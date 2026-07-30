@@ -1,0 +1,23 @@
+import { DocsPage, Markdown, Meta, Source } from "@storybook/addon-docs/blocks";
+import * as Stories from "./confirmation-dialog.stories";
+
+<Meta of={Stories} />
+
+<DocsPage />
+
+<Markdown>{`
+| Part | Description |
+| --- | --- |
+| \`Root\` | Modal confirmation flow with optional trigger and success feedback. |
+| \`Header\` | Dialog header region. |
+| \`Visual\` | Optional visual treatment for customized confirmations. |
+| \`Title\` | Accessible dialog title. |
+| \`Description\` | Supporting dialog description. |
+| \`Body\` | Internally scrollable confirmation details. |
+| \`Footer\` | Dialog footer region. |
+| \`Actions\` | Layout for caller-composed dialog controls. |
+| \`Cancel\` | Neutral button that closes without confirming. |
+| \`Confirm\` | Confirmation button that closes and announces success. |
+`}</Markdown>
+
+<Source code={'import { ConfirmationDialog } from "@/blocks";'} language="tsx" />

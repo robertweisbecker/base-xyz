@@ -1,0 +1,29 @@
+import { DocsPage, Markdown, Meta, Source } from "@storybook/addon-docs/blocks";
+import * as Stories from "./agent-action-approval.stories";
+
+<Meta of={Stories} />
+
+<DocsPage />
+
+<Markdown>{`
+| Part | Description |
+| --- | --- |
+| \`Root\` | Accessible outline card that owns the title relationship. |
+| \`Header\` | Card header region for the title and supporting description. |
+| \`Title\` | Heading that labels the approval surface. |
+| \`Description\` | Supporting copy beneath the title. |
+| \`Content\` | Main approval content region. |
+| \`Summary\` | Layout for the action icon and summary copy. |
+| \`Icon\` | Visual container for the action icon. |
+| \`SummaryContent\` | Textual content within the action summary. |
+| \`Action\` | Primary action name or command. |
+| \`ActionDescription\` | Supporting explanation of the proposed action. |
+| \`Details\` | Description list for structured action metadata. |
+| \`Detail\` | Row containing one metadata term and value. |
+| \`DetailLabel\` | Metadata term. |
+| \`DetailValue\` | Metadata value. |
+| \`Footer\` | Card footer for options and controls. |
+| \`Actions\` | Layout for the approval buttons. |
+`}</Markdown>
+
+<Source code={'import { AgentActionApproval } from "@/blocks";'} language="tsx" />

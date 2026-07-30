@@ -1,0 +1,26 @@
+import { DocsPage, Markdown, Meta, Source } from "@storybook/addon-docs/blocks";
+import * as Stories from "./prompt-composer.stories";
+
+<Meta of={Stories} />
+
+<DocsPage />
+
+<Markdown>{`
+| Part | Description |
+| --- | --- |
+| \`Root\` | Form and prompt-state provider that owns submission behavior. |
+| \`Surface\` | Elevated or standard InputGroup composer surface. |
+| \`Input\` | Controlled textarea with Enter-to-submit behavior. |
+| \`Footer\` | InputGroup footer for options and submission controls. |
+| \`Options\` | Layout for add menus and caller-composed prompt tools. |
+| \`Actions\` | InputGroup action region. |
+| \`Submit\` | Submit button derived from the current prompt state. |
+| \`Stop\` | Button for caller-provided cancellation behavior. |
+| \`AddTrigger\` | Plus-button trigger for an add menu. |
+| \`AddPositioner\` | Default positioning for the add menu. |
+| \`AddPopup\` | Styled add-menu popup. |
+| \`AddItemContent\` | Layout for an add-item label and description. |
+| \`AddItemDescription\` | Muted supporting copy within an add item. |
+`}</Markdown>
+
+<Source code={'import { PromptComposer } from "@/blocks";'} language="tsx" />

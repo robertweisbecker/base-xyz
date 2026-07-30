@@ -1,0 +1,265 @@
+import { CheckIcon } from "@phosphor-icons/react/dist/csr/Check";
+import { ClockIcon } from "@phosphor-icons/react/dist/csr/Clock";
+import { SpinnerGapIcon } from "@phosphor-icons/react/dist/csr/SpinnerGap";
+import { WarningIcon } from "@phosphor-icons/react/dist/csr/Warning";
+import * as stylex from "@stylexjs/stylex";
+import type { StyleXStyles } from "@stylexjs/stylex";
+import { createContext, type ComponentProps, createElement, useContext, useId } from "react";
+import { Badge, type BadgeHue } from "@/components/badge/badge";
+import * as ProgressPrimitive from "@/components/progress/progress";
+import { color, space } from "@/styles/tokens.stylex";
+import { fontSize, fontWeight, letterSpacing, lineHeight } from "@/styles/tokens.stylex";
+
+export type AsyncJobStatus = "queued" | "running" | "complete" | "error";
+export type AsyncJobHeadingLevel = 2 | 3 | 4 | 5 | 6;
+
+type AsyncJobProgressContextValue = {
+	status: AsyncJobStatus;
+	titleId: string;
+	value: number | null;
+	valueText?: string;
+};
+
+const AsyncJobProgressContext = createContext<AsyncJobProgressContextValue | null>(null);
+
+type StyledProps<T> = Omit<T, "style"> & {
+	/** StyleX overrides, applied after the component's own styles. */
+	style?: StyleXStyles;
+};
+
+export type AsyncJobProgressRootProps = StyledProps<ComponentProps<"section">> & {
+	status: AsyncJobStatus;
+	value?: number | null;
+	valueText?: string;
+};
+export type AsyncJobProgressHeaderProps = StyledProps<ComponentProps<"div">>;
+export type AsyncJobProgressHeadingProps = StyledProps<ComponentProps<"div">>;
+export type AsyncJobProgressTitleProps = StyledProps<ComponentProps<"h3">> & {
+	level?: AsyncJobHeadingLevel;
+};
+export type AsyncJobProgressDescriptionProps = StyledProps<ComponentProps<"p">>;
+export type AsyncJobProgressStatusProps = StyledProps<ComponentProps<"span">>;
+export type AsyncJobProgressProgressProps = Omit<
+	ComponentProps<typeof ProgressPrimitive.Root>,
+	"value" | "aria-labelledby" | "aria-valuetext"
+>;
+export type AsyncJobProgressActionsProps = StyledProps<ComponentProps<"div">>;
+
+const statusPresentation: Record<AsyncJobStatus, { badgeLabel: string; hue: BadgeHue }> = {
+	queued: { badgeLabel: "Queued", hue: "neutral" },
+	running: { badgeLabel: "Running", hue: "accent" },
+	complete: { badgeLabel: "Complete", hue: "neutral" },
+	error: { badgeLabel: "Failed", hue: "danger" },
+};
+
+export function Root({ status, value, valueText, className, style, ...props }: AsyncJobProgressRootProps) {
+	const titleId = useId();
+	const progressValue = getProgressValue(status, value);
+	const sx = stylex.props(parts.root, style);
+
+	return (
+		<AsyncJobProgressContext.Provider value={{ status, titleId, value: progressValue, valueText }}>
+			<section className={joinClassNames(sx.className, className)} style={sx.style} {...props} />
+		</AsyncJobProgressContext.Provider>
+	);
+}
+
+export function Header({ className, style, ...props }: AsyncJobProgressHeaderProps) {
+	const sx = stylex.props(parts.header, style);
+	return <div className={joinClassNames(sx.className, className)} style={sx.style} {...props} />;
+}
+
+export function Heading({ className, style, ...props }: AsyncJobProgressHeadingProps) {
+	const sx = stylex.props(parts.heading, style);
+	return <div className={joinClassNames(sx.className, className)} style={sx.style} {...props} />;
+}
+
+export function Title({ level = 3, id, className, style, ...props }: AsyncJobProgressTitleProps) {
+	const context = useAsyncJobProgressContext("Title");
+	const sx = stylex.props(parts.title, style);
+
+	return createElement(`h${level}`, {
+		...props,
+		id: id ?? context.titleId,
+		className: joinClassNames(sx.className, className),
+		style: sx.style,
+	});
+}
+
+export function Description({ className, style, ...props }: AsyncJobProgressDescriptionProps) {
+	const sx = stylex.props(parts.description, style);
+	return <p className={joinClassNames(sx.className, className)} style={sx.style} {...props} />;
+}
+
+export function Status({ className, style, ...props }: AsyncJobProgressStatusProps) {
+	const { status } = useAsyncJobProgressContext("Status");
+	const presentation = statusPresentation[status];
+	const statusIcon = renderStatusIcon(status);
+	const sx = stylex.props(parts.status, style);
+
+	return (
+		<span
+			role="status"
+			aria-atomic="true"
+			className={joinClassNames(sx.className, className)}
+			style={sx.style}
+			{...props}>
+			<Badge hue={presentation.hue} size="sm" startSlot={statusIcon}>
+				{presentation.badgeLabel}
+			</Badge>
+		</span>
+	);
+}
+
+export function Progress(props: AsyncJobProgressProgressProps) {
+	const { status, titleId, value, valueText } = useAsyncJobProgressContext("Progress");
+	const ariaValueText = valueText ?? getAriaValueText(status, value);
+
+	return (
+		<ProgressPrimitive.Root aria-labelledby={titleId} aria-valuetext={ariaValueText} value={value} {...props}>
+			<ProgressPrimitive.Value style={parts.progressValue}>
+				{(formattedValue, currentValue) =>
+					valueText ??
+					(status === "queued"
+						? "Waiting"
+						: status === "error" && value === 0
+							? "Failed"
+							: currentValue === null
+								? "In progress"
+								: formattedValue)
+				}
+			</ProgressPrimitive.Value>
+			<ProgressPrimitive.Track>
+				<ProgressPrimitive.Indicator style={indicatorStatus[status]} />
+			</ProgressPrimitive.Track>
+		</ProgressPrimitive.Root>
+	);
+}
+
+export function Actions({ className, style, ...props }: AsyncJobProgressActionsProps) {
+	const sx = stylex.props(parts.actions, style);
+	return <div className={joinClassNames(sx.className, className)} style={sx.style} {...props} />;
+}
+
+function useAsyncJobProgressContext(part: string) {
+	const context = useContext(AsyncJobProgressContext);
+	if (!context) {
+		throw new Error(`AsyncJobProgress.${part} must be used inside AsyncJobProgress.Root.`);
+	}
+	return context;
+}
+
+function getProgressValue(status: AsyncJobStatus, value: number | null | undefined) {
+	switch (status) {
+		case "queued":
+			return 0;
+		case "running":
+			return value == null ? null : normalizeProgressValue(value);
+		case "complete":
+			return 100;
+		case "error":
+			return typeof value === "number" ? normalizeProgressValue(value) : 0;
+	}
+}
+
+function normalizeProgressValue(value: number) {
+	if (!Number.isFinite(value)) return 0;
+	return Math.min(100, Math.max(0, value));
+}
+
+function getAriaValueText(status: AsyncJobStatus, value: number | null) {
+	switch (status) {
+		case "queued":
+			return "Queued";
+		case "running":
+			return value === null ? "In progress" : `${value}% complete`;
+		case "complete":
+			return "Complete";
+		case "error":
+			return value !== null && value > 0 ? `Failed at ${value}%` : "Failed";
+	}
+}
+
+function renderStatusIcon(status: AsyncJobStatus) {
+	switch (status) {
+		case "queued":
+			return <ClockIcon aria-hidden weight="bold" />;
+		case "running":
+			return <SpinnerGapIcon aria-hidden weight="bold" {...stylex.props(parts.spinner)} />;
+		case "complete":
+			return <CheckIcon aria-hidden weight="bold" />;
+		case "error":
+			return <WarningIcon aria-hidden weight="fill" />;
+	}
+}
+
+function joinClassNames(...classNames: Array<string | undefined>) {
+	return classNames.filter(Boolean).join(" ");
+}
+
+const spin = stylex.keyframes({ to: { transform: "rotate(360deg)" } });
+
+const parts = stylex.create({
+	root: {
+		gap: space.x3,
+		color: color.fg,
+		display: "flex",
+		flexDirection: "column",
+		maxWidth: "36rem",
+		width: "100%",
+	},
+	header: {
+		gap: space.x4,
+		alignItems: "flex-start",
+		display: "flex",
+		justifyContent: "space-between",
+	},
+	heading: {
+		gap: space.x1,
+		display: "flex",
+		flexDirection: "column",
+		minWidth: 0,
+	},
+	title: {
+		margin: 0,
+		color: color.fg,
+		fontSize: fontSize.x3,
+		fontWeight: fontWeight.semibold,
+		letterSpacing: letterSpacing.x3,
+		lineHeight: lineHeight.x3,
+		textWrap: "balance",
+	},
+	description: {
+		margin: 0,
+		color: color.fgMuted,
+		fontSize: fontSize.x2,
+		letterSpacing: letterSpacing.x2,
+		lineHeight: lineHeight.x2,
+	},
+	status: { display: "inline-flex", flexShrink: 0 },
+	progressValue: { gridColumn: "2" },
+	actions: {
+		gap: space.x2,
+		alignItems: "center",
+		display: "flex",
+		justifyContent: "flex-end",
+	},
+	spinner: {
+		animationDuration: "900ms",
+		animationIterationCount: "infinite",
+		animationName: {
+			default: spin,
+			"@media (prefers-reduced-motion: reduce)": "none",
+		},
+		animationTimingFunction: "linear",
+	},
+});
+
+const indicatorStatus = stylex.create({
+	queued: { backgroundColor: color.bgNeutral },
+	running: {},
+	complete: {},
+	error: {
+		backgroundColor: color.bgDanger,
+	},
+});

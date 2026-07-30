@@ -1,0 +1,116 @@
+import type { Meta, StoryObj } from "@storybook/react-vite";
+import * as stylex from "@stylexjs/stylex";
+import { space } from "@/styles/tokens.stylex";
+import * as Meter from "./meter";
+
+const meta = {
+	title: "Components/Meter",
+	component: Meter.Root,
+	args: {
+		value: 64,
+	},
+	argTypes: {
+		format: { control: false },
+		getAriaValueText: { control: false },
+		locale: { control: false },
+		value: {
+			control: { type: "number", min: 0, max: 100, step: 1 },
+		},
+	},
+	parameters: {
+		controls: {
+			include: ["value", "min", "max", "low", "high", "optimum"],
+		},
+	},
+	decorators: [
+		(Story) => (
+			<div {...stylex.props(storyStyles.frame)}>
+				<Story />
+			</div>
+		),
+	],
+	render: (args) => (
+		<Meter.Root {...args}>
+			<Meter.Label>Storage used</Meter.Label>
+			<Meter.Value />
+			<Meter.Track>
+				<Meter.Indicator />
+			</Meter.Track>
+		</Meter.Root>
+	),
+} satisfies Meta<typeof Meter.Root>;
+
+export default meta;
+type Story = StoryObj<typeof meta>;
+
+export const Playground: Story = {
+	args: {
+		high: 80,
+		low: 50,
+		optimum: 20,
+	},
+};
+
+export const RangesAndThresholds: Story = {
+	parameters: {
+		controls: { disable: true },
+	},
+	render: () => (
+		<div {...stylex.props(storyStyles.stack)}>
+			<Meter.Root value={0}>
+				<Meter.Label>Empty range</Meter.Label>
+				<Meter.Value />
+				<Meter.Track>
+					<Meter.Indicator />
+				</Meter.Track>
+			</Meter.Root>
+			<Meter.Root aria-valuetext="18 of 25 seats used" max={25} value={18}>
+				<Meter.Label>Seats in use</Meter.Label>
+				<Meter.Value>{() => "18 of 25"}</Meter.Value>
+				<Meter.Track>
+					<Meter.Indicator />
+				</Meter.Track>
+			</Meter.Root>
+			<Meter.Root high={80} low={50} max={100} optimum={20} value={35}>
+				<Meter.Label>Healthy storage use</Meter.Label>
+				<Meter.Value />
+				<Meter.Track>
+					<Meter.Indicator />
+				</Meter.Track>
+			</Meter.Root>
+			<Meter.Root high={80} low={50} max={100} optimum={20} value={65}>
+				<Meter.Label>Storage use approaching capacity</Meter.Label>
+				<Meter.Value />
+				<Meter.Track>
+					<Meter.Indicator />
+				</Meter.Track>
+			</Meter.Root>
+			<Meter.Root high={80} low={50} max={100} optimum={20} value={90}>
+				<Meter.Label>Storage use over threshold</Meter.Label>
+				<Meter.Value />
+				<Meter.Track>
+					<Meter.Indicator />
+				</Meter.Track>
+			</Meter.Root>
+			<Meter.Root value={100}>
+				<Meter.Label>Full range</Meter.Label>
+				<Meter.Value />
+				<Meter.Track>
+					<Meter.Indicator />
+				</Meter.Track>
+			</Meter.Root>
+		</div>
+	),
+};
+
+const storyStyles = stylex.create({
+	frame: {
+		maxWidth: "28rem",
+		width: "100%",
+	},
+	stack: {
+		gap: space.x8,
+		display: "flex",
+		flexDirection: "column",
+	},
+});

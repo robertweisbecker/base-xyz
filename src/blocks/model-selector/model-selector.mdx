@@ -1,0 +1,19 @@
+import { DocsPage, Markdown, Meta, Source } from "@storybook/addon-docs/blocks";
+import * as Stories from "./model-selector.stories";
+
+<Meta of={Stories} />
+
+<DocsPage />
+
+<Markdown>{`
+| Part | Description |
+| --- | --- |
+| \`Root\` | Controlled or uncontrolled provider for model, effort, speed, and reset state. |
+| \`Trigger\` | Button-backed menu trigger showing the selected model and optional effort. |
+| \`Portal\` | Renders the popup outside the current layout context. |
+| \`Positioner\` | Anchors the popup to the trigger. |
+| \`Popup\` | Complete settings menu with Model, Effort, Speed, and Reset to default controls. |
+| \`List\` | Grouped, single-select model list with a leading checkmark and optional provider icons and descriptions. |
+`}</Markdown>
+
+<Source code={'import { ModelSelector } from "@/blocks";'} language="tsx" />

@@ -1,0 +1,23 @@
+import { DocsPage, Markdown, Meta, Source } from "@storybook/addon-docs/blocks";
+import * as Stories from "./tool-activity-timeline.stories";
+
+<Meta of={Stories} />
+
+<DocsPage />
+
+<Markdown>{`
+| Part | Description |
+| --- | --- |
+| \`Root\` | Ordered activity timeline. |
+| \`Item\` | Timeline entry and status provider. |
+| \`Marker\` | Status-derived icon on the timeline rail. |
+| \`Content\` | Main content region for an activity entry. |
+| \`Header\` | Grid for title, description, and metadata. |
+| \`Title\` | Activity title. |
+| \`Description\` | Supporting activity description. |
+| \`Metadata\` | Layout for duration and status. |
+| \`Meta\` | Compact metadata such as elapsed time. |
+| \`Status\` | Status badge derived from the item state. |
+`}</Markdown>
+
+<Source code={'import { ToolActivityTimeline } from "@/blocks";'} language="tsx" />

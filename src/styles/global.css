@@ -1,0 +1,242 @@
+:root,
+[data-theme="light"] {
+	color-scheme: light;
+	--color-white: #ffffff;
+	--color-black: #000000;
+
+	--color-accent-25: oklch(0.94 0.028 257.74);
+	--color-accent-50: oklch(0.873 0.06 257.74);
+	--color-accent-100: oklch(0.807 0.093 257.74);
+	--color-accent-200: oklch(0.74 0.128 257.74);
+	--color-accent-300: oklch(0.673 0.164 257.74);
+	--color-accent-400: oklch(0.607 0.201 257.74);
+	--color-accent-500: oklch(0.54 0.218 257.74);
+	--color-accent-600: oklch(0.473 0.191 257.74);
+	--color-accent-700: oklch(0.407 0.164 257.74);
+	--color-accent-800: oklch(0.34 0.138 257.74);
+	--color-accent-900: oklch(0.273 0.111 257.74);
+	--color-accent-950: oklch(0.207 0.084 257.74);
+	--color-accent-975: oklch(0.14 0.057 257.74);
+
+	--gray-s1: oklch(99% 0 0deg);
+	--gray-s2: oklch(97.5% 0 0deg);
+	--gray-c1: oklch(95.25% 0 0deg);
+	--gray-c2: oklch(93.5% 0 0deg);
+	--gray-c3: oklch(92.25% 0 0deg);
+	--gray-p1: oklch(73% 0 0deg);
+	--gray-p2: oklch(67% 0 0deg);
+	--gray-p3: oklch(64% 0 0deg);
+	--gray-p4: oklch(62.5% 0 0deg);
+	--gray-t1: oklch(61% 0 0deg);
+	--gray-t2: oklch(53% 0 0deg);
+	--gray-t3: oklch(30% 0 0deg);
+	--gray-a1: oklch(0% 0 0deg / 4%);
+	--gray-a2: oklch(0% 0 0deg / 8%);
+	--gray-a3: oklch(0% 0 0deg / 12%);
+	--gray-a4: oklch(0% 0 0deg / 24%);
+	--gray-a5: oklch(0% 0 0deg / 60%);
+	--gray-contrast: white;
+
+	--indigo-s1: hsl(204deg 100% 98.75%);
+	--indigo-s2: hsl(198deg 100% 97.5%);
+	--indigo-c1: hsl(204deg 100% 95%);
+	--indigo-c2: hsl(205deg 100% 93.5%);
+	--indigo-c3: hsl(206deg 100% 92.5%);
+	--indigo-p1: hsl(214deg 98% 50%);
+	--indigo-p2: hsl(207deg 96% 48%);
+	--indigo-t1: hsl(221deg 74% 51%);
+	--indigo-t2: hsl(221deg 74% 19.8%);
+
+	--white-a1: hsl(0deg 0% 100% / 4%);
+	--white-a2: hsl(0deg 0% 100% / 8%);
+	--white-a3: hsl(0deg 0% 100% / 12%);
+	--white-a4: hsl(0deg 0% 100% / 24%);
+	--white-a5: hsl(0deg 0% 100% / 60%);
+
+	--poppy-t1: hsl(10deg 86% 48%);
+	--red-t1: oklch(50% 55% 31deg);
+	--blue-t1: hsl(211deg 100% 49%);
+	--green-t1: hsl(156deg 81% 29%);
+	--orange-t1: hsl(14deg 96% 52.5%);
+	--pink-t1: hsl(316deg 84% 51%);
+	--grape-t1: hsl(276deg 66% 54%);
+	--lime-t1: hsl(91deg 64% 38.75%);
+
+	--color-neutral-25: #f7f7f5;
+	--color-neutral-50: #f0f0ed;
+	--color-neutral-100: #deded9;
+	--color-neutral-200: #c5c5be;
+	--color-neutral-300: #a1a2a6;
+	--color-neutral-400: #83858a;
+	--color-neutral-500: #676a70;
+	--color-neutral-600: #6a6c70;
+	--color-neutral-700: #414246;
+	--color-neutral-800: #35363a;
+	--color-neutral-900: #1c1d1f;
+	--color-neutral-950: #0f1012;
+	--color-neutral-975: #070809;
+
+	--ds-color-canvas: var(--gray-s1);
+	--ds-color-canvas-subtle: var(--gray-s2);
+	--ds-color-surface: var(--color-white);
+	--ds-color-elevated: var(--color-white);
+	--ds-color-surface-subtle: var(--gray-c1);
+	--ds-color-surface-subtle-hover: var(--gray-c3);
+	--ds-color-surface-subtle-active: var(--gray-c2);
+	--ds-color-highlight: var(--gray-a1);
+	--ds-color-fill-track: var(--gray-a2);
+	--ds-color-fill-disabled: var(--gray-a1);
+
+	--ds-color-tooltip: var(--color-white);
+
+	--ds-color-text: var(--gray-t3);
+	--ds-color-text-muted: var(--gray-t2);
+	--ds-color-text-subtle: var(--gray-t1);
+	--ds-color-text-accent: var(--indigo-t1);
+	--ds-color-text-accent-hover: var(--indigo-t2);
+	--ds-color-border: var(--gray-a2);
+	--ds-color-border-strong: var(--gray-a3);
+	--ds-color-border-hover: var(--gray-p1);
+	--ds-color-border-disabled: var(--gray-c2);
+	--ds-color-accent: var(--indigo-p1);
+	--ds-color-accent-hover: var(--indigo-p2);
+	--ds-color-accent-soft: var(--indigo-c1);
+	--ds-color-accent-soft-hover: var(--indigo-c2);
+	--ds-color-accent-contrast: var(--color-white);
+	--ds-color-neutral: var(--gray-p1);
+	--ds-color-neutral-strong: var(--gray-t2);
+	--ds-color-neutral-contrast: var(--gray-s1);
+
+	--ds-color-danger: #ff383c;
+	--ds-color-text-danger: var(--poppy-t1);
+	--ds-color-text-danger-strong: #b4232f;
+	--ds-color-danger-subtle: #fff0f1;
+
+	--ds-color-success: #248a3d;
+	--ds-color-text-success: var(--green-t1);
+	--ds-color-success-subtle: #e8f7ed;
+
+	--ds-color-warning: var(--orange-t1);
+	--ds-color-text-warning: var(--orange-t1);
+	--ds-color-warning-subtle: color-mix(in oklab, var(--ds-color-warning) 8%, transparent);
+
+	--ds-color-inverse-surface: #17181b;
+	--ds-color-inverse-text: #ffffff;
+	--ds-color-inverse-text-muted: #b8bbc3;
+	--ds-color-focus: var(--indigo-p1);
+	--ds-color-overlay: rgb(0 0 0 / 20%);
+
+	--ds-shadow-ring: 0 0 0 1px rgb(20 20 24 / 4%);
+	--ds-shadow-inset-ring: inset 0 0 0 1px rgb(20 20 24 / 4%);
+}
+
+[data-theme="dark"] {
+	color-scheme: dark;
+
+	--gray-s1: oklch(17% 0 0deg);
+	--gray-s2: oklch(22% 0 0deg);
+	--gray-c1: oklch(30% 0 0deg);
+	--gray-c2: oklch(37.75% 0 0deg);
+	--gray-c3: oklch(43.25% 0 0deg);
+	--gray-t1: oklch(54% 0 0deg);
+	--gray-t2: oklch(80% 0 0deg);
+	--gray-t3: oklch(93% 0 0deg);
+	--gray-a1: oklch(100% 0 0deg / 7.7%);
+	--gray-a2: oklch(100% 0 0deg / 17.1%);
+	--gray-a3: oklch(100% 0 0deg / 23.2%);
+	--gray-a4: oklch(100% 0 0deg / 33.8%);
+	--gray-a5: oklch(100% 0 0deg / 64.1%);
+
+	--indigo-s1: hsl(223deg 38% 10%);
+	--indigo-s2: hsl(223deg 42% 12%);
+	--indigo-c1: hsl(222deg 50% 16%);
+	--indigo-c2: hsl(221deg 56% 20%);
+	--indigo-c3: hsl(220deg 62% 24%);
+	--indigo-p1: hsl(214deg 94% 60%);
+	--indigo-p2: hsl(207deg 96% 64%);
+	--indigo-t1: hsl(214deg 93% 66%);
+	--indigo-t2: hsl(210deg 100% 86%);
+
+	--poppy-t1: hsl(10deg 96% 63%);
+	/* --blue-t1: hsl(210deg 98% 66%); */
+	--green-t1: hsl(156deg 68% 54%);
+	--orange-t1: hsl(26deg 98% 63%);
+	--pink-t1: hsl(316deg 86% 68%);
+	--grape-t1: hsl(276deg 86% 70%);
+	--lime-t1: hsl(91deg 72% 56%);
+
+	--color-neutral-25: hsl(220, 9%, 6%);
+	--color-neutral-50: hsl(240, 5%, 9%);
+	--color-neutral-100: hsl(240, 5%, 12%);
+	--color-neutral-200: hsl(240, 5%, 17%);
+	--color-neutral-300: hsl(240, 5%, 15%);
+	--color-neutral-400: hsl(240, 5%, 21%);
+	--color-neutral-500: hsl(240, 5%, 30%);
+	--color-neutral-600: hsl(240, 4%, 34%);
+	--color-neutral-700: hsl(240, 4%, 67%);
+	--color-neutral-800: hsl(60, 6%, 76%);
+	--color-neutral-900: hsl(60, 7%, 84%);
+	--color-neutral-950: hsl(60, 8%, 95%);
+	--color-neutral-975: hsl(60, 9%, 97%);
+
+	/* --ds-color-text: #f1f1ef;
+	--ds-color-text-strong: #f4f4f2;
+	--ds-color-text-muted: #a8a8ae;
+	--ds-color-border-strong: #4a4a51;
+	--ds-color-border: #343439;
+	--ds-color-elevated: #242428;
+	--ds-color-surface-subtle: #29292d;
+	--ds-color-canvas: #151517;
+	--ds-color-surface: #1d1d20; */
+
+	--ds-color-canvas: hsl(220, 9%, 3%);
+	--ds-color-canvas-subtle: var(--gray-s2);
+	--ds-color-surface: var(--gray-s1);
+	--ds-color-elevated: var(--gray-s2);
+	--ds-color-surface-subtle: var(--gray-c1);
+	--ds-color-fill-track: var(--gray-a2);
+	--ds-color-fill-disabled: var(--gray-a1);
+	--ds-color-tooltip: var(--gray-c2);
+
+	--ds-color-border: var(--gray-a1);
+	--ds-color-border-strong: var(--gray-a2);
+
+	/* --ds-color-highlight: color-mix(in oklab, #f4f4f2 7%, transparent); */
+	--ds-color-text-accent: var(--indigo-t1);
+	--ds-color-accent: var(--blue-t1);
+	--ds-color-accent-hover: var(--indigo-p2);
+	--ds-color-accent-soft: var(--indigo-c1);
+	--ds-color-accent-contrast: var(--color-white);
+	--ds-color-danger: #ff4245;
+	--ds-color-text-danger: #ff858d;
+	--ds-color-danger-subtle: #47252a;
+	--ds-color-success: #4ecb71;
+	--ds-color-success-subtle: #173821;
+	--ds-color-focus: var(--indigo-p1);
+	--ds-color-overlay: rgb(0 0 0 / 48%);
+	--ds-shadow-ring:
+		inset 0 1px rgb(255 255 255 / 5%), inset 0 0 0 1px rgba(255, 255, 255, 0.03), 0 0 0 0.5px rgb(0 0 0 / 20%);
+	--ds-shadow-inset-ring: inset 0 0 0 1px rgb(255 255 255 / 10%), inset 0 -1px rgb(255 255 255 / 5%);
+}
+
+/*
+ * InputGroup.Addon owns direct icon geometry. Artwork and semantic weight
+ * remain caller-controlled.
+ */
+.ds-input-group-addon > svg {
+	block-size: var(--ds-input-group-icon-size);
+	display: block;
+	flex: none;
+	inline-size: var(--ds-input-group-icon-size);
+	pointer-events: none;
+}
+
+:is(input, textarea):is([data-readonly], [readonly])::placeholder,
+:is([data-readonly], [aria-readonly="true"]) :is(input, textarea)::placeholder {
+	opacity: 0;
+}
+
+::selection {
+	background-color: var(--gray-a4);
+	color: var(--gray-t3);
+}

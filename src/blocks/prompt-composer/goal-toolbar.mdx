@@ -1,0 +1,15 @@
+import { DocsPage, Markdown, Meta, Source } from "@storybook/addon-docs/blocks";
+import * as Stories from "./goal-toolbar.stories";
+
+<Meta of={Stories} />
+
+<DocsPage />
+
+<Markdown>{`
+| Prop | Type | Description |
+| --- | --- | --- |
+| \`description\` | \`string\` | Initial goal description shown in the summary, details panel, and edit dialog. |
+| \`active\` | \`boolean\` | Whether the goal is initially running. |
+`}</Markdown>
+
+<Source code={'import { GoalToolbar } from "@/blocks";'} language="tsx" />

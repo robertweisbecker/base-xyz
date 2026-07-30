@@ -1,0 +1,39 @@
+/*
+ * Base UI owns the current/previous payload wrappers. This bridge is scoped to
+ * an explicitly rendered Viewport, so ordinary popups never run swap motion.
+ */
+.ds-popup-viewport [data-current],
+.ds-popup-viewport [data-previous] {
+	width: var(--popup-width);
+	opacity: 1;
+	transform: translateX(0);
+	transition:
+		transform var(--popup-motion-duration) var(--popup-motion-ease),
+		opacity calc(var(--popup-motion-duration) / 2) var(--popup-motion-ease);
+}
+
+.ds-popup-viewport[data-activation-direction~="right"] [data-previous][data-ending-style],
+.ds-popup-viewport[data-activation-direction~="left"] [data-current][data-starting-style] {
+	opacity: 0;
+	transform: translateX(-50%);
+}
+
+.ds-popup-viewport[data-activation-direction~="left"] [data-previous][data-ending-style],
+.ds-popup-viewport[data-activation-direction~="right"] [data-current][data-starting-style] {
+	opacity: 0;
+	transform: translateX(50%);
+}
+
+[data-instant] .ds-popup-viewport [data-current],
+[data-instant] .ds-popup-viewport [data-previous],
+.ds-popup-viewport[data-instant] [data-current],
+.ds-popup-viewport[data-instant] [data-previous] {
+	transition: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.ds-popup-viewport [data-current],
+	.ds-popup-viewport [data-previous] {
+		transition: none;
+	}
+}

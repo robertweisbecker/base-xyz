@@ -1,0 +1,17 @@
+import { DocsPage, Markdown, Meta, Source } from "@storybook/addon-docs/blocks";
+import * as Stories from "./streaming-response.stories";
+
+<Meta of={Stories} />
+
+<DocsPage />
+
+<Markdown>{`
+| Part | Description |
+| --- | --- |
+| \`Root\` | Accessible response region and status provider. |
+| \`Status\` | Live status label and icon derived from the root state. |
+| \`Content\` | Response content with coordinated busy state. |
+| \`Actions\` | Unstyled toolbar for caller-composed response controls. |
+`}</Markdown>
+
+<Source code={'import { StreamingResponse } from "@/blocks";'} language="tsx" />

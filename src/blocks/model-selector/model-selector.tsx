@@ -1,0 +1,391 @@
+import { ArrowCounterClockwiseIcon } from "@phosphor-icons/react/dist/csr/ArrowCounterClockwise";
+import { LightningIcon } from "@phosphor-icons/react/dist/csr/Lightning";
+import * as stylex from "@stylexjs/stylex";
+import { createContext, Fragment, type ComponentProps, type ReactNode, useContext, useState } from "react";
+import { Button, type ButtonProps } from "@/components/button/button";
+import * as Menu from "@/components/menu/menu";
+import { menuItemVars } from "@/components/menu/menu-item.stylex";
+import { color, space } from "@/styles/tokens.stylex";
+import { fontSize, fontWeight, letterSpacing, lineHeight } from "@/styles/tokens.stylex";
+
+export type ModelSelectorOption = {
+	value: string;
+	label: ReactNode;
+	description?: ReactNode;
+	icon?: ReactNode;
+	disabled?: boolean;
+};
+
+export type ModelSelectorGroup = {
+	id: string;
+	label: ReactNode;
+	options: readonly ModelSelectorOption[];
+};
+
+export type ModelSelectorValue = {
+	model: string;
+	effort: string;
+	speed: string;
+};
+
+export type ModelSelectorChangeReason = "model" | "effort" | "speed" | "reset";
+
+export type ModelSelectorChangeDetails = {
+	reason: ModelSelectorChangeReason;
+};
+
+type MenuRootProps = Omit<ComponentProps<typeof Menu.Root>, "children">;
+
+export type ModelSelectorRootProps = MenuRootProps & {
+	children: ReactNode;
+	groups: readonly ModelSelectorGroup[];
+	effortOptions: readonly string[];
+	speedOptions: readonly string[];
+	defaultValue: ModelSelectorValue;
+	value?: ModelSelectorValue;
+	onValueChange?: (value: ModelSelectorValue, details: ModelSelectorChangeDetails) => void;
+};
+
+type MenuTriggerProps = ComponentProps<typeof Menu.Trigger>;
+
+export type ModelSelectorTriggerProps = Omit<MenuTriggerProps, "style"> &
+	Pick<ButtonProps, "className" | "shape" | "size" | "style" | "variant"> & {
+		showEffort?: boolean;
+	};
+export type ModelSelectorPopupProps = Omit<ComponentProps<typeof Menu.Popup>, "children">;
+export type ModelSelectorListProps = {
+	groups: readonly ModelSelectorGroup[];
+	value: string;
+	onValueChange: (value: string) => void;
+};
+
+type ModelSelectorContextValue = {
+	defaultValue: ModelSelectorValue;
+	effortOptions: readonly string[];
+	groups: readonly ModelSelectorGroup[];
+	selectedModel: ModelSelectorOption;
+	speedOptions: readonly string[];
+	updateValue: (value: ModelSelectorValue, reason: ModelSelectorChangeReason) => void;
+	value: ModelSelectorValue;
+};
+
+const ModelSelectorContext = createContext<ModelSelectorContextValue | null>(null);
+
+export function Root({
+	children,
+	groups,
+	effortOptions,
+	speedOptions,
+	defaultValue,
+	value,
+	onValueChange,
+	...props
+}: ModelSelectorRootProps) {
+	const [uncontrolledValue, setUncontrolledValue] = useState(defaultValue);
+	const currentValue = value ?? uncontrolledValue;
+	const selectedModel = findModel(groups, currentValue.model) ?? groups[0]?.options[0];
+
+	if (!selectedModel) {
+		throw new Error("ModelSelector.Root requires at least one model option.");
+	}
+
+	function updateValue(nextValue: ModelSelectorValue, reason: ModelSelectorChangeReason) {
+		if (value === undefined) setUncontrolledValue(nextValue);
+		onValueChange?.(nextValue, { reason });
+	}
+
+	return (
+		<ModelSelectorContext.Provider
+			value={{
+				defaultValue,
+				effortOptions,
+				groups,
+				selectedModel,
+				speedOptions,
+				updateValue,
+				value: currentValue,
+			}}>
+			<Menu.Root {...props}>{children}</Menu.Root>
+		</ModelSelectorContext.Provider>
+	);
+}
+
+export function Trigger({
+	children,
+	className,
+	"aria-label": ariaLabel,
+	render,
+	shape,
+	showEffort = true,
+	size,
+	style,
+	variant,
+	...props
+}: ModelSelectorTriggerProps) {
+	const { selectedModel, value } = useModelSelectorContext("Trigger");
+	const triggerIcon = value.speed === "Fast" ? <LightningIcon size="1em" weight="fill" /> : selectedModel.icon;
+	const triggerLabel = showEffort
+		? `Choose model, current ${getTextLabel(selectedModel.label)}, ${value.effort} effort`
+		: `Choose model, current ${getTextLabel(selectedModel.label)}`;
+
+	return (
+		<Menu.Trigger
+			aria-label={ariaLabel ?? triggerLabel}
+			className={render ? className : undefined}
+			render={
+				render ?? (
+					<Button
+						className={className}
+						shape={shape}
+						size={size}
+						startSlot={triggerIcon}
+						style={style}
+						variant={variant}
+					/>
+				)
+			}
+			{...props}>
+			{children ?? (
+				<>
+					{render && triggerIcon ? (
+						<span aria-hidden {...stylex.props(parts.triggerIcon)}>
+							{triggerIcon}
+						</span>
+					) : null}
+					<span {...stylex.props(parts.triggerModel)}>{selectedModel.label}</span>
+					{showEffort ? <span {...stylex.props(parts.triggerSetting)}>{value.effort}</span> : null}
+				</>
+			)}
+		</Menu.Trigger>
+	);
+}
+
+export function Popup({ positionerProps, style, ...props }: ModelSelectorPopupProps) {
+	const context = useModelSelectorContext("Popup");
+
+	return (
+		<Menu.Popup
+			positionerProps={{ align: "start", side: "top", ...positionerProps }}
+			style={[parts.settingsPopup, style]}
+			{...props}>
+			<Menu.SubmenuRoot>
+				<SettingsTrigger label="Model" value={context.selectedModel.label} />
+				<Menu.Popup positionerProps={{ align: "start", side: "inline-end", sideOffset: 4 }} style={parts.modelPopup}>
+					<List
+						groups={context.groups}
+						value={context.value.model}
+						onValueChange={(model) => context.updateValue({ ...context.value, model }, "model")}
+					/>
+				</Menu.Popup>
+			</Menu.SubmenuRoot>
+			<ChoiceSubmenu
+				label="Effort"
+				options={context.effortOptions}
+				value={context.value.effort}
+				onValueChange={(effort) => context.updateValue({ ...context.value, effort }, "effort")}
+			/>
+			<ChoiceSubmenu
+				label="Speed"
+				options={context.speedOptions}
+				value={context.value.speed}
+				onValueChange={(speed) => context.updateValue({ ...context.value, speed }, "speed")}
+			/>
+			<Menu.Separator />
+			<Menu.Item style={parts.resetItem} onClick={() => context.updateValue(context.defaultValue, "reset")}>
+				<span {...stylex.props(parts.resetLabel)}>Reset to default</span>
+				<ArrowCounterClockwiseIcon aria-hidden size="1em" weight="regular" {...stylex.props(parts.resetIcon)} />
+			</Menu.Item>
+		</Menu.Popup>
+	);
+}
+
+function SettingsTrigger({ label, value }: { label: ReactNode; value: ReactNode }) {
+	return (
+		<Menu.SubmenuTrigger openOnHover style={parts.settingsRow}>
+			<span {...stylex.props(parts.settingsLabel)}>{label}</span>
+			<span {...stylex.props(parts.settingsValue)}>{value}</span>
+		</Menu.SubmenuTrigger>
+	);
+}
+
+function ChoiceSubmenu({
+	label,
+	options,
+	value,
+	onValueChange,
+}: {
+	label: string;
+	options: readonly string[];
+	value: string;
+	onValueChange: (value: string) => void;
+}) {
+	return (
+		<Menu.SubmenuRoot>
+			<SettingsTrigger label={label} value={value} />
+			<Menu.Popup positionerProps={{ align: "start", side: "inline-end", sideOffset: 4 }} style={parts.choicePopup}>
+				<Menu.RadioGroup value={value} onValueChange={onValueChange}>
+					<Menu.GroupLabel>{label}</Menu.GroupLabel>
+					{options.map((option) => (
+						<Menu.RadioItem key={option} value={option}>
+							<Menu.ItemLabel>{option}</Menu.ItemLabel>
+						</Menu.RadioItem>
+					))}
+				</Menu.RadioGroup>
+			</Menu.Popup>
+		</Menu.SubmenuRoot>
+	);
+}
+
+export function List({ groups, value, onValueChange }: ModelSelectorListProps) {
+	return (
+		<Menu.RadioGroup value={value} onValueChange={onValueChange}>
+			{groups.map((group, index) => (
+				<Fragment key={group.id}>
+					{index > 0 ? <Menu.Separator /> : null}
+					<Menu.Group>
+						<Menu.GroupLabel>{group.label}</Menu.GroupLabel>
+						{group.options.map((option) => (
+							<Menu.RadioItem
+								key={option.value}
+								value={option.value}
+								disabled={option.disabled}
+								style={parts.modelItem}>
+								{option.icon ? (
+									<span aria-hidden {...stylex.props(parts.modelIcon)}>
+										{option.icon}
+									</span>
+								) : null}
+								<span {...stylex.props(parts.modelLabel, !option.icon && parts.copyWithoutIcon)}>{option.label}</span>
+								{option.description ? (
+									<span {...stylex.props(parts.modelDescription, !option.icon && parts.copyWithoutIcon)}>
+										{option.description}
+									</span>
+								) : null}
+							</Menu.RadioItem>
+						))}
+					</Menu.Group>
+				</Fragment>
+			))}
+		</Menu.RadioGroup>
+	);
+}
+
+function useModelSelectorContext(part: string) {
+	const context = useContext(ModelSelectorContext);
+	if (!context) {
+		throw new Error(`ModelSelector.${part} must be used inside ModelSelector.Root.`);
+	}
+	return context;
+}
+
+function findModel(groups: readonly ModelSelectorGroup[], value: string) {
+	return groups.flatMap((group) => group.options).find((option) => option.value === value);
+}
+
+function getTextLabel(label: ReactNode) {
+	return typeof label === "string" || typeof label === "number" ? String(label) : "selected model";
+}
+
+const parts = stylex.create({
+	settingsPopup: {
+		// minWidth: "19rem",
+	},
+	modelPopup: {
+		// minWidth: "22rem",
+	},
+	choicePopup: {
+		// minWidth: "12rem",
+	},
+	triggerIcon: {
+		alignItems: "center",
+		display: "inline-flex",
+		flexShrink: 0,
+		justifyContent: "center",
+		height: "1em",
+		width: "1em",
+	},
+	triggerModel: {
+		overflow: "hidden",
+		textOverflow: "ellipsis",
+		whiteSpace: "nowrap",
+	},
+	triggerSetting: {
+		overflow: "hidden",
+		fontWeight: fontWeight.regular,
+		opacity: 0.72,
+		textOverflow: "ellipsis",
+		whiteSpace: "nowrap",
+	},
+	settingsRow: {
+		[menuItemVars.columns]: "5rem minmax(0, 1fr) auto",
+		[menuItemVars.paddingInlineStart]: space.x3,
+	},
+	settingsLabel: {
+		gridColumn: "1",
+		minWidth: 0,
+	},
+	settingsValue: {
+		gridColumn: "2",
+		overflow: "hidden",
+		color: color.fgMuted,
+		textAlign: "end",
+		textOverflow: "ellipsis",
+		whiteSpace: "nowrap",
+	},
+	resetItem: {
+		[menuItemVars.columns]: "minmax(0, 1fr) auto",
+		[menuItemVars.paddingInlineStart]: space.x3,
+		color: color.fgMuted,
+	},
+	resetLabel: {
+		gridColumn: "1",
+		whiteSpace: "nowrap",
+		minWidth: 0,
+	},
+	resetIcon: {
+		gridColumn: "2",
+		color: color.fgMuted,
+		justifySelf: "end",
+	},
+	modelItem: {
+		[menuItemVars.columns]: `${space.x4} 1em minmax(0, 1fr)`,
+		[menuItemVars.columnGap]: space.x2,
+		[menuItemVars.minHeight]: "3.375rem",
+		[menuItemVars.paddingBlock]: space.x2,
+		[menuItemVars.rowGap]: "0.0625rem",
+	},
+	modelIcon: {
+		gridColumn: "2",
+		gridRow: "1",
+		alignItems: "center",
+		display: "inline-flex",
+		justifyContent: "center",
+		height: "1em",
+		width: "1em",
+	},
+	modelLabel: {
+		gridColumn: "3",
+		gridRow: "1",
+		overflow: "hidden",
+		color: color.fg,
+		fontSize: fontSize.x2,
+		letterSpacing: letterSpacing.x2,
+		lineHeight: lineHeight.x2,
+		textOverflow: "ellipsis",
+		whiteSpace: "nowrap",
+	},
+	modelDescription: {
+		gridColumn: "3",
+		gridRow: "2",
+		overflow: "hidden",
+		color: color.fgMuted,
+		fontSize: fontSize.x1,
+		letterSpacing: letterSpacing.x1,
+		lineHeight: lineHeight.x1,
+		textOverflow: "ellipsis",
+		whiteSpace: "nowrap",
+	},
+	copyWithoutIcon: {
+		gridColumn: "2 / 4",
+	},
+});

@@ -1,0 +1,14 @@
+import { DocsPage, Markdown, Meta, Source } from "@storybook/addon-docs/blocks";
+import * as Stories from "./copy-button.stories";
+
+<Meta of={Stories} />
+
+<DocsPage />
+
+<Markdown>{`
+| Part | Description |
+| --- | --- |
+| \`CopyButton\` | Copies its value and shows anchored feedback; omit children for an icon-only button with a tooltip, or provide children for a labeled button. The tooltip defaults to "Copy to clipboard" and can be changed with the \`tooltip\` prop. |
+`}</Markdown>
+
+<Source code={'import { CopyButton } from "@/blocks";'} language="tsx" />

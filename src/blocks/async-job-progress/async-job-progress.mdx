@@ -1,0 +1,21 @@
+import { DocsPage, Markdown, Meta, Source } from "@storybook/addon-docs/blocks";
+import * as Stories from "./async-job-progress.stories";
+
+<Meta of={Stories} />
+
+<DocsPage />
+
+<Markdown>{`
+| Part | Description |
+| --- | --- |
+| \`Root\` | State-owning progress region that coordinates status and value. |
+| \`Header\` | Layout for job identity and current status. |
+| \`Heading\` | Groups the title and description. |
+| \`Title\` | Configurable semantic heading that labels the progress bar. |
+| \`Description\` | Supporting information about the job. |
+| \`Status\` | Live status badge derived from the root status. |
+| \`Progress\` | Accessible determinate or indeterminate progress display. |
+| \`Actions\` | Layout for caller-composed job controls. |
+`}</Markdown>
+
+<Source code={'import { AsyncJobProgress } from "@/blocks";'} language="tsx" />
