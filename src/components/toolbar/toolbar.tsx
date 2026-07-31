@@ -221,6 +221,9 @@ const toolbarParts = stylex.create({
 			"[data-disabled]": color.fgSubtle,
 			default: color.fg,
 		},
+		flexBasis: 0,
+		flexGrow: 1,
+		flexShrink: 1,
 		fontFamily: "inherit",
 		fontSize: fontSize.x2,
 		letterSpacing: letterSpacing.x2,
@@ -230,7 +233,6 @@ const toolbarParts = stylex.create({
 			default: 1,
 		},
 		height: size["control.md"],
-		flex: 1,
 		minWidth: "10rem",
 		"::placeholder": {
 			color: color.fgSubtle,

@@ -9,7 +9,7 @@ import { fieldStyles } from "@/components/field/field.stylex";
 import { textStyles } from "@/components/text/text.stylex";
 import { focusRing } from "@/styles/recipes/focus";
 import { pressable } from "@/styles/recipes/transitions";
-import { color, fontWeight, motion, radius, size as sizeToken, space } from "@/styles/tokens.stylex";
+import { color, motion, radius, size as sizeToken, space } from "@/styles/tokens.stylex";
 
 export type RadioSize = "sm" | "md";
 
@@ -46,7 +46,6 @@ export function Radio({
 	className,
 	style,
 	disabled,
-	readOnly,
 	required,
 	size,
 	id: providedId,
@@ -152,7 +151,7 @@ export function RadioGroup({
 						// disabled={disabled}
 						// readOnly={readOnly}
 						// required={required}
-						// aria-describedby={mergeIds(ariaDescribedBy, descriptionId)}
+						aria-describedby={mergeIds(ariaDescribedBy, descriptionId)}
 						{...props}
 					/>
 				}
