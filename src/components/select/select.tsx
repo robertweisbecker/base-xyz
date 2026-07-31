@@ -45,8 +45,7 @@ export function Root<Value, Multiple extends SelectMultiple = false>({
 			disabled={disabled}
 			invalid={invalid}
 			className={[sx.className, className].filter(Boolean).join(" ")}
-			style={sx.style}
-		>
+			style={sx.style}>
 			<BaseSelect.Root disabled={disabled} {...props}>
 				{children}
 			</BaseSelect.Root>
@@ -108,8 +107,7 @@ export function Trigger({
 			ref={ref}
 			className={[sx.className, className].filter(Boolean).join(" ")}
 			style={sx.style}
-			{...props}
-		>
+			{...props}>
 			<BaseSelect.Value className={stylex.props(selectParts.value).className} placeholder={placeholder}>
 				{children}
 			</BaseSelect.Value>
@@ -190,14 +188,12 @@ export function Popup({
 				sideOffset={sideOffset}
 				className={[positionerSx.className, positionerClassName].filter(Boolean).join(" ")}
 				style={positionerSx.style}
-				{...otherPositionerProps}
-			>
+				{...otherPositionerProps}>
 				<BaseSelect.Popup
 					ref={ref}
 					className={[sx.className, className].filter(Boolean).join(" ")}
 					style={sx.style}
-					{...props}
-				>
+					{...props}>
 					{children}
 				</BaseSelect.Popup>
 			</BaseSelect.Positioner>
@@ -243,19 +239,20 @@ export type SelectItemProps = Omit<BaseSelect.Item.Props, "children" | "classNam
 export type SelectItemVariant = MenuItemVariant;
 
 export function Item({ ref, children, className, style, variant = "primary", ...props }: SelectItemProps) {
-	const sx = stylex.props(menuItemStyles.row, menuItemVariantStyles[variant], focusRing.inset, style);
+	const sx = stylex.props(menuItemStyles.item, menuItemVariantStyles[variant], focusRing.inset, style);
 
 	return (
 		<BaseSelect.Item
 			ref={ref}
 			className={[sx.className, className].filter(Boolean).join(" ")}
 			style={sx.style}
-			{...props}
-		>
+			{...props}>
 			<BaseSelect.ItemIndicator keepMounted className={stylex.props(menuItemStyles.indicator).className}>
 				<CheckmarkIcon />
 			</BaseSelect.ItemIndicator>
-			<BaseSelect.ItemText {...stylex.props(menuItemStyles.label, selectParts.itemText)}>{children}</BaseSelect.ItemText>
+			<BaseSelect.ItemText {...stylex.props(menuItemStyles.label, selectParts.itemText)}>
+				{children}
+			</BaseSelect.ItemText>
 		</BaseSelect.Item>
 	);
 }
@@ -275,8 +272,7 @@ export function Group({ ref, children, className, label, style, ...props }: Sele
 			ref={ref}
 			className={[sx.className, className].filter(Boolean).join(" ")}
 			style={sx.style}
-			{...props}
-		>
+			{...props}>
 			{label ? <BaseSelect.GroupLabel {...stylex.props(selectParts.groupLabel)}>{label}</BaseSelect.GroupLabel> : null}
 			{children}
 		</BaseSelect.Group>
@@ -413,7 +409,6 @@ const selectParts = stylex.create({
 		insetInline: "1px",
 		alignItems: "center",
 		color: color.fgMuted,
-		cursor: "default",
 		display: "flex",
 		justifyContent: "center",
 		zIndex: 2,

@@ -8,13 +8,7 @@ import {
 	type DragStartEvent,
 } from "@dnd-kit/react";
 import { useSortable } from "@dnd-kit/react/sortable";
-import {
-	ArchiveIcon,
-	BellIcon,
-	DotsSixVerticalIcon,
-	EnvelopeSimpleIcon,
-	FolderIcon,
-} from "@phosphor-icons/react";
+import { ArchiveIcon, BellIcon, DotsSixVerticalIcon, EnvelopeSimpleIcon, FolderIcon } from "@phosphor-icons/react";
 import * as stylex from "@stylexjs/stylex";
 import type { ReactNode } from "react";
 import { useRef, useState } from "react";
@@ -203,7 +197,7 @@ function SortableMenu({
 function EmptyMenuGroup({ groupId }: { groupId: MenuGroupId }) {
 	return (
 		<Menu.Item disabled closeOnClick={false} style={demoStyles.emptyMenuItem}>
-			Drop into {MENU_GROUP_LABELS[groupId].toLowerCase()}
+			Add {MENU_GROUP_LABELS[groupId].toLowerCase()}
 		</Menu.Item>
 	);
 }
@@ -234,7 +228,7 @@ function SortableMenuItem({ item, index, groupId }: { item: MenuAction; index: n
 			data-drop-target={isDropTarget || undefined}
 			style={demoStyles.sortableMenuItem}>
 			<Menu.ItemIcon>
-				<DotsSixVerticalIcon size={16} weight="bold" />
+				<DotsSixVerticalIcon weight="bold" />
 			</Menu.ItemIcon>
 			<Menu.ItemLabel>{item.label}</Menu.ItemLabel>
 			<Menu.ItemShortcut>{item.shortcut}</Menu.ItemShortcut>
@@ -245,18 +239,15 @@ function SortableMenuItem({ item, index, groupId }: { item: MenuAction; index: n
 function MenuOverlay({ label }: { label: string }) {
 	return (
 		<div {...stylex.props(demoStyles.menuOverlay)}>
-			<DotsSixVerticalIcon aria-hidden size={16} weight="bold" />
+			<DotsSixVerticalIcon aria-hidden weight="bold" />
 			<span>{label}</span>
 		</div>
 	);
 }
 
 function cloneMenuGroups(groups: MenuGroupState = INITIAL_MENU_GROUPS): MenuGroupState {
-	return MENU_GROUP_ORDER.reduce(
-		(next, groupId) => {
-			next[groupId] = groups[groupId].map((item) => ({ ...item }));
-			return next;
-		},
-		{} as MenuGroupState,
-	);
+	return MENU_GROUP_ORDER.reduce((next, groupId) => {
+		next[groupId] = groups[groupId].map((item) => ({ ...item }));
+		return next;
+	}, {} as MenuGroupState);
 }

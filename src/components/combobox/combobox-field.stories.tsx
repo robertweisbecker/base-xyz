@@ -398,7 +398,7 @@ function PopupContent({ label }: { label: string }) {
 							<Combobox.Item
 								key={item}
 								value={item}
-								className={stylex.props(menuItemStyles.row, menuItemVariantStyles.default).className}>
+								className={stylex.props(menuItemStyles.item, menuItemVariantStyles.default).className}>
 								<Combobox.ItemIndicator keepMounted className={stylex.props(menuItemStyles.indicator).className}>
 									<CheckmarkIcon />
 								</Combobox.ItemIndicator>

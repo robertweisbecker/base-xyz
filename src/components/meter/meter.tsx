@@ -2,9 +2,8 @@ import { Meter as BaseMeter } from "@base-ui/react/meter";
 import * as stylex from "@stylexjs/stylex";
 import type { StyleXStyles } from "@stylexjs/stylex";
 import { textColorStyles, textStyles } from "@/components/text/text.stylex";
-import type { CSSProperties } from "react";
-import { motion, shadow } from "@/styles/tokens.stylex";
-import { color, space } from "@/styles/tokens.stylex";
+import { createContext, useContext, type CSSProperties } from "react";
+import { color, motion, shadow, size, space } from "@/styles/tokens.stylex";
 
 type StyledProps<T> = Omit<T, "className" | "style"> & {
 	className?: string;
@@ -14,7 +13,10 @@ type StyledProps<T> = Omit<T, "className" | "style"> & {
 
 type MeterStyle = CSSProperties & {
 	"--ds-meter-indicator-color"?: string;
+	"--ds-meter-segment-count"?: number;
 };
+
+export type MeterVariant = "bar" | "segmented";
 
 export type RootProps = Omit<StyledProps<BaseMeter.Root.Props>, "color"> & {
 	/** The lower boundary of the middle range. */
@@ -25,18 +27,31 @@ export type RootProps = Omit<StyledProps<BaseMeter.Root.Props>, "color"> & {
 	optimum?: number;
 	/** Overrides the indicator color, including colors derived from semantic thresholds. */
 	color?: string;
+	/** The visual treatment of the meter. */
+	variant?: MeterVariant;
 };
 export type LabelProps = StyledProps<BaseMeter.Label.Props>;
 export type ValueProps = StyledProps<BaseMeter.Value.Props>;
 export type TrackProps = StyledProps<BaseMeter.Track.Props>;
 export type IndicatorProps = StyledProps<BaseMeter.Indicator.Props>;
 
-type MeterState = "optimum" | "suboptimum" | "even-less-good";
+type MeterState = "optimum" | "suboptimum" | "critical";
+
+type ResolvedMeterValues = {
+	actualValue: number;
+	highBoundary: number;
+	lowBoundary: number;
+	maximumValue: number;
+	minimumValue: number;
+	optimumPoint: number;
+};
+
+const MeterVariantContext = createContext<MeterVariant>("bar");
 
 const meterStateColors = {
 	optimum: color.bgSuccess,
 	suboptimum: color.bgWarning,
-	"even-less-good": color.bgDanger,
+	critical: color.bgDanger,
 } satisfies Record<MeterState, string>;
 
 export function Root({
@@ -50,34 +65,47 @@ export function Root({
 	optimum,
 	style,
 	value,
+	variant = "bar",
 	...props
 }: RootProps) {
-	const hasSemanticThresholds = low !== undefined || high !== undefined || optimum !== undefined;
-	const meterState = hasSemanticThresholds ? getMeterState({ high, low, max, min, optimum, value }) : undefined;
+	const meterValues = resolveMeterValues({ high, low, max, min, optimum, value });
+	const hasSemanticThresholds = [low, high, optimum].some(isValidMeterNumber);
+	const meterState = hasSemanticThresholds ? getMeterState(meterValues) : undefined;
 	const resolvedIndicatorColor = indicatorColor ?? (meterState ? meterStateColors[meterState] : undefined);
-	const sx = stylex.props(meterParts.root, style);
-	const meterStyle = resolvedIndicatorColor
-		? ({
-				...sx.style,
-				"--ds-meter-indicator-color": resolvedIndicatorColor,
-			} satisfies MeterStyle)
-		: sx.style;
+	const sx = stylex.props(meterParts.root, variant === "segmented" && meterParts.segmentedRoot, style);
+	const meterStyle: MeterStyle = {
+		...sx.style,
+		...(resolvedIndicatorColor && {
+			"--ds-meter-indicator-color": resolvedIndicatorColor,
+		}),
+		...(variant === "segmented" && {
+			"--ds-meter-segment-count": getSegmentCount(meterValues.minimumValue, meterValues.maximumValue),
+		}),
+	};
 
 	return (
-		<BaseMeter.Root
-			ref={ref}
-			className={[sx.className, className].filter(Boolean).join(" ")}
-			data-meter-state={meterState}
-			max={max}
-			min={min}
-			style={meterStyle}
-			value={value}
-			{...props}
-		/>
+		<MeterVariantContext.Provider value={variant}>
+			<BaseMeter.Root
+				ref={ref}
+				className={[sx.className, className].filter(Boolean).join(" ")}
+				data-meter-state={meterState}
+				data-variant={variant}
+				max={meterValues.maximumValue}
+				min={meterValues.minimumValue}
+				style={meterStyle}
+				value={meterValues.actualValue}
+				{...props}
+			/>
+		</MeterVariantContext.Provider>
 	);
 }
 
-function getMeterState({
+function getSegmentCount(min: number, max: number) {
+	const range = max - min;
+	return Number.isFinite(range) && range > 0 ? Math.ceil(range) : 1;
+}
+
+function resolveMeterValues({
 	high,
 	low,
 	max,
@@ -91,12 +119,32 @@ function getMeterState({
 	min: number;
 	optimum?: number;
 	value: number;
-}): MeterState {
-	const lowValue = normalizeThreshold(low, min, min, max);
-	const highValue = normalizeThreshold(high, max, lowValue, max);
-	const optimumValue = normalizeThreshold(optimum, min + (max - min) / 2, min, max);
-	const valueRegion = getMeterRegion(normalizeThreshold(value, min, min, max), lowValue, highValue);
-	const optimumRegion = getMeterRegion(optimumValue, lowValue, highValue);
+}): ResolvedMeterValues {
+	const minimumValue = isValidMeterNumber(min) ? min : 0;
+	const candidateMaximumValue = isValidMeterNumber(max) ? max : 100;
+	const maximumValue = Math.max(minimumValue, candidateMaximumValue);
+	const actualValue = clampMeterValue(isValidMeterNumber(value) ? value : 0, minimumValue, maximumValue);
+	const lowBoundary = clampMeterValue(isValidMeterNumber(low) ? low : minimumValue, minimumValue, maximumValue);
+	const highBoundary = clampMeterValue(isValidMeterNumber(high) ? high : maximumValue, lowBoundary, maximumValue);
+	const optimumPoint = clampMeterValue(
+		isValidMeterNumber(optimum) ? optimum : minimumValue + (maximumValue - minimumValue) / 2,
+		minimumValue,
+		maximumValue,
+	);
+
+	return {
+		actualValue,
+		highBoundary,
+		lowBoundary,
+		maximumValue,
+		minimumValue,
+		optimumPoint,
+	};
+}
+
+function getMeterState({ actualValue, highBoundary, lowBoundary, optimumPoint }: ResolvedMeterValues): MeterState {
+	const valueRegion = getMeterRegion(actualValue, lowBoundary, highBoundary);
+	const optimumRegion = getMeterRegion(optimumPoint, lowBoundary, highBoundary);
 
 	if (valueRegion === optimumRegion) {
 		return "optimum";
@@ -106,12 +154,15 @@ function getMeterState({
 		return "suboptimum";
 	}
 
-	return "even-less-good";
+	return "critical";
 }
 
-function normalizeThreshold(value: number | undefined, fallback: number, min: number, max: number) {
-	const resolvedValue = value === undefined || Number.isNaN(value) ? fallback : value;
-	return Math.max(min, Math.min(resolvedValue, max));
+function isValidMeterNumber(value: number | undefined): value is number {
+	return value !== undefined && Number.isFinite(value);
+}
+
+function clampMeterValue(value: number, min: number, max: number) {
+	return Math.max(min, Math.min(value, max));
 }
 
 function getMeterRegion(value: number, low: number, high: number) {
@@ -121,7 +172,14 @@ function getMeterRegion(value: number, low: number, high: number) {
 }
 
 export function Label({ ref, className, style, ...props }: LabelProps) {
-	const sx = stylex.props(textStyles.supporting, textColorStyles.muted, meterParts.label, style);
+	const variant = useContext(MeterVariantContext);
+	const sx = stylex.props(
+		textStyles.supporting,
+		textColorStyles.muted,
+		meterParts.label,
+		variant === "segmented" && meterParts.segmentedLabel,
+		style,
+	);
 
 	return (
 		<BaseMeter.Label
@@ -134,7 +192,13 @@ export function Label({ ref, className, style, ...props }: LabelProps) {
 }
 
 export function Value({ ref, className, style, ...props }: ValueProps) {
-	const sx = stylex.props(textStyles.supporting, meterParts.value, style);
+	const variant = useContext(MeterVariantContext);
+	const sx = stylex.props(
+		textStyles.supporting,
+		meterParts.value,
+		variant === "segmented" && meterParts.segmentedValue,
+		style,
+	);
 
 	return (
 		<BaseMeter.Value
@@ -147,7 +211,8 @@ export function Value({ ref, className, style, ...props }: ValueProps) {
 }
 
 export function Track({ ref, className, style, ...props }: TrackProps) {
-	const sx = stylex.props(meterParts.track, style);
+	const variant = useContext(MeterVariantContext);
+	const sx = stylex.props(meterParts.track, variant === "segmented" && meterParts.segmentedTrack, style);
 
 	return (
 		<BaseMeter.Track
@@ -160,7 +225,8 @@ export function Track({ ref, className, style, ...props }: TrackProps) {
 }
 
 export function Indicator({ ref, className, style, ...props }: IndicatorProps) {
-	const sx = stylex.props(meterParts.indicator, style);
+	const variant = useContext(MeterVariantContext);
+	const sx = stylex.props(meterParts.indicator, variant === "segmented" && meterParts.segmentedIndicator, style);
 
 	return (
 		<BaseMeter.Indicator
@@ -174,12 +240,16 @@ export function Indicator({ ref, className, style, ...props }: IndicatorProps) {
 
 const meterParts = stylex.create({
 	root: {
-		color: color.fg,
 		columnGap: space.x3,
 		display: "grid",
 		gridTemplateColumns: "minmax(0, 1fr) auto",
-		rowGap: space.x2,
+		rowGap: space.x1,
 		width: "100%",
+	},
+	segmentedRoot: {
+		alignItems: "center",
+		gridTemplateColumns: "auto minmax(0, 1fr) auto",
+		rowGap: 0,
 	},
 	label: {
 		overflow: "hidden",
@@ -187,26 +257,44 @@ const meterParts = stylex.create({
 		whiteSpace: "nowrap",
 		minWidth: 0,
 	},
+	segmentedLabel: {
+		gridColumn: "2",
+		gridRow: "1",
+	},
 	value: {
 		color: color.fg,
 		fontVariantNumeric: "tabular-nums",
 		textAlign: "end",
 		whiteSpace: "nowrap",
 	},
+	segmentedValue: {
+		gridColumn: "3",
+		gridRow: "1",
+	},
 	track: {
 		borderRadius: "2px",
 		gridColumn: "1 / -1",
 		overflow: "hidden",
-		backgroundColor: color.canvas,
-		boxShadow: shadow.inset,
-		outlineColor: color.fillTrack,
-		outlineOffset: "-1px",
-		outlineStyle: "solid",
-		outlineWidth: "1px",
-		height: "0.375rem",
+		backgroundColor: color.fillTrack,
+		height: space.x2,
+	},
+	segmentedTrack: {
+		borderRadius: 0,
+		gridColumn: "1",
+		gridRow: "1",
+		backgroundColor: color.fillTrack,
+		boxShadow: "none",
+		maskImage:
+			"url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 10 16'%3E%3Crect width='6' height='16' rx='1' fill='black'/%3E%3C/svg%3E\")",
+		maskPosition: "left center",
+		maskRepeat: "repeat-x",
+		maskSize: `calc(10px) ${size["indicator.sm"]}`,
+		outlineWidth: 0,
+		height: size["indicator.sm"],
+		width: `calc(var(--ds-meter-segment-count) * (10px) - ${space.x1})`,
 	},
 	indicator: {
-		backgroundColor: "var(--ds-meter-indicator-color, var(--ds-color-text))",
+		backgroundColor: "var(--ds-meter-indicator-color, var(--gray-p1))",
 		borderEndStartRadius: "inherit",
 		borderStartStartRadius: "inherit",
 		boxShadow: shadow.sm,
@@ -216,5 +304,9 @@ const meterParts = stylex.create({
 		},
 		transitionProperty: "width, background-color",
 		transitionTimingFunction: motion.easeSmoothOut,
+	},
+	segmentedIndicator: {
+		borderRadius: 0,
+		boxShadow: "none",
 	},
 });

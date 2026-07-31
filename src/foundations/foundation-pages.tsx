@@ -1109,7 +1109,6 @@ const styles = stylex.create({
 			":hover": color.bgAccentHover,
 		},
 		color: color.fgAccentContrast,
-		cursor: "default",
 		display: "inline-flex",
 		flexShrink: 0,
 		fontSize: fontSize.x1,

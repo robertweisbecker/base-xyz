@@ -355,7 +355,7 @@ function ComboboxPopup({ itemVariant, creatableItem }: { itemVariant: MenuItemVa
 									key={isCreatableItem ? `create:${item}` : item}
 									value={item}
 									className={
-										stylex.props(menuItemStyles.row, menuItemVariantStyles[itemVariant], focusRing.inset).className
+										stylex.props(menuItemStyles.item, menuItemVariantStyles[itemVariant], focusRing.inset).className
 									}>
 									{isCreatableItem ? (
 										<span className={stylex.props(menuItemStyles.indicator).className}>

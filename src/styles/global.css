@@ -93,15 +93,17 @@
 	--ds-color-text-muted: var(--gray-t2);
 	--ds-color-text-subtle: var(--gray-t1);
 	--ds-color-text-accent: var(--indigo-t1);
-	--ds-color-text-accent-hover: var(--indigo-t2);
+	--ds-color-text-accent-strong: var(--indigo-t2);
 	--ds-color-border: var(--gray-a2);
 	--ds-color-border-strong: var(--gray-a3);
 	--ds-color-border-hover: var(--gray-p1);
 	--ds-color-border-disabled: var(--gray-c2);
 	--ds-color-accent: var(--indigo-p1);
 	--ds-color-accent-hover: var(--indigo-p2);
+
 	--ds-color-accent-soft: var(--indigo-c1);
 	--ds-color-accent-soft-hover: var(--indigo-c2);
+	--ds-color-accent-muted: var(--indigo-c3);
 	--ds-color-accent-contrast: var(--color-white);
 	--ds-color-neutral: var(--gray-p1);
 	--ds-color-neutral-strong: var(--gray-t2);
@@ -203,6 +205,7 @@
 
 	/* --ds-color-highlight: color-mix(in oklab, #f4f4f2 7%, transparent); */
 	--ds-color-text-accent: var(--indigo-t1);
+
 	--ds-color-accent: var(--blue-t1);
 	--ds-color-accent-hover: var(--indigo-p2);
 	--ds-color-accent-soft: var(--indigo-c1);

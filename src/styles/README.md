@@ -9,7 +9,7 @@ appears.
   These compile inline rather than creating themeable CSS variables.
 - Component-owned `*.stylex.ts` files are canonical style APIs. Borrowers
   import from the component they intentionally resemble: Select and Combobox
-  import Menu rows, for example.
+  import Menu item styles, for example.
 - `recipes/*.ts` is reserved for ownerless interaction primitives with several
   real consumers. Component geometry and one-off variants remain beside the
   component.
@@ -102,7 +102,7 @@ other components that intentionally look like Menu items compose it directly:
 ```tsx
 import { menuItemStyles, menuItemVariantStyles } from "@/components/menu/menu-item.stylex";
 
-stylex.props(menuItemStyles.row, menuItemVariantStyles.default, style); // item row
+stylex.props(menuItemStyles.item, menuItemVariantStyles.default, style); // item row
 stylex.props(menuItemStyles.label); // primary label cell
 stylex.props(menuItemStyles.indicator); // check/radio slot
 ```

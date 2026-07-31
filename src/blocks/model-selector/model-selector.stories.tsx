@@ -1,4 +1,3 @@
-import { RobotIcon } from "@phosphor-icons/react/dist/csr/Robot";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import * as stylex from "@stylexjs/stylex";
 import type { ButtonSize, ButtonVariant } from "@/components/button/button";
@@ -11,6 +10,7 @@ import {
 	exampleModelGroups,
 	exampleSpeedOptions,
 } from "./model-selector.examples";
+import { CirclesThreeIcon } from "@phosphor-icons/react";
 
 const meta = {
 	title: "Blocks/Model selector",
@@ -26,24 +26,24 @@ export const Examples: Story = {
 	render: () => (
 		<div {...stylex.props(storyParts.stack)}>
 			<ModelSelectorSample
-				label="Primary model with icons"
-				groups={modelGroupsWithIcons}
+				label="Brand icons"
+				groups={exampleModelGroups}
 				defaultValue={exampleDefaultValue}
-				size="lg"
+				size="md"
 				variant="secondary"
 			/>
 			<ModelSelectorSample
-				label="Alternative model"
-				groups={exampleModelGroups}
+				label="Fallback icons"
+				groups={modelGroupsWithIcons}
 				defaultValue={{ model: "claude-fable-5", effort: "Medium", speed: "Default" }}
 				size="md"
 				variant="neutral"
 			/>
 			<ModelSelectorSample
-				label="Options without icons"
+				label="No icons"
 				groups={iconlessModelGroups}
 				defaultValue={{ model: "composer-2-5", effort: "Medium", speed: "Default" }}
-				size="lg"
+				size="md"
 				variant="secondary"
 			/>
 			<ModelSelectorSample
@@ -51,7 +51,7 @@ export const Examples: Story = {
 				groups={exampleModelGroups}
 				defaultValue={{ model: "gpt-5.6-terra", effort: "High", speed: "Default" }}
 				showEffort={false}
-				size="lg"
+				size="md"
 				variant="secondary"
 			/>
 		</div>
@@ -92,7 +92,7 @@ const modelGroupsWithIcons = exampleModelGroups.map((group) => ({
 	...group,
 	options: group.options.map((option) => ({
 		...option,
-		icon: <RobotIcon aria-hidden weight="duotone" />,
+		icon: <CirclesThreeIcon aria-hidden weight="duotone" />,
 	})),
 }));
 

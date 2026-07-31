@@ -67,15 +67,7 @@ export default meta;
 type Story = StoryObj<MenuStoryArgs>;
 
 export const Playground: Story = {
-	render: ({
-		_side,
-		_align,
-		defaultOpen,
-		_showShortcuts,
-		_showSelectionItems,
-		_disabledItem,
-		_itemVariant,
-	}) => (
+	render: ({ _side, _align, defaultOpen, _showShortcuts, _showSelectionItems, _disabledItem, _itemVariant }) => (
 		<Menu.Root
 			key={`${_side}-${_align}-${defaultOpen}-${_showShortcuts}-${_showSelectionItems}-${_disabledItem}-${_itemVariant}`}
 			defaultOpen={defaultOpen}>
@@ -246,7 +238,7 @@ export const SharedRowParity: Story = {
 					<span {...stylex.props(textStyles.supporting)}>{owner}</span>
 					<div
 						data-highlighted={index === 1 ? "" : undefined}
-						{...stylex.props(menuItemStyles.row, menuItemVariantStyles.default, storyStyles.parityRow)}>
+						{...stylex.props(menuItemStyles.item, menuItemVariantStyles.default, storyStyles.parityRow)}>
 						<span aria-hidden {...stylex.props(menuItemStyles.indicator)} />
 						<span {...stylex.props(menuItemStyles.label)}>Shared selectable row</span>
 					</div>

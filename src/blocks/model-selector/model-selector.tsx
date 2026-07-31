@@ -5,8 +5,8 @@ import { createContext, Fragment, type ComponentProps, type ReactNode, useContex
 import { Button, type ButtonProps } from "@/components/button/button";
 import * as Menu from "@/components/menu/menu";
 import { menuItemVars } from "@/components/menu/menu-item.stylex";
-import { color, space } from "@/styles/tokens.stylex";
-import { fontSize, fontWeight, letterSpacing, lineHeight } from "@/styles/tokens.stylex";
+import { color, space, fontSize, fontWeight, letterSpacing, lineHeight } from "@/styles/tokens.stylex";
+import { breakpoints } from "@/styles/constants.stylex";
 
 export type ModelSelectorOption = {
 	value: string;
@@ -170,7 +170,19 @@ export function Popup({ positionerProps, style, ...props }: ModelSelectorPopupPr
 			{...props}>
 			<Menu.SubmenuRoot>
 				<SettingsTrigger label="Model" value={context.selectedModel.label} />
-				<Menu.Popup positionerProps={{ align: "start", side: "inline-end", sideOffset: 4 }} style={parts.modelPopup}>
+				<Menu.Popup
+					positionerProps={{
+						align: "start",
+						side: "inline-end",
+						sideOffset: 4,
+						alignOffset: -24,
+						collisionAvoidance: {
+							side: "shift",
+							align: "shift",
+							fallbackAxisSide: "none",
+						},
+					}}
+					style={parts.modelPopup}>
 					<List
 						groups={context.groups}
 						value={context.value.model}
@@ -199,11 +211,16 @@ export function Popup({ positionerProps, style, ...props }: ModelSelectorPopupPr
 	);
 }
 
-function SettingsTrigger({ label, value }: { label: ReactNode; value: ReactNode }) {
+function SettingsTrigger({ label, value, valueIcon }: { label: ReactNode; value: ReactNode; valueIcon?: ReactNode }) {
 	return (
 		<Menu.SubmenuTrigger openOnHover style={parts.settingsRow}>
 			<span {...stylex.props(parts.settingsLabel)}>{label}</span>
-			<span {...stylex.props(parts.settingsValue)}>{value}</span>
+			<span {...stylex.props(parts.settingsValue)}>
+				<span aria-hidden {...stylex.props(parts.settingsValueIcon)}>
+					{valueIcon}
+				</span>
+				{value}
+			</span>
 		</Menu.SubmenuTrigger>
 	);
 }
@@ -213,16 +230,34 @@ function ChoiceSubmenu({
 	options,
 	value,
 	onValueChange,
+	valueIcon,
 }: {
 	label: string;
 	options: readonly string[];
 	value: string;
+	valueIcon?: ReactNode;
 	onValueChange: (value: string) => void;
 }) {
 	return (
 		<Menu.SubmenuRoot>
-			<SettingsTrigger label={label} value={value} />
-			<Menu.Popup positionerProps={{ align: "start", side: "inline-end", sideOffset: 4 }} style={parts.choicePopup}>
+			<SettingsTrigger
+				label={label}
+				value={value}
+				valueIcon={value === "Fast" ? <LightningIcon size="1em" weight="fill" /> : valueIcon}
+			/>
+			<Menu.Popup
+				positionerProps={{
+					align: "start",
+					side: "inline-end",
+					sideOffset: 0,
+					alignOffset: -28,
+					collisionAvoidance: {
+						side: "shift",
+						align: "shift",
+						fallbackAxisSide: "none",
+					},
+				}}
+				style={parts.choicePopup}>
 				<Menu.RadioGroup value={value} onValueChange={onValueChange}>
 					<Menu.GroupLabel>{label}</Menu.GroupLabel>
 					{options.map((option) => (
@@ -288,10 +323,16 @@ function getTextLabel(label: ReactNode) {
 
 const parts = stylex.create({
 	settingsPopup: {
-		// minWidth: "19rem",
+		minWidth: {
+			default: null,
+			[breakpoints.sm]: "16rem",
+		},
 	},
 	modelPopup: {
-		// minWidth: "22rem",
+		minWidth: {
+			default: null,
+			[breakpoints.sm]: "16rem",
+		},
 	},
 	choicePopup: {
 		// minWidth: "12rem",
@@ -317,8 +358,7 @@ const parts = stylex.create({
 		whiteSpace: "nowrap",
 	},
 	settingsRow: {
-		[menuItemVars.columns]: "5rem minmax(0, 1fr) auto",
-		[menuItemVars.paddingInlineStart]: space.x3,
+		[menuItemVars.columns]: "auto minmax(0, 1fr) .5rem",
 	},
 	settingsLabel: {
 		gridColumn: "1",
@@ -328,13 +368,27 @@ const parts = stylex.create({
 		gridColumn: "2",
 		overflow: "hidden",
 		color: color.fgMuted,
+		fontSize: fontSize.x1,
+		letterSpacing: letterSpacing.x1,
 		textAlign: "end",
 		textOverflow: "ellipsis",
 		whiteSpace: "nowrap",
+		display: "flex",
+		alignItems: "center",
+		justifyContent: "end",
+		gap: space.x1,
+	},
+	settingsValueIcon: {
+		alignItems: "center",
+		display: "inline-flex",
+		flexShrink: 0,
+		justifyContent: "center",
+		height: "1em",
+		width: "1em",
 	},
 	resetItem: {
 		[menuItemVars.columns]: "minmax(0, 1fr) auto",
-		[menuItemVars.paddingInlineStart]: space.x3,
+		// [menuItemVars.paddingInlineStart]: space.x3,
 		color: color.fgMuted,
 	},
 	resetLabel: {
@@ -352,7 +406,7 @@ const parts = stylex.create({
 		[menuItemVars.columnGap]: space.x2,
 		[menuItemVars.minHeight]: "3.375rem",
 		[menuItemVars.paddingBlock]: space.x2,
-		[menuItemVars.rowGap]: "0.0625rem",
+		// [menuItemVars.rowGap]: "0.0625rem",
 	},
 	modelIcon: {
 		gridColumn: "2",
@@ -382,8 +436,12 @@ const parts = stylex.create({
 		fontSize: fontSize.x1,
 		letterSpacing: letterSpacing.x1,
 		lineHeight: lineHeight.x1,
-		textOverflow: "ellipsis",
-		whiteSpace: "nowrap",
+		// textOverflow: "ellipsis",
+		// whiteSpace: "nowrap",
+		display: {
+			default: "none",
+			[breakpoints.md]: "block",
+		},
 	},
 	copyWithoutIcon: {
 		gridColumn: "2 / 4",

@@ -174,7 +174,6 @@ const toolbarParts = stylex.create({
 	},
 	button: {
 		appearance: "none",
-		cursor: "default",
 	},
 	link: {
 		borderRadius: radius.xs,

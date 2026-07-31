@@ -20,7 +20,7 @@ export const menuItemVars = stylex.defineVars({
  * items compose these styles before their component-specific overrides.
  */
 const menuItemParts = stylex.create({
-	row: {
+	itemBase: {
 		borderRadius: radius.md,
 		outline: "0",
 		paddingBlock: menuItemVars.paddingBlock,
@@ -47,7 +47,7 @@ const menuItemParts = stylex.create({
 		gridColumn: "2",
 		minWidth: 0,
 	},
-	indicator: {
+	indicatorSizing: {
 		gridColumn: "1",
 		alignItems: "center",
 		display: "inline-flex",
@@ -63,9 +63,9 @@ const menuItemParts = stylex.create({
 });
 
 export const menuItemStyles = {
-	row: [textStyles.body, menuItemParts.row],
+	item: [textStyles.body, menuItemParts.itemBase],
 	label: menuItemParts.label,
-	indicator: menuItemParts.indicator,
+	indicator: menuItemParts.indicatorSizing,
 } as const;
 
 export const menuItemVariantStyles = stylex.create({

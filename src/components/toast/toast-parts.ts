@@ -22,7 +22,6 @@ const toastControlParts = stylex.create({
 		borderWidth: 0,
 		backgroundColor: "transparent",
 		color: color.bgAccent,
-		cursor: "default",
 		flexShrink: 0,
 	},
 	close: {
@@ -36,7 +35,6 @@ const toastControlParts = stylex.create({
 			},
 		},
 		color: "currentColor",
-		cursor: "default",
 		display: "inline-flex",
 		flexShrink: 0,
 		justifyContent: "center",

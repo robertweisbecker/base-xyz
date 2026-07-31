@@ -153,6 +153,7 @@ export type PopoverCloseVariant = "iconButton" | "button";
 
 export function Close({
 	ref,
+	"aria-label": ariaLabel,
 	variant = "iconButton",
 	className,
 	style,
@@ -169,6 +170,7 @@ export function Close({
 	return (
 		<BasePopover.Close
 			ref={ref}
+			aria-label={ariaLabel ?? (variant === "iconButton" ? "Close" : undefined)}
 			className={[sxClassName, className].filter(Boolean).join(" ")}
 			style={sxStyle}
 			{...props}>
@@ -305,7 +307,6 @@ const popoverCloseVariants = stylex.create({
 			},
 		},
 		color: color.fg,
-		cursor: "default",
 		height: "28px",
 		minWidth: "28px",
 	},

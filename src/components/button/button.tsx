@@ -110,10 +110,13 @@ const colorVariants = stylex.create({
 			[HOVER_WHEN_INACTIVE]: {
 				"@media (hover: hover) and (pointer: fine)": color.bgAccentSoftHover,
 			},
-			[PRESSED_OR_ACTIVATED]: color.bgAccentSoftHover,
+			[PRESSED_OR_ACTIVATED]: color.bgAccentMuted,
 			default: color.bgAccentSoft,
 		},
-		color: color.fgAccent,
+		color: {
+			[PRESSED_OR_ACTIVATED]: color.fgAccentStrong,
+			default: color.fgAccent,
+		},
 	},
 	secondary: {
 		backgroundColor: {

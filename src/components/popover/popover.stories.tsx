@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import * as stylex from "@stylexjs/stylex";
-import { color, space } from "@/styles/tokens.stylex";
+import { color, motion, space } from "@/styles/tokens.stylex";
 import { fontSize, letterSpacing, lineHeight } from "@/styles/tokens.stylex";
 import { Button } from "../button/button";
 import { createPopoverHandle } from "../popup-handles";
@@ -145,8 +145,9 @@ export const SharedTriggers: Story = {
 				{({ payload }) => (
 					<Popover.Popup
 						arrowProps={_showArrow ? {} : undefined}
-						positionerProps={{ side: _side, align: _align }}
-						showClose={_showClose}>
+						positionerProps={{ side: _side, align: _align, style: storyParts.movingPositioner }}
+						showClose={_showClose}
+						style={storyParts.movingPopup}>
 						<Popover.Viewport>
 							<Popover.Title>{payload?.title}</Popover.Title>
 							<Popover.Description>{payload?.description}</Popover.Description>
@@ -203,6 +204,24 @@ const storyParts = stylex.create({
 		gap: space.x2,
 		display: "flex",
 		flexWrap: "wrap",
+	},
+	movingPositioner: {
+		transitionDuration: {
+			default: motion.durationContent,
+			":has(> [data-starting-style])": "0ms",
+			"@media (prefers-reduced-motion: reduce)": "0ms",
+		},
+		transitionProperty: "top, right, bottom, left, transform",
+		transitionTimingFunction: motion.easeSmoothOut,
+	},
+	movingPopup: {
+		transitionDuration: {
+			"[data-instant]": "0ms",
+			default: motion.durationContent,
+			"@media (prefers-reduced-motion: reduce)": "0ms",
+		},
+		transitionProperty: "width, height, transform, opacity",
+		transitionTimingFunction: motion.easeSmoothOut,
 	},
 });
 

@@ -103,7 +103,6 @@ const switchParts = stylex.create({
 	label: {
 		gridColumn: "1",
 		gridRow: "1",
-		cursor: "default",
 	},
 	labelDisabled: {
 		color: color.fgMuted,
@@ -112,7 +111,6 @@ const switchParts = stylex.create({
 	},
 	labelReadOnly: {
 		color: color.fgMuted,
-		cursor: "default",
 	},
 	description: {
 		margin: 0,

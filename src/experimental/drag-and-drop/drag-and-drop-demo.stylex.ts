@@ -1,6 +1,17 @@
 import * as stylex from "@stylexjs/stylex";
 import { breakpoints } from "@/styles/constants.stylex";
-import { border, color, fontSize, fontWeight, lineHeight, radius, shadow, size, space } from "@/styles/tokens.stylex";
+import {
+	border,
+	color,
+	fontSize,
+	fontWeight,
+	letterSpacing,
+	lineHeight,
+	radius,
+	shadow,
+	size,
+	space,
+} from "@/styles/tokens.stylex";
 
 const activeDropTarget = ":is([data-drop-target], [data-drop-target='true'], [data-drop-target=''])";
 const invalidTarget = ":is([data-invalid], [data-invalid='true'], [data-invalid=''])";
@@ -307,10 +318,10 @@ export const demoStyles = stylex.create({
 	sortableMenuPopup: {
 		outlineColor: {
 			default: "transparent",
-			":is([data-drop-target], [data-drop-target='true'], [data-drop-target=''])": color.focus,
+			":is([data-drop-target], [data-drop-target='true'], [data-drop-target=''])": color.fgMuted,
 		},
-		outlineOffset: "2px",
-		outlineStyle: "solid",
+		outlineOffset: "4px",
+		outlineStyle: "dashed",
 		outlineWidth: "2px",
 		minWidth: "12rem",
 	},
@@ -321,29 +332,45 @@ export const demoStyles = stylex.create({
 		},
 		outlineColor: {
 			default: "transparent",
-			":is([data-drop-target], [data-drop-target='true'], [data-drop-target=''])": color.focus,
+			":is([data-drop-target], [data-drop-target='true'], [data-drop-target=''])": color.fg,
 		},
-		outlineOffset: "-1px",
-		outlineStyle: "solid",
+		outlineOffset: "2px",
+		outlineStyle: "dashed",
 		outlineWidth: "2px",
 	},
 	emptyMenuItem: {
 		color: color.fgMuted,
 		fontStyle: "italic",
+		display: "flex",
+		outlineStyle: "dashed",
+		outlineWidth: "1px",
+		outlineColor: color.borderStrong,
+		outlineOffset: "-1px",
 	},
 	menuOverlay: {
 		borderRadius: radius.md,
 		paddingBlock: space.x2,
-		paddingInline: space.x3,
+		paddingInline: space.x2,
 		alignItems: "center",
-		backgroundColor: color.bgElevated,
+		backgroundColor: color.canvas,
+		outlineColor: color.bgElevated,
+		outlineOffset: "-2px",
+		outlineStyle: "solid",
+		outlineWidth: "2px",
 		boxShadow: shadow.lg,
 		color: color.fg,
 		columnGap: space.x2,
-		display: "grid",
-		gridTemplateColumns: "auto minmax(0, 1fr)",
+		display: "flex",
+		// gridTemplateColumns: "auto minmax(0, 1fr)",
 		pointerEvents: "none",
-		minWidth: "12rem",
+		fontSize: fontSize.x2,
+		lineHeight: lineHeight.x2,
+		letterSpacing: letterSpacing.x2,
+		textOverflow: "ellipsis",
+		whiteSpace: "nowrap",
+		overflow: "hidden",
+
+		// minWidth: "12rem",
 	},
 	nestedAction: {
 		justifySelf: "end",

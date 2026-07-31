@@ -96,7 +96,7 @@ export function Viewport({ ref, className, style, ...props }: MenuViewportProps)
 
 export function Item({ ref, className, style, variant = "default", ...props }: MenuItemProps) {
 	const { className: sxClassName, style: sxStyle } = stylex.props(
-		menuItemStyles.row,
+		menuItemStyles.item,
 		menuItemVariantStyles[variant],
 		style,
 	);
@@ -113,7 +113,7 @@ export function Item({ ref, className, style, variant = "default", ...props }: M
 
 export function LinkItem({ ref, className, style, ...props }: StyledProps<BaseMenu.LinkItem.Props>) {
 	const { className: sxClassName, style: sxStyle } = stylex.props(
-		menuItemStyles.row,
+		menuItemStyles.item,
 		menuItemVariantStyles.default,
 		style,
 	);
@@ -130,7 +130,7 @@ export function LinkItem({ ref, className, style, ...props }: StyledProps<BaseMe
 
 export function CheckboxItem({ ref, children, className, style, ...props }: StyledProps<BaseMenu.CheckboxItem.Props>) {
 	const { className: sxClassName, style: sxStyle } = stylex.props(
-		menuItemStyles.row,
+		menuItemStyles.item,
 		menuItemVariantStyles.default,
 		style,
 	);
@@ -151,7 +151,7 @@ export function CheckboxItem({ ref, children, className, style, ...props }: Styl
 
 export function SwitchItem({ ref, children, className, style, ...props }: StyledProps<BaseMenu.CheckboxItem.Props>) {
 	const { className: sxClassName, style: sxStyle } = stylex.props(
-		menuItemStyles.row,
+		menuItemStyles.item,
 		menuItemVariantStyles.default,
 		style,
 	);
@@ -178,7 +178,7 @@ export function SwitchItem({ ref, children, className, style, ...props }: Styled
 
 export function RadioItem({ ref, children, className, style, ...props }: StyledProps<BaseMenu.RadioItem.Props>) {
 	const { className: sxClassName, style: sxStyle } = stylex.props(
-		menuItemStyles.row,
+		menuItemStyles.item,
 		menuItemVariantStyles.default,
 		style,
 	);
@@ -205,7 +205,7 @@ export function SubmenuTrigger({
 	...props
 }: StyledProps<BaseMenu.SubmenuTrigger.Props>) {
 	const { className: sxClassName, style: sxStyle } = stylex.props(
-		menuItemStyles.row,
+		menuItemStyles.item,
 		menuItemVariantStyles.default,
 		menuParts.submenuTrigger,
 		style,
@@ -238,7 +238,7 @@ export function CollapsibleGroup({ ref, className, style, ...props }: Collapsibl
 
 export function CollapsibleGroupTrigger({ ref, children, className, style, ...props }: CollapsibleGroupTriggerProps) {
 	const { className: sxClassName, style: sxStyle } = stylex.props(
-		menuItemStyles.row,
+		menuItemStyles.item,
 		menuItemVariantStyles.default,
 		menuParts.collapsibleGroupTrigger,
 		stylex.defaultMarker(),
