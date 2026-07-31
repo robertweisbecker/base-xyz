@@ -83,7 +83,7 @@ const preview: Preview = {
 				includeNames: false,
 				locales: "en",
 				method: "alphabetical",
-				order: ["Foundations", "Components", "Blocks", "Experimental"],
+				order: ["Components", "Blocks", "Experimental", "Design system"],
 			},
 		},
 	},

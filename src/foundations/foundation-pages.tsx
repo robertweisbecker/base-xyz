@@ -13,9 +13,23 @@ import { color, radius, shadow, space } from "@/styles/tokens.stylex";
 import { textFamilyStyles, textSizeStyles } from "@/components/text/text.stylex";
 import { fontFamily, fontSize, fontWeight, letterSpacing, lineHeight } from "@/styles/tokens.stylex";
 
-export function ColorsPage() {
+export function DesignSystemPage() {
 	return (
 		<FoundationPage
+			title="Design system"
+			description="Tokens and foundations for color, typography, spacing, shape, depth, motion, and iconography.">
+			<ColorsSection />
+			<TypographySection />
+			<SpacingAndShapeSection />
+			<DepthAndMotionSection />
+			<IconographySection />
+		</FoundationPage>
+	);
+}
+
+function ColorsSection() {
+	return (
+		<FoundationCategory
 			title="Color"
 			description="Semantic tokens describe a role instead of a fixed value, so the same component code adapts across light and dark themes.">
 			<FoundationSection
@@ -104,13 +118,13 @@ const styles = stylex.create({
   },
 });`}
 			/>
-		</FoundationPage>
+		</FoundationCategory>
 	);
 }
 
-export function TypographyPage() {
+function TypographySection() {
 	return (
-		<FoundationPage
+		<FoundationCategory
 			title="Typography"
 			description="A compact semantic type scale pairs each font size with Radix-derived line-height and letter-spacing tokens.">
 			<FoundationSection
@@ -239,13 +253,13 @@ import { textFamilyStyles, textSizeStyles, textWeightStyles } from "@/components
 <h2 {...stylex.props(textSizeStyles["4"], textWeightStyles.semibold)}>Workspace activity</h2>
 <code {...stylex.props(textFamilyStyles.mono, textSizeStyles["2"])}>npm run build</code>`}
 			/>
-		</FoundationPage>
+		</FoundationCategory>
 	);
 }
 
-export function SpacingAndShapePage() {
+function SpacingAndShapeSection() {
 	return (
-		<FoundationPage
+		<FoundationCategory
 			title="Spacing & shape"
 			description="A 0.25rem-based spacing scale and a restrained radius family create consistent rhythm from compact controls to large surfaces.">
 			<FoundationSection
@@ -306,13 +320,13 @@ const styles = stylex.create({
   },
 });`}
 			/>
-		</FoundationPage>
+		</FoundationCategory>
 	);
 }
 
-export function DepthAndMotionPage() {
+function DepthAndMotionSection() {
 	return (
-		<FoundationPage
+		<FoundationCategory
 			title="Depth & motion"
 			description="Elevation and movement clarify hierarchy, continuity, and feedback without becoming the focus of the interface.">
 			<FoundationSection
@@ -366,13 +380,13 @@ const styles = stylex.create({
   },
 });`}
 			/>
-		</FoundationPage>
+		</FoundationCategory>
 	);
 }
 
-export function IconographyPage() {
+function IconographySection() {
 	return (
-		<FoundationPage
+		<FoundationCategory
 			title="Iconography"
 			description="Phosphor icons use a consistent optical language. Keep icons aligned to a clear action or state, and pair unfamiliar symbols with text.">
 			<FoundationSection
@@ -427,7 +441,7 @@ import { Button } from "./components/button/button";
   Continue
 </Button>`}
 			/>
-		</FoundationPage>
+		</FoundationCategory>
 	);
 }
 
@@ -435,12 +449,31 @@ function FoundationPage({ children, description, title }: { children: ReactNode;
 	return (
 		<article data-theme="light" {...stylex.props(styles.page)}>
 			<header {...stylex.props(styles.pageHeader)}>
-				<p {...stylex.props(styles.kicker)}>Foundations</p>
 				<h1 {...stylex.props(styles.pageTitle)}>{title}</h1>
 				<p {...stylex.props(styles.pageDescription)}>{description}</p>
 			</header>
 			{children}
 		</article>
+	);
+}
+
+function FoundationCategory({
+	children,
+	description,
+	title,
+}: {
+	children: ReactNode;
+	description: string;
+	title: string;
+}) {
+	return (
+		<section {...stylex.props(styles.category)}>
+			<div {...stylex.props(styles.categoryHeader)}>
+				<h2 {...stylex.props(styles.categoryTitle)}>{title}</h2>
+				<p {...stylex.props(styles.categoryDescription)}>{description}</p>
+			</div>
+			{children}
+		</section>
 	);
 }
 
@@ -456,7 +489,7 @@ function FoundationSection({
 	return (
 		<section {...stylex.props(styles.section)}>
 			<div {...stylex.props(styles.sectionHeader)}>
-				<h2 {...stylex.props(styles.sectionTitle)}>{title}</h2>
+				<h3 {...stylex.props(styles.sectionTitle)}>{title}</h3>
 				<p {...stylex.props(styles.sectionDescription)}>{description}</p>
 			</div>
 			{children}
@@ -467,7 +500,7 @@ function FoundationSection({
 function ThemePalette({ name, theme }: { name: string; theme: "light" | "dark" }) {
 	return (
 		<div {...stylex.props(styles.themePalette)}>
-			<h3 {...stylex.props(styles.paletteTitle)}>{name} theme</h3>
+			<h4 {...stylex.props(styles.paletteTitle)}>{name} theme</h4>
 			<div data-theme={theme} {...stylex.props(styles.paletteScroller)}>
 				<div {...stylex.props(styles.paletteContent)}>
 					<ColorPalette>
@@ -708,14 +741,6 @@ const styles = stylex.create({
 		borderBottomStyle: "solid",
 		borderBottomWidth: "1px",
 	},
-	kicker: {
-		margin: 0,
-		color: color.fgMuted,
-		fontSize: fontSize.x1,
-		fontWeight: fontWeight.regular,
-		letterSpacing: letterSpacing.x1,
-		lineHeight: lineHeight.x1,
-	},
 	pageTitle: {
 		color: color.fg,
 		fontSize: fontSize.x8,
@@ -723,7 +748,7 @@ const styles = stylex.create({
 		letterSpacing: letterSpacing.x8,
 		lineHeight: lineHeight.x8,
 		marginBlockEnd: space.x3,
-		marginBlockStart: space.x2,
+		marginBlockStart: 0,
 	},
 	pageDescription: {
 		margin: 0,
@@ -732,6 +757,35 @@ const styles = stylex.create({
 		letterSpacing: letterSpacing.x3,
 		lineHeight: lineHeight.x3,
 		maxWidth: "720px",
+	},
+	category: {
+		paddingBlock: space.x12,
+		borderTopColor: color.border,
+		borderTopStyle: "solid",
+		borderTopWidth: {
+			default: "1px",
+			":first-of-type": 0,
+		},
+	},
+	categoryHeader: {
+		marginBlockEnd: space.x2,
+		maxWidth: "760px",
+	},
+	categoryTitle: {
+		margin: 0,
+		color: color.fg,
+		fontSize: fontSize.x7,
+		fontWeight: fontWeight.semibold,
+		letterSpacing: letterSpacing.x7,
+		lineHeight: lineHeight.x7,
+	},
+	categoryDescription: {
+		color: color.fgMuted,
+		fontSize: fontSize.x3,
+		letterSpacing: letterSpacing.x3,
+		lineHeight: lineHeight.x3,
+		marginBlockEnd: 0,
+		marginBlockStart: space.x2,
 	},
 	section: {
 		paddingBlock: space.x8,
