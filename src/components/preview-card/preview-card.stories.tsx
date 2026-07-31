@@ -3,6 +3,7 @@ import * as stylex from "@stylexjs/stylex";
 import { color, space } from "@/styles/tokens.stylex";
 import { fontSize, letterSpacing, lineHeight } from "@/styles/tokens.stylex";
 import { createPreviewCardHandle } from "../popup-handles";
+import { popupMotionStyles } from "../popover/popover.stylex";
 import * as PreviewCard from "./preview-card";
 
 type PopupSide = "top" | "right" | "bottom" | "left";
@@ -113,7 +114,12 @@ export const SharedPreviews: Story = {
 				{({ payload }) => (
 					<PreviewCard.Popup
 						arrowProps={_showArrow ? {} : undefined}
-						positionerProps={{ side: _side, align: _align }}>
+						positionerProps={{
+							side: _side,
+							align: _align,
+							style: popupMotionStyles.movingPositioner,
+						}}
+						style={popupMotionStyles.movingPopup}>
 						<PreviewCard.Viewport>{payload ? <PreviewContent {...payload} /> : null}</PreviewCard.Viewport>
 					</PreviewCard.Popup>
 				)}

@@ -89,7 +89,6 @@ export function Root({
 				ref={ref}
 				className={[sx.className, className].filter(Boolean).join(" ")}
 				data-meter-state={meterState}
-				data-variant={variant}
 				max={meterValues.maximumValue}
 				min={meterValues.minimumValue}
 				style={meterStyle}

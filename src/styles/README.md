@@ -75,6 +75,10 @@ stylex.props(popupStaticPositionerStyles, style);
 // Panel-style Popup (menu, select, combobox, popover, preview-card)
 stylex.props(menuParts.panelSurface, menuParts.popup, popupMotionStyles.anchoredPopup, style);
 
+// Opt-in detached-trigger movement (positioner and popup respectively)
+stylex.props(popupPositionerStyles, popupMotionStyles.movingPositioner, style);
+stylex.props(panelSurface, popupMotionStyles.anchoredPopup, popupMotionStyles.movingPopup, style);
+
 // Tooltip Popup (chrome + motion bundled)
 stylex.props(tooltipStyles.popup, tooltipParts.popup, style);
 
@@ -83,10 +87,12 @@ stylex.props(popupViewportStyles, style);
 ```
 
 Popup composites render their children directly. Opt into Base UI's content
-swapping only where it is actually needed:
+swapping and detached-trigger movement only where they are actually needed:
 
 ```tsx
-<Popover.Popup>
+<Popover.Popup
+	positionerProps={{ style: popupMotionStyles.movingPositioner }}
+	style={popupMotionStyles.movingPopup}>
 	<Popover.Viewport>{content}</Popover.Viewport>
 </Popover.Popup>
 ```

@@ -18,6 +18,7 @@ import { popupVars } from "./popover-vars.stylex";
  * | -------------------------------------- | ----------------------------------------------- |
  * | Base UI `Positioner`          | `popupPositionerStyles`                        |
  * | `Popup` element (panel-style) | own chrome + `popupMotionStyles.anchoredPopup` |
+ * | Moving detached trigger       | `popupMotionStyles.movingPositioner` + `.movingPopup` |
  * | Optional `Viewport` child     | `popupViewportStyles`                          |
  * | Base UI `Arrow`               | `popupArrowStyles`                             |
  *
@@ -66,6 +67,24 @@ export const popupMotionStyles = stylex.create({
 			"[data-instant]": "none",
 			default: "opacity",
 		},
+	},
+	movingPositioner: {
+		transitionDuration: {
+			default: motion.durationContent,
+			":has(> [data-starting-style])": "0ms",
+			"@media (prefers-reduced-motion: reduce)": "0ms",
+		},
+		transitionProperty: "top, right, bottom, left, transform",
+		transitionTimingFunction: motion.easeSmoothOut,
+	},
+	movingPopup: {
+		transitionDuration: {
+			"[data-instant]": "0ms",
+			default: motion.durationContent,
+			"@media (prefers-reduced-motion: reduce)": "0ms",
+		},
+		transitionProperty: "width, height, transform, opacity",
+		transitionTimingFunction: motion.easeSmoothOut,
 	},
 	viewport: {
 		"--popup-motion-duration": motion.durationContent,
