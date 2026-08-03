@@ -81,6 +81,7 @@ export {
 } from "./toggle/toggle";
 export * as Toast from "./toast";
 export * as Tooltip from "./tooltip/tooltip";
+export { VisuallyHidden, type VisuallyHiddenProps } from "./visually-hidden/visually-hidden";
 export type {
 	TypographyAlign,
 	TypographyColor,
