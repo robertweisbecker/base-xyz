@@ -45,6 +45,7 @@ import {
 	Select,
 	Separator,
 	Switch,
+	Tabs,
 	Text,
 	Textarea,
 	TextField,
@@ -446,6 +447,25 @@ function getComponentCells(): GalleryCell[] {
 		{
 			title: "Switch",
 			content: <Switch label="Realtime sync" defaultChecked size="sm" />,
+		},
+		{
+			title: "Tabs",
+			content: (
+				<Tabs.Root defaultValue="overview" size="sm">
+					<Tabs.List>
+						<Tabs.Tab value="overview">Overview</Tabs.Tab>
+						<Tabs.Tab value="activity">Activity</Tabs.Tab>
+					</Tabs.List>
+					<Tabs.Content>
+						<Tabs.Panel value="overview">
+							<Text size="1">Workspace summary</Text>
+						</Tabs.Panel>
+						<Tabs.Panel value="activity">
+							<Text size="1">Recent activity</Text>
+						</Tabs.Panel>
+					</Tabs.Content>
+				</Tabs.Root>
+			),
 		},
 		{
 			title: "Text",

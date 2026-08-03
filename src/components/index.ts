@@ -21,6 +21,7 @@ export * as InputGroup from "./input-group/input-group";
 export * as Meter from "./meter/meter";
 export * as Progress from "./progress/progress";
 export { Separator, type SeparatorProps } from "./separator/separator";
+export * as Tabs from "./tabs/tabs";
 export * as Toolbar from "./toolbar/toolbar";
 export {
 	Badge,
