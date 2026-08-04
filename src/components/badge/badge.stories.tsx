@@ -35,7 +35,7 @@ const meta = {
 		},
 		size: {
 			control: "inline-radio",
-			options: ["sm", "md"],
+			options: ["xs", "sm", "md"],
 		},
 		shape: {
 			control: "select",

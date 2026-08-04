@@ -31,6 +31,9 @@ export const tokens = stylex.defineVars({
 	"--color-gray-a4": "light-dark(var(--color-black-a4), var(--color-white-a4))",
 	"--color-gray-a5": "light-dark(var(--color-black-a5), var(--color-white-a5))",
 	"--color-gray-contrast": "var(--color-white)",
+	"--fg-success-contrast": "var(--color-white)",
+	"--fg-error-contrast": "var(--color-white)",
+
 	"--color-accent-s1": "light-dark(oklch(98.965% 0.005 248.371), oklch(19.812% 0.02939 268.624))",
 	"--color-accent-s2": "light-dark(oklch(98.25% 0.012 226.394), oklch(21.637% 0.03717 267.141))",
 	"--color-accent-c1": "light-dark(oklch(96.125% 0.022 235.163), oklch(25.216% 0.05627 264.018))",
@@ -43,6 +46,7 @@ export const tokens = stylex.defineVars({
 	"--color-accent-p2": "light-dark(hsl(207deg 96% 48%), oklch(72.163% 0.14676 246.443))",
 	"--color-accent-t1": "light-dark(oklch(53.072% 0.20334 262.925), oklch(69.483% 0.15223 255.815))",
 	"--color-accent-t2": "light-dark(oklch(28.072% 0.09716 262.82), oklch(87.811% 0.0624 249.313))",
+	"--icon-accent": "var(--color-accent-p1)",
 	"--color-white-a1": "hsl(0deg 0% 100% / 3%)",
 	"--color-white-a2": "hsl(0deg 0% 100% / 6%)",
 	"--color-white-a3": "hsl(0deg 0% 100% / 10%)",
@@ -222,8 +226,7 @@ export const tokens = stylex.defineVars({
 		'-apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji"',
 	"--font-family-serif":
 		'Georgia, -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans", Helvetica, Arial, Times, sans-serif, "Apple Color Emoji", "Segoe UI Emoji"',
-	"--font-family-mono":
-		"ui-monospace, SFMono-Regular, SF Mono, Menlo, Consolas, Liberation Mono, monospace",
+	"--font-family-mono": "ui-monospace, SFMono-Regular, SF Mono, Menlo, Consolas, Liberation Mono, monospace",
 	"--font-size-1": "0.75rem",
 	"--font-size-2": "0.875rem",
 	"--font-size-3": "1rem",

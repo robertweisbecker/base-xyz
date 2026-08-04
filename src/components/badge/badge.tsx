@@ -65,7 +65,7 @@ const badgeParts = stylex.create({
 });
 
 const labeledSlotSizes = stylex.create({
-	xs: { fontSize: "0.6875rem" },
+	xs: { fontSize: ".875rem" },
 	sm: { fontSize: "0.75rem" },
 	md: { fontSize: "0.875rem" },
 });
@@ -77,15 +77,15 @@ const iconOnlySlotSizes = stylex.create({
 });
 
 const startSlotOffsets = stylex.create({
-	xs: { marginInlineStart: "-0.125rem" },
-	sm: { marginInlineStart: "-0.125rem" },
-	md: { marginInlineStart: "-0.125rem" },
+	xs: { marginInlineStart: "-0.2em" },
+	sm: { marginInlineStart: "-0.125em" },
+	md: { marginInlineStart: "-0.35em" },
 });
 
 const endSlotOffsets = stylex.create({
-	xs: { marginInlineEnd: "-0.125rem" },
-	sm: { marginInlineEnd: "-0.125rem" },
-	md: { marginInlineEnd: "-0.125rem" },
+	xs: { marginInlineEnd: "-0.2em" },
+	sm: { marginInlineEnd: "-0.125em" },
+	md: { marginInlineEnd: "-0.35em" },
 });
 
 const variantAppearance = stylex.create({
@@ -118,7 +118,7 @@ const hueColors = stylex.create({
 	},
 	errorSolid: {
 		backgroundColor: tokens["--bg-error-primary"],
-		color: tokens["--fg-accent-contrast"],
+		color: tokens["--fg-error-contrast"],
 	},
 	warningSubtle: {
 		backgroundColor: tokens["--bg-warning-subtle"],
@@ -140,7 +140,7 @@ const hueColors = stylex.create({
 	},
 	successSolid: {
 		backgroundColor: tokens["--bg-success-primary"],
-		color: tokens["--fg-accent-contrast"],
+		color: tokens["--fg-success-contrast"],
 	},
 	neutralSubtle: {
 		backgroundColor: tokens["--surface-subtle"],
@@ -158,7 +158,7 @@ const hueColors = stylex.create({
 const sizeVariants = stylex.create({
 	xs: {
 		borderRadius: tokens["--radius-xs"],
-		gap: tokens["--space-1"],
+		gap: tokens["--space-0-5"],
 		paddingInline: tokens["--space-1"],
 		fontSize: "11px",
 		letterSpacing: tokens["--letter-spacing-1"],

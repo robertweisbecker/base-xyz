@@ -202,11 +202,14 @@ test("MP loads and applies the Apercu font family", async ({ page }) => {
 
 	const loadedFaces = await page.evaluate(async () => ({
 		bold: (await document.fonts.load('700 16px "Apercu"')).length,
+		boldItalic: (await document.fonts.load('italic 700 16px "Apercu"')).length,
+		medium: (await document.fonts.load('500 16px "Apercu"')).length,
+		mediumItalic: (await document.fonts.load('italic 500 16px "Apercu"')).length,
 		regular: (await document.fonts.load('400 16px "Apercu"')).length,
 	}));
 	const fontFamily = await page.locator("body").evaluate((element) => getComputedStyle(element).fontFamily);
 
-	expect(loadedFaces).toEqual({ bold: 1, regular: 1 });
+	expect(loadedFaces).toEqual({ bold: 1, boldItalic: 1, medium: 1, mediumItalic: 1, regular: 1 });
 	expect(fontFamily.startsWith("Apercu")).toBe(true);
 });
 

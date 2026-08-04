@@ -142,8 +142,8 @@ const scrollAreaParts = stylex.create({
 			default: tokens["--border-input"],
 			":active": tokens["--border-input-hover"],
 		},
-		transitionProperty: "background-color, width",
 		transitionDuration: tokens["--motion-duration-short"],
+		transitionProperty: "background-color, width",
 		transitionTimingFunction: tokens["--motion-ease-out"],
 	},
 	corner: {
