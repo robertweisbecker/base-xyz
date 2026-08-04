@@ -3,14 +3,14 @@ import { PlusIcon } from "@phosphor-icons/react/dist/csr/Plus";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import * as stylex from "@stylexjs/stylex";
 import { useState } from "react";
-import { color, space } from "@/styles/tokens.stylex";
-import { fontSize, letterSpacing, lineHeight } from "@/styles/tokens.stylex";
+import { tokens } from "@/theme/tokens.stylex";
+
 import { Button } from "./button";
 
 const iconOptions = {
 	None: undefined,
-	Add: <PlusIcon aria-hidden weight="bold" />,
-	Continue: <ArrowRightIcon aria-hidden weight="bold" />,
+	Add: <PlusIcon aria-hidden />,
+	Continue: <ArrowRightIcon aria-hidden />,
 };
 
 const meta = {
@@ -34,7 +34,7 @@ const meta = {
 		loadingText: { control: "text" },
 		variant: {
 			control: "select",
-			options: ["primary", "subtle", "secondary", "neutral", "ghost", "plain", "danger"],
+			options: ["primary", "subtle", "secondary", "neutral", "ghost", "plain", "error"],
 		},
 		size: { control: "select", options: ["xs", "sm", "md", "lg"] },
 		shape: { control: "select", options: ["default", "pill", "circle", "square"] },
@@ -52,17 +52,7 @@ const meta = {
 	},
 	parameters: {
 		controls: {
-			include: [
-				"children",
-				"variant",
-				"size",
-				"shape",
-				"startSlot",
-				"endSlot",
-				"disabled",
-				"loading",
-				"loadingText",
-			],
+			include: ["children", "variant", "size", "shape", "startSlot", "endSlot", "disabled", "loading", "loadingText"],
 		},
 	},
 } satisfies Meta<typeof Button>;
@@ -106,7 +96,7 @@ export const SizesAndIcons: Story = {
 	),
 };
 
-const variants = ["primary", "subtle", "secondary", "neutral", "ghost", "plain", "danger"] as const;
+const variants = ["primary", "subtle", "secondary", "neutral", "ghost", "plain", "error"] as const;
 
 export const Variants: Story = {
 	parameters: {
@@ -186,51 +176,51 @@ function ButtonStates() {
 
 const storyStyles = stylex.create({
 	variantRows: {
-		gap: space[5],
+		gap: tokens["--space-5"],
 		display: "flex",
 		flexDirection: "column",
 	},
 	variantRow: {
-		gap: space[2],
+		gap: tokens["--space-2"],
 		alignItems: "flex-start",
 		display: "flex",
 		flexDirection: "column",
 	},
 	states: {
-		gap: space[6],
+		gap: tokens["--space-6"],
 		alignItems: "flex-start",
 		display: "flex",
 		flexDirection: "column",
 		maxWidth: "100%",
 	},
 	stateGrid: {
-		gap: space[6],
+		gap: tokens["--space-6"],
 		display: "grid",
 		gridTemplateColumns: "repeat(7, max-content)",
-		paddingBlockEnd: space[2],
+		paddingBlockEnd: tokens["--space-2"],
 		maxWidth: "100%",
 		overflowX: "auto",
 	},
 	stateColumn: {
-		gap: space[5],
+		gap: tokens["--space-5"],
 		alignItems: "flex-start",
 		display: "flex",
 		flexDirection: "column",
 	},
 	stateSpecimen: {
-		gap: space[2],
+		gap: tokens["--space-2"],
 		alignItems: "flex-start",
 		display: "flex",
 		flexDirection: "column",
 	},
 	rowLabel: {
-		color: color.fgMuted,
-		fontSize: fontSize.x1,
-		letterSpacing: letterSpacing.x1,
-		lineHeight: lineHeight.x1,
+		color: tokens["--fg-muted"],
+		fontSize: tokens["--font-size-1"],
+		letterSpacing: tokens["--letter-spacing-1"],
+		lineHeight: tokens["--line-height-1"],
 	},
 	row: {
-		gap: space[3],
+		gap: tokens["--space-3"],
 		alignItems: "center",
 		display: "flex",
 		flexWrap: "wrap",

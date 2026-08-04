@@ -1,8 +1,8 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import * as stylex from "@stylexjs/stylex";
 import { Separator } from "@/components/separator/separator";
-import { color, space } from "@/styles/tokens.stylex";
-import { fontSize, fontWeight, letterSpacing, lineHeight } from "@/styles/tokens.stylex";
+import { tokens } from "@/theme/tokens.stylex";
+
 import { CopyButton } from "./copy-button";
 
 const meta = {
@@ -66,8 +66,8 @@ export const Examples: Story = {
 					<CopyButton value="Ghost" variant="ghost">
 						Ghost
 					</CopyButton>
-					<CopyButton value="Danger" variant="danger">
-						Danger
+					<CopyButton value="Error" variant="error">
+						Error
 					</CopyButton>
 				</div>
 			</Example>
@@ -101,27 +101,27 @@ function Example({ children, title }: { children: React.ReactNode; title: string
 
 const storyParts = stylex.create({
 	list: {
-		gap: space[8],
+		gap: tokens["--space-8"],
 		display: "flex",
 		flexDirection: "column",
 	},
 	example: {
-		gap: space[3],
+		gap: tokens["--space-3"],
 		display: "flex",
 		flexDirection: "column",
 	},
 	row: {
-		gap: space[3],
+		gap: tokens["--space-3"],
 		alignItems: "center",
 		display: "flex",
 		flexWrap: "wrap",
 	},
 	heading: {
 		margin: 0,
-		color: color.fgMuted,
-		fontSize: fontSize.x1,
-		fontWeight: fontWeight.regular,
-		letterSpacing: letterSpacing.x1,
-		lineHeight: lineHeight.x1,
+		color: tokens["--fg-muted"],
+		fontSize: tokens["--font-size-1"],
+		fontWeight: tokens["--font-weight-regular"],
+		letterSpacing: tokens["--letter-spacing-1"],
+		lineHeight: tokens["--line-height-1"],
 	},
 });

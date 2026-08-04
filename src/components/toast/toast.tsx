@@ -3,9 +3,9 @@ import * as stylex from "@stylexjs/stylex";
 import type { StyleXStyles } from "@stylexjs/stylex";
 import { type ComponentProps } from "react";
 import { zIndex } from "@/styles/constants.stylex";
-import { motion } from "@/styles/tokens.stylex";
+import { tokens } from "@/theme/tokens.stylex";
 import { pressable } from "@/styles/recipes/transitions";
-import { color, radius, shadow, space } from "@/styles/tokens.stylex";
+
 import { toastMotion } from "./toast-motion.stylex";
 import { toastControlStyles, toastTextStyles } from "./toast-parts";
 
@@ -127,13 +127,13 @@ const toastParts = stylex.create({
 		position: "fixed",
 		zIndex: zIndex.toast,
 		bottom: {
-			default: space[4],
-			"@media (min-width: 500px)": space[8],
+			default: tokens["--space-4"],
+			"@media (min-width: 500px)": tokens["--space-8"],
 		},
 		left: "auto",
 		right: {
-			default: space[4],
-			"@media (min-width: 500px)": space[8],
+			default: tokens["--space-4"],
+			"@media (min-width: 500px)": tokens["--space-8"],
 		},
 		top: "auto",
 		width: {
@@ -144,17 +144,17 @@ const toastParts = stylex.create({
 	root: {
 		"--toast-expanded-offset-y":
 			"calc((var(--toast-offset-y) * -1) + (var(--toast-index) * var(--toast-gap) * -1) + var(--toast-swipe-movement-y))",
-		"--toast-gap": space[3],
-		"--toast-peek": space[3],
+		"--toast-gap": tokens["--space-3"],
+		"--toast-peek": tokens["--space-3"],
 		"--toast-scale": "calc(max(0, 1 - (var(--toast-index) * 0.1)))",
 		"--toast-shrink": "calc(1 - var(--toast-scale))",
 		"--toast-stack-height": "var(--toast-frontmost-height, var(--toast-height))",
 		margin: "0 auto",
-		borderRadius: radius.md,
-		backgroundColor: color.bgElevated,
-		boxShadow: shadow.md,
+		borderRadius: tokens["--radius-md"],
+		backgroundColor: tokens["--elevated"],
+		boxShadow: tokens["--shadow-md"],
 		boxSizing: "border-box",
-		color: color.fg,
+		color: tokens["--fg"],
 		cursor: "default",
 		opacity: {
 			"[data-ending-style]": 0,
@@ -182,7 +182,7 @@ const toastParts = stylex.create({
 			"@media (prefers-reduced-motion: reduce)": "0ms",
 		},
 		transitionProperty: "transform, opacity, height",
-		transitionTimingFunction: `${motion.easeSmoothOut}, ease, ease`,
+		transitionTimingFunction: `${tokens["--motion-ease-smooth-out"]}, ease, ease`,
 		userSelect: "none",
 		willChange: "transform, opacity, height",
 		zIndex: `calc(${toastMotion.stackItemZIndex} - var(--toast-index))`,
@@ -205,8 +205,8 @@ const toastParts = stylex.create({
 		},
 	},
 	content: {
-		padding: space[4],
-		gap: space[3],
+		padding: tokens["--space-4"],
+		gap: tokens["--space-3"],
 		overflow: "hidden",
 		alignItems: "center",
 		boxSizing: "border-box",
@@ -217,15 +217,15 @@ const toastParts = stylex.create({
 			default: 1,
 		},
 		transitionDuration: {
-			default: motion.durationMedium,
+			default: tokens["--motion-duration-medium"],
 			"@media (prefers-reduced-motion: reduce)": "0ms",
 		},
 		transitionProperty: "opacity",
-		transitionTimingFunction: motion.easeSmoothOut,
+		transitionTimingFunction: tokens["--motion-ease-smooth-out"],
 		height: "100%",
 	},
 	text: {
-		gap: space[1],
+		gap: tokens["--space-1"],
 		display: "flex",
 		flexDirection: "column",
 		flexGrow: 1,

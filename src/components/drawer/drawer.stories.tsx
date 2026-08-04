@@ -1,8 +1,8 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import * as stylex from "@stylexjs/stylex";
 import { useState } from "react";
-import { color, radius, space } from "@/styles/tokens.stylex";
-import { fontSize, letterSpacing, lineHeight } from "@/styles/tokens.stylex";
+import { tokens } from "@/theme/tokens.stylex";
+
 import * as AlertDialog from "../alert-dialog/alert-dialog";
 import { Button } from "../button/button";
 import { createDrawerHandle } from "../popup-handles";
@@ -349,22 +349,22 @@ function CloseConfirmationDrawer() {
 
 			<AlertDialog.Root open={confirmationOpen} onOpenChange={setConfirmationOpen}>
 				<AlertDialog.Popup>
-							<AlertDialog.Header>
-								<AlertDialog.Title>Discard this update?</AlertDialog.Title>
-								<AlertDialog.Description>Your unsaved changes will be lost.</AlertDialog.Description>
-							</AlertDialog.Header>
-							<AlertDialog.Footer>
-								<AlertDialog.Close render={<Button variant="secondary" />}>Keep editing</AlertDialog.Close>
-								<Button
-									variant="danger"
-									onClick={() => {
-										setConfirmationOpen(false);
-										setDraft("");
-										setDrawerOpen(false);
-									}}>
-									Discard update
-								</Button>
-							</AlertDialog.Footer>
+					<AlertDialog.Header>
+						<AlertDialog.Title>Discard this update?</AlertDialog.Title>
+						<AlertDialog.Description>Your unsaved changes will be lost.</AlertDialog.Description>
+					</AlertDialog.Header>
+					<AlertDialog.Footer>
+						<AlertDialog.Close render={<Button variant="secondary" />}>Keep editing</AlertDialog.Close>
+						<Button
+							variant="error"
+							onClick={() => {
+								setConfirmationOpen(false);
+								setDraft("");
+								setDrawerOpen(false);
+							}}>
+							Discard update
+						</Button>
+					</AlertDialog.Footer>
 				</AlertDialog.Popup>
 			</AlertDialog.Root>
 		</Drawer.Root>
@@ -380,51 +380,51 @@ export const CloseToConfirm: Story = {
 
 const storyParts = stylex.create({
 	stack: {
-		gap: space[3],
+		gap: tokens["--space-3"],
 		alignItems: "center",
 		display: "flex",
 		flexDirection: "column",
 	},
 	hint: {
 		margin: 0,
-		color: color.fgMuted,
-		fontSize: fontSize.x1,
-		letterSpacing: letterSpacing.x1,
-		lineHeight: lineHeight.x1,
+		color: tokens["--fg-muted"],
+		fontSize: tokens["--font-size-1"],
+		letterSpacing: tokens["--letter-spacing-1"],
+		lineHeight: tokens["--line-height-1"],
 	},
 	triggerGroup: {
-		gap: space[2],
+		gap: tokens["--space-2"],
 		display: "flex",
 		flexWrap: "wrap",
 	},
 	snapPointControls: {
-		gap: space[2],
+		gap: tokens["--space-2"],
 		display: "flex",
 		flexWrap: "wrap",
-		marginBlockEnd: space[5],
+		marginBlockEnd: tokens["--space-5"],
 	},
 	snapPointFooter: {
-		paddingBlockEnd: space[4],
+		paddingBlockEnd: tokens["--space-4"],
 	},
 	activityCards: {
-		gap: space[3],
+		gap: tokens["--space-3"],
 		display: "grid",
 	},
 	activityCard: {
-		padding: space[3],
-		borderColor: color.border,
-		borderRadius: radius.md,
+		padding: tokens["--space-3"],
+		borderColor: tokens["--border"],
+		borderRadius: tokens["--radius-md"],
 		borderStyle: "solid",
 		borderWidth: "1px",
-		gap: space[1],
-		backgroundColor: color.surfaceSubtle,
+		gap: tokens["--space-1"],
+		backgroundColor: tokens["--surface-subtle"],
 		display: "flex",
 		flexDirection: "column",
 	},
 	activityMeta: {
-		color: color.fgMuted,
-		fontSize: fontSize.x1,
-		letterSpacing: letterSpacing.x1,
-		lineHeight: lineHeight.x1,
+		color: tokens["--fg-muted"],
+		fontSize: tokens["--font-size-1"],
+		letterSpacing: tokens["--letter-spacing-1"],
+		lineHeight: tokens["--line-height-1"],
 	},
 });

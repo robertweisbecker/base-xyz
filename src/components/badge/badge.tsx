@@ -4,8 +4,8 @@ import type { StyleXStyles } from "@stylexjs/stylex";
 import type { ReactNode } from "react";
 import { useTextTruncation } from "@/hooks/use-text-truncation";
 import { composeThemeProps, resolveThemeProps, type VerifyThemeProps } from "@/theme/theme-props";
-import { childLayoutThemeProps, positioningThemeProps, sizingThemeProps } from "@/styles/theme-props-layout.stylex";
-import { gapThemeProps, spacingThemeProps } from "@/styles/theme-props-spacing.stylex";
+import { childLayoutThemeProps, positioningThemeProps, sizingThemeProps } from "@/theme/theme-props-layout.stylex";
+import { gapThemeProps, spacingThemeProps } from "@/theme/theme-props-spacing.stylex";
 import type {
 	ChildLayoutProps,
 	GapProps,
@@ -14,8 +14,8 @@ import type {
 	SpacingProps,
 } from "@/theme/theme-props.types";
 import { focusRing } from "@/styles/recipes/focus";
-import { color, radius, shadow, space } from "@/styles/tokens.stylex";
-import { fontSize, fontWeight, letterSpacing } from "@/styles/tokens.stylex";
+import { tokens } from "@/theme/tokens.stylex";
+
 import * as Tooltip from "../tooltip/tooltip";
 import { VisuallyHidden } from "../visually-hidden/visually-hidden";
 
@@ -26,7 +26,7 @@ const badgeParts = stylex.create({
 		boxSizing: "border-box",
 		display: "inline-flex",
 		flexShrink: 1,
-		fontWeight: fontWeight.medium,
+		fontWeight: tokens["--font-weight-medium"],
 		justifyContent: "center",
 		textDecorationLine: {
 			"[href]": "underline",
@@ -65,7 +65,7 @@ const badgeParts = stylex.create({
 });
 
 const labeledSlotSizes = stylex.create({
-	xs: { fontSize: "0.6875rem" },
+	xs: { fontSize: ".875rem" },
 	sm: { fontSize: "0.75rem" },
 	md: { fontSize: "0.875rem" },
 });
@@ -77,112 +77,111 @@ const iconOnlySlotSizes = stylex.create({
 });
 
 const startSlotOffsets = stylex.create({
-	xs: { marginInlineStart: "-0.125rem" },
-	sm: { marginInlineStart: "-0.125rem" },
-	md: { marginInlineStart: "-0.125rem" },
+	xs: { marginInlineStart: "-0.2em" },
+	sm: { marginInlineStart: "-0.125em" },
+	md: { marginInlineStart: "-0.35em" },
 });
 
 const endSlotOffsets = stylex.create({
-	xs: { marginInlineEnd: "-0.125rem" },
-	sm: { marginInlineEnd: "-0.125rem" },
-	md: { marginInlineEnd: "-0.125rem" },
+	xs: { marginInlineEnd: "-0.2em" },
+	sm: { marginInlineEnd: "-0.125em" },
+	md: { marginInlineEnd: "-0.35em" },
 });
 
 const variantAppearance = stylex.create({
 	subtle: {},
 	elevated: {
-		backgroundColor: color.bgElevated,
-		boxShadow: shadow.xs,
+		backgroundColor: tokens["--panel"],
+		boxShadow: tokens["--shadow-xs"],
 	},
 	solid: {},
 });
 
 const hueColors = stylex.create({
 	accentSubtle: {
-		backgroundColor: color.bgAccentSoftHover,
-		color: color.fgAccent,
+		backgroundColor: tokens["--bg-accent-hover"],
+		color: tokens["--fg-accent"],
 	},
 	accentElevated: {
-		color: color.fgAccent,
+		color: tokens["--fg-accent"],
 	},
 	accentSolid: {
-		backgroundColor: color.bgAccent,
-		color: color.fgAccentContrast,
+		backgroundColor: tokens["--bg-primary"],
+		color: tokens["--fg-accent-contrast"],
 	},
-	dangerSubtle: {
-		backgroundColor: color.bgDangerSubtle,
-		color: color.fgDanger,
+	errorSubtle: {
+		backgroundColor: tokens["--bg-error"],
+		color: tokens["--fg-error"],
 	},
-	dangerElevated: {
-		color: color.fgDanger,
+	errorElevated: {
+		color: tokens["--fg-error"],
 	},
-	dangerSolid: {
-		backgroundColor: color.bgDanger,
-		color: color.fgAccentContrast,
+	errorSolid: {
+		backgroundColor: tokens["--bg-error-primary"],
+		color: tokens["--fg-error-contrast"],
 	},
 	warningSubtle: {
-		backgroundColor: color.bgWarningSubtle,
-		color: color.fgWarning,
+		backgroundColor: tokens["--bg-warning-subtle"],
+		color: tokens["--fg-warning"],
 	},
 	warningElevated: {
-		color: color.fgWarning,
+		color: tokens["--fg-warning"],
 	},
 	warningSolid: {
-		backgroundColor: color.bgWarning,
-		color: color.fgWarningContrast,
+		backgroundColor: tokens["--bg-warning-primary"],
+		color: tokens["--fg-warning-contrast"],
 	},
 	successSubtle: {
-		backgroundColor: color.bgSuccessSubtle,
-		color: color.fgSuccess,
+		backgroundColor: tokens["--bg-success"],
+		color: tokens["--fg-success"],
 	},
 	successElevated: {
-		color: color.fgSuccess,
+		color: tokens["--fg-success"],
 	},
-
 	successSolid: {
-		backgroundColor: color.bgSuccess,
-		color: color.fgAccentContrast,
+		backgroundColor: tokens["--bg-success-primary"],
+		color: tokens["--fg-success-contrast"],
 	},
 	neutralSubtle: {
-		backgroundColor: "var(--gray-a2)",
-		color: "var(--gray-t2)",
+		backgroundColor: tokens["--surface-subtle"],
+		color: tokens["--fg-muted"],
 	},
 	neutralElevated: {
-		color: color.fg,
+		color: tokens["--fg"],
 	},
 	neutralSolid: {
-		backgroundColor: color.bgNeutralStrong,
-		color: color.fgNeutralContrast,
+		backgroundColor: tokens["--bg-neutral"],
+		color: tokens["--fg-neutral-contrast"],
 	},
 });
 
 const sizeVariants = stylex.create({
 	xs: {
-		borderRadius: radius.xs,
-		gap: space[1],
-		paddingInline: space[1],
+		borderRadius: tokens["--radius-xs"],
+		gap: tokens["--space-0-5"],
+		paddingInline: tokens["--space-1"],
 		fontSize: "11px",
-		letterSpacing: letterSpacing.x1,
-		lineHeight: space[4],
-		height: space[4],
+		letterSpacing: tokens["--letter-spacing-1"],
+		lineHeight: tokens["--space-4"],
+		height: tokens["--space-4"],
 	},
 	sm: {
-		borderRadius: radius.xs,
-		gap: space[1],
-		paddingInline: space[1],
+		borderRadius: tokens["--radius-xs"],
+		gap: tokens["--space-1"],
+		paddingInline: tokens["--space-1"],
 		fontSize: "11px",
-		letterSpacing: letterSpacing.x1,
-		lineHeight: space[4],
-		height: space[4],
+		letterSpacing: tokens["--letter-spacing-1"],
+		lineHeight: tokens["--space-4"],
+		height: tokens["--space-4"],
 	},
 	md: {
-		borderRadius: radius.sm,
-		gap: space[1],
-		paddingInline: space[2],
-		fontSize: fontSize.x1,
-		letterSpacing: letterSpacing.x1,
-		lineHeight: space[5],
-		height: space[5],
+		borderRadius: tokens["--radius-sm"],
+		gap: tokens["--space-1"],
+		paddingInline: tokens["--space-2"],
+		fontSize: tokens["--font-size-1"],
+		letterSpacing: tokens["--letter-spacing-1"],
+		lineHeight: tokens["--space-5"],
+		height: tokens["--space-5"],
 	},
 });
 
@@ -191,15 +190,15 @@ const shapeVariants = stylex.create({
 		cornerShape: "superellipse(1.2)",
 	},
 	pill: {
-		borderRadius: radius.full,
+		borderRadius: tokens["--radius-full"],
 	},
 	circle: {
-		borderRadius: radius.full,
+		borderRadius: tokens["--radius-full"],
 		paddingInline: 0,
 		aspectRatio: 1,
 	},
 	square: {
-		borderRadius: radius.xs,
+		borderRadius: tokens["--radius-xs"],
 		paddingInline: 0,
 		aspectRatio: 1,
 	},
@@ -211,10 +210,10 @@ const stylesByHue = {
 		elevated: hueColors.accentElevated,
 		solid: hueColors.accentSolid,
 	},
-	danger: {
-		subtle: hueColors.dangerSubtle,
-		elevated: hueColors.dangerElevated,
-		solid: hueColors.dangerSolid,
+	error: {
+		subtle: hueColors.errorSubtle,
+		elevated: hueColors.errorElevated,
+		solid: hueColors.errorSolid,
 	},
 	neutral: {
 		subtle: hueColors.neutralSubtle,

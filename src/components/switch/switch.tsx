@@ -6,7 +6,7 @@ import { resolveThemeProps } from "@/theme/theme-props";
 import type { FieldThemeProps } from "@/components/field/field.types";
 import { fieldStyles, fieldThemeProps } from "@/components/field/field.stylex";
 import { focusRing } from "@/styles/recipes/focus";
-import { color, motion, radius, space, shadow } from "@/styles/tokens.stylex";
+import { tokens } from "@/theme/tokens.stylex";
 import { CheckmarkIcon } from "@/components/selection-icons";
 export type SwitchSize = "sm" | "md" | "lg";
 
@@ -86,42 +86,42 @@ function mergeIds(...ids: Array<string | undefined>) {
 
 const switchParts = stylex.create({
 	root: {
-		gap: space[1],
+		gap: tokens["--space-1"],
 		alignItems: "stretch",
 		display: "flex",
 		flexDirection: "column",
 	},
 	labelRoot: {
 		"--_switch-border-color": {
-			default: color.borderStrong,
+			default: tokens["--border-input"],
 			":hover": {
-				"@media (hover: hover) and (pointer: fine)": color.borderHover,
+				"@media (hover: hover) and (pointer: fine)": tokens["--border-input-hover"],
 			},
-			":active": color.bgAccentHover,
+			":active": tokens["--bg-primary-highlight"],
 		},
 		"--_switch-press-scale": {
 			default: "1",
 			":active": "0.94",
 		},
 		"--_switch-selected-color": {
-			default: color.bgAccent,
+			default: tokens["--bg-primary"],
 			":hover": {
-				"@media (hover: hover) and (pointer: fine)": color.bgAccentHover,
+				"@media (hover: hover) and (pointer: fine)": tokens["--bg-primary-highlight"],
 			},
-			":active": color.bgAccentHover,
+			":active": tokens["--bg-primary-highlight"],
 		},
-		gap: space[2],
+		gap: tokens["--space-2"],
 		alignItems: "center",
 		display: "flex",
 		justifyContent: "space-between",
 	},
 	labelDisabled: {
-		color: color.fgMuted,
+		color: tokens["--fg-muted"],
 		cursor: "not-allowed",
 		opacity: 0.48,
 	},
 	labelReadOnly: {
-		color: color.fgMuted,
+		color: tokens["--fg-muted"],
 	},
 	description: {
 		// margin: 0,
@@ -130,28 +130,28 @@ const switchParts = stylex.create({
 		padding: "calc(var(--_switch-track-height) / 14)",
 		borderColor: {
 			"[data-checked]": "var(--_switch-selected-color)",
-			"[data-checked][data-disabled]": color.borderDisabled,
-			"[data-checked][data-readonly]": color.border,
-			"[data-disabled]": color.borderDisabled,
-			"[data-readonly]": color.border,
+			"[data-checked][data-disabled]": tokens["--border-disabled"],
+			"[data-checked][data-readonly]": tokens["--border"],
+			"[data-disabled]": tokens["--border-disabled"],
+			"[data-readonly]": tokens["--border"],
 			default: "var(--_switch-border-color)",
 		},
-		borderRadius: radius.full,
+		borderRadius: tokens["--radius-full"],
 		alignItems: "center",
 		alignSelf: "start",
 		backgroundColor: {
 			"[data-checked]": "var(--_switch-selected-color)",
-			"[data-checked][data-disabled]": color.fillDisabled,
-			"[data-checked][data-readonly]": color.bgNeutral,
-			"[data-disabled]": color.fillDisabled,
-			default: color.fillTrack,
+			"[data-checked][data-disabled]": tokens["--fill-disabled"],
+			"[data-checked][data-readonly]": tokens["--bg-neutral"],
+			"[data-disabled]": tokens["--fill-disabled"],
+			default: tokens["--fill-track"],
 		},
 		// borderStyle: "solid",
 		// borderWidth: "1px",
 		boxShadow: {
 			"[data-disabled]": "none",
 			"[data-readonly]": null,
-			default: shadow.inset,
+			default: tokens["--shadow-inset"],
 		},
 		cursor: {
 			"[data-disabled]": "not-allowed",
@@ -164,23 +164,23 @@ const switchParts = stylex.create({
 			"[data-readonly]": "scale(1)",
 			default: "scale(var(--_switch-press-scale))",
 		},
-		transitionDuration: motion.durationQuick,
+		transitionDuration: tokens["--motion-duration-quick"],
 		transitionProperty: "background-color, border-color, transform",
 		transitionTimingFunction: "ease-out",
 		height: "var(--_switch-track-height)",
 		width: "calc(var(--_switch-track-height) * 1.5)",
 	},
 	thumb: {
-		borderRadius: radius.full,
+		borderRadius: tokens["--radius-full"],
 		alignItems: "center",
 		aspectRatio: 1,
 		backgroundColor: {
-			"[data-disabled]": color.fillDisabled,
-			default: "var(--color-white)",
+			"[data-disabled]": tokens["--fill-disabled"],
+			default: tokens["--color-white"],
 		},
 		boxShadow: {
 			"[data-disabled]": "none",
-			default: shadow.sm,
+			default: tokens["--shadow-sm"],
 		},
 		display: "flex",
 		flexShrink: 0,
@@ -189,16 +189,16 @@ const switchParts = stylex.create({
 			"[data-checked]": "translateX(calc(var(--_switch-track-height) / 2))",
 			default: "translateX(0)",
 		},
-		transitionDuration: motion.durationShort,
+		transitionDuration: tokens["--motion-duration-short"],
 		transitionProperty: "transform",
-		transitionTimingFunction: motion.easeOut,
+		transitionTimingFunction: tokens["--motion-ease-out"],
 		height: "100%",
 	},
 	icon: {
 		stroke: "currentColor",
 		color: {
-			"[data-checked]": color.fgAccent,
-			default: color.fg,
+			"[data-checked]": tokens["--fg-accent"],
+			default: tokens["--fg"],
 		},
 		display: {
 			default: "none",
@@ -211,12 +211,12 @@ const switchParts = stylex.create({
 
 const sizeVariants = stylex.create({
 	sm: {
-		"--_switch-track-height": space[5],
+		"--_switch-track-height": tokens["--space-5"],
 	},
 	md: {
-		"--_switch-track-height": space[6],
+		"--_switch-track-height": tokens["--space-6"],
 	},
 	lg: {
-		"--_switch-track-height": space[7],
+		"--_switch-track-height": tokens["--space-7"],
 	},
 });

@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import * as stylex from "@stylexjs/stylex";
-import { space } from "@/styles/tokens.stylex";
+import { tokens } from "@/theme/tokens.stylex";
 import { Text } from "../text/text";
 import { Heading } from "./heading";
 import { Code } from "../code/code";
@@ -26,7 +26,7 @@ const meta = {
 		fontWeight: { control: "select", options: ["regular", "medium", "semibold", "bold"] },
 		color: {
 			control: "select",
-			options: ["default", "subtle", "muted", "accent", "danger", "success", "warning", "inverse", "inverse-muted"],
+			options: ["default", "subtle", "muted", "accent", "error", "success", "warning", "inverse", "inverse-muted"],
 		},
 		textAlign: { control: "inline-radio", options: ["start", "center", "end", "justify"] },
 		wrap: { control: "inline-radio", options: ["wrap", "nowrap", "pretty", "balance"] },
@@ -102,7 +102,7 @@ export const Colors: Story = {
 	},
 	render: () => (
 		<div {...stylex.props(storyStyles.stack)}>
-			{(["default", "subtle", "muted", "accent", "danger", "success", "warning"] as const).map((headingColor) => (
+			{(["default", "subtle", "muted", "accent", "error", "success", "warning"] as const).map((headingColor) => (
 				<Heading key={headingColor} color={headingColor} size="4">
 					{headingColor}
 				</Heading>
@@ -144,30 +144,30 @@ const storyStyles = stylex.create({
 		maxWidth: "760px",
 	},
 	stack: {
-		gap: space[4],
+		gap: tokens["--space-4"],
 		display: "flex",
 		flexDirection: "column",
 	},
 	sections: {
-		gap: space[8],
+		gap: tokens["--space-8"],
 		display: "flex",
 		flexDirection: "column",
 	},
 	styleGrid: {
-		gap: space[4],
+		gap: tokens["--space-4"],
 		display: "grid",
 		gridTemplateColumns: "repeat(4, minmax(0, 1fr))",
 	},
 	specimen: {
-		gap: space[4],
+		gap: tokens["--space-4"],
 		alignItems: "baseline",
 		display: "grid",
-		gridTemplateColumns: `${space[6]} minmax(0, 1fr)`,
+		gridTemplateColumns: `${tokens["--space-6"]} minmax(0, 1fr)`,
 	},
 	subsection: {
-		gap: space[2],
+		gap: tokens["--space-2"],
 		display: "flex",
 		flexDirection: "column",
-		marginBlockStart: space[4],
+		marginBlockStart: tokens["--space-4"],
 	},
 });

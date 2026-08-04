@@ -9,11 +9,11 @@ import {
 	positioningThemeProps,
 	sizingThemeProps,
 	verticalFlexThemeProps,
-} from "@/styles/theme-props-layout.stylex";
-import { spacingThemeProps } from "@/styles/theme-props-spacing.stylex";
-import { radiusThemeProps, shadowThemeProps } from "@/styles/theme-props-surface.stylex";
-import { color, radius, size, space } from "@/styles/tokens.stylex";
-import { fontSize, letterSpacing, lineHeight } from "@/styles/tokens.stylex";
+} from "@/theme/theme-props-layout.stylex";
+import { spacingThemeProps } from "@/theme/theme-props-spacing.stylex";
+import { radiusThemeProps, shadowThemeProps } from "@/theme/theme-props-surface.stylex";
+import { tokens } from "@/theme/tokens.stylex";
+
 
 const INTERACTIVE_CONTROL_HOVER =
 	':hover:not(:focus-within):not([aria-invalid="true"]):not([data-active]):not([data-disabled]):not([data-invalid]):not([data-panel-open]):not([data-popup-open]):not([data-pressed]):not([data-readonly]):not([readonly])';
@@ -52,7 +52,7 @@ export const fieldThemeProps: ThemePropDefinition<VerifyThemeProps<FieldThemePro
  */
 const parts = stylex.create({
 	root: {
-		gap: space[1],
+		gap: tokens["--space-1"],
 		display: "flex",
 		flexDirection: "column",
 		minWidth: 0,
@@ -72,39 +72,39 @@ const parts = stylex.create({
 		},
 	},
 	itemLabel: {},
-	description: { color: color.fgMuted },
+	description: { color: tokens["--fg-muted"] },
 	error: {
-		gap: space[1],
+		gap: tokens["--space-1"],
 		alignItems: "center",
-		color: color.fgDanger,
+		color: tokens["--fg-error"],
 		display: "inline-flex",
 	},
 	requiredIndicator: {
-		color: color.fgDanger,
-		marginInlineStart: space[1],
+		color: tokens["--fg-error"],
+		marginInlineStart: tokens["--space-1"],
 	},
 	inputBase: {
 		borderColor: {
 			// eslint-disable-next-line @stylexjs/valid-styles -- the compiler supports chained pseudo-class conditions; the lint rule is stricter than the compiler.
 			[INTERACTIVE_CONTROL_HOVER]: {
-				"@media (hover: hover) and (pointer: fine)": color.borderHover,
+				"@media (hover: hover) and (pointer: fine)": tokens["--border-input-hover"],
 			},
-			"[data-disabled]": color.borderDisabled,
-			"[data-invalid]": color.bgDanger,
-			"[data-popup-open]": color.borderHover,
-			"[data-readonly]": color.border,
-			default: color.borderStrong,
+			"[data-disabled]": tokens["--border-disabled"],
+			"[data-invalid]": tokens["--bg-error-primary"],
+			"[data-popup-open]": tokens["--border-input-hover"],
+			"[data-readonly]": tokens["--border"],
+			default: tokens["--border-input"],
 		},
 		borderStyle: "solid",
 		borderWidth: "1px",
 		backgroundColor: {
 			"[data-disabled]": "transparent",
-			default: color.surface,
+			default: tokens["--surface"],
 		},
 		color: {
-			"[data-disabled]": color.fgMuted,
-			"[data-readonly]": color.fg,
-			default: color.fg,
+			"[data-disabled]": tokens["--fg-muted"],
+			"[data-readonly]": tokens["--fg"],
+			default: tokens["--fg"],
 		},
 		cursor: {
 			"[data-disabled]": "not-allowed",
@@ -125,15 +125,15 @@ const parts = stylex.create({
 			":focus-visible": "none",
 		},
 		color: {
-			"[data-disabled]": color.fgSubtle,
-			"[data-readonly]": color.fg,
-			"[readonly]": color.fg,
-			default: color.fg,
-			[stylex.when.ancestor('[aria-readonly="true"]')]: color.fg,
-			[stylex.when.ancestor("[data-readonly]")]: color.fg,
+			"[data-disabled]": tokens["--fg-subtle"],
+			"[data-readonly]": tokens["--fg"],
+			"[readonly]": tokens["--fg"],
+			default: tokens["--fg"],
+			[stylex.when.ancestor('[aria-readonly="true"]')]: tokens["--fg"],
+			[stylex.when.ancestor("[data-readonly]")]: tokens["--fg"],
 		},
 		"::placeholder": {
-			color: color.fgMuted,
+			color: tokens["--fg-muted"],
 		},
 	},
 	inputStandard: {
@@ -166,15 +166,15 @@ export const fieldStyles = {
 export const fieldChoiceGroupStyles = stylex.create({
 	root: {
 		alignItems: "stretch",
-		columnGap: space[3],
+		columnGap: tokens["--space-3"],
 		display: "flex",
 		flexDirection: "column",
 		flexWrap: "nowrap",
-		rowGap: space[3],
+		rowGap: tokens["--space-3"],
 	},
 	inline: {
 		alignItems: "start",
-		columnGap: space[6],
+		columnGap: tokens["--space-6"],
 		flexDirection: "row",
 		flexWrap: "wrap",
 	},
@@ -182,62 +182,62 @@ export const fieldChoiceGroupStyles = stylex.create({
 
 export const fieldControlSizes = stylex.create({
 	sm: {
-		borderRadius: radius.md,
+		borderRadius: tokens["--radius-md"],
 		cornerShape: "superellipse(1.6)",
-		height: size["control.sm"],
-		minHeight: size["control.sm"],
+		height: tokens["--size-control-sm"],
+		minHeight: tokens["--size-control-sm"],
 	},
 	md: {
-		borderRadius: radius.md,
+		borderRadius: tokens["--radius-md"],
 		cornerShape: "superellipse(1.3)",
-		height: size["control.md"],
-		minHeight: size["control.md"],
+		height: tokens["--size-control-md"],
+		minHeight: tokens["--size-control-md"],
 	},
 	lg: {
-		borderRadius: radius.lg,
+		borderRadius: tokens["--radius-lg"],
 		cornerShape: "superellipse(1.6)",
-		height: size["control.lg"],
-		minHeight: size["control.lg"],
+		height: tokens["--size-control-lg"],
+		minHeight: tokens["--size-control-lg"],
 	},
 });
 
 export const fieldPaddingSizes = stylex.create({
 	sm: {
-		paddingBlock: space[1],
-		paddingInlineEnd: space[2],
-		paddingInlineStart: space[2],
+		paddingBlock: tokens["--space-1"],
+		paddingInlineEnd: tokens["--space-2"],
+		paddingInlineStart: tokens["--space-2"],
 	},
 	md: {
-		paddingBlock: space[1.5],
-		paddingInlineEnd: space[2],
-		paddingInlineStart: space[3],
+		paddingBlock: tokens["--space-1-5"],
+		paddingInlineEnd: tokens["--space-2"],
+		paddingInlineStart: tokens["--space-3"],
 	},
 	lg: {
-		paddingBlock: space[2],
-		paddingInlineEnd: space[3],
-		paddingInlineStart: space[4],
+		paddingBlock: tokens["--space-2"],
+		paddingInlineEnd: tokens["--space-3"],
+		paddingInlineStart: tokens["--space-4"],
 	},
 });
 
 const fieldFontSizes = stylex.create({
 	responsive: {
 		fontSize: {
-			default: fontSize.x3,
-			[breakpoints.sm]: fontSize.x2,
+			default: tokens["--font-size-3"],
+			[breakpoints.sm]: tokens["--font-size-2"],
 		},
 		letterSpacing: {
-			default: letterSpacing.x3,
-			[breakpoints.sm]: letterSpacing.x2,
+			default: tokens["--letter-spacing-3"],
+			[breakpoints.sm]: tokens["--letter-spacing-2"],
 		},
 		lineHeight: {
-			default: lineHeight.x3,
-			[breakpoints.sm]: lineHeight.x2,
+			default: tokens["--line-height-3"],
+			[breakpoints.sm]: tokens["--line-height-2"],
 		},
 	},
 	lg: {
-		fontSize: fontSize.x3,
-		letterSpacing: letterSpacing.x3,
-		lineHeight: lineHeight.x3,
+		fontSize: tokens["--font-size-3"],
+		letterSpacing: tokens["--letter-spacing-3"],
+		lineHeight: tokens["--line-height-3"],
 	},
 });
 

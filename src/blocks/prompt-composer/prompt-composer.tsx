@@ -7,8 +7,8 @@ import { createContext, type ComponentProps, type FormEvent, type KeyboardEvent,
 import { Button, type ButtonProps, IconButton } from "@/components/button/button";
 import * as InputGroup from "@/components/input-group/input-group";
 import * as Menu from "@/components/menu/menu";
-import { color, space } from "@/styles/tokens.stylex";
-import { fontSize, letterSpacing, lineHeight } from "@/styles/tokens.stylex";
+import { tokens } from "@/theme/tokens.stylex";
+
 
 const ADD_MENU_SIDE_OFFSET = 106;
 
@@ -280,22 +280,22 @@ function joinClassNames(...classNames: Array<string | undefined>) {
 
 const parts = stylex.create({
 	root: {
-		gap: space[2],
-		color: color.fg,
+		gap: tokens["--space-2"],
+		color: tokens["--fg"],
 		display: "flex",
 		flexDirection: "column",
 		maxWidth: "42rem",
 		width: "100%",
 	},
 	options: {
-		gap: space[1],
+		gap: tokens["--space-1"],
 		alignItems: "center",
 		display: "flex",
 		minWidth: 0,
 	},
 	addMenu: { minWidth: "15rem" },
 	addMenuCopy: {
-		gap: space[2],
+		gap: tokens["--space-2"],
 		gridColumn: "2 / 4",
 		alignItems: "baseline",
 		display: "flex",
@@ -303,10 +303,10 @@ const parts = stylex.create({
 	},
 	addMenuDescription: {
 		overflow: "hidden",
-		color: color.fgMuted,
-		fontSize: fontSize.x1,
-		letterSpacing: letterSpacing.x1,
-		lineHeight: lineHeight.x1,
+		color: tokens["--fg-muted"],
+		fontSize: tokens["--font-size-1"],
+		letterSpacing: tokens["--letter-spacing-1"],
+		lineHeight: tokens["--line-height-1"],
 		textOverflow: "ellipsis",
 		whiteSpace: "nowrap",
 	},

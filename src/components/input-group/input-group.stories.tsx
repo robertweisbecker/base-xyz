@@ -8,8 +8,8 @@ import type { ReactNode } from "react";
 import { Button, IconButton } from "@/components/button/button";
 import { breakpoints } from "@/styles/constants.stylex";
 import { fieldStyles } from "@/components/field/field.stylex";
-import { color, space } from "@/styles/tokens.stylex";
-import { fontSize, fontWeight, letterSpacing, lineHeight } from "@/styles/tokens.stylex";
+import { tokens } from "@/theme/tokens.stylex";
+
 import * as InputGroup from "./input-group";
 
 const meta = {
@@ -188,7 +188,7 @@ const styles = stylex.create({
 		maxWidth: "32rem",
 	},
 	states: {
-		gap: space[8],
+		gap: tokens["--space-8"],
 		display: "grid",
 		gridTemplateColumns: {
 			default: "1fr",
@@ -197,26 +197,26 @@ const styles = stylex.create({
 		maxWidth: "56rem",
 	},
 	variants: {
-		gap: space[8],
+		gap: tokens["--space-8"],
 		display: "flex",
 		flexDirection: "column",
 		maxWidth: "32rem",
 	},
 	state: {
-		gap: space[3],
+		gap: tokens["--space-3"],
 		display: "flex",
 		flexDirection: "column",
 	},
 	stateTitle: {
 		margin: 0,
-		color: color.fgMuted,
-		fontSize: fontSize.x1,
-		fontWeight: fontWeight.regular,
-		letterSpacing: letterSpacing.x1,
-		lineHeight: lineHeight.x1,
+		color: tokens["--fg-muted"],
+		fontSize: tokens["--font-size-1"],
+		fontWeight: tokens["--font-weight-regular"],
+		letterSpacing: tokens["--letter-spacing-1"],
+		lineHeight: tokens["--line-height-1"],
 	},
 	sizeRow: {
-		gap: space[3],
+		gap: tokens["--space-3"],
 		alignItems: "center",
 		display: "grid",
 		gridTemplateColumns: "minmax(0, 1fr) auto",

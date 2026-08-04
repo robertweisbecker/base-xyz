@@ -8,7 +8,7 @@ export type TypographyColor =
 	| "subtle"
 	| "muted"
 	| "accent"
-	| "danger"
+	| "error"
 	| "success"
 	| "warning"
 	| "inverse"

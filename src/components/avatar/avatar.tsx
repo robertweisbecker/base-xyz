@@ -5,19 +5,19 @@ import type { StyleXStyles } from "@stylexjs/stylex";
 import type { ReactNode } from "react";
 import { breakpointRanges } from "@/styles/constants.stylex";
 import { focusRing } from "@/styles/recipes/focus";
-import { color, fontWeight, radius, space } from "@/styles/tokens.stylex";
+import { tokens } from "@/theme/tokens.stylex";
 import * as Tooltip from "../tooltip/tooltip";
 
 const avatarSizeTokens = {
-	4: space[4],
-	5: space[5],
-	6: space[6],
-	7: space[7],
-	8: space[8],
-	9: space[9],
-	10: space[10],
-	12: space[12],
-	16: space[16],
+	4: tokens["--space-4"],
+	5: tokens["--space-5"],
+	6: tokens["--space-6"],
+	7: tokens["--space-7"],
+	8: tokens["--space-8"],
+	9: tokens["--space-9"],
+	10: tokens["--space-10"],
+	12: tokens["--space-12"],
+	16: tokens["--space-16"],
 } as const;
 const responsiveKeys = ["default", "xs", "sm", "md", "lg", "xl", "xxl"] as const;
 
@@ -152,19 +152,19 @@ const avatarParts = stylex.create({
 	root: {
 		overflow: "hidden",
 		alignItems: "center",
-		backgroundColor: "var(--gray-a1)",
+		backgroundColor: tokens["--color-gray-a1"],
 		boxSizing: "border-box",
-		color: color.fgMuted,
+		color: tokens["--fg-muted"],
 		display: "inline-flex",
 		flexShrink: 0,
-		fontWeight: fontWeight.semibold,
+		fontWeight: tokens["--font-weight-semibold"],
 		isolation: "isolate",
 		justifyContent: "center",
 		outlineColor: {
 			default: null,
 			// eslint-disable-next-line @stylexjs/valid-styles -- the compiler supports nested pseudo-class conditions; the lint rule is stricter than the compiler.
 			":is(button)": {
-				":hover": color.borderStrong,
+				":hover": tokens["--border-input"],
 			},
 		},
 		outlineStyle: {
@@ -179,7 +179,7 @@ const avatarParts = stylex.create({
 	},
 	tooltipTrigger: {
 		// outlineColor: {
-		// 	":hover": color.borderStrong,
+		// 	":hover": colors["--border-input"],
 		// 	default: null,
 		// },
 		// outlineWidth: {
@@ -195,10 +195,10 @@ const avatarParts = stylex.create({
 
 const shapeVariants = stylex.create({
 	circle: {
-		borderRadius: radius.full,
+		borderRadius: tokens["--radius-full"],
 	},
 	rounded: {
-		borderRadius: radius.md,
+		borderRadius: tokens["--radius-md"],
 	},
 	square: {
 		borderRadius: 0,

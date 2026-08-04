@@ -14,7 +14,7 @@ import {
 import type { ButtonSize } from "@/components/button/button";
 import { textSizeStyles, textWeightStyles } from "@/components/text/text.stylex";
 import { focusRing } from "@/styles/recipes/focus";
-import { color, motion, radius, shadow, size, space } from "@/styles/tokens.stylex";
+import { tokens } from "@/theme/tokens.stylex";
 
 export type TabsSize = Extract<ButtonSize, "sm" | "md" | "lg">;
 
@@ -202,7 +202,7 @@ function mergeClassNames(...classNames: Array<string | undefined>) {
 
 const tabsParts = stylex.create({
 	root: {
-		gap: space[3],
+		gap: tokens["--space-3"],
 		boxSizing: "border-box",
 		display: "flex",
 		minWidth: 0,
@@ -213,12 +213,12 @@ const tabsParts = stylex.create({
 		borderRadius: "var(--_tabs-list-radius)",
 		cornerShape: "superellipse(1.3)",
 		flex: "none",
-		gap: space[1],
-		backgroundColor: color.canvas,
+		gap: tokens["--space-1"],
+		backgroundColor: tokens["--color-gray-s1"],
 		boxSizing: "border-box",
 		display: "inline-flex",
 		isolation: "isolate",
-		outlineColor: color.border,
+		outlineColor: tokens["--border"],
 		outlineStyle: "solid",
 		outlineWidth: 1,
 		position: "relative",
@@ -226,19 +226,19 @@ const tabsParts = stylex.create({
 	indicator: {
 		borderRadius: "calc(var(--_tabs-list-radius) - 1px)",
 		cornerShape: "superellipse(1.3)",
-		backgroundColor: color.bgElevated,
-		boxShadow: shadow.sm,
+		backgroundColor: tokens["--elevated"],
+		boxShadow: tokens["--shadow-sm"],
 		insetBlockStart: 0,
 		insetInlineStart: 0,
 		pointerEvents: "none",
 		position: "absolute",
 		transitionDuration: {
 			"[data-snap]": "0ms",
-			default: motion.durationMedium,
+			default: tokens["--motion-duration-medium"],
 			"@media (prefers-reduced-motion: reduce)": "0ms",
 		},
 		transitionProperty: "translate, width, height",
-		transitionTimingFunction: motion.easeSmoothOut,
+		transitionTimingFunction: tokens["--motion-ease-smooth-out"],
 		translate: "var(--active-tab-left) var(--active-tab-top)",
 		willChange: "translate, width, height",
 		zIndex: 0,
@@ -250,16 +250,16 @@ const tabsParts = stylex.create({
 		borderRadius: "calc(var(--_tabs-list-radius) - 1px)",
 		borderStyle: "none",
 		cornerShape: "superellipse(1.3)",
-		gap: space[2],
+		gap: tokens["--space-2"],
 		paddingBlock: 0,
 		alignItems: "center",
 		appearance: "none",
 		backgroundColor: "transparent",
 		boxSizing: "border-box",
 		color: {
-			"[data-active]": color.fg,
-			default: color.fgMuted,
-			":hover": color.fg,
+			"[data-active]": tokens["--fg"],
+			default: tokens["--fg-muted"],
+			":hover": tokens["--fg"],
 		},
 		cursor: "default",
 		display: "inline-flex",
@@ -274,11 +274,11 @@ const tabsParts = stylex.create({
 		},
 		position: "relative",
 		transitionDuration: {
-			default: motion.durationMedium,
+			default: tokens["--motion-duration-medium"],
 			"@media (prefers-reduced-motion: reduce)": "0ms",
 		},
 		transitionProperty: "color",
-		transitionTimingFunction: motion.easeSmoothOut,
+		transitionTimingFunction: tokens["--motion-ease-smooth-out"],
 		userSelect: "none",
 		whiteSpace: "nowrap",
 		zIndex: 1,
@@ -303,7 +303,7 @@ const tabsParts = stylex.create({
 	},
 	panel: {
 		gridArea: "1 / 1",
-		paddingBlock: space[3],
+		paddingBlock: tokens["--space-3"],
 		outlineStyle: "solid",
 		outlineWidth: 0,
 		minWidth: 0,
@@ -345,9 +345,9 @@ const tabOrientationStyles = stylex.create({
 });
 
 const tabsRadiusStyles = stylex.create({
-	sm: { "--_tabs-list-radius": radius.sm },
-	md: { "--_tabs-list-radius": radius.md },
-	lg: { "--_tabs-list-radius": radius.md },
+	sm: { "--_tabs-list-radius": tokens["--radius-sm"] },
+	md: { "--_tabs-list-radius": tokens["--radius-md"] },
+	lg: { "--_tabs-list-radius": tokens["--radius-md"] },
 });
 
 const tabTextSizeStyles = {
@@ -358,19 +358,19 @@ const tabTextSizeStyles = {
 
 const tabSizeStyles = stylex.create({
 	sm: {
-		paddingInline: space[3],
-		height: size["control.sm"],
-		minWidth: size["control.sm"],
+		paddingInline: tokens["--space-3"],
+		height: tokens["--size-control-sm"],
+		minWidth: tokens["--size-control-sm"],
 	},
 	md: {
-		paddingInline: space[3],
-		height: size["control.md"],
-		minWidth: size["control.md"],
+		paddingInline: tokens["--space-3"],
+		height: tokens["--size-control-md"],
+		minWidth: tokens["--size-control-md"],
 	},
 	lg: {
-		paddingInline: space[4],
-		height: size["control.lg"],
-		minWidth: size["control.lg"],
+		paddingInline: tokens["--space-4"],
+		height: tokens["--size-control-lg"],
+		minWidth: tokens["--size-control-lg"],
 	},
 });
 

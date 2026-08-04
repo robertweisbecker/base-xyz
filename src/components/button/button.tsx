@@ -5,8 +5,8 @@ import type { ReactNode } from "react";
 import { resolveThemeProps } from "@/theme/theme-props";
 import { focusRing } from "@/styles/recipes/focus";
 import { pressable } from "@/styles/recipes/transitions";
-import { color, radius, size, space, shadow } from "@/styles/tokens.stylex";
-import { fontSize, fontWeight, letterSpacing, lineHeight } from "@/styles/tokens.stylex";
+import { tokens } from "@/theme/tokens.stylex";
+
 import { Loader } from "../loader/loader";
 import * as Tooltip from "../tooltip/tooltip";
 import { buttonThemeProps, type ButtonThemeProps } from "./button-theme-props";
@@ -20,7 +20,7 @@ const PRESSED =
 
 const buttonParts = stylex.create({
 	root: {
-		gap: space[2],
+		gap: tokens["--space-2"],
 		overflow: "hidden",
 		textDecoration: "none",
 		alignItems: "center",
@@ -29,11 +29,11 @@ const buttonParts = stylex.create({
 			":is(a[href])": "pointer",
 		},
 		display: "inline-flex",
-		fontSize: fontSize.x2,
-		fontWeight: fontWeight.medium,
+		fontSize: tokens["--font-size-2"],
+		fontWeight: tokens["--font-weight-medium"],
 		justifyContent: "center",
-		letterSpacing: letterSpacing.x2,
-		lineHeight: lineHeight.x2,
+		letterSpacing: tokens["--letter-spacing-2"],
+		lineHeight: tokens["--line-height-2"],
 		opacity: {
 			default: 1,
 			":disabled": 0.48,
@@ -65,7 +65,7 @@ const slotParts = stylex.create({
 		width: "1em",
 	},
 	muted: {
-		color: color.fgMuted,
+		color: tokens["--fg-muted"],
 	},
 });
 
@@ -75,10 +75,11 @@ const contentParts = stylex.create({
 	},
 	transparent: {
 		color: "transparent",
+		opacity: 0,
 		textShadow: "none",
 	},
 	loading: {
-		inset: space[1],
+		inset: tokens["--space-1"],
 		gap: "inherit",
 		alignItems: "center",
 		display: "flex",
@@ -96,10 +97,10 @@ const contentParts = stylex.create({
 });
 
 const slotSizes = stylex.create({
-	xs: { fontSize: "0.875em" },
-	sm: { fontSize: "1em" },
+	xs: { fontSize: "0.875rem" },
+	sm: { fontSize: "1rem" },
 	md: { fontSize: "1rem" },
-	lg: { fontSize: "1.125em" },
+	lg: { fontSize: "1rem" },
 });
 
 const iconOnlySlotSizes = stylex.create({
@@ -111,24 +112,24 @@ const iconOnlySlotSizes = stylex.create({
 
 const iconOnlyControlSizes = stylex.create({
 	xs: {
-		height: size["control.xs"],
-		maxWidth: size["control.xs"],
-		minWidth: size["control.xs"],
+		height: tokens["--size-control-xs"],
+		maxWidth: tokens["--size-control-xs"],
+		minWidth: tokens["--size-control-xs"],
 	},
 	sm: {
-		height: size["control.sm"],
-		maxWidth: size["control.sm"],
-		minWidth: size["control.sm"],
+		height: tokens["--size-control-sm"],
+		maxWidth: tokens["--size-control-sm"],
+		minWidth: tokens["--size-control-sm"],
 	},
 	md: {
-		height: size["control.md"],
-		maxWidth: size["control.md"],
-		minWidth: size["control.md"],
+		height: tokens["--size-control-md"],
+		maxWidth: tokens["--size-control-md"],
+		minWidth: tokens["--size-control-md"],
 	},
 	lg: {
-		height: size["control.lg"],
-		maxWidth: size["control.lg"],
-		minWidth: size["control.lg"],
+		height: tokens["--size-control-lg"],
+		maxWidth: tokens["--size-control-lg"],
+		minWidth: tokens["--size-control-lg"],
 	},
 });
 
@@ -151,63 +152,63 @@ const colorVariants = stylex.create({
 		backgroundColor: {
 			// eslint-disable-next-line @stylexjs/valid-styles -- the compiler supports chained pseudo-class conditions; the lint rule is stricter than the compiler.
 			[HOVER_NOT_PRESSED_OR_OPEN]: {
-				"@media (hover: hover) and (pointer: fine)": color.bgAccentHover,
+				"@media (hover: hover) and (pointer: fine)": tokens["--bg-primary-highlight"],
 			},
-			[PRESSED]: color.bgAccentHover,
-			default: color.bgAccent,
+			[PRESSED]: tokens["--bg-primary-highlight"],
+			default: tokens["--bg-primary"],
 		},
-		backgroundImage: `linear-gradient(to bottom, ${color.bgAccentHover},transparent 40%)`,
+		// backgroundImage: `linear-gradient(to bottom, ${colors["--bg-primary-highlight"]},transparent 40%)`,
 		boxShadow: {
-			[PRESSED]: `inset 0 0 0.08em color-mix(in oklch, black 20%, ${color.bgAccent}), inset 0 0.08em 0.16em 0.08em color-mix(in oklch, black 10%, ${color.bgAccent})`,
+			[PRESSED]: tokens["--shadow-primary-pressed"],
 			"[data-disabled]": null,
-			default: `inset 0 0 0.04em 0.08em color-mix(in srgb, ${color.bgAccent} 90%, ${color.fg}), inset 0 0.04em 0.04em 0.08em color-mix(in oklch, white 40%, ${color.bgAccent}), var(--shadow-ring)`,
+			default: tokens["--shadow-primary"],
 		},
-		color: color.fgAccentContrast,
-		textShadow: `0 .03em .06em oklch(from ${color.bgAccent} calc(l*0.7) calc(c*1.1) h)`,
+		color: tokens["--fg-accent-contrast"],
+		textShadow: `0 .03em .06em oklch(from ${tokens["--bg-primary"]} calc(l*0.7) calc(c*1.1) h)`,
 	},
 	subtle: {
 		backgroundColor: {
 			// eslint-disable-next-line @stylexjs/valid-styles -- the compiler supports chained pseudo-class conditions; the lint rule is stricter than the compiler.
 			[HOVER_NOT_PRESSED_OR_OPEN]: {
-				"@media (hover: hover) and (pointer: fine)": color.bgAccentSoftHover,
+				"@media (hover: hover) and (pointer: fine)": tokens["--bg-accent-hover"],
 			},
-			[PRESSED]: color.bgAccentMuted,
-			default: color.bgAccentSoft,
+			[PRESSED]: tokens["--bg-accent-active"],
+			default: tokens["--bg-accent"],
 		},
 		color: {
-			[PRESSED]: color.fgAccentStrong,
-			default: color.fgAccent,
+			[PRESSED]: tokens["--fg-accent-strong"],
+			default: tokens["--fg-accent"],
 		},
 	},
 	secondary: {
 		backgroundColor: {
-			[HOVER_NOT_PRESSED_OR_OPEN]: color.highlight,
-			[PRESSED]: color.bgElevatedActive,
-			default: color.bgElevated,
+			[HOVER_NOT_PRESSED_OR_OPEN]: tokens["--bg-highlight"],
+			[PRESSED]: tokens["--elevated-active"],
+			default: tokens["--elevated"],
 		},
 		boxShadow: {
-			[PRESSED]: shadow.inset,
-			default: shadow.sm,
+			[PRESSED]: tokens["--shadow-inset"],
+			default: tokens["--shadow-sm"],
 		},
-		color: color.fg,
+		color: tokens["--fg"],
 	},
 	neutral: {
 		backgroundColor: {
 			// eslint-disable-next-line @stylexjs/valid-styles -- the compiler supports chained pseudo-class conditions; the lint rule is stricter than the compiler.
 			[HOVER_NOT_PRESSED_OR_OPEN]: {
-				"@media (hover: hover) and (pointer: fine)": color.surfaceSubtleHover,
+				"@media (hover: hover) and (pointer: fine)": tokens["--surface-subtle-hover"],
 			},
-			[PRESSED]: color.surfaceSubtleHover,
-			default: color.surfaceSubtle,
-			":active": color.surfaceSubtleActive,
+			[PRESSED]: tokens["--surface-subtle-hover"],
+			default: tokens["--surface-subtle"],
+			":active": tokens["--surface-subtle-active"],
 		},
 		color: {
+			// eslint-disable-next-line @stylexjs/valid-styles -- the compiler supports chained pseudo-class conditions; the lint rule is stricter than the compiler.
 			[HOVER_NOT_PRESSED_OR_OPEN]: {
-				"@media (hover: hover) and (pointer: fine)": color.fg,
+				"@media (hover: hover) and (pointer: fine)": tokens["--fg"],
 			},
-			[PRESSED]: color.fgSubtle,
-			default: color.fgMuted,
-			":active": color.fgSubtle,
+			[PRESSED]: tokens["--fg"],
+			default: tokens["--fg-muted"],
 		},
 	},
 	ghost: {
@@ -215,97 +216,100 @@ const colorVariants = stylex.create({
 		backgroundColor: {
 			// eslint-disable-next-line @stylexjs/valid-styles -- the compiler supports chained pseudo-class conditions; the lint rule is stricter than the compiler.
 			[HOVER_NOT_PRESSED_OR_OPEN]: {
-				"@media (hover: hover) and (pointer: fine)": color.highlight,
+				"@media (hover: hover) and (pointer: fine)": tokens["--bg-highlight"],
 			},
-			[PRESSED]: color.surfaceSubtle,
+			[PRESSED]: tokens["--surface-subtle"],
 			default: "transparent",
 		},
 		color: {
+			// eslint-disable-next-line @stylexjs/valid-styles -- the compiler supports chained pseudo-class conditions; the lint rule is stricter than the compiler.
 			[HOVER_NOT_PRESSED_OR_OPEN]: {
-				"@media (hover: hover) and (pointer: fine)": color.fgMuted,
+				"@media (hover: hover) and (pointer: fine)": tokens["--fg-muted"],
 			},
-			[PRESSED]: color.fg,
-			default: color.fgMuted,
+			[PRESSED]: tokens["--fg"],
+			default: tokens["--fg-muted"],
 		},
 	},
 	plain: {
 		backgroundColor: {
 			// eslint-disable-next-line @stylexjs/valid-styles -- the compiler supports chained pseudo-class conditions; the lint rule is stricter than the compiler.
 			[HOVER_NOT_PRESSED_OR_OPEN]: {
-				"@media (hover: hover) and (pointer: fine)": color.highlight,
+				"@media (hover: hover) and (pointer: fine)": tokens["--bg-highlight"],
 			},
 			default: "transparent",
 		},
 		color: {
+			// eslint-disable-next-line @stylexjs/valid-styles -- the compiler supports chained pseudo-class conditions; the lint rule is stricter than the compiler.
 			[HOVER_NOT_PRESSED_OR_OPEN]: {
-				"@media (hover: hover) and (pointer: fine)": color.fg,
+				"@media (hover: hover) and (pointer: fine)": tokens["--fg"],
 			},
-			[PRESSED]: color.fg,
-			default: color.fgMuted,
+			[PRESSED]: tokens["--fg"],
+			default: tokens["--fg-muted"],
 		},
 	},
-	danger: {
-		borderColor: color.bgDanger,
+	error: {
+		borderColor: tokens["--bg-error-primary"],
 		backgroundColor: {
 			// eslint-disable-next-line @stylexjs/valid-styles -- the compiler supports chained pseudo-class conditions; the lint rule is stricter than the compiler.
 			[HOVER_NOT_PRESSED_OR_OPEN]: {
-				"@media (hover: hover) and (pointer: fine)": color.bgDanger,
+				"@media (hover: hover) and (pointer: fine)": tokens["--bg-error-primary"],
 			},
-			[PRESSED]: color.bgDanger,
-			default: color.bgDangerSubtle,
+			[PRESSED]: tokens["--bg-error-primary"],
+			default: tokens["--bg-error"],
 		},
 		color: {
+			// eslint-disable-next-line @stylexjs/valid-styles -- the compiler supports chained pseudo-class conditions; the lint rule is stricter than the compiler.
 			[HOVER_NOT_PRESSED_OR_OPEN]: {
-				"@media (hover: hover) and (pointer: fine)": color.fgAccentContrast,
+				"@media (hover: hover) and (pointer: fine)": tokens["--color-white"],
 			},
-			[PRESSED]: color.fgAccentContrast,
-			default: color.bgDanger,
+			[PRESSED]: tokens["--fg-accent-contrast"],
+			default: tokens["--fg-error"],
 		},
 	},
 });
 
 const sizeVariants = stylex.create({
 	xs: {
-		borderRadius: radius.sm,
-		gap: space[1],
-		paddingBlock: space[2],
-		paddingInline: space[2],
-		fontSize: fontSize.x1,
-		fontWeight: fontWeight.medium,
-		letterSpacing: letterSpacing.x1,
-		lineHeight: lineHeight.x1,
-		height: size["control.xs"],
-		minWidth: size["control.xs"],
+		borderRadius: tokens["--radius-sm"],
+		gap: tokens["--space-1"],
+		paddingBlock: tokens["--space-2"],
+		paddingInline: tokens["--space-2"],
+		fontSize: tokens["--font-size-1"],
+		fontWeight: tokens["--font-weight-medium"],
+		letterSpacing: tokens["--letter-spacing-1"],
+		lineHeight: tokens["--line-height-1"],
+		height: tokens["--size-control-xs"],
+		minWidth: tokens["--size-control-xs"],
 	},
 	sm: {
-		borderRadius: radius.sm,
-		gap: space[1.5],
-		paddingBlock: space[2],
-		paddingInline: space[3],
+		borderRadius: tokens["--radius-sm"],
+		gap: tokens["--space-1-5"],
+		paddingBlock: tokens["--space-2"],
+		paddingInline: tokens["--space-3"],
 		fontSize: "13px",
-		fontWeight: fontWeight.medium,
+		fontWeight: tokens["--font-weight-medium"],
 		letterSpacing: "-.0125em",
-		lineHeight: lineHeight.x2,
-		height: size["control.sm"],
-		minWidth: size["control.sm"],
+		lineHeight: tokens["--line-height-2"],
+		height: tokens["--size-control-sm"],
+		minWidth: tokens["--size-control-sm"],
 	},
 	md: {
-		borderRadius: radius.md,
-		paddingBlock: space[3],
-		paddingInline: space[3],
-		fontWeight: fontWeight.medium,
-		height: size["control.md"],
-		minWidth: size["control.md"],
+		borderRadius: tokens["--radius-md"],
+		paddingBlock: tokens["--space-3"],
+		paddingInline: tokens["--space-3"],
+		fontWeight: tokens["--font-weight-medium"],
+		height: tokens["--size-control-md"],
+		minWidth: tokens["--size-control-md"],
 	},
 	lg: {
-		borderRadius: radius.lg,
-		paddingBlock: space[4],
-		paddingInline: space[5],
-		fontSize: fontSize.x3,
-		letterSpacing: letterSpacing.x3,
-		lineHeight: lineHeight.x3,
-		height: size["control.lg"],
-		minWidth: size["control.lg"],
+		borderRadius: tokens["--radius-lg"],
+		paddingBlock: tokens["--space-4"],
+		paddingInline: tokens["--space-5"],
+		fontSize: tokens["--font-size-3"],
+		letterSpacing: tokens["--letter-spacing-3"],
+		lineHeight: tokens["--line-height-3"],
+		height: tokens["--size-control-lg"],
+		minWidth: tokens["--size-control-lg"],
 	},
 });
 
@@ -317,11 +321,11 @@ const shapeVariants = stylex.create({
 		},
 	},
 	pill: {
-		borderRadius: radius.full,
+		borderRadius: tokens["--radius-full"],
 	},
 	circle: {
 		padding: 0,
-		borderRadius: radius.full,
+		borderRadius: tokens["--radius-full"],
 		aspectRatio: "1 / 1",
 	},
 	square: {

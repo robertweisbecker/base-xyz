@@ -7,15 +7,15 @@ import {
 	marginThemePropKeys,
 	paddingThemePropKeys,
 	textAlignThemePropKeys,
-} from "../theme/theme-props";
+} from "./theme-props";
 import type {
 	GapProps,
 	MarginProps,
 	PaddingProps,
 	SpaceStep,
 	TextAlignProps,
-} from "../theme/theme-props.types";
-import { space } from "./tokens.stylex";
+} from "./theme-props.types";
+import { tokens } from "@/theme/tokens.stylex";
 
 const scalarStyles = stylex.create({
 	marginBlockStart: (value) => ({ marginTop: value }),
@@ -31,11 +31,30 @@ const scalarStyles = stylex.create({
 	textAlign: (value) => ({ textAlign: value }),
 });
 
+const spaceValues = {
+	0: tokens["--space-0"],
+	0.5: tokens["--space-0-5"],
+	1: tokens["--space-1"],
+	1.5: tokens["--space-1-5"],
+	2: tokens["--space-2"],
+	3: tokens["--space-3"],
+	3.5: tokens["--space-3-5"],
+	4: tokens["--space-4"],
+	5: tokens["--space-5"],
+	6: tokens["--space-6"],
+	7: tokens["--space-7"],
+	8: tokens["--space-8"],
+	9: tokens["--space-9"],
+	10: tokens["--space-10"],
+	12: tokens["--space-12"],
+	16: tokens["--space-16"],
+} satisfies Record<SpaceStep, string>;
+
 /** Shared by positioning compilers; numeric values always resolve through spacing tokens. */
 export function resolveSpaceValue(value: unknown): unknown {
 	if (typeof value !== "number") return value;
-	if (value < 0) return `calc(${space[Math.abs(value) as SpaceStep]} * -1)`;
-	return space[value as SpaceStep];
+	if (value < 0) return `calc(${spaceValues[Math.abs(value) as SpaceStep]} * -1)`;
+	return spaceValues[value as SpaceStep];
 }
 
 function resolveEdge(broad: unknown, axis: unknown, edge: unknown): unknown {

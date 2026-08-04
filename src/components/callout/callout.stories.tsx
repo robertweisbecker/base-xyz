@@ -5,7 +5,7 @@ import { WarningIcon } from "@phosphor-icons/react/dist/csr/Warning";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import * as stylex from "@stylexjs/stylex";
 import type { ReactNode } from "react";
-import { color, space } from "@/styles/tokens.stylex";
+import { tokens } from "@/theme/tokens.stylex";
 import { Button } from "../button/button";
 import { CloseButton } from "../button/close-button";
 import { Link } from "../link/link";
@@ -63,7 +63,7 @@ const meta = {
 		description: { control: "text" },
 		hue: {
 			control: "inline-radio",
-			options: ["accent", "danger", "warning", "success", "neutral"],
+			options: ["accent", "error", "warning", "success", "neutral"],
 		},
 		icon: {
 			control: "select",
@@ -118,7 +118,7 @@ type Story = StoryObj<typeof meta>;
 
 export const Playground: Story = {};
 
-const hues: readonly CalloutHue[] = ["accent", "danger", "warning", "success", "neutral"];
+const hues: readonly CalloutHue[] = ["accent", "error", "warning", "success", "neutral"];
 const variants: readonly CalloutVariant[] = ["default", "banner"];
 
 const examplesByHue: Record<CalloutHue, { description: string; icon: ReactNode; title: string }> = {
@@ -127,7 +127,7 @@ const examplesByHue: Record<CalloutHue, { description: string; icon: ReactNode; 
 		icon: <InfoIcon aria-hidden weight="duotone" />,
 		title: "Update available",
 	},
-	danger: {
+	error: {
 		description: "We couldn't save your changes. Please try again.",
 		icon: <WarningCircleIcon aria-hidden weight="duotone" />,
 		title: "Save failed",
@@ -166,11 +166,7 @@ export const Variants: Story = {
 
 							return (
 								<Callout
-									action={
-										variant === "banner" ? (
-											<CloseButton label={`Dismiss ${example.title}`} />
-										) : undefined
-									}
+									action={variant === "banner" ? <CloseButton label={`Dismiss ${example.title}`} /> : undefined}
 									key={hue}
 									description={example.description}
 									hue={hue}
@@ -213,7 +209,7 @@ export const Options: Story = {
 				action={<CloseButton label="Dismiss save error" />}
 				alert
 				description="We couldn't save your changes."
-				hue="danger"
+				hue="error"
 				icon={<WarningCircleIcon aria-hidden weight="duotone" />}
 				variant="banner"
 			/>
@@ -301,46 +297,46 @@ const storyStyles = stylex.create({
 		width: "100%",
 	},
 	sections: {
-		gap: space[8],
+		gap: tokens["--space-8"],
 		display: "flex",
 		flexDirection: "column",
 	},
 	section: {
-		gap: space[2],
+		gap: tokens["--space-2"],
 		display: "flex",
 		flexDirection: "column",
 	},
 	stack: {
-		gap: space[3],
+		gap: tokens["--space-3"],
 		display: "flex",
 		flexDirection: "column",
 	},
 	positioningExamples: {
-		gap: space[8],
-		paddingBlock: space[4],
+		gap: tokens["--space-8"],
+		paddingBlock: tokens["--space-4"],
 		display: "flex",
 		flexDirection: "column",
 	},
 	positioningStage: {
-		borderColor: color.border,
+		borderColor: tokens["--border"],
 		borderStyle: "solid",
 		borderWidth: "1px",
 		height: "13rem",
 	},
 	absoluteStageContent: {
-		paddingInline: space[4],
-		paddingBlockEnd: space[4],
-		paddingBlockStart: space[12],
+		paddingInline: tokens["--space-4"],
+		paddingBlockEnd: tokens["--space-4"],
+		paddingBlockStart: tokens["--space-12"],
 		minHeight: "24rem",
 	},
 	stickyStageContent: {
-		padding: space[3],
-		gap: space[3],
+		padding: tokens["--space-3"],
+		gap: tokens["--space-3"],
 		display: "flex",
 		flexDirection: "column",
 	},
 	log: {
-		gap: space[3],
+		gap: tokens["--space-3"],
 		display: "flex",
 		flexDirection: "column",
 		minHeight: "18rem",

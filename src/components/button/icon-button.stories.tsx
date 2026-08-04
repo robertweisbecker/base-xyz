@@ -3,8 +3,8 @@ import { PlusIcon } from "@phosphor-icons/react/dist/csr/Plus";
 import { TrashIcon } from "@phosphor-icons/react/dist/csr/Trash";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import * as stylex from "@stylexjs/stylex";
-import { color, space } from "@/styles/tokens.stylex";
-import { fontSize, letterSpacing, lineHeight } from "@/styles/tokens.stylex";
+import { tokens } from "@/theme/tokens.stylex";
+
 import { IconButton } from "./button";
 
 const iconOptions = {
@@ -14,7 +14,7 @@ const iconOptions = {
 };
 
 const sizes = ["xs", "sm", "md", "lg"] as const;
-const variants = ["primary", "subtle", "secondary", "neutral", "ghost", "plain", "danger"] as const;
+const variants = ["primary", "subtle", "secondary", "neutral", "ghost", "plain", "error"] as const;
 
 const meta = {
 	title: "Components/Button/Icon button",
@@ -130,50 +130,50 @@ export const States: Story = {
 
 const storyStyles = stylex.create({
 	options: {
-		gap: space[6],
+		gap: tokens["--space-6"],
 		display: "flex",
 		flexDirection: "column",
 	},
 	section: {
-		gap: space[2],
+		gap: tokens["--space-2"],
 		alignItems: "flex-start",
 		display: "flex",
 		flexDirection: "column",
 	},
 	label: {
-		color: color.fgMuted,
-		fontSize: fontSize.x1,
-		letterSpacing: letterSpacing.x1,
-		lineHeight: lineHeight.x1,
+		color: tokens["--fg-muted"],
+		fontSize: tokens["--font-size-1"],
+		letterSpacing: tokens["--letter-spacing-1"],
+		lineHeight: tokens["--line-height-1"],
 		textTransform: "capitalize",
 	},
 	row: {
-		gap: space[3],
+		gap: tokens["--space-3"],
 		alignItems: "flex-end",
 		display: "flex",
 	},
 	specimen: {
-		gap: space[2],
+		gap: tokens["--space-2"],
 		alignItems: "center",
 		display: "flex",
 		flexDirection: "column",
 	},
 	stateGrid: {
-		gap: space[6],
+		gap: tokens["--space-6"],
 		display: "grid",
 		gridTemplateColumns: "repeat(7, max-content)",
-		paddingBlockEnd: space[2],
+		paddingBlockEnd: tokens["--space-2"],
 		maxWidth: "100%",
 		overflowX: "auto",
 	},
 	stateColumn: {
-		gap: space[5],
+		gap: tokens["--space-5"],
 		alignItems: "flex-start",
 		display: "flex",
 		flexDirection: "column",
 	},
 	stateSpecimen: {
-		gap: space[2],
+		gap: tokens["--space-2"],
 		alignItems: "flex-start",
 		display: "flex",
 		flexDirection: "column",

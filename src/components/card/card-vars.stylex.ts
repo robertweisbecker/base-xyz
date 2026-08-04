@@ -1,16 +1,16 @@
 import * as stylex from "@stylexjs/stylex";
-import { space } from "@/styles/tokens.stylex";
-import { fontSize, letterSpacing, lineHeight } from "@/styles/tokens.stylex";
+import { tokens } from "@/theme/tokens.stylex";
+
 
 export const cardVars = stylex.defineVars({
-	contentFontSize: fontSize.x2,
-	contentLetterSpacing: letterSpacing.x2,
-	contentLineHeight: lineHeight.x2,
-	contentPaddingBlock: space[5],
-	contentPaddingInline: space[5],
-	footerPaddingBlock: space[3],
-	footerPaddingInline: space[3],
-	headerGap: space[1],
-	headerPaddingBlock: space[5],
-	headerPaddingInline: space[5],
+	contentFontSize: tokens["--font-size-2"],
+	contentLetterSpacing: tokens["--letter-spacing-2"],
+	contentLineHeight: tokens["--line-height-2"],
+	contentPaddingBlock: tokens["--space-5"],
+	contentPaddingInline: tokens["--space-5"],
+	footerPaddingBlock: tokens["--space-3"],
+	footerPaddingInline: tokens["--space-3"],
+	headerGap: tokens["--space-1"],
+	headerPaddingBlock: tokens["--space-5"],
+	headerPaddingInline: tokens["--space-5"],
 });

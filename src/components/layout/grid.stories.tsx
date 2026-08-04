@@ -1,12 +1,12 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import * as stylex from "@stylexjs/stylex";
 import { breakpoints } from "@/styles/constants.stylex";
-import { color, radius } from "@/styles/tokens.stylex";
+import { tokens } from "@/theme/tokens.stylex";
 import { Card, CardContent, CardTitle } from "../card/card";
 import { Box, Grid } from "./layout";
 
 const meta = {
-	title: "Components/Grid",
+	title: "Components/Layout/Grid",
 	component: Grid,
 	args: { columns: 3, gap: 3 },
 	argTypes: {
@@ -44,7 +44,7 @@ export const ResponsiveSpanStyle: Story = {
 };
 
 const styles = stylex.create({
-	item: { borderColor: color.border, borderRadius: radius.sm, borderStyle: "solid", borderWidth: 1, backgroundColor: color.surfaceSubtle },
+	item: { borderColor: tokens["--border"], borderRadius: tokens["--radius-sm"], borderStyle: "solid", borderWidth: 1, backgroundColor: tokens["--surface-subtle"] },
 	responsiveSpan: {
 		gridColumn: {
 			default: "span 12 / span 12",

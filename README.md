@@ -30,25 +30,27 @@ npm run dev
 src/
   components/               Base UI-backed components and colocated stories
   blocks/                   Opinionated compositions for recurring use cases
+  theme/
+    tokens.stylex.ts        Unified themeable StyleX token contract
+    themes.stylex.ts        Named partial token overrides
+    theme-provider.tsx      Theme context, host, and root synchronization
+    theme-props-*.stylex.ts Token-backed component prop compilers
   styles/
-    tokens.stylex.ts        Themeable StyleX token contract
-    type-tokens.stylex.ts   Type primitives, family variables, and font scale styles
-    constants.stylex.ts     Breakpoint selectors plus fixed motion and layers
+    constants.stylex.ts     Fixed breakpoint/range selectors and stacking layers
     recipes/                Purpose-named cross-component styles and inherited variables
     reset.css               Tailwind v4-derived reset and accessibility defaults
-    global.css              Light/dark semantic token values
-  theme/                    Gallery theme state and persistence
+    global.css              Fixed document-level styles
   App.tsx                   Integrated component gallery
 ```
 
 ## Theming model
 
-Components use the `@/` alias for imports from `src`, including direct named
-imports from StyleX token, constant, and recipe files. Themeable tokens point
-to a small semantic CSS custom-property contract whose values switch at the
-document root with `data-theme="light|dark"`. Keeping the theme selector at the
-document root also means Base UI popups rendered through portals inherit the
-correct theme.
+Components use the `@/` alias for imports from `src`. All themeable values come
+through the direct `tokens` binding in `src/theme/tokens.stylex.ts`; fixed
+constants and recipes retain their own direct named imports. Named themes
+provide partial overrides of that unified StyleX variable group.
+`ThemeProvider` applies the requested theme and mode to a real host and mirrors
+the outermost provider onto the document root so body-level portals inherit it.
 
 See [`src/styles/README.md`](src/styles/README.md) for the style ownership rules.
 

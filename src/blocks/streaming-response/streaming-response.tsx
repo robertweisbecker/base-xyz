@@ -9,8 +9,8 @@ import { Loader } from "@/components/loader/loader";
 import { textSizeStyles, textStyles } from "@/components/text/text.stylex";
 import { shimmerTextStyles } from "./shimmer-text.stylex";
 import { typingTextStyles } from "./typing-text.stylex";
-import { color, space } from "@/styles/tokens.stylex";
-import { lineHeight } from "@/styles/tokens.stylex";
+import { tokens } from "@/theme/tokens.stylex";
+
 
 export type StreamingResponseStatus = "streaming" | "complete" | "stopped" | "error";
 
@@ -123,8 +123,8 @@ function joinClassNames(...classNames: Array<string | undefined>) {
 
 const parts = stylex.create({
 	root: {
-		gap: space[3],
-		color: color.fg,
+		gap: tokens["--space-3"],
+		color: tokens["--fg"],
 		display: "flex",
 		flexDirection: "column",
 		maxWidth: "46rem",
@@ -132,14 +132,14 @@ const parts = stylex.create({
 		width: "100%",
 	},
 	status: {
-		gap: space[1],
+		gap: tokens["--space-1"],
 		alignItems: "center",
 		display: "inline-flex",
 		width: "fit-content",
 	},
 	content: {
-		color: color.fg,
-		lineHeight: lineHeight.x4,
+		color: tokens["--fg"],
+		lineHeight: tokens["--line-height-4"],
 		whiteSpace: "pre-wrap",
 	},
 	toolbar: {
@@ -151,8 +151,8 @@ const parts = stylex.create({
 });
 
 const statusColor = stylex.create({
-	streaming: { color: color.fgMuted },
-	complete: { color: color.bgSuccess },
-	stopped: { color: color.fgMuted },
-	error: { color: color.fgDanger },
+	streaming: { color: tokens["--fg-muted"] },
+	complete: { color: tokens["--bg-success-primary"] },
+	stopped: { color: tokens["--fg-muted"] },
+	error: { color: tokens["--fg-error"] },
 });

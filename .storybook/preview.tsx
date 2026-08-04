@@ -1,9 +1,10 @@
 import type { Decorator, Preview } from "@storybook/react-vite";
 import { themes } from "storybook/theming";
 import "../src/styles/index.css";
+import "./docs.css";
 import "./reduced-motion.css";
 import { ReducedMotionFrame } from "./reduced-motion-frame";
-import { ThemeFrame } from "./theme-frame";
+import { ThemeProvider, type ThemeMode, type ThemeName } from "../src/theme";
 
 let focusAccessorGuarded = false;
 
@@ -37,12 +38,13 @@ const withStorybookFocusCompatibility: Decorator = (Story) => {
 };
 
 const withTheme: Decorator = (Story, context) => {
-	const theme =
-		context.globals.theme === "light" || context.globals.theme === "dark" ? context.globals.theme : "system";
+	const theme: ThemeName = context.globals.theme === "mp" ? "mp" : "default";
+	const mode: ThemeMode =
+		context.globals.mode === "light" || context.globals.mode === "dark" ? context.globals.mode : "system";
 	return (
-		<ThemeFrame theme={theme}>
+		<ThemeProvider mode={mode} theme={theme}>
 			<Story />
-		</ThemeFrame>
+		</ThemeProvider>
 	);
 };
 
@@ -55,6 +57,18 @@ const withReducedMotion: Decorator = (Story, context) => (
 const preview: Preview = {
 	decorators: [withStorybookFocusCompatibility, withTheme, withReducedMotion],
 	globalTypes: {
+		mode: {
+			description: "Global color mode",
+			toolbar: {
+				dynamicTitle: false,
+				title: "Mode",
+				items: [
+					{ value: "system", title: "Auto", icon: "paintbrush" },
+					{ value: "light", title: "Light", icon: "sun" },
+					{ value: "dark", title: "Dark", icon: "moon" },
+				],
+			},
+		},
 		reducedMotion: {
 			description: "Global motion preference",
 			toolbar: {
@@ -67,21 +81,21 @@ const preview: Preview = {
 			},
 		},
 		theme: {
-			description: "Global color theme",
+			description: "Global design theme",
 			toolbar: {
 				dynamicTitle: false,
 				title: "Theme",
 				items: [
-					{ value: "system", title: "Auto", icon: "paintbrush" },
-					{ value: "light", title: "Light", icon: "sun" },
-					{ value: "dark", title: "Dark", icon: "moon" },
+					{ value: "default", title: "Default", icon: "paintbrush" },
+					{ value: "mp", title: "MP", icon: "paintbrush" },
 				],
 			},
 		},
 	},
 	initialGlobals: {
+		mode: "system",
 		reducedMotion: "system",
-		theme: "system",
+		theme: "default",
 	},
 	parameters: {
 		docs: {

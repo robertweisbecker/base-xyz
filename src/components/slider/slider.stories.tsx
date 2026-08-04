@@ -12,7 +12,7 @@ import { NumberField } from "@/components/number-field/number-field";
 import { Text } from "@/components/text/text";
 import { textStyles } from "@/components/text/text.stylex";
 import { Toggle } from "@/components/toggle/toggle";
-import { color, space } from "@/styles/tokens.stylex";
+import { tokens } from "@/theme/tokens.stylex";
 import * as Slider from "./slider";
 
 type PlaygroundArgs = Slider.SliderRootProps<number> & {
@@ -423,32 +423,32 @@ function getMarkerFactor(increment: number, step = 1) {
 const styles = stylex.create({
 	frame: { maxWidth: "28rem" },
 	story: {
-		gap: space[8],
+		gap: tokens["--space-8"],
 		display: "flex",
 		flexDirection: "column",
 	},
 	section: {
-		gap: space[3],
+		gap: tokens["--space-3"],
 		display: "flex",
 		flexDirection: "column",
 	},
 	heading: {
 		margin: 0,
-		color: color.fgMuted,
+		color: tokens["--fg-muted"],
 	},
 	sideIcon: {
 		flex: "none",
-		color: color.fgMuted,
-		height: space[5],
-		width: space[5],
+		color: tokens["--fg-muted"],
+		height: tokens["--space-5"],
+		width: tokens["--space-5"],
 	},
 	orientationGrid: {
-		gap: space[12],
+		gap: tokens["--space-12"],
 		display: "grid",
 		gridTemplateColumns: "minmax(0, 1fr) auto",
 	},
 	verticalSection: {
-		gap: space[3],
+		gap: tokens["--space-3"],
 		alignItems: "center",
 		display: "flex",
 		flexDirection: "column",

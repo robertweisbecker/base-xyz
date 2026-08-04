@@ -21,12 +21,15 @@ import {
 	NumberField,
 	type NumberFieldInputWidth,
 	type NumberFieldProps,
+	type RadiusValue,
 	Radio,
 	type RadioGroupProps,
 	type RadioProps,
 	Select,
 	Stack,
 	type SpaceStep,
+	type SemanticColor,
+	type ShadowValue,
 	type FlexProps,
 	type StackThemeProps,
 	Switch,
@@ -48,6 +51,20 @@ export const tokenDerivedThemeValues = {
 	container: "container.3xl" as const,
 	space: 1.5 as const,
 } satisfies { container: ContainerSize; space: SpaceStep };
+
+export const closedThemePropValues = {
+	container: "container.7xl" as const,
+	radius: "xxs" as const,
+	semanticColor: "bgErrorPrimary" as const,
+	shadow: "xs" as const,
+	space: 3.5 as const,
+} satisfies {
+	container: ContainerSize;
+	radius: RadiusValue;
+	semanticColor: SemanticColor;
+	shadow: ShadowValue;
+	space: SpaceStep;
+};
 
 export const publicLayoutThemeTypes: BoxThemeProps & StackThemeProps = {
 	gap: 2,
@@ -111,6 +128,10 @@ export const validThemePropExamples = (
 			position="relative"
 			width="2/3"
 		/>
+		<Box bg="bgPrimary" color="fgAccentContrast" />
+		<Box bg="bgPanel" />
+		<Box bg="bgElevatedActive" />
+		<Box bg="bgError" color="fgError" />
 		<Stack gap={4} orientation="horizontal" />
 		<Card orientation="horizontal" radius="lg" shadow="lg" />
 		<Button width="full" p={3} />
@@ -132,7 +153,7 @@ export const invalidThemePropExamples = (
 		{/* @ts-expect-error Card intentionally has no shared color prop. */}
 		<Card color="fg" />
 		{/* @ts-expect-error Button intentionally has no shared background prop. */}
-		<Button bg="bgAccent" />
+		<Button bg="bgPrimary" />
 		{/* @ts-expect-error Field wrappers intentionally have no shared color prop. */}
 		<TextField color="fg" label="Name" />
 		{/* @ts-expect-error Field wrappers intentionally have no shared background prop. */}
@@ -174,6 +195,8 @@ export const invalidThemePropExamples = (
 		<CheckboxGroup label="Choices" inline={{ md: true }} />
 		{/* @ts-expect-error Layout primitive theme props are scalar too. */}
 		<Box bg={{ md: "surface" }} />
+		{/* @ts-expect-error Danger aliases were replaced by the error variants. */}
+		<Box bg="bgDanger" />
 		{/* @ts-expect-error Layout primitive theme props are scalar too. */}
 		<Box shadow={{ md: "lg" }} />
 		{/* @ts-expect-error Responsive grid spans use predeclared StyleX styles. */}

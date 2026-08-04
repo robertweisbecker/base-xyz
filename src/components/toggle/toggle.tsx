@@ -6,7 +6,7 @@ import type { ReactNode } from "react";
 import { extractThemeProps } from "@/theme/theme-props";
 import { Button, type ButtonProps, type ButtonShape, type ButtonSize, type ButtonVariant } from "../button/button";
 import { buttonThemeProps, type ButtonThemeProps } from "../button/button-theme-props";
-import { space } from "../../styles/tokens.stylex";
+import { tokens } from "@/theme/tokens.stylex";
 
 export type ToggleProps = Omit<
 	BaseToggle.Props,
@@ -80,7 +80,7 @@ export function ToggleGroup({ ref, className, style, ...props }: ToggleGroupProp
 
 const toggleParts = stylex.create({
 	group: {
-		gap: space[0.5],
+		gap: tokens["--space-0-5"],
 		alignItems: "stretch",
 		display: "inline-flex",
 		flexDirection: {

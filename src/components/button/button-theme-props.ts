@@ -7,8 +7,8 @@ import {
 	childLayoutThemeProps,
 	positioningThemeProps,
 	sizingThemeProps,
-} from "@/styles/theme-props-layout.stylex";
-import { gapThemeProps, spacingThemeProps } from "@/styles/theme-props-spacing.stylex";
+} from "@/theme/theme-props-layout.stylex";
+import { gapThemeProps, spacingThemeProps } from "@/theme/theme-props-spacing.stylex";
 import type {
 	ChildLayoutProps,
 	GapProps,

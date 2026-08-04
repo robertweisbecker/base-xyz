@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import * as stylex from "@stylexjs/stylex";
-import { color, space } from "@/styles/tokens.stylex";
-import { fontSize, letterSpacing, lineHeight } from "@/styles/tokens.stylex";
+import { tokens } from "@/theme/tokens.stylex";
+
 import { Link } from "./link";
 
 const meta = {
@@ -57,20 +57,20 @@ export const Examples: Story = {
 
 const storyStyles = stylex.create({
 	examples: {
-		gap: space[6],
+		gap: tokens["--space-6"],
 		display: "flex",
 		flexDirection: "column",
 	},
 	example: {
-		gap: space[2],
+		gap: tokens["--space-2"],
 		display: "flex",
 		flexDirection: "column",
 	},
 	label: {
-		color: color.fgMuted,
-		fontSize: fontSize.x1,
-		letterSpacing: letterSpacing.x1,
-		lineHeight: lineHeight.x1,
+		color: tokens["--fg-muted"],
+		fontSize: tokens["--font-size-1"],
+		letterSpacing: tokens["--letter-spacing-1"],
+		lineHeight: tokens["--line-height-1"],
 	},
 	copy: {
 		margin: 0,

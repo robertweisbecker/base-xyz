@@ -11,7 +11,7 @@ import type { FieldSize, FieldThemeProps } from "@/components/field/field.types"
 import { fieldStyles, fieldTextStyles, fieldThemeProps } from "@/components/field/field.stylex";
 import { focusRing } from "@/styles/recipes/focus";
 import { pressable } from "@/styles/recipes/transitions";
-import { color, radius, size, space, shadow } from "@/styles/tokens.stylex";
+import { tokens } from "@/theme/tokens.stylex";
 import { WarningOctagonIcon } from "@phosphor-icons/react";
 
 const STEPPER_HOVER = ":hover:not([data-disabled]):not([data-readonly]):not(:active)";
@@ -24,23 +24,23 @@ export type NumberFieldProps = Omit<
 	"children" | "className" | "color" | "id" | "style" | keyof FieldThemeProps
 > &
 	FieldThemeProps & {
-	label: string;
-	description?: string;
-	error?: string;
-	className?: string;
-	/** StyleX overrides, applied after the component's own styles. */
-	style?: StyleXStyles;
-	id?: string;
-	/**
-	 * Width of the nested input. Use `"fill"` to occupy the available inline
-	 * space, or provide any CSS width such as `"10ch"`, `"80px"`, or `240`.
-	 * @default "5ch"
-	 */
-	inputWidth?: NumberFieldInputWidth;
-	decrementLabel?: string;
-	incrementLabel?: string;
-	size?: FieldSize;
-};
+		label: string;
+		description?: string;
+		error?: string;
+		className?: string;
+		/** StyleX overrides, applied after the component's own styles. */
+		style?: StyleXStyles;
+		id?: string;
+		/**
+		 * Width of the nested input. Use `"fill"` to occupy the available inline
+		 * space, or provide any CSS width such as `"10ch"`, `"80px"`, or `240`.
+		 * @default "5ch"
+		 */
+		inputWidth?: NumberFieldInputWidth;
+		decrementLabel?: string;
+		incrementLabel?: string;
+		size?: FieldSize;
+	};
 
 export type NumberFieldInputWidth = CSSProperties["width"] | "fill";
 
@@ -66,12 +66,7 @@ export function NumberField({
 	const id = providedId ?? generatedId;
 	const descriptionId = description ? `${id}-description` : undefined;
 	const errorId = error ? `${id}-error` : undefined;
-	const rootSx = stylex.props(
-		fieldStyles.root,
-		numberFieldParts.root,
-		...styles,
-		style,
-	);
+	const rootSx = stylex.props(fieldStyles.root, numberFieldParts.root, ...styles, style);
 
 	return (
 		<Field.Root
@@ -80,7 +75,9 @@ export function NumberField({
 			disabled={disabled}
 			invalid={Boolean(error)}
 			name={name}
-			render={<BaseNumberField.Root id={id} disabled={disabled} readOnly={readOnly} required={required} {...restProps} />}>
+			render={
+				<BaseNumberField.Root id={id} disabled={disabled} readOnly={readOnly} required={required} {...restProps} />
+			}>
 			<BaseNumberField.ScrubArea {...stylex.props(numberFieldParts.scrubArea)}>
 				<Field.Label htmlFor={id} {...stylex.props(fieldStyles.label, numberFieldParts.label)}>
 					{label}
@@ -148,7 +145,7 @@ export function NumberField({
 
 const numberFieldParts = stylex.create({
 	root: {
-		gap: space[1],
+		gap: tokens["--space-1"],
 		display: "flex",
 		flexDirection: "column",
 		minWidth: 0,
@@ -166,13 +163,13 @@ const numberFieldParts = stylex.create({
 		cursor: "inherit",
 	},
 	scrubCursor: {
-		borderRadius: radius.full,
-		paddingBlock: space[1],
-		paddingInline: space[2],
+		borderRadius: tokens["--radius-full"],
+		paddingBlock: tokens["--space-1"],
+		paddingInline: tokens["--space-2"],
 		alignItems: "center",
-		backgroundColor: color.bgInverse,
-		boxShadow: shadow.sm,
-		color: color.fgInverse,
+		backgroundColor: tokens["--bg-inverse"],
+		boxShadow: tokens["--shadow-sm"],
+		color: tokens["--fg-inverse"],
 		display: "flex",
 		justifyContent: "center",
 	},
@@ -188,14 +185,14 @@ const numberFieldParts = stylex.create({
 		borderColor: {
 			// eslint-disable-next-line @stylexjs/valid-styles -- the compiler supports chained pseudo-class conditions; the lint rule is stricter than the compiler.
 			[INPUT_HOVER]: {
-				"@media (hover: hover) and (pointer: fine)": color.borderHover,
+				"@media (hover: hover) and (pointer: fine)": tokens["--border-input-hover"],
 			},
-			'[aria-invalid="true"]': color.bgDanger,
-			"[data-readonly]": `${color.border} transparent ${color.border}`,
-			"[readonly]": `${color.border} transparent ${color.border}`,
-			default: color.borderStrong,
-			":focus-visible": color.focus,
-			':focus-visible[aria-invalid="true"]': color.bgDanger,
+			'[aria-invalid="true"]': tokens["--bg-error-primary"],
+			"[data-readonly]": `${tokens["--border"]} transparent ${tokens["--border"]}`,
+			"[readonly]": `${tokens["--border"]} transparent ${tokens["--border"]}`,
+			default: tokens["--border-input"],
+			":focus-visible": tokens["--focus"],
+			':focus-visible[aria-invalid="true"]': tokens["--bg-error-primary"],
 		},
 		borderRadius: 0,
 		borderStyle: "solid",
@@ -205,9 +202,9 @@ const numberFieldParts = stylex.create({
 		paddingBlock: 0,
 		appearance: "textfield",
 		backgroundColor: {
-			"[data-disabled]": color.surfaceSubtle,
+			"[data-disabled]": tokens["--surface-subtle"],
 			"[data-readonly]": "transparent",
-			default: color.surface,
+			default: tokens["--surface"],
 		},
 		fontFamily: "inherit",
 		fontVariantNumeric: "tabular-nums",
@@ -224,26 +221,26 @@ const numberFieldParts = stylex.create({
 	},
 	stepper: {
 		padding: 0,
-		borderColor: color.borderStrong,
+		borderColor: tokens["--border-input"],
 		borderStyle: "solid",
 		borderWidth: "1px",
 		outline: "0",
 		alignItems: "center",
 		backgroundColor: {
-			[STEPPER_ACTIVE]: color.surfaceSubtleActive,
+			[STEPPER_ACTIVE]: tokens["--surface-subtle-active"],
 			// eslint-disable-next-line @stylexjs/valid-styles -- the compiler supports chained pseudo-class conditions; the lint rule is stricter than the compiler.
 			[STEPPER_HOVER]: {
-				"@media (hover: hover) and (pointer: fine)": color.surfaceSubtleHover,
+				"@media (hover: hover) and (pointer: fine)": tokens["--surface-subtle-hover"],
 			},
-			"[data-disabled]": color.canvas,
+			"[data-disabled]": tokens["--bg-canvas"],
 			default: "transparent",
 		},
 		color: {
-			"[data-disabled]": `color-mix(in srgb, ${color.fgSubtle} 48%, transparent)`,
-			"[data-readonly]": `color-mix(in srgb, ${color.fgSubtle} 48%, transparent)`,
-			default: color.fgMuted,
+			"[data-disabled]": `color-mix(in srgb, ${tokens["--fg-subtle"]} 48%, transparent)`,
+			"[data-readonly]": `color-mix(in srgb, ${tokens["--fg-subtle"]} 48%, transparent)`,
+			default: tokens["--fg-muted"],
 			":hover": {
-				"@media (hover: hover) and (pointer: fine)": color.fg,
+				"@media (hover: hover) and (pointer: fine)": tokens["--fg"],
 			},
 		},
 		cursor: {
@@ -265,66 +262,66 @@ const numberFieldParts = stylex.create({
 
 const numberFieldGroupSizes = stylex.create({
 	sm: {
-		height: size["control.sm"],
+		height: tokens["--size-control-sm"],
 	},
 	md: {
-		height: size["control.md"],
+		height: tokens["--size-control-md"],
 	},
 	lg: {
-		height: size["control.lg"],
+		height: tokens["--size-control-lg"],
 	},
 });
 
 const numberFieldStepperSizes = stylex.create({
 	sm: {
-		minWidth: size["control.sm"],
+		minWidth: tokens["--size-control-sm"],
 	},
 	md: {
-		minWidth: size["control.md"],
+		minWidth: tokens["--size-control-md"],
 	},
 	lg: {
-		minWidth: size["control.lg"],
+		minWidth: tokens["--size-control-lg"],
 	},
 });
 
 const numberFieldInputPaddingSizes = stylex.create({
 	sm: {
-		paddingInline: space[3],
+		paddingInline: tokens["--space-3"],
 	},
 	md: {
-		paddingInline: space[3],
+		paddingInline: tokens["--space-3"],
 	},
 	lg: {
-		paddingInline: space[5],
+		paddingInline: tokens["--space-5"],
 	},
 });
 
 const numberFieldDecrementRadii = stylex.create({
 	sm: {
-		borderEndStartRadius: radius.sm,
-		borderStartStartRadius: radius.sm,
+		borderEndStartRadius: tokens["--radius-sm"],
+		borderStartStartRadius: tokens["--radius-sm"],
 	},
 	md: {
-		borderEndStartRadius: radius.md,
-		borderStartStartRadius: radius.md,
+		borderEndStartRadius: tokens["--radius-md"],
+		borderStartStartRadius: tokens["--radius-md"],
 	},
 	lg: {
-		borderEndStartRadius: radius.lg,
-		borderStartStartRadius: radius.lg,
+		borderEndStartRadius: tokens["--radius-lg"],
+		borderStartStartRadius: tokens["--radius-lg"],
 	},
 });
 
 const numberFieldIncrementRadii = stylex.create({
 	sm: {
-		borderEndEndRadius: radius.sm,
-		borderStartEndRadius: radius.sm,
+		borderEndEndRadius: tokens["--radius-sm"],
+		borderStartEndRadius: tokens["--radius-sm"],
 	},
 	md: {
-		borderEndEndRadius: radius.md,
-		borderStartEndRadius: radius.md,
+		borderEndEndRadius: tokens["--radius-md"],
+		borderStartEndRadius: tokens["--radius-md"],
 	},
 	lg: {
-		borderEndEndRadius: radius.lg,
-		borderStartEndRadius: radius.lg,
+		borderEndEndRadius: tokens["--radius-lg"],
+		borderStartEndRadius: tokens["--radius-lg"],
 	},
 });

@@ -5,7 +5,7 @@ import { createContext, Fragment, type ComponentProps, type ReactNode, useContex
 import { Button, type ButtonProps } from "@/components/button/button";
 import * as Menu from "@/components/menu/menu";
 import { menuItemVars } from "@/components/menu/menu-item.stylex";
-import { color, space, fontSize, fontWeight, letterSpacing, lineHeight } from "@/styles/tokens.stylex";
+import { tokens } from "@/theme/tokens.stylex";
 import { breakpoints } from "@/styles/constants.stylex";
 
 export type ModelSelectorOption = {
@@ -352,7 +352,7 @@ const parts = stylex.create({
 	},
 	triggerSetting: {
 		overflow: "hidden",
-		fontWeight: fontWeight.regular,
+		fontWeight: tokens["--font-weight-regular"],
 		opacity: 0.72,
 		textOverflow: "ellipsis",
 		whiteSpace: "nowrap",
@@ -365,15 +365,15 @@ const parts = stylex.create({
 		minWidth: 0,
 	},
 	settingsValue: {
-		gap: space[1],
+		gap: tokens["--space-1"],
 		gridColumn: "2",
 		overflow: "hidden",
 		alignItems: "center",
-		color: color.fgMuted,
+		color: tokens["--fg-muted"],
 		display: "flex",
-		fontSize: fontSize.x1,
+		fontSize: tokens["--font-size-1"],
 		justifyContent: "end",
-		letterSpacing: letterSpacing.x1,
+		letterSpacing: tokens["--letter-spacing-1"],
 		textAlign: "end",
 		textOverflow: "ellipsis",
 		whiteSpace: "nowrap",
@@ -389,7 +389,7 @@ const parts = stylex.create({
 	resetItem: {
 		[menuItemVars.columns]: "minmax(0, 1fr) auto",
 		// [menuItemVars.paddingInlineStart]: space[3],
-		color: color.fgMuted,
+		color: tokens["--fg-muted"],
 	},
 	resetLabel: {
 		gridColumn: "1",
@@ -398,14 +398,14 @@ const parts = stylex.create({
 	},
 	resetIcon: {
 		gridColumn: "2",
-		color: color.fgMuted,
+		color: tokens["--fg-muted"],
 		justifySelf: "end",
 	},
 	modelItem: {
-		[menuItemVars.columns]: `${space[4]} 1em minmax(0, 1fr)`,
-		[menuItemVars.columnGap]: space[2],
+		[menuItemVars.columns]: `${tokens["--space-4"]} 1em minmax(0, 1fr)`,
+		[menuItemVars.columnGap]: tokens["--space-2"],
 		[menuItemVars.minHeight]: "3.375rem",
-		[menuItemVars.paddingBlock]: space[2],
+		[menuItemVars.paddingBlock]: tokens["--space-2"],
 		// [menuItemVars.rowGap]: "0.0625rem",
 	},
 	modelIcon: {
@@ -421,10 +421,10 @@ const parts = stylex.create({
 		gridColumn: "3",
 		gridRow: "1",
 		overflow: "hidden",
-		color: color.fg,
-		fontSize: fontSize.x2,
-		letterSpacing: letterSpacing.x2,
-		lineHeight: lineHeight.x2,
+		color: tokens["--fg"],
+		fontSize: tokens["--font-size-2"],
+		letterSpacing: tokens["--letter-spacing-2"],
+		lineHeight: tokens["--line-height-2"],
 		textOverflow: "ellipsis",
 		whiteSpace: "nowrap",
 	},
@@ -432,16 +432,16 @@ const parts = stylex.create({
 		gridColumn: "3",
 		gridRow: "2",
 		overflow: "hidden",
-		color: color.fgMuted,
+		color: tokens["--fg-muted"],
 		// textOverflow: "ellipsis",
 		// whiteSpace: "nowrap",
 		display: {
 			default: "none",
 			[breakpoints.md]: "block",
 		},
-		fontSize: fontSize.x1,
-		letterSpacing: letterSpacing.x1,
-		lineHeight: lineHeight.x1,
+		fontSize: tokens["--font-size-1"],
+		letterSpacing: tokens["--letter-spacing-1"],
+		lineHeight: tokens["--line-height-1"],
 	},
 	copyWithoutIcon: {
 		gridColumn: "2 / 4",

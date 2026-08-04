@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import * as stylex from "@stylexjs/stylex";
-import { color, space } from "@/styles/tokens.stylex";
-import { fontSize, letterSpacing, lineHeight } from "@/styles/tokens.stylex";
+import { tokens } from "@/theme/tokens.stylex";
+
 import { Button } from "../button/button";
 import { createPopoverHandle } from "../popup-handles";
 import * as Popover from "./popover";
@@ -169,7 +169,7 @@ const storyParts = stylex.create({
 		width: "min(720px, calc(100vw - 48px))",
 	},
 	positioningGrid: {
-		gap: space[4],
+		gap: tokens["--space-4"],
 		paddingBlock: "10rem",
 		display: "grid",
 		gridTemplateColumns: {
@@ -189,20 +189,20 @@ const storyParts = stylex.create({
 		maxWidth: "17rem",
 	},
 	stack: {
-		gap: space[3],
+		gap: tokens["--space-3"],
 		alignItems: "center",
 		display: "flex",
 		flexDirection: "column",
 	},
 	hint: {
 		margin: 0,
-		color: color.fgMuted,
-		fontSize: fontSize.x1,
-		letterSpacing: letterSpacing.x1,
-		lineHeight: lineHeight.x1,
+		color: tokens["--fg-muted"],
+		fontSize: tokens["--font-size-1"],
+		letterSpacing: tokens["--letter-spacing-1"],
+		lineHeight: tokens["--line-height-1"],
 	},
 	triggerGroup: {
-		gap: space[2],
+		gap: tokens["--space-2"],
 		display: "flex",
 		flexWrap: "wrap",
 	},

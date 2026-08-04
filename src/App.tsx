@@ -1,4 +1,4 @@
-import type { ReactNode } from "react";
+import { useLayoutEffect, useState, type ReactNode } from "react";
 import * as stylex from "@stylexjs/stylex";
 import * as Blocks from "./blocks";
 import { BlueprintIcon } from "@phosphor-icons/react/dist/csr/Blueprint";
@@ -37,12 +37,12 @@ import {
 	InfoTip,
 	InputGroup,
 	Link,
+	LinkPreview,
 	Loader,
 	Menu,
 	Meter,
 	NumberField,
 	Popover,
-	PreviewCard,
 	Progress,
 	Radio,
 	RadioGroup,
@@ -68,10 +68,10 @@ import {
 	exampleSpeedOptions,
 } from "./blocks/model-selector/model-selector.examples";
 import { breakpoints, zIndex } from "@/styles/constants.stylex";
-import { color, radius, space } from "@/styles/tokens.stylex";
-import { fontSize, fontWeight, letterSpacing, lineHeight } from "@/styles/tokens.stylex";
+import { tokens } from "@/theme/tokens.stylex";
+
 import { textStyles } from "@/components/text/text.stylex";
-import { useTheme } from "./theme/use-theme";
+import { ThemeProvider, useTheme, type ResolvedThemeMode, type ThemeMode } from "./theme";
 import {
 	ArrowRightIcon,
 	FileSearchIcon,
@@ -88,6 +88,7 @@ type GalleryCell = {
 
 const componentNames = ["React", "Vue", "Svelte", "Solid"];
 const themeIconSize = 18;
+const themeModeStorageKey = "base-stylex-theme";
 
 function getComponentCells(): GalleryCell[] {
 	return [
@@ -103,7 +104,7 @@ function getComponentCells(): GalleryCell[] {
 						</AlertDialog.Header>
 						<AlertDialog.Footer>
 							<AlertDialog.Close render={<Button variant="ghost" />}>Cancel</AlertDialog.Close>
-							<AlertDialog.Close render={<Button variant="danger" />}>Delete</AlertDialog.Close>
+							<AlertDialog.Close render={<Button variant="error" />}>Delete</AlertDialog.Close>
 						</AlertDialog.Footer>
 					</AlertDialog.Popup>
 				</AlertDialog.Root>
@@ -120,8 +121,8 @@ function getComponentCells(): GalleryCell[] {
 					<Badge hue="accent" variant="solid">
 						Primary
 					</Badge>
-					<Badge hue="danger" variant="solid">
-						Danger
+					<Badge hue="error" variant="solid">
+						Error
 					</Badge>
 					<Badge hue="neutral" variant="subtle">
 						Neutral
@@ -337,6 +338,20 @@ function getComponentCells(): GalleryCell[] {
 			),
 		},
 		{
+			title: "LinkPreview",
+			content: (
+				<LinkPreview.Root>
+					<LinkPreview.Trigger href="#top">Hover preview</LinkPreview.Trigger>
+					<LinkPreview.Popup>
+						<LinkPreview.Content>
+							<LinkPreview.Title>Base + StyleX Lab</LinkPreview.Title>
+							<LinkPreview.Description>Reusable primitives and blocks.</LinkPreview.Description>
+						</LinkPreview.Content>
+					</LinkPreview.Popup>
+				</LinkPreview.Root>
+			),
+		},
+		{
 			title: "Loader",
 			content: <Loader aria-label="Loading" />,
 		},
@@ -355,7 +370,7 @@ function getComponentCells(): GalleryCell[] {
 							<Menu.ItemLabel>Duplicate</Menu.ItemLabel>
 						</Menu.Item>
 						<Menu.Separator />
-						<Menu.Item variant="danger">
+						<Menu.Item variant="error">
 							<TrashIcon aria-hidden weight="regular" />
 							<Menu.ItemLabel>Delete</Menu.ItemLabel>
 						</Menu.Item>
@@ -366,7 +381,7 @@ function getComponentCells(): GalleryCell[] {
 		{
 			title: "Meter",
 			content: (
-				<Meter.Root value={100} max={500} color="var(--color-warning)">
+				<Meter.Root value={100} max={500} color={tokens["--bg-warning-primary"]}>
 					<Meter.Label>My meter</Meter.Label>
 					<Meter.Value />
 					<Meter.Track>
@@ -389,20 +404,6 @@ function getComponentCells(): GalleryCell[] {
 						<Popover.Description>You are all caught up.</Popover.Description>
 					</Popover.Popup>
 				</Popover.Root>
-			),
-		},
-		{
-			title: "PreviewCard",
-			content: (
-				<PreviewCard.Root>
-					<PreviewCard.Trigger href="#top">Hover preview</PreviewCard.Trigger>
-					<PreviewCard.Popup>
-						<PreviewCard.Content>
-							<PreviewCard.Title>Base + StyleX Lab</PreviewCard.Title>
-							<PreviewCard.Description>Reusable primitives and blocks.</PreviewCard.Description>
-						</PreviewCard.Content>
-					</PreviewCard.Popup>
-				</PreviewCard.Root>
 			),
 		},
 		{
@@ -872,10 +873,25 @@ function ToastList() {
 }
 
 function App() {
-	const { theme, toggleTheme } = useTheme();
+	const [mode, setMode] = useState<ThemeMode>(getInitialThemeMode);
+
+	useLayoutEffect(() => {
+		localStorage.setItem(themeModeStorageKey, mode);
+	}, [mode]);
 
 	return (
-		<div id="top" {...stylex.props(styles.app)}>
+		<ThemeProvider mode={mode} render={<div id="top" />} style={styles.app}>
+			<AppContent onModeChange={setMode} />
+		</ThemeProvider>
+	);
+}
+
+function AppContent({ onModeChange }: { onModeChange: (mode: ThemeMode) => void }) {
+	const { resolvedMode } = useTheme();
+	const nextMode: ResolvedThemeMode = resolvedMode === "light" ? "dark" : "light";
+
+	return (
+		<>
 			<header {...stylex.props(styles.header)}>
 				<a href="#top" {...stylex.props(textStyles.supporting, styles.brand)}>
 					<span {...stylex.props(styles.brandMark)}>
@@ -894,18 +910,18 @@ function App() {
 					<IconButton
 						icon={
 							<span {...stylex.props(styles.themeIcon)}>
-								{theme === "light" ? (
+								{resolvedMode === "light" ? (
 									<MoonIcon aria-hidden size={themeIconSize} weight="duotone" />
 								) : (
 									<SunIcon aria-hidden size={themeIconSize} weight="duotone" />
 								)}
 							</span>
 						}
-						label={`Switch to ${theme === "light" ? "dark" : "light"} mode`}
+						label={`Switch to ${nextMode} mode`}
 						variant="ghost"
 						shape="circle"
 						size="sm"
-						onClick={toggleTheme}
+						onClick={() => onModeChange(nextMode)}
 					/>
 				</div>
 			</header>
@@ -914,8 +930,14 @@ function App() {
 				<GallerySection title="Components" cells={getComponentCells()} variant="components" />
 				<GallerySection title="Blocks" cells={getBlockCells()} variant="blocks" />
 			</main>
-		</div>
+		</>
 	);
+}
+
+function getInitialThemeMode(): ThemeMode {
+	if (typeof window === "undefined") return "system";
+	const storedMode = localStorage.getItem(themeModeStorageKey);
+	return storedMode === "light" || storedMode === "dark" || storedMode === "system" ? storedMode : "system";
 }
 
 function GallerySection({
@@ -961,14 +983,14 @@ function GallerySection({
 
 const styles = stylex.create({
 	app: {
-		backgroundColor: "light-dark(white,black)",
-		color: color.fg,
+		backgroundColor: tokens["--bg-canvas"],
+		color: tokens["--fg"],
 		minHeight: "100svh",
 	},
 	header: {
-		paddingInline: { default: space[4], [breakpoints.sm]: space[4] },
+		paddingInline: { default: tokens["--space-4"], [breakpoints.sm]: tokens["--space-4"] },
 		alignItems: "center",
-		backgroundImage: `linear-gradient(to bottom, ${color.canvas}, transparent)`,
+		backgroundImage: `linear-gradient(to bottom, ${tokens["--bg-canvas"]}, transparent)`,
 		display: "flex",
 		justifyContent: "space-between",
 		position: "sticky",
@@ -977,30 +999,30 @@ const styles = stylex.create({
 		top: 0,
 	},
 	brand: {
-		gap: space[2],
+		gap: tokens["--space-2"],
 		textDecoration: "none",
 		alignItems: "center",
-		color: color.fg,
+		color: tokens["--fg"],
 		display: "inline-flex",
 	},
 	brandMark: {
-		borderRadius: radius.xs,
-		outline: `1px solid ${color.canvas}`,
+		borderRadius: tokens["--radius-xs"],
+		outline: `1px solid ${tokens["--bg-canvas"]}`,
 		alignItems: "center",
 		aspectRatio: 1,
-		backgroundColor: color.border,
-		color: color.fgMuted,
+		backgroundColor: tokens["--border"],
+		color: tokens["--fg-muted"],
 		display: "inline-flex",
 		justifyContent: "center",
 		height: "20px",
 	},
 	headerMeta: {
-		gap: space[3],
+		gap: tokens["--space-3"],
 		alignItems: "center",
 		display: "flex",
 	},
 	headerNavLink: {
-		fontSize: fontSize.x1,
+		fontSize: tokens["--font-size-1"],
 	},
 	themeIcon: {
 		alignItems: "center",
@@ -1014,34 +1036,34 @@ const styles = stylex.create({
 		width: "100%",
 	},
 	sectionHeader: {
-		gap: space[2],
-		paddingBlock: space[4],
-		paddingInline: space[4],
+		gap: tokens["--space-2"],
+		paddingBlock: tokens["--space-4"],
+		paddingInline: tokens["--space-4"],
 		alignItems: "center",
-		// backgroundColor: color.surface,
-		// borderBottomColor: color.border,
+		// backgroundColor: colors["--surface"],
+		// borderBottomColor: colors["--border"],
 		// borderBottomStyle: "solid",
 		// borderBottomWidth: "1px",
 		display: "flex",
 	},
 	sectionTitle: {
 		margin: 0,
-		color: color.fg,
-		fontSize: fontSize.x2,
-		fontWeight: fontWeight.regular,
-		letterSpacing: letterSpacing.x2,
-		lineHeight: lineHeight.x2,
+		color: tokens["--fg"],
+		fontSize: tokens["--font-size-2"],
+		fontWeight: tokens["--font-weight-regular"],
+		letterSpacing: tokens["--letter-spacing-2"],
+		lineHeight: tokens["--line-height-2"],
 	},
 	componentGrid: {
 		gap: "1px",
 		paddingInline: 1,
-		// borderBottomColor: color.border,
+		// borderBottomColor: colors["--border"],
 		// borderBottomStyle: "solid",
 		// borderBottomWidth: "1px",
-		// borderLeftColor: color.border,
+		// borderLeftColor: colors["--border"],
 		// borderLeftStyle: "solid",
 		// borderLeftWidth: "1px",
-		// borderRightColor: color.border,
+		// borderRightColor: colors["--border"],
 		// borderRightStyle: "solid",
 		// borderRightWidth: "1px",
 		display: "grid",
@@ -1053,14 +1075,14 @@ const styles = stylex.create({
 	},
 	blockGrid: {
 		gap: "1px",
-		// backgroundColor: color.border,
-		// borderBottomColor: color.border,
+		// backgroundColor: colors["--border"],
+		// borderBottomColor: colors["--border"],
 		// borderBottomStyle: "solid",
 		// borderBottomWidth: "1px",
-		// borderLeftColor: color.border,
+		// borderLeftColor: colors["--border"],
 		// borderLeftStyle: "solid",
 		// borderLeftWidth: "1px",
-		// borderRightColor: color.border,
+		// borderRightColor: colors["--border"],
 		// borderRightStyle: "solid",
 		// borderRightWidth: "1px",
 		display: "grid",
@@ -1070,9 +1092,9 @@ const styles = stylex.create({
 		},
 	},
 	componentCell: {
-		padding: space[4],
-		borderRadius: radius.sm,
-		backgroundColor: "var(--gray-s2)",
+		padding: tokens["--space-4"],
+		borderRadius: tokens["--radius-sm"],
+		backgroundColor: tokens["--color-gray-s2"],
 		boxSizing: "border-box",
 		display: "grid",
 		gridTemplateRows: "minmax(0, 1fr) auto",
@@ -1080,9 +1102,9 @@ const styles = stylex.create({
 		minWidth: 0,
 	},
 	blockCell: {
-		padding: space[4],
-		borderRadius: radius.md,
-		backgroundColor: "var(--gray-s2)",
+		padding: tokens["--space-4"],
+		borderRadius: tokens["--radius-md"],
+		backgroundColor: tokens["--color-gray-s2"],
 		boxSizing: "border-box",
 		display: "grid",
 		gridTemplateRows: "minmax(0, 1fr) auto",
@@ -1090,8 +1112,8 @@ const styles = stylex.create({
 		minWidth: 0,
 	},
 	componentFillerCell: {
-		borderRadius: radius.md,
-		backgroundColor: "var(--gray-s2)",
+		borderRadius: tokens["--radius-md"],
+		backgroundColor: tokens["--color-gray-s2"],
 		boxSizing: "border-box",
 		minHeight: { default: "220px", [breakpoints.sm]: "248px" },
 	},
@@ -1115,14 +1137,14 @@ const styles = stylex.create({
 	},
 	cellTitle: {
 		margin: 0,
-		color: color.fgSubtle,
-		fontSize: fontSize.x1,
-		letterSpacing: letterSpacing.x1,
-		lineHeight: lineHeight.x1,
+		color: tokens["--fg-subtle"],
+		fontSize: tokens["--font-size-1"],
+		letterSpacing: tokens["--letter-spacing-1"],
+		lineHeight: tokens["--line-height-1"],
 		textAlign: "center",
 	},
 	cellContent: {
-		paddingBlock: space[4],
+		paddingBlock: tokens["--space-4"],
 		alignItems: "center",
 		display: "flex",
 		justifyContent: "center",
@@ -1130,13 +1152,13 @@ const styles = stylex.create({
 		minWidth: 0,
 	},
 	buttonStack: {
-		gap: space[2],
+		gap: tokens["--space-2"],
 		alignItems: "center",
 		display: "flex",
 		flexDirection: "column",
 	},
 	controlStack: {
-		gap: space[3],
+		gap: tokens["--space-3"],
 		display: "flex",
 		flexDirection: "column",
 		width: "min(100%, 180px)",
@@ -1151,7 +1173,7 @@ const styles = stylex.create({
 		width: "min(100%, 230px)",
 	},
 	badgeStack: {
-		gap: space[2],
+		gap: tokens["--space-2"],
 		alignItems: "center",
 		display: "flex",
 		flexWrap: "wrap",
@@ -1163,55 +1185,55 @@ const styles = stylex.create({
 		width: "min(100%, 240px)",
 	},
 	linkStack: {
-		gap: space[1],
+		gap: tokens["--space-1"],
 		display: "flex",
 		flexDirection: "column",
-		fontSize: fontSize.x1,
-		letterSpacing: letterSpacing.x1,
-		lineHeight: lineHeight.x1,
+		fontSize: tokens["--font-size-1"],
+		letterSpacing: tokens["--letter-spacing-1"],
+		lineHeight: tokens["--line-height-1"],
 	},
 	scrollAreaSample: {
-		// backgroundColor: color.surfaceSubtle,
-		borderColor: color.border,
-		borderRadius: radius.md,
+		// backgroundColor: colors["--surface-subtle"],
+		borderColor: tokens["--border"],
+		borderRadius: tokens["--radius-md"],
 		borderStyle: "solid",
 		borderWidth: "1px",
 		height: "112px",
 		width: "min(100%, 210px)",
 	},
 	scrollAreaContent: {
-		padding: space[2],
-		gap: space[1],
+		padding: tokens["--space-2"],
+		gap: tokens["--space-1"],
 		display: "flex",
 		flexDirection: "column",
 	},
 	scrollItem: {
-		borderRadius: radius.sm,
-		paddingBlock: space[2],
-		paddingInline: space[3],
-		backgroundColor: color.surface,
-		fontSize: fontSize.x1,
-		letterSpacing: letterSpacing.x1,
-		lineHeight: lineHeight.x1,
+		borderRadius: tokens["--radius-sm"],
+		paddingBlock: tokens["--space-2"],
+		paddingInline: tokens["--space-3"],
+		backgroundColor: tokens["--surface"],
+		fontSize: tokens["--font-size-1"],
+		letterSpacing: tokens["--letter-spacing-1"],
+		lineHeight: tokens["--line-height-1"],
 	},
 	separatorSample: {
-		gap: space[2],
+		gap: tokens["--space-2"],
 		alignItems: "center",
-		color: color.fgMuted,
+		color: tokens["--fg-muted"],
 		display: "flex",
 		flexDirection: "column",
-		fontSize: fontSize.x1,
-		letterSpacing: letterSpacing.x1,
-		lineHeight: lineHeight.x1,
+		fontSize: tokens["--font-size-1"],
+		letterSpacing: tokens["--letter-spacing-1"],
+		lineHeight: tokens["--line-height-1"],
 		width: "min(100%, 180px)",
 	},
 	toggleRow: {
 		padding: 2,
-		borderRadius: radius.md,
+		borderRadius: tokens["--radius-md"],
 		gap: 1,
-		outline: `1px solid ${color.border}`,
+		outline: `1px solid ${tokens["--border"]}`,
 		alignItems: "center",
-		backgroundColor: color.canvas,
+		backgroundColor: tokens["--bg-canvas"],
 		display: "inline-flex",
 	},
 	blockWide: {

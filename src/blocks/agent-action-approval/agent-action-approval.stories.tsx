@@ -8,8 +8,8 @@ import { Checkbox } from "@/components/checkbox/checkbox";
 import { CodeBlock } from "@/components/code-block/code-block";
 import * as Collapsible from "@/components/collapsible/collapsible";
 import { Separator } from "@/components/separator/separator";
-import { color, space } from "@/styles/tokens.stylex";
-import { fontSize, fontWeight, letterSpacing, lineHeight } from "@/styles/tokens.stylex";
+import { tokens } from "@/theme/tokens.stylex";
+
 import * as AgentActionApproval from "./agent-action-approval";
 
 const meta = {
@@ -165,21 +165,21 @@ function Example({ children, title }: { children: React.ReactNode; title: string
 
 const storyParts = stylex.create({
 	list: {
-		gap: space[8],
+		gap: tokens["--space-8"],
 		display: "flex",
 		flexDirection: "column",
 	},
 	example: {
-		gap: space[3],
+		gap: tokens["--space-3"],
 		display: "flex",
 		flexDirection: "column",
 	},
 	heading: {
 		margin: 0,
-		color: color.fgMuted,
-		fontSize: fontSize.x1,
-		fontWeight: fontWeight.regular,
-		letterSpacing: letterSpacing.x1,
-		lineHeight: lineHeight.x1,
+		color: tokens["--fg-muted"],
+		fontSize: tokens["--font-size-1"],
+		fontWeight: tokens["--font-weight-regular"],
+		letterSpacing: tokens["--letter-spacing-1"],
+		lineHeight: tokens["--line-height-1"],
 	},
 });

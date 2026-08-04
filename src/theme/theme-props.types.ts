@@ -1,12 +1,4 @@
-import type {
-	colorDefaults,
-	radiusDefaults,
-	shadowDefaults,
-	sizeDefaults,
-	spaceDefaults,
-} from "../styles/tokens.stylex";
-
-export type SpaceStep = Extract<keyof typeof spaceDefaults, number>;
+export type SpaceStep = 0 | 0.5 | 1 | 1.5 | 2 | 3 | 3.5 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 12 | 16;
 type Negate<Value extends number> = `-${Value}` extends `${infer NegativeValue extends number}`
 	? NegativeValue
 	: never;
@@ -16,7 +8,18 @@ export type PaddingValue = SpaceStep;
 export type GapValue = SpaceStep;
 export type OffsetValue = SpaceStep | NegativeSpaceStep | "auto";
 
-export type ContainerSize = Extract<keyof typeof sizeDefaults, `container.${string}`>;
+export type ContainerSize =
+	| "container.xs"
+	| "container.sm"
+	| "container.md"
+	| "container.lg"
+	| "container.xl"
+	| "container.2xl"
+	| "container.3xl"
+	| "container.4xl"
+	| "container.5xl"
+	| "container.6xl"
+	| "container.7xl";
 export type SizeKeyword = "auto" | "full" | "min-content" | "max-content" | "fit-content" | "stretch";
 export type CssLengthUnit =
 	| "px"
@@ -81,9 +84,56 @@ export type Orientation = "horizontal" | "vertical";
 export type GridFlow = "row" | "column" | "dense" | "row dense" | "column dense";
 export type GridSpan = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 | "full";
 export type GridColumns = Exclude<GridSpan, "full">;
-export type RadiusValue = keyof typeof radiusDefaults;
-export type ShadowValue = keyof typeof shadowDefaults | "none";
-export type SemanticColor = keyof typeof colorDefaults;
+export type RadiusValue = "xxs" | "xs" | "sm" | "md" | "lg" | "xl" | "full";
+export type ShadowValue = "none" | "inset" | "xs" | "sm" | "md" | "lg";
+export type SemanticColor =
+	| "canvas"
+	| "inset"
+	| "surface"
+	| "bgPanel"
+	| "bgElevated"
+	| "bgElevatedActive"
+	| "surfaceSubtle"
+	| "surfaceSubtleHover"
+	| "surfaceSubtleActive"
+	| "highlight"
+	| "fg"
+	| "fgMuted"
+	| "fgSubtle"
+	| "fgAccent"
+	| "fgAccentStrong"
+	| "fgAccentHover"
+	| "border"
+	| "borderInput"
+	| "borderInputHover"
+	| "borderDisabled"
+	| "bgPrimary"
+	| "bgPrimaryHighlight"
+	| "bgAccent"
+	| "bgAccentHover"
+	| "bgAccentActive"
+	| "fgAccentContrast"
+	| "bgNeutral"
+	| "bgNeutralStrong"
+	| "fgNeutralContrast"
+	| "bgErrorPrimary"
+	| "fgError"
+	| "bgError"
+	| "fgSuccess"
+	| "bgSuccessPrimary"
+	| "bgSuccess"
+	| "fgWarning"
+	| "bgWarningPrimary"
+	| "bgWarning"
+	| "bgInverse"
+	| "fgInverse"
+	| "fgInverseMuted"
+	| "focus"
+	| "overlay"
+	| "fillTrack"
+	| "fillDisabled"
+	| "bgTooltip"
+	| "fgWarningContrast";
 
 export type DisplayProps = {
 	display?: DisplayValue;

@@ -33,7 +33,7 @@ type Story = StoryObj<StoryArgs>;
 export const Playground: Story = {
 	render: ({ defaultOpen, _triggerDisabled }) => (
 		<AlertDialog.Root key={`${defaultOpen}-${_triggerDisabled}`} defaultOpen={defaultOpen}>
-			<AlertDialog.Trigger disabled={_triggerDisabled} render={<Button variant="danger" />}>
+			<AlertDialog.Trigger disabled={_triggerDisabled} render={<Button variant="error" />}>
 				Discard draft
 			</AlertDialog.Trigger>
 			<AlertDialog.Popup>
@@ -43,7 +43,7 @@ export const Playground: Story = {
 				</AlertDialog.Header>
 				<AlertDialog.Footer>
 					<AlertDialog.Close render={<Button variant="neutral" />}>Keep editing</AlertDialog.Close>
-					<AlertDialog.Close render={<Button variant="danger" />}>Discard draft</AlertDialog.Close>
+					<AlertDialog.Close render={<Button variant="error" />}>Discard draft</AlertDialog.Close>
 				</AlertDialog.Footer>
 			</AlertDialog.Popup>
 		</AlertDialog.Root>
@@ -56,7 +56,7 @@ export const DetailedMessage: Story = {
 	},
 	render: () => (
 		<AlertDialog.Root>
-			<AlertDialog.Trigger render={<Button variant="danger" />}>Delete environment</AlertDialog.Trigger>
+			<AlertDialog.Trigger render={<Button variant="error" />}>Delete environment</AlertDialog.Trigger>
 			<AlertDialog.Popup>
 				<AlertDialog.Header>
 					<AlertDialog.Title>Delete the staging environment?</AlertDialog.Title>
@@ -67,7 +67,7 @@ export const DetailedMessage: Story = {
 				</AlertDialog.Header>
 				<AlertDialog.Footer>
 					<AlertDialog.Close render={<Button variant="neutral" />}>Cancel</AlertDialog.Close>
-					<AlertDialog.Close render={<Button variant="danger" />}>Delete environment</AlertDialog.Close>
+					<AlertDialog.Close render={<Button variant="error" />}>Delete environment</AlertDialog.Close>
 				</AlertDialog.Footer>
 			</AlertDialog.Popup>
 		</AlertDialog.Root>

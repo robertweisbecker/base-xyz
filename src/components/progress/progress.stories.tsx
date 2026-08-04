@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from "@storybook/react-vite";
 import * as stylex from "@stylexjs/stylex";
 import { useEffect, useState } from "react";
 import { Text } from "@/components/text/text";
-import { space } from "@/styles/tokens.stylex";
+import { tokens } from "@/theme/tokens.stylex";
 import { Button } from "../button/button";
 import * as Progress from "./progress";
 
@@ -137,12 +137,12 @@ const storyStyles = stylex.create({
 		width: "100%",
 	},
 	stack: {
-		gap: space[8],
+		gap: tokens["--space-8"],
 		display: "flex",
 		flexDirection: "column",
 	},
 	specimen: {
-		gap: space[2],
+		gap: tokens["--space-2"],
 		display: "flex",
 		flexDirection: "column",
 	},

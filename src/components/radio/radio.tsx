@@ -11,7 +11,7 @@ import { fieldChoiceGroupStyles, fieldStyles, fieldThemeProps } from "@/componen
 import { textStyles } from "@/components/text/text.stylex";
 import { focusRing } from "@/styles/recipes/focus";
 import { pressable } from "@/styles/recipes/transitions";
-import { color, motion, radius, size as sizeToken, space } from "@/styles/tokens.stylex";
+import { tokens } from "@/theme/tokens.stylex";
 
 export type RadioSize = "sm" | "md";
 
@@ -193,12 +193,12 @@ function mergeIds(...ids: Array<string | undefined>) {
 
 const radioControlSizeStyles = stylex.create({
 	sm: {
-		height: sizeToken["indicator.sm"],
-		width: sizeToken["indicator.sm"],
+		height: tokens["--size-indicator-sm"],
+		width: tokens["--size-indicator-sm"],
 	},
 	md: {
-		height: sizeToken["indicator.md"],
-		width: sizeToken["indicator.md"],
+		height: tokens["--size-indicator-md"],
+		width: tokens["--size-indicator-md"],
 	},
 });
 
@@ -209,21 +209,21 @@ const radioLabelStyles = {
 
 const radioDescriptionStyles = stylex.create({
 	sm: {
-		paddingInlineStart: `calc(${sizeToken["indicator.sm"]} + ${space[2]} + 2px)`,
+		paddingInlineStart: `calc(${tokens["--size-indicator-sm"]} + ${tokens["--space-2"]} + 2px)`,
 	},
 	md: {
-		paddingInlineStart: `calc(${sizeToken["indicator.md"]} + ${space[2]} + 2px)`,
+		paddingInlineStart: `calc(${tokens["--size-indicator-md"]} + ${tokens["--space-2"]} + 2px)`,
 	},
 });
 
 const radioIndicatorSizeStyles = stylex.create({
 	sm: {
-		height: `calc((${sizeToken["indicator.sm"]} - 2px) / 2)`,
-		width: `calc((${sizeToken["indicator.sm"]} - 2px) / 2)`,
+		height: `calc((${tokens["--size-indicator-sm"]} - 2px) / 2)`,
+		width: `calc((${tokens["--size-indicator-sm"]} - 2px) / 2)`,
 	},
 	md: {
-		height: `calc((${sizeToken["indicator.md"]} - 2px) / 2)`,
-		width: `calc((${sizeToken["indicator.md"]} - 2px) / 2)`,
+		height: `calc((${tokens["--size-indicator-md"]} - 2px) / 2)`,
+		width: `calc((${tokens["--size-indicator-md"]} - 2px) / 2)`,
 	},
 });
 
@@ -232,13 +232,13 @@ const radioParts = stylex.create({
 		margin: 0,
 		padding: 0,
 		borderWidth: 0,
-		gap: space[3],
+		gap: tokens["--space-3"],
 		display: "flex",
 		flexDirection: "column",
 		minInlineSize: 0,
 	},
 	title: {
-		gap: space[1],
+		gap: tokens["--space-1"],
 		display: "flex",
 		flexDirection: "column",
 	},
@@ -249,7 +249,7 @@ const radioParts = stylex.create({
 		// margin: 0,
 	},
 	item: {
-		gap: space[1],
+		gap: tokens["--space-1"],
 		cursor: {
 			"[data-disabled]": "not-allowed",
 			"[data-readonly]": "default",
@@ -265,53 +265,53 @@ const radioParts = stylex.create({
 	},
 	labelRoot: {
 		"--_radio-bg": {
-			default: color.surface,
+			default: tokens["--surface"],
 			":hover": {
-				"@media (hover: hover) and (pointer: fine)": color.surfaceSubtle,
+				"@media (hover: hover) and (pointer: fine)": tokens["--surface-subtle"],
 			},
-			":active": color.surfaceSubtleActive,
+			":active": tokens["--surface-subtle-active"],
 		},
 		"--_radio-bg-checked": {
-			default: color.bgAccent,
+			default: tokens["--bg-primary"],
 			":hover": {
-				"@media (hover: hover) and (pointer: fine)": color.bgAccentHover,
+				"@media (hover: hover) and (pointer: fine)": tokens["--bg-primary-highlight"],
 			},
-			":active": color.bgAccentHover,
+			":active": tokens["--bg-primary-highlight"],
 		},
 		"--_radio-border": {
-			default: color.borderStrong,
+			default: tokens["--border-input"],
 			":hover": {
-				"@media (hover: hover) and (pointer: fine)": color.borderHover,
+				"@media (hover: hover) and (pointer: fine)": tokens["--border-input-hover"],
 			},
-			":active": color.bgAccentHover,
+			":active": tokens["--bg-primary-highlight"],
 		},
 		"--_radio-press-scale": {
 			default: "1",
 			":active": "0.94",
 		},
-		gap: space[2],
+		gap: tokens["--space-2"],
 		alignItems: "flex-start",
-		color: color.fg,
+		color: tokens["--fg"],
 		cursor: "inherit",
 		display: "inline-flex",
 	},
 	control: {
 		borderColor: {
 			"[data-checked]": "var(--_radio-bg-checked)",
-			"[data-checked][data-disabled]": color.bgNeutral,
-			"[data-checked][data-readonly]": color.fgMuted,
-			"[data-disabled]": color.borderDisabled,
-			"[data-readonly]": color.border,
+			"[data-checked][data-disabled]": tokens["--bg-neutral"],
+			"[data-checked][data-readonly]": tokens["--fg-muted"],
+			"[data-disabled]": tokens["--border-disabled"],
+			"[data-readonly]": tokens["--border"],
 			default: "var(--_radio-border)",
 		},
-		borderRadius: radius.full,
+		borderRadius: tokens["--radius-full"],
 		borderStyle: "solid",
 		borderWidth: "1px",
 		alignItems: "center",
 		backgroundColor: {
 			"[data-checked]": "var(--_radio-bg-checked)",
-			"[data-checked][data-disabled]": color.bgNeutral,
-			"[data-checked][data-readonly]": color.bgNeutral,
+			"[data-checked][data-disabled]": tokens["--bg-neutral"],
+			"[data-checked][data-readonly]": tokens["--bg-neutral"],
 			default: "var(--_radio-bg)",
 		},
 		display: "inline-flex",
@@ -327,16 +327,16 @@ const radioParts = stylex.create({
 		"::after": {
 			inset: 0,
 			borderRadius: "inherit",
-			boxShadow: `0 -1px 0 var(--white-a3), 0 1px 0 var(--black-a2)`,
+			boxShadow: `0 -1px 0 ${tokens["--color-white-a3"]}, 0 1px 0 ${tokens["--color-black-a2"]}`,
 			content: "''",
 			position: "absolute",
 			zIndex: 1,
 		},
 	},
 	indicator: {
-		borderRadius: radius.full,
-		backgroundColor: color.fgAccentContrast,
-		boxShadow: `0 -1px 1px var(--gray-a2), 0 1px 0  var(--black-a3)`,
+		borderRadius: tokens["--radius-full"],
+		backgroundColor: tokens["--fg-accent-contrast"],
+		boxShadow: `0 -1px 1px ${tokens["--color-gray-a2"]}, 0 1px 0 ${tokens["--color-black-a3"]}`,
 	},
 	indicatorTransition: {
 		opacity: {
@@ -350,11 +350,11 @@ const radioParts = stylex.create({
 			default: "scale(1)",
 		},
 		transitionDuration: {
-			default: motion.durationQuick,
+			default: tokens["--motion-duration-quick"],
 			"@media (prefers-reduced-motion: reduce)": "0ms",
 		},
 		transitionProperty: "transform, opacity",
-		transitionTimingFunction: motion.easeOut,
+		transitionTimingFunction: tokens["--motion-ease-out"],
 	},
 	description: {
 		margin: 0,

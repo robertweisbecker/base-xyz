@@ -5,3 +5,14 @@
 - **Layout primitive** — `Box`, `Stack`, or `Grid`; a product-agnostic composition root with the broadest theme-prop contract. Only these primitives expose shared `color` and `bg` props.
 - **Responsive style set** — A predeclared StyleX style that keeps every breakpoint value for a CSS property together. Pass it through `style`; theme props themselves remain scalar.
 - **Field wrapper** — The public root around a label, control, description, and error. Layout theme props style this wrapper only; they never alter the inner control chrome.
+
+## Tokens and themes
+
+- `src/theme/tokens.stylex.ts` is the public token interface. Themeable design values are named StyleX variables exposed through `tokens["--…"]`, including primitive ramps, semantic colors, spacing, sizes, radius, shadows, typography, and motion.
+- Default values are defined once in `tokens.stylex.ts`. They use CSS custom properties, derived variables, and `light-dark()` where a value has light/dark behavior. The default theme is `stylex.createTheme(tokens, {})`, so it does not redeclare defaults.
+- Named themes are partial overrides in `src/theme/themes.stylex.ts`. The closed registry is currently `"default" | "mp"`; `mp` overrides only the tokens that differ and inherits omitted values from `tokens`.
+- Component styles should import `tokens` directly and reference semantic tokens rather than raw custom-property strings. Component variants such as `bg="surface"` or `Text color="error"` remain stable public props that map to the renamed tokens.
+- Themeable typography is tokenized. MP uses the Apercu font family via `--font-family-sans`, with font files registered in `src/styles/fonts.css`; font loading remains a consuming-application responsibility outside this demo package.
+- `ThemeProvider` applies the composed StyleX theme, foreground, inherited font family, `color-scheme`, `data-theme`, and `data-mode` to its host. It uses Base UI's `render` convention for element replacement, falls back to a normal `div`, and never uses `display: contents`.
+- The outermost provider synchronizes its owned theme attributes, classes, and styles to `document.documentElement` so browser chrome and body-level portals inherit the root theme. Nested providers scope through their rendered host.
+- Fixed global selectors and non-theme constants stay outside the token contract. CSS should contain genuine global rules and font-face declarations, not theme-value declarations.

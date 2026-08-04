@@ -5,7 +5,7 @@ import { SignOutIcon } from "@phosphor-icons/react/dist/csr/SignOut";
 import { UserIcon } from "@phosphor-icons/react/dist/csr/User";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import * as stylex from "@stylexjs/stylex";
-import { color, fontSize, fontWeight, letterSpacing, lineHeight, space } from "@/styles/tokens.stylex";
+import { tokens } from "@/theme/tokens.stylex";
 import { Button, IconButton } from "../button/button";
 import { Stack } from "../layout/layout";
 import * as Menu from "../menu/menu";
@@ -129,7 +129,7 @@ function AccountMenu() {
 				</Menu.ItemIcon>
 				<Menu.ItemLabel>Add account</Menu.ItemLabel>
 			</Menu.Item>
-			<Menu.Item variant="danger">
+			<Menu.Item variant="error">
 				<Menu.ItemIcon>
 					<SignOutIcon size={16} weight="duotone" />
 				</Menu.ItemIcon>
@@ -210,8 +210,8 @@ export const Sizes: Story = {
 
 const storyStyles = stylex.create({
 	accountIdentity: {
-		padding: space[2],
-		gap: space[3],
+		padding: tokens["--space-2"],
+		gap: tokens["--space-3"],
 		alignItems: "center",
 		display: "flex",
 		minWidth: 0,
@@ -223,30 +223,30 @@ const storyStyles = stylex.create({
 		alignItems: "end",
 	},
 	label: {
-		color: color.fgMuted,
-		fontSize: fontSize.x1,
-		fontWeight: fontWeight.regular,
-		letterSpacing: letterSpacing.x1,
-		lineHeight: lineHeight.x1,
+		color: tokens["--fg-muted"],
+		fontSize: tokens["--font-size-1"],
+		fontWeight: tokens["--font-weight-regular"],
+		letterSpacing: tokens["--letter-spacing-1"],
+		lineHeight: tokens["--line-height-1"],
 	},
 	row: {
-		gap: space[6],
+		gap: tokens["--space-6"],
 		alignItems: "center",
 		display: "flex",
 		flexWrap: "wrap",
 	},
 	section: {
-		gap: space[3],
+		gap: tokens["--space-3"],
 		display: "flex",
 		flexDirection: "column",
 	},
 	sections: {
-		gap: space[8],
+		gap: tokens["--space-8"],
 		display: "flex",
 		flexDirection: "column",
 	},
 	specimen: {
-		gap: space[2],
+		gap: tokens["--space-2"],
 		alignItems: "center",
 		display: "flex",
 		flexDirection: "column",

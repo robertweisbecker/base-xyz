@@ -13,8 +13,8 @@ import { Textarea } from "@/components/textarea/textarea";
 import * as Tooltip from "@/components/tooltip/tooltip";
 import * as Toolbar from "@/components/toolbar/toolbar";
 import { iconSwapTransition } from "@/styles/recipes/transitions";
-import { color, radius, size, space } from "@/styles/tokens.stylex";
-import { fontSize, fontWeight, letterSpacing, lineHeight } from "@/styles/tokens.stylex";
+import { tokens } from "@/theme/tokens.stylex";
+
 
 type GoalToolbarProps = {
 	active: boolean;
@@ -160,60 +160,60 @@ export function GoalToolbar({ active, description }: GoalToolbarProps) {
 
 const parts = stylex.create({
 	root: {
-		borderColor: color.border,
+		borderColor: tokens["--border"],
 		borderStyle: "solid",
 		borderWidth: "1px",
 		overflow: "hidden",
 		boxSizing: "border-box",
 		containerType: "inline-size",
 		borderBottomWidth: 0,
-		borderTopLeftRadius: radius.lg,
-		borderTopRightRadius: radius.lg,
+		borderTopLeftRadius: tokens["--radius-lg"],
+		borderTopRightRadius: tokens["--radius-lg"],
 	},
 	summary: {
-		padding: space[1],
-		gap: space[2],
+		padding: tokens["--space-1"],
+		gap: tokens["--space-2"],
 		alignItems: "center",
 		display: "flex",
-		minHeight: size["control.lg"],
+		minHeight: tokens["--size-control-lg"],
 		width: "100%",
 	},
 	statusIcon: {
-		color: color.fgMuted,
+		color: tokens["--fg-muted"],
 		display: "inline-flex",
 		flexShrink: 0,
 		opacity: 0.64,
-		paddingInlineEnd: space[1],
-		paddingInlineStart: space[2],
+		paddingInlineEnd: tokens["--space-1"],
+		paddingInlineStart: tokens["--space-2"],
 	},
 	statusLabel: {
-		gap: space[1],
+		gap: tokens["--space-1"],
 		alignItems: "center",
-		color: color.fg,
+		color: tokens["--fg"],
 		display: "flex",
 		flexShrink: 0,
-		fontSize: fontSize.x2,
-		fontWeight: fontWeight.medium,
-		letterSpacing: letterSpacing.x2,
-		lineHeight: lineHeight.x2,
+		fontSize: tokens["--font-size-2"],
+		fontWeight: tokens["--font-weight-medium"],
+		letterSpacing: tokens["--letter-spacing-2"],
+		lineHeight: tokens["--line-height-2"],
 	},
 	description: {
 		overflow: "hidden",
-		color: color.fgMuted,
-		fontSize: fontSize.x2,
-		letterSpacing: letterSpacing.x2,
-		lineHeight: lineHeight.x2,
+		color: tokens["--fg-muted"],
+		fontSize: tokens["--font-size-2"],
+		letterSpacing: tokens["--letter-spacing-2"],
+		lineHeight: tokens["--line-height-2"],
 		textOverflow: "ellipsis",
 		whiteSpace: "nowrap",
 		minWidth: 0,
 	},
 	elapsed: {
-		color: color.fgSubtle,
+		color: tokens["--fg-subtle"],
 		flexShrink: 0,
-		fontSize: fontSize.x2,
+		fontSize: tokens["--font-size-2"],
 		fontVariantNumeric: "tabular-nums",
-		letterSpacing: letterSpacing.x2,
-		lineHeight: lineHeight.x2,
+		letterSpacing: tokens["--letter-spacing-2"],
+		lineHeight: tokens["--line-height-2"],
 	},
 	actions: {
 		marginInlineStart: "auto",
@@ -231,9 +231,9 @@ const parts = stylex.create({
 		},
 	},
 	details: {
-		color: color.fgSubtle,
+		color: tokens["--fg-subtle"],
 		lineHeight: 1.5,
-		paddingInlineStart: space[3],
+		paddingInlineStart: tokens["--space-3"],
 	},
 	descriptionScroll: {
 		minWidth: 0,
@@ -243,6 +243,6 @@ const parts = stylex.create({
 		maxHeight: "8lh",
 	},
 	descriptionScrollContent: {
-		paddingInlineEnd: space[3],
+		paddingInlineEnd: tokens["--space-3"],
 	},
 });

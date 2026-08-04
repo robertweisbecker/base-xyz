@@ -12,8 +12,8 @@ import { menuItemStyles, menuItemVariantStyles } from "../menu/menu-item.stylex"
 import { popupMotionStyles, popupPositionerStyles } from "@/components/popover/popover.stylex";
 import { popupVars } from "@/components/popover/popover-vars.stylex";
 import { pressable } from "@/styles/recipes/transitions";
-import { color, radius, shadow, size, space } from "@/styles/tokens.stylex";
-import { fontSize, letterSpacing, lineHeight } from "@/styles/tokens.stylex";
+import { tokens } from "@/theme/tokens.stylex";
+
 import { Button } from "@/components/button/button";
 import { ComboboxField, ComboboxMultiple, type ComboboxMultipleProps } from "@/components/combobox/combobox-field";
 import { CheckmarkIcon } from "@/components/selection-icons";
@@ -35,7 +35,7 @@ const meta = {
 		size: "md",
 	},
 	argTypes: {
-		itemVariant: { control: "select", options: ["default", "primary", "danger"] },
+		itemVariant: { control: "select", options: ["default", "primary", "error"] },
 		size: { control: "inline-radio", options: ["sm", "md", "lg"] },
 	},
 	decorators: [
@@ -86,7 +86,7 @@ export const MultiplePlayground: MultipleStory = {
 		chipPlacement: { control: "inline-radio", options: ["inside", "outside"] },
 		creatable: { control: "boolean" },
 		expandChips: { control: "select", options: ["input-focus", "always"] },
-		itemVariant: { control: "select", options: ["default", "primary", "danger"] },
+		itemVariant: { control: "select", options: ["default", "primary", "error"] },
 		maxVisibleChips: { control: { type: "number", min: 0, step: 1 } },
 		onCreate: { control: false },
 		onValueChange: { control: false },
@@ -332,9 +332,11 @@ function MultipleSummaryPopupExample() {
 					<Combobox.Value placeholder="Select">
 						{(selectedValue: string[]) => {
 							const hiddenCount = Math.max(0, selectedValue.length - 1);
-							return selectedValue.length > 0
-								? `${selectedValue[0]}${hiddenCount > 0 ? `, +${hiddenCount} more` : ""}`
-								: <span {...stylex.props(styles.triggerPlaceholder)}>Select options</span>;
+							return selectedValue.length > 0 ? (
+								`${selectedValue[0]}${hiddenCount > 0 ? `, +${hiddenCount} more` : ""}`
+							) : (
+								<span {...stylex.props(styles.triggerPlaceholder)}>Select options</span>
+							);
 						}}
 					</Combobox.Value>
 				</Combobox.Trigger>
@@ -445,51 +447,51 @@ const styles = stylex.create({
 		maxWidth: "420px",
 	},
 	sizeStack: {
-		gap: space[6],
+		gap: tokens["--space-6"],
 		display: "flex",
 		flexDirection: "column",
 		maxWidth: "420px",
 	},
 	exampleStack: {
-		gap: space[2],
+		gap: tokens["--space-2"],
 		display: "flex",
 		flexDirection: "column",
 	},
 	variantStack: {
-		gap: space[8],
+		gap: tokens["--space-8"],
 		display: "flex",
 		flexDirection: "column",
 	},
 	exampleSection: {
-		gap: space[3],
+		gap: tokens["--space-3"],
 		display: "flex",
 		flexDirection: "column",
 	},
 	exampleHeading: {
-		gap: space[1],
+		gap: tokens["--space-1"],
 		display: "flex",
 		flexDirection: "column",
 	},
 	exampleTitle: {
 		margin: 0,
-		color: color.fg,
-		fontSize: fontSize.x2,
-		letterSpacing: letterSpacing.x2,
-		lineHeight: lineHeight.x2,
+		color: tokens["--fg"],
+		fontSize: tokens["--font-size-2"],
+		letterSpacing: tokens["--letter-spacing-2"],
+		lineHeight: tokens["--line-height-2"],
 	},
 	exampleDescription: {
 		margin: 0,
-		color: color.fgMuted,
-		fontSize: fontSize.x1,
-		letterSpacing: letterSpacing.x1,
-		lineHeight: lineHeight.x1,
+		color: tokens["--fg-muted"],
+		fontSize: tokens["--font-size-1"],
+		letterSpacing: tokens["--letter-spacing-1"],
+		lineHeight: tokens["--line-height-1"],
 	},
 	status: {
 		margin: 0,
-		color: color.fgMuted,
-		fontSize: fontSize.x1,
-		letterSpacing: letterSpacing.x1,
-		lineHeight: lineHeight.x1,
+		color: tokens["--fg-muted"],
+		fontSize: tokens["--font-size-1"],
+		letterSpacing: tokens["--letter-spacing-1"],
+		lineHeight: tokens["--line-height-1"],
 	},
 	fieldLayout: {
 		alignItems: "flex-start",
@@ -499,11 +501,11 @@ const styles = stylex.create({
 		minWidth: "240px",
 	},
 	triggerPlaceholder: {
-		color: color.fgSubtle,
+		color: tokens["--fg-subtle"],
 	},
 	filterChips: {
 		alignItems: "center",
-		columnGap: space[1],
+		columnGap: tokens["--space-1"],
 		display: "flex",
 		flexWrap: "wrap",
 		rowGap: 2,
@@ -513,58 +515,58 @@ const styles = stylex.create({
 		flexShrink: 0,
 	},
 	chip: {
-		padding: space[1],
-		borderRadius: radius.sm,
+		padding: tokens["--space-1"],
+		borderRadius: tokens["--radius-sm"],
 		overflow: "hidden",
 		alignItems: "center",
 		backgroundColor: {
-			default: color.surfaceSubtle,
-			":focus-within": color.bgAccent,
+			default: tokens["--surface-subtle"],
+			":focus-within": tokens["--bg-primary"],
 		},
 		color: {
-			default: color.fg,
-			":focus-within": color.fgAccentContrast,
+			default: tokens["--fg"],
+			":focus-within": tokens["--fg-accent-contrast"],
 		},
 		display: "inline-flex",
-		fontSize: fontSize.x1,
-		letterSpacing: letterSpacing.x1,
-		lineHeight: lineHeight.x1,
+		fontSize: tokens["--font-size-1"],
+		letterSpacing: tokens["--letter-spacing-1"],
+		lineHeight: tokens["--line-height-1"],
 		height: "28px",
 	},
 	chipLabel: {
 		overflow: "hidden",
-		paddingInline: space[1],
+		paddingInline: tokens["--space-1"],
 		textOverflow: "ellipsis",
 		whiteSpace: "nowrap",
 	},
 	chipRemove: {
 		padding: 0,
-		borderRadius: radius.xs,
+		borderRadius: tokens["--radius-xs"],
 		borderWidth: 0,
 		outline: "0",
 		alignItems: "center",
 		backgroundColor: {
 			default: "transparent",
 			":hover": {
-				"@media (hover: hover) and (pointer: fine)": color.surface,
+				"@media (hover: hover) and (pointer: fine)": tokens["--surface"],
 			},
 		},
 		color: {
-			default: color.fgMuted,
-			":hover": color.fg,
+			default: tokens["--fg-muted"],
+			":hover": tokens["--fg"],
 		},
 		display: "flex",
 		justifyContent: "center",
-		height: space[5],
-		width: space[5],
+		height: tokens["--space-5"],
+		width: tokens["--space-5"],
 	},
 	panelSurface: {
-		[popupVars.background]: color.bgElevated,
-		[popupVars.border]: color.border,
-		[popupVars.foreground]: color.fg,
-		borderRadius: radius.lg,
+		[popupVars.background]: tokens["--elevated"],
+		[popupVars.border]: tokens["--border"],
+		[popupVars.foreground]: tokens["--fg"],
+		borderRadius: tokens["--radius-lg"],
 		backgroundColor: popupVars.background,
-		boxShadow: shadow.md,
+		boxShadow: tokens["--shadow-md"],
 		color: popupVars.foreground,
 	},
 	popup: {
@@ -574,11 +576,11 @@ const styles = stylex.create({
 		width: "var(--anchor-width)",
 	},
 	popupInputRegion: {
-		padding: space[1],
+		padding: tokens["--space-1"],
 	},
 	popupInputControl: {
-		gap: space[2],
-		paddingInline: space[3],
+		gap: tokens["--space-2"],
+		paddingInline: tokens["--space-3"],
 		alignItems: "center",
 		display: "flex",
 	},
@@ -590,34 +592,34 @@ const styles = stylex.create({
 		appearance: "none",
 		backgroundColor: "transparent",
 		boxSizing: "border-box",
-		height: size["control.md"],
+		height: tokens["--size-control-md"],
 		minWidth: 0,
 		width: "100%",
 	},
 	searchIcon: {
-		color: color.fgSubtle,
+		color: tokens["--fg-subtle"],
 		flexShrink: 0,
 	},
 	list: {
 		padding: {
 			"[data-empty]": 0,
-			default: space[1],
+			default: tokens["--space-1"],
 		},
 		maxHeight: "240px",
 		overflowY: "auto",
 	},
 	empty: {
 		padding: {
-			default: space[3],
+			default: tokens["--space-3"],
 			":empty": 0,
 		},
 		alignItems: "center",
-		color: color.fgMuted,
+		color: tokens["--fg-muted"],
 		display: "flex",
-		fontSize: fontSize.x2,
+		fontSize: tokens["--font-size-2"],
 		justifyContent: "center",
-		letterSpacing: letterSpacing.x2,
-		lineHeight: lineHeight.x2,
+		letterSpacing: tokens["--letter-spacing-2"],
+		lineHeight: tokens["--line-height-2"],
 		textAlign: "center",
 	},
 });

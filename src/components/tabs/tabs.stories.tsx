@@ -5,7 +5,7 @@ import type { Meta, StoryObj } from "@storybook/react-vite";
 import * as stylex from "@stylexjs/stylex";
 import type { ReactNode } from "react";
 import { Text } from "@/components/text/text";
-import { space } from "@/styles/tokens.stylex";
+import { tokens } from "@/theme/tokens.stylex";
 import * as Tabs from "./tabs";
 
 const iconOptions = {
@@ -187,18 +187,18 @@ const storyStyles = stylex.create({
 		width: "100%",
 	},
 	stack: {
-		gap: space[6],
+		gap: tokens["--space-6"],
 		display: "flex",
 		flexDirection: "column",
 	},
 	section: {
-		gap: space[2],
+		gap: tokens["--space-2"],
 		display: "flex",
 		flexDirection: "column",
 		minWidth: 0,
 	},
 	orientationGrid: {
-		gap: space[8],
+		gap: tokens["--space-8"],
 		display: "grid",
 		gridTemplateColumns: "repeat(auto-fit, minmax(18rem, 1fr))",
 	},

@@ -160,7 +160,7 @@ confirmed a 24 px track and thumb with a 32 px pseudo-element target.
   cannot be changed with the keyboard, removes the inset/thumb shadows, and
   uses neutral fill, track, label, and value treatments.
 - Invalid state is provided through `Field.Root`, reaches the hidden range input
-  as `aria-invalid="true"`, and renders the Slider track's danger outline.
+  as `aria-invalid="true"`, and renders the Slider track's error outline.
 - Playground exposes a visible Marker increment control in value units. A 30
   increment on a 0–100 slider rendered dots at exactly 0%, 30%, 60%, and 90%;
   vertical markers likewise measured from 0% through 100% in 10% increments.

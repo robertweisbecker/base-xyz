@@ -1,16 +1,16 @@
 import * as stylex from "@stylexjs/stylex";
 import { textSizeStyles, textStyles } from "@/components/text/text.stylex";
-import { color, radius, size, space } from "@/styles/tokens.stylex";
+import { tokens } from "@/theme/tokens.stylex";
 import type { MenuItemSize } from "./menu.types";
 
 /** Inherited layout variables for Menu items and components that intentionally match them. */
 export const menuItemVars = stylex.defineVars({
-	columns: `${space[4]} minmax(0, 1fr) auto`,
-	columnGap: space[2],
-	minHeight: size["control.md"],
-	paddingBlock: space[1],
-	paddingInlineEnd: space[2],
-	paddingInlineStart: space[3],
+	columns: `${tokens["--space-4"]} minmax(0, 1fr) auto`,
+	columnGap: tokens["--space-2"],
+	minHeight: tokens["--size-control-md"],
+	paddingBlock: tokens["--space-1"],
+	paddingInlineEnd: tokens["--space-2"],
+	paddingInlineStart: tokens["--space-3"],
 	rowGap: "0px",
 });
 
@@ -22,7 +22,7 @@ export const menuItemVars = stylex.defineVars({
  */
 const menuItemParts = stylex.create({
 	itemBase: {
-		borderRadius: radius.md,
+		borderRadius: tokens["--radius-md"],
 		outline: "0",
 		paddingBlock: menuItemVars.paddingBlock,
 		textDecoration: "none",
@@ -58,17 +58,17 @@ const menuItemParts = stylex.create({
 			"[data-selected]": "visible",
 			default: "hidden",
 		},
-		height: space[4],
-		width: space[4],
+		height: tokens["--space-4"],
+		width: tokens["--space-4"],
 	},
 	itemSm: {
-		minHeight: size["control.sm"],
+		minHeight: tokens["--size-control-sm"],
 	},
 	itemMd: {
-		minHeight: size["control.md"],
+		minHeight: tokens["--size-control-md"],
 	},
 	itemLg: {
-		minHeight: size["control.lg"],
+		minHeight: tokens["--size-control-lg"],
 	},
 });
 
@@ -88,32 +88,32 @@ export const menuItemSizeStyles = {
 export const menuItemVariantStyles = stylex.create({
 	default: {
 		backgroundColor: {
-			"[data-highlighted]": color.highlight,
+			"[data-highlighted]": tokens["--bg-highlight"],
 			default: "transparent",
 		},
 		color: {
-			"[data-highlighted]": color.fg,
-			default: color.fg,
+			"[data-highlighted]": tokens["--fg"],
+			default: tokens["--fg"],
 		},
 	},
 	primary: {
 		backgroundColor: {
-			"[data-highlighted]": color.bgAccent,
+			"[data-highlighted]": tokens["--bg-primary"],
 			default: "transparent",
 		},
 		color: {
-			"[data-highlighted]": color.fgAccentContrast,
-			default: color.fg,
+			"[data-highlighted]": tokens["--fg-accent-contrast"],
+			default: tokens["--fg"],
 		},
 	},
-	danger: {
+	error: {
 		backgroundColor: {
-			"[data-highlighted]": color.bgDangerSubtle,
+			"[data-highlighted]": tokens["--bg-error"],
 			default: "transparent",
 		},
 		color: {
-			"[data-highlighted]": color.bgDanger,
-			default: color.bgDanger,
+			"[data-highlighted]": tokens["--bg-error-primary"],
+			default: tokens["--bg-error-primary"],
 		},
 	},
 });

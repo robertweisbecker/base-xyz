@@ -15,9 +15,9 @@ import {
 	positioningThemeProps,
 	sizingThemeProps,
 	verticalFlexThemeProps,
-} from "@/styles/theme-props-layout.stylex";
-import { spacingThemeProps } from "@/styles/theme-props-spacing.stylex";
-import { surfaceThemeProps } from "@/styles/theme-props-surface.stylex";
+} from "@/theme/theme-props-layout.stylex";
+import { spacingThemeProps } from "@/theme/theme-props-spacing.stylex";
+import { surfaceThemeProps } from "@/theme/theme-props-surface.stylex";
 import type {
 	ChildLayoutProps,
 	DisplayProps,

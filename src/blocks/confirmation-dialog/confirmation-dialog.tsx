@@ -6,7 +6,7 @@ import { Button, type ButtonProps } from "@/components/button/button";
 import * as Dialog from "@/components/dialog/dialog";
 import { ScrollArea } from "@/components/scroll-area/scroll-area";
 import * as Toast from "@/components/toast";
-import { color, radius, space } from "@/styles/tokens.stylex";
+import { tokens } from "@/theme/tokens.stylex";
 
 export type ConfirmationDialogSize = "sm" | "md" | "lg";
 
@@ -203,25 +203,25 @@ function ToastList() {
 
 const confirmationDialogParts = stylex.create({
 	popup: {
-		maxHeight: `calc(100dvh - ${space[8]})`,
+		maxHeight: `calc(100dvh - ${tokens["--space-8"]})`,
 	},
 	header: {
 		alignItems: "stretch",
 		flexShrink: 0,
-		paddingBlockStart: space[5],
+		paddingBlockStart: tokens["--space-5"],
 		textAlign: "start",
 	},
 	visual: {
-		borderRadius: radius.sm,
+		borderRadius: tokens["--radius-sm"],
 		alignItems: "center",
 		alignSelf: "flex-start",
-		backgroundColor: color.surfaceSubtle,
-		color: color.fg,
+		backgroundColor: tokens["--surface-subtle"],
+		color: tokens["--fg"],
 		display: "flex",
 		justifyContent: "center",
-		marginBlockEnd: space[2],
-		height: space[10],
-		width: space[10],
+		marginBlockEnd: tokens["--space-2"],
+		height: tokens["--space-10"],
+		width: tokens["--space-10"],
 	},
 	body: {
 		flex: "1 1 auto",
@@ -231,7 +231,7 @@ const confirmationDialogParts = stylex.create({
 		maxHeight: "min(50dvh, 28rem)",
 	},
 	bodyContent: {
-		padding: space[5],
+		padding: tokens["--space-5"],
 	},
 	footer: {
 		flexShrink: 0,
@@ -239,7 +239,7 @@ const confirmationDialogParts = stylex.create({
 	},
 	footerActions: {
 		flex: "0 0 auto",
-		gap: space[2],
+		gap: tokens["--space-2"],
 		alignItems: "center",
 		display: "flex",
 		marginInlineStart: "auto",

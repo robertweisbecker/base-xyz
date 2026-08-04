@@ -1,8 +1,8 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import * as stylex from "@stylexjs/stylex";
 import { useRef, useState } from "react";
-import { color, space } from "@/styles/tokens.stylex";
-import { fontSize, fontWeight, letterSpacing, lineHeight } from "@/styles/tokens.stylex";
+import { tokens } from "@/theme/tokens.stylex";
+
 import * as AlertDialog from "../alert-dialog/alert-dialog";
 import { Button } from "../button/button";
 import { ScrollArea } from "../scroll-area/scroll-area";
@@ -147,22 +147,22 @@ function InsideScrollDialog() {
 		<Dialog.Root>
 			<Dialog.Trigger render={<Button />}>Open inside-scroll dialog</Dialog.Trigger>
 			<Dialog.Popup scrollBehavior="inside" style={storyParts.insideScrollPopup}>
-						<Dialog.Header>
-							<Dialog.Title>Dialog guidelines</Dialog.Title>
-							<Dialog.Description>
-								The popup stays on screen while the ScrollArea inside it holds the long content.
-							</Dialog.Description>
-						</Dialog.Header>
-						<ScrollArea
-							label="Dialog guidelines"
-							size="content"
-							style={storyParts.insideScrollArea}
-							contentStyle={storyParts.insideScrollContent}>
-							<DialogSections />
-						</ScrollArea>
-						<Dialog.Footer>
-							<Dialog.Close render={<Button variant="neutral" />}>Close</Dialog.Close>
-						</Dialog.Footer>
+				<Dialog.Header>
+					<Dialog.Title>Dialog guidelines</Dialog.Title>
+					<Dialog.Description>
+						The popup stays on screen while the ScrollArea inside it holds the long content.
+					</Dialog.Description>
+				</Dialog.Header>
+				<ScrollArea
+					label="Dialog guidelines"
+					size="content"
+					style={storyParts.insideScrollArea}
+					contentStyle={storyParts.insideScrollContent}>
+					<DialogSections />
+				</ScrollArea>
+				<Dialog.Footer>
+					<Dialog.Close render={<Button variant="neutral" />}>Close</Dialog.Close>
+				</Dialog.Footer>
 			</Dialog.Popup>
 		</Dialog.Root>
 	);
@@ -175,18 +175,18 @@ function OutsideScrollDialog() {
 		<Dialog.Root>
 			<Dialog.Trigger render={<Button />}>Open outside-scroll dialog</Dialog.Trigger>
 			<Dialog.Popup ref={popupRef} initialFocus={popupRef} scrollBehavior="outside">
-							<Dialog.Header>
-								<Dialog.Title>Dialog guidelines</Dialog.Title>
-								<Dialog.Description>
-									The popup may extend past the screen while the surrounding ScrollArea provides scrolling.
-								</Dialog.Description>
-							</Dialog.Header>
-							<Dialog.Body>
-								<DialogSections />
-							</Dialog.Body>
-							<Dialog.Footer>
-								<Dialog.Close render={<Button variant="neutral" />}>Close</Dialog.Close>
-							</Dialog.Footer>
+				<Dialog.Header>
+					<Dialog.Title>Dialog guidelines</Dialog.Title>
+					<Dialog.Description>
+						The popup may extend past the screen while the surrounding ScrollArea provides scrolling.
+					</Dialog.Description>
+				</Dialog.Header>
+				<Dialog.Body>
+					<DialogSections />
+				</Dialog.Body>
+				<Dialog.Footer>
+					<Dialog.Close render={<Button variant="neutral" />}>Close</Dialog.Close>
+				</Dialog.Footer>
 			</Dialog.Popup>
 		</Dialog.Root>
 	);
@@ -205,7 +205,9 @@ export const ScrollBehavior: Story = {
 			</section>
 			<section {...stylex.props(storyParts.section)}>
 				<h2 {...stylex.props(storyParts.sectionTitle)}>Outside</h2>
-				<p {...stylex.props(storyParts.sectionBody)}>The surrounding viewport scrolls when the popup exceeds the screen.</p>
+				<p {...stylex.props(storyParts.sectionBody)}>
+					The surrounding viewport scrolls when the popup exceeds the screen.
+				</p>
 				<OutsideScrollDialog />
 			</section>
 		</div>
@@ -232,16 +234,16 @@ function NonModalExample() {
 					backdropProps={false}
 					viewportProps={{ style: storyParts.nonModalViewport }}
 					style={storyParts.nonModalPopup}>
-							<Dialog.Header>
-								<Dialog.Title>Selection inspector</Dialog.Title>
-								<Dialog.Description>A non-modal dialog for supporting controls.</Dialog.Description>
-							</Dialog.Header>
-							<Dialog.Body>
-								The popup animates independently while pointer and keyboard interaction remain available outside it.
-							</Dialog.Body>
-							<Dialog.Footer>
-								<Dialog.Close render={<Button variant="neutral" />}>Close inspector</Dialog.Close>
-							</Dialog.Footer>
+					<Dialog.Header>
+						<Dialog.Title>Selection inspector</Dialog.Title>
+						<Dialog.Description>A non-modal dialog for supporting controls.</Dialog.Description>
+					</Dialog.Header>
+					<Dialog.Body>
+						The popup animates independently while pointer and keyboard interaction remain available outside it.
+					</Dialog.Body>
+					<Dialog.Footer>
+						<Dialog.Close render={<Button variant="neutral" />}>Close inspector</Dialog.Close>
+					</Dialog.Footer>
 				</Dialog.Popup>
 			</Dialog.Root>
 		</div>
@@ -263,28 +265,28 @@ export const Nested: Story = {
 		<Dialog.Root defaultOpen>
 			<Dialog.Trigger render={<Button />}>Open project</Dialog.Trigger>
 			<Dialog.Popup>
-						<Dialog.Header>
-							<Dialog.Title>Project settings</Dialog.Title>
-							<Dialog.Description>The parent scales and dims when its nested dialog opens.</Dialog.Description>
-						</Dialog.Header>
-						<Dialog.Body>
-							<Dialog.Root>
-								<Dialog.Trigger render={<Button variant="secondary" />}>Manage access</Dialog.Trigger>
-								<Dialog.Popup>
-											<Dialog.Header>
-												<Dialog.Title>Manage access</Dialog.Title>
-												<Dialog.Description>Invite collaborators to this project.</Dialog.Description>
-											</Dialog.Header>
-											<Dialog.Body>Nested dialogs retain their own focus scope and animated lifecycle.</Dialog.Body>
-											<Dialog.Footer>
-												<Dialog.Close render={<Button variant="neutral" />}>Done</Dialog.Close>
-											</Dialog.Footer>
-								</Dialog.Popup>
-							</Dialog.Root>
-						</Dialog.Body>
-						<Dialog.Footer>
-							<Dialog.Close render={<Button variant="neutral" />}>Close project</Dialog.Close>
-						</Dialog.Footer>
+				<Dialog.Header>
+					<Dialog.Title>Project settings</Dialog.Title>
+					<Dialog.Description>The parent scales and dims when its nested dialog opens.</Dialog.Description>
+				</Dialog.Header>
+				<Dialog.Body>
+					<Dialog.Root>
+						<Dialog.Trigger render={<Button variant="secondary" />}>Manage access</Dialog.Trigger>
+						<Dialog.Popup>
+							<Dialog.Header>
+								<Dialog.Title>Manage access</Dialog.Title>
+								<Dialog.Description>Invite collaborators to this project.</Dialog.Description>
+							</Dialog.Header>
+							<Dialog.Body>Nested dialogs retain their own focus scope and animated lifecycle.</Dialog.Body>
+							<Dialog.Footer>
+								<Dialog.Close render={<Button variant="neutral" />}>Done</Dialog.Close>
+							</Dialog.Footer>
+						</Dialog.Popup>
+					</Dialog.Root>
+				</Dialog.Body>
+				<Dialog.Footer>
+					<Dialog.Close render={<Button variant="neutral" />}>Close project</Dialog.Close>
+				</Dialog.Footer>
 			</Dialog.Popup>
 		</Dialog.Root>
 	),
@@ -311,50 +313,50 @@ function CloseConfirmationDialog() {
 			}}>
 			<Dialog.Trigger render={<Button />}>Compose note</Dialog.Trigger>
 			<Dialog.Popup>
-						<Dialog.Header>
-							<Dialog.Title>New note</Dialog.Title>
-							<Dialog.Description>Type something, then try to close this dialog.</Dialog.Description>
-						</Dialog.Header>
-						<form
-							onSubmit={(event) => {
-								event.preventDefault();
-								setDraft("");
-								setDialogOpen(false);
-							}}>
-							<Dialog.Body>
-								<Textarea
-									label="Note"
-									value={draft}
-									onChange={(event) => setDraft(event.target.value)}
-									placeholder="Capture a thought…"
-									rows={5}
-								/>
-							</Dialog.Body>
-							<Dialog.Footer>
-								<Dialog.Close render={<Button variant="neutral" />}>Cancel</Dialog.Close>
-								<Button type="submit">Save note</Button>
-							</Dialog.Footer>
-						</form>
+				<Dialog.Header>
+					<Dialog.Title>New note</Dialog.Title>
+					<Dialog.Description>Type something, then try to close this dialog.</Dialog.Description>
+				</Dialog.Header>
+				<form
+					onSubmit={(event) => {
+						event.preventDefault();
+						setDraft("");
+						setDialogOpen(false);
+					}}>
+					<Dialog.Body>
+						<Textarea
+							label="Note"
+							value={draft}
+							onChange={(event) => setDraft(event.target.value)}
+							placeholder="Capture a thought…"
+							rows={5}
+						/>
+					</Dialog.Body>
+					<Dialog.Footer>
+						<Dialog.Close render={<Button variant="neutral" />}>Cancel</Dialog.Close>
+						<Button type="submit">Save note</Button>
+					</Dialog.Footer>
+				</form>
 			</Dialog.Popup>
 
 			<AlertDialog.Root open={confirmationOpen} onOpenChange={setConfirmationOpen}>
 				<AlertDialog.Popup>
-							<AlertDialog.Header>
-								<AlertDialog.Title>Discard this note?</AlertDialog.Title>
-								<AlertDialog.Description>Your unsaved changes will be lost.</AlertDialog.Description>
-							</AlertDialog.Header>
-							<AlertDialog.Footer>
-								<AlertDialog.Close render={<Button variant="neutral" />}>Keep editing</AlertDialog.Close>
-								<Button
-									variant="danger"
-									onClick={() => {
-										setConfirmationOpen(false);
-										setDraft("");
-										setDialogOpen(false);
-									}}>
-									Discard note
-								</Button>
-							</AlertDialog.Footer>
+					<AlertDialog.Header>
+						<AlertDialog.Title>Discard this note?</AlertDialog.Title>
+						<AlertDialog.Description>Your unsaved changes will be lost.</AlertDialog.Description>
+					</AlertDialog.Header>
+					<AlertDialog.Footer>
+						<AlertDialog.Close render={<Button variant="neutral" />}>Keep editing</AlertDialog.Close>
+						<Button
+							variant="error"
+							onClick={() => {
+								setConfirmationOpen(false);
+								setDraft("");
+								setDialogOpen(false);
+							}}>
+							Discard note
+						</Button>
+					</AlertDialog.Footer>
 				</AlertDialog.Popup>
 			</AlertDialog.Root>
 		</Dialog.Root>
@@ -370,66 +372,66 @@ export const CloseToConfirm: Story = {
 
 const storyParts = stylex.create({
 	insideScrollPopup: {
-		height: `min(620px, calc(100dvh - ${space[8]}))`,
+		height: `min(620px, calc(100dvh - ${tokens["--space-8"]}))`,
 	},
 	insideScrollArea: {
 		flex: "1 1 auto",
 		minHeight: 0,
 	},
 	insideScrollContent: {
-		padding: space[5],
+		padding: tokens["--space-5"],
 	},
 	sections: {
-		gap: space[5],
+		gap: tokens["--space-5"],
 		display: "flex",
 		flexDirection: "column",
 	},
 	section: {
-		gap: space[1],
+		gap: tokens["--space-1"],
 		display: "flex",
 		flexDirection: "column",
 	},
 	sectionTitle: {
 		margin: 0,
-		color: color.fg,
-		fontSize: fontSize.x2,
-		fontWeight: fontWeight.semibold,
-		letterSpacing: letterSpacing.x2,
-		lineHeight: lineHeight.x2,
+		color: tokens["--fg"],
+		fontSize: tokens["--font-size-2"],
+		fontWeight: tokens["--font-weight-semibold"],
+		letterSpacing: tokens["--letter-spacing-2"],
+		lineHeight: tokens["--line-height-2"],
 	},
 	sectionBody: {
 		margin: 0,
-		color: color.fgMuted,
-		fontSize: fontSize.x2,
-		letterSpacing: letterSpacing.x2,
-		lineHeight: lineHeight.x2,
+		color: tokens["--fg-muted"],
+		fontSize: tokens["--font-size-2"],
+		letterSpacing: tokens["--letter-spacing-2"],
+		lineHeight: tokens["--line-height-2"],
 	},
 	nonModalStage: {
-		gap: space[5],
+		gap: tokens["--space-5"],
 		alignItems: "center",
 		display: "flex",
 		flexDirection: "column",
 		minWidth: "min(680px, calc(100vw - 48px))",
 	},
 	outsidePanel: {
-		gap: space[6],
+		gap: tokens["--space-6"],
 		alignItems: "center",
 		display: "flex",
 		justifyContent: "space-between",
 		width: "100%",
 	},
 	panelTitle: {
-		color: color.fg,
-		fontSize: fontSize.x2,
-		letterSpacing: letterSpacing.x2,
-		lineHeight: lineHeight.x2,
+		color: tokens["--fg"],
+		fontSize: tokens["--font-size-2"],
+		letterSpacing: tokens["--letter-spacing-2"],
+		lineHeight: tokens["--line-height-2"],
 	},
 	copy: {
-		marginBlock: space[1],
-		color: color.fgMuted,
-		fontSize: fontSize.x1,
-		letterSpacing: letterSpacing.x1,
-		lineHeight: lineHeight.x1,
+		marginBlock: tokens["--space-1"],
+		color: tokens["--fg-muted"],
+		fontSize: tokens["--font-size-1"],
+		letterSpacing: tokens["--letter-spacing-1"],
+		lineHeight: tokens["--line-height-1"],
 	},
 	nonModalViewport: {
 		pointerEvents: "none",

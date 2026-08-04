@@ -19,7 +19,7 @@ import { TrashIcon } from "@phosphor-icons/react/dist/csr/Trash";
 import type { ReactNode } from "react";
 import * as stylex from "@stylexjs/stylex";
 import { textStyles } from "@/components/text/text.stylex";
-import { space } from "@/styles/tokens.stylex";
+import { tokens } from "@/theme/tokens.stylex";
 import { Button } from "../button/button";
 import * as Menu from "./menu";
 import { menuItemStyles, menuItemVariantStyles } from "./menu-item.stylex";
@@ -61,7 +61,7 @@ const meta = {
 		_showShortcuts: { control: "boolean" },
 		_showSelectionItems: { control: "boolean" },
 		_disabledItem: { control: "boolean" },
-		_itemVariant: { control: "select", options: ["default", "primary", "danger"] },
+		_itemVariant: { control: "select", options: ["default", "primary", "error"] },
 		size: { control: "inline-radio", options: ["sm", "md", "lg"] },
 	},
 } satisfies Meta<MenuStoryArgs>;
@@ -161,11 +161,11 @@ export const ItemVariants: Story = {
 						</Menu.ItemIcon>
 						<Menu.ItemLabel>Disabled item</Menu.ItemLabel>
 					</Menu.Item>
-					<Menu.Item variant="danger">
+					<Menu.Item variant="error">
 						<Menu.ItemIcon>
 							<TrashIcon size={16} weight="duotone" />
 						</Menu.ItemIcon>
-						<Menu.ItemLabel>Danger item</Menu.ItemLabel>
+						<Menu.ItemLabel>Error item</Menu.ItemLabel>
 					</Menu.Item>
 				</Menu.Group>
 				<Menu.Separator />
@@ -306,7 +306,7 @@ export const MenuTypes: Story = {
 						<Menu.ItemLabel>Duplicate</Menu.ItemLabel>
 					</Menu.Item>
 					<Menu.Separator />
-					<Menu.Item variant="danger">
+					<Menu.Item variant="error">
 						<Menu.ItemIcon>
 							<TrashIcon size={16} weight="duotone" />
 						</Menu.ItemIcon>
@@ -552,7 +552,7 @@ export const CollapsibleGroup: Story = {
 					<Menu.ItemLabel>Settings</Menu.ItemLabel>
 					<Menu.ItemShortcut>⌘,</Menu.ItemShortcut>
 				</Menu.Item>
-				<Menu.Item variant="danger">
+				<Menu.Item variant="error">
 					<Menu.ItemIcon>
 						<SignOutIcon size={16} weight="duotone" />
 					</Menu.ItemIcon>
@@ -575,7 +575,7 @@ function PositionedMenu({ _side, _align }: Pick<MenuStoryArgs, "_side" | "_align
 					<Menu.ItemLabel>Duplicate</Menu.ItemLabel>
 				</Menu.Item>
 				<Menu.Separator />
-				<Menu.Item variant="danger">
+				<Menu.Item variant="error">
 					<Menu.ItemLabel>Delete</Menu.ItemLabel>
 				</Menu.Item>
 			</Menu.Popup>
@@ -598,7 +598,7 @@ function formatPosition(side: MenuStoryArgs["_side"], align: MenuStoryArgs["_ali
 
 const storyStyles = stylex.create({
 	positioningGrid: {
-		gap: space[4],
+		gap: tokens["--space-4"],
 		paddingBlock: "10rem",
 		display: "grid",
 		gridTemplateColumns: {
@@ -621,13 +621,13 @@ const storyStyles = stylex.create({
 		width: "22rem",
 	},
 	parityGrid: {
-		gap: space[6],
+		gap: tokens["--space-6"],
 		display: "grid",
 		gridTemplateColumns: "repeat(3, minmax(0, 1fr))",
 		maxWidth: "54rem",
 	},
 	paritySection: {
-		gap: space[2],
+		gap: tokens["--space-2"],
 		display: "flex",
 		flexDirection: "column",
 	},

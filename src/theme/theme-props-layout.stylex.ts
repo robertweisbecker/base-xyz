@@ -9,7 +9,7 @@ import {
 	gridCompositionThemePropKeys,
 	positioningThemePropKeys,
 	sizingThemePropKeys,
-} from "../theme/theme-props";
+} from "./theme-props";
 import { gapThemeProps, resolveSpaceValue } from "./theme-props-spacing.stylex";
 import type {
 	ChildLayoutProps,
@@ -21,10 +21,9 @@ import type {
 	Orientation,
 	PositioningProps,
 	SizingProps,
-	SpaceStep,
 	WidthFraction,
-} from "../theme/theme-props.types";
-import { size, space } from "./tokens.stylex";
+} from "./theme-props.types";
+import { tokens } from "@/theme/tokens.stylex";
 
 type FlexLayoutProps = Omit<FlexProps, keyof GapProps>;
 type GridCompositionProps = Omit<GridLayoutProps, keyof GapProps>;
@@ -68,10 +67,26 @@ const widthFractions: Record<WidthFraction, string> = {
 	"3/4": "75%",
 };
 
+const containerValues = {
+	"container.xs": tokens["--size-container-xs"],
+	"container.sm": tokens["--size-container-sm"],
+	"container.md": tokens["--size-container-md"],
+	"container.lg": tokens["--size-container-lg"],
+	"container.xl": tokens["--size-container-xl"],
+	"container.2xl": tokens["--size-container-2xl"],
+	"container.3xl": tokens["--size-container-3xl"],
+	"container.4xl": tokens["--size-container-4xl"],
+	"container.5xl": tokens["--size-container-5xl"],
+	"container.6xl": tokens["--size-container-6xl"],
+	"container.7xl": tokens["--size-container-7xl"],
+} satisfies Record<ContainerSize, string>;
+
 function resolveDimension(value: unknown): unknown {
-	if (typeof value === "number") return space[value as SpaceStep];
-	if (value === "full") return size.full;
-	if (typeof value === "string" && value.startsWith("container.")) return size[value as ContainerSize];
+	if (typeof value === "number") return resolveSpaceValue(value);
+	if (value === "full") return tokens["--size-full"];
+	if (typeof value === "string" && value.startsWith("container.")) {
+		return containerValues[value as ContainerSize];
+	}
 	return value;
 }
 

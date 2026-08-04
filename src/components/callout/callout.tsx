@@ -1,15 +1,15 @@
 import * as stylex from "@stylexjs/stylex";
 import type { StyleXStyles } from "@stylexjs/stylex";
 import type { ComponentProps, ReactNode } from "react";
-import { positioningThemeProps } from "@/styles/theme-props-layout.stylex";
-import { border, color, fontSize, lineHeight, radius, size, space } from "@/styles/tokens.stylex";
+import { positioningThemeProps } from "@/theme/theme-props-layout.stylex";
+import { tokens } from "@/theme/tokens.stylex";
 import { resolveThemeProps, type VerifyThemeProps } from "@/theme/theme-props";
 import type { PositioningProps } from "@/theme/theme-props.types";
 import { Heading } from "../heading/heading";
 import { Text } from "../text/text";
 import { VisuallyHidden } from "../visually-hidden/visually-hidden";
 
-export type CalloutHue = "accent" | "danger" | "warning" | "success" | "neutral";
+export type CalloutHue = "accent" | "error" | "warning" | "success" | "neutral";
 export type CalloutVariant = "default" | "banner";
 export interface CalloutThemeProps extends PositioningProps {}
 
@@ -96,18 +96,18 @@ const calloutParts = stylex.create({
 	root: {
 		borderColor: "transparent",
 		borderStyle: "solid",
-		borderWidth: border.width,
+		borderWidth: tokens["--border-width"],
 		boxSizing: "border-box",
-		color: color.fg,
-		fontSize: fontSize.x2,
+		color: tokens["--fg"],
+		fontSize: tokens["--font-size-2"],
 		isolation: "isolate",
-		lineHeight: lineHeight.x2,
+		lineHeight: tokens["--line-height-2"],
 		width: "100%",
 	},
 	body: {
 		alignItems: "start",
 		boxSizing: "border-box",
-		columnGap: space[3],
+		columnGap: tokens["--space-2"],
 		display: "flex",
 		width: "100%",
 	},
@@ -117,6 +117,7 @@ const calloutParts = stylex.create({
 		flexShrink: 0,
 		fontSize: "1.25em",
 		justifyContent: "center",
+		transform: "translateY(-0.03125em)",
 		height: "1lh",
 	},
 	content: {
@@ -134,7 +135,7 @@ const calloutParts = stylex.create({
 		minWidth: 0,
 	},
 	action: {
-		gap: space[2],
+		gap: tokens["--space-2"],
 		alignItems: "center",
 		display: "flex",
 		flexShrink: 0,
@@ -145,10 +146,10 @@ const calloutParts = stylex.create({
 
 const calloutVariantStyles = stylex.create({
 	default: {
-		borderRadius: radius.md,
-		paddingBlock: space[2],
-		paddingInlineEnd: space[2],
-		paddingInlineStart: space[3],
+		borderRadius: tokens["--radius-md"],
+		paddingBlock: tokens["--space-2"],
+		paddingInlineEnd: tokens["--space-2"],
+		paddingInlineStart: tokens["--space-3"],
 	},
 	banner: {
 		borderRadius: 0,
@@ -161,11 +162,11 @@ const calloutBodyVariantStyles = stylex.create({
 	},
 	banner: {
 		marginInline: "auto",
-		paddingBlock: space[2],
-		paddingInline: space[3],
+		paddingBlock: tokens["--space-2"],
+		paddingInline: tokens["--space-3"],
 		alignItems: "center",
-		columnGap: space[2],
-		maxWidth: size["container.4xl"],
+		columnGap: tokens["--space-2"],
+		maxWidth: tokens["--size-container-4xl"],
 	},
 });
 
@@ -175,7 +176,7 @@ const calloutContentVariantStyles = stylex.create({
 	},
 	banner: {
 		alignItems: "baseline",
-		columnGap: space[2],
+		columnGap: tokens["--space-2"],
 		flexDirection: "row",
 	},
 });
@@ -200,46 +201,46 @@ const calloutActionVariantStyles = stylex.create({
 
 const calloutHueStyles = stylex.create({
 	accent: {
-		backgroundColor: "var(--indigo-c1)",
-		// borderColor: "var(--indigo-o1)",
-		color: "var(--indigo-t2)",
+		backgroundColor: tokens["--color-accent-c1"],
+		// borderColor: colors["--color-accent-b1"],
+		color: tokens["--color-accent-t2"],
 	},
-	danger: {
-		backgroundColor: "var(--red-c2)",
-		// borderColor: "var(--red-o1)",
-		color: "var(--red-t2)",
+	error: {
+		backgroundColor: tokens["--color-error-c1"],
+		// borderColor: colors["--color-error-b1"],
+		color: tokens["--color-error-t2"],
 	},
 	warning: {
-		backgroundColor: "var(--orange-c1)",
-		// borderColor: "var(--orange-o1)",
-		color: "var(--orange-t2)",
+		backgroundColor: tokens["--color-warning-c1"],
+		// borderColor: colors["--color-warning-b1"],
+		color: tokens["--color-warning-t2"],
 	},
 	success: {
-		backgroundColor: "var(--green-c2)",
-		// borderColor: "var(--green-o1)",
-		color: "var(--green-t2)",
+		backgroundColor: tokens["--color-success-c1"],
+		// borderColor: colors["--color-success-b1"],
+		color: tokens["--color-success-t2"],
 	},
 	neutral: {
-		backgroundColor: "var(--gray-s2)",
-		// borderColor: "var(--gray-o2)",
-		color: "var(--gray-t3)",
+		backgroundColor: tokens["--color-gray-c1"],
+		// borderColor: colors["--color-gray-b2"],
+		color: tokens["--color-gray-t3"],
 	},
 });
 
 const calloutIconHueStyles = stylex.create({
 	accent: {
-		color: "var(--indigo-p2)",
+		color: tokens["--color-accent-t1"],
 	},
-	danger: {
-		color: "var(--red-p2)",
+	error: {
+		color: tokens["--color-error-t1"],
 	},
 	warning: {
-		color: "var(--orange-p2)",
+		color: tokens["--color-warning-t1"],
 	},
 	success: {
-		color: "var(--green-p2)",
+		color: tokens["--color-success-t1"],
 	},
 	neutral: {
-		color: color.fgMuted,
+		color: tokens["--fg-muted"],
 	},
 });

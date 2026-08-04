@@ -5,7 +5,7 @@ import type { StyleXStyles } from "@stylexjs/stylex";
 import { createContext, useContext, useRef, type MouseEvent, type RefObject } from "react";
 import { zIndex } from "@/styles/constants.stylex";
 import { popupArrowStyles, popupPositionerStyles, popupViewportStyles } from "@/components/popover/popover.stylex";
-import { size, space } from "@/styles/tokens.stylex";
+import { tokens } from "@/theme/tokens.stylex";
 import { CloseButton as CloseButtonControl } from "../button/close-button";
 import { tooltipStyles } from "./tooltip.stylex";
 
@@ -197,8 +197,8 @@ const tooltipParts = stylex.create({
 	closeButton: {
 		position: "absolute",
 		zIndex: 1,
-		right: space[1],
-		top: space[1],
+		right: tokens["--space-1"],
+		top: tokens["--space-1"],
 	},
 	popup: {
 		hyphens: "auto",
@@ -207,7 +207,7 @@ const tooltipParts = stylex.create({
 		wordBreak: "break-word",
 	},
 	popupWithClose: {
-		paddingInlineEnd: space[8],
-		minHeight: size["control.sm"],
+		paddingInlineEnd: tokens["--space-8"],
+		minHeight: tokens["--size-control-sm"],
 	},
 });

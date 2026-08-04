@@ -11,7 +11,7 @@ import { fieldChoiceGroupStyles, fieldStyles, fieldThemeProps } from "@/componen
 import { textStyles } from "@/components/text/text.stylex";
 import { focusRing } from "@/styles/recipes/focus";
 import { pressable } from "@/styles/recipes/transitions";
-import { color, motion, radius, size as sizeToken, space } from "@/styles/tokens.stylex";
+import { tokens } from "@/theme/tokens.stylex";
 import { CheckmarkIcon, IndeterminateIcon } from "../selection-icons";
 
 export type CheckboxSize = "sm" | "md";
@@ -214,12 +214,12 @@ function mergeIds(...ids: Array<string | undefined>) {
 
 const checkboxControlSizeStyles = stylex.create({
 	sm: {
-		height: sizeToken["indicator.sm"],
-		width: sizeToken["indicator.sm"],
+		height: tokens["--size-indicator-sm"],
+		width: tokens["--size-indicator-sm"],
 	},
 	md: {
-		height: sizeToken["indicator.md"],
-		width: sizeToken["indicator.md"],
+		height: tokens["--size-indicator-md"],
+		width: tokens["--size-indicator-md"],
 	},
 });
 
@@ -230,10 +230,10 @@ const checkboxLabelStyles = {
 
 const checkboxDescriptionStyles = stylex.create({
 	sm: {
-		paddingInlineStart: `calc(${sizeToken["indicator.sm"]} + ${space[2]} + 2px)`,
+		paddingInlineStart: `calc(${tokens["--size-indicator-sm"]} + ${tokens["--space-2"]} + 2px)`,
 	},
 	md: {
-		paddingInlineStart: `calc(${sizeToken["indicator.md"]} + ${space[2]} + 2px)`,
+		paddingInlineStart: `calc(${tokens["--size-indicator-md"]} + ${tokens["--space-2"]} + 2px)`,
 	},
 });
 
@@ -242,7 +242,7 @@ const checkboxParts = stylex.create({
 		margin: 0,
 		padding: 0,
 		borderWidth: 0,
-		gap: space[2],
+		gap: tokens["--space-2"],
 		display: "flex",
 		flexDirection: "column",
 		minInlineSize: 0,
@@ -251,13 +251,13 @@ const checkboxParts = stylex.create({
 		padding: 0,
 	},
 	groupDescription: {
-		marginBlockEnd: space[2],
+		marginBlockEnd: tokens["--space-2"],
 	},
 	item: {
 		gap: 0,
 		color: {
-			"[data-disabled]": color.fgSubtle,
-			default: color.fg,
+			"[data-disabled]": tokens["--fg-subtle"],
+			default: tokens["--fg"],
 		},
 		cursor: {
 			"[data-disabled]": "not-allowed",
@@ -269,26 +269,26 @@ const checkboxParts = stylex.create({
 	},
 	labelRoot: {
 		"--_checkbox-bg": {
-			default: color.surface,
+			default: tokens["--surface"],
 			// eslint-disable-next-line @stylexjs/valid-styles -- the compiler supports chained pseudo-class conditions; the lint rule is stricter than the compiler.
 			":hover:not([data-disabled])": {
-				"@media (hover: hover) and (pointer: fine)": color.surfaceSubtle,
+				"@media (hover: hover) and (pointer: fine)": tokens["--surface-subtle"],
 			},
-			":active": color.surfaceSubtleActive,
+			":active": tokens["--surface-subtle-active"],
 		},
 		"--_checkbox-bg-checked": {
-			default: color.bgAccent,
+			default: tokens["--bg-primary"],
 			// eslint-disable-next-line @stylexjs/valid-styles -- the compiler supports chained pseudo-class conditions; the lint rule is stricter than the compiler.
 			":hover:not([data-disabled])": {
-				"@media (hover: hover) and (pointer: fine)": color.bgAccentHover,
+				"@media (hover: hover) and (pointer: fine)": tokens["--bg-primary-highlight"],
 			},
-			":active": color.bgAccent,
+			":active": tokens["--bg-primary"],
 		},
 		"--_checkbox-border": {
-			default: color.borderStrong,
-			":active:hover": color.bgAccentHover,
+			default: tokens["--border-input"],
+			":active:hover": tokens["--bg-primary-highlight"],
 			":hover": {
-				"@media (hover: hover) and (pointer: fine)": color.borderHover,
+				"@media (hover: hover) and (pointer: fine)": tokens["--border-input-hover"],
 			},
 		},
 		"--_checkbox-press-scale": {
@@ -296,14 +296,14 @@ const checkboxParts = stylex.create({
 			":active": "0.94",
 		},
 		"--_checkbox-radius": {
-			default: radius.xs,
+			default: tokens["--radius-xs"],
 		},
-		gap: space[2],
+		gap: tokens["--space-2"],
 		alignItems: "flex-start",
 		color: {
-			"[data-disabled]": color.fgSubtle,
-			"[data-readonly]": color.fgMuted,
-			default: color.fg,
+			"[data-disabled]": tokens["--fg-subtle"],
+			"[data-readonly]": tokens["--fg-muted"],
+			default: tokens["--fg"],
 		},
 		cursor: "inherit",
 		display: "inline-flex",
@@ -311,14 +311,14 @@ const checkboxParts = stylex.create({
 	control: {
 		padding: 2,
 		borderColor: {
-			"[data-checked]": color.fgAccent,
-			"[data-checked][data-disabled]": color.border,
-			"[data-disabled]": color.borderDisabled,
+			"[data-checked]": tokens["--fg-accent"],
+			"[data-checked][data-disabled]": tokens["--border"],
+			"[data-disabled]": tokens["--border-disabled"],
 			"[data-indeterminate]": "var(--_checkbox-bg-checked)",
-			"[data-indeterminate][data-disabled]": color.border,
-			"[data-indeterminate][data-readonly]": color.borderStrong,
-			"[data-invalid]": color.fgDanger,
-			"[data-readonly]": color.borderStrong,
+			"[data-indeterminate][data-disabled]": tokens["--border"],
+			"[data-indeterminate][data-readonly]": tokens["--border-input"],
+			"[data-invalid]": tokens["--fg-error"],
+			"[data-readonly]": tokens["--border-input"],
 			default: "var(--_checkbox-border)",
 		},
 		borderRadius: "var(--_checkbox-radius)",
@@ -327,9 +327,9 @@ const checkboxParts = stylex.create({
 		alignItems: "center",
 		backgroundColor: {
 			"[data-checked]": "var(--_checkbox-bg-checked)",
-			"[data-checked][data-disabled]": color.surfaceSubtle,
-			"[data-checked][data-invalid]": color.bgDanger,
-			"[data-readonly]": color.surface,
+			"[data-checked][data-disabled]": tokens["--surface-subtle"],
+			"[data-checked][data-invalid]": tokens["--bg-error-primary"],
+			"[data-readonly]": tokens["--surface"],
 			default: "var(--_checkbox-bg)",
 		},
 		display: "inline-flex",
@@ -345,7 +345,7 @@ const checkboxParts = stylex.create({
 		"::after": {
 			inset: 0,
 			borderRadius: "calc(var(--_checkbox-radius) - 1px)",
-			boxShadow: `0 -1px 0 var(--white-a3), 0 1px var(--black-a2)`,
+			boxShadow: `0 -1px 0 ${tokens["--color-white-a3"]}, 0 1px ${tokens["--color-black-a2"]}`,
 			content: "''",
 			position: "absolute",
 			zIndex: 1,
@@ -354,17 +354,17 @@ const checkboxParts = stylex.create({
 	indicator: {
 		alignItems: "center",
 		color: {
-			"[data-disabled]": color.fgSubtle,
+			"[data-disabled]": tokens["--fg-subtle"],
 			"[data-indeterminate]": "var(--_checkbox-bg-checked)",
-			"[data-indeterminate][data-disabled]": color.fgSubtle,
-			"[data-invalid]": color.fgAccentContrast,
-			"[data-readonly]": color.fgAccent,
-			default: color.fgAccentContrast,
+			"[data-indeterminate][data-disabled]": tokens["--fg-subtle"],
+			"[data-invalid]": tokens["--fg-accent-contrast"],
+			"[data-readonly]": tokens["--fg-accent"],
+			default: tokens["--fg-accent-contrast"],
 		},
 		display: "flex",
 		filter: {
 			"[data-disabled]": null,
-			default: "drop-shadow(0 1px 1px var(--black-a3))",
+			default: `drop-shadow(0 1px 1px ${tokens["--color-black-a3"]})`,
 		},
 		justifyContent: "center",
 		height: "100%",
@@ -382,11 +382,11 @@ const checkboxParts = stylex.create({
 			default: "scale(1)",
 		},
 		transitionDuration: {
-			default: motion.durationMedium,
+			default: tokens["--motion-duration-medium"],
 			"@media (prefers-reduced-motion: reduce)": "0ms",
 		},
 		transitionProperty: "transform, opacity",
-		transitionTimingFunction: motion.easeOut,
+		transitionTimingFunction: tokens["--motion-ease-out"],
 	},
 	description: {
 		margin: 0,

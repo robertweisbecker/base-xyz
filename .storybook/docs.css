@@ -1,0 +1,23 @@
+#storybook-docs .sbdocs-preview {
+	background: var(--bg-canvas) !important;
+	border-color: var(--border) !important;
+	color: var(--fg) !important;
+}
+
+#storybook-docs .sbdocs-preview > :first-child:not(.docs-story) {
+	background: var(--surface) !important;
+	box-shadow: var(--border) 0 -1px 0 0 inset !important;
+	color: var(--fg-muted) !important;
+}
+
+#storybook-docs .sbdocs-preview > :first-child:not(.docs-story) button,
+#storybook-docs .sbdocs-preview > :first-child:not(.docs-story) svg {
+	color: var(--fg-muted) !important;
+}
+
+#storybook-docs .docs-story,
+#storybook-docs .innerZoomElementWrapper,
+#storybook-docs .sb-story {
+	background: var(--bg-canvas) !important;
+	color: var(--fg) !important;
+}
