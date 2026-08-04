@@ -1,5 +1,4 @@
 import { CheckCircleIcon } from "@phosphor-icons/react/dist/csr/CheckCircle";
-import { CircleNotchIcon } from "@phosphor-icons/react/dist/csr/CircleNotch";
 import { InfoIcon } from "@phosphor-icons/react/dist/csr/Info";
 import { WarningCircleIcon } from "@phosphor-icons/react/dist/csr/WarningCircle";
 import { XIcon } from "@phosphor-icons/react/dist/csr/X";
@@ -10,6 +9,7 @@ import type { StyleXStyles } from "@stylexjs/stylex";
 import { zIndex } from "@/styles/constants.stylex";
 import { tokens } from "@/theme/tokens.stylex";
 import { focusRing } from "@/styles/recipes/focus";
+import { Loader } from "@/components/loader/loader";
 import { popupMotionStyles } from "@/components/popover/popover.stylex";
 import { tooltipStyles } from "@/components/tooltip/tooltip.stylex";
 import { popupVars } from "@/components/popover/popover-vars.stylex";
@@ -131,7 +131,6 @@ export function AnchoredToast({ toast, className, positionerClassName, style, po
 								variant === "tooltip" && anchoredParts.tooltipIcon,
 								variant === "pill" && anchoredParts.pillIcon,
 								variant === "pill" && pillIconToneVariants[tone],
-								showGeneratedIcon && (status === "loading" || status === "ongoing") && anchoredMotion.spin,
 							)}>
 							{customIcon
 								? data.icon
@@ -242,7 +241,15 @@ function toneForStatus(status: AnchoredToastStatus): AnchoredToastTone {
 function statusIcon(status: AnchoredToastStatus, size: number | string = 18) {
 	if (status === "success") return <CheckCircleIcon size={size} weight="fill" />;
 	if (status === "error") return <WarningCircleIcon size={size} weight="fill" />;
-	if (status === "loading" || status === "ongoing") return <CircleNotchIcon size={size} weight="bold" />;
+	if (status === "loading" || status === "ongoing") {
+		const loaderStyle =
+			size === 16
+				? anchoredParts.generatedPillLoader
+				: size === "1em"
+					? anchoredParts.generatedTooltipLoader
+					: anchoredParts.generatedLoader;
+		return <Loader aria-hidden style={loaderStyle} />;
+	}
 	return <InfoIcon size={size} weight="fill" />;
 }
 
@@ -256,10 +263,6 @@ const renotifyOdd = stylex.keyframes({
 	// Keep this visually equivalent to renotifyEven while preventing StyleX
 	// from hashing both keyframes to the same animation name.
 	"49.9%": { scale: 1.04 },
-});
-
-const rotate = stylex.keyframes({
-	to: { transform: "rotate(360deg)" },
 });
 
 const anchoredMotion = stylex.create({
@@ -282,18 +285,6 @@ const anchoredMotion = stylex.create({
 		},
 		animationName: renotifyOdd,
 		animationTimingFunction: "ease",
-	},
-	spin: {
-		animationDuration: {
-			default: toastMotion.spinnerDuration,
-			"@media (prefers-reduced-motion: reduce)": "0ms",
-		},
-		animationIterationCount: {
-			default: "infinite",
-			"@media (prefers-reduced-motion: reduce)": 1,
-		},
-		animationName: rotate,
-		animationTimingFunction: "linear",
 	},
 });
 
@@ -396,6 +387,15 @@ const anchoredParts = stylex.create({
 		letterSpacing: tokens["--letter-spacing-2"],
 		lineHeight: tokens["--line-height-2"],
 		whiteSpace: "nowrap",
+	},
+	generatedLoader: {
+		fontSize: "18px",
+	},
+	generatedTooltipLoader: {
+		fontSize: "1em",
+	},
+	generatedPillLoader: {
+		fontSize: "16px",
 	},
 });
 

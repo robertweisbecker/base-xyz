@@ -73,7 +73,7 @@ The block collection includes:
 
 - `ConfirmationDialog` for non-alert confirmation flows
 - `AgentActionApproval` for reviewing and approving an agent's external action
-- `ToolActivityTimeline` for queued, running, completed, and failed tool work
+- `WorkflowProgress` for queued, running, completed, and failed workflow steps
 - `PromptComposer` for keyboard-aware AI prompt submission and cancellation
 - `StreamingResponse` for generating, completed, stopped, and failed responses
 - `AsyncJobProgress` for determinate or indeterminate background work

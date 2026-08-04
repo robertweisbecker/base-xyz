@@ -97,8 +97,8 @@ const contentParts = stylex.create({
 });
 
 const slotSizes = stylex.create({
-	xs: { fontSize: "0.875rem" },
-	sm: { fontSize: "1rem" },
+	xs: { fontSize: "0.75rem" },
+	sm: { fontSize: "0.875rem" },
 	md: { fontSize: "1rem" },
 	lg: { fontSize: "1rem" },
 });

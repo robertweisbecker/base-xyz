@@ -15,6 +15,7 @@ export {
 	IconButton,
 	type IconButtonProps,
 } from "./button/button";
+export * as Breadcrumbs from "./breadcrumbs/breadcrumbs";
 export {
 	Callout,
 	type CalloutHue,
@@ -24,6 +25,17 @@ export {
 } from "./callout/callout";
 export { Code, type CodeProps } from "./code/code";
 export { CodeBlock, type CodeBlockProps } from "./code-block/code-block";
+export * as CommandPalette from "./command-palette/command-palette";
+export {
+	DataTable,
+	type DataTableColumn,
+	type DataTableColumnDef,
+	type DataTableFilter,
+	type DataTableFilterOption,
+	type DataTableProps,
+	type DataTableRow,
+	type DataTableRowAction,
+} from "./data-table/data-table";
 export {
 	EmptyState,
 	type EmptyStateHeadingLevel,
@@ -95,7 +107,7 @@ export {
 } from "./checkbox/checkbox";
 export * as Dialog from "./dialog/dialog";
 export * as Drawer from "./drawer/drawer";
-export { Link, type LinkProps } from "./link/link";
+export { Link, type LinkProps, type LinkVariant } from "./link/link";
 export * as LinkPreview from "./link-preview/link-preview";
 export { Loader, type LoaderProps } from "./loader/loader";
 export * as Menu from "./menu/menu";

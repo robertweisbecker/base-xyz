@@ -9,8 +9,7 @@ import {
 	modalViewportStyles,
 } from "@/components/dialog/dialog.stylex";
 import { tokens } from "@/theme/tokens.stylex";
-import { XIcon } from "@phosphor-icons/react";
-import { IconButton } from "../button";
+import { CloseButton as CloseButtonControl } from "../button/close-button";
 
 type StyledProps<T> = Omit<T, "className" | "style"> & {
 	className?: string;
@@ -83,6 +82,7 @@ export function Popup({
 	const { className: sxClassName, style: sxStyle } = stylex.props(
 		modalPopupStyles,
 		dialogParts.popup,
+		showClose && dialogParts.popupWithClose,
 		dialogScrollBehavior[scrollBehavior],
 		style,
 	);
@@ -176,15 +176,8 @@ export function CloseButton({
 			aria-label={ariaLabel}
 			className={className}
 			nativeButton
-			render={
-				<IconButton
-					icon={<XIcon aria-hidden weight="bold" />}
-					label={ariaLabel}
-					variant="neutral"
-					shape="circle"
-					style={[dialogParts.closeButton, style]}
-				/>
-			}
+			render={<CloseButtonControl label={ariaLabel} />}
+			style={[dialogParts.closeButton, style]}
 			{...props}
 		/>
 	);
@@ -195,9 +188,14 @@ export const Trigger = BaseDialog.Trigger;
 
 const dialogParts = stylex.create({
 	popup: {
+		"--_dialog-header-padding-inline-end": tokens["--space-6"],
 		maxWidth: "440px",
 	},
+	popupWithClose: {
+		"--_dialog-header-padding-inline-end": `calc(${tokens["--space-4"]} + ${tokens["--size-control-xs"]} + ${tokens["--space-2"]})`,
+	},
 	closeButton: {
+		flexShrink: 0,
 		position: "absolute",
 		zIndex: 1,
 		right: tokens["--space-4"],
@@ -214,6 +212,7 @@ const dialogParts = stylex.create({
 		display: "flex",
 		flexDirection: "column",
 		paddingBlockStart: tokens["--space-6"],
+		paddingInlineEnd: "var(--_dialog-header-padding-inline-end)",
 	},
 	body: {
 		padding: tokens["--space-6"],

@@ -4,6 +4,7 @@ import * as Blocks from "./blocks";
 import { BlueprintIcon } from "@phosphor-icons/react/dist/csr/Blueprint";
 import { CopyIcon } from "@phosphor-icons/react/dist/csr/Copy";
 import { FolderOpenIcon } from "@phosphor-icons/react/dist/csr/FolderOpen";
+import { GithubLogoIcon } from "@phosphor-icons/react/dist/csr/GithubLogo";
 import { InfoIcon } from "@phosphor-icons/react/dist/csr/Info";
 import { MagnifyingGlassIcon } from "@phosphor-icons/react/dist/csr/MagnifyingGlass";
 import { StairsIcon } from "@phosphor-icons/react/dist/csr/Stairs";
@@ -15,6 +16,7 @@ import {
 	AlertDialog,
 	Avatar,
 	Badge,
+	Breadcrumbs,
 	Button,
 	Callout,
 	Card,
@@ -29,6 +31,9 @@ import {
 	Collapsible,
 	ComboboxField,
 	ComboboxMultiple,
+	CommandPalette,
+	DataTable,
+	type DataTableColumnDef,
 	Dialog,
 	Drawer,
 	EmptyState,
@@ -87,6 +92,20 @@ type GalleryCell = {
 };
 
 const componentNames = ["React", "Vue", "Svelte", "Solid"];
+type GalleryDeployment = {
+	status: "Ready" | "Failed";
+	url: string;
+	updated: string;
+};
+const galleryDeployments: GalleryDeployment[] = [
+	{ status: "Ready", url: "app.example.com", updated: "2m ago" },
+	{ status: "Failed", url: "preview.example.com", updated: "18m ago" },
+];
+const galleryDeploymentColumns: Array<DataTableColumnDef<GalleryDeployment>> = [
+	{ accessorKey: "url", header: "URL" },
+	{ accessorKey: "status", header: "Status" },
+	{ accessorKey: "updated", header: "Updated" },
+];
 const themeIconSize = 18;
 const themeModeStorageKey = "base-stylex-theme";
 
@@ -131,6 +150,18 @@ function getComponentCells(): GalleryCell[] {
 						Elevated
 					</Badge>
 				</div>
+			),
+		},
+		{
+			title: "Breadcrumbs",
+			content: (
+				<Breadcrumbs.Root size="sm">
+					<Breadcrumbs.Link href="#">Home</Breadcrumbs.Link>
+					<Breadcrumbs.Separator />
+					<Breadcrumbs.Link href="#">Docs</Breadcrumbs.Link>
+					<Breadcrumbs.Separator />
+					<Breadcrumbs.Current>Components</Breadcrumbs.Current>
+				</Breadcrumbs.Root>
 			),
 		},
 		{
@@ -227,6 +258,38 @@ function getComponentCells(): GalleryCell[] {
 					items={componentNames}
 					defaultValue={["React", "Solid"]}
 					placeholder="Choose libraries"
+				/>
+			),
+		},
+		{
+			title: "CommandPalette",
+			content: (
+				<CommandPalette.Root
+					inline
+					items={["Create project", "Search docs", "Open settings"]}
+					style={styles.commandPaletteSample}>
+					<CommandPalette.Input placeholder="Search commands..." />
+					<CommandPalette.List>
+						{["Create project", "Search docs", "Open settings"].map((item) => (
+							<CommandPalette.Item key={item} value={item}>
+								{item}
+							</CommandPalette.Item>
+						))}
+						<CommandPalette.Empty>No commands found.</CommandPalette.Empty>
+					</CommandPalette.List>
+				</CommandPalette.Root>
+			),
+		},
+		{
+			title: "DataTable",
+			content: (
+				<DataTable
+					columns={galleryDeploymentColumns}
+					data={galleryDeployments}
+					filterColumnId="url"
+					filterPlaceholder="Filter"
+					rowSelection={false}
+					style={styles.dataTableSample}
 				/>
 			),
 		},
@@ -722,6 +785,30 @@ function getBlockCells(): GalleryCell[] {
 			),
 		},
 		{
+			title: "PageHeader",
+			content: (
+				<Blocks.PageHeader
+					title="Component library"
+					description="Primitives, blocks, and verification stories."
+					headingLevel={2}
+					startSlot={<Avatar icon={<GithubLogoIcon aria-hidden weight="fill" />} name="GitHub" size={8} />}
+					breadcrumbs={
+						<Breadcrumbs.Root size="sm">
+							<Breadcrumbs.Link href="#">Docs</Breadcrumbs.Link>
+							<Breadcrumbs.Separator />
+							<Breadcrumbs.Current>Components</Breadcrumbs.Current>
+						</Breadcrumbs.Root>
+					}
+					style={styles.blockWide}
+					actions={
+						<Button size="sm" variant="neutral">
+							New
+						</Button>
+					}
+				/>
+			),
+		},
+		{
 			title: "PasswordField",
 			content: (
 				<Blocks.PasswordField.Root defaultValue="correct-horse-2" style={styles.blockField}>
@@ -780,38 +867,38 @@ function getBlockCells(): GalleryCell[] {
 			),
 		},
 		{
-			title: "ToolActivityTimeline",
+			title: "WorkflowProgress",
 			content: (
-				<Blocks.ToolActivityTimeline.Root>
-					<Blocks.ToolActivityTimeline.Item status="complete">
-						<Blocks.ToolActivityTimeline.Marker />
-						<Blocks.ToolActivityTimeline.Content>
-							<Blocks.ToolActivityTimeline.Header>
-								<Blocks.ToolActivityTimeline.Title>Read exports</Blocks.ToolActivityTimeline.Title>
-								<Blocks.ToolActivityTimeline.Description>
+				<Blocks.WorkflowProgress.Root>
+					<Blocks.WorkflowProgress.Item status="complete">
+						<Blocks.WorkflowProgress.Marker />
+						<Blocks.WorkflowProgress.Content>
+							<Blocks.WorkflowProgress.Header>
+								<Blocks.WorkflowProgress.Title>Read exports</Blocks.WorkflowProgress.Title>
+								<Blocks.WorkflowProgress.Description>
 									Mapped components and blocks.
-								</Blocks.ToolActivityTimeline.Description>
-								<Blocks.ToolActivityTimeline.Metadata>
-									<Blocks.ToolActivityTimeline.Status />
-								</Blocks.ToolActivityTimeline.Metadata>
-							</Blocks.ToolActivityTimeline.Header>
-						</Blocks.ToolActivityTimeline.Content>
-					</Blocks.ToolActivityTimeline.Item>
-					<Blocks.ToolActivityTimeline.Item status="running">
-						<Blocks.ToolActivityTimeline.Marker />
-						<Blocks.ToolActivityTimeline.Content>
-							<Blocks.ToolActivityTimeline.Header>
-								<Blocks.ToolActivityTimeline.Title>Verify layout</Blocks.ToolActivityTimeline.Title>
-								<Blocks.ToolActivityTimeline.Description>
+								</Blocks.WorkflowProgress.Description>
+								<Blocks.WorkflowProgress.Metadata>
+									<Blocks.WorkflowProgress.Status />
+								</Blocks.WorkflowProgress.Metadata>
+							</Blocks.WorkflowProgress.Header>
+						</Blocks.WorkflowProgress.Content>
+					</Blocks.WorkflowProgress.Item>
+					<Blocks.WorkflowProgress.Item status="running">
+						<Blocks.WorkflowProgress.Marker />
+						<Blocks.WorkflowProgress.Content>
+							<Blocks.WorkflowProgress.Header>
+								<Blocks.WorkflowProgress.Title>Verify layout</Blocks.WorkflowProgress.Title>
+								<Blocks.WorkflowProgress.Description>
 									Check desktop and mobile grids.
-								</Blocks.ToolActivityTimeline.Description>
-								<Blocks.ToolActivityTimeline.Metadata>
-									<Blocks.ToolActivityTimeline.Status />
-								</Blocks.ToolActivityTimeline.Metadata>
-							</Blocks.ToolActivityTimeline.Header>
-						</Blocks.ToolActivityTimeline.Content>
-					</Blocks.ToolActivityTimeline.Item>
-				</Blocks.ToolActivityTimeline.Root>
+								</Blocks.WorkflowProgress.Description>
+								<Blocks.WorkflowProgress.Metadata>
+									<Blocks.WorkflowProgress.Status />
+								</Blocks.WorkflowProgress.Metadata>
+							</Blocks.WorkflowProgress.Header>
+						</Blocks.WorkflowProgress.Content>
+					</Blocks.WorkflowProgress.Item>
+				</Blocks.WorkflowProgress.Root>
 			),
 		},
 	];
@@ -1180,6 +1267,12 @@ const styles = stylex.create({
 	},
 	codeSample: {
 		width: "min(100%, 210px)",
+	},
+	commandPaletteSample: {
+		width: "min(100%, 24rem)",
+	},
+	dataTableSample: {
+		width: "min(100%, 24rem)",
 	},
 	inputGroupSample: {
 		width: "min(100%, 240px)",

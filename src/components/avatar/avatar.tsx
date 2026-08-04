@@ -1,5 +1,5 @@
 import { Avatar as BaseAvatar } from "@base-ui/react/avatar";
-import { UserCircleIcon } from "@phosphor-icons/react";
+import { LegoSmileyIcon } from "@phosphor-icons/react";
 import * as stylex from "@stylexjs/stylex";
 import type { StyleXStyles } from "@stylexjs/stylex";
 import type { ReactNode } from "react";
@@ -66,7 +66,11 @@ export function Avatar({
 }: AvatarProps) {
 	const normalizedName = normalizeName(name);
 	const resolvedInitials = normalizeInitials(initials) || deriveInitials(normalizedName);
-	const fallback = icon ?? (resolvedInitials || <UserCircleIcon aria-hidden weight="fill" size="100%" />);
+	const fallback =
+		icon ??
+		(resolvedInitials || (
+			<LegoSmileyIcon aria-hidden weight="duotone" size="100%" style={{ transform: "translateY(24%)" }} />
+		));
 	const hasName = normalizedName.length > 0;
 	const sx = stylex.props(
 		avatarParts.root,
@@ -139,8 +143,9 @@ const avatarParts = stylex.create({
 		display: "inline-flex",
 		justifyContent: "center",
 		lineHeight: 0,
-		height: "1em",
-		width: "1em",
+		fontSize: "1.5em",
+		// height: "2em",
+		// width: "2em",
 	},
 	image: {
 		inset: 0,
@@ -152,7 +157,7 @@ const avatarParts = stylex.create({
 	root: {
 		overflow: "hidden",
 		alignItems: "center",
-		backgroundColor: tokens["--color-gray-a1"],
+		backgroundColor: tokens["--color-gray-a3"],
 		boxSizing: "border-box",
 		color: tokens["--fg-muted"],
 		display: "inline-flex",
@@ -161,18 +166,15 @@ const avatarParts = stylex.create({
 		isolation: "isolate",
 		justifyContent: "center",
 		outlineColor: {
-			default: null,
-			// eslint-disable-next-line @stylexjs/valid-styles -- the compiler supports nested pseudo-class conditions; the lint rule is stricter than the compiler.
-			":is(button)": {
-				":hover": tokens["--border-input"],
-			},
+			default: tokens["--border-input"],
+			// // eslint-disable-next-line @stylexjs/valid-styles -- the compiler supports nested pseudo-class conditions; the lint rule is stricter than the compiler.
+			// ":is(button)": {
+			// 	":hover": tokens["--border-input"],
+			// },
 		},
-		outlineStyle: {
-			default: "solid",
-		},
-		outlineWidth: {
-			default: "1px",
-		},
+		outlineOffset: "-1px",
+		outlineStyle: "solid",
+		outlineWidth: "1px",
 		position: "relative",
 		userSelect: "none",
 		verticalAlign: "middle",

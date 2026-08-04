@@ -1,0 +1,21 @@
+import { DocsPage, Markdown, Meta, Source } from "@storybook/addon-docs/blocks";
+import * as Stories from "./page-header.stories";
+
+<Meta of={Stories} />
+
+<DocsPage />
+
+<Markdown>{`
+| Prop | Description |
+| --- | --- |
+| \`title\` | String heading rendered at the requested \`headingLevel\`. |
+| \`breadcrumbs\` | Breadcrumb navigation rendered above the page title. |
+| \`description\` | Supporting copy below the title. |
+| \`startSlot\` | Visual content rendered inline before the title. |
+| \`endSlot\` | Visual content aligned after the title area. |
+| \`metadata\` | Compact metadata shown beside the title. |
+| \`actions\` | Caller-composed controls aligned to the end of the header. |
+| \`navigation\` | Optional navigation row below the title and actions. |
+`}</Markdown>
+
+<Source code={'import { PageHeader } from "@/blocks";'} language="tsx" />

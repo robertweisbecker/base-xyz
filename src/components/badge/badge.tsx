@@ -143,7 +143,7 @@ const hueColors = stylex.create({
 		color: tokens["--fg-success-contrast"],
 	},
 	neutralSubtle: {
-		backgroundColor: tokens["--surface-subtle"],
+		backgroundColor: tokens["--surface-subtle-active"],
 		color: tokens["--fg-muted"],
 	},
 	neutralElevated: {

@@ -8,10 +8,10 @@ import * as Collapsible from "@/components/collapsible/collapsible";
 import { Separator } from "@/components/separator/separator";
 import { tokens } from "@/theme/tokens.stylex";
 
-import * as Timeline from "./tool-activity-timeline";
+import * as Timeline from "./workflow-progress";
 
 const meta = {
-	title: "Blocks/Tool activity timeline",
+	title: "Blocks/Workflow progress",
 	component: Timeline.Root,
 	parameters: {
 		controls: { disable: true },
@@ -47,7 +47,7 @@ function Activity({
 	startSlot,
 	details,
 }: {
-	status: Timeline.ToolActivityStatus;
+	status: Timeline.WorkflowProgressStatus;
 	title: string;
 	description?: string;
 	endSlot?: ReactNode;
@@ -114,7 +114,7 @@ export const Examples: Story = {
 						title="Built Storybook"
 						description="The build stopped while compiling a story."
 						meta="12s"
-						details={"TypeError: Cannot read properties of undefined\nat ToolActivityTimeline.stories.tsx:42"}
+						details={"TypeError: Cannot read properties of undefined\nat WorkflowProgress.stories.tsx:42"}
 					/>
 				</Timeline.Root>
 			</section>

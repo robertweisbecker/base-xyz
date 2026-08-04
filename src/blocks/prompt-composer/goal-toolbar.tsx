@@ -19,9 +19,10 @@ import { tokens } from "@/theme/tokens.stylex";
 type GoalToolbarProps = {
 	active: boolean;
 	description: string;
+	onActiveChange?: (active: boolean) => void;
 };
 
-export function GoalToolbar({ active, description }: GoalToolbarProps) {
+export function GoalToolbar({ active, description, onActiveChange }: GoalToolbarProps) {
 	const [currentActive, setCurrentActive] = useState(active);
 	const [currentDescription, setCurrentDescription] = useState(description);
 	const [draftDescription, setDraftDescription] = useState(description);
@@ -89,7 +90,13 @@ export function GoalToolbar({ active, description }: GoalToolbarProps) {
 								}
 								label={currentActive ? "Pause goal" : "Resume goal"}
 								nativeButton
-								onClick={() => setCurrentActive((isActive) => !isActive)}
+								onClick={() =>
+									setCurrentActive((isActive) => {
+										const nextActive = !isActive;
+										onActiveChange?.(nextActive);
+										return nextActive;
+									})
+								}
 								render={<Toolbar.Button />}
 								variant="ghost"
 							/>

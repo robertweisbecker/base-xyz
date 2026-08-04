@@ -15,29 +15,29 @@ type StyledProps<T> = Omit<T, "style"> & {
 	style?: StyleXStyles;
 };
 
-export type ToolActivityStatus = "queued" | "running" | "complete" | "approval" | "error";
+export type WorkflowProgressStatus = "queued" | "running" | "complete" | "approval" | "error";
 
-const ToolActivityItemContext = createContext<ToolActivityStatus | null>(null);
+const WorkflowProgressItemContext = createContext<WorkflowProgressStatus | null>(null);
 
-export type ToolActivityTimelineRootProps = StyledProps<ComponentProps<"ol">>;
-export type ToolActivityTimelineItemProps = StyledProps<ComponentProps<"li">> & {
-	status: ToolActivityStatus;
+export type WorkflowProgressRootProps = StyledProps<ComponentProps<"ol">>;
+export type WorkflowProgressItemProps = StyledProps<ComponentProps<"li">> & {
+	status: WorkflowProgressStatus;
 };
-export type ToolActivityTimelineMarkerProps = StyledProps<ComponentProps<"div">>;
-export type ToolActivityTimelineContentProps = StyledProps<ComponentProps<"div">>;
-export type ToolActivityTimelineHeaderProps = StyledProps<ComponentProps<"div">>;
-export type ToolActivityTimelineTitleProps = StyledProps<ComponentProps<"div">>;
-export type ToolActivityTimelineDescriptionProps = StyledProps<ComponentProps<"div">>;
-export type ToolActivityTimelineMetadataProps = StyledProps<ComponentProps<"div">>;
-export type ToolActivityTimelineMetaProps = StyledProps<ComponentProps<"span">>;
-export type ToolActivityTimelineStatusProps = Omit<BadgeProps, "children" | "endSlot" | "label" | "startSlot"> & {
+export type WorkflowProgressMarkerProps = StyledProps<ComponentProps<"div">>;
+export type WorkflowProgressContentProps = StyledProps<ComponentProps<"div">>;
+export type WorkflowProgressHeaderProps = StyledProps<ComponentProps<"div">>;
+export type WorkflowProgressTitleProps = StyledProps<ComponentProps<"div">>;
+export type WorkflowProgressDescriptionProps = StyledProps<ComponentProps<"div">>;
+export type WorkflowProgressMetadataProps = StyledProps<ComponentProps<"div">>;
+export type WorkflowProgressMetaProps = StyledProps<ComponentProps<"span">>;
+export type WorkflowProgressStatusProps = Omit<BadgeProps, "children" | "endSlot" | "label" | "startSlot"> & {
 	children?: ReactNode;
 	endSlot?: ReactNode;
 	icon?: ReactNode;
 	startSlot?: ReactNode;
 };
 
-const statusPresentation: Record<ToolActivityStatus, { label: string; hue: BadgeHue }> = {
+const statusPresentation: Record<WorkflowProgressStatus, { label: string; hue: BadgeHue }> = {
 	queued: { label: "Queued", hue: "neutral" },
 	running: { label: "Running", hue: "accent" },
 	complete: { label: "Complete", hue: "neutral" },
@@ -46,26 +46,26 @@ const statusPresentation: Record<ToolActivityStatus, { label: string; hue: Badge
 };
 
 export function Root({
-	"aria-label": ariaLabel = "Agent activity",
+	"aria-label": ariaLabel = "Workflow progress",
 	className,
 	style,
 	...props
-}: ToolActivityTimelineRootProps) {
+}: WorkflowProgressRootProps) {
 	const sx = stylex.props(parts.timeline, style);
 	return <ol aria-label={ariaLabel} className={joinClassNames(sx.className, className)} style={sx.style} {...props} />;
 }
 
-export function Item({ status, className, style, ...props }: ToolActivityTimelineItemProps) {
+export function Item({ status, className, style, ...props }: WorkflowProgressItemProps) {
 	const sx = stylex.props(parts.item, style);
 	return (
-		<ToolActivityItemContext.Provider value={status}>
+		<WorkflowProgressItemContext.Provider value={status}>
 			<li className={joinClassNames(sx.className, className)} style={sx.style} {...props} />
-		</ToolActivityItemContext.Provider>
+		</WorkflowProgressItemContext.Provider>
 	);
 }
 
-export function Marker({ className, style, ...props }: ToolActivityTimelineMarkerProps) {
-	const status = useToolActivityStatus("Marker");
+export function Marker({ className, style, ...props }: WorkflowProgressMarkerProps) {
+	const status = useWorkflowProgressStatus("Marker");
 	const sx = stylex.props(parts.marker, markerStatus[status], style);
 	return (
 		<div aria-hidden className={joinClassNames(sx.className, className)} style={sx.style} {...props}>
@@ -74,32 +74,32 @@ export function Marker({ className, style, ...props }: ToolActivityTimelineMarke
 	);
 }
 
-export function Content({ className, style, ...props }: ToolActivityTimelineContentProps) {
+export function Content({ className, style, ...props }: WorkflowProgressContentProps) {
 	const sx = stylex.props(parts.content, style);
 	return <div className={joinClassNames(sx.className, className)} style={sx.style} {...props} />;
 }
 
-export function Header({ className, style, ...props }: ToolActivityTimelineHeaderProps) {
+export function Header({ className, style, ...props }: WorkflowProgressHeaderProps) {
 	const sx = stylex.props(parts.header, style);
 	return <div className={joinClassNames(sx.className, className)} style={sx.style} {...props} />;
 }
 
-export function Title({ className, style, ...props }: ToolActivityTimelineTitleProps) {
+export function Title({ className, style, ...props }: WorkflowProgressTitleProps) {
 	const sx = stylex.props(textStyles.body, textWeightStyles.semibold, parts.title, style);
 	return <div className={joinClassNames(sx.className, className)} style={sx.style} {...props} />;
 }
 
-export function Description({ className, style, ...props }: ToolActivityTimelineDescriptionProps) {
+export function Description({ className, style, ...props }: WorkflowProgressDescriptionProps) {
 	const sx = stylex.props(textStyles.body, parts.description, style);
 	return <div className={joinClassNames(sx.className, className)} style={sx.style} {...props} />;
 }
 
-export function Metadata({ className, style, ...props }: ToolActivityTimelineMetadataProps) {
+export function Metadata({ className, style, ...props }: WorkflowProgressMetadataProps) {
 	const sx = stylex.props(parts.metadata, style);
 	return <div className={joinClassNames(sx.className, className)} style={sx.style} {...props} />;
 }
 
-export function Meta({ className, style, ...props }: ToolActivityTimelineMetaProps) {
+export function Meta({ className, style, ...props }: WorkflowProgressMetaProps) {
 	const sx = stylex.props(textStyles.supporting, parts.meta, style);
 	return <span className={joinClassNames(sx.className, className)} style={sx.style} {...props} />;
 }
@@ -112,8 +112,8 @@ export function Status({
 	size = "sm",
 	startSlot,
 	...props
-}: ToolActivityTimelineStatusProps) {
-	const status = useToolActivityStatus("Status");
+}: WorkflowProgressStatusProps) {
+	const status = useWorkflowProgressStatus("Status");
 	const presentation = statusPresentation[status];
 	return (
 		<Badge endSlot={endSlot} hue={hue ?? presentation.hue} size={size} startSlot={startSlot ?? icon} {...props}>
@@ -122,15 +122,15 @@ export function Status({
 	);
 }
 
-function useToolActivityStatus(part: string) {
-	const status = useContext(ToolActivityItemContext);
+function useWorkflowProgressStatus(part: string) {
+	const status = useContext(WorkflowProgressItemContext);
 	if (!status) {
-		throw new Error(`ToolActivityTimeline.${part} must be used inside ToolActivityTimeline.Item.`);
+		throw new Error(`WorkflowProgress.${part} must be used inside WorkflowProgress.Item.`);
 	}
 	return status;
 }
 
-function renderStatusIcon(status: ToolActivityStatus) {
+function renderStatusIcon(status: WorkflowProgressStatus) {
 	switch (status) {
 		case "queued":
 			return <CircleIcon aria-hidden weight="bold" />;

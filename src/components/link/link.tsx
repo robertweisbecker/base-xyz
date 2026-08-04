@@ -5,15 +5,27 @@ import { type ComponentProps } from "react";
 import { tokens } from "@/theme/tokens.stylex";
 import { focusRing } from "@/styles/recipes/focus";
 
+export type LinkVariant = "accent" | "neutral";
 
 export type LinkProps = Omit<ComponentProps<"a">, "style"> & {
 	external?: boolean;
+	variant?: LinkVariant;
 	/** StyleX overrides, applied after the component's own styles. */
 	style?: StyleXStyles;
 };
 
-export function Link({ ref, children, className, external = false, rel, style, target, ...props }: LinkProps) {
-	const sx = stylex.props(linkStyles.root, focusRing.outset, style);
+export function Link({
+	ref,
+	children,
+	className,
+	external = false,
+	rel,
+	style,
+	target,
+	variant = "accent",
+	...props
+}: LinkProps) {
+	const sx = stylex.props(linkStyles.root, linkVariants[variant], focusRing.outset, style);
 
 	return (
 		<a
@@ -36,10 +48,6 @@ function mergeRel(rel: string | undefined, requiredRel: string) {
 const linkStyles = stylex.create({
 	root: {
 		alignItems: "center",
-		color: {
-			default: tokens["--fg-accent"],
-			":hover": tokens["--fg-accent-hover"],
-		},
 		columnGap: "0.125em",
 		display: "inline-flex",
 		textDecorationColor: {
@@ -52,5 +60,20 @@ const linkStyles = stylex.create({
 		transitionDuration: tokens["--motion-duration-quick"],
 		transitionProperty: "color, text-decoration-color",
 		transitionTimingFunction: tokens["--motion-ease-out"],
+	},
+});
+
+const linkVariants = stylex.create({
+	accent: {
+		color: {
+			default: tokens["--fg-accent"],
+			":hover": tokens["--fg-accent-hover"],
+		},
+	},
+	neutral: {
+		color: {
+			default: tokens["--fg-muted"],
+			":hover": tokens["--fg"],
+		},
 	},
 });

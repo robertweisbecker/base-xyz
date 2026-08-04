@@ -5,7 +5,6 @@ import { FloppyDiskIcon } from "@phosphor-icons/react/dist/csr/FloppyDisk";
 import { PaperPlaneTiltIcon } from "@phosphor-icons/react/dist/csr/PaperPlaneTilt";
 import { PencilSimpleIcon } from "@phosphor-icons/react/dist/csr/PencilSimple";
 import { PlugIcon } from "@phosphor-icons/react/dist/csr/Plug";
-import { SpinnerGapIcon } from "@phosphor-icons/react/dist/csr/SpinnerGap";
 import { WarningCircleIcon } from "@phosphor-icons/react/dist/csr/WarningCircle";
 import { XIcon } from "@phosphor-icons/react/dist/csr/X";
 import * as stylex from "@stylexjs/stylex";
@@ -14,6 +13,7 @@ import { useEffect, useRef, useState } from "react";
 import { tokens } from "@/theme/tokens.stylex";
 
 import { Button, IconButton } from "../button/button";
+import { Loader } from "../loader";
 import * as Tooltip from "../tooltip/tooltip";
 import * as Toast from "./index";
 
@@ -303,7 +303,7 @@ function PopoverAnchoredExample({ _side, _align }: Pick<StoryArgs, "_side" | "_a
 				onClick={submitForm}
 				startSlot={
 					isSubmitting ? (
-						<SpinnerGapIcon aria-hidden {...stylex.props(storyStyles.spinning)} />
+						<Loader aria-hidden />
 					) : (
 						<PaperPlaneTiltIcon aria-hidden />
 					)
@@ -505,12 +505,6 @@ function ToastList({ swipeDirection }: { swipeDirection: SwipeDirection }) {
 	));
 }
 
-const spin = stylex.keyframes({
-	to: {
-		transform: "rotate(360deg)",
-	},
-});
-
 const storyStyles = stylex.create({
 	controls: {
 		gap: "8px",
@@ -560,15 +554,6 @@ const storyStyles = stylex.create({
 		display: "flex",
 		flexWrap: "wrap",
 		justifyContent: "center",
-	},
-	spinning: {
-		animationDuration: {
-			default: "900ms",
-			"@media (prefers-reduced-motion: reduce)": "0ms",
-		},
-		animationIterationCount: "infinite",
-		animationName: spin,
-		animationTimingFunction: "linear",
 	},
 	changeCount: {
 		gap: tokens["--space-1"],
