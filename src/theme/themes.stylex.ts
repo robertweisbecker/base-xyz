@@ -17,6 +17,14 @@ const mpTheme = stylex.createTheme(tokens, {
 	"--color-gray-t2": "#626266",
 	"--color-gray-t3": "#1F1F24",
 
+	"--surface": "var(--color-white)",
+
+	"--color-gray-a1": "var(--color-black-a1)",
+	"--color-gray-a2": "var(--color-black-a2)",
+	"--color-gray-a3": "var(--color-black-a3)",
+	"--color-gray-a4": "var(--color-black-a4)",
+	"--color-gray-a5": "var(--color-black-a5)",
+
 	"--color-success-s1": "#f2f8f8",
 	"--color-success-s2": "#eaf6f4",
 	"--color-success-c1": "#cff4f0",
@@ -79,6 +87,8 @@ const mpTheme = stylex.createTheme(tokens, {
 	"--color-accent-t2": "oklch(31.3% 0.1288 285.7)",
 	"--icon-accent": "#7856ff",
 	"--font-family-sans": '"Apercu", sans-serif',
+	"--font-family-mono":
+		'"Apercu Mono", ui-monospace, SFMono-Regular, SF Mono, Menlo, Consolas, Liberation Mono, monospace',
 	"--shadow-primary": "0 0 0 transparent",
 	"--shadow-primary-pressed": "0 0 0 transparent",
 	"--font-weight-regular": "400",

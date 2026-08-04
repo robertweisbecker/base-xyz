@@ -16,7 +16,7 @@ import { tokens } from "@/theme/tokens.stylex";
 
 import { Button } from "@/components/button/button";
 import { ComboboxField, ComboboxMultiple, type ComboboxMultipleProps } from "@/components/combobox/combobox-field";
-import { CheckmarkIcon } from "@/components/selection-icons";
+import { Checkmark } from "@/components/selection-icons";
 import { Text } from "@/components/text/text";
 
 const frameworks = ["React", "Vue", "Svelte", "Solid", "Preact", "Qwik", "Angular"];
@@ -418,7 +418,7 @@ function PopupContent({ label }: { label: string }) {
 								value={item}
 								className={stylex.props(menuItemStyles.item, menuItemVariantStyles.default).className}>
 								<Combobox.ItemIndicator keepMounted className={stylex.props(menuItemStyles.indicator).className}>
-									<CheckmarkIcon />
+									<Checkmark />
 								</Combobox.ItemIndicator>
 								<span {...stylex.props(menuItemStyles.label)}>{item}</span>
 							</Combobox.Item>

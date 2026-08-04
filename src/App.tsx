@@ -76,7 +76,8 @@ import { breakpoints, zIndex } from "@/styles/constants.stylex";
 import { tokens } from "@/theme/tokens.stylex";
 
 import { textStyles } from "@/components/text/text.stylex";
-import { ThemeProvider, useTheme, type ResolvedThemeMode, type ThemeMode } from "./theme";
+import { parseModeFromSearchParams, parseThemeFromSearchParams, syncAppThemeUrl } from "./theme/app-theme-url";
+import { ThemeProvider, useTheme, type ResolvedThemeMode, type ThemeMode, type ThemeName } from "./theme";
 import {
 	ArrowRightIcon,
 	FileSearchIcon,
@@ -108,6 +109,12 @@ const galleryDeploymentColumns: Array<DataTableColumnDef<GalleryDeployment>> = [
 ];
 const themeIconSize = 18;
 const themeModeStorageKey = "base-stylex-theme";
+const themeBrandStorageKey = "base-stylex-theme-brand";
+
+const themeBrandItems: { label: string; value: ThemeName }[] = [
+	{ label: "Base", value: "default" },
+	{ label: "MP", value: "mp" },
+];
 
 function getComponentCells(): GalleryCell[] {
 	return [
@@ -270,13 +277,13 @@ function getComponentCells(): GalleryCell[] {
 					style={styles.commandPaletteSample}>
 					<CommandPalette.Input placeholder="Search commands..." />
 					<CommandPalette.List>
-						{["Create project", "Search docs", "Open settings"].map((item) => (
+						{(item: string) => (
 							<CommandPalette.Item key={item} value={item}>
 								{item}
 							</CommandPalette.Item>
-						))}
-						<CommandPalette.Empty>No commands found.</CommandPalette.Empty>
+						)}
 					</CommandPalette.List>
+					<CommandPalette.Empty />
 				</CommandPalette.Root>
 			),
 		},
@@ -472,7 +479,7 @@ function getComponentCells(): GalleryCell[] {
 		{
 			title: "Progress",
 			content: (
-				<Progress.Root value={62} aria-label="Build progress">
+				<Progress.Root value={null} aria-label="Build progress">
 					<Progress.Label>Build</Progress.Label>
 					<Progress.Value />
 					<Progress.Track>
@@ -875,9 +882,7 @@ function getBlockCells(): GalleryCell[] {
 						<Blocks.WorkflowProgress.Content>
 							<Blocks.WorkflowProgress.Header>
 								<Blocks.WorkflowProgress.Title>Read exports</Blocks.WorkflowProgress.Title>
-								<Blocks.WorkflowProgress.Description>
-									Mapped components and blocks.
-								</Blocks.WorkflowProgress.Description>
+								<Blocks.WorkflowProgress.Description>Mapped components and blocks.</Blocks.WorkflowProgress.Description>
 								<Blocks.WorkflowProgress.Metadata>
 									<Blocks.WorkflowProgress.Status />
 								</Blocks.WorkflowProgress.Metadata>
@@ -961,19 +966,42 @@ function ToastList() {
 
 function App() {
 	const [mode, setMode] = useState<ThemeMode>(getInitialThemeMode);
+	const [theme, setTheme] = useState<ThemeName>(getInitialThemeBrand);
 
 	useLayoutEffect(() => {
 		localStorage.setItem(themeModeStorageKey, mode);
 	}, [mode]);
 
+	useLayoutEffect(() => {
+		localStorage.setItem(themeBrandStorageKey, theme);
+	}, [theme]);
+
+	const handleModeChange = (nextMode: ThemeMode) => {
+		setMode(nextMode);
+		syncAppThemeUrl(theme, nextMode);
+	};
+
+	const handleThemeChange = (nextTheme: ThemeName) => {
+		setTheme(nextTheme);
+		syncAppThemeUrl(nextTheme, mode);
+	};
+
 	return (
-		<ThemeProvider mode={mode} render={<div id="top" />} style={styles.app}>
-			<AppContent onModeChange={setMode} />
+		<ThemeProvider mode={mode} theme={theme} render={<div id="top" />} style={styles.app}>
+			<AppContent onModeChange={handleModeChange} onThemeChange={handleThemeChange} theme={theme} />
 		</ThemeProvider>
 	);
 }
 
-function AppContent({ onModeChange }: { onModeChange: (mode: ThemeMode) => void }) {
+function AppContent({
+	onModeChange,
+	onThemeChange,
+	theme,
+}: {
+	onModeChange: (mode: ThemeMode) => void;
+	onThemeChange: (theme: ThemeName) => void;
+	theme: ThemeName;
+}) {
 	const { resolvedMode } = useTheme();
 	const nextMode: ResolvedThemeMode = resolvedMode === "light" ? "dark" : "light";
 
@@ -994,6 +1022,24 @@ function AppContent({ onModeChange }: { onModeChange: (mode: ThemeMode) => void 
 						blocks
 					</Link>
 					<Separator orientation="vertical" />
+					<Select.Root<ThemeName>
+						size="sm"
+						value={theme}
+						items={themeBrandItems}
+						onValueChange={(value) => {
+							if (value) onThemeChange(value);
+						}}>
+						<Select.Trigger aria-label="Theme" variant="inline" />
+						<Select.Popup>
+							<Select.List>
+								{themeBrandItems.map((item) => (
+									<Select.Item key={item.value} value={item.value}>
+										{item.label}
+									</Select.Item>
+								))}
+							</Select.List>
+						</Select.Popup>
+					</Select.Root>
 					<IconButton
 						icon={
 							<span {...stylex.props(styles.themeIcon)}>
@@ -1013,18 +1059,35 @@ function AppContent({ onModeChange }: { onModeChange: (mode: ThemeMode) => void 
 				</div>
 			</header>
 
-			<main>
-				<GallerySection title="Components" cells={getComponentCells()} variant="components" />
-				<GallerySection title="Blocks" cells={getBlockCells()} variant="blocks" />
-			</main>
+			<GalleryGrid />
 		</>
+	);
+}
+
+/** Specimen grids used by the demo app and the Storybook Gallery story. */
+export function GalleryGrid() {
+	return (
+		<main>
+			<GallerySection title="Components" cells={getComponentCells()} variant="components" />
+			<GallerySection title="Blocks" cells={getBlockCells()} variant="blocks" />
+		</main>
 	);
 }
 
 function getInitialThemeMode(): ThemeMode {
 	if (typeof window === "undefined") return "system";
+	const fromUrl = parseModeFromSearchParams(new URLSearchParams(window.location.search));
+	if (fromUrl !== undefined) return fromUrl;
 	const storedMode = localStorage.getItem(themeModeStorageKey);
 	return storedMode === "light" || storedMode === "dark" || storedMode === "system" ? storedMode : "system";
+}
+
+function getInitialThemeBrand(): ThemeName {
+	if (typeof window === "undefined") return "default";
+	const fromUrl = parseThemeFromSearchParams(new URLSearchParams(window.location.search));
+	if (fromUrl !== undefined) return fromUrl;
+	const storedTheme = localStorage.getItem(themeBrandStorageKey);
+	return storedTheme === "default" || storedTheme === "mp" ? storedTheme : "default";
 }
 
 function GallerySection({

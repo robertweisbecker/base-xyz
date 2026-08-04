@@ -1,0 +1,269 @@
+import type { Meta, StoryObj } from "@storybook/react-vite";
+import { CubeIcon } from "@phosphor-icons/react/dist/csr/Cube";
+import { GearIcon } from "@phosphor-icons/react/dist/csr/Gear";
+import { HouseIcon } from "@phosphor-icons/react/dist/csr/House";
+import { UsersIcon } from "@phosphor-icons/react/dist/csr/Users";
+import * as stylex from "@stylexjs/stylex";
+import { useState } from "react";
+import { Avatar } from "@/components/avatar/avatar";
+import * as NavList from "@/components/nav-list/nav-list";
+import { tokens } from "@/theme/tokens.stylex";
+import * as Sidebar from "./sidebar";
+
+type StoryArgs = {
+	collapseMode: Sidebar.SidebarCollapseMode;
+	defaultCollapsed: boolean;
+	side: Sidebar.SidebarSide;
+};
+
+const meta = {
+	title: "Components/Navigation/Sidebar",
+	args: {
+		collapseMode: "icon",
+		defaultCollapsed: false,
+		side: "start",
+	},
+	argTypes: {
+		collapseMode: { control: "select", options: ["icon", "offcanvas"] },
+		defaultCollapsed: { control: "boolean" },
+		side: { control: "select", options: ["start", "end"] },
+	},
+	parameters: {
+		docs: {
+			story: {
+				height: "520px",
+			},
+		},
+	},
+} satisfies Meta<StoryArgs>;
+
+export default meta;
+type Story = StoryObj<StoryArgs>;
+
+export const Playground: Story = {
+	render: ({ collapseMode, defaultCollapsed, side }) => (
+		<Sidebar.Root
+			key={`${collapseMode}-${defaultCollapsed}-${side}`}
+			collapseMode={collapseMode}
+			defaultCollapsed={defaultCollapsed}
+			side={side}>
+			<div {...stylex.props(storyParts.shell, side === "end" && storyParts.shellEnd)}>
+				<Sidebar.Panel>
+					<WorkspaceHeader />
+					<Sidebar.Content>
+						<NavList.Root aria-label="Primary">
+							<PrimaryNavigation />
+						</NavList.Root>
+					</Sidebar.Content>
+				</Sidebar.Panel>
+				<main {...stylex.props(storyParts.main)}>
+					<Sidebar.Trigger />
+					<p {...stylex.props(storyParts.copy)}>
+						Sidebar controls state only. The page owns layout and mobile composition.
+					</p>
+				</main>
+			</div>
+		</Sidebar.Root>
+	),
+};
+
+export const Modes: Story = {
+	parameters: { controls: { disable: true } },
+	render: () => (
+		<div {...stylex.props(storyParts.examples)}>
+			<ModeExample label="Expanded" collapseMode="icon" />
+			<ModeExample label="Icon rail" collapseMode="icon" defaultCollapsed />
+			<ModeExample label="Off-canvas" collapseMode="offcanvas" defaultCollapsed />
+		</div>
+	),
+};
+
+export const ChildPopovers: Story = {
+	name: "Child popovers",
+	parameters: { controls: { disable: true } },
+	render: () => (
+		<Sidebar.Root collapseMode="icon" defaultCollapsed>
+			<div {...stylex.props(storyParts.shell)}>
+				<Sidebar.Panel>
+					<WorkspaceHeader />
+					<Sidebar.Content>
+						<NavList.Root aria-label="Collapsed primary">
+							<PrimaryNavigation includeChildren />
+						</NavList.Root>
+					</Sidebar.Content>
+				</Sidebar.Panel>
+				<main {...stylex.props(storyParts.main)}>
+					<p {...stylex.props(storyParts.copy)}>
+						Top-level child-bearing rows in an icon rail require icons. Labels are exposed through tooltips or child
+						popovers.
+					</p>
+				</main>
+			</div>
+		</Sidebar.Root>
+	),
+};
+
+export const SideEnd: Story = {
+	name: "Side end",
+	parameters: { controls: { disable: true } },
+	render: () => (
+		<Sidebar.Root side="end" collapseMode="icon">
+			<div {...stylex.props(storyParts.shell, storyParts.shellEnd)}>
+				<Sidebar.Panel>
+					<WorkspaceHeader />
+					<Sidebar.Content>
+						<NavList.Root aria-label="Secondary">
+							<PrimaryNavigation />
+						</NavList.Root>
+					</Sidebar.Content>
+				</Sidebar.Panel>
+				<main {...stylex.props(storyParts.main)}>
+					<Sidebar.Trigger />
+				</main>
+			</div>
+		</Sidebar.Root>
+	),
+};
+
+export const ExternalTrigger: Story = {
+	name: "External trigger",
+	parameters: { controls: { disable: true } },
+	render: () => <ExternalTriggerExample />,
+};
+
+function ModeExample({
+	label,
+	collapseMode,
+	defaultCollapsed = false,
+}: {
+	label: string;
+	collapseMode: Sidebar.SidebarCollapseMode;
+	defaultCollapsed?: boolean;
+}) {
+	return (
+		<div {...stylex.props(storyParts.mode)}>
+			<p {...stylex.props(storyParts.label)}>{label}</p>
+			<Sidebar.Root collapseMode={collapseMode} defaultCollapsed={defaultCollapsed}>
+				<Sidebar.Panel>
+					<WorkspaceHeader />
+					<Sidebar.Content>
+						<NavList.Root aria-label={`${label} navigation`}>
+							<PrimaryNavigation includeChildren />
+						</NavList.Root>
+					</Sidebar.Content>
+				</Sidebar.Panel>
+			</Sidebar.Root>
+		</div>
+	);
+}
+
+function WorkspaceHeader() {
+	return (
+		<Sidebar.Header
+			startSlot={<Avatar aria-label="Acme workspace" initials="AC" shape="rounded" size={6} />}
+			endSlot={<Sidebar.Trigger />}>
+			<Sidebar.Title>Acme</Sidebar.Title>
+			<Sidebar.Description>Production</Sidebar.Description>
+		</Sidebar.Header>
+	);
+}
+
+function ExternalTriggerExample() {
+	const [collapsed, setCollapsed] = useState(false);
+
+	return (
+		<Sidebar.Root collapsed={collapsed} onCollapsedChange={setCollapsed}>
+			<div {...stylex.props(storyParts.shell)}>
+				<Sidebar.Panel>
+					<Sidebar.Content>
+						<NavList.Root aria-label="External trigger navigation">
+							<PrimaryNavigation />
+						</NavList.Root>
+					</Sidebar.Content>
+				</Sidebar.Panel>
+				<main {...stylex.props(storyParts.main)}>
+					<Sidebar.Trigger />
+					<p {...stylex.props(storyParts.copy)}>
+						This trigger lives outside the panel while sharing the same Sidebar state.
+					</p>
+				</main>
+			</div>
+		</Sidebar.Root>
+	);
+}
+
+function PrimaryNavigation({ includeChildren = false }: { includeChildren?: boolean }) {
+	return (
+		<NavList.Section label="Project" labelHidden>
+			<NavList.Item label="Overview" href="#overview" icon={<HouseIcon weight="duotone" />} current="page" />
+			<NavList.Item label="Members" href="#members" icon={<UsersIcon weight="duotone" />} />
+			{includeChildren ? (
+				<NavList.CollapsibleGroup>
+					<NavList.CollapsibleGroupTrigger label="Deploy" icon={<CubeIcon weight="duotone" />} />
+					<NavList.CollapsibleGroupPanel>
+						<NavList.Item label="Deployments" href="#deployments" />
+						<NavList.Item label="Workers" href="#workers" />
+					</NavList.CollapsibleGroupPanel>
+				</NavList.CollapsibleGroup>
+			) : null}
+			<NavList.Drilldown defaultValue="account">
+				<NavList.DrilldownPanel value="account" label="Account navigation">
+					<NavList.DrilldownTrigger to="settings" label="Settings" icon={<GearIcon weight="duotone" />} />
+				</NavList.DrilldownPanel>
+				<NavList.DrilldownPanel value="settings" label="Settings">
+					<NavList.DrilldownBack to="account" />
+					<NavList.Section label="Settings">
+						<NavList.Item label="Profile" href="#profile" />
+						<NavList.Item label="Billing" href="#billing" />
+					</NavList.Section>
+				</NavList.DrilldownPanel>
+			</NavList.Drilldown>
+		</NavList.Section>
+	);
+}
+
+const storyParts = stylex.create({
+	shell: {
+		borderRadius: tokens["--radius-lg"],
+		overflow: "hidden",
+		blockSize: "28rem",
+		display: "flex",
+		outlineColor: tokens["--border-input"],
+		outlineOffset: "-1px",
+		outlineStyle: "solid",
+		outlineWidth: tokens["--border-width"],
+	},
+	shellEnd: {
+		flexDirection: "row-reverse",
+	},
+	main: {
+		padding: tokens["--space-4"],
+		flex: "1",
+		gap: tokens["--space-3"],
+		display: "flex",
+		flexDirection: "column",
+		minInlineSize: 0,
+	},
+	examples: {
+		gap: tokens["--space-4"],
+		alignItems: "stretch",
+		display: "flex",
+	},
+	mode: {
+		overflow: "hidden",
+		blockSize: "24rem",
+		display: "flex",
+		flexDirection: "column",
+	},
+	label: {
+		margin: 0,
+		padding: tokens["--space-2"],
+		color: tokens["--fg-muted"],
+		fontSize: tokens["--font-size-1"],
+	},
+	copy: {
+		margin: 0,
+		color: tokens["--fg-muted"],
+		maxInlineSize: "28rem",
+	},
+});

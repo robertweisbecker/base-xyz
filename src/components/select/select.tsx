@@ -17,7 +17,7 @@ import { tokens } from "@/theme/tokens.stylex";
 
 import { menuItemSizeStyles, menuItemStyles, menuItemVariantStyles } from "../menu/menu-item.stylex";
 import type { MenuItemVariant } from "../menu/menu.types";
-import { CheckmarkIcon } from "../selection-icons";
+import { Checkmark } from "../selection-icons";
 
 const HOVER_WHEN_INACTIVE = ":hover:not([data-disabled]):not([data-popup-open]):not([data-pressed])";
 const SelectSizeContext = createContext<FieldSize>("md");
@@ -264,7 +264,7 @@ export function Item({ ref, children, className, style, variant = "primary", ...
 			style={sx.style}
 			{...props}>
 			<BaseSelect.ItemIndicator keepMounted className={stylex.props(menuItemStyles.indicator).className}>
-				<CheckmarkIcon width="1em" height="1em" />
+				<Checkmark width="1em" height="1em" />
 			</BaseSelect.ItemIndicator>
 			<BaseSelect.ItemText {...stylex.props(menuItemStyles.label, selectParts.itemText)}>
 				{children}

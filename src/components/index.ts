@@ -59,8 +59,10 @@ export {
 export * as Collapsible from "./collapsible/collapsible";
 export * as InputGroup from "./input-group/input-group";
 export * as Meter from "./meter/meter";
+export * as NavList from "./nav-list/nav-list";
 export * as Progress from "./progress/progress";
 export { Separator, type SeparatorProps, type SeparatorThemeProps } from "./separator/separator";
+export * as Sidebar from "./sidebar/sidebar";
 export * as Slider from "./slider/slider";
 export * as Tabs from "./tabs/tabs";
 export * as Toolbar from "./toolbar/toolbar";

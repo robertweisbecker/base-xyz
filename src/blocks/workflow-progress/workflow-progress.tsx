@@ -1,7 +1,7 @@
-import { CheckIcon } from "@phosphor-icons/react/dist/csr/Check";
-import { CircleIcon } from "@phosphor-icons/react/dist/csr/Circle";
+import { ListChecksIcon } from "@phosphor-icons/react/dist/csr/ListChecks";
+import { Circle } from "@/components/selection-icons";
 import { ClockIcon } from "@phosphor-icons/react/dist/csr/Clock";
-import { WarningIcon } from "@phosphor-icons/react/dist/csr/Warning";
+import { WarningDiamondIcon } from "@phosphor-icons/react/dist/csr/WarningDiamond";
 import * as stylex from "@stylexjs/stylex";
 import type { StyleXStyles } from "@stylexjs/stylex";
 import { textStyles, textWeightStyles } from "@/components/text/text.stylex";
@@ -40,8 +40,8 @@ export type WorkflowProgressStatusProps = Omit<BadgeProps, "children" | "endSlot
 const statusPresentation: Record<WorkflowProgressStatus, { label: string; hue: BadgeHue }> = {
 	queued: { label: "Queued", hue: "neutral" },
 	running: { label: "Running", hue: "accent" },
-	complete: { label: "Complete", hue: "neutral" },
-	approval: { label: "Needs approval", hue: "accent" },
+	complete: { label: "Complete", hue: "success" },
+	approval: { label: "Needs approval", hue: "warning" },
 	error: { label: "Failed", hue: "error" },
 };
 
@@ -133,15 +133,15 @@ function useWorkflowProgressStatus(part: string) {
 function renderStatusIcon(status: WorkflowProgressStatus) {
 	switch (status) {
 		case "queued":
-			return <CircleIcon aria-hidden weight="bold" />;
+			return <Circle aria-hidden />;
 		case "running":
 			return <Loader aria-hidden />;
 		case "complete":
-			return <CheckIcon aria-hidden weight="bold" />;
+			return <ListChecksIcon aria-hidden />;
 		case "approval":
-			return <ClockIcon aria-hidden weight="bold" />;
+			return <ClockIcon aria-hidden />;
 		case "error":
-			return <WarningIcon aria-hidden weight="fill" />;
+			return <WarningDiamondIcon aria-hidden weight="duotone" />;
 	}
 }
 
@@ -229,7 +229,7 @@ const parts = stylex.create({
 
 const markerStatus = stylex.create({
 	queued: { backgroundColor: tokens["--surface-subtle"], color: tokens["--fg-muted"] },
-	running: { backgroundColor: tokens["--bg-accent"], color: tokens["--bg-primary"] },
+	running: { backgroundColor: tokens["--bg-neutral"], color: tokens["--color-white"] },
 	complete: { backgroundColor: tokens["--surface-subtle"], color: tokens["--fg"] },
 	approval: { backgroundColor: tokens["--bg-accent"], color: tokens["--bg-primary"] },
 	error: { backgroundColor: tokens["--bg-error"], color: tokens["--bg-error-primary"] },

@@ -190,6 +190,8 @@ export const tokens = stylex.defineVars({
 	"--size-control-lg": "2.5rem",
 	"--size-indicator-sm": "1rem",
 	"--size-indicator-md": "1.125rem",
+	"--size-sidebar": "16rem",
+	"--size-sidebar-rail": "3.5rem",
 
 	"--border-width": "1px",
 

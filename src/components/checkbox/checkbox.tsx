@@ -12,7 +12,7 @@ import { textStyles } from "@/components/text/text.stylex";
 import { focusRing } from "@/styles/recipes/focus";
 import { pressable } from "@/styles/recipes/transitions";
 import { tokens } from "@/theme/tokens.stylex";
-import { CheckmarkIcon, IndeterminateIcon } from "../selection-icons";
+import { Checkmark, Minus } from "../selection-icons";
 
 export type CheckboxSize = "sm" | "md";
 
@@ -98,9 +98,9 @@ export function Checkbox({
 						render={(indicatorProps, state) => (
 							<span {...indicatorProps}>
 								{state.indeterminate ? (
-									<IndeterminateIcon width="100%" height="100%" strokeWidth={3} />
+									<Minus width="100%" height="100%" strokeWidth={3} />
 								) : (
-									<CheckmarkIcon width="100%" height="100%" strokeWidth={3} />
+									<Checkmark width="100%" height="100%" strokeWidth={3} />
 								)}
 							</span>
 						)}

@@ -106,16 +106,10 @@ export const Playground: Story = {
 export const Inline: Story = {
 	render: () => (
 		<div {...stylex.props(storyParts.inlineFrame)}>
-			<CommandPalette.Root
-				inline
-				items={commandGroups}
-				itemToStringValue={commandToStringValue}
-				filter={filterCommandGroups}>
+			<CommandPalette.Root inline items={commandGroups} itemToStringValue={commandToStringValue}>
 				<CommandPalette.Input placeholder="Search inline commands…" />
-				<CommandPalette.List>
-					<CommandResults />
-					<CommandPalette.Empty>No inline commands found.</CommandPalette.Empty>
-				</CommandPalette.List>
+				<CommandResults />
+				<CommandPalette.Empty />
 				<CommandPalette.Footer>
 					<span>Inline palette</span>
 					<span {...stylex.props(storyParts.footerHint)}>
@@ -141,13 +135,10 @@ function CommandPaletteExample({ shortcut = false }: { shortcut?: boolean }) {
 				shortcut={shortcut}
 				trigger={<CommandPalette.Trigger startSlot={<CommandIcon aria-hidden weight="bold" />} />}
 				items={commandGroups}
-				itemToStringValue={commandToStringValue}
-				filter={filterCommandGroups}>
+				itemToStringValue={commandToStringValue}>
 				<CommandPalette.Input placeholder="Search actions, settings, and docs…" />
-				<CommandPalette.List>
-					<CommandResults onSelect={handleSelect} />
-					<CommandPalette.Empty>No commands found.</CommandPalette.Empty>
-				</CommandPalette.List>
+				<CommandResults onSelect={handleSelect} />
+				<CommandPalette.Empty />
 				<CommandPalette.Footer>
 					<span {...stylex.props(storyParts.footerHint)}>
 						<CommandPalette.Shortcut>↑↓</CommandPalette.Shortcut>
@@ -168,8 +159,8 @@ function CommandPaletteExample({ shortcut = false }: { shortcut?: boolean }) {
 
 function CommandResults({ onSelect }: { onSelect?: (command: CommandAction) => void }) {
 	return (
-		<>
-			{commandGroups.map((group) => (
+		<CommandPalette.List>
+			{(group: CommandGroup) => (
 				<CommandPalette.Group key={group.id} items={group.items}>
 					<CommandPalette.GroupLabel>{group.label}</CommandPalette.GroupLabel>
 					<CommandPalette.Items>
@@ -187,25 +178,17 @@ function CommandResults({ onSelect }: { onSelect?: (command: CommandAction) => v
 						)}
 					</CommandPalette.Items>
 				</CommandPalette.Group>
-			))}
-		</>
+			)}
+		</CommandPalette.List>
 	);
 }
 
+/** Filters by command title (item name). Groups use their label. */
 function commandToStringValue(item: CommandAction | CommandGroup) {
 	if ("title" in item) {
-		return `${item.title} ${item.description} ${item.keywords}`;
+		return item.title;
 	}
 	return item.label;
-}
-
-function filterCommandGroups(item: CommandAction | CommandGroup, query: string) {
-	const normalizedQuery = query.trim().toLocaleLowerCase();
-	if (!normalizedQuery) {
-		return true;
-	}
-
-	return commandToStringValue(item).toLocaleLowerCase().includes(normalizedQuery);
 }
 
 const storyParts = stylex.create({

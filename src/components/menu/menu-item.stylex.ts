@@ -7,6 +7,7 @@ import type { MenuItemSize } from "./menu.types";
 export const menuItemVars = stylex.defineVars({
 	columns: `${tokens["--space-4"]} minmax(0, 1fr) auto`,
 	columnGap: tokens["--space-2"],
+	indicatorColor: "inherit",
 	minHeight: tokens["--size-control-md"],
 	paddingBlock: tokens["--space-1"],
 	paddingInlineEnd: tokens["--space-2"],
@@ -49,6 +50,7 @@ const menuItemParts = stylex.create({
 		minWidth: 0,
 	},
 	indicatorSizing: {
+		color: menuItemVars.indicatorColor,
 		gridColumn: "1",
 		alignItems: "center",
 		display: "inline-flex",
@@ -95,6 +97,7 @@ export const menuItemVariantStyles = stylex.create({
 			"[data-highlighted]": tokens["--fg"],
 			default: tokens["--fg"],
 		},
+		[menuItemVars.indicatorColor]: tokens["--fg-accent"],
 	},
 	primary: {
 		backgroundColor: {

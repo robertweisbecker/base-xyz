@@ -1,5 +1,6 @@
 import * as stylex from "@stylexjs/stylex";
 import { shimmerTextVars } from "./shimmer-text-vars.stylex";
+import { tokens } from "@/theme/tokens.stylex";
 
 const shimmerSweep = stylex.keyframes({
 	"0%": {
@@ -16,8 +17,8 @@ const shimmerSweep = stylex.keyframes({
 export const shimmerTextStyles = stylex.create({
 	effect: {
 		[shimmerTextVars.base]: "color-mix(in oklch, currentColor 54%, transparent)",
-		[shimmerTextVars.duration]: "2000ms",
-		[shimmerTextVars.highlight]: "currentColor",
+		[shimmerTextVars.duration]: "2500ms",
+		[shimmerTextVars.highlight]: `color-mix(in srgb, currentColor, ${tokens["--bg-inverse"]})`,
 		WebkitBackgroundClip: {
 			default: "text",
 			"@media (prefers-reduced-motion: reduce)": "initial",
@@ -26,7 +27,7 @@ export const shimmerTextStyles = stylex.create({
 			default: "transparent",
 			"@media (prefers-reduced-motion: reduce)": "currentColor",
 		},
-		backgroundPosition: "200% 0",
+		backgroundPosition: "150% 0",
 		animationDuration: shimmerTextVars.duration,
 		animationIterationCount: "infinite",
 		animationName: {

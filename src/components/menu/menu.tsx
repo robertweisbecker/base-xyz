@@ -10,7 +10,7 @@ import { tokens } from "@/theme/tokens.stylex";
 import { popupMotionStyles, popupPositionerStyles, popupViewportStyles } from "@/components/popover/popover.stylex";
 import { popupVars } from "@/components/popover/popover-vars.stylex";
 
-import { CheckmarkIcon } from "../selection-icons";
+import { Checkmark } from "../selection-icons";
 import { menuItemSizeStyles, menuItemStyles, menuItemVariantStyles } from "./menu-item.stylex";
 import type { MenuItemSize, MenuItemVariant } from "./menu.types";
 
@@ -166,7 +166,7 @@ export function CheckboxItem({ ref, children, className, style, ...props }: Styl
 			style={sxStyle}
 			{...props}>
 			<BaseMenu.CheckboxItemIndicator keepMounted {...stylex.props(menuItemStyles.indicator)}>
-				<CheckmarkIcon width="1em" height="1em" />
+				<Checkmark width="1em" height="1em" />
 			</BaseMenu.CheckboxItemIndicator>
 			{children}
 		</BaseMenu.CheckboxItem>

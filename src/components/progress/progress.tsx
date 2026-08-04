@@ -4,7 +4,6 @@ import type { StyleXStyles } from "@stylexjs/stylex";
 import { textStyles } from "@/components/text/text.stylex";
 import { tokens } from "@/theme/tokens.stylex";
 
-
 type StyledProps<T> = Omit<T, "className" | "style"> & {
 	className?: string;
 	/** StyleX overrides, applied after the component's own styles. */
@@ -91,7 +90,7 @@ const indeterminatePingPong = stylex.keyframes({
 	},
 });
 
-const indeterminatePingPongDuration = "2500ms";
+const indeterminatePingPongDuration = "2000ms";
 
 const progressParts = stylex.create({
 	root: {
@@ -145,7 +144,7 @@ const progressParts = stylex.create({
 		animationTimingFunction: "ease-in-out",
 		backgroundColor: tokens["--fill-track"],
 		backgroundImage: {
-			"[data-indeterminate]": `linear-gradient(90deg, transparent 0%, transparent 28%, ${tokens["--fill-track"]} 40%, ${tokens["--bg-primary"]} 48%, ${tokens["--bg-primary"]} 52%, ${tokens["--fill-track"]} 60%, transparent 72%, transparent 100%)`,
+			"[data-indeterminate]": `linear-gradient(90deg, transparent 0%, transparent 28%, ${tokens["--fill-track"]} 40%, ${tokens["--icon-accent"]} 48%, ${tokens["--icon-accent"]} 52%, ${tokens["--fill-track"]} 60%, transparent 72%, transparent 100%)`,
 			default: `linear-gradient(90deg, transparent 0%, transparent 100%)`,
 		},
 		backgroundRepeat: "no-repeat",
@@ -167,7 +166,7 @@ const progressParts = stylex.create({
 			default: tokens["--bg-primary"],
 		},
 		transitionDuration: {
-			default: tokens["--motion-duration-medium"],
+			default: tokens["--motion-duration-short"],
 			"@media (prefers-reduced-motion: reduce)": "0ms",
 		},
 		transitionProperty: "width, background-color",

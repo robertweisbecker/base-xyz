@@ -27,7 +27,7 @@
 	font-family: "Apercu";
 	font-style: normal;
 	font-weight: 700;
-	src: url("../assets/fonts/apercu-bold-pro.woff2") format("woff2");
+	src: url("../assets/fonts/apercu-pro-bold.woff2") format("woff2");
 }
 
 @font-face {
@@ -44,4 +44,36 @@
 	font-style: normal;
 	font-weight: 500;
 	src: url("../assets/fonts/apercu-pro-medium-alt.woff2") format("woff2");
+}
+
+@font-face {
+	font-display: swap;
+	font-family: "Apercu Mono";
+	font-style: normal;
+	font-weight: 300;
+	src: url("../assets/fonts/apercu-mono-pro-light.woff2") format("woff2");
+}
+
+@font-face {
+	font-display: swap;
+	font-family: "Apercu Mono";
+	font-style: normal;
+	font-weight: 400;
+	src: url("../assets/fonts/apercu-mono-pro-regular.woff2") format("woff2");
+}
+
+@font-face {
+	font-display: swap;
+	font-family: "Apercu Mono";
+	font-style: normal;
+	font-weight: 500;
+	src: url("../assets/fonts/apercu-mono-pro-medium.woff2") format("woff2");
+}
+
+@font-face {
+	font-display: swap;
+	font-family: "Apercu Mono";
+	font-style: normal;
+	font-weight: 700;
+	src: url("../assets/fonts/apercu-mono-pro-bold.woff2") format("woff2");
 }

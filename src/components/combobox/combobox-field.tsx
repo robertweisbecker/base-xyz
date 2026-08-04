@@ -17,7 +17,7 @@ import { tokens } from "@/theme/tokens.stylex";
 
 import { menuItemSizeStyles, menuItemStyles, menuItemVariantStyles } from "../menu/menu-item.stylex";
 import type { MenuItemVariant } from "../menu/menu.types";
-import { CheckmarkIcon } from "../selection-icons";
+import { Checkmark } from "../selection-icons";
 import { comboboxMarker } from "./combobox.stylex";
 import * as Tooltip from "@/components/tooltip/tooltip";
 
@@ -407,7 +407,7 @@ function ComboboxPopup({
 										</span>
 									) : (
 										<Combobox.ItemIndicator keepMounted className={stylex.props(menuItemStyles.indicator).className}>
-											<CheckmarkIcon width="1em" height="1em" />
+											<Checkmark width="1em" height="1em" />
 										</Combobox.ItemIndicator>
 									)}
 									<span {...stylex.props(menuItemStyles.label)}>{isCreatableItem ? `Create “${item}”` : item}</span>

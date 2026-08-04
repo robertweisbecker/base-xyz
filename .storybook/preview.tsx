@@ -6,6 +6,25 @@ import "./reduced-motion.css";
 import { ReducedMotionFrame } from "./reduced-motion-frame";
 import { ThemeProvider, type ThemeMode, type ThemeName } from "../src/theme";
 
+type StorybookAppearance = "system" | "light" | "dark" | "mp-light";
+
+function resolveAppearance(appearance: StorybookAppearance): { mode: ThemeMode; theme: ThemeName } {
+	switch (appearance) {
+		case "system":
+			return { mode: "system", theme: "default" };
+		case "light":
+			return { mode: "light", theme: "default" };
+		case "dark":
+			return { mode: "dark", theme: "default" };
+		case "mp-light":
+			return { mode: "light", theme: "mp" };
+		default: {
+			const _exhaustive: never = appearance;
+			return _exhaustive;
+		}
+	}
+}
+
 let focusAccessorGuarded = false;
 
 const guardStorybookFocusAccessor = () => {
@@ -38,9 +57,8 @@ const withStorybookFocusCompatibility: Decorator = (Story) => {
 };
 
 const withTheme: Decorator = (Story, context) => {
-	const theme: ThemeName = context.globals.theme === "mp" ? "mp" : "default";
-	const mode: ThemeMode =
-		context.globals.mode === "light" || context.globals.mode === "dark" ? context.globals.mode : "system";
+	const appearance = (context.globals.appearance ?? "system") as StorybookAppearance;
+	const { mode, theme } = resolveAppearance(appearance);
 	return (
 		<ThemeProvider mode={mode} theme={theme}>
 			<Story />
@@ -57,15 +75,15 @@ const withReducedMotion: Decorator = (Story, context) => (
 const preview: Preview = {
 	decorators: [withStorybookFocusCompatibility, withTheme, withReducedMotion],
 	globalTypes: {
-		mode: {
-			description: "Global color mode",
+		appearance: {
+			description: "Theme",
 			toolbar: {
-				dynamicTitle: false,
-				title: "Mode",
+				title: "Theme",
 				items: [
-					{ value: "system", title: "Auto", icon: "paintbrush" },
+					{ value: "system", title: "System", icon: "paintbrush" },
 					{ value: "light", title: "Light", icon: "sun" },
 					{ value: "dark", title: "Dark", icon: "moon" },
+					{ value: "mp-light", title: "mp-light", icon: "paintbrush" },
 				],
 			},
 		},
@@ -80,22 +98,10 @@ const preview: Preview = {
 				],
 			},
 		},
-		theme: {
-			description: "Global design theme",
-			toolbar: {
-				dynamicTitle: false,
-				title: "Theme",
-				items: [
-					{ value: "default", title: "Default", icon: "paintbrush" },
-					{ value: "mp", title: "MP", icon: "paintbrush" },
-				],
-			},
-		},
 	},
 	initialGlobals: {
-		mode: "system",
+		appearance: "system",
 		reducedMotion: "system",
-		theme: "default",
 	},
 	parameters: {
 		docs: {
@@ -117,7 +123,7 @@ const preview: Preview = {
 				includeNames: false,
 				locales: "en",
 				method: "alphabetical",
-				order: ["Components", "Blocks", "Experimental", "Design system"],
+				order: ["Gallery", "Components", "Blocks", "Experimental", "Design system"],
 			},
 		},
 	},

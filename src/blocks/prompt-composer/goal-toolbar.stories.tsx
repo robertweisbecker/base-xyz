@@ -1,10 +1,21 @@
+import { LinkSimpleIcon } from "@phosphor-icons/react/dist/csr/LinkSimple";
+import { PaperclipIcon } from "@phosphor-icons/react/dist/csr/Paperclip";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import * as stylex from "@stylexjs/stylex";
 import { useEffect, useRef, useState, type ComponentProps, type ReactNode, type RefObject } from "react";
+import * as Menu from "@/components/menu/menu";
 import { Loader } from "@/components/loader/loader";
 import * as Toast from "@/components/toast";
+import * as Toolbar from "@/components/toolbar/toolbar";
 import { tokens } from "@/theme/tokens.stylex";
 
+import * as ModelSelector from "../model-selector/model-selector";
+import {
+	exampleDefaultValue,
+	exampleEffortOptions,
+	exampleModelGroups,
+	exampleSpeedOptions,
+} from "../model-selector/model-selector.examples";
 import { GoalToolbar } from "./goal-toolbar";
 import * as PromptComposer from "./prompt-composer";
 
@@ -66,7 +77,7 @@ function GoalProgressDemo({ id }: { id: string }) {
 	return (
 		<GoalProgressProvider id={id}>
 			{({ anchorRef, setGoalActive }) => (
-				<div ref={anchorRef}>
+				<div ref={anchorRef} {...stylex.props(storyParts.goalTray)}>
 					<GoalToolbar
 						active
 						description="Refactor the command palette and data table stories."
@@ -82,21 +93,34 @@ function GoalPromptStackDemo({ id }: { id: string }) {
 	return (
 		<GoalProgressProvider id={id}>
 			{({ anchorRef, setGoalActive }) => (
-				<div ref={anchorRef} {...stylex.props(storyParts.promptStack)}>
-					<GoalToolbar
-						active
-						description="Wire the goal state into the next prompt before continuing."
-						onActiveChange={setGoalActive}
-					/>
+				<div {...stylex.props(storyParts.promptStack)}>
+					<div ref={anchorRef} {...stylex.props(storyParts.goalTray)}>
+						<GoalToolbar
+							active
+							description="Wire the goal state into the next prompt before continuing."
+							onActiveChange={setGoalActive}
+						/>
+					</div>
 					<PromptComposer.Root
 						clearOnSubmit={false}
 						defaultValue="Continue with the current goal and summarize the next change."
-						onSubmit={() => undefined}
-						style={storyParts.promptRoot}>
-						<PromptComposer.Surface variant="standard" style={storyParts.promptSurface}>
+						onSubmit={() => undefined}>
+						<PromptComposer.Surface>
 							<PromptComposer.Input placeholder="Ask about the current goal…" />
 							<PromptComposer.Footer>
-								<PromptComposer.Options />
+								<PromptComposer.Options>
+									<GoalComposerAddMenu />
+									<Toolbar.Root aria-label="Prompt options" variant="unstyled">
+										<ModelSelector.Root
+											groups={exampleModelGroups}
+											effortOptions={exampleEffortOptions}
+											speedOptions={exampleSpeedOptions}
+											defaultValue={exampleDefaultValue}>
+											<ModelSelector.Trigger render={<Toolbar.Button style={storyParts.modelTrigger} />} />
+											<ModelSelector.Popup />
+										</ModelSelector.Root>
+									</Toolbar.Root>
+								</PromptComposer.Options>
 								<PromptComposer.Actions>
 									<PromptComposer.Submit />
 								</PromptComposer.Actions>
@@ -106,6 +130,34 @@ function GoalPromptStackDemo({ id }: { id: string }) {
 				</div>
 			)}
 		</GoalProgressProvider>
+	);
+}
+
+function GoalComposerAddMenu() {
+	return (
+		<Menu.Root>
+			<PromptComposer.AddTrigger />
+			<PromptComposer.AddPopup>
+				<Menu.Group>
+					<Menu.GroupLabel>Add</Menu.GroupLabel>
+					<Menu.Item>
+						<Menu.ItemIcon>
+							<PaperclipIcon aria-hidden size={16} weight="bold" />
+						</Menu.ItemIcon>
+						<PromptComposer.AddItemContent>Files and folders</PromptComposer.AddItemContent>
+					</Menu.Item>
+					<Menu.Item>
+						<Menu.ItemIcon>
+							<LinkSimpleIcon aria-hidden size={16} weight="bold" />
+						</Menu.ItemIcon>
+						<PromptComposer.AddItemContent>
+							<span>Add a link</span>
+							<PromptComposer.AddItemDescription>Paste a URL</PromptComposer.AddItemDescription>
+						</PromptComposer.AddItemContent>
+					</Menu.Item>
+				</Menu.Group>
+			</PromptComposer.AddPopup>
+		</Menu.Root>
 	);
 }
 
@@ -159,7 +211,7 @@ function GoalProgressContent({
 			positionerProps: {
 				anchor: anchorRef.current,
 				side: "top",
-				align: "start",
+				align: "center",
 				sideOffset: 12,
 			},
 			data: {
@@ -177,9 +229,7 @@ function GoalProgressContent({
 
 function ChangeCount({ additions, deletions }: { additions: number; deletions: number }) {
 	return (
-		<span
-			aria-label={`${additions} additions and ${deletions} deletions`}
-			{...stylex.props(storyParts.changeCount)}>
+		<span aria-label={`${additions} additions and ${deletions} deletions`} {...stylex.props(storyParts.changeCount)}>
 			<span aria-hidden {...stylex.props(storyParts.additions)}>
 				+{additions}
 			</span>
@@ -217,19 +267,14 @@ const storyParts = stylex.create({
 	compositionStage: {
 		paddingBlockStart: tokens["--space-8"],
 	},
+	goalTray: {
+		marginInline: tokens["--space-6"],
+	},
 	promptStack: {
 		gap: 0,
 		display: "flex",
 		flexDirection: "column",
 		width: "100%",
-	},
-	promptRoot: {
-		gap: 0,
-		maxWidth: "none",
-	},
-	promptSurface: {
-		borderTopLeftRadius: 0,
-		borderTopRightRadius: 0,
 	},
 	label: {
 		margin: 0,
@@ -247,5 +292,8 @@ const storyParts = stylex.create({
 	},
 	deletions: {
 		color: tokens["--bg-error-primary"],
+	},
+	modelTrigger: {
+		maxWidth: "100%",
 	},
 });

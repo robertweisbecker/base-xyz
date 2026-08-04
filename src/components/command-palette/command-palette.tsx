@@ -27,6 +27,7 @@ import {
 } from "react";
 import { Button, type ButtonProps } from "@/components/button/button";
 import { modalBackdropStyles, modalPopupStyles, modalViewportStyles } from "@/components/dialog/dialog.stylex";
+import { EmptyState } from "@/components/empty-state/empty-state";
 import { fieldStyles, fieldTextStyles } from "@/components/field/field.stylex";
 import { Loader } from "@/components/loader/loader";
 import { menuItemSizeStyles, menuItemStyles, menuItemVariantStyles } from "@/components/menu/menu-item.stylex";
@@ -353,7 +354,21 @@ export function Item({
 	);
 }
 
-export function Empty({ ref, children = "No commands found.", className, style, ...props }: CommandPaletteEmptyProps) {
+export function Empty({
+	ref,
+	children = (
+		<EmptyState
+			size="sm"
+			headingLevel="h3"
+			icon={<MagnifyingGlassIcon aria-hidden weight="duotone" />}
+			title="No commands found"
+			description="Try a different search term."
+		/>
+	),
+	className,
+	style,
+	...props
+}: CommandPaletteEmptyProps) {
 	const sx = stylex.props(commandPaletteParts.empty, style);
 
 	return (
@@ -467,9 +482,9 @@ const commandPaletteParts = stylex.create({
 		maxHeight: "min(420px, 52dvh)",
 	},
 	listContent: {
-		paddingInline: tokens["--space-2"],
+		paddingInline: tokens["--space-1"],
 		paddingBlockEnd: tokens["--space-4"],
-		paddingBlockStart: tokens["--space-2"],
+		paddingBlockStart: tokens["--space-1"],
 	},
 	list: {
 		display: "flex",
@@ -482,7 +497,7 @@ const commandPaletteParts = stylex.create({
 	groupLabel: {
 		paddingBlock: tokens["--space-2"],
 		paddingInline: tokens["--space-3"],
-		color: tokens["--fg-muted"],
+		color: tokens["--fg-subtle"],
 		fontSize: tokens["--font-size-1"],
 		fontWeight: tokens["--font-weight-medium"],
 		letterSpacing: tokens["--letter-spacing-1"],
@@ -498,11 +513,10 @@ const commandPaletteParts = stylex.create({
 		color: tokens["--fg-subtle"],
 		display: "inline-flex",
 		justifyContent: "center",
-		height: tokens["--space-6"],
-		width: tokens["--space-6"],
-		fontSize: tokens["--font-size-4"],
-		backgroundColor: tokens["--surface-subtle"],
-		borderRadius: tokens["--radius-sm"],
+		// height: tokens["--space-6"],
+		// width: tokens["--space-6"],
+		fontSize: tokens["--font-size-3"],
+		minHeight: "1lh",
 	},
 	itemText: {
 		gridColumn: "2",
@@ -527,10 +541,8 @@ const commandPaletteParts = stylex.create({
 		minWidth: 0,
 	},
 	empty: {
-		paddingBlock: tokens["--space-10"],
+		paddingBlock: tokens["--space-6"],
 		paddingInline: tokens["--space-4"],
-		color: tokens["--fg-muted"],
-		textAlign: "center",
 	},
 	loading: {
 		gap: tokens["--space-2"],

@@ -4,6 +4,7 @@ import type { ReactNode } from "react";
 import { PageHeader } from "@/blocks/page-header/page-header";
 import { Badge } from "@/components/badge/badge";
 import * as CommandPalette from "@/components/command-palette/command-palette";
+import * as Breadcrumbs from "@/components/breadcrumbs/breadcrumbs";
 import { Stack } from "@/components/layout/layout";
 import { Text } from "@/components/text/text";
 import { tokens } from "@/theme/tokens.stylex";
@@ -14,6 +15,7 @@ import { CaretDownIcon } from "@phosphor-icons/react/dist/csr/CaretDown";
 import { CaretRightIcon } from "@phosphor-icons/react/dist/csr/CaretRight";
 import { CheckCircleIcon } from "@phosphor-icons/react/dist/csr/CheckCircle";
 import { XCircleIcon } from "@phosphor-icons/react/dist/csr/XCircle";
+import { GearFineIcon, ScrollIcon } from "@phosphor-icons/react";
 
 type Deployment = {
 	id: string;
@@ -106,12 +108,6 @@ const commandGroups: DeploymentCommandGroup[] = [
 				shortcut: "N",
 				icon: <CheckCircleIcon aria-hidden />,
 			},
-		],
-	},
-	{
-		id: "maintenance",
-		label: "Maintenance",
-		items: [
 			{
 				id: "retry-failed",
 				title: "Retry failed deployments",
@@ -120,13 +116,27 @@ const commandGroups: DeploymentCommandGroup[] = [
 				keywords: "failed retry rebuild",
 				icon: <XCircleIcon aria-hidden />,
 			},
+		],
+	},
+	{
+		id: "admin",
+		label: "Admin",
+		items: [
+			{
+				id: "view-logs",
+				title: "View logs",
+				description: "View the logs for the selected deployment.",
+				group: "Admin",
+				keywords: "logs view",
+				icon: <ScrollIcon aria-hidden />,
+			},
 			{
 				id: "open-settings",
 				title: "Deployment settings",
 				description: "Manage environments and visibility defaults.",
 				group: "Maintenance",
 				keywords: "settings environments visibility",
-				icon: <CaretRightIcon aria-hidden />,
+				icon: <GearFineIcon aria-hidden />,
 			},
 		],
 	},
@@ -235,9 +245,7 @@ export default meta;
 type Story = StoryObj;
 
 export const Playground: Story = {
-	render: (args: Partial<DataTableProps<Deployment>>) => (
-		<DeploymentTable {...args} />
-	),
+	render: (args: Partial<DataTableProps<Deployment>>) => <DeploymentTable {...args} />,
 };
 
 export const Composition: Story = {
@@ -247,6 +255,13 @@ export const Composition: Story = {
 	render: () => (
 		<Stack gap={5} style={storyParts.composition}>
 			<PageHeader
+				breadcrumbs={
+					<Breadcrumbs.Root size="sm">
+						<Breadcrumbs.Link href="#">Repositories</Breadcrumbs.Link>
+						<Breadcrumbs.Separator />
+						<Breadcrumbs.Current>base-stylex-lab</Breadcrumbs.Current>
+					</Breadcrumbs.Root>
+				}
 				title="Deployments"
 				description="Monitor production and preview releases across environments."
 				actions={
@@ -300,13 +315,12 @@ function DeploymentCommandPalette() {
 	return (
 		<CommandPalette.Root
 			shortcut
-			trigger={<CommandPalette.Trigger size="sm">Command</CommandPalette.Trigger>}
+			trigger={<CommandPalette.Trigger size="sm">Commands</CommandPalette.Trigger>}
 			items={commandGroups}
-			itemToStringValue={commandToStringValue}
-			filter={filterCommandGroups}>
+			itemToStringValue={commandToStringValue}>
 			<CommandPalette.Input placeholder="Search deployments and actions…" />
 			<CommandPalette.List>
-				{commandGroups.map((group) => (
+				{(group: DeploymentCommandGroup) => (
 					<CommandPalette.Group key={group.id} items={group.items}>
 						<CommandPalette.GroupLabel>{group.label}</CommandPalette.GroupLabel>
 						<CommandPalette.Items>
@@ -323,9 +337,9 @@ function DeploymentCommandPalette() {
 							)}
 						</CommandPalette.Items>
 					</CommandPalette.Group>
-				))}
-				<CommandPalette.Empty>No deployment commands found.</CommandPalette.Empty>
+				)}
 			</CommandPalette.List>
+			<CommandPalette.Empty />
 			<CommandPalette.Footer>
 				<span {...stylex.props(storyParts.footerHint)}>
 					<CommandPalette.Shortcut>↑↓</CommandPalette.Shortcut>
@@ -342,18 +356,9 @@ function DeploymentCommandPalette() {
 
 function commandToStringValue(item: DeploymentCommand | DeploymentCommandGroup) {
 	if ("title" in item) {
-		return `${item.title} ${item.description} ${item.keywords}`;
+		return item.title;
 	}
 	return item.label;
-}
-
-function filterCommandGroups(item: DeploymentCommand | DeploymentCommandGroup, query: string) {
-	const normalizedQuery = query.trim().toLocaleLowerCase();
-	if (!normalizedQuery) {
-		return true;
-	}
-
-	return commandToStringValue(item).toLocaleLowerCase().includes(normalizedQuery);
 }
 
 function StatusBadge({ status }: { status: Deployment["status"] }) {

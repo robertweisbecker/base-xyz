@@ -1,12 +1,16 @@
 import * as stylex from "@stylexjs/stylex";
 import { typingTextVars } from "./typing-text-vars.stylex";
 
-const textReveal = stylex.keyframes({
+const chunkReveal = stylex.keyframes({
 	from: {
-		maxWidth: "0%",
+		filter: "blur(3px)",
+		opacity: 0,
+		transform: "translateY(0.42em)",
 	},
 	to: {
-		maxWidth: "100%",
+		filter: "blur(0)",
+		opacity: 1,
+		transform: "translateY(0)",
 	},
 });
 
@@ -26,33 +30,49 @@ const caretPulse = stylex.keyframes({
 });
 
 export const typingTextStyles = stylex.create({
-	reveal: {
-		[typingTextVars.revealDuration]: "2200ms",
-		[typingTextVars.revealSteps]: "72",
-		overflow: "hidden",
-		animationDuration: typingTextVars.revealDuration,
+	chunk: {
+		[typingTextVars.chunkDuration]: "140ms",
+		[typingTextVars.chunkEasing]: "cubic-bezier(0.22, 1, 0.36, 1)",
+		animationDuration: typingTextVars.chunkDuration,
 		animationFillMode: "both",
 		animationName: {
-			default: textReveal,
+			default: chunkReveal,
 			"@media (prefers-reduced-motion: reduce)": "none",
 		},
-		animationTimingFunction: `steps(${typingTextVars.revealSteps}, end)`,
+		animationTimingFunction: typingTextVars.chunkEasing,
 		display: "inline-block",
-		verticalAlign: "bottom",
+		filter: {
+			default: "blur(1px)",
+			"@media (prefers-reduced-motion: reduce)": "none",
+		},
+		opacity: {
+			default: 0,
+			"@media (prefers-reduced-motion: reduce)": 1,
+		},
+		transform: {
+			default: "translateX(-0.5em)",
+			"@media (prefers-reduced-motion: reduce)": "translateX(0)",
+		},
+		verticalAlign: "baseline",
 		whiteSpace: "inherit",
 		willChange: {
-			default: "max-width",
+			default: "filter, opacity, transform",
 			"@media (prefers-reduced-motion: reduce)": "auto",
 		},
-		maxWidth: "100%",
+	},
+	chunks: {
+		whiteSpace: "inherit",
+		display: "inline-block",
 	},
 	caret: {
+		"--_streaming-text-caret-delay": "0ms",
 		[typingTextVars.caretColor]: "currentColor",
 		[typingTextVars.caretDuration]: "1100ms",
 		[typingTextVars.caretGap]: "0.125em",
 		[typingTextVars.caretOpacity]: "0.72",
 		[typingTextVars.caretWidth]: "0.08em",
 		"::after": {
+			animationDelay: "var(--_streaming-text-caret-delay)",
 			animationDuration: typingTextVars.caretDuration,
 			animationIterationCount: "infinite",
 			animationName: {

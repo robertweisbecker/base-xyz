@@ -3,7 +3,7 @@ import * as stylex from "@stylexjs/stylex";
 import { useCallback, type ReactNode, useId, useRef, useState } from "react";
 import { flushSync } from "react-dom";
 import { Button, type ButtonProps, IconButton } from "@/components/button/button";
-import { CheckmarkIcon } from "@/components/selection-icons";
+import { Checkmark } from "@/components/selection-icons";
 import * as Toast from "@/components/toast";
 import { iconSwapTransition } from "@/styles/recipes/transitions";
 
@@ -113,7 +113,7 @@ function CopyButtonControl({
 					iconSwapTransition.to,
 					copied ? iconSwapTransition.visible : iconSwapTransition.hidden,
 				)}>
-				<CheckmarkIcon width="1em" height="1em" strokeWidth={1.5} />
+				<Checkmark width="1em" height="1em" strokeWidth={1.5} />
 			</span>
 		</span>
 	);

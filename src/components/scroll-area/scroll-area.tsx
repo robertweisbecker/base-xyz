@@ -1,7 +1,7 @@
 import { ScrollArea as BaseScrollArea } from "@base-ui/react/scroll-area";
 import * as stylex from "@stylexjs/stylex";
 import type { StyleXStyles } from "@stylexjs/stylex";
-import type { ReactNode } from "react";
+import type { ReactNode, Ref } from "react";
 import { tokens } from "@/theme/tokens.stylex";
 
 export type ScrollAreaProps = Omit<BaseScrollArea.Root.Props, "children" | "className" | "style"> & {
@@ -11,6 +11,7 @@ export type ScrollAreaProps = Omit<BaseScrollArea.Root.Props, "children" | "clas
 	/** StyleX overrides, applied after the component's own styles. */
 	style?: StyleXStyles;
 	viewportClassName?: string;
+	viewportRef?: Ref<HTMLDivElement>;
 	/** StyleX overrides, applied after the component's own styles. */
 	viewportStyle?: StyleXStyles;
 	/** Removes the viewport edge fade mask. @default false */
@@ -33,6 +34,7 @@ export function ScrollArea({
 	className,
 	style,
 	viewportClassName,
+	viewportRef,
 	viewportStyle,
 	disableFade = false,
 	contentClassName,
@@ -66,6 +68,7 @@ export function ScrollArea({
 			style={rootSx.style}
 			{...props}>
 			<BaseScrollArea.Viewport
+				ref={viewportRef}
 				aria-label={label}
 				style={(state) => ({
 					...viewportSx.style,
