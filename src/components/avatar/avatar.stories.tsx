@@ -5,7 +5,7 @@ import { SignOutIcon } from "@phosphor-icons/react/dist/csr/SignOut";
 import { UserIcon } from "@phosphor-icons/react/dist/csr/User";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import * as stylex from "@stylexjs/stylex";
-import { color, fontSize, fontWeight, letterSpacing, lineHeight, space } from "@/styles/tokens.stylex";
+import { colors, fontSize, fontWeight, letterSpacing, lineHeight, space } from "@/styles/tokens.stylex";
 import { Button, IconButton } from "../button/button";
 import { Stack } from "../layout/layout";
 import * as Menu from "../menu/menu";
@@ -223,7 +223,7 @@ const storyStyles = stylex.create({
 		alignItems: "end",
 	},
 	label: {
-		color: color.fgMuted,
+		color: colors["--text-muted"],
 		fontSize: fontSize.x1,
 		fontWeight: fontWeight.regular,
 		letterSpacing: letterSpacing.x1,

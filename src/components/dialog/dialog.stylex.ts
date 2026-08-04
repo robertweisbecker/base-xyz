@@ -1,7 +1,7 @@
 import * as stylex from "@stylexjs/stylex";
 import { headingStyles, textStyles } from "@/components/text/text.stylex";
 import { zIndex } from "@/styles/constants.stylex";
-import { color, motion, radius, shadow, space } from "@/styles/tokens.stylex";
+import { colors, motion, radius, shadow, space } from "@/styles/tokens.stylex";
 
 /**
  * Shared behavior and chrome for modal surfaces (dialogs, alert dialogs,
@@ -31,7 +31,7 @@ import { color, motion, radius, shadow, space } from "@/styles/tokens.stylex";
 export const modalChromeStyles = stylex.create({
 	backdrop: {
 		inset: 0,
-		backgroundColor: color.overlay,
+		backgroundColor: colors["--overlay"],
 		position: "fixed",
 	},
 	viewport: {
@@ -46,12 +46,12 @@ export const modalChromeStyles = stylex.create({
 		borderRadius: radius.xl,
 		outline: "0",
 		backgroundColor: {
-			"[data-close-confirmation-open]": color.surface,
-			"[data-nested-dialog-open]": color.surface,
-			default: color.bgPanel,
+			"[data-close-confirmation-open]": colors["--surface"],
+			"[data-nested-dialog-open]": colors["--surface"],
+			default: colors["--panel"],
 		},
 		boxShadow: shadow.lg,
-		color: color.fg,
+		color: colors["--text"],
 		display: "flex",
 		flexDirection: "column",
 		width: "100%",
@@ -140,10 +140,10 @@ const modalTextParts = stylex.create({
 	},
 	description: {
 		margin: 0,
-		color: color.fgMuted,
+		color: colors["--text-muted"],
 	},
 	body: {
-		color: color.fg,
+		color: colors["--text"],
 	},
 	footer: {
 		alignItems: "center",

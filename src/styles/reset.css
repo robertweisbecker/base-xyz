@@ -41,27 +41,14 @@
 		line-height: 1.5;
 		-webkit-text-size-adjust: 100%;
 		tab-size: 4;
-		font-family:
-			ui-sans-serif,
-			-apple-system,
-			BlinkMacSystemFont,
-			"Segoe UI",
-			Roboto,
-			"Helvetica Neue",
-			"Noto Sans",
-			Arial,
-			sans-serif,
-			"Apple Color Emoji",
-			"Segoe UI Emoji",
-			"Segoe UI Symbol",
-			"Noto Color Emoji";
+		font-family: inherit;
 		font-feature-settings: normal;
 		font-variation-settings: normal;
 		-webkit-tap-highlight-color: transparent;
 	}
 
 	html {
-		background: var(--color-canvas);
+		background: var(--canvas);
 		font-synthesis: none;
 		text-rendering: optimizeLegibility;
 		-webkit-font-smoothing: antialiased;
@@ -71,8 +58,8 @@
 		position: relative;
 		min-width: 320px;
 		min-height: 100vh;
-		background: var(--color-canvas);
-		color: var(--color-text);
+		background: var(--canvas);
+		color: var(--text);
 		line-height: inherit;
 	}
 
@@ -276,7 +263,7 @@
 
 	::selection {
 		background: currentColor;
-		color: var(--color-canvas);
+		color: var(--canvas);
 	}
 
 	[hidden]:where(:not([hidden="until-found"])) {

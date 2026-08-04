@@ -1,7 +1,7 @@
 import * as stylex from "@stylexjs/stylex";
 import { composeThemeProps, type ThemePropDefinition, type VerifyThemeProps } from "@/theme/theme-props";
 import { marginThemeProps, textAlignThemeProps } from "@/styles/theme-props-spacing.stylex";
-import { color, fontFamily, fontSize, fontWeight, letterSpacing, lineHeight, typeScale } from "@/styles/tokens.stylex";
+import { colors, fontFamily, fontSize, fontWeight, letterSpacing, lineHeight, typeScale } from "@/styles/tokens.stylex";
 import type { TextThemeProps } from "./text.types";
 
 const textThemePropsDefinition = composeThemeProps(marginThemeProps, textAlignThemeProps);
@@ -17,15 +17,15 @@ export const textBaseStyles = stylex.create({
 
 /** Internal implementation for the Text and Heading `color` prop. Other owners use color tokens directly. */
 export const textColorPropStyles = stylex.create({
-	default: { color: color.fg },
-	muted: { color: color.fgMuted },
-	subtle: { color: color.fgSubtle },
-	accent: { color: color.fgAccent },
-	danger: { color: color.fgDanger },
-	success: { color: color.fgSuccess },
-	warning: { color: color.fgWarning },
-	inverse: { color: color.fgInverse },
-	"inverse-muted": { color: color.fgInverseMuted },
+	default: { color: colors["--text"] },
+	muted: { color: colors["--text-muted"] },
+	subtle: { color: colors["--text-subtle"] },
+	accent: { color: colors["--text-accent"] },
+	danger: { color: colors["--text-danger"] },
+	success: { color: colors["--text-success"] },
+	warning: { color: colors["--text-warning"] },
+	inverse: { color: colors["--inverse-text"] },
+	"inverse-muted": { color: colors["--inverse-text-muted"] },
 	inherit: { color: "inherit" },
 });
 

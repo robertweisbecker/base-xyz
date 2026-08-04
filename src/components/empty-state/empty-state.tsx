@@ -25,7 +25,7 @@ import type {
 	SizingProps,
 	SpacingProps,
 } from "@/theme/theme-props.types";
-import { color, radius, space } from "@/styles/tokens.stylex";
+import { colors, radius, space } from "@/styles/tokens.stylex";
 import { Heading } from "../heading/heading";
 import { Text } from "../text/text";
 
@@ -118,7 +118,7 @@ const emptyStateStyles = stylex.create({
 	root: {
 		alignItems: "center",
 		boxSizing: "border-box",
-		color: color.fg,
+		color: colors["--text"],
 		display: "flex",
 		flexBasis: 0,
 		flexDirection: "column",
@@ -132,11 +132,11 @@ const emptyStateStyles = stylex.create({
 		borderRadius: radius.full,
 		flex: "none",
 		alignItems: "center",
-		backgroundColor: color.highlight,
+		backgroundColor: colors["--highlight"],
 		// borderWidth: 1,
 		// borderStyle: "dashed",
-		// borderColor: color.borderStrong,
-		color: color.fgMuted,
+		// borderColor: colors["--border-strong"],
+		color: colors["--text-muted"],
 		display: "flex",
 		justifyContent: "center",
 		lineHeight: 0,

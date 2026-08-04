@@ -4,7 +4,7 @@ import * as stylex from "@stylexjs/stylex";
 import { Button } from "@/components/button/button";
 import { Checkbox } from "@/components/checkbox/checkbox";
 import { Separator } from "@/components/separator/separator";
-import { color, space } from "@/styles/tokens.stylex";
+import { colors, space } from "@/styles/tokens.stylex";
 import { fontSize, fontWeight, letterSpacing, lineHeight } from "@/styles/tokens.stylex";
 import * as ConfirmationDialog from "./confirmation-dialog";
 
@@ -173,7 +173,7 @@ const storyParts = stylex.create({
 	},
 	heading: {
 		margin: 0,
-		color: color.fgMuted,
+		color: colors["--text-muted"],
 		fontSize: fontSize.x1,
 		fontWeight: fontWeight.regular,
 		letterSpacing: letterSpacing.x1,
@@ -191,14 +191,14 @@ const storyParts = stylex.create({
 		justifyContent: "space-between",
 	},
 	reviewLabel: {
-		color: color.fg,
+		color: colors["--text"],
 		fontSize: fontSize.x2,
 		fontWeight: fontWeight.medium,
 		letterSpacing: letterSpacing.x2,
 		lineHeight: lineHeight.x2,
 	},
 	reviewStatus: {
-		color: color.fgMuted,
+		color: colors["--text-muted"],
 		fontSize: fontSize.x1,
 		letterSpacing: letterSpacing.x1,
 		lineHeight: lineHeight.x1,

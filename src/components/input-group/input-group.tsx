@@ -6,7 +6,7 @@ import { type ComponentProps, type ReactElement } from "react";
 import { fieldStyles, fieldControlSizes, fieldTextStyles } from "@/components/field/field.stylex";
 import type { FieldSize } from "@/components/field/field.types";
 import { focusRing } from "@/styles/recipes/focus";
-import { color, shadow, space } from "@/styles/tokens.stylex";
+import { colors, shadow, space } from "@/styles/tokens.stylex";
 
 const GROUP_HOVER =
 	':hover:not(:focus-within):not(:has([aria-invalid="true"])):not(:has([data-disabled])):not(:has([data-invalid])):not(:has([readonly]))';
@@ -156,18 +156,18 @@ const inputGroupParts = stylex.create({
 		borderColor: {
 			// eslint-disable-next-line @stylexjs/valid-styles -- the compiler supports chained pseudo-class conditions; the lint rule is stricter than the compiler.
 			[GROUP_HOVER]: {
-				"@media (hover: hover) and (pointer: fine)": color.borderHover,
+				"@media (hover: hover) and (pointer: fine)": colors["--border-hover"],
 			},
-			default: color.borderStrong,
-			":has([data-invalid])": color.bgDanger,
-			":has([readonly])": color.border,
+			default: colors["--border-strong"],
+			":has([data-invalid])": colors["--danger"],
+			":has([readonly])": colors["--border"],
 		},
 		gap: space[1],
 		overflow: "hidden",
 		alignItems: "center",
 		backgroundColor: {
-			default: color.surface,
-			":has([data-disabled])": color.surfaceSubtle,
+			default: colors["--surface"],
+			":has([data-disabled])": colors["--surface-subtle"],
 		},
 		display: "flex",
 		minWidth: 0,
@@ -203,7 +203,7 @@ const inputGroupParts = stylex.create({
 	addon: {
 		paddingInline: "var(--_input-group-child-padding-inline)",
 		alignItems: "center",
-		color: color.fgMuted,
+		color: colors["--text-muted"],
 		cursor: "text",
 		display: "inline-flex",
 		flexShrink: 0,
@@ -242,7 +242,7 @@ const inputGroupVariants = stylex.create({
 	standard: {},
 	elevated: {
 		borderWidth: 0,
-		backgroundColor: color.bgElevated,
+		backgroundColor: colors["--elevated"],
 		boxShadow: shadow.sm,
 	},
 });

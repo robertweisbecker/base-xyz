@@ -11,7 +11,7 @@ import type { FieldSize, FieldThemeProps } from "@/components/field/field.types"
 import { fieldStyles, fieldTextStyles, fieldThemeProps } from "@/components/field/field.stylex";
 import { focusRing } from "@/styles/recipes/focus";
 import { pressable } from "@/styles/recipes/transitions";
-import { color, radius, size, space, shadow } from "@/styles/tokens.stylex";
+import { colors, radius, size, space, shadow } from "@/styles/tokens.stylex";
 import { WarningOctagonIcon } from "@phosphor-icons/react";
 
 const STEPPER_HOVER = ":hover:not([data-disabled]):not([data-readonly]):not(:active)";
@@ -170,9 +170,9 @@ const numberFieldParts = stylex.create({
 		paddingBlock: space[1],
 		paddingInline: space[2],
 		alignItems: "center",
-		backgroundColor: color.bgInverse,
+		backgroundColor: colors["--inverse-surface"],
 		boxShadow: shadow.sm,
-		color: color.fgInverse,
+		color: colors["--inverse-text"],
 		display: "flex",
 		justifyContent: "center",
 	},
@@ -188,14 +188,14 @@ const numberFieldParts = stylex.create({
 		borderColor: {
 			// eslint-disable-next-line @stylexjs/valid-styles -- the compiler supports chained pseudo-class conditions; the lint rule is stricter than the compiler.
 			[INPUT_HOVER]: {
-				"@media (hover: hover) and (pointer: fine)": color.borderHover,
+				"@media (hover: hover) and (pointer: fine)": colors["--border-hover"],
 			},
-			'[aria-invalid="true"]': color.bgDanger,
-			"[data-readonly]": `${color.border} transparent ${color.border}`,
-			"[readonly]": `${color.border} transparent ${color.border}`,
-			default: color.borderStrong,
-			":focus-visible": color.focus,
-			':focus-visible[aria-invalid="true"]': color.bgDanger,
+			'[aria-invalid="true"]': colors["--danger"],
+			"[data-readonly]": `${colors["--border"]} transparent ${colors["--border"]}`,
+			"[readonly]": `${colors["--border"]} transparent ${colors["--border"]}`,
+			default: colors["--border-strong"],
+			":focus-visible": colors["--focus"],
+			':focus-visible[aria-invalid="true"]': colors["--danger"],
 		},
 		borderRadius: 0,
 		borderStyle: "solid",
@@ -205,9 +205,9 @@ const numberFieldParts = stylex.create({
 		paddingBlock: 0,
 		appearance: "textfield",
 		backgroundColor: {
-			"[data-disabled]": color.surfaceSubtle,
+			"[data-disabled]": colors["--surface-subtle"],
 			"[data-readonly]": "transparent",
-			default: color.surface,
+			default: colors["--surface"],
 		},
 		fontFamily: "inherit",
 		fontVariantNumeric: "tabular-nums",
@@ -224,26 +224,26 @@ const numberFieldParts = stylex.create({
 	},
 	stepper: {
 		padding: 0,
-		borderColor: color.borderStrong,
+		borderColor: colors["--border-strong"],
 		borderStyle: "solid",
 		borderWidth: "1px",
 		outline: "0",
 		alignItems: "center",
 		backgroundColor: {
-			[STEPPER_ACTIVE]: color.surfaceSubtleActive,
+			[STEPPER_ACTIVE]: colors["--surface-subtle-active"],
 			// eslint-disable-next-line @stylexjs/valid-styles -- the compiler supports chained pseudo-class conditions; the lint rule is stricter than the compiler.
 			[STEPPER_HOVER]: {
-				"@media (hover: hover) and (pointer: fine)": color.surfaceSubtleHover,
+				"@media (hover: hover) and (pointer: fine)": colors["--surface-subtle-hover"],
 			},
-			"[data-disabled]": color.canvas,
+			"[data-disabled]": colors["--canvas"],
 			default: "transparent",
 		},
 		color: {
-			"[data-disabled]": `color-mix(in srgb, ${color.fgSubtle} 48%, transparent)`,
-			"[data-readonly]": `color-mix(in srgb, ${color.fgSubtle} 48%, transparent)`,
-			default: color.fgMuted,
+			"[data-disabled]": `color-mix(in srgb, ${colors["--text-subtle"]} 48%, transparent)`,
+			"[data-readonly]": `color-mix(in srgb, ${colors["--text-subtle"]} 48%, transparent)`,
+			default: colors["--text-muted"],
 			":hover": {
-				"@media (hover: hover) and (pointer: fine)": color.fg,
+				"@media (hover: hover) and (pointer: fine)": colors["--text"],
 			},
 		},
 		cursor: {

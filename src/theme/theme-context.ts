@@ -1,10 +1,13 @@
-import { createContext } from 'react'
+import { createContext } from "react";
 
-export type Theme = 'light' | 'dark'
+export type ThemeName = "default" | "mp";
+export type ThemeMode = "system" | "light" | "dark";
+export type ResolvedThemeMode = Exclude<ThemeMode, "system">;
 
 export type ThemeContextValue = {
-  theme: Theme
-  toggleTheme: () => void
-}
+	theme: ThemeName;
+	mode: ThemeMode;
+	resolvedMode: ResolvedThemeMode;
+};
 
-export const ThemeContext = createContext<ThemeContextValue | null>(null)
+export const ThemeContext = createContext<ThemeContextValue | null>(null);

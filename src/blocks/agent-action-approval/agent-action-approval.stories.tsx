@@ -8,7 +8,7 @@ import { Checkbox } from "@/components/checkbox/checkbox";
 import { CodeBlock } from "@/components/code-block/code-block";
 import * as Collapsible from "@/components/collapsible/collapsible";
 import { Separator } from "@/components/separator/separator";
-import { color, space } from "@/styles/tokens.stylex";
+import { colors, space } from "@/styles/tokens.stylex";
 import { fontSize, fontWeight, letterSpacing, lineHeight } from "@/styles/tokens.stylex";
 import * as AgentActionApproval from "./agent-action-approval";
 
@@ -176,7 +176,7 @@ const storyParts = stylex.create({
 	},
 	heading: {
 		margin: 0,
-		color: color.fgMuted,
+		color: colors["--text-muted"],
 		fontSize: fontSize.x1,
 		fontWeight: fontWeight.regular,
 		letterSpacing: letterSpacing.x1,

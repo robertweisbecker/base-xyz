@@ -2,7 +2,7 @@ import { CheckCircleIcon } from "@phosphor-icons/react/dist/csr/CheckCircle";
 import { WarningIcon } from "@phosphor-icons/react/dist/csr/Warning";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import * as stylex from "@stylexjs/stylex";
-import { color, space } from "@/styles/tokens.stylex";
+import { colors, space } from "@/styles/tokens.stylex";
 import { fontSize, fontWeight, letterSpacing, lineHeight } from "@/styles/tokens.stylex";
 import { Badge } from "./badge";
 
@@ -218,7 +218,7 @@ const storyStyles = stylex.create({
 	},
 	heading: {
 		margin: 0,
-		color: color.fgMuted,
+		color: colors["--text-muted"],
 		fontSize: fontSize.x1,
 		fontWeight: fontWeight.regular,
 		letterSpacing: letterSpacing.x1,
@@ -242,7 +242,7 @@ const storyStyles = stylex.create({
 		flexDirection: "column",
 	},
 	gridHeader: {
-		color: color.fgMuted,
+		color: colors["--text-muted"],
 		fontSize: fontSize.x1,
 		letterSpacing: letterSpacing.x1,
 		lineHeight: lineHeight.x1,
@@ -250,7 +250,7 @@ const storyStyles = stylex.create({
 	},
 	rowLabel: {
 		margin: 0,
-		color: color.fgMuted,
+		color: colors["--text-muted"],
 		fontSize: fontSize.x1,
 		letterSpacing: letterSpacing.x1,
 		lineHeight: lineHeight.x1,
@@ -278,7 +278,7 @@ const storyStyles = stylex.create({
 	},
 	hint: {
 		margin: 0,
-		color: color.fgMuted,
+		color: colors["--text-muted"],
 		fontSize: fontSize.x1,
 		letterSpacing: letterSpacing.x1,
 		lineHeight: lineHeight.x1,

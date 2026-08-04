@@ -2,7 +2,7 @@ import * as stylex from "@stylexjs/stylex";
 import type { StyleXStyles } from "@stylexjs/stylex";
 import { type ComponentProps } from "react";
 import { fontFamily, fontSize, lineHeight } from "@/styles/tokens.stylex";
-import { color, radius, space } from "@/styles/tokens.stylex";
+import { colors, radius, space } from "@/styles/tokens.stylex";
 import { ScrollArea } from "../scroll-area/scroll-area";
 
 export type CodeBlockProps = Omit<ComponentProps<"pre">, "className" | "style"> & {
@@ -30,7 +30,7 @@ export function CodeBlock({ ref, children, className, style, ...props }: CodeBlo
 const styles = stylex.create({
 	root: {
 		borderRadius: radius.sm,
-		backgroundColor: color.surfaceSubtle,
+		backgroundColor: colors["--surface-subtle"],
 		maxWidth: "100%",
 		width: "100%",
 	},
@@ -42,7 +42,7 @@ const styles = stylex.create({
 		margin: 0,
 		padding: space[2],
 		boxSizing: "border-box",
-		color: color.fg,
+		color: colors["--text"],
 		fontFamily: fontFamily.mono,
 		fontSize: fontSize.x1,
 		lineHeight: lineHeight.x2,

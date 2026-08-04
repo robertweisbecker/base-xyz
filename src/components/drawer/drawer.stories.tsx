@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import * as stylex from "@stylexjs/stylex";
 import { useState } from "react";
-import { color, radius, space } from "@/styles/tokens.stylex";
+import { colors, radius, space } from "@/styles/tokens.stylex";
 import { fontSize, letterSpacing, lineHeight } from "@/styles/tokens.stylex";
 import * as AlertDialog from "../alert-dialog/alert-dialog";
 import { Button } from "../button/button";
@@ -387,7 +387,7 @@ const storyParts = stylex.create({
 	},
 	hint: {
 		margin: 0,
-		color: color.fgMuted,
+		color: colors["--text-muted"],
 		fontSize: fontSize.x1,
 		letterSpacing: letterSpacing.x1,
 		lineHeight: lineHeight.x1,
@@ -412,17 +412,17 @@ const storyParts = stylex.create({
 	},
 	activityCard: {
 		padding: space[3],
-		borderColor: color.border,
+		borderColor: colors["--border"],
 		borderRadius: radius.md,
 		borderStyle: "solid",
 		borderWidth: "1px",
 		gap: space[1],
-		backgroundColor: color.surfaceSubtle,
+		backgroundColor: colors["--surface-subtle"],
 		display: "flex",
 		flexDirection: "column",
 	},
 	activityMeta: {
-		color: color.fgMuted,
+		color: colors["--text-muted"],
 		fontSize: fontSize.x1,
 		letterSpacing: letterSpacing.x1,
 		lineHeight: lineHeight.x1,

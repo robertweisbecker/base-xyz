@@ -8,7 +8,7 @@ import type { ReactNode } from "react";
 import { Button, IconButton } from "@/components/button/button";
 import { breakpoints } from "@/styles/constants.stylex";
 import { fieldStyles } from "@/components/field/field.stylex";
-import { color, space } from "@/styles/tokens.stylex";
+import { colors, space } from "@/styles/tokens.stylex";
 import { fontSize, fontWeight, letterSpacing, lineHeight } from "@/styles/tokens.stylex";
 import * as InputGroup from "./input-group";
 
@@ -209,7 +209,7 @@ const styles = stylex.create({
 	},
 	stateTitle: {
 		margin: 0,
-		color: color.fgMuted,
+		color: colors["--text-muted"],
 		fontSize: fontSize.x1,
 		fontWeight: fontWeight.regular,
 		letterSpacing: letterSpacing.x1,

@@ -2,7 +2,7 @@ import * as stylex from "@stylexjs/stylex";
 import type { StyleXStyles } from "@stylexjs/stylex";
 import type { ComponentProps, ReactNode } from "react";
 import { positioningThemeProps } from "@/styles/theme-props-layout.stylex";
-import { border, color, fontSize, lineHeight, radius, size, space } from "@/styles/tokens.stylex";
+import { border, colors, fontSize, lineHeight, radius, size, space } from "@/styles/tokens.stylex";
 import { resolveThemeProps, type VerifyThemeProps } from "@/theme/theme-props";
 import type { PositioningProps } from "@/theme/theme-props.types";
 import { Heading } from "../heading/heading";
@@ -98,7 +98,7 @@ const calloutParts = stylex.create({
 		borderStyle: "solid",
 		borderWidth: border.width,
 		boxSizing: "border-box",
-		color: color.fg,
+		color: colors["--text"],
 		fontSize: fontSize.x2,
 		isolation: "isolate",
 		lineHeight: lineHeight.x2,
@@ -200,46 +200,46 @@ const calloutActionVariantStyles = stylex.create({
 
 const calloutHueStyles = stylex.create({
 	accent: {
-		backgroundColor: "var(--indigo-c1)",
-		// borderColor: "var(--indigo-o1)",
-		color: "var(--indigo-t2)",
+		backgroundColor: colors["--indigo-c1"],
+		// borderColor: colors["--indigo-o1"],
+		color: colors["--indigo-t2"],
 	},
 	danger: {
-		backgroundColor: "var(--red-c2)",
-		// borderColor: "var(--red-o1)",
-		color: "var(--red-t2)",
+		backgroundColor: colors["--red-c2"],
+		// borderColor: colors["--red-o1"],
+		color: colors["--red-t2"],
 	},
 	warning: {
-		backgroundColor: "var(--orange-c1)",
-		// borderColor: "var(--orange-o1)",
-		color: "var(--orange-t2)",
+		backgroundColor: colors["--orange-c1"],
+		// borderColor: colors["--orange-o1"],
+		color: colors["--orange-t2"],
 	},
 	success: {
-		backgroundColor: "var(--green-c2)",
-		// borderColor: "var(--green-o1)",
-		color: "var(--green-t2)",
+		backgroundColor: colors["--green-c2"],
+		// borderColor: colors["--green-o1"],
+		color: colors["--green-t2"],
 	},
 	neutral: {
-		backgroundColor: "var(--gray-s2)",
-		// borderColor: "var(--gray-o2)",
-		color: "var(--gray-t3)",
+		backgroundColor: colors["--gray-s2"],
+		// borderColor: colors["--gray-o2"],
+		color: colors["--gray-t3"],
 	},
 });
 
 const calloutIconHueStyles = stylex.create({
 	accent: {
-		color: "var(--indigo-p2)",
+		color: colors["--indigo-p2"],
 	},
 	danger: {
-		color: "var(--red-p2)",
+		color: colors["--red-p2"],
 	},
 	warning: {
-		color: "var(--orange-p2)",
+		color: colors["--orange-p2"],
 	},
 	success: {
-		color: "var(--green-p2)",
+		color: colors["--green-p2"],
 	},
 	neutral: {
-		color: color.fgMuted,
+		color: colors["--text-muted"],
 	},
 });

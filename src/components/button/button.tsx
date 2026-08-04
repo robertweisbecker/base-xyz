@@ -5,7 +5,7 @@ import type { ReactNode } from "react";
 import { resolveThemeProps } from "@/theme/theme-props";
 import { focusRing } from "@/styles/recipes/focus";
 import { pressable } from "@/styles/recipes/transitions";
-import { color, radius, size, space, shadow } from "@/styles/tokens.stylex";
+import { colors, radius, shadow, shadowRingVars, size, space } from "@/styles/tokens.stylex";
 import { fontSize, fontWeight, letterSpacing, lineHeight } from "@/styles/tokens.stylex";
 import { Loader } from "../loader/loader";
 import * as Tooltip from "../tooltip/tooltip";
@@ -65,7 +65,7 @@ const slotParts = stylex.create({
 		width: "1em",
 	},
 	muted: {
-		color: color.fgMuted,
+		color: colors["--text-muted"],
 	},
 });
 
@@ -151,63 +151,64 @@ const colorVariants = stylex.create({
 		backgroundColor: {
 			// eslint-disable-next-line @stylexjs/valid-styles -- the compiler supports chained pseudo-class conditions; the lint rule is stricter than the compiler.
 			[HOVER_NOT_PRESSED_OR_OPEN]: {
-				"@media (hover: hover) and (pointer: fine)": color.bgAccentHover,
+				"@media (hover: hover) and (pointer: fine)": colors["--accent-hover"],
 			},
-			[PRESSED]: color.bgAccentHover,
-			default: color.bgAccent,
+			[PRESSED]: colors["--accent-hover"],
+			default: colors["--accent"],
 		},
-		backgroundImage: `linear-gradient(to bottom, ${color.bgAccentHover},transparent 40%)`,
+		backgroundImage: `linear-gradient(to bottom, ${colors["--accent-hover"]},transparent 40%)`,
 		boxShadow: {
-			[PRESSED]: `inset 0 0 0.08em color-mix(in oklch, black 20%, ${color.bgAccent}), inset 0 0.08em 0.16em 0.08em color-mix(in oklch, black 10%, ${color.bgAccent})`,
+			[PRESSED]: `inset 0 0 0.08em color-mix(in oklch, black 20%, ${colors["--accent"]}), inset 0 0.08em 0.16em 0.08em color-mix(in oklch, black 10%, ${colors["--accent"]})`,
 			"[data-disabled]": null,
-			default: `inset 0 0 0.04em 0.08em color-mix(in srgb, ${color.bgAccent} 90%, ${color.fg}), inset 0 0.04em 0.04em 0.08em color-mix(in oklch, white 40%, ${color.bgAccent}), var(--shadow-ring)`,
+			default: `inset 0 0 0.04em 0.08em color-mix(in srgb, ${colors["--accent"]} 90%, ${colors["--text"]}), inset 0 0.04em 0.04em 0.08em color-mix(in oklch, white 40%, ${colors["--accent"]}), ${shadowRingVars.ring}`,
 		},
-		color: color.fgAccentContrast,
-		textShadow: `0 .03em .06em oklch(from ${color.bgAccent} calc(l*0.7) calc(c*1.1) h)`,
+		color: colors["--accent-contrast"],
+		textShadow: `0 .03em .06em oklch(from ${colors["--accent"]} calc(l*0.7) calc(c*1.1) h)`,
 	},
 	subtle: {
 		backgroundColor: {
 			// eslint-disable-next-line @stylexjs/valid-styles -- the compiler supports chained pseudo-class conditions; the lint rule is stricter than the compiler.
 			[HOVER_NOT_PRESSED_OR_OPEN]: {
-				"@media (hover: hover) and (pointer: fine)": color.bgAccentSoftHover,
+				"@media (hover: hover) and (pointer: fine)": colors["--accent-soft-hover"],
 			},
-			[PRESSED]: color.bgAccentMuted,
-			default: color.bgAccentSoft,
+			[PRESSED]: colors["--accent-muted"],
+			default: colors["--accent-soft"],
 		},
 		color: {
-			[PRESSED]: color.fgAccentStrong,
-			default: color.fgAccent,
+			[PRESSED]: colors["--text-accent-strong"],
+			default: colors["--text-accent"],
 		},
 	},
 	secondary: {
 		backgroundColor: {
-			[HOVER_NOT_PRESSED_OR_OPEN]: color.highlight,
-			[PRESSED]: color.bgElevatedActive,
-			default: color.bgElevated,
+			[HOVER_NOT_PRESSED_OR_OPEN]: colors["--highlight"],
+			[PRESSED]: colors["--elevated-active"],
+			default: colors["--elevated"],
 		},
 		boxShadow: {
 			[PRESSED]: shadow.inset,
 			default: shadow.sm,
 		},
-		color: color.fg,
+		color: colors["--text"],
 	},
 	neutral: {
 		backgroundColor: {
 			// eslint-disable-next-line @stylexjs/valid-styles -- the compiler supports chained pseudo-class conditions; the lint rule is stricter than the compiler.
 			[HOVER_NOT_PRESSED_OR_OPEN]: {
-				"@media (hover: hover) and (pointer: fine)": color.surfaceSubtleHover,
+				"@media (hover: hover) and (pointer: fine)": colors["--surface-subtle-hover"],
 			},
-			[PRESSED]: color.surfaceSubtleHover,
-			default: color.surfaceSubtle,
-			":active": color.surfaceSubtleActive,
+			[PRESSED]: colors["--surface-subtle-hover"],
+			default: colors["--surface-subtle"],
+			":active": colors["--surface-subtle-active"],
 		},
 		color: {
+			// eslint-disable-next-line @stylexjs/valid-styles -- the compiler supports chained pseudo-class conditions; the lint rule is stricter than the compiler.
 			[HOVER_NOT_PRESSED_OR_OPEN]: {
-				"@media (hover: hover) and (pointer: fine)": color.fg,
+				"@media (hover: hover) and (pointer: fine)": colors["--text"],
 			},
-			[PRESSED]: color.fgSubtle,
-			default: color.fgMuted,
-			":active": color.fgSubtle,
+			[PRESSED]: colors["--text-subtle"],
+			default: colors["--text-muted"],
+			":active": colors["--text-subtle"],
 		},
 	},
 	ghost: {
@@ -215,51 +216,54 @@ const colorVariants = stylex.create({
 		backgroundColor: {
 			// eslint-disable-next-line @stylexjs/valid-styles -- the compiler supports chained pseudo-class conditions; the lint rule is stricter than the compiler.
 			[HOVER_NOT_PRESSED_OR_OPEN]: {
-				"@media (hover: hover) and (pointer: fine)": color.highlight,
+				"@media (hover: hover) and (pointer: fine)": colors["--highlight"],
 			},
-			[PRESSED]: color.surfaceSubtle,
+			[PRESSED]: colors["--surface-subtle"],
 			default: "transparent",
 		},
 		color: {
+			// eslint-disable-next-line @stylexjs/valid-styles -- the compiler supports chained pseudo-class conditions; the lint rule is stricter than the compiler.
 			[HOVER_NOT_PRESSED_OR_OPEN]: {
-				"@media (hover: hover) and (pointer: fine)": color.fgMuted,
+				"@media (hover: hover) and (pointer: fine)": colors["--text-muted"],
 			},
-			[PRESSED]: color.fg,
-			default: color.fgMuted,
+			[PRESSED]: colors["--text"],
+			default: colors["--text-muted"],
 		},
 	},
 	plain: {
 		backgroundColor: {
 			// eslint-disable-next-line @stylexjs/valid-styles -- the compiler supports chained pseudo-class conditions; the lint rule is stricter than the compiler.
 			[HOVER_NOT_PRESSED_OR_OPEN]: {
-				"@media (hover: hover) and (pointer: fine)": color.highlight,
+				"@media (hover: hover) and (pointer: fine)": colors["--highlight"],
 			},
 			default: "transparent",
 		},
 		color: {
+			// eslint-disable-next-line @stylexjs/valid-styles -- the compiler supports chained pseudo-class conditions; the lint rule is stricter than the compiler.
 			[HOVER_NOT_PRESSED_OR_OPEN]: {
-				"@media (hover: hover) and (pointer: fine)": color.fg,
+				"@media (hover: hover) and (pointer: fine)": colors["--text"],
 			},
-			[PRESSED]: color.fg,
-			default: color.fgMuted,
+			[PRESSED]: colors["--text"],
+			default: colors["--text-muted"],
 		},
 	},
 	danger: {
-		borderColor: color.bgDanger,
+		borderColor: colors["--danger"],
 		backgroundColor: {
 			// eslint-disable-next-line @stylexjs/valid-styles -- the compiler supports chained pseudo-class conditions; the lint rule is stricter than the compiler.
 			[HOVER_NOT_PRESSED_OR_OPEN]: {
-				"@media (hover: hover) and (pointer: fine)": color.bgDanger,
+				"@media (hover: hover) and (pointer: fine)": colors["--danger"],
 			},
-			[PRESSED]: color.bgDanger,
-			default: color.bgDangerSubtle,
+			[PRESSED]: colors["--danger"],
+			default: colors["--danger-subtle"],
 		},
 		color: {
+			// eslint-disable-next-line @stylexjs/valid-styles -- the compiler supports chained pseudo-class conditions; the lint rule is stricter than the compiler.
 			[HOVER_NOT_PRESSED_OR_OPEN]: {
-				"@media (hover: hover) and (pointer: fine)": color.fgAccentContrast,
+				"@media (hover: hover) and (pointer: fine)": colors["--accent-contrast"],
 			},
-			[PRESSED]: color.fgAccentContrast,
-			default: color.bgDanger,
+			[PRESSED]: colors["--accent-contrast"],
+			default: colors["--danger"],
 		},
 	},
 });

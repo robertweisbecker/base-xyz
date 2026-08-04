@@ -5,7 +5,7 @@ import { WarningIcon } from "@phosphor-icons/react/dist/csr/Warning";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import * as stylex from "@stylexjs/stylex";
 import type { ReactNode } from "react";
-import { color, space } from "@/styles/tokens.stylex";
+import { colors, space } from "@/styles/tokens.stylex";
 import { Button } from "../button/button";
 import { CloseButton } from "../button/close-button";
 import { Link } from "../link/link";
@@ -322,7 +322,7 @@ const storyStyles = stylex.create({
 		flexDirection: "column",
 	},
 	positioningStage: {
-		borderColor: color.border,
+		borderColor: colors["--border"],
 		borderStyle: "solid",
 		borderWidth: "1px",
 		height: "13rem",

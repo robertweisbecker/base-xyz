@@ -13,7 +13,7 @@ import { focusRing } from "@/styles/recipes/focus";
 import { popupMotionStyles, popupPositionerStyles } from "@/components/popover/popover.stylex";
 import { popupVars } from "@/components/popover/popover-vars.stylex";
 import { pressable } from "@/styles/recipes/transitions";
-import { color, radius, shadow, size, space, motion } from "@/styles/tokens.stylex";
+import { colors, radius, shadow, size, space, motion } from "@/styles/tokens.stylex";
 import { fontSize, letterSpacing, lineHeight } from "@/styles/tokens.stylex";
 import {
 	menuItemSizeStyles,
@@ -539,9 +539,9 @@ function normalizeChipLimit(limit?: number) {
 
 const comboboxParts = stylex.create({
 	panelSurface: {
-		[popupVars.background]: color.bgElevated,
-		[popupVars.border]: color.border,
-		[popupVars.foreground]: color.fg,
+		[popupVars.background]: colors["--elevated"],
+		[popupVars.border]: colors["--border"],
+		[popupVars.foreground]: colors["--text"],
 		borderRadius: radius.lg,
 		backgroundColor: popupVars.background,
 		boxShadow: shadow.md,
@@ -549,11 +549,11 @@ const comboboxParts = stylex.create({
 	},
 	inputGroup: {
 		borderColor: {
-			"[data-disabled]": color.border,
-			"[data-readonly]": color.border,
-			default: color.borderStrong,
-			":focus-within:not([data-disabled]):not([data-readonly])": color.focus,
-			":hover:not(:focus-within):not([data-disabled]):not([data-readonly])": color.borderHover,
+			"[data-disabled]": colors["--border"],
+			"[data-readonly]": colors["--border"],
+			default: colors["--border-strong"],
+			":focus-within:not([data-disabled]):not([data-readonly])": colors["--focus"],
+			":hover:not(:focus-within):not([data-disabled]):not([data-readonly])": colors["--border-hover"],
 		},
 		alignItems: "center",
 		display: "flex",
@@ -589,12 +589,12 @@ const comboboxParts = stylex.create({
 		overflow: "hidden",
 		alignItems: "center",
 		backgroundColor: {
-			default: color.surfaceSubtle,
-			":focus-within": color.bgAccent,
+			default: colors["--surface-subtle"],
+			":focus-within": colors["--accent"],
 		},
 		color: {
-			default: color.fg,
-			":focus-within": color.fgAccentContrast,
+			default: colors["--text"],
+			":focus-within": colors["--accent-contrast"],
 		},
 		display: "inline-flex",
 		fontSize: fontSize.x1,
@@ -614,10 +614,10 @@ const comboboxParts = stylex.create({
 		paddingInline: space[2],
 		alignItems: "center",
 		backgroundColor: {
-			default: color.surfaceSubtle,
-			":hover": color.highlight,
+			default: colors["--surface-subtle"],
+			":hover": colors["--highlight"],
 		},
-		color: color.fg,
+		color: colors["--text"],
 		display: "inline-flex",
 		flexShrink: 0,
 		fontSize: fontSize.x1,
@@ -636,14 +636,14 @@ const comboboxParts = stylex.create({
 			[stylex.when.ancestor("[data-disabled]", comboboxMarker)]: "transparent",
 			[stylex.when.ancestor("[data-readonly]", comboboxMarker)]: "transparent",
 			":hover": {
-				"@media (hover: hover) and (pointer: fine)": color.surface,
+				"@media (hover: hover) and (pointer: fine)": colors["--surface"],
 			},
 		},
 		height: space[5],
 		width: space[5],
 	},
 	noChips: {
-		color: color.fgMuted,
+		color: colors["--text-muted"],
 		fontSize: fontSize.x1,
 		letterSpacing: letterSpacing.x1,
 		lineHeight: lineHeight.x1,
@@ -657,20 +657,21 @@ const comboboxParts = stylex.create({
 		insetInlineEnd: 2,
 		position: "absolute",
 	},
-	action: {
+		action: {
 		padding: 0,
 		borderRadius: radius.sm,
 		borderWidth: 0,
 		alignItems: "center",
 		color: {
+			// eslint-disable-next-line @stylexjs/valid-styles -- the compiler supports chained pseudo-class conditions; the lint rule is stricter than the compiler.
 			[HOVER_WHEN_INACTIVE]: {
-				"@media (hover: hover) and (pointer: fine)": color.fg,
+				"@media (hover: hover) and (pointer: fine)": colors["--text"],
 			},
-			"[data-disabled]": color.fgSubtle,
-			"[data-popup-open]": color.fg,
-			default: color.fgSubtle,
-			[stylex.when.ancestor('[aria-readonly="true"]', comboboxMarker)]: color.fgSubtle,
-			[stylex.when.ancestor("[data-readonly]", comboboxMarker)]: color.fgSubtle,
+			"[data-disabled]": colors["--text-subtle"],
+			"[data-popup-open]": colors["--text"],
+			default: colors["--text-subtle"],
+			[stylex.when.ancestor('[aria-readonly="true"]', comboboxMarker)]: colors["--text-subtle"],
+			[stylex.when.ancestor("[data-readonly]", comboboxMarker)]: colors["--text-subtle"],
 		},
 		cursor: {
 			"[data-disabled]": "not-allowed",
@@ -712,7 +713,7 @@ const comboboxParts = stylex.create({
 			":empty": 0,
 		},
 		alignItems: "center",
-		color: color.fgMuted,
+		color: colors["--text-muted"],
 		display: "flex",
 		fontSize: fontSize.x2,
 		justifyContent: "center",

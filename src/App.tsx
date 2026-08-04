@@ -1,4 +1,4 @@
-import type { ReactNode } from "react";
+import { useLayoutEffect, useState, type ReactNode } from "react";
 import * as stylex from "@stylexjs/stylex";
 import * as Blocks from "./blocks";
 import { BlueprintIcon } from "@phosphor-icons/react/dist/csr/Blueprint";
@@ -68,10 +68,10 @@ import {
 	exampleSpeedOptions,
 } from "./blocks/model-selector/model-selector.examples";
 import { breakpoints, zIndex } from "@/styles/constants.stylex";
-import { color, radius, space } from "@/styles/tokens.stylex";
+import { colors, radius, space } from "@/styles/tokens.stylex";
 import { fontSize, fontWeight, letterSpacing, lineHeight } from "@/styles/tokens.stylex";
 import { textStyles } from "@/components/text/text.stylex";
-import { useTheme } from "./theme/use-theme";
+import { ThemeProvider, useTheme, type ResolvedThemeMode, type ThemeMode } from "./theme";
 import {
 	ArrowRightIcon,
 	FileSearchIcon,
@@ -88,6 +88,7 @@ type GalleryCell = {
 
 const componentNames = ["React", "Vue", "Svelte", "Solid"];
 const themeIconSize = 18;
+const themeModeStorageKey = "base-stylex-theme";
 
 function getComponentCells(): GalleryCell[] {
 	return [
@@ -366,7 +367,7 @@ function getComponentCells(): GalleryCell[] {
 		{
 			title: "Meter",
 			content: (
-				<Meter.Root value={100} max={500} color="var(--color-warning)">
+				<Meter.Root value={100} max={500} color={colors["--warning"]}>
 					<Meter.Label>My meter</Meter.Label>
 					<Meter.Value />
 					<Meter.Track>
@@ -872,10 +873,25 @@ function ToastList() {
 }
 
 function App() {
-	const { theme, toggleTheme } = useTheme();
+	const [mode, setMode] = useState<ThemeMode>(getInitialThemeMode);
+
+	useLayoutEffect(() => {
+		localStorage.setItem(themeModeStorageKey, mode);
+	}, [mode]);
 
 	return (
-		<div id="top" {...stylex.props(styles.app)}>
+		<ThemeProvider mode={mode} render={<div id="top" />} style={styles.app}>
+			<AppContent onModeChange={setMode} />
+		</ThemeProvider>
+	);
+}
+
+function AppContent({ onModeChange }: { onModeChange: (mode: ThemeMode) => void }) {
+	const { resolvedMode } = useTheme();
+	const nextMode: ResolvedThemeMode = resolvedMode === "light" ? "dark" : "light";
+
+	return (
+		<>
 			<header {...stylex.props(styles.header)}>
 				<a href="#top" {...stylex.props(textStyles.supporting, styles.brand)}>
 					<span {...stylex.props(styles.brandMark)}>
@@ -894,18 +910,18 @@ function App() {
 					<IconButton
 						icon={
 							<span {...stylex.props(styles.themeIcon)}>
-								{theme === "light" ? (
+								{resolvedMode === "light" ? (
 									<MoonIcon aria-hidden size={themeIconSize} weight="duotone" />
 								) : (
 									<SunIcon aria-hidden size={themeIconSize} weight="duotone" />
 								)}
 							</span>
 						}
-						label={`Switch to ${theme === "light" ? "dark" : "light"} mode`}
+						label={`Switch to ${nextMode} mode`}
 						variant="ghost"
 						shape="circle"
 						size="sm"
-						onClick={toggleTheme}
+						onClick={() => onModeChange(nextMode)}
 					/>
 				</div>
 			</header>
@@ -914,8 +930,14 @@ function App() {
 				<GallerySection title="Components" cells={getComponentCells()} variant="components" />
 				<GallerySection title="Blocks" cells={getBlockCells()} variant="blocks" />
 			</main>
-		</div>
+		</>
 	);
+}
+
+function getInitialThemeMode(): ThemeMode {
+	if (typeof window === "undefined") return "system";
+	const storedMode = localStorage.getItem(themeModeStorageKey);
+	return storedMode === "light" || storedMode === "dark" || storedMode === "system" ? storedMode : "system";
 }
 
 function GallerySection({
@@ -961,14 +983,14 @@ function GallerySection({
 
 const styles = stylex.create({
 	app: {
-		backgroundColor: "light-dark(white,black)",
-		color: color.fg,
+		backgroundColor: colors["--canvas"],
+		color: colors["--text"],
 		minHeight: "100svh",
 	},
 	header: {
 		paddingInline: { default: space[4], [breakpoints.sm]: space[4] },
 		alignItems: "center",
-		backgroundImage: `linear-gradient(to bottom, ${color.canvas}, transparent)`,
+		backgroundImage: `linear-gradient(to bottom, ${colors["--canvas"]}, transparent)`,
 		display: "flex",
 		justifyContent: "space-between",
 		position: "sticky",
@@ -980,16 +1002,16 @@ const styles = stylex.create({
 		gap: space[2],
 		textDecoration: "none",
 		alignItems: "center",
-		color: color.fg,
+		color: colors["--text"],
 		display: "inline-flex",
 	},
 	brandMark: {
 		borderRadius: radius.xs,
-		outline: `1px solid ${color.canvas}`,
+		outline: `1px solid ${colors["--canvas"]}`,
 		alignItems: "center",
 		aspectRatio: 1,
-		backgroundColor: color.border,
-		color: color.fgMuted,
+		backgroundColor: colors["--border"],
+		color: colors["--text-muted"],
 		display: "inline-flex",
 		justifyContent: "center",
 		height: "20px",
@@ -1018,15 +1040,15 @@ const styles = stylex.create({
 		paddingBlock: space[4],
 		paddingInline: space[4],
 		alignItems: "center",
-		// backgroundColor: color.surface,
-		// borderBottomColor: color.border,
+		// backgroundColor: colors["--surface"],
+		// borderBottomColor: colors["--border"],
 		// borderBottomStyle: "solid",
 		// borderBottomWidth: "1px",
 		display: "flex",
 	},
 	sectionTitle: {
 		margin: 0,
-		color: color.fg,
+		color: colors["--text"],
 		fontSize: fontSize.x2,
 		fontWeight: fontWeight.regular,
 		letterSpacing: letterSpacing.x2,
@@ -1035,13 +1057,13 @@ const styles = stylex.create({
 	componentGrid: {
 		gap: "1px",
 		paddingInline: 1,
-		// borderBottomColor: color.border,
+		// borderBottomColor: colors["--border"],
 		// borderBottomStyle: "solid",
 		// borderBottomWidth: "1px",
-		// borderLeftColor: color.border,
+		// borderLeftColor: colors["--border"],
 		// borderLeftStyle: "solid",
 		// borderLeftWidth: "1px",
-		// borderRightColor: color.border,
+		// borderRightColor: colors["--border"],
 		// borderRightStyle: "solid",
 		// borderRightWidth: "1px",
 		display: "grid",
@@ -1053,14 +1075,14 @@ const styles = stylex.create({
 	},
 	blockGrid: {
 		gap: "1px",
-		// backgroundColor: color.border,
-		// borderBottomColor: color.border,
+		// backgroundColor: colors["--border"],
+		// borderBottomColor: colors["--border"],
 		// borderBottomStyle: "solid",
 		// borderBottomWidth: "1px",
-		// borderLeftColor: color.border,
+		// borderLeftColor: colors["--border"],
 		// borderLeftStyle: "solid",
 		// borderLeftWidth: "1px",
-		// borderRightColor: color.border,
+		// borderRightColor: colors["--border"],
 		// borderRightStyle: "solid",
 		// borderRightWidth: "1px",
 		display: "grid",
@@ -1072,7 +1094,7 @@ const styles = stylex.create({
 	componentCell: {
 		padding: space[4],
 		borderRadius: radius.sm,
-		backgroundColor: "var(--gray-s2)",
+		backgroundColor: colors["--gray-s2"],
 		boxSizing: "border-box",
 		display: "grid",
 		gridTemplateRows: "minmax(0, 1fr) auto",
@@ -1082,7 +1104,7 @@ const styles = stylex.create({
 	blockCell: {
 		padding: space[4],
 		borderRadius: radius.md,
-		backgroundColor: "var(--gray-s2)",
+		backgroundColor: colors["--gray-s2"],
 		boxSizing: "border-box",
 		display: "grid",
 		gridTemplateRows: "minmax(0, 1fr) auto",
@@ -1091,7 +1113,7 @@ const styles = stylex.create({
 	},
 	componentFillerCell: {
 		borderRadius: radius.md,
-		backgroundColor: "var(--gray-s2)",
+		backgroundColor: colors["--gray-s2"],
 		boxSizing: "border-box",
 		minHeight: { default: "220px", [breakpoints.sm]: "248px" },
 	},
@@ -1115,7 +1137,7 @@ const styles = stylex.create({
 	},
 	cellTitle: {
 		margin: 0,
-		color: color.fgSubtle,
+		color: colors["--text-subtle"],
 		fontSize: fontSize.x1,
 		letterSpacing: letterSpacing.x1,
 		lineHeight: lineHeight.x1,
@@ -1171,8 +1193,8 @@ const styles = stylex.create({
 		lineHeight: lineHeight.x1,
 	},
 	scrollAreaSample: {
-		// backgroundColor: color.surfaceSubtle,
-		borderColor: color.border,
+		// backgroundColor: colors["--surface-subtle"],
+		borderColor: colors["--border"],
 		borderRadius: radius.md,
 		borderStyle: "solid",
 		borderWidth: "1px",
@@ -1189,7 +1211,7 @@ const styles = stylex.create({
 		borderRadius: radius.sm,
 		paddingBlock: space[2],
 		paddingInline: space[3],
-		backgroundColor: color.surface,
+		backgroundColor: colors["--surface"],
 		fontSize: fontSize.x1,
 		letterSpacing: letterSpacing.x1,
 		lineHeight: lineHeight.x1,
@@ -1197,7 +1219,7 @@ const styles = stylex.create({
 	separatorSample: {
 		gap: space[2],
 		alignItems: "center",
-		color: color.fgMuted,
+		color: colors["--text-muted"],
 		display: "flex",
 		flexDirection: "column",
 		fontSize: fontSize.x1,
@@ -1209,9 +1231,9 @@ const styles = stylex.create({
 		padding: 2,
 		borderRadius: radius.md,
 		gap: 1,
-		outline: `1px solid ${color.border}`,
+		outline: `1px solid ${colors["--border"]}`,
 		alignItems: "center",
-		backgroundColor: color.canvas,
+		backgroundColor: colors["--canvas"],
 		display: "inline-flex",
 	},
 	blockWide: {

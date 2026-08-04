@@ -3,7 +3,7 @@ import * as stylex from "@stylexjs/stylex";
 import type { StyleXStyles } from "@stylexjs/stylex";
 import { textStyles } from "@/components/text/text.stylex";
 import { motion } from "@/styles/tokens.stylex";
-import { color, radius, space } from "@/styles/tokens.stylex";
+import { colors, radius, space } from "@/styles/tokens.stylex";
 
 type StyledProps<T> = Omit<T, "className" | "style"> & {
 	className?: string;
@@ -95,7 +95,7 @@ const indeterminatePingPongDuration = "2500ms";
 
 const progressParts = stylex.create({
 	root: {
-		color: color.fg,
+		color: colors["--text"],
 		columnGap: space[3],
 		display: "grid",
 		gridTemplateColumns: "minmax(0, 1fr) auto",
@@ -104,13 +104,13 @@ const progressParts = stylex.create({
 	},
 	label: {
 		overflow: "hidden",
-		color: color.fgMuted,
+		color: colors["--text-muted"],
 		textOverflow: "ellipsis",
 		whiteSpace: "nowrap",
 		minWidth: 0,
 	},
 	value: {
-		color: color.fg,
+		color: colors["--text"],
 		fontVariantNumeric: "tabular-nums",
 		textAlign: "end",
 		whiteSpace: "nowrap",
@@ -143,9 +143,9 @@ const progressParts = stylex.create({
 			default: "none",
 		},
 		animationTimingFunction: "ease-in-out",
-		backgroundColor: color.fillTrack,
+		backgroundColor: colors["--fill-track"],
 		backgroundImage: {
-			"[data-indeterminate]": `linear-gradient(90deg, transparent 0%, transparent 28%, ${color.fillTrack} 40%, ${color.bgAccent} 48%, ${color.bgAccent} 52%, ${color.fillTrack} 60%, transparent 72%, transparent 100%)`,
+			"[data-indeterminate]": `linear-gradient(90deg, transparent 0%, transparent 28%, ${colors["--fill-track"]} 40%, ${colors["--accent"]} 48%, ${colors["--accent"]} 52%, ${colors["--fill-track"]} 60%, transparent 72%, transparent 100%)`,
 			default: `linear-gradient(90deg, transparent 0%, transparent 100%)`,
 		},
 		backgroundRepeat: "no-repeat",
@@ -153,7 +153,7 @@ const progressParts = stylex.create({
 			"[data-indeterminate]": "200% 100%",
 			default: "auto",
 		},
-		outlineColor: color.border,
+		outlineColor: colors["--border"],
 		outlineOffset: -1,
 		outlineStyle: "solid",
 		outlineWidth: 1,
@@ -162,9 +162,9 @@ const progressParts = stylex.create({
 	indicator: {
 		borderRadius: radius.full,
 		backgroundColor: {
-			"[data-complete]": color.bgSuccess,
+			"[data-complete]": colors["--success"],
 			"[data-indeterminate]": "transparent",
-			default: color.bgAccent,
+			default: colors["--accent"],
 		},
 		transitionDuration: {
 			default: motion.durationMedium,

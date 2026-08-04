@@ -8,7 +8,7 @@ import { textStyles, textWeightStyles } from "@/components/text/text.stylex";
 import { createContext, type ComponentProps, type ReactNode, useContext } from "react";
 import { Badge, type BadgeHue, type BadgeProps } from "@/components/badge/badge";
 import { Loader } from "@/components/loader/loader";
-import { color, radius, space } from "@/styles/tokens.stylex";
+import { colors, radius, space } from "@/styles/tokens.stylex";
 
 type StyledProps<T> = Omit<T, "style"> & {
 	/** StyleX overrides, applied after the component's own styles. */
@@ -162,7 +162,7 @@ const parts = stylex.create({
 		paddingBlockEnd: space[5],
 		position: "relative",
 		"::before": {
-			backgroundColor: color.border,
+			backgroundColor: colors["--border"],
 			content: '""',
 			display: {
 				default: "block",
@@ -207,7 +207,7 @@ const parts = stylex.create({
 	description: {
 		gridColumn: "1",
 		gridRow: "2",
-		color: color.fgMuted,
+		color: colors["--text-muted"],
 		minWidth: 0,
 	},
 	metadata: {
@@ -219,15 +219,15 @@ const parts = stylex.create({
 		display: "flex",
 	},
 	meta: {
-		color: color.fgMuted,
+		color: colors["--text-muted"],
 		fontVariantNumeric: "tabular-nums",
 	},
 });
 
 const markerStatus = stylex.create({
-	queued: { backgroundColor: color.surfaceSubtle, color: color.fgMuted },
-	running: { backgroundColor: color.bgAccentSoft, color: color.bgAccent },
-	complete: { backgroundColor: color.surfaceSubtle, color: color.fg },
-	approval: { backgroundColor: color.bgAccentSoft, color: color.bgAccent },
-	error: { backgroundColor: color.bgDangerSubtle, color: color.bgDanger },
+	queued: { backgroundColor: colors["--surface-subtle"], color: colors["--text-muted"] },
+	running: { backgroundColor: colors["--accent-soft"], color: colors["--accent"] },
+	complete: { backgroundColor: colors["--surface-subtle"], color: colors["--text"] },
+	approval: { backgroundColor: colors["--accent-soft"], color: colors["--accent"] },
+	error: { backgroundColor: colors["--danger-subtle"], color: colors["--danger"] },
 });

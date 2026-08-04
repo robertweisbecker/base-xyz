@@ -1,6 +1,6 @@
 import * as stylex from "@stylexjs/stylex";
 import { textStyles, textWeightStyles } from "@/components/text/text.stylex";
-import { color, radius } from "@/styles/tokens.stylex";
+import { colors, radius } from "@/styles/tokens.stylex";
 
 const toastTextParts = stylex.create({
 	title: {
@@ -8,7 +8,7 @@ const toastTextParts = stylex.create({
 	},
 	description: {
 		margin: 0,
-		color: color.fgMuted,
+		color: colors["--text-muted"],
 	},
 });
 
@@ -22,7 +22,7 @@ const toastControlParts = stylex.create({
 		padding: 0,
 		borderWidth: 0,
 		backgroundColor: "transparent",
-		color: color.bgAccent,
+		color: colors["--accent"],
 		flexShrink: 0,
 	},
 	close: {
@@ -32,7 +32,7 @@ const toastControlParts = stylex.create({
 		backgroundColor: {
 			default: "transparent",
 			":hover": {
-				"@media (hover: hover) and (pointer: fine)": color.surfaceSubtle,
+				"@media (hover: hover) and (pointer: fine)": colors["--surface-subtle"],
 			},
 		},
 		color: "currentColor",
@@ -43,7 +43,7 @@ const toastControlParts = stylex.create({
 	stackedClose: {
 		borderRadius: radius.sm,
 		marginBlock: "-8px",
-		color: color.fgMuted,
+		color: colors["--text-muted"],
 		marginInlineEnd: "-8px",
 		height: "36px",
 		width: "36px",

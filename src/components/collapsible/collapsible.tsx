@@ -5,7 +5,7 @@ import type { StyleXStyles } from "@stylexjs/stylex";
 import type { ComponentProps } from "react";
 import { motion } from "@/styles/tokens.stylex";
 import { focusRing } from "@/styles/recipes/focus";
-import { color, radius, size, space } from "@/styles/tokens.stylex";
+import { colors, radius, size, space } from "@/styles/tokens.stylex";
 import { fontSize, fontWeight, letterSpacing, lineHeight } from "@/styles/tokens.stylex";
 import type { ButtonShape, ButtonSize } from "../button/button";
 
@@ -118,7 +118,7 @@ export function Icon({ ref, children, className, style, side = "end", ...props }
 
 const collapsibleParts = stylex.create({
 	root: {
-		color: color.fg,
+		color: colors["--text"],
 		display: "flex",
 		flexDirection: "column",
 		width: "100%",
@@ -133,12 +133,12 @@ const collapsibleParts = stylex.create({
 		backgroundColor: {
 			// eslint-disable-next-line @stylexjs/valid-styles -- the compiler supports chained pseudo-class conditions; the lint rule is stricter than the compiler.
 			[HOVER_WHEN_INACTIVE]: {
-				"@media (hover: hover) and (pointer: fine)": color.surfaceSubtle,
+				"@media (hover: hover) and (pointer: fine)": colors["--surface-subtle"],
 			},
-			"[data-panel-open]": color.surfaceSubtle,
+			"[data-panel-open]": colors["--surface-subtle"],
 			default: "transparent",
 		},
-		color: color.fg,
+		color: colors["--text"],
 		cursor: {
 			"[data-disabled]": "not-allowed",
 			default: "default",
@@ -178,7 +178,7 @@ const collapsibleParts = stylex.create({
 	content: {
 		// paddingInlineStart: space[3],
 		gap: space[2],
-		color: color.fgMuted,
+		color: colors["--text-muted"],
 		display: "flex",
 		flexDirection: "column",
 		fontSize: fontSize.x2,
@@ -284,11 +284,12 @@ const triggerVariants = stylex.create({
 			default: "transparent",
 		},
 		color: {
+			// eslint-disable-next-line @stylexjs/valid-styles -- the compiler supports chained pseudo-class conditions; the lint rule is stricter than the compiler.
 			[HOVER_WHEN_INACTIVE]: {
-				"@media (hover: hover) and (pointer: fine)": color.fg,
+				"@media (hover: hover) and (pointer: fine)": colors["--text"],
 			},
-			"[data-panel-open]": color.fg,
-			default: color.fgMuted,
+			"[data-panel-open]": colors["--text"],
+			default: colors["--text-muted"],
 		},
 		minWidth: 0,
 		width: "fit-content",

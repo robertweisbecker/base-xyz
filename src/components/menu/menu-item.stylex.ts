@@ -1,6 +1,6 @@
 import * as stylex from "@stylexjs/stylex";
 import { textSizeStyles, textStyles } from "@/components/text/text.stylex";
-import { color, radius, size, space } from "@/styles/tokens.stylex";
+import { colors, radius, size, space } from "@/styles/tokens.stylex";
 import type { MenuItemSize } from "./menu.types";
 
 /** Inherited layout variables for Menu items and components that intentionally match them. */
@@ -88,32 +88,32 @@ export const menuItemSizeStyles = {
 export const menuItemVariantStyles = stylex.create({
 	default: {
 		backgroundColor: {
-			"[data-highlighted]": color.highlight,
+			"[data-highlighted]": colors["--highlight"],
 			default: "transparent",
 		},
 		color: {
-			"[data-highlighted]": color.fg,
-			default: color.fg,
+			"[data-highlighted]": colors["--text"],
+			default: colors["--text"],
 		},
 	},
 	primary: {
 		backgroundColor: {
-			"[data-highlighted]": color.bgAccent,
+			"[data-highlighted]": colors["--accent"],
 			default: "transparent",
 		},
 		color: {
-			"[data-highlighted]": color.fgAccentContrast,
-			default: color.fg,
+			"[data-highlighted]": colors["--accent-contrast"],
+			default: colors["--text"],
 		},
 	},
 	danger: {
 		backgroundColor: {
-			"[data-highlighted]": color.bgDangerSubtle,
+			"[data-highlighted]": colors["--danger-subtle"],
 			default: "transparent",
 		},
 		color: {
-			"[data-highlighted]": color.bgDanger,
-			default: color.bgDanger,
+			"[data-highlighted]": colors["--danger"],
+			default: colors["--danger"],
 		},
 	},
 });

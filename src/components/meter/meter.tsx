@@ -3,7 +3,7 @@ import * as stylex from "@stylexjs/stylex";
 import type { StyleXStyles } from "@stylexjs/stylex";
 import { textStyles } from "@/components/text/text.stylex";
 import { createContext, useContext, type CSSProperties } from "react";
-import { color, motion, shadow, size, space } from "@/styles/tokens.stylex";
+import { colors, motion, shadow, size, space } from "@/styles/tokens.stylex";
 
 type StyledProps<T> = Omit<T, "className" | "style"> & {
 	className?: string;
@@ -49,9 +49,9 @@ type ResolvedMeterValues = {
 const MeterVariantContext = createContext<MeterVariant>("bar");
 
 const meterStateColors = {
-	optimum: color.bgSuccess,
-	suboptimum: color.bgWarning,
-	critical: color.bgDanger,
+	optimum: colors["--success"],
+	suboptimum: colors["--warning"],
+	critical: colors["--danger"],
 } satisfies Record<MeterState, string>;
 
 export function Root({
@@ -251,7 +251,7 @@ const meterParts = stylex.create({
 	},
 	label: {
 		overflow: "hidden",
-		color: color.fgMuted,
+		color: colors["--text-muted"],
 		textOverflow: "ellipsis",
 		whiteSpace: "nowrap",
 		minWidth: 0,
@@ -261,7 +261,7 @@ const meterParts = stylex.create({
 		gridRow: "1",
 	},
 	value: {
-		color: color.fg,
+		color: colors["--text"],
 		fontVariantNumeric: "tabular-nums",
 		textAlign: "end",
 		whiteSpace: "nowrap",
@@ -274,14 +274,14 @@ const meterParts = stylex.create({
 		borderRadius: "2px",
 		gridColumn: "1 / -1",
 		overflow: "hidden",
-		backgroundColor: color.fillTrack,
+		backgroundColor: colors["--fill-track"],
 		height: space[2],
 	},
 	segmentedTrack: {
 		borderRadius: 0,
 		gridColumn: "1",
 		gridRow: "1",
-		backgroundColor: color.fillTrack,
+		backgroundColor: colors["--fill-track"],
 		boxShadow: "none",
 		maskImage:
 			"url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 10 16'%3E%3Crect width='6' height='16' rx='1' fill='black'/%3E%3C/svg%3E\")",
@@ -293,7 +293,7 @@ const meterParts = stylex.create({
 		width: `calc(var(--_meter-segment-count) * (10px) - ${space[1]})`,
 	},
 	indicator: {
-		backgroundColor: "var(--_meter-indicator-color, var(--gray-p1))",
+		backgroundColor: `var(--_meter-indicator-color, ${colors["--gray-p1"]})`,
 		borderEndStartRadius: "inherit",
 		borderStartStartRadius: "inherit",
 		boxShadow: shadow.sm,

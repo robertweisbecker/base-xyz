@@ -2,7 +2,7 @@ import { Toolbar as BaseToolbar } from "@base-ui/react/toolbar";
 import * as stylex from "@stylexjs/stylex";
 import type { StyleXStyles } from "@stylexjs/stylex";
 import { focusRing } from "@/styles/recipes/focus";
-import { color, radius, shadow, size, space } from "@/styles/tokens.stylex";
+import { colors, radius, shadow, size, space } from "@/styles/tokens.stylex";
 import { fontSize, letterSpacing, lineHeight } from "@/styles/tokens.stylex";
 
 const HOVER_WHEN_INACTIVE =
@@ -142,18 +142,18 @@ const toolbarParts = stylex.create({
 		backgroundColor: {
 			// eslint-disable-next-line @stylexjs/valid-styles -- the compiler supports chained pseudo-class conditions; the lint rule is stricter than the compiler.
 			[HOVER_WHEN_INACTIVE]: {
-				"@media (hover: hover) and (pointer: fine)": color.highlight,
+				"@media (hover: hover) and (pointer: fine)": colors["--highlight"],
 			},
-			[TOGGLED_ON]: color.surfaceSubtle,
+			[TOGGLED_ON]: colors["--surface-subtle"],
 			"[data-disabled]": "transparent",
 			default: "transparent",
-			":active": color.surfaceSubtleActive,
+			":active": colors["--surface-subtle-active"],
 		},
 		boxSizing: "border-box",
 		color: {
-			[TOGGLED_ON]: color.fg,
-			"[data-disabled]": color.fgSubtle,
-			default: color.fgMuted,
+			[TOGGLED_ON]: colors["--text"],
+			"[data-disabled]": colors["--text-subtle"],
+			default: colors["--text-muted"],
 		},
 		display: "inline-flex",
 		flexShrink: 0,
@@ -183,10 +183,10 @@ const toolbarParts = stylex.create({
 		textDecoration: "underline",
 		alignItems: "center",
 		color: {
-			"[data-disabled]": color.fgSubtle,
-			default: color.fg,
+			"[data-disabled]": colors["--text-subtle"],
+			default: colors["--text"],
 			":hover": {
-				"@media (hover: hover) and (pointer: fine)": color.fgAccent,
+				"@media (hover: hover) and (pointer: fine)": colors["--text-accent"],
 			},
 		},
 		display: "inline-flex",
@@ -212,13 +212,13 @@ const toolbarParts = stylex.create({
 		borderRadius: radius.sm,
 		paddingInline: space[3],
 		backgroundColor: {
-			default: color.surfaceSubtle,
-			":focus-visible": color.canvas,
+			default: colors["--surface-subtle"],
+			":focus-visible": colors["--canvas"],
 		},
 		boxSizing: "border-box",
 		color: {
-			"[data-disabled]": color.fgSubtle,
-			default: color.fg,
+			"[data-disabled]": colors["--text-subtle"],
+			default: colors["--text"],
 		},
 		flexBasis: 0,
 		flexGrow: 1,
@@ -234,12 +234,12 @@ const toolbarParts = stylex.create({
 		height: size["control.md"],
 		minWidth: "10rem",
 		"::placeholder": {
-			color: color.fgSubtle,
+			color: colors["--text-subtle"],
 		},
 	},
 	separator: {
 		margin: space[1],
-		backgroundColor: color.border,
+		backgroundColor: colors["--border"],
 		flexShrink: 0,
 		height: {
 			"[data-orientation=horizontal]": "1px",
@@ -257,8 +257,8 @@ const toolbarVariants = stylex.create({
 		padding: space[1],
 		borderRadius: radius.md,
 		backgroundColor: {
-			"[data-disabled]": color.surface,
-			default: color.bgPanel,
+			"[data-disabled]": colors["--surface"],
+			default: colors["--panel"],
 		},
 		boxShadow: {
 			"[data-disabled]": "none",

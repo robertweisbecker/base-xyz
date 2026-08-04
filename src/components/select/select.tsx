@@ -13,7 +13,7 @@ import { focusRing } from "@/styles/recipes/focus";
 import { modalMotionStyles } from "@/components/dialog/dialog.stylex";
 import { popupMotionStyles, popupStaticPositionerStyles } from "@/components/popover/popover.stylex";
 import { popupVars } from "@/components/popover/popover-vars.stylex";
-import { color, radius, shadow, size, space } from "@/styles/tokens.stylex";
+import { colors, radius, shadow, size, space } from "@/styles/tokens.stylex";
 import { fontSize, fontWeight, letterSpacing, lineHeight } from "@/styles/tokens.stylex";
 import {
 	menuItemSizeStyles,
@@ -320,9 +320,9 @@ export function Separator({ ref, className, style, ...props }: SelectSeparatorPr
 
 const selectParts = stylex.create({
 	panelSurface: {
-		[popupVars.background]: color.bgElevated,
-		[popupVars.border]: color.border,
-		[popupVars.foreground]: color.fg,
+		[popupVars.background]: colors["--elevated"],
+		[popupVars.border]: colors["--border"],
+		[popupVars.foreground]: colors["--text"],
 		borderRadius: radius.lg,
 		backgroundColor: popupVars.background,
 		boxShadow: shadow.md,
@@ -338,8 +338,8 @@ const selectParts = stylex.create({
 	trigger: {
 		alignItems: "center",
 		color: {
-			"[data-placeholder]": color.fgMuted,
-			default: color.fg,
+			"[data-placeholder]": colors["--text-muted"],
+			default: colors["--text"],
 		},
 		columnGap: space[3],
 		cursor: {
@@ -359,7 +359,7 @@ const selectParts = stylex.create({
 	},
 	inlineTrigger: {
 		borderColor: {
-			"[data-invalid]": color.bgDanger,
+			"[data-invalid]": colors["--danger"],
 			default: "transparent",
 			// eslint-disable-next-line @stylexjs/valid-styles -- the compiler supports chained pseudo-class conditions; the lint rule is stricter than the compiler.
 			":hover:not([data-invalid])": {
@@ -372,16 +372,16 @@ const selectParts = stylex.create({
 		backgroundColor: {
 			// eslint-disable-next-line @stylexjs/valid-styles -- the compiler supports chained pseudo-class conditions; the lint rule is stricter than the compiler.
 			[HOVER_WHEN_INACTIVE]: {
-				"@media (hover: hover) and (pointer: fine)": color.surfaceSubtle,
+				"@media (hover: hover) and (pointer: fine)": colors["--surface-subtle"],
 			},
-			"[data-popup-open]": color.bgAccentSoft,
+			"[data-popup-open]": colors["--accent-soft"],
 			default: "transparent",
-			":active": color.bgAccentSoft,
+			":active": colors["--accent-soft"],
 		},
 		color: {
-			"[data-placeholder]": color.fgSubtle,
-			"[data-placeholder]:hover": color.fgAccent,
-			default: color.fgAccent,
+			"[data-placeholder]": colors["--text-subtle"],
+			"[data-placeholder]:hover": colors["--text-accent"],
+			default: colors["--text-accent"],
 		},
 		columnGap: "2px",
 		fontWeight: {
@@ -392,7 +392,7 @@ const selectParts = stylex.create({
 		marginBlockStart: "-1px",
 		paddingInlineEnd: "2px",
 		paddingInlineStart: "2px",
-		textDecorationColor: color.fgSubtle,
+		textDecorationColor: colors["--text-subtle"],
 		textDecorationStyle: "dotted",
 		textDecorationThickness: "2px",
 		textUnderlineOffset: "4px",
@@ -412,7 +412,7 @@ const selectParts = stylex.create({
 	},
 	triggerIcon: {
 		alignItems: "center",
-		// color: color.fgSubtle,
+		// color: colors["--text-subtle"],
 		display: "inline-flex",
 		flexShrink: 0,
 		justifyContent: "center",
@@ -437,7 +437,7 @@ const selectParts = stylex.create({
 	scrollArrow: {
 		insetInline: "1px",
 		alignItems: "center",
-		color: color.fgMuted,
+		color: colors["--text-muted"],
 		display: "flex",
 		justifyContent: "center",
 		zIndex: 2,
@@ -452,7 +452,7 @@ const selectParts = stylex.create({
 			insetInline: 0,
 			backgroundImage: `linear-gradient(
 				to bottom,
-				${color.bgElevated} 10%,
+				${colors["--elevated"]} 10%,
 				transparent 100%
 			)`,
 			borderStartEndRadius: `calc(${radius.lg} - 1px)`,
@@ -472,7 +472,7 @@ const selectParts = stylex.create({
 			insetInline: 0,
 			backgroundImage: `linear-gradient(
 				to top,
-				${color.bgElevated} 10%,
+				${colors["--elevated"]} 10%,
 				transparent 100%
 			)`,
 			borderEndEndRadius: `calc(${radius.lg} - 1px)`,
@@ -500,7 +500,7 @@ const selectParts = stylex.create({
 	groupLabel: {
 		paddingBlock: space[2],
 		paddingInline: space[3],
-		color: color.fgMuted,
+		color: colors["--text-muted"],
 		fontSize: fontSize.x1,
 		fontWeight: fontWeight.semibold,
 		letterSpacing: letterSpacing.x1,
@@ -509,7 +509,7 @@ const selectParts = stylex.create({
 	separator: {
 		marginBlock: space[1],
 		marginInline: space[3],
-		backgroundColor: color.border,
+		backgroundColor: colors["--border"],
 		height: "1px",
 	},
 	backdrop: {

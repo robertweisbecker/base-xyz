@@ -2,7 +2,7 @@ import * as stylex from "@stylexjs/stylex";
 import type { StyleXStyles } from "@stylexjs/stylex";
 import { createContext, type ComponentProps, useContext, useId } from "react";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/card/card";
-import { color, radius, shadow, space } from "@/styles/tokens.stylex";
+import { colors, radius, shadow, space } from "@/styles/tokens.stylex";
 import { fontSize, fontWeight, letterSpacing, lineHeight } from "@/styles/tokens.stylex";
 
 type StyledProps<T> = Omit<T, "style"> & {
@@ -166,15 +166,15 @@ const parts = stylex.create({
 		borderRadius: radius.md,
 		gap: space[3],
 		alignItems: "flex-start",
-		backgroundImage: `linear-gradient(to bottom right, ${color.surfaceSubtle}, transparent)`,
+		backgroundImage: `linear-gradient(to bottom right, ${colors["--surface-subtle"]}, transparent)`,
 		display: "flex",
 	},
 	icon: {
 		borderRadius: radius.sm,
 		alignItems: "center",
-		backgroundColor: color.bgElevated,
+		backgroundColor: colors["--elevated"],
 		boxShadow: shadow.sm,
-		color: color.fgSubtle,
+		color: colors["--text-subtle"],
 		display: "flex",
 		flexShrink: 0,
 		justifyContent: "center",
@@ -188,14 +188,14 @@ const parts = stylex.create({
 		minWidth: 0,
 	},
 	action: {
-		color: color.fg,
+		color: colors["--text"],
 		fontSize: fontSize.x2,
 		fontWeight: fontWeight.medium,
 		letterSpacing: letterSpacing.x2,
 		lineHeight: lineHeight.x2,
 	},
 	actionDescription: {
-		color: color.fgMuted,
+		color: colors["--text-muted"],
 		fontSize: fontSize.x2,
 		letterSpacing: letterSpacing.x2,
 		lineHeight: lineHeight.x2,
@@ -213,14 +213,14 @@ const parts = stylex.create({
 		gridTemplateColumns: "6.5rem minmax(0, 1fr)",
 	},
 	detailLabel: {
-		color: color.fgMuted,
+		color: colors["--text-muted"],
 		fontSize: fontSize.x1,
 		letterSpacing: letterSpacing.x1,
 		lineHeight: lineHeight.x1,
 	},
 	detailValue: {
 		margin: 0,
-		color: color.fg,
+		color: colors["--text"],
 		fontSize: fontSize.x2,
 		letterSpacing: letterSpacing.x2,
 		lineHeight: lineHeight.x2,
@@ -232,7 +232,7 @@ const parts = stylex.create({
 		paddingBlock: space[3],
 		paddingInline: space[5],
 		backgroundColor: "transparent",
-		borderBlockStartColor: color.border,
+		borderBlockStartColor: colors["--border"],
 		borderBlockStartStyle: "solid",
 		borderBlockStartWidth: "1px",
 	},

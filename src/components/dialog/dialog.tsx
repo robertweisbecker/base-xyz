@@ -8,7 +8,7 @@ import {
 	modalTextStyles,
 	modalViewportStyles,
 } from "@/components/dialog/dialog.stylex";
-import { color, space } from "@/styles/tokens.stylex";
+import { colors, space } from "@/styles/tokens.stylex";
 import { XIcon } from "@phosphor-icons/react";
 import { IconButton } from "../button";
 
@@ -223,7 +223,7 @@ const dialogParts = stylex.create({
 		paddingBlock: space[4],
 		paddingInlineEnd: space[4],
 		paddingInlineStart: space[6],
-		borderTopColor: color.border,
+		borderTopColor: colors["--border"],
 		borderTopStyle: "solid",
 		borderTopWidth: "0.5px",
 	},

@@ -12,7 +12,7 @@ import {
 } from "@/styles/theme-props-layout.stylex";
 import { spacingThemeProps } from "@/styles/theme-props-spacing.stylex";
 import { radiusThemeProps, shadowThemeProps } from "@/styles/theme-props-surface.stylex";
-import { color, radius, size, space } from "@/styles/tokens.stylex";
+import { colors, radius, size, space } from "@/styles/tokens.stylex";
 import { fontSize, letterSpacing, lineHeight } from "@/styles/tokens.stylex";
 
 const INTERACTIVE_CONTROL_HOVER =
@@ -72,39 +72,39 @@ const parts = stylex.create({
 		},
 	},
 	itemLabel: {},
-	description: { color: color.fgMuted },
+	description: { color: colors["--text-muted"] },
 	error: {
 		gap: space[1],
 		alignItems: "center",
-		color: color.fgDanger,
+		color: colors["--text-danger"],
 		display: "inline-flex",
 	},
 	requiredIndicator: {
-		color: color.fgDanger,
+		color: colors["--text-danger"],
 		marginInlineStart: space[1],
 	},
 	inputBase: {
 		borderColor: {
 			// eslint-disable-next-line @stylexjs/valid-styles -- the compiler supports chained pseudo-class conditions; the lint rule is stricter than the compiler.
 			[INTERACTIVE_CONTROL_HOVER]: {
-				"@media (hover: hover) and (pointer: fine)": color.borderHover,
+				"@media (hover: hover) and (pointer: fine)": colors["--border-hover"],
 			},
-			"[data-disabled]": color.borderDisabled,
-			"[data-invalid]": color.bgDanger,
-			"[data-popup-open]": color.borderHover,
-			"[data-readonly]": color.border,
-			default: color.borderStrong,
+			"[data-disabled]": colors["--border-disabled"],
+			"[data-invalid]": colors["--danger"],
+			"[data-popup-open]": colors["--border-hover"],
+			"[data-readonly]": colors["--border"],
+			default: colors["--border-strong"],
 		},
 		borderStyle: "solid",
 		borderWidth: "1px",
 		backgroundColor: {
 			"[data-disabled]": "transparent",
-			default: color.surface,
+			default: colors["--surface"],
 		},
 		color: {
-			"[data-disabled]": color.fgMuted,
-			"[data-readonly]": color.fg,
-			default: color.fg,
+			"[data-disabled]": colors["--text-muted"],
+			"[data-readonly]": colors["--text"],
+			default: colors["--text"],
 		},
 		cursor: {
 			"[data-disabled]": "not-allowed",
@@ -125,15 +125,15 @@ const parts = stylex.create({
 			":focus-visible": "none",
 		},
 		color: {
-			"[data-disabled]": color.fgSubtle,
-			"[data-readonly]": color.fg,
-			"[readonly]": color.fg,
-			default: color.fg,
-			[stylex.when.ancestor('[aria-readonly="true"]')]: color.fg,
-			[stylex.when.ancestor("[data-readonly]")]: color.fg,
+			"[data-disabled]": colors["--text-subtle"],
+			"[data-readonly]": colors["--text"],
+			"[readonly]": colors["--text"],
+			default: colors["--text"],
+			[stylex.when.ancestor('[aria-readonly="true"]')]: colors["--text"],
+			[stylex.when.ancestor("[data-readonly]")]: colors["--text"],
 		},
 		"::placeholder": {
-			color: color.fgMuted,
+			color: colors["--text-muted"],
 		},
 	},
 	inputStandard: {

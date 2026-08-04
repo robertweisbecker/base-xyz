@@ -7,7 +7,7 @@ import { useState, type ReactNode } from "react";
 import * as Menu from "@/components/menu/menu";
 import { Separator } from "@/components/separator/separator";
 import * as Toolbar from "@/components/toolbar/toolbar";
-import { color, space } from "@/styles/tokens.stylex";
+import { colors, space } from "@/styles/tokens.stylex";
 import {
   fontSize,
   letterSpacing,
@@ -278,14 +278,14 @@ const storyParts = stylex.create({
   },
   label: {
     margin: 0,
-    color: color.fgMuted,
+    color: colors["--text-muted"],
     fontSize: fontSize.x1,
     letterSpacing: letterSpacing.x1,
     lineHeight: lineHeight.x1,
   },
   feedback: {
     margin: 0,
-    color: color.fgMuted,
+    color: colors["--text-muted"],
     fontSize: fontSize.x1,
     letterSpacing: letterSpacing.x1,
     lineHeight: lineHeight.x1,

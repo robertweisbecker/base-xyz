@@ -5,7 +5,7 @@ import { createContext, type ComponentPropsWithoutRef, useContext, useMemo } fro
 import { fieldStyles } from "@/components/field/field.stylex";
 import { textSizeStyles, textWeightStyles } from "@/components/text/text.stylex";
 import { focusRing } from "@/styles/recipes/focus";
-import { color, motion, radius, size, space, shadow } from "@/styles/tokens.stylex";
+import { colors, motion, radius, size, space, shadow } from "@/styles/tokens.stylex";
 
 type SliderValue = number | readonly number[];
 
@@ -236,7 +236,7 @@ function mergeClassNames(...classNames: Array<string | undefined>) {
 
 const sliderParts = stylex.create({
 	root: {
-		"--_slider-fill": color.bgAccent,
+		"--_slider-fill": colors["--accent"],
 		gap: space[2],
 		display: "flex",
 		flexDirection: "column",
@@ -252,8 +252,8 @@ const sliderParts = stylex.create({
 	},
 	label: {
 		color: {
-			"[data-disabled]": color.fgMuted,
-			default: color.fg,
+			"[data-disabled]": colors["--text-muted"],
+			default: colors["--text"],
 		},
 		opacity: {
 			"[data-disabled]": 0.48,
@@ -261,7 +261,7 @@ const sliderParts = stylex.create({
 		},
 	},
 	value: {
-		color: color.fgMuted,
+		color: colors["--text-muted"],
 		display: "inline-grid",
 		opacity: {
 			"[data-disabled]": 0.48,
@@ -287,10 +287,10 @@ const sliderParts = stylex.create({
 	},
 	control: {
 		"--_slider-fill": {
-			"[data-disabled]": color.bgNeutral,
-			default: color.bgAccent,
+			"[data-disabled]": colors["--neutral"],
+			default: colors["--accent"],
 			":hover": {
-				"@media (hover: hover) and (pointer: fine)": color.bgAccentHover,
+				"@media (hover: hover) and (pointer: fine)": colors["--accent-hover"],
 			},
 		},
 		flex: {
@@ -319,12 +319,12 @@ const sliderParts = stylex.create({
 		borderRadius: radius.full,
 		overflow: "hidden",
 		backgroundColor: {
-			"[data-disabled]": color.fillDisabled,
-			default: color.fillTrack,
+			"[data-disabled]": colors["--fill-disabled"],
+			default: colors["--fill-track"],
 		},
 		boxShadow: {
 			"[data-disabled]": "none",
-			"[data-invalid]": `0 0 0 2px ${color.surface}, 0 0 0 4px ${color.bgDanger}`,
+			"[data-invalid]": `0 0 0 2px ${colors["--surface"]}, 0 0 0 4px ${colors["--danger"]}`,
 			default: shadow.inset,
 		},
 		height: "100%",
@@ -333,7 +333,7 @@ const sliderParts = stylex.create({
 	indicator: {
 		borderRadius: 0,
 		backgroundColor: {
-			"[data-disabled]": color.border,
+			"[data-disabled]": colors["--border"],
 			default: "var(--_slider-fill)",
 		},
 		transitionDuration: motion.durationQuick,
@@ -360,7 +360,7 @@ const sliderParts = stylex.create({
 		width: 0,
 		"::before": {
 			borderRadius: radius.full,
-			backgroundColor: color.border,
+			backgroundColor: colors["--border"],
 			content: '""',
 			position: "absolute",
 			transform: "translate(-50%, -50%)",
@@ -372,17 +372,17 @@ const sliderParts = stylex.create({
 	},
 	thumb: {
 		borderRadius: radius.full,
-		backgroundColor: color.fgAccentContrast,
+		backgroundColor: colors["--accent-contrast"],
 		boxShadow: {
 			"[data-disabled]": "none",
 			default: shadow.sm,
 		},
 		outlineColor: {
 			"[data-disabled]": "transparent",
-			default: color.bgAccent,
-			":has(input:focus-visible)": color.focus,
-			':has(input:focus-visible[aria-invalid="true"])': color.bgDanger,
-			":has(input:focus-visible[data-invalid])": color.bgDanger,
+			default: colors["--accent"],
+			":has(input:focus-visible)": colors["--focus"],
+			':has(input:focus-visible[aria-invalid="true"])': colors["--danger"],
+			":has(input:focus-visible[data-invalid])": colors["--danger"],
 		},
 		outlineOffset: {
 			default: 0,

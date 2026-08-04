@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import * as stylex from "@stylexjs/stylex";
 import type { ReactNode } from "react";
-import { color, space } from "@/styles/tokens.stylex";
+import { colors, space } from "@/styles/tokens.stylex";
 import { fontSize, fontWeight, letterSpacing, lineHeight } from "@/styles/tokens.stylex";
 import * as Select from "./select";
 
@@ -576,7 +576,7 @@ const storyParts = stylex.create({
 	},
 	heading: {
 		margin: 0,
-		color: color.fgMuted,
+		color: colors["--text-muted"],
 		fontSize: fontSize.x1,
 		fontWeight: fontWeight.regular,
 		letterSpacing: letterSpacing.x1,
@@ -606,7 +606,7 @@ const storyParts = stylex.create({
 	},
 	stateLabel: {
 		margin: 0,
-		color: color.fgMuted,
+		color: colors["--text-muted"],
 		fontSize: fontSize.x1,
 		fontWeight: fontWeight.regular,
 		letterSpacing: letterSpacing.x1,
@@ -654,7 +654,7 @@ const storyParts = stylex.create({
 	},
 	adLibSentence: {
 		alignItems: "baseline",
-		color: color.fg,
+		color: colors["--text"],
 		columnGap: space[1],
 		display: "flex",
 		flexWrap: "wrap",
@@ -669,7 +669,7 @@ const storyParts = stylex.create({
 	},
 	adLibHint: {
 		margin: 0,
-		color: color.fgMuted,
+		color: colors["--text-muted"],
 		fontSize: fontSize.x1,
 		letterSpacing: letterSpacing.x1,
 		lineHeight: lineHeight.x1,

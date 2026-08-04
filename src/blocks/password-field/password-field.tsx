@@ -9,7 +9,7 @@ import * as InputGroup from "@/components/input-group/input-group";
 import * as MeterPrimitive from "@/components/meter/meter";
 import { Toggle, type ToggleProps } from "@/components/toggle/toggle";
 import { iconSwapTransition } from "@/styles/recipes/transitions";
-import { color, space } from "@/styles/tokens.stylex";
+import { colors, space } from "@/styles/tokens.stylex";
 
 type StyledProps<T> = Omit<T, "className" | "style"> & {
 	className?: string;
@@ -242,10 +242,10 @@ function joinClassNames(...classNames: Array<string | undefined>) {
 }
 
 const meterToneColors = {
-	neutral: color.border,
-	weak: color.bgDanger,
-	medium: color.bgWarning,
-	strong: color.bgSuccess,
+	neutral: colors["--border"],
+	weak: colors["--danger"],
+	medium: colors["--warning"],
+	strong: colors["--success"],
 } as const;
 
 const parts = stylex.create({

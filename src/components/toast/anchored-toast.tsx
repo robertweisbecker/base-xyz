@@ -14,7 +14,7 @@ import { popupMotionStyles } from "@/components/popover/popover.stylex";
 import { tooltipStyles } from "@/components/tooltip/tooltip.stylex";
 import { popupVars } from "@/components/popover/popover-vars.stylex";
 import { pressable } from "@/styles/recipes/transitions";
-import { color, radius, shadow, size, space } from "@/styles/tokens.stylex";
+import { colors, radius, shadow, size, space } from "@/styles/tokens.stylex";
 import { fontSize, fontWeight, letterSpacing, lineHeight } from "@/styles/tokens.stylex";
 import {
 	anchoredToastManager,
@@ -299,9 +299,9 @@ const anchoredMotion = stylex.create({
 
 const anchoredParts = stylex.create({
 	panelSurface: {
-		[popupVars.background]: color.bgElevated,
-		[popupVars.border]: color.border,
-		[popupVars.foreground]: color.fg,
+		[popupVars.background]: colors["--elevated"],
+		[popupVars.border]: colors["--border"],
+		[popupVars.foreground]: colors["--text"],
 		borderRadius: radius.lg,
 		backgroundColor: popupVars.background,
 		boxShadow: shadow.md,
@@ -379,7 +379,7 @@ const anchoredParts = stylex.create({
 	},
 	pillTitle: {
 		overflow: "hidden",
-		color: color.fgInverseMuted,
+		color: colors["--inverse-text-muted"],
 		flexShrink: 1,
 		fontSize: fontSize.x2,
 		fontWeight: fontWeight.regular,
@@ -389,7 +389,7 @@ const anchoredParts = stylex.create({
 		whiteSpace: "nowrap",
 	},
 	pillDescription: {
-		color: color.fgInverseMuted,
+		color: colors["--inverse-text-muted"],
 		display: "inline-flex",
 		flexShrink: 0,
 		fontSize: fontSize.x2,
@@ -410,9 +410,9 @@ const rootVariants = stylex.create({
 		maxWidth: "min(320px, calc(100vw - 24px))",
 	},
 	pill: {
-		[popupVars.background]: color.bgInverse,
+		[popupVars.background]: colors["--inverse-surface"],
 		[popupVars.border]: "rgb(255 255 255 / 9%)",
-		[popupVars.foreground]: color.fgInverse,
+		[popupVars.foreground]: colors["--inverse-text"],
 		borderRadius: radius.md,
 		backgroundColor: popupVars.background,
 		boxShadow: shadow.md,
@@ -449,34 +449,34 @@ const contentVariants = stylex.create({
 
 const iconToneVariants = stylex.create({
 	neutral: {
-		backgroundColor: color.surfaceSubtle,
-		color: color.fgMuted,
+		backgroundColor: colors["--surface-subtle"],
+		color: colors["--text-muted"],
 	},
 	accent: {
-		backgroundColor: color.bgAccentSoft,
-		color: color.bgAccent,
+		backgroundColor: colors["--accent-soft"],
+		color: colors["--accent"],
 	},
 	success: {
-		backgroundColor: color.bgSuccessSubtle,
-		color: color.fgSuccess,
+		backgroundColor: colors["--success-subtle"],
+		color: colors["--text-success"],
 	},
 	danger: {
-		backgroundColor: color.bgDangerSubtle,
-		color: color.fgDanger,
+		backgroundColor: colors["--danger-subtle"],
+		color: colors["--text-danger"],
 	},
 });
 
 const pillIconToneVariants = stylex.create({
 	neutral: {
-		color: color.fgInverseMuted,
+		color: colors["--inverse-text-muted"],
 	},
 	accent: {
-		color: color.bgAccent,
+		color: colors["--accent"],
 	},
 	success: {
-		color: color.fgSuccess,
+		color: colors["--text-success"],
 	},
 	danger: {
-		color: color.fgDanger,
+		color: colors["--text-danger"],
 	},
 });

@@ -15,7 +15,7 @@ import type {
 	ShadowValue,
 	SurfaceThemeProps,
 } from "../theme/theme-props.types";
-import { color, radius, shadow } from "./tokens.stylex";
+import { colorDefaults, radius, shadow } from "./tokens.stylex";
 
 type SurfaceColorProps = Pick<SurfaceThemeProps, "color" | "bg">;
 
@@ -27,7 +27,7 @@ const scalarStyles = stylex.create({
 });
 
 function resolveColor(value: SemanticColor): unknown {
-	return color[value];
+	return colorDefaults[value];
 }
 
 function resolveRadius(value: RadiusValue): unknown {

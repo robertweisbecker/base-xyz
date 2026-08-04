@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import * as stylex from "@stylexjs/stylex";
-import { color, radius } from "@/styles/tokens.stylex";
+import { colors, radius } from "@/styles/tokens.stylex";
 import { Box, Stack } from "./layout";
 
 const meta = {
@@ -40,5 +40,5 @@ export const Reverse: Story = {
 };
 
 const styles = stylex.create({
-	item: { borderColor: color.border, borderRadius: radius.sm, borderStyle: "solid", borderWidth: 1, backgroundColor: color.surfaceSubtle },
+	item: { borderColor: colors["--border"], borderRadius: radius.sm, borderStyle: "solid", borderWidth: 1, backgroundColor: colors["--surface-subtle"] },
 });

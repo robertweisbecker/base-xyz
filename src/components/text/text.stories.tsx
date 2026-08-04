@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import * as stylex from "@stylexjs/stylex";
-import { color, space } from "@/styles/tokens.stylex";
+import { colors, space } from "@/styles/tokens.stylex";
 import { Heading } from "../heading/heading";
 import { Text } from "./text";
 import { textStyles } from "./text.stylex";
@@ -197,7 +197,7 @@ const storyStyles = stylex.create({
 		gridTemplateColumns: `${space[6]} minmax(0, 1fr)`,
 	},
 	input: {
-		borderColor: color.borderStrong,
+		borderColor: colors["--border-strong"],
 		borderRadius: "0.4375rem",
 		borderStyle: "solid",
 		borderWidth: "1px",

@@ -2,7 +2,7 @@ import * as stylex from "@stylexjs/stylex";
 import type { StyleXStyles } from "@stylexjs/stylex";
 import { type ComponentProps } from "react";
 import { fontFamily, fontWeight } from "@/styles/tokens.stylex";
-import { color } from "@/styles/tokens.stylex";
+import { colors } from "@/styles/tokens.stylex";
 
 export type CodeProps = Omit<ComponentProps<"code">, "className" | "style"> & {
 	className?: string;
@@ -21,8 +21,8 @@ const styles = stylex.create({
 		marginBlock: "-0.25em",
 		paddingBlock: "0.125lh",
 		paddingInline: "0.45em",
-		backgroundColor: color.canvasSubtle,
-		color: color.fgMuted,
+		backgroundColor: colors["--canvas-subtle"],
+		color: colors["--text-muted"],
 		display: "inline",
 		fontFamily: fontFamily.mono,
 		fontSize: "0.875em",

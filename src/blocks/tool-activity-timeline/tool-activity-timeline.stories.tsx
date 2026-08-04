@@ -6,7 +6,7 @@ import type { ReactNode } from "react";
 import { CodeBlock } from "@/components/code-block/code-block";
 import * as Collapsible from "@/components/collapsible/collapsible";
 import { Separator } from "@/components/separator/separator";
-import { color, space } from "@/styles/tokens.stylex";
+import { colors, space } from "@/styles/tokens.stylex";
 import { fontSize, letterSpacing, lineHeight } from "@/styles/tokens.stylex";
 import * as Timeline from "./tool-activity-timeline";
 
@@ -138,7 +138,7 @@ const storyParts = stylex.create({
 	},
 	label: {
 		margin: 0,
-		color: color.fgMuted,
+		color: colors["--text-muted"],
 		fontSize: fontSize.x1,
 		letterSpacing: letterSpacing.x1,
 		lineHeight: lineHeight.x1,

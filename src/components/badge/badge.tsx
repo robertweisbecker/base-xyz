@@ -14,7 +14,7 @@ import type {
 	SpacingProps,
 } from "@/theme/theme-props.types";
 import { focusRing } from "@/styles/recipes/focus";
-import { color, radius, shadow, space } from "@/styles/tokens.stylex";
+import { colors, radius, shadow, space } from "@/styles/tokens.stylex";
 import { fontSize, fontWeight, letterSpacing } from "@/styles/tokens.stylex";
 import * as Tooltip from "../tooltip/tooltip";
 import { VisuallyHidden } from "../visually-hidden/visually-hidden";
@@ -91,7 +91,7 @@ const endSlotOffsets = stylex.create({
 const variantAppearance = stylex.create({
 	subtle: {},
 	elevated: {
-		backgroundColor: color.bgElevated,
+		backgroundColor: colors["--elevated"],
 		boxShadow: shadow.xs,
 	},
 	solid: {},
@@ -99,60 +99,60 @@ const variantAppearance = stylex.create({
 
 const hueColors = stylex.create({
 	accentSubtle: {
-		backgroundColor: color.bgAccentSoftHover,
-		color: color.fgAccent,
+		backgroundColor: colors["--accent-soft-hover"],
+		color: colors["--text-accent"],
 	},
 	accentElevated: {
-		color: color.fgAccent,
+		color: colors["--text-accent"],
 	},
 	accentSolid: {
-		backgroundColor: color.bgAccent,
-		color: color.fgAccentContrast,
+		backgroundColor: colors["--accent"],
+		color: colors["--accent-contrast"],
 	},
 	dangerSubtle: {
-		backgroundColor: color.bgDangerSubtle,
-		color: color.fgDanger,
+		backgroundColor: colors["--danger-subtle"],
+		color: colors["--text-danger"],
 	},
 	dangerElevated: {
-		color: color.fgDanger,
+		color: colors["--text-danger"],
 	},
 	dangerSolid: {
-		backgroundColor: color.bgDanger,
-		color: color.fgAccentContrast,
+		backgroundColor: colors["--danger"],
+		color: colors["--accent-contrast"],
 	},
 	warningSubtle: {
-		backgroundColor: color.bgWarningSubtle,
-		color: color.fgWarning,
+		backgroundColor: colors["--warning-subtle"],
+		color: colors["--text-warning"],
 	},
 	warningElevated: {
-		color: color.fgWarning,
+		color: colors["--text-warning"],
 	},
 	warningSolid: {
-		backgroundColor: color.bgWarning,
-		color: color.fgWarningContrast,
+		backgroundColor: colors["--warning"],
+		color: colors["--warning-contrast"],
 	},
 	successSubtle: {
-		backgroundColor: color.bgSuccessSubtle,
-		color: color.fgSuccess,
+		backgroundColor: colors["--success-subtle"],
+		color: colors["--text-success"],
 	},
 	successElevated: {
-		color: color.fgSuccess,
+		color: colors["--text-success"],
 	},
 
 	successSolid: {
-		backgroundColor: color.bgSuccess,
-		color: color.fgAccentContrast,
+		backgroundColor: colors["--success"],
+		color: colors["--accent-contrast"],
 	},
 	neutralSubtle: {
-		backgroundColor: "var(--gray-a2)",
-		color: "var(--gray-t2)",
+		backgroundColor: colors["--gray-a2"],
+		color: colors["--gray-t2"],
 	},
 	neutralElevated: {
-		color: color.fg,
+		color: colors["--text"],
 	},
 	neutralSolid: {
-		backgroundColor: color.bgNeutralStrong,
-		color: color.fgNeutralContrast,
+		backgroundColor: colors["--neutral-strong"],
+		color: colors["--neutral-contrast"],
 	},
 });
 

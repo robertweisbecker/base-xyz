@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import * as stylex from "@stylexjs/stylex";
-import { color, space } from "@/styles/tokens.stylex";
+import { colors, space } from "@/styles/tokens.stylex";
 import { fontSize, fontWeight, letterSpacing, lineHeight } from "@/styles/tokens.stylex";
 import { Separator } from "./separator";
 
@@ -80,7 +80,7 @@ const storyStyles = stylex.create({
 	},
 	heading: {
 		margin: 0,
-		color: color.fgMuted,
+		color: colors["--text-muted"],
 		fontSize: fontSize.x1,
 		fontWeight: fontWeight.regular,
 		letterSpacing: letterSpacing.x1,
@@ -94,7 +94,7 @@ const storyStyles = stylex.create({
 	row: {
 		gap: space[3],
 		alignItems: "center",
-		color: color.fg,
+		color: colors["--text"],
 		display: "flex",
 		fontSize: fontSize.x2,
 		letterSpacing: letterSpacing.x2,
@@ -102,14 +102,14 @@ const storyStyles = stylex.create({
 	},
 	text: {
 		margin: 0,
-		color: color.fg,
+		color: colors["--text"],
 		fontSize: fontSize.x2,
 		letterSpacing: letterSpacing.x2,
 		lineHeight: lineHeight.x2,
 	},
 	mutedText: {
 		margin: 0,
-		color: color.fgMuted,
+		color: colors["--text-muted"],
 		fontSize: fontSize.x2,
 		letterSpacing: letterSpacing.x2,
 		lineHeight: lineHeight.x2,

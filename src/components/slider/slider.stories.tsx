@@ -12,7 +12,7 @@ import { NumberField } from "@/components/number-field/number-field";
 import { Text } from "@/components/text/text";
 import { textStyles } from "@/components/text/text.stylex";
 import { Toggle } from "@/components/toggle/toggle";
-import { color, space } from "@/styles/tokens.stylex";
+import { colors, space } from "@/styles/tokens.stylex";
 import * as Slider from "./slider";
 
 type PlaygroundArgs = Slider.SliderRootProps<number> & {
@@ -434,11 +434,11 @@ const styles = stylex.create({
 	},
 	heading: {
 		margin: 0,
-		color: color.fgMuted,
+		color: colors["--text-muted"],
 	},
 	sideIcon: {
 		flex: "none",
-		color: color.fgMuted,
+		color: colors["--text-muted"],
 		height: space[5],
 		width: space[5],
 	},

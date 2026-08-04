@@ -5,7 +5,7 @@ import { createContext, Fragment, type ComponentProps, type ReactNode, useContex
 import { Button, type ButtonProps } from "@/components/button/button";
 import * as Menu from "@/components/menu/menu";
 import { menuItemVars } from "@/components/menu/menu-item.stylex";
-import { color, space, fontSize, fontWeight, letterSpacing, lineHeight } from "@/styles/tokens.stylex";
+import { colors, space, fontSize, fontWeight, letterSpacing, lineHeight } from "@/styles/tokens.stylex";
 import { breakpoints } from "@/styles/constants.stylex";
 
 export type ModelSelectorOption = {
@@ -369,7 +369,7 @@ const parts = stylex.create({
 		gridColumn: "2",
 		overflow: "hidden",
 		alignItems: "center",
-		color: color.fgMuted,
+		color: colors["--text-muted"],
 		display: "flex",
 		fontSize: fontSize.x1,
 		justifyContent: "end",
@@ -389,7 +389,7 @@ const parts = stylex.create({
 	resetItem: {
 		[menuItemVars.columns]: "minmax(0, 1fr) auto",
 		// [menuItemVars.paddingInlineStart]: space[3],
-		color: color.fgMuted,
+		color: colors["--text-muted"],
 	},
 	resetLabel: {
 		gridColumn: "1",
@@ -398,7 +398,7 @@ const parts = stylex.create({
 	},
 	resetIcon: {
 		gridColumn: "2",
-		color: color.fgMuted,
+		color: colors["--text-muted"],
 		justifySelf: "end",
 	},
 	modelItem: {
@@ -421,7 +421,7 @@ const parts = stylex.create({
 		gridColumn: "3",
 		gridRow: "1",
 		overflow: "hidden",
-		color: color.fg,
+		color: colors["--text"],
 		fontSize: fontSize.x2,
 		letterSpacing: letterSpacing.x2,
 		lineHeight: lineHeight.x2,
@@ -432,7 +432,7 @@ const parts = stylex.create({
 		gridColumn: "3",
 		gridRow: "2",
 		overflow: "hidden",
-		color: color.fgMuted,
+		color: colors["--text-muted"],
 		// textOverflow: "ellipsis",
 		// whiteSpace: "nowrap",
 		display: {

@@ -5,7 +5,7 @@ import { type ComponentProps } from "react";
 import { zIndex } from "@/styles/constants.stylex";
 import { motion } from "@/styles/tokens.stylex";
 import { pressable } from "@/styles/recipes/transitions";
-import { color, radius, shadow, space } from "@/styles/tokens.stylex";
+import { colors, radius, shadow, space } from "@/styles/tokens.stylex";
 import { toastMotion } from "./toast-motion.stylex";
 import { toastControlStyles, toastTextStyles } from "./toast-parts";
 
@@ -151,10 +151,10 @@ const toastParts = stylex.create({
 		"--toast-stack-height": "var(--toast-frontmost-height, var(--toast-height))",
 		margin: "0 auto",
 		borderRadius: radius.md,
-		backgroundColor: color.bgElevated,
+		backgroundColor: colors["--elevated"],
 		boxShadow: shadow.md,
 		boxSizing: "border-box",
-		color: color.fg,
+		color: colors["--text"],
 		cursor: "default",
 		opacity: {
 			"[data-ending-style]": 0,

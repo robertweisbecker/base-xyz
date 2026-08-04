@@ -12,7 +12,7 @@ import { menuItemStyles, menuItemVariantStyles } from "../menu/menu-item.stylex"
 import { popupMotionStyles, popupPositionerStyles } from "@/components/popover/popover.stylex";
 import { popupVars } from "@/components/popover/popover-vars.stylex";
 import { pressable } from "@/styles/recipes/transitions";
-import { color, radius, shadow, size, space } from "@/styles/tokens.stylex";
+import { colors, radius, shadow, size, space } from "@/styles/tokens.stylex";
 import { fontSize, letterSpacing, lineHeight } from "@/styles/tokens.stylex";
 import { Button } from "@/components/button/button";
 import { ComboboxField, ComboboxMultiple, type ComboboxMultipleProps } from "@/components/combobox/combobox-field";
@@ -472,21 +472,21 @@ const styles = stylex.create({
 	},
 	exampleTitle: {
 		margin: 0,
-		color: color.fg,
+		color: colors["--text"],
 		fontSize: fontSize.x2,
 		letterSpacing: letterSpacing.x2,
 		lineHeight: lineHeight.x2,
 	},
 	exampleDescription: {
 		margin: 0,
-		color: color.fgMuted,
+		color: colors["--text-muted"],
 		fontSize: fontSize.x1,
 		letterSpacing: letterSpacing.x1,
 		lineHeight: lineHeight.x1,
 	},
 	status: {
 		margin: 0,
-		color: color.fgMuted,
+		color: colors["--text-muted"],
 		fontSize: fontSize.x1,
 		letterSpacing: letterSpacing.x1,
 		lineHeight: lineHeight.x1,
@@ -499,7 +499,7 @@ const styles = stylex.create({
 		minWidth: "240px",
 	},
 	triggerPlaceholder: {
-		color: color.fgSubtle,
+		color: colors["--text-subtle"],
 	},
 	filterChips: {
 		alignItems: "center",
@@ -518,12 +518,12 @@ const styles = stylex.create({
 		overflow: "hidden",
 		alignItems: "center",
 		backgroundColor: {
-			default: color.surfaceSubtle,
-			":focus-within": color.bgAccent,
+			default: colors["--surface-subtle"],
+			":focus-within": colors["--accent"],
 		},
 		color: {
-			default: color.fg,
-			":focus-within": color.fgAccentContrast,
+			default: colors["--text"],
+			":focus-within": colors["--accent-contrast"],
 		},
 		display: "inline-flex",
 		fontSize: fontSize.x1,
@@ -546,12 +546,12 @@ const styles = stylex.create({
 		backgroundColor: {
 			default: "transparent",
 			":hover": {
-				"@media (hover: hover) and (pointer: fine)": color.surface,
+				"@media (hover: hover) and (pointer: fine)": colors["--surface"],
 			},
 		},
 		color: {
-			default: color.fgMuted,
-			":hover": color.fg,
+			default: colors["--text-muted"],
+			":hover": colors["--text"],
 		},
 		display: "flex",
 		justifyContent: "center",
@@ -559,9 +559,9 @@ const styles = stylex.create({
 		width: space[5],
 	},
 	panelSurface: {
-		[popupVars.background]: color.bgElevated,
-		[popupVars.border]: color.border,
-		[popupVars.foreground]: color.fg,
+		[popupVars.background]: colors["--elevated"],
+		[popupVars.border]: colors["--border"],
+		[popupVars.foreground]: colors["--text"],
 		borderRadius: radius.lg,
 		backgroundColor: popupVars.background,
 		boxShadow: shadow.md,
@@ -595,7 +595,7 @@ const styles = stylex.create({
 		width: "100%",
 	},
 	searchIcon: {
-		color: color.fgSubtle,
+		color: colors["--text-subtle"],
 		flexShrink: 0,
 	},
 	list: {
@@ -612,7 +612,7 @@ const styles = stylex.create({
 			":empty": 0,
 		},
 		alignItems: "center",
-		color: color.fgMuted,
+		color: colors["--text-muted"],
 		display: "flex",
 		fontSize: fontSize.x2,
 		justifyContent: "center",

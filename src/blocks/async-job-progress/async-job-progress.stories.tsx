@@ -3,7 +3,7 @@ import * as stylex from "@stylexjs/stylex";
 import { Button } from "@/components/button/button";
 import * as Collapsible from "@/components/collapsible/collapsible";
 import { Separator } from "@/components/separator/separator";
-import { color, space } from "@/styles/tokens.stylex";
+import { colors, space } from "@/styles/tokens.stylex";
 import { fontSize, fontWeight, letterSpacing, lineHeight } from "@/styles/tokens.stylex";
 import * as AsyncJobProgress from "./async-job-progress";
 
@@ -169,7 +169,7 @@ const storyParts = stylex.create({
 	},
 	heading: {
 		margin: 0,
-		color: color.fgMuted,
+		color: colors["--text-muted"],
 		fontSize: fontSize.x1,
 		fontWeight: fontWeight.regular,
 		letterSpacing: letterSpacing.x1,

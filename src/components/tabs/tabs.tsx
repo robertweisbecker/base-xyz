@@ -14,7 +14,7 @@ import {
 import type { ButtonSize } from "@/components/button/button";
 import { textSizeStyles, textWeightStyles } from "@/components/text/text.stylex";
 import { focusRing } from "@/styles/recipes/focus";
-import { color, motion, radius, shadow, size, space } from "@/styles/tokens.stylex";
+import { colors, motion, radius, shadow, size, space } from "@/styles/tokens.stylex";
 
 export type TabsSize = Extract<ButtonSize, "sm" | "md" | "lg">;
 
@@ -214,11 +214,11 @@ const tabsParts = stylex.create({
 		cornerShape: "superellipse(1.3)",
 		flex: "none",
 		gap: space[1],
-		backgroundColor: color.canvas,
+		backgroundColor: colors["--canvas"],
 		boxSizing: "border-box",
 		display: "inline-flex",
 		isolation: "isolate",
-		outlineColor: color.border,
+		outlineColor: colors["--border"],
 		outlineStyle: "solid",
 		outlineWidth: 1,
 		position: "relative",
@@ -226,7 +226,7 @@ const tabsParts = stylex.create({
 	indicator: {
 		borderRadius: "calc(var(--_tabs-list-radius) - 1px)",
 		cornerShape: "superellipse(1.3)",
-		backgroundColor: color.bgElevated,
+		backgroundColor: colors["--elevated"],
 		boxShadow: shadow.sm,
 		insetBlockStart: 0,
 		insetInlineStart: 0,
@@ -257,9 +257,9 @@ const tabsParts = stylex.create({
 		backgroundColor: "transparent",
 		boxSizing: "border-box",
 		color: {
-			"[data-active]": color.fg,
-			default: color.fgMuted,
-			":hover": color.fg,
+			"[data-active]": colors["--text"],
+			default: colors["--text-muted"],
+			":hover": colors["--text"],
 		},
 		cursor: "default",
 		display: "inline-flex",

@@ -23,7 +23,7 @@ import type {
 	SizingProps,
 	SpacingProps,
 } from "@/theme/theme-props.types";
-import { color, space, shadow } from "@/styles/tokens.stylex";
+import { colors, space, shadow } from "@/styles/tokens.stylex";
 import { fontSize, letterSpacing, lineHeight } from "@/styles/tokens.stylex";
 import { Heading, type HeadingProps } from "../heading/heading";
 import { Text, type TextProps } from "../text/text";
@@ -128,7 +128,7 @@ const cardParts = stylex.create({
 	root: {
 		gap: space[1],
 		overflow: "hidden",
-		color: color.fg,
+		color: colors["--text"],
 		display: "flex",
 		flexDirection: "column",
 		isolation: "isolate",
@@ -201,14 +201,14 @@ const cardSizeVariants = stylex.create({
 const cardVariants = stylex.create({
 	elevated: {
 		borderWidth: 0,
-		backgroundColor: color.bgPanel,
+		backgroundColor: colors["--panel"],
 		boxShadow: shadow.md,
 	},
 	outline: {
-		borderColor: color.border,
+		borderColor: colors["--border"],
 		borderStyle: "solid",
 		borderWidth: "1px",
-		backgroundColor: color.surface,
+		backgroundColor: colors["--surface"],
 		boxShadow: "none",
 	},
 });

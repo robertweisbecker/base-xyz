@@ -11,7 +11,7 @@ import { fieldChoiceGroupStyles, fieldStyles, fieldThemeProps } from "@/componen
 import { textStyles } from "@/components/text/text.stylex";
 import { focusRing } from "@/styles/recipes/focus";
 import { pressable } from "@/styles/recipes/transitions";
-import { color, motion, radius, size as sizeToken, space } from "@/styles/tokens.stylex";
+import { colors, motion, radius, size as sizeToken, space } from "@/styles/tokens.stylex";
 
 export type RadioSize = "sm" | "md";
 
@@ -265,25 +265,25 @@ const radioParts = stylex.create({
 	},
 	labelRoot: {
 		"--_radio-bg": {
-			default: color.surface,
+			default: colors["--surface"],
 			":hover": {
-				"@media (hover: hover) and (pointer: fine)": color.surfaceSubtle,
+				"@media (hover: hover) and (pointer: fine)": colors["--surface-subtle"],
 			},
-			":active": color.surfaceSubtleActive,
+			":active": colors["--surface-subtle-active"],
 		},
 		"--_radio-bg-checked": {
-			default: color.bgAccent,
+			default: colors["--accent"],
 			":hover": {
-				"@media (hover: hover) and (pointer: fine)": color.bgAccentHover,
+				"@media (hover: hover) and (pointer: fine)": colors["--accent-hover"],
 			},
-			":active": color.bgAccentHover,
+			":active": colors["--accent-hover"],
 		},
 		"--_radio-border": {
-			default: color.borderStrong,
+			default: colors["--border-strong"],
 			":hover": {
-				"@media (hover: hover) and (pointer: fine)": color.borderHover,
+				"@media (hover: hover) and (pointer: fine)": colors["--border-hover"],
 			},
-			":active": color.bgAccentHover,
+			":active": colors["--accent-hover"],
 		},
 		"--_radio-press-scale": {
 			default: "1",
@@ -291,17 +291,17 @@ const radioParts = stylex.create({
 		},
 		gap: space[2],
 		alignItems: "flex-start",
-		color: color.fg,
+		color: colors["--text"],
 		cursor: "inherit",
 		display: "inline-flex",
 	},
 	control: {
 		borderColor: {
 			"[data-checked]": "var(--_radio-bg-checked)",
-			"[data-checked][data-disabled]": color.bgNeutral,
-			"[data-checked][data-readonly]": color.fgMuted,
-			"[data-disabled]": color.borderDisabled,
-			"[data-readonly]": color.border,
+			"[data-checked][data-disabled]": colors["--neutral"],
+			"[data-checked][data-readonly]": colors["--text-muted"],
+			"[data-disabled]": colors["--border-disabled"],
+			"[data-readonly]": colors["--border"],
 			default: "var(--_radio-border)",
 		},
 		borderRadius: radius.full,
@@ -310,8 +310,8 @@ const radioParts = stylex.create({
 		alignItems: "center",
 		backgroundColor: {
 			"[data-checked]": "var(--_radio-bg-checked)",
-			"[data-checked][data-disabled]": color.bgNeutral,
-			"[data-checked][data-readonly]": color.bgNeutral,
+			"[data-checked][data-disabled]": colors["--neutral"],
+			"[data-checked][data-readonly]": colors["--neutral"],
 			default: "var(--_radio-bg)",
 		},
 		display: "inline-flex",
@@ -327,7 +327,7 @@ const radioParts = stylex.create({
 		"::after": {
 			inset: 0,
 			borderRadius: "inherit",
-			boxShadow: `0 -1px 0 var(--white-a3), 0 1px 0 var(--black-a2)`,
+			boxShadow: `0 -1px 0 ${colors["--white-a3"]}, 0 1px 0 ${colors["--black-a2"]}`,
 			content: "''",
 			position: "absolute",
 			zIndex: 1,
@@ -335,8 +335,8 @@ const radioParts = stylex.create({
 	},
 	indicator: {
 		borderRadius: radius.full,
-		backgroundColor: color.fgAccentContrast,
-		boxShadow: `0 -1px 1px var(--gray-a2), 0 1px 0  var(--black-a3)`,
+		backgroundColor: colors["--accent-contrast"],
+		boxShadow: `0 -1px 1px ${colors["--gray-a2"]}, 0 1px 0 ${colors["--black-a3"]}`,
 	},
 	indicatorTransition: {
 		opacity: {

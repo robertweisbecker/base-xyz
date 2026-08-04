@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import * as stylex from "@stylexjs/stylex";
-import { color, fontSize, fontWeight, letterSpacing, lineHeight, radius, shadow, space } from "@/styles/tokens.stylex";
+import { colors, fontSize, fontWeight, letterSpacing, lineHeight, radius, shadow, space } from "@/styles/tokens.stylex";
 import { ScrollArea } from "./scroll-area";
 
 const items = Array.from({ length: 16 }, (_, index) => ({
@@ -301,7 +301,7 @@ const styles = stylex.create({
 	},
 	surface: {
 		borderRadius: radius.md,
-		backgroundColor: color.canvasSubtle,
+		backgroundColor: colors["--canvas-subtle"],
 	},
 	padding: {
 		padding: space[3],
@@ -316,7 +316,7 @@ const styles = stylex.create({
 		paddingBlock: space[2],
 		paddingInline: space[3],
 		alignItems: "center",
-		backgroundColor: color.bgElevated,
+		backgroundColor: colors["--elevated"],
 		boxShadow: shadow.sm,
 		display: "flex",
 		fontSize: fontSize.x2,
@@ -334,7 +334,7 @@ const styles = stylex.create({
 		borderRadius: radius.sm,
 		gap: space[1],
 		paddingInline: space[4],
-		backgroundColor: color.bgElevated,
+		backgroundColor: colors["--elevated"],
 		display: "flex",
 		flexDirection: "column",
 		flexShrink: 0,
@@ -346,7 +346,7 @@ const styles = stylex.create({
 		width: "140px",
 	},
 	meta: {
-		color: color.fgMuted,
+		color: colors["--text-muted"],
 		fontSize: fontSize.x1,
 		letterSpacing: letterSpacing.x1,
 		lineHeight: lineHeight.x1,
@@ -360,7 +360,7 @@ const styles = stylex.create({
 	boardItem: {
 		borderRadius: radius.sm,
 		alignItems: "center",
-		backgroundColor: color.bgElevated,
+		backgroundColor: colors["--elevated"],
 		display: "flex",
 		fontSize: fontSize.x2,
 		justifyContent: "center",

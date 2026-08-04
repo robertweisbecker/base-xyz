@@ -5,7 +5,7 @@ import type { StyleXStyles } from "@stylexjs/stylex";
 import type { ReactNode } from "react";
 import { breakpointRanges } from "@/styles/constants.stylex";
 import { focusRing } from "@/styles/recipes/focus";
-import { color, fontWeight, radius, space } from "@/styles/tokens.stylex";
+import { colors, fontWeight, radius, space } from "@/styles/tokens.stylex";
 import * as Tooltip from "../tooltip/tooltip";
 
 const avatarSizeTokens = {
@@ -152,9 +152,9 @@ const avatarParts = stylex.create({
 	root: {
 		overflow: "hidden",
 		alignItems: "center",
-		backgroundColor: "var(--gray-a1)",
+		backgroundColor: colors["--gray-a1"],
 		boxSizing: "border-box",
-		color: color.fgMuted,
+		color: colors["--text-muted"],
 		display: "inline-flex",
 		flexShrink: 0,
 		fontWeight: fontWeight.semibold,
@@ -164,7 +164,7 @@ const avatarParts = stylex.create({
 			default: null,
 			// eslint-disable-next-line @stylexjs/valid-styles -- the compiler supports nested pseudo-class conditions; the lint rule is stricter than the compiler.
 			":is(button)": {
-				":hover": color.borderStrong,
+				":hover": colors["--border-strong"],
 			},
 		},
 		outlineStyle: {
@@ -179,7 +179,7 @@ const avatarParts = stylex.create({
 	},
 	tooltipTrigger: {
 		// outlineColor: {
-		// 	":hover": color.borderStrong,
+		// 	":hover": colors["--border-strong"],
 		// 	default: null,
 		// },
 		// outlineWidth: {

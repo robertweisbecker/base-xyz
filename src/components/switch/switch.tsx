@@ -6,7 +6,7 @@ import { resolveThemeProps } from "@/theme/theme-props";
 import type { FieldThemeProps } from "@/components/field/field.types";
 import { fieldStyles, fieldThemeProps } from "@/components/field/field.stylex";
 import { focusRing } from "@/styles/recipes/focus";
-import { color, motion, radius, space, shadow } from "@/styles/tokens.stylex";
+import { colors, motion, radius, space, shadow } from "@/styles/tokens.stylex";
 import { CheckmarkIcon } from "@/components/selection-icons";
 export type SwitchSize = "sm" | "md" | "lg";
 
@@ -93,22 +93,22 @@ const switchParts = stylex.create({
 	},
 	labelRoot: {
 		"--_switch-border-color": {
-			default: color.borderStrong,
+			default: colors["--border-strong"],
 			":hover": {
-				"@media (hover: hover) and (pointer: fine)": color.borderHover,
+				"@media (hover: hover) and (pointer: fine)": colors["--border-hover"],
 			},
-			":active": color.bgAccentHover,
+			":active": colors["--accent-hover"],
 		},
 		"--_switch-press-scale": {
 			default: "1",
 			":active": "0.94",
 		},
 		"--_switch-selected-color": {
-			default: color.bgAccent,
+			default: colors["--accent"],
 			":hover": {
-				"@media (hover: hover) and (pointer: fine)": color.bgAccentHover,
+				"@media (hover: hover) and (pointer: fine)": colors["--accent-hover"],
 			},
-			":active": color.bgAccentHover,
+			":active": colors["--accent-hover"],
 		},
 		gap: space[2],
 		alignItems: "center",
@@ -116,12 +116,12 @@ const switchParts = stylex.create({
 		justifyContent: "space-between",
 	},
 	labelDisabled: {
-		color: color.fgMuted,
+		color: colors["--text-muted"],
 		cursor: "not-allowed",
 		opacity: 0.48,
 	},
 	labelReadOnly: {
-		color: color.fgMuted,
+		color: colors["--text-muted"],
 	},
 	description: {
 		// margin: 0,
@@ -130,10 +130,10 @@ const switchParts = stylex.create({
 		padding: "calc(var(--_switch-track-height) / 14)",
 		borderColor: {
 			"[data-checked]": "var(--_switch-selected-color)",
-			"[data-checked][data-disabled]": color.borderDisabled,
-			"[data-checked][data-readonly]": color.border,
-			"[data-disabled]": color.borderDisabled,
-			"[data-readonly]": color.border,
+			"[data-checked][data-disabled]": colors["--border-disabled"],
+			"[data-checked][data-readonly]": colors["--border"],
+			"[data-disabled]": colors["--border-disabled"],
+			"[data-readonly]": colors["--border"],
 			default: "var(--_switch-border-color)",
 		},
 		borderRadius: radius.full,
@@ -141,10 +141,10 @@ const switchParts = stylex.create({
 		alignSelf: "start",
 		backgroundColor: {
 			"[data-checked]": "var(--_switch-selected-color)",
-			"[data-checked][data-disabled]": color.fillDisabled,
-			"[data-checked][data-readonly]": color.bgNeutral,
-			"[data-disabled]": color.fillDisabled,
-			default: color.fillTrack,
+			"[data-checked][data-disabled]": colors["--fill-disabled"],
+			"[data-checked][data-readonly]": colors["--neutral"],
+			"[data-disabled]": colors["--fill-disabled"],
+			default: colors["--fill-track"],
 		},
 		// borderStyle: "solid",
 		// borderWidth: "1px",
@@ -175,8 +175,8 @@ const switchParts = stylex.create({
 		alignItems: "center",
 		aspectRatio: 1,
 		backgroundColor: {
-			"[data-disabled]": color.fillDisabled,
-			default: "var(--color-white)",
+			"[data-disabled]": colors["--fill-disabled"],
+			default: colors["--white"],
 		},
 		boxShadow: {
 			"[data-disabled]": "none",
@@ -197,8 +197,8 @@ const switchParts = stylex.create({
 	icon: {
 		stroke: "currentColor",
 		color: {
-			"[data-checked]": color.fgAccent,
-			default: color.fg,
+			"[data-checked]": colors["--text-accent"],
+			default: colors["--text"],
 		},
 		display: {
 			default: "none",

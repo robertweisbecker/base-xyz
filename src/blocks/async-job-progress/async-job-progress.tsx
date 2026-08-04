@@ -7,7 +7,7 @@ import { createContext, type ComponentProps, createElement, useContext, useId } 
 import { Badge, type BadgeHue } from "@/components/badge/badge";
 import { Loader } from "@/components/loader/loader";
 import * as ProgressPrimitive from "@/components/progress/progress";
-import { color, space } from "@/styles/tokens.stylex";
+import { colors, space } from "@/styles/tokens.stylex";
 import { fontSize, fontWeight, letterSpacing, lineHeight } from "@/styles/tokens.stylex";
 
 export type AsyncJobStatus = "queued" | "running" | "complete" | "error";
@@ -200,7 +200,7 @@ function joinClassNames(...classNames: Array<string | undefined>) {
 const parts = stylex.create({
 	root: {
 		gap: space[3],
-		color: color.fg,
+		color: colors["--text"],
 		display: "flex",
 		flexDirection: "column",
 		maxWidth: "36rem",
@@ -220,7 +220,7 @@ const parts = stylex.create({
 	},
 	title: {
 		margin: 0,
-		color: color.fg,
+		color: colors["--text"],
 		fontSize: fontSize.x3,
 		fontWeight: fontWeight.semibold,
 		letterSpacing: letterSpacing.x3,
@@ -229,7 +229,7 @@ const parts = stylex.create({
 	},
 	description: {
 		margin: 0,
-		color: color.fgMuted,
+		color: colors["--text-muted"],
 		fontSize: fontSize.x2,
 		letterSpacing: letterSpacing.x2,
 		lineHeight: lineHeight.x2,
@@ -245,10 +245,10 @@ const parts = stylex.create({
 });
 
 const indicatorStatus = stylex.create({
-	queued: { backgroundColor: color.bgNeutral },
+	queued: { backgroundColor: colors["--neutral"] },
 	running: {},
 	complete: {},
 	error: {
-		backgroundColor: color.bgDanger,
+		backgroundColor: colors["--danger"],
 	},
 });

@@ -2,7 +2,7 @@ import { ScrollArea as BaseScrollArea } from "@base-ui/react/scroll-area";
 import * as stylex from "@stylexjs/stylex";
 import type { StyleXStyles } from "@stylexjs/stylex";
 import type { ReactNode } from "react";
-import { color, motion, radius, space } from "@/styles/tokens.stylex";
+import { colors, motion, radius, space } from "@/styles/tokens.stylex";
 
 export type ScrollAreaProps = Omit<BaseScrollArea.Root.Props, "children" | "className" | "style"> & {
 	children: ReactNode;
@@ -130,7 +130,7 @@ const scrollAreaParts = stylex.create({
 	},
 	scrollbar: {
 		borderRadius: radius.full,
-		backgroundColor: color.border,
+		backgroundColor: colors["--border"],
 		display: "flex",
 		position: "absolute",
 		touchAction: "none",
@@ -139,9 +139,9 @@ const scrollAreaParts = stylex.create({
 	thumb: {
 		borderRadius: radius.full,
 		backgroundColor: {
-			"[data-hovering]": color.fgMuted,
-			default: color.fgSubtle,
-			":hover": color.fgMuted,
+			"[data-hovering]": colors["--text-muted"],
+			default: colors["--text-subtle"],
+			":hover": colors["--text-muted"],
 		},
 	},
 	corner: {

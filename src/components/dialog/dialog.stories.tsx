@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import * as stylex from "@stylexjs/stylex";
 import { useRef, useState } from "react";
-import { color, space } from "@/styles/tokens.stylex";
+import { colors, space } from "@/styles/tokens.stylex";
 import { fontSize, fontWeight, letterSpacing, lineHeight } from "@/styles/tokens.stylex";
 import * as AlertDialog from "../alert-dialog/alert-dialog";
 import { Button } from "../button/button";
@@ -391,7 +391,7 @@ const storyParts = stylex.create({
 	},
 	sectionTitle: {
 		margin: 0,
-		color: color.fg,
+		color: colors["--text"],
 		fontSize: fontSize.x2,
 		fontWeight: fontWeight.semibold,
 		letterSpacing: letterSpacing.x2,
@@ -399,7 +399,7 @@ const storyParts = stylex.create({
 	},
 	sectionBody: {
 		margin: 0,
-		color: color.fgMuted,
+		color: colors["--text-muted"],
 		fontSize: fontSize.x2,
 		letterSpacing: letterSpacing.x2,
 		lineHeight: lineHeight.x2,
@@ -419,14 +419,14 @@ const storyParts = stylex.create({
 		width: "100%",
 	},
 	panelTitle: {
-		color: color.fg,
+		color: colors["--text"],
 		fontSize: fontSize.x2,
 		letterSpacing: letterSpacing.x2,
 		lineHeight: lineHeight.x2,
 	},
 	copy: {
 		marginBlock: space[1],
-		color: color.fgMuted,
+		color: colors["--text-muted"],
 		fontSize: fontSize.x1,
 		letterSpacing: letterSpacing.x1,
 		lineHeight: lineHeight.x1,

@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import * as stylex from "@stylexjs/stylex";
-import { color, radius } from "@/styles/tokens.stylex";
+import { colors, radius } from "@/styles/tokens.stylex";
 import { Box } from "./layout";
 
 const meta = {
@@ -83,9 +83,9 @@ export const CustomWidthAndPrecedence: Story = {
 };
 
 const styles = stylex.create({
-	frame: { borderColor: color.border, borderRadius: radius.md, borderStyle: "solid", borderWidth: 1 },
+	frame: { borderColor: colors["--border"], borderRadius: radius.md, borderStyle: "solid", borderWidth: 1 },
 	heading: { margin: 0 },
 	precedenceWidth: { width: "12rem" },
-	itemOutline: { borderColor: color.border, borderStyle: "solid", borderWidth: 1 },
+	itemOutline: { borderColor: colors["--border"], borderStyle: "solid", borderWidth: 1 },
 	widthFrame: { width: "40rem" },
 });

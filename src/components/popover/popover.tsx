@@ -10,7 +10,7 @@ import {
 	popupViewportStyles,
 } from "@/components/popover/popover.stylex";
 import { popupVars } from "@/components/popover/popover-vars.stylex";
-import { color, radius, shadow, space } from "@/styles/tokens.stylex";
+import { colors, radius, shadow, space } from "@/styles/tokens.stylex";
 import { CloseButton as CloseButtonControl } from "../button/close-button";
 
 type StyledProps<T> = Omit<T, "className" | "style"> & {
@@ -197,9 +197,9 @@ export const Trigger = BasePopover.Trigger;
 
 const popoverParts = stylex.create({
 	panelSurface: {
-		[popupVars.background]: color.bgPanel,
-		[popupVars.border]: color.border,
-		[popupVars.foreground]: color.fg,
+		[popupVars.background]: colors["--panel"],
+		[popupVars.border]: colors["--border"],
+		[popupVars.foreground]: colors["--text"],
 		borderRadius: radius.lg,
 		backgroundColor: popupVars.background,
 		boxShadow: shadow.md,
@@ -235,7 +235,7 @@ const popoverParts = stylex.create({
 
 const popoverTextParts = stylex.create({
 	title: { marginTop: `-.25em` },
-	description: { margin: 0, color: color.fgMuted },
+	description: { margin: 0, color: colors["--text-muted"] },
 });
 
 const popoverText = {

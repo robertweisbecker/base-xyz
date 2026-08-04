@@ -6,7 +6,7 @@ import { Button, type ButtonProps } from "@/components/button/button";
 import * as Dialog from "@/components/dialog/dialog";
 import { ScrollArea } from "@/components/scroll-area/scroll-area";
 import * as Toast from "@/components/toast";
-import { color, radius, space } from "@/styles/tokens.stylex";
+import { colors, radius, space } from "@/styles/tokens.stylex";
 
 export type ConfirmationDialogSize = "sm" | "md" | "lg";
 
@@ -215,8 +215,8 @@ const confirmationDialogParts = stylex.create({
 		borderRadius: radius.sm,
 		alignItems: "center",
 		alignSelf: "flex-start",
-		backgroundColor: color.surfaceSubtle,
-		color: color.fg,
+		backgroundColor: colors["--surface-subtle"],
+		color: colors["--text"],
 		display: "flex",
 		justifyContent: "center",
 		marginBlockEnd: space[2],

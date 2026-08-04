@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from "@storybook/react-vite";
 import * as stylex from "@stylexjs/stylex";
 import type { ReactNode } from "react";
 import { textStyles, textWeightStyles } from "@/components/text/text.stylex";
-import { color, space } from "@/styles/tokens.stylex";
+import { colors, space } from "@/styles/tokens.stylex";
 import { ComboboxField } from "../combobox/combobox-field";
 import { NumberField } from "../number-field/number-field";
 import * as Select from "../select/select";
@@ -242,7 +242,7 @@ const styles = stylex.create({
 		margin: 0,
 	},
 	stateAttribute: {
-		color: color.fgMuted,
+		color: colors["--text-muted"],
 	},
 	familyOverflow: {
 		overflowX: "auto",

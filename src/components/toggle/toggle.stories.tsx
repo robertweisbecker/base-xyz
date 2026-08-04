@@ -8,7 +8,7 @@ import { TextItalicIcon } from "@phosphor-icons/react/dist/csr/TextItalic";
 import { TextUnderlineIcon } from "@phosphor-icons/react/dist/csr/TextUnderline";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import * as stylex from "@stylexjs/stylex";
-import { color, radius, space } from "@/styles/tokens.stylex";
+import { colors, radius, space } from "@/styles/tokens.stylex";
 import { fontSize, fontWeight, letterSpacing, lineHeight } from "@/styles/tokens.stylex";
 import { Toggle, ToggleGroup, type ToggleVariant } from "./toggle";
 import { firstToggleMarker, secondToggleMarker, thirdToggleMarker } from "./toggle-radius-testing.stylex";
@@ -264,7 +264,7 @@ const styles = stylex.create({
 	},
 	heading: {
 		margin: 0,
-		color: color.fgMuted,
+		color: colors["--text-muted"],
 		fontSize: fontSize.x1,
 		fontWeight: fontWeight.regular,
 		letterSpacing: letterSpacing.x1,
@@ -282,7 +282,7 @@ const styles = stylex.create({
 	},
 	rowLabel: {
 		alignSelf: "center",
-		color: color.fgMuted,
+		color: colors["--text-muted"],
 		fontSize: fontSize.x1,
 		letterSpacing: letterSpacing.x1,
 		lineHeight: lineHeight.x1,

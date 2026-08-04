@@ -199,7 +199,8 @@ stylex.props(modalChromeStyles.surface, drawerParts.popup);
   `startSlot` and `endSlot` content entirely in StyleX. `popup-motion.css`
   bridges Base UI's generated payload wrappers only inside an explicitly
   rendered popup `Viewport`.
-- Color values always go through the `color` tokens in `tokens.stylex.ts`.
+- Color values always go through named `colors["--…"]` tokens in
+  `tokens.stylex.ts`.
   Do not write `"var(--gray-*)"` or other raw palette strings in component
   styles; if a semantic token is missing, add it to `tokens.stylex.ts` first.
   Base UI-provided variables (`--anchor-width`, `--transform-origin`, ...)

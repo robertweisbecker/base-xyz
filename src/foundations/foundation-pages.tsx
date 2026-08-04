@@ -9,9 +9,10 @@ import * as stylex from "@stylexjs/stylex";
 import { useState, type ReactNode } from "react";
 import { breakpoints, zIndex } from "@/styles/constants.stylex";
 import { motion } from "@/styles/tokens.stylex";
-import { color, radius, shadow, space } from "@/styles/tokens.stylex";
+import { colors, radius, shadow, space } from "@/styles/tokens.stylex";
 import { textFamilyStyles, textSizeStyles } from "@/components/text/text.stylex";
 import { fontFamily, fontSize, fontWeight, letterSpacing, lineHeight } from "@/styles/tokens.stylex";
+import { ThemeProvider } from "@/theme";
 
 export function DesignSystemPage() {
 	return (
@@ -36,8 +37,8 @@ function ColorsSection() {
 				title="Semantic palette"
 				description="Use these tokens in component styles. Each row groups colors that work together in a specific UI role.">
 				<div {...stylex.props(styles.themePalettes)}>
-					<ThemePalette name="Light" theme="light" />
-					<ThemePalette name="Dark" theme="dark" />
+					<ThemePalette mode="light" name="Light" />
+					<ThemePalette mode="dark" name="Dark" />
 				</div>
 			</FoundationSection>
 
@@ -51,50 +52,50 @@ function ColorsSection() {
 								title="Accent / lighter steps"
 								subtitle="Backgrounds, selected rows, and quiet emphasis"
 								colors={{
-									"25": "var(--color-accent-25)",
-									"50": "var(--color-accent-50)",
-									"100": "var(--color-accent-100)",
-									"200": "var(--color-accent-200)",
-									"300": "var(--color-accent-300)",
-									"400": "var(--color-accent-400)",
+									"25": colors["--accent-25"],
+									"50": colors["--accent-50"],
+									"100": colors["--accent-100"],
+									"200": colors["--accent-200"],
+									"300": colors["--accent-300"],
+									"400": colors["--accent-400"],
 								}}
 							/>
 							<ColorItem
 								title="Accent / stronger steps"
 								subtitle="Controls, text, and high-emphasis states"
 								colors={{
-									"500": "var(--color-accent-500)",
-									"600": "var(--color-accent-600)",
-									"700": "var(--color-accent-700)",
-									"800": "var(--color-accent-800)",
-									"900": "var(--color-accent-900)",
-									"950": "var(--color-accent-950)",
-									"975": "var(--color-accent-975)",
+									"500": colors["--accent-500"],
+									"600": colors["--accent-600"],
+									"700": colors["--accent-700"],
+									"800": colors["--accent-800"],
+									"900": colors["--accent-900"],
+									"950": colors["--accent-950"],
+									"975": colors["--accent-975"],
 								}}
 							/>
 							<ColorItem
 								title="Neutral / lighter steps"
 								subtitle="Canvas, surfaces, borders, and disabled states"
 								colors={{
-									"25": "var(--color-neutral-25)",
-									"50": "var(--color-neutral-50)",
-									"100": "var(--color-neutral-100)",
-									"200": "var(--color-neutral-200)",
-									"300": "var(--color-neutral-300)",
-									"400": "var(--color-neutral-400)",
+									"25": colors["--neutral-25"],
+									"50": colors["--neutral-50"],
+									"100": colors["--neutral-100"],
+									"200": colors["--neutral-200"],
+									"300": colors["--neutral-300"],
+									"400": colors["--neutral-400"],
 								}}
 							/>
 							<ColorItem
 								title="Neutral / stronger steps"
 								subtitle="Secondary text through highest-contrast content"
 								colors={{
-									"500": "var(--color-neutral-500)",
-									"600": "var(--color-neutral-600)",
-									"700": "var(--color-neutral-700)",
-									"800": "var(--color-neutral-800)",
-									"900": "var(--color-neutral-900)",
-									"950": "var(--color-neutral-950)",
-									"975": "var(--color-neutral-975)",
+									"500": colors["--neutral-500"],
+									"600": colors["--neutral-600"],
+									"700": colors["--neutral-700"],
+									"800": colors["--neutral-800"],
+									"900": colors["--neutral-900"],
+									"950": colors["--neutral-950"],
+									"975": colors["--neutral-975"],
 								}}
 							/>
 						</ColorPalette>
@@ -104,17 +105,17 @@ function ColorsSection() {
 
 			<TokenSource
 				code={`import * as stylex from "@stylexjs/stylex";
-import { color } from "@/styles/tokens.stylex";
+import { colors } from "@/styles/tokens.stylex";
 
 const styles = stylex.create({
   card: {
-    backgroundColor: color.surface,
-    borderColor: color.border,
-    color: color.fg,
+    backgroundColor: colors["--surface"],
+    borderColor: colors["--border"],
+    color: colors["--text"],
   },
   action: {
-    backgroundColor: color.bgAccent,
-    color: color.fgAccentContrast,
+    backgroundColor: colors["--accent"],
+    color: colors["--accent-contrast"],
   },
 });`}
 			/>
@@ -460,7 +461,7 @@ import { Button } from "./components/button/button";
 
 function FoundationPage({ children, description, title }: { children: ReactNode; description: string; title: string }) {
 	return (
-		<article data-theme="light" {...stylex.props(styles.page)}>
+		<article {...stylex.props(styles.page)}>
 			<header {...stylex.props(styles.pageHeader)}>
 				<h1 {...stylex.props(styles.pageTitle)}>{title}</h1>
 				<p {...stylex.props(styles.pageDescription)}>{description}</p>
@@ -510,65 +511,69 @@ function FoundationSection({
 	);
 }
 
-function ThemePalette({ name, theme }: { name: string; theme: "light" | "dark" }) {
+function ThemePalette({ mode, name }: { mode: "light" | "dark"; name: string }) {
 	return (
 		<div {...stylex.props(styles.themePalette)}>
 			<h4 {...stylex.props(styles.paletteTitle)}>{name} theme</h4>
-			<div data-theme={theme} {...stylex.props(styles.paletteScroller)}>
+			<ThemeProvider
+				aria-label={`${name} theme palette`}
+				mode={mode}
+				render={<section />}
+				style={styles.paletteScroller}>
 				<div {...stylex.props(styles.paletteContent)}>
 					<ColorPalette>
 						<ColorItem
 							title="Surfaces"
 							subtitle="Page and container elevation"
 							colors={{
-								canvas: "var(--color-canvas)",
-								surface: "var(--color-surface)",
-								raised: "var(--color-elevated)",
-								subtle: "var(--color-surface-subtle)",
+								canvas: colors["--canvas"],
+								surface: colors["--surface"],
+								raised: colors["--elevated"],
+								subtle: colors["--surface-subtle"],
 							}}
 						/>
 						<ColorItem
 							title="Content"
 							subtitle="Default, quiet, and emphasized text"
 							colors={{
-								text: "var(--color-text)",
-								muted: "var(--color-text-muted)",
-								accent: "var(--color-text-accent)",
-								inverse: "var(--color-inverse-text)",
+								text: colors["--text"],
+								muted: colors["--text-muted"],
+								accent: colors["--text-accent"],
+								inverse: colors["--inverse-text"],
 							}}
 						/>
 						<ColorItem
 							title="Boundaries"
 							subtitle="Dividers, control borders, and focus"
 							colors={{
-								border: "var(--color-border)",
-								strong: "var(--color-border-strong)",
-								focus: "var(--color-focus)",
+								border: colors["--border"],
+								strong: colors["--border-strong"],
+								focus: colors["--focus"],
 							}}
 						/>
 						<ColorItem
 							title="Interaction"
 							subtitle="Primary actions and hover feedback"
 							colors={{
-								accent: "var(--color-accent)",
-								hover: "var(--color-accent-hover)",
-								soft: "var(--color-accent-soft)",
-								contrast: "var(--color-accent-contrast)",
+								accent: colors["--accent"],
+								hover: colors["--accent-hover"],
+								soft: colors["--accent-soft"],
+								contrast: colors["--accent-contrast"],
 							}}
 						/>
 						<ColorItem
 							title="Feedback"
 							subtitle="Destructive and successful outcomes"
 							colors={{
-								danger: "var(--color-danger)",
-								"danger soft": "var(--color-danger-subtle)",
-								success: "var(--color-success)",
-								"success soft": "var(--color-success-subtle)",
+								danger: colors["--danger"],
+								"danger soft": colors["--danger-subtle"],
+								success: colors["--success"],
+								"success soft": colors["--success-subtle"],
 							}}
 						/>
 					</ColorPalette>
 				</div>
-			</div>
+			</ThemeProvider>
 		</div>
 	);
 }
@@ -763,12 +768,12 @@ const styles = stylex.create({
 	},
 	pageHeader: {
 		paddingBlockEnd: space[8],
-		borderBottomColor: color.border,
+		borderBottomColor: colors["--border"],
 		borderBottomStyle: "solid",
 		borderBottomWidth: "1px",
 	},
 	pageTitle: {
-		color: color.fg,
+		color: colors["--text"],
 		fontSize: fontSize.x8,
 		fontWeight: fontWeight.semibold,
 		letterSpacing: letterSpacing.x8,
@@ -778,7 +783,7 @@ const styles = stylex.create({
 	},
 	pageDescription: {
 		margin: 0,
-		color: color.fgMuted,
+		color: colors["--text-muted"],
 		fontSize: fontSize.x3,
 		letterSpacing: letterSpacing.x3,
 		lineHeight: lineHeight.x3,
@@ -786,7 +791,7 @@ const styles = stylex.create({
 	},
 	category: {
 		paddingBlock: space[12],
-		borderTopColor: color.border,
+		borderTopColor: colors["--border"],
 		borderTopStyle: "solid",
 		borderTopWidth: {
 			default: "1px",
@@ -799,14 +804,14 @@ const styles = stylex.create({
 	},
 	categoryTitle: {
 		margin: 0,
-		color: color.fg,
+		color: colors["--text"],
 		fontSize: fontSize.x7,
 		fontWeight: fontWeight.semibold,
 		letterSpacing: letterSpacing.x7,
 		lineHeight: lineHeight.x7,
 	},
 	categoryDescription: {
-		color: color.fgMuted,
+		color: colors["--text-muted"],
 		fontSize: fontSize.x3,
 		letterSpacing: letterSpacing.x3,
 		lineHeight: lineHeight.x3,
@@ -822,14 +827,14 @@ const styles = stylex.create({
 	},
 	sectionTitle: {
 		margin: 0,
-		color: color.fg,
+		color: colors["--text"],
 		fontSize: fontSize.x5,
 		fontWeight: fontWeight.semibold,
 		letterSpacing: letterSpacing.x5,
 		lineHeight: lineHeight.x5,
 	},
 	sectionDescription: {
-		color: color.fgMuted,
+		color: colors["--text-muted"],
 		fontSize: fontSize.x2,
 		letterSpacing: letterSpacing.x2,
 		lineHeight: lineHeight.x2,
@@ -842,16 +847,16 @@ const styles = stylex.create({
 	},
 	themePalette: {
 		padding: space[6],
-		borderColor: color.border,
+		borderColor: colors["--border"],
 		borderRadius: radius.md,
 		borderStyle: "solid",
 		borderWidth: "1px",
 		overflow: "hidden",
-		backgroundColor: color.surface,
+		backgroundColor: colors["--surface"],
 	},
 	paletteTitle: {
 		margin: 0,
-		color: "var(--color-text)",
+		color: colors["--text"],
 		fontSize: fontSize.x4,
 		fontWeight: fontWeight.semibold,
 		letterSpacing: letterSpacing.x4,
@@ -864,7 +869,7 @@ const styles = stylex.create({
 		minWidth: "760px",
 	},
 	typeRoles: {
-		borderColor: color.border,
+		borderColor: colors["--border"],
 		borderRadius: radius.md,
 		borderStyle: "solid",
 		borderWidth: "1px",
@@ -874,13 +879,13 @@ const styles = stylex.create({
 		padding: space[5],
 		gap: space[8],
 		alignItems: "center",
-		backgroundColor: color.surface,
+		backgroundColor: colors["--surface"],
 		display: "grid",
 		gridTemplateColumns: {
 			default: "minmax(220px, 0.8fr) minmax(0, 1.2fr)",
 			"@media (max-width: 700px)": "1fr",
 		},
-		borderBottomColor: color.border,
+		borderBottomColor: colors["--border"],
 		borderBottomStyle: "solid",
 		borderBottomWidth: {
 			default: "1px",
@@ -895,7 +900,7 @@ const styles = stylex.create({
 	},
 	typeSample: {
 		margin: 0,
-		color: color.fg,
+		color: colors["--text"],
 	},
 	typeDisplay: {
 		fontSize: fontSize.x5,
@@ -936,14 +941,14 @@ const styles = stylex.create({
 		},
 	},
 	inlineCode: {
-		color: color.fgAccent,
+		color: colors["--text-accent"],
 		fontFamily: "ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace",
 		fontSize: fontSize.x1,
 		letterSpacing: letterSpacing.x1,
 		lineHeight: lineHeight.x1,
 	},
 	tokenRows: {
-		borderColor: color.border,
+		borderColor: colors["--border"],
 		borderRadius: radius.md,
 		borderStyle: "solid",
 		borderWidth: "1px",
@@ -954,13 +959,13 @@ const styles = stylex.create({
 		paddingBlock: space[3],
 		paddingInline: space[4],
 		alignItems: "center",
-		backgroundColor: color.surface,
+		backgroundColor: colors["--surface"],
 		display: "grid",
 		gridTemplateColumns: {
 			default: "150px minmax(120px, 1fr) minmax(150px, 0.8fr)",
 			"@media (max-width: 650px)": "120px minmax(0, 1fr)",
 		},
-		borderBottomColor: color.border,
+		borderBottomColor: colors["--border"],
 		borderBottomStyle: "solid",
 		borderBottomWidth: {
 			default: "1px",
@@ -976,13 +981,13 @@ const styles = stylex.create({
 		minWidth: 0,
 	},
 	tokenValue: {
-		color: color.fgMuted,
+		color: colors["--text-muted"],
 		fontSize: fontSize.x1,
 		letterSpacing: letterSpacing.x1,
 		lineHeight: lineHeight.x1,
 	},
 	usage: {
-		color: color.fgMuted,
+		color: colors["--text-muted"],
 		fontSize: fontSize.x1,
 		letterSpacing: letterSpacing.x1,
 		lineHeight: lineHeight.x1,
@@ -992,13 +997,13 @@ const styles = stylex.create({
 		overflow: "hidden",
 		paddingInline: space[1],
 		alignItems: "center",
-		backgroundColor: color.surfaceSubtle,
+		backgroundColor: colors["--surface-subtle"],
 		display: "flex",
 		height: "20px",
 	},
 	measureBar: {
 		borderRadius: radius.full,
-		backgroundColor: color.bgAccent,
+		backgroundColor: colors["--accent"],
 		display: "block",
 		height: "12px",
 		minWidth: "4px",
@@ -1008,7 +1013,7 @@ const styles = stylex.create({
 		borderRadius: radius.lg,
 		gap: space[8],
 		alignItems: "center",
-		backgroundColor: color.surfaceSubtle,
+		backgroundColor: colors["--surface-subtle"],
 		display: "grid",
 		gridTemplateColumns: {
 			default: "minmax(260px, 0.8fr) minmax(0, 1.2fr)",
@@ -1020,34 +1025,34 @@ const styles = stylex.create({
 		padding: space[6],
 		borderRadius: radius.md,
 		gap: space[3],
-		backgroundColor: color.surface,
+		backgroundColor: colors["--surface"],
 		boxShadow: shadow.sm,
 		display: "flex",
 		flexDirection: "column",
 	},
 	exampleEyebrow: {
-		color: color.fgMuted,
+		color: colors["--text-muted"],
 		fontSize: fontSize.x1,
 		fontWeight: fontWeight.regular,
 		letterSpacing: letterSpacing.x1,
 		lineHeight: lineHeight.x1,
 	},
 	exampleTitle: {
-		color: color.fg,
+		color: colors["--text"],
 		fontSize: fontSize.x4,
 		letterSpacing: letterSpacing.x4,
 		lineHeight: lineHeight.x4,
 	},
 	exampleCopy: {
 		margin: 0,
-		color: color.fgMuted,
+		color: colors["--text-muted"],
 		fontSize: fontSize.x2,
 		letterSpacing: letterSpacing.x2,
 		lineHeight: lineHeight.x2,
 	},
 	exampleAnnotation: {
 		margin: 0,
-		color: color.fgMuted,
+		color: colors["--text-muted"],
 		fontSize: fontSize.x2,
 		letterSpacing: letterSpacing.x2,
 		lineHeight: lineHeight.x2,
@@ -1063,20 +1068,20 @@ const styles = stylex.create({
 	},
 	radiusToken: {
 		padding: space[4],
-		borderColor: color.border,
+		borderColor: colors["--border"],
 		borderRadius: radius.md,
 		borderStyle: "solid",
 		borderWidth: "1px",
 		gap: space[3],
-		backgroundColor: color.surface,
+		backgroundColor: colors["--surface"],
 		display: "flex",
 		flexDirection: "column",
 	},
 	radiusSpecimen: {
-		borderColor: color.bgAccent,
+		borderColor: colors["--accent"],
 		borderStyle: "solid",
 		borderWidth: "1px",
-		backgroundColor: color.bgAccentSoft,
+		backgroundColor: colors["--accent-soft"],
 		height: "72px",
 		width: "100%",
 	},
@@ -1092,7 +1097,7 @@ const styles = stylex.create({
 	shadowSpecimen: {
 		padding: space[5],
 		borderRadius: radius.md,
-		backgroundColor: color.surface,
+		backgroundColor: colors["--surface"],
 		minHeight: "132px",
 	},
 	shadowSmall: {
@@ -1105,24 +1110,24 @@ const styles = stylex.create({
 		boxShadow: shadow.lg,
 	},
 	motionPanel: {
-		borderColor: color.border,
+		borderColor: colors["--border"],
 		borderRadius: radius.md,
 		borderStyle: "solid",
 		borderWidth: "1px",
 		overflow: "hidden",
-		backgroundColor: color.surface,
+		backgroundColor: colors["--surface"],
 	},
 	motionToolbar: {
 		padding: space[4],
 		gap: space[4],
 		alignItems: "center",
-		backgroundColor: color.surfaceSubtle,
+		backgroundColor: colors["--surface-subtle"],
 		display: "flex",
 		justifyContent: "space-between",
 	},
 	motionHint: {
 		margin: 0,
-		color: color.fgMuted,
+		color: colors["--text-muted"],
 		fontSize: fontSize.x1,
 	},
 	playButton: {
@@ -1131,10 +1136,10 @@ const styles = stylex.create({
 		paddingInline: space[3],
 		alignItems: "center",
 		backgroundColor: {
-			default: color.bgAccent,
-			":hover": color.bgAccentHover,
+			default: colors["--accent"],
+			":hover": colors["--accent-hover"],
 		},
-		color: color.fgAccentContrast,
+		color: colors["--accent-contrast"],
 		display: "inline-flex",
 		flexShrink: 0,
 		fontSize: fontSize.x1,
@@ -1154,20 +1159,20 @@ const styles = stylex.create({
 			default: "190px minmax(150px, 1fr) minmax(160px, 0.7fr)",
 			"@media (max-width: 680px)": "140px minmax(0, 1fr)",
 		},
-		borderBottomColor: color.border,
+		borderBottomColor: colors["--border"],
 		borderBottomStyle: "solid",
 		borderBottomWidth: "1px",
 	},
 	motionTrack: {
 		padding: "3px",
 		borderRadius: radius.full,
-		backgroundColor: color.surfaceSubtle,
+		backgroundColor: colors["--surface-subtle"],
 		position: "relative",
 		height: "20px",
 	},
 	motionDot: {
 		borderRadius: radius.full,
-		backgroundColor: color.bgAccent,
+		backgroundColor: colors["--accent"],
 		display: "block",
 		insetInlineStart: "0",
 		position: "absolute",
@@ -1223,19 +1228,19 @@ const styles = stylex.create({
 	},
 	layerStage: {
 		borderRadius: radius.lg,
-		backgroundColor: color.surfaceSubtle,
+		backgroundColor: colors["--surface-subtle"],
 		position: "relative",
 		height: "330px",
 	},
 	layerCard: {
-		borderColor: color.border,
+		borderColor: colors["--border"],
 		borderRadius: radius.md,
 		borderStyle: "solid",
 		borderWidth: "1px",
 		alignItems: "center",
-		backgroundColor: color.surface,
+		backgroundColor: colors["--surface"],
 		boxShadow: shadow.sm,
-		color: color.fg,
+		color: colors["--text"],
 		display: "flex",
 		fontSize: fontSize.x1,
 		fontWeight: fontWeight.semibold,
@@ -1265,7 +1270,7 @@ const styles = stylex.create({
 		zIndex: zIndex.toast,
 	},
 	layerList: {
-		borderColor: color.border,
+		borderColor: colors["--border"],
 		borderRadius: radius.md,
 		borderStyle: "solid",
 		borderWidth: "1px",
@@ -1274,10 +1279,10 @@ const styles = stylex.create({
 	layerRow: {
 		padding: space[3],
 		gap: space[3],
-		backgroundColor: color.surface,
+		backgroundColor: colors["--surface"],
 		display: "grid",
 		gridTemplateColumns: "130px minmax(0, 1fr)",
-		borderBottomColor: color.border,
+		borderBottomColor: colors["--border"],
 		borderBottomStyle: "solid",
 		borderBottomWidth: {
 			default: "1px",
@@ -1294,14 +1299,14 @@ const styles = stylex.create({
 	},
 	iconExample: {
 		padding: space[4],
-		borderColor: color.border,
+		borderColor: colors["--border"],
 		borderRadius: radius.md,
 		borderStyle: "solid",
 		borderWidth: "1px",
 		gap: space[4],
 		alignItems: "center",
-		backgroundColor: color.surface,
-		color: color.fg,
+		backgroundColor: colors["--surface"],
+		color: colors["--text"],
 		display: "flex",
 	},
 });

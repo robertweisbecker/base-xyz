@@ -4,7 +4,7 @@ import type { StyleXStyles } from "@stylexjs/stylex";
 import { type ComponentProps } from "react";
 import { motion } from "@/styles/tokens.stylex";
 import { focusRing } from "@/styles/recipes/focus";
-import { color } from "@/styles/tokens.stylex";
+import { colors } from "@/styles/tokens.stylex";
 
 export type LinkProps = Omit<ComponentProps<"a">, "style"> & {
 	external?: boolean;
@@ -38,8 +38,8 @@ const linkStyles = stylex.create({
 	root: {
 		alignItems: "center",
 		color: {
-			default: color.fgAccent,
-			":hover": color.fgAccentHover,
+			default: colors["--text-accent"],
+			":hover": colors["--text-accent-hover"],
 		},
 		columnGap: "0.2em",
 		display: "inline-flex",

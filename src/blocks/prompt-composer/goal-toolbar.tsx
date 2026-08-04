@@ -13,7 +13,7 @@ import { Textarea } from "@/components/textarea/textarea";
 import * as Tooltip from "@/components/tooltip/tooltip";
 import * as Toolbar from "@/components/toolbar/toolbar";
 import { iconSwapTransition } from "@/styles/recipes/transitions";
-import { color, radius, size, space } from "@/styles/tokens.stylex";
+import { colors, radius, size, space } from "@/styles/tokens.stylex";
 import { fontSize, fontWeight, letterSpacing, lineHeight } from "@/styles/tokens.stylex";
 
 type GoalToolbarProps = {
@@ -160,7 +160,7 @@ export function GoalToolbar({ active, description }: GoalToolbarProps) {
 
 const parts = stylex.create({
 	root: {
-		borderColor: color.border,
+		borderColor: colors["--border"],
 		borderStyle: "solid",
 		borderWidth: "1px",
 		overflow: "hidden",
@@ -179,7 +179,7 @@ const parts = stylex.create({
 		width: "100%",
 	},
 	statusIcon: {
-		color: color.fgMuted,
+		color: colors["--text-muted"],
 		display: "inline-flex",
 		flexShrink: 0,
 		opacity: 0.64,
@@ -189,7 +189,7 @@ const parts = stylex.create({
 	statusLabel: {
 		gap: space[1],
 		alignItems: "center",
-		color: color.fg,
+		color: colors["--text"],
 		display: "flex",
 		flexShrink: 0,
 		fontSize: fontSize.x2,
@@ -199,7 +199,7 @@ const parts = stylex.create({
 	},
 	description: {
 		overflow: "hidden",
-		color: color.fgMuted,
+		color: colors["--text-muted"],
 		fontSize: fontSize.x2,
 		letterSpacing: letterSpacing.x2,
 		lineHeight: lineHeight.x2,
@@ -208,7 +208,7 @@ const parts = stylex.create({
 		minWidth: 0,
 	},
 	elapsed: {
-		color: color.fgSubtle,
+		color: colors["--text-subtle"],
 		flexShrink: 0,
 		fontSize: fontSize.x2,
 		fontVariantNumeric: "tabular-nums",
@@ -231,7 +231,7 @@ const parts = stylex.create({
 		},
 	},
 	details: {
-		color: color.fgSubtle,
+		color: colors["--text-subtle"],
 		lineHeight: 1.5,
 		paddingInlineStart: space[3],
 	},

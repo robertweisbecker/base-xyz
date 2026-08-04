@@ -9,7 +9,7 @@ import { textFamilyStyles, textStyles, textWeightStyles } from "@/components/tex
 import { motion } from "@/styles/tokens.stylex";
 import { popupMotionStyles, popupPositionerStyles, popupViewportStyles } from "@/components/popover/popover.stylex";
 import { popupVars } from "@/components/popover/popover-vars.stylex";
-import { color, radius, shadow, space } from "@/styles/tokens.stylex";
+import { colors, radius, shadow, space } from "@/styles/tokens.stylex";
 import { CheckmarkIcon } from "../selection-icons";
 import {
 	menuItemSizeStyles,
@@ -385,9 +385,9 @@ export const SubmenuRoot = BaseMenu.SubmenuRoot;
 
 const menuParts = stylex.create({
 	panelSurface: {
-		[popupVars.background]: color.bgPanel,
-		[popupVars.border]: color.border,
-		[popupVars.foreground]: color.fg,
+		[popupVars.background]: colors["--panel"],
+		[popupVars.border]: colors["--border"],
+		[popupVars.foreground]: colors["--text"],
 		borderRadius: radius.lg,
 		backgroundColor: popupVars.background,
 		boxShadow: shadow.md,
@@ -417,21 +417,21 @@ const menuParts = stylex.create({
 	},
 	submenuTrigger: {
 		backgroundColor: {
-			"[data-highlighted]": color.highlight,
-			"[data-popup-open]": color.surfaceSubtle,
-			"[data-popup-open][data-highlighted]": color.surfaceSubtle,
+			"[data-highlighted]": colors["--highlight"],
+			"[data-popup-open]": colors["--surface-subtle"],
+			"[data-popup-open][data-highlighted]": colors["--surface-subtle"],
 			default: "transparent",
 		},
 		color: {
-			"[data-highlighted]": color.fg,
-			"[data-popup-open]": color.fgMuted,
-			"[data-popup-open][data-highlighted]": color.fgMuted,
-			default: color.fg,
+			"[data-highlighted]": colors["--text"],
+			"[data-popup-open]": colors["--text-muted"],
+			"[data-popup-open][data-highlighted]": colors["--text-muted"],
+			default: colors["--text"],
 		},
 	},
 	submenuIcon: {
 		gridColumn: "3",
-		color: color.fgSubtle,
+		color: colors["--text-subtle"],
 		justifySelf: "end",
 	},
 	collapsibleGroup: {
@@ -444,14 +444,14 @@ const menuParts = stylex.create({
 		borderStyle: "solid",
 		borderWidth: "0",
 		backgroundColor: {
-			"[data-highlighted]": color.highlight,
-			"[data-panel-open]": `color-mix(in srgb, ${color.highlight} 50%, transparent)`,
+			"[data-highlighted]": colors["--highlight"],
+			"[data-panel-open]": `color-mix(in srgb, ${colors["--highlight"]} 50%, transparent)`,
 			default: "transparent",
 		},
 		color: {
-			"[data-highlighted]": color.fg,
-			"[data-panel-open]": color.fg,
-			default: color.fgMuted,
+			"[data-highlighted]": colors["--text"],
+			"[data-panel-open]": colors["--text"],
+			default: colors["--text-muted"],
 		},
 		fontFamily: "inherit",
 		textAlign: "start",
@@ -501,8 +501,8 @@ const menuParts = stylex.create({
 		gridColumn: "1",
 		alignItems: "center",
 		backgroundColor: {
-			"[data-checked]": color.bgAccent,
-			default: color.bgNeutral,
+			"[data-checked]": colors["--accent"],
+			default: colors["--neutral"],
 		},
 		display: "inline-flex",
 		justifySelf: "start",
@@ -520,7 +520,7 @@ const menuParts = stylex.create({
 		borderRadius: radius.full,
 		marginInline: "0.125rem",
 		aspectRatio: 1,
-		backgroundColor: color.fgInverse,
+		backgroundColor: colors["--inverse-text"],
 		transform: {
 			"[data-checked]": `translateX(${space[2]})`,
 			default: "translateX(0)",
@@ -536,11 +536,11 @@ const menuParts = stylex.create({
 	groupLabel: {
 		paddingBlock: space[1],
 		paddingInline: space[2],
-		color: color.fgSubtle,
+		color: colors["--text-subtle"],
 	},
 	separator: {
 		marginBlock: space[1],
-		backgroundColor: color.border,
+		backgroundColor: colors["--border"],
 		marginInlineEnd: `calc(-1 * ${space[1]})`,
 		marginInlineStart: space[3],
 		height: "1px",

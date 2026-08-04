@@ -4,7 +4,7 @@ import type { StyleXStyles } from "@stylexjs/stylex";
 import { type ComponentProps } from "react";
 import { motion } from "@/styles/tokens.stylex";
 import { modalChromeStyles, modalTextStyles } from "@/components/dialog/dialog.stylex";
-import { color, radius, space } from "@/styles/tokens.stylex";
+import { colors, radius, space } from "@/styles/tokens.stylex";
 
 type StyledProps<T> = Omit<T, "className" | "style"> & {
 	className?: string;
@@ -276,7 +276,7 @@ const drawerParts = stylex.create({
 		borderRadius: radius.full,
 		marginBlock: space[1],
 		marginInline: "auto",
-		backgroundColor: color.border,
+		backgroundColor: colors["--border"],
 		opacity: {
 			default: "1",
 			[stylex.when.ancestor("[data-nested-drawer-open]")]: "0",
@@ -298,7 +298,7 @@ const drawerParts = stylex.create({
 		flexDirection: "column",
 		paddingBlockEnd: space[3],
 		paddingBlockStart: space[2],
-		borderBottomColor: color.border,
+		borderBottomColor: colors["--border"],
 		borderBottomStyle: "solid",
 		borderBottomWidth: "0.5px",
 	},
@@ -309,7 +309,7 @@ const drawerParts = stylex.create({
 		gap: space[3],
 		paddingInline: space[5],
 		paddingBlockStart: space[3],
-		borderTopColor: color.border,
+		borderTopColor: colors["--border"],
 		borderTopStyle: "solid",
 		borderTopWidth: "1px",
 	},

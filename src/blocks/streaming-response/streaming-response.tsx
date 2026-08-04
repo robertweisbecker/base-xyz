@@ -9,7 +9,7 @@ import { Loader } from "@/components/loader/loader";
 import { textSizeStyles, textStyles } from "@/components/text/text.stylex";
 import { shimmerTextStyles } from "./shimmer-text.stylex";
 import { typingTextStyles } from "./typing-text.stylex";
-import { color, space } from "@/styles/tokens.stylex";
+import { colors, space } from "@/styles/tokens.stylex";
 import { lineHeight } from "@/styles/tokens.stylex";
 
 export type StreamingResponseStatus = "streaming" | "complete" | "stopped" | "error";
@@ -124,7 +124,7 @@ function joinClassNames(...classNames: Array<string | undefined>) {
 const parts = stylex.create({
 	root: {
 		gap: space[3],
-		color: color.fg,
+		color: colors["--text"],
 		display: "flex",
 		flexDirection: "column",
 		maxWidth: "46rem",
@@ -138,7 +138,7 @@ const parts = stylex.create({
 		width: "fit-content",
 	},
 	content: {
-		color: color.fg,
+		color: colors["--text"],
 		lineHeight: lineHeight.x4,
 		whiteSpace: "pre-wrap",
 	},
@@ -151,8 +151,8 @@ const parts = stylex.create({
 });
 
 const statusColor = stylex.create({
-	streaming: { color: color.fgMuted },
-	complete: { color: color.bgSuccess },
-	stopped: { color: color.fgMuted },
-	error: { color: color.fgDanger },
+	streaming: { color: colors["--text-muted"] },
+	complete: { color: colors["--success"] },
+	stopped: { color: colors["--text-muted"] },
+	error: { color: colors["--text-danger"] },
 });

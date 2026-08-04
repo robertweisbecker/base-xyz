@@ -11,7 +11,7 @@ import { XIcon } from "@phosphor-icons/react/dist/csr/X";
 import * as stylex from "@stylexjs/stylex";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { useEffect, useRef, useState } from "react";
-import { color, space } from "@/styles/tokens.stylex";
+import { colors, space } from "@/styles/tokens.stylex";
 import { fontSize, letterSpacing, lineHeight } from "@/styles/tokens.stylex";
 import { Button, IconButton } from "../button/button";
 import * as Tooltip from "../tooltip/tooltip";
@@ -556,7 +556,7 @@ const storyStyles = stylex.create({
 	},
 	hint: {
 		margin: 0,
-		color: color.fgMuted,
+		color: colors["--text-muted"],
 		fontSize: fontSize.x1,
 		letterSpacing: letterSpacing.x1,
 		lineHeight: lineHeight.x1,
@@ -585,9 +585,9 @@ const storyStyles = stylex.create({
 		display: "inline-flex",
 	},
 	additions: {
-		color: color.bgSuccess,
+		color: colors["--success"],
 	},
 	deletions: {
-		color: color.bgDanger,
+		color: colors["--danger"],
 	},
 });

@@ -10,7 +10,7 @@ import {
 	popupViewportStyles,
 } from "@/components/popover/popover.stylex";
 import { popupVars } from "@/components/popover/popover-vars.stylex";
-import { color, radius, shadow, space } from "@/styles/tokens.stylex";
+import { colors, radius, shadow, space } from "@/styles/tokens.stylex";
 import { fontSize, fontWeight, letterSpacing, lineHeight } from "@/styles/tokens.stylex";
 
 type StyledProps<T> = Omit<T, "className" | "style"> & {
@@ -153,9 +153,9 @@ export const Root = BasePreviewCard.Root;
 
 const previewCardParts = stylex.create({
 	panelSurface: {
-		[popupVars.background]: color.bgElevated,
-		[popupVars.border]: color.border,
-		[popupVars.foreground]: color.fg,
+		[popupVars.background]: colors["--elevated"],
+		[popupVars.border]: colors["--border"],
+		[popupVars.foreground]: colors["--text"],
 		borderRadius: radius.lg,
 		backgroundColor: popupVars.background,
 		boxShadow: shadow.md,
@@ -188,6 +188,6 @@ const previewCardParts = stylex.create({
 	},
 	description: {
 		margin: 0,
-		color: color.fgMuted,
+		color: colors["--text-muted"],
 	},
 });
