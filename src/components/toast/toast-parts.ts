@@ -1,6 +1,6 @@
 import * as stylex from "@stylexjs/stylex";
 import { textStyles, textWeightStyles } from "@/components/text/text.stylex";
-import { colors, radius } from "@/styles/tokens.stylex";
+import { tokens } from "@/theme/tokens.stylex";
 
 const toastTextParts = stylex.create({
 	title: {
@@ -8,7 +8,7 @@ const toastTextParts = stylex.create({
 	},
 	description: {
 		margin: 0,
-		color: colors["--text-muted"],
+		color: tokens["--fg-muted"],
 	},
 });
 
@@ -22,7 +22,7 @@ const toastControlParts = stylex.create({
 		padding: 0,
 		borderWidth: 0,
 		backgroundColor: "transparent",
-		color: colors["--accent"],
+		color: tokens["--bg-primary"],
 		flexShrink: 0,
 	},
 	close: {
@@ -32,7 +32,7 @@ const toastControlParts = stylex.create({
 		backgroundColor: {
 			default: "transparent",
 			":hover": {
-				"@media (hover: hover) and (pointer: fine)": colors["--surface-subtle"],
+				"@media (hover: hover) and (pointer: fine)": tokens["--surface-subtle"],
 			},
 		},
 		color: "currentColor",
@@ -41,15 +41,15 @@ const toastControlParts = stylex.create({
 		justifyContent: "center",
 	},
 	stackedClose: {
-		borderRadius: radius.sm,
+		borderRadius: tokens["--radius-sm"],
 		marginBlock: "-8px",
-		color: colors["--text-muted"],
+		color: tokens["--fg-muted"],
 		marginInlineEnd: "-8px",
 		height: "36px",
 		width: "36px",
 	},
 	anchoredClose: {
-		borderRadius: radius.full,
+		borderRadius: tokens["--radius-full"],
 		marginInlineEnd: "-6px",
 		height: "28px",
 		width: "28px",

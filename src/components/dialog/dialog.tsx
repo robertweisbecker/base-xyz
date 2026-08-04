@@ -8,7 +8,7 @@ import {
 	modalTextStyles,
 	modalViewportStyles,
 } from "@/components/dialog/dialog.stylex";
-import { colors, space } from "@/styles/tokens.stylex";
+import { tokens } from "@/theme/tokens.stylex";
 import { XIcon } from "@phosphor-icons/react";
 import { IconButton } from "../button";
 
@@ -200,30 +200,30 @@ const dialogParts = stylex.create({
 	closeButton: {
 		position: "absolute",
 		zIndex: 1,
-		right: space[4],
-		top: space[4],
+		right: tokens["--space-4"],
+		top: tokens["--space-4"],
 	},
 	outsideScrollViewport: {
-		paddingBlock: space[8],
+		paddingBlock: tokens["--space-8"],
 		alignItems: "flex-start",
 		overflowY: "auto",
 	},
 	header: {
-		gap: space[1],
-		paddingInline: space[6],
+		gap: tokens["--space-1"],
+		paddingInline: tokens["--space-6"],
 		display: "flex",
 		flexDirection: "column",
-		paddingBlockStart: space[6],
+		paddingBlockStart: tokens["--space-6"],
 	},
 	body: {
-		padding: space[6],
+		padding: tokens["--space-6"],
 	},
 	footer: {
-		gap: space[3],
-		paddingBlock: space[4],
-		paddingInlineEnd: space[4],
-		paddingInlineStart: space[6],
-		borderTopColor: colors["--border"],
+		gap: tokens["--space-3"],
+		paddingBlock: tokens["--space-4"],
+		paddingInlineEnd: tokens["--space-4"],
+		paddingInlineStart: tokens["--space-6"],
+		borderTopColor: tokens["--border"],
 		borderTopStyle: "solid",
 		borderTopWidth: "0.5px",
 	},
@@ -232,11 +232,11 @@ const dialogParts = stylex.create({
 const dialogScrollBehavior = stylex.create({
 	popup: {
 		overflow: "auto",
-		maxHeight: `calc(100dvh - ${space[8]})`,
+		maxHeight: `calc(100dvh - ${tokens["--space-8"]})`,
 	},
 	inside: {
 		overflow: "hidden",
-		maxHeight: `calc(100dvh - ${space[8]})`,
+		maxHeight: `calc(100dvh - ${tokens["--space-8"]})`,
 	},
 	outside: {
 		overflow: "visible",

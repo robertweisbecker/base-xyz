@@ -1,7 +1,7 @@
 import * as stylex from "@stylexjs/stylex";
 import { headingStyles, textStyles } from "@/components/text/text.stylex";
 import { zIndex } from "@/styles/constants.stylex";
-import { colors, motion, radius, shadow, space } from "@/styles/tokens.stylex";
+import { tokens } from "@/theme/tokens.stylex";
 
 /**
  * Shared behavior and chrome for modal surfaces (dialogs, alert dialogs,
@@ -31,27 +31,27 @@ import { colors, motion, radius, shadow, space } from "@/styles/tokens.stylex";
 export const modalChromeStyles = stylex.create({
 	backdrop: {
 		inset: 0,
-		backgroundColor: colors["--overlay"],
+		backgroundColor: tokens["--overlay"],
 		position: "fixed",
 	},
 	viewport: {
 		inset: 0,
-		padding: space[4],
+		padding: tokens["--space-4"],
 		alignItems: "center",
 		display: "flex",
 		justifyContent: "center",
 		position: "fixed",
 	},
 	surface: {
-		borderRadius: radius.xl,
+		borderRadius: tokens["--radius-xl"],
 		outline: "0",
 		backgroundColor: {
-			"[data-close-confirmation-open]": colors["--surface"],
-			"[data-nested-dialog-open]": colors["--surface"],
-			default: colors["--panel"],
+			"[data-close-confirmation-open]": tokens["--surface"],
+			"[data-nested-dialog-open]": tokens["--surface"],
+			default: tokens["--panel"],
 		},
-		boxShadow: shadow.lg,
-		color: colors["--text"],
+		boxShadow: tokens["--shadow-lg"],
+		color: tokens["--fg"],
 		display: "flex",
 		flexDirection: "column",
 		width: "100%",
@@ -72,11 +72,11 @@ export const modalChromeStyles = stylex.create({
 			pointerEvents: "none",
 			position: "absolute",
 			transitionDuration: {
-				default: motion.durationMedium,
+				default: tokens["--motion-duration-medium"],
 				"@media (prefers-reduced-motion: reduce)": "0ms",
 			},
 			transitionProperty: "background-color, opacity",
-			transitionTimingFunction: motion.easeOut,
+			transitionTimingFunction: tokens["--motion-ease-out"],
 		},
 	},
 	modalBackdropLayer: {
@@ -102,11 +102,11 @@ export const modalMotionStyles = stylex.create({
 			default: 1,
 		},
 		transitionDuration: {
-			default: motion.durationMedium,
+			default: tokens["--motion-duration-medium"],
 			"@media (prefers-reduced-motion: reduce)": "0ms",
 		},
 		transitionProperty: "opacity",
-		transitionTimingFunction: motion.easeOut,
+		transitionTimingFunction: tokens["--motion-ease-out"],
 	},
 	popup: {
 		opacity: {
@@ -123,11 +123,11 @@ export const modalMotionStyles = stylex.create({
 		},
 		transformOrigin: "center center",
 		transitionDuration: {
-			default: motion.durationMedium,
+			default: tokens["--motion-duration-medium"],
 			"@media (prefers-reduced-motion: reduce)": "0ms",
 		},
 		transitionProperty: "opacity, transform",
-		transitionTimingFunction: motion.easeOut,
+		transitionTimingFunction: tokens["--motion-ease-out"],
 		willChange: "transform, opacity",
 	},
 });
@@ -140,10 +140,10 @@ const modalTextParts = stylex.create({
 	},
 	description: {
 		margin: 0,
-		color: colors["--text-muted"],
+		color: tokens["--fg-muted"],
 	},
 	body: {
-		color: colors["--text"],
+		color: tokens["--fg"],
 	},
 	footer: {
 		alignItems: "center",

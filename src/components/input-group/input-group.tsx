@@ -6,7 +6,7 @@ import { type ComponentProps, type ReactElement } from "react";
 import { fieldStyles, fieldControlSizes, fieldTextStyles } from "@/components/field/field.stylex";
 import type { FieldSize } from "@/components/field/field.types";
 import { focusRing } from "@/styles/recipes/focus";
-import { colors, shadow, space } from "@/styles/tokens.stylex";
+import { tokens } from "@/theme/tokens.stylex";
 
 const GROUP_HOVER =
 	':hover:not(:focus-within):not(:has([aria-invalid="true"])):not(:has([data-disabled])):not(:has([data-invalid])):not(:has([readonly]))';
@@ -156,18 +156,18 @@ const inputGroupParts = stylex.create({
 		borderColor: {
 			// eslint-disable-next-line @stylexjs/valid-styles -- the compiler supports chained pseudo-class conditions; the lint rule is stricter than the compiler.
 			[GROUP_HOVER]: {
-				"@media (hover: hover) and (pointer: fine)": colors["--border-hover"],
+				"@media (hover: hover) and (pointer: fine)": tokens["--border-input-hover"],
 			},
-			default: colors["--border-strong"],
-			":has([data-invalid])": colors["--danger"],
-			":has([readonly])": colors["--border"],
+			default: tokens["--border-input"],
+			":has([data-invalid])": tokens["--bg-error-primary"],
+			":has([readonly])": tokens["--border"],
 		},
-		gap: space[1],
+		gap: tokens["--space-1"],
 		overflow: "hidden",
 		alignItems: "center",
 		backgroundColor: {
-			default: colors["--surface"],
-			":has([data-disabled])": colors["--surface-subtle"],
+			default: tokens["--surface"],
+			":has([data-disabled])": tokens["--surface-subtle"],
 		},
 		display: "flex",
 		minWidth: 0,
@@ -203,7 +203,7 @@ const inputGroupParts = stylex.create({
 	addon: {
 		paddingInline: "var(--_input-group-child-padding-inline)",
 		alignItems: "center",
-		color: colors["--text-muted"],
+		color: tokens["--fg-muted"],
 		cursor: "text",
 		display: "inline-flex",
 		flexShrink: 0,
@@ -219,13 +219,13 @@ const inputGroupParts = stylex.create({
 		// lineHeight: lineHeight.x1,
 	},
 	actions: {
-		gap: space[1],
+		gap: tokens["--space-1"],
 		alignItems: "center",
 		display: "flex",
 		flexShrink: 0,
 	},
 	footer: {
-		gap: space[2],
+		gap: tokens["--space-2"],
 		paddingInline: "var(--_input-group-child-padding-inline)",
 		alignItems: "center",
 		display: "flex",
@@ -242,8 +242,8 @@ const inputGroupVariants = stylex.create({
 	standard: {},
 	elevated: {
 		borderWidth: 0,
-		backgroundColor: colors["--elevated"],
-		boxShadow: shadow.sm,
+		backgroundColor: tokens["--elevated"],
+		boxShadow: tokens["--shadow-sm"],
 	},
 });
 
@@ -261,24 +261,24 @@ const inputGroupOrientations = stylex.create({
 
 const inputGroupSizes = stylex.create({
 	sm: {
-		"--_input-group-child-padding-inline": space[1],
+		"--_input-group-child-padding-inline": tokens["--space-1"],
 		"--_input-group-icon-size": "0.875rem",
-		"--_input-group-vertical-padding-block": space[2],
-		paddingBlock: space[1],
-		paddingInline: space[1],
+		"--_input-group-vertical-padding-block": tokens["--space-2"],
+		paddingBlock: tokens["--space-1"],
+		paddingInline: tokens["--space-1"],
 	},
 	md: {
-		"--_input-group-child-padding-inline": space[1],
+		"--_input-group-child-padding-inline": tokens["--space-1"],
 		"--_input-group-icon-size": "1rem",
-		"--_input-group-vertical-padding-block": space[3],
-		paddingBlock: space[1],
-		paddingInline: space[1],
+		"--_input-group-vertical-padding-block": tokens["--space-3"],
+		paddingBlock: tokens["--space-1"],
+		paddingInline: tokens["--space-1"],
 	},
 	lg: {
-		"--_input-group-child-padding-inline": space[1],
+		"--_input-group-child-padding-inline": tokens["--space-1"],
 		"--_input-group-icon-size": "1rem",
-		"--_input-group-vertical-padding-block": space[4],
-		paddingBlock: space[2],
-		paddingInline: space[2],
+		"--_input-group-vertical-padding-block": tokens["--space-4"],
+		paddingBlock: tokens["--space-2"],
+		paddingInline: tokens["--space-2"],
 	},
 });

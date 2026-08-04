@@ -2,7 +2,7 @@ import { ScrollArea as BaseScrollArea } from "@base-ui/react/scroll-area";
 import * as stylex from "@stylexjs/stylex";
 import type { StyleXStyles } from "@stylexjs/stylex";
 import type { ReactNode } from "react";
-import { colors, motion, radius, space } from "@/styles/tokens.stylex";
+import { tokens } from "@/theme/tokens.stylex";
 
 export type ScrollAreaProps = Omit<BaseScrollArea.Root.Props, "children" | "className" | "style"> & {
 	children: ReactNode;
@@ -113,36 +113,38 @@ const scrollAreaParts = stylex.create({
 	},
 	fade: {
 		"--scroll-area-mask-x-end": {
-			"[data-overflow-x-end]": space[6],
+			"[data-overflow-x-end]": tokens["--space-6"],
 		},
 		"--scroll-area-mask-x-start": {
-			"[data-overflow-x-start]": space[6],
+			"[data-overflow-x-start]": tokens["--space-6"],
 		},
 		"--scroll-area-mask-y-end": {
-			"[data-overflow-y-end]": space[6],
+			"[data-overflow-y-end]": tokens["--space-6"],
 		},
 		"--scroll-area-mask-y-start": {
-			"[data-overflow-y-start]": space[6],
+			"[data-overflow-y-start]": tokens["--space-6"],
 		},
 		maskComposite: "intersect",
 		maskImage:
 			"linear-gradient(to right, transparent 0, #000 var(--scroll-area-mask-x-start, 0px), #000 calc(100% - var(--scroll-area-mask-x-end, 0px)), transparent 100%), linear-gradient(to bottom, transparent 0, #000 var(--scroll-area-mask-y-start, 0px), #000 calc(100% - var(--scroll-area-mask-y-end, 0px)), transparent 100%)",
 	},
 	scrollbar: {
-		borderRadius: radius.full,
-		backgroundColor: colors["--border"],
+		borderRadius: tokens["--radius-full"],
+		backgroundColor: tokens["--fill-track"],
 		display: "flex",
 		position: "absolute",
 		touchAction: "none",
 		userSelect: "none",
 	},
 	thumb: {
-		borderRadius: radius.full,
+		borderRadius: tokens["--radius-full"],
 		backgroundColor: {
-			"[data-hovering]": colors["--text-muted"],
-			default: colors["--text-subtle"],
-			":hover": colors["--text-muted"],
+			default: tokens["--border-input"],
+			":active": tokens["--border-input-hover"],
 		},
+		transitionProperty: "background-color, width",
+		transitionDuration: tokens["--motion-duration-short"],
+		transitionTimingFunction: tokens["--motion-ease-out"],
 	},
 	corner: {
 		insetInlineEnd: 0,
@@ -169,11 +171,11 @@ const scrollbarVisibilityVariants = stylex.create({
 		},
 		transitionDuration: {
 			"[data-scrolling]": "0ms",
-			default: motion.durationShort,
+			default: tokens["--motion-duration-short"],
 			"@media (prefers-reduced-motion: reduce)": "0ms",
 		},
 		transitionProperty: "opacity",
-		transitionTimingFunction: motion.easeOut,
+		transitionTimingFunction: tokens["--motion-ease-out"],
 	},
 	hover: {
 		opacity: {
@@ -188,18 +190,18 @@ const scrollbarVisibilityVariants = stylex.create({
 		},
 		transitionDuration: {
 			"[data-scrolling]": "0ms",
-			default: motion.durationShort,
+			default: tokens["--motion-duration-short"],
 			"@media (prefers-reduced-motion: reduce)": "0ms",
 		},
 		transitionProperty: "opacity",
-		transitionTimingFunction: motion.easeOut,
+		transitionTimingFunction: tokens["--motion-ease-out"],
 	},
 });
 
 const scrollbarVariants = stylex.create({
 	vertical: {
 		insetBlock: 0,
-		marginBlock: space[2],
+		marginBlock: tokens["--space-2"],
 		marginInline: "3px",
 		insetInlineEnd: 0,
 		justifyContent: "center",
@@ -207,7 +209,7 @@ const scrollbarVariants = stylex.create({
 	horizontal: {
 		insetInline: 0,
 		marginBlock: "3px",
-		marginInline: space[2],
+		marginInline: tokens["--space-2"],
 		alignItems: "center",
 		justifyContent: "flex-start",
 		bottom: 0,
@@ -217,10 +219,16 @@ const scrollbarVariants = stylex.create({
 const thumbVariants = stylex.create({
 	vertical: {
 		minHeight: "36px",
-		width: "4px",
+		width: {
+			default: "4px",
+			":hover": "6px",
+		},
 	},
 	horizontal: {
-		height: "4px",
+		height: {
+			default: "4px",
+			":hover": "6px",
+		},
 		minWidth: "36px",
 	},
 });

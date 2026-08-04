@@ -10,10 +10,10 @@ import {
 	childLayoutThemeProps,
 	positioningThemeProps,
 	sizingThemeProps,
-} from "@/styles/theme-props-layout.stylex";
-import { marginThemeProps } from "@/styles/theme-props-spacing.stylex";
+} from "@/theme/theme-props-layout.stylex";
+import { marginThemeProps } from "@/theme/theme-props-spacing.stylex";
 import type { ChildLayoutProps, MarginProps, PositioningProps, SizingProps } from "@/theme/theme-props.types";
-import { colors } from "@/styles/tokens.stylex";
+import { tokens } from "@/theme/tokens.stylex";
 
 export interface SeparatorThemeProps extends MarginProps, SizingProps, PositioningProps, ChildLayoutProps {}
 const separatorThemeProps = composeThemeProps(
@@ -51,7 +51,7 @@ export function Separator({ ref, className, orientation = "horizontal", style, .
 
 const separatorParts = stylex.create({
 	root: {
-		backgroundColor: colors["--border"],
+		backgroundColor: tokens["--border"],
 		flexShrink: 0,
 	},
 });

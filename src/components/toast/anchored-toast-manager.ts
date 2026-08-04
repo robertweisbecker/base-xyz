@@ -4,7 +4,7 @@ import type { ReactNode } from "react";
 export const anchoredToastVariants = ["default", "tooltip", "popover", "pill"] as const;
 export type AnchoredToastVariant = (typeof anchoredToastVariants)[number];
 
-export const anchoredToastTones = ["neutral", "accent", "success", "danger"] as const;
+export const anchoredToastTones = ["neutral", "accent", "success", "error"] as const;
 export type AnchoredToastTone = (typeof anchoredToastTones)[number];
 
 export const anchoredToastStatuses = ["idle", "loading", "ongoing", "success", "error"] as const;

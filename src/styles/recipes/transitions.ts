@@ -1,5 +1,5 @@
 import * as stylex from "@stylexjs/stylex";
-import { motion } from "../tokens.stylex";
+import { tokens } from "@/theme/tokens.stylex";
 
 /**
  * Interaction-feedback transitions shared so pressed/hovered feedback feels
@@ -8,9 +8,9 @@ import { motion } from "../tokens.stylex";
  */
 export const pressable = stylex.create({
 	transition: {
-		transitionDuration: motion.durationQuick,
+		transitionDuration: tokens["--motion-duration-quick"],
 		transitionProperty: "background-color, border-color, color, transform, box-shadow",
-		transitionTimingFunction: motion.easeOut,
+		transitionTimingFunction: tokens["--motion-ease-out"],
 	},
 });
 
@@ -28,11 +28,11 @@ export const iconSwapTransition = stylex.create({
 		display: "flex",
 		justifyContent: "center",
 		transitionDuration: {
-			default: motion.durationQuick,
+			default: tokens["--motion-duration-quick"],
 			"@media (prefers-reduced-motion: reduce)": "0ms",
 		},
 		transitionProperty: "filter, opacity, scale",
-		transitionTimingFunction: motion.easeSmoothOut,
+		transitionTimingFunction: tokens["--motion-ease-smooth-out"],
 		willChange: "filter, opacity, scale",
 		height: "1em",
 		width: "1em",

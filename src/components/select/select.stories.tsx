@@ -1,8 +1,8 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import * as stylex from "@stylexjs/stylex";
 import type { ReactNode } from "react";
-import { colors, space } from "@/styles/tokens.stylex";
-import { fontSize, fontWeight, letterSpacing, lineHeight } from "@/styles/tokens.stylex";
+import { tokens } from "@/theme/tokens.stylex";
+
 import * as Select from "./select";
 
 type Positioning = "item-aligned" | "bottom-start" | "bottom-end" | "top-start";
@@ -39,7 +39,7 @@ const meta: Meta<PlaygroundArgs> = {
 	argTypes: {
 		disabled: { control: "boolean" },
 		invalid: { control: "boolean" },
-		_itemVariant: { control: "select", options: ["default", "primary", "danger"] },
+		_itemVariant: { control: "select", options: ["default", "primary", "error"] },
 		_label: { control: "text" },
 		multiple: { control: "boolean" },
 		_placeholder: { control: "text" },
@@ -55,17 +55,17 @@ const meta: Meta<PlaygroundArgs> = {
 	parameters: {
 		controls: {
 			include: [
-					"_label",
-					"_placeholder",
-					"multiple",
-					"disabled",
-					"readOnly",
-					"required",
-					"invalid",
-					"_size",
-					"_variant",
-					"_itemVariant",
-					"_positioning",
+				"_label",
+				"_placeholder",
+				"multiple",
+				"disabled",
+				"readOnly",
+				"required",
+				"invalid",
+				"_size",
+				"_variant",
+				"_itemVariant",
+				"_positioning",
 			],
 		},
 	},
@@ -119,10 +119,7 @@ function PlaygroundExample({
 				items={frameworkItems}
 				multiple>
 				{selectLabel ? <Select.Label>{selectLabel}</Select.Label> : null}
-				<Select.Trigger
-					aria-label={selectLabel || "Framework"}
-					placeholder={_placeholder}
-					variant={_variant}>
+				<Select.Trigger aria-label={selectLabel || "Framework"} placeholder={_placeholder} variant={_variant}>
 					{formatMultipleFrameworks}
 				</Select.Trigger>
 				<FrameworkPopup itemVariant={_itemVariant} positioning={_positioning} />
@@ -133,11 +130,7 @@ function PlaygroundExample({
 	return (
 		<Select.Root<string> key="single" {...sharedProps} items={frameworkItems}>
 			{selectLabel ? <Select.Label>{selectLabel}</Select.Label> : null}
-			<Select.Trigger
-				aria-label={selectLabel || "Framework"}
-				placeholder={_placeholder}
-				variant={_variant}
-			/>
+			<Select.Trigger aria-label={selectLabel || "Framework"} placeholder={_placeholder} variant={_variant} />
 			<FrameworkPopup itemVariant={_itemVariant} positioning={_positioning} />
 		</Select.Root>
 	);
@@ -261,7 +254,7 @@ const produceGroups = [
 		items: [
 			{ label: "Apple", value: "apple" },
 			{ label: "Banana", value: "banana" },
-			{ label: "Orange", value: "orange" },
+			{ label: "Cherry", value: "cherry" },
 		],
 	},
 	{
@@ -471,10 +464,7 @@ function AdLibSelect({
 	placeholder?: string;
 }) {
 	return (
-		<Select.Root<string>
-			style={storyParts.adLibSelect}
-			defaultValue={defaultValue}
-			items={items}>
+		<Select.Root<string> style={storyParts.adLibSelect} defaultValue={defaultValue} items={items}>
 			<Select.Trigger aria-label={label} placeholder={placeholder} variant="inline" />
 			<Select.Popup backdrop>
 				<Select.List>
@@ -561,29 +551,29 @@ function formatMultipleValue(value: string[], placeholder: string) {
 
 const storyParts = stylex.create({
 	frame: {
-		padding: space[8],
+		padding: tokens["--space-8"],
 	},
 	story: {
-		gap: space[8],
+		gap: tokens["--space-8"],
 		display: "flex",
 		flexDirection: "column",
 	},
 	section: {
-		gap: space[4],
+		gap: tokens["--space-4"],
 		alignItems: "flex-start",
 		display: "flex",
 		flexDirection: "column",
 	},
 	heading: {
 		margin: 0,
-		color: colors["--text-muted"],
-		fontSize: fontSize.x1,
-		fontWeight: fontWeight.regular,
-		letterSpacing: letterSpacing.x1,
-		lineHeight: lineHeight.x1,
+		color: tokens["--fg-muted"],
+		fontSize: tokens["--font-size-1"],
+		fontWeight: tokens["--font-weight-regular"],
+		letterSpacing: tokens["--letter-spacing-1"],
+		lineHeight: tokens["--line-height-1"],
 	},
 	fieldGrid: {
-		gap: space[6],
+		gap: tokens["--space-6"],
 		display: "grid",
 		gridTemplateColumns: {
 			default: "repeat(3, minmax(0, 1fr))",
@@ -592,7 +582,7 @@ const storyParts = stylex.create({
 		width: "100%",
 	},
 	stateGrid: {
-		gap: space[8],
+		gap: tokens["--space-8"],
 		display: "grid",
 		gridTemplateColumns: {
 			default: "repeat(2, minmax(0, 1fr))",
@@ -600,39 +590,39 @@ const storyParts = stylex.create({
 		},
 	},
 	state: {
-		gap: space[3],
+		gap: tokens["--space-3"],
 		display: "flex",
 		flexDirection: "column",
 	},
 	stateLabel: {
 		margin: 0,
-		color: colors["--text-muted"],
-		fontSize: fontSize.x1,
-		fontWeight: fontWeight.regular,
-		letterSpacing: letterSpacing.x1,
-		lineHeight: lineHeight.x1,
+		color: tokens["--fg-muted"],
+		fontSize: tokens["--font-size-1"],
+		fontWeight: tokens["--font-weight-regular"],
+		letterSpacing: tokens["--letter-spacing-1"],
+		lineHeight: tokens["--line-height-1"],
 	},
 	sizeStack: {
-		gap: space[6],
+		gap: tokens["--space-6"],
 		display: "flex",
 		flexDirection: "column",
 	},
 	countryValue: {
-		gap: space[2],
+		gap: tokens["--space-2"],
 		alignItems: "center",
 		display: "inline-flex",
 		minWidth: 0,
 	},
 	countryItem: {
 		alignItems: "center",
-		columnGap: space[2],
+		columnGap: tokens["--space-2"],
 		display: "grid",
 		gridTemplateColumns: "auto minmax(0, 1fr) auto",
 		minWidth: "16rem",
 	},
 	flag: {
-		fontSize: fontSize.x3,
-		lineHeight: lineHeight.x3,
+		fontSize: tokens["--font-size-3"],
+		lineHeight: tokens["--line-height-3"],
 	},
 	countryName: {
 		overflow: "hidden",
@@ -641,26 +631,26 @@ const storyParts = stylex.create({
 	},
 	countryMeta: {
 		color: "currentColor",
-		fontSize: fontSize.x1,
-		letterSpacing: letterSpacing.x1,
-		lineHeight: lineHeight.x1,
+		fontSize: tokens["--font-size-1"],
+		letterSpacing: tokens["--letter-spacing-1"],
+		lineHeight: tokens["--line-height-1"],
 		opacity: 0.68,
 	},
 	inlineUseCase: {
-		gap: space[6],
+		gap: tokens["--space-6"],
 		display: "flex",
 		flexDirection: "column",
 		minHeight: "12rem",
 	},
 	adLibSentence: {
 		alignItems: "baseline",
-		color: colors["--text"],
-		columnGap: space[1],
+		color: tokens["--fg"],
+		columnGap: tokens["--space-1"],
 		display: "flex",
 		flexWrap: "wrap",
-		fontSize: fontSize.x2,
-		letterSpacing: letterSpacing.x2,
-		lineHeight: lineHeight.x2,
+		fontSize: tokens["--font-size-2"],
+		letterSpacing: tokens["--letter-spacing-2"],
+		lineHeight: tokens["--line-height-2"],
 		rowGap: 0,
 		maxWidth: "44rem",
 	},
@@ -669,9 +659,9 @@ const storyParts = stylex.create({
 	},
 	adLibHint: {
 		margin: 0,
-		color: colors["--text-muted"],
-		fontSize: fontSize.x1,
-		letterSpacing: letterSpacing.x1,
-		lineHeight: lineHeight.x1,
+		color: tokens["--fg-muted"],
+		fontSize: tokens["--font-size-1"],
+		letterSpacing: tokens["--letter-spacing-1"],
+		lineHeight: tokens["--line-height-1"],
 	},
 });

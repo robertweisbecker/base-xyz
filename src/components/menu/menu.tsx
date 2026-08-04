@@ -6,16 +6,12 @@ import * as stylex from "@stylexjs/stylex";
 import type { StyleXStyles } from "@stylexjs/stylex";
 import { createContext, useContext, type ReactNode } from "react";
 import { textFamilyStyles, textStyles, textWeightStyles } from "@/components/text/text.stylex";
-import { motion } from "@/styles/tokens.stylex";
+import { tokens } from "@/theme/tokens.stylex";
 import { popupMotionStyles, popupPositionerStyles, popupViewportStyles } from "@/components/popover/popover.stylex";
 import { popupVars } from "@/components/popover/popover-vars.stylex";
-import { colors, radius, shadow, space } from "@/styles/tokens.stylex";
+
 import { CheckmarkIcon } from "../selection-icons";
-import {
-	menuItemSizeStyles,
-	menuItemStyles,
-	menuItemVariantStyles,
-} from "./menu-item.stylex";
+import { menuItemSizeStyles, menuItemStyles, menuItemVariantStyles } from "./menu-item.stylex";
 import type { MenuItemSize, MenuItemVariant } from "./menu.types";
 
 const MenuSizeContext = createContext<MenuItemSize>("md");
@@ -385,16 +381,16 @@ export const SubmenuRoot = BaseMenu.SubmenuRoot;
 
 const menuParts = stylex.create({
 	panelSurface: {
-		[popupVars.background]: colors["--panel"],
-		[popupVars.border]: colors["--border"],
-		[popupVars.foreground]: colors["--text"],
-		borderRadius: radius.lg,
+		[popupVars.background]: tokens["--panel"],
+		[popupVars.border]: tokens["--border"],
+		[popupVars.foreground]: tokens["--fg"],
+		borderRadius: tokens["--radius-lg"],
 		backgroundColor: popupVars.background,
-		boxShadow: shadow.md,
+		boxShadow: tokens["--shadow-md"],
 		color: popupVars.foreground,
 	},
 	popup: {
-		padding: space[1],
+		padding: tokens["--space-1"],
 		outline: "0",
 		minWidth: "8rem",
 	},
@@ -412,26 +408,26 @@ const menuParts = stylex.create({
 		alignItems: "center",
 		display: "inline-flex",
 		justifyContent: "center",
-		height: space[4],
-		width: space[4],
+		height: tokens["--space-4"],
+		width: tokens["--space-4"],
 	},
 	submenuTrigger: {
 		backgroundColor: {
-			"[data-highlighted]": colors["--highlight"],
-			"[data-popup-open]": colors["--surface-subtle"],
-			"[data-popup-open][data-highlighted]": colors["--surface-subtle"],
+			"[data-highlighted]": tokens["--bg-highlight"],
+			"[data-popup-open]": tokens["--surface-subtle"],
+			"[data-popup-open][data-highlighted]": tokens["--surface-subtle"],
 			default: "transparent",
 		},
 		color: {
-			"[data-highlighted]": colors["--text"],
-			"[data-popup-open]": colors["--text-muted"],
-			"[data-popup-open][data-highlighted]": colors["--text-muted"],
-			default: colors["--text"],
+			"[data-highlighted]": tokens["--fg"],
+			"[data-popup-open]": tokens["--fg-muted"],
+			"[data-popup-open][data-highlighted]": tokens["--fg-muted"],
+			default: tokens["--fg"],
 		},
 	},
 	submenuIcon: {
 		gridColumn: "3",
-		color: colors["--text-subtle"],
+		color: tokens["--fg-subtle"],
 		justifySelf: "end",
 	},
 	collapsibleGroup: {
@@ -444,14 +440,14 @@ const menuParts = stylex.create({
 		borderStyle: "solid",
 		borderWidth: "0",
 		backgroundColor: {
-			"[data-highlighted]": colors["--highlight"],
-			"[data-panel-open]": `color-mix(in srgb, ${colors["--highlight"]} 50%, transparent)`,
+			"[data-highlighted]": tokens["--bg-highlight"],
+			"[data-panel-open]": `color-mix(in srgb, ${tokens["--bg-highlight"]} 50%, transparent)`,
 			default: "transparent",
 		},
 		color: {
-			"[data-highlighted]": colors["--text"],
-			"[data-panel-open]": colors["--text"],
-			default: colors["--text-muted"],
+			"[data-highlighted]": tokens["--fg"],
+			"[data-panel-open]": tokens["--fg"],
+			default: tokens["--fg-muted"],
 		},
 		fontFamily: "inherit",
 		textAlign: "start",
@@ -463,21 +459,21 @@ const menuParts = stylex.create({
 			[stylex.when.ancestor("[data-panel-open]")]: "rotate(180deg)",
 		},
 		transitionDuration: {
-			default: motion.durationShort,
+			default: tokens["--motion-duration-short"],
 			"@media (prefers-reduced-motion: reduce)": "0ms",
 		},
 		transitionProperty: "transform",
-		transitionTimingFunction: motion.easeSmoothOut,
+		transitionTimingFunction: tokens["--motion-ease-smooth-out"],
 	},
 	collapsibleGroupPanel: {
 		overflow: "hidden",
 		display: "block",
 		transitionDuration: {
-			default: motion.durationShort,
+			default: tokens["--motion-duration-short"],
 			"@media (prefers-reduced-motion: reduce)": "0ms",
 		},
 		transitionProperty: "height",
-		transitionTimingFunction: motion.easeOut,
+		transitionTimingFunction: tokens["--motion-ease-out"],
 		visibility: {
 			'[aria-hidden="true"]': "hidden",
 			default: "visible",
@@ -491,58 +487,58 @@ const menuParts = stylex.create({
 		minWidth: "var(--collapsible-panel-width)",
 	},
 	indicatorDot: {
-		borderRadius: radius.full,
+		borderRadius: tokens["--radius-full"],
 		backgroundColor: "currentColor",
-		height: space[2],
-		width: space[2],
+		height: tokens["--space-2"],
+		width: tokens["--space-2"],
 	},
 	switchIndicator: {
-		borderRadius: radius.full,
+		borderRadius: tokens["--radius-full"],
 		gridColumn: "1",
 		alignItems: "center",
 		backgroundColor: {
-			"[data-checked]": colors["--accent"],
-			default: colors["--neutral"],
+			"[data-checked]": tokens["--bg-primary"],
+			default: tokens["--bg-neutral"],
 		},
 		display: "inline-flex",
 		justifySelf: "start",
 		marginInlineStart: "-0.33rem",
 		transitionDuration: {
-			default: motion.durationQuick,
+			default: tokens["--motion-duration-quick"],
 			"@media (prefers-reduced-motion: reduce)": "0ms",
 		},
 		transitionProperty: "background-color",
-		transitionTimingFunction: motion.easeSmoothOut,
-		height: space[4],
-		width: space[6],
+		transitionTimingFunction: tokens["--motion-ease-smooth-out"],
+		height: tokens["--space-4"],
+		width: tokens["--space-6"],
 	},
 	switchThumb: {
-		borderRadius: radius.full,
+		borderRadius: tokens["--radius-full"],
 		marginInline: "0.125rem",
 		aspectRatio: 1,
-		backgroundColor: colors["--inverse-text"],
+		backgroundColor: tokens["--fg-inverse"],
 		transform: {
-			"[data-checked]": `translateX(${space[2]})`,
+			"[data-checked]": `translateX(${tokens["--space-2"]})`,
 			default: "translateX(0)",
 		},
 		transitionDuration: {
-			default: motion.durationQuick,
+			default: tokens["--motion-duration-quick"],
 			"@media (prefers-reduced-motion: reduce)": "0ms",
 		},
 		transitionProperty: "transform",
-		transitionTimingFunction: motion.easeOut,
+		transitionTimingFunction: tokens["--motion-ease-out"],
 		height: "calc(100% - 0.25rem)",
 	},
 	groupLabel: {
-		paddingBlock: space[1],
-		paddingInline: space[2],
-		color: colors["--text-subtle"],
+		paddingBlock: tokens["--space-1"],
+		paddingInline: tokens["--space-2"],
+		color: tokens["--fg-subtle"],
 	},
 	separator: {
-		marginBlock: space[1],
-		backgroundColor: colors["--border"],
-		marginInlineEnd: `calc(-1 * ${space[1]})`,
-		marginInlineStart: space[3],
+		marginBlock: tokens["--space-1"],
+		backgroundColor: tokens["--border"],
+		marginInlineEnd: `calc(-1 * ${tokens["--space-1"]})`,
+		marginInlineStart: tokens["--space-3"],
 		height: "1px",
 	},
 });

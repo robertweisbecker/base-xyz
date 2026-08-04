@@ -8,7 +8,7 @@ const virtualEntry = {
 	},
 	load(id) {
 		if (id !== "\0virtual:theme-props-entry") return undefined;
-		return 'import { marginThemeProps } from "/src/styles/theme-props-spacing.stylex.ts"; console.log(marginThemeProps);';
+		return 'import { marginThemeProps } from "/src/theme/theme-props-spacing.stylex.ts"; console.log(marginThemeProps);';
 	},
 };
 

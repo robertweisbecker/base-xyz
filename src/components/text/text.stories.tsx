@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import * as stylex from "@stylexjs/stylex";
-import { colors, space } from "@/styles/tokens.stylex";
+import { tokens } from "@/theme/tokens.stylex";
 import { Heading } from "../heading/heading";
 import { Text } from "./text";
 import { textStyles } from "./text.stylex";
@@ -37,7 +37,7 @@ const meta = {
 		fontWeight: { control: "select", options: ["regular", "medium", "semibold", "bold"] },
 		color: {
 			control: "select",
-			options: ["default", "subtle", "muted", "accent", "danger", "success", "warning", "inverse", "inverse-muted"],
+			options: ["default", "subtle", "muted", "accent", "error", "success", "warning", "inverse", "inverse-muted"],
 		},
 		textAlign: { control: "inline-radio", options: ["start", "center", "end", "justify"] },
 		wrap: { control: "inline-radio", options: ["wrap", "nowrap", "pretty", "balance"] },
@@ -74,7 +74,9 @@ export const Layout: Story = {
 	parameters: { controls: { disable: true } },
 	render: () => (
 		<div {...stylex.props(storyStyles.frame)}>
-			<Heading mb={3} textAlign="center" size="4">Logical, token-backed spacing</Heading>
+			<Heading mb={3} textAlign="center" size="4">
+				Logical, token-backed spacing
+			</Heading>
 			<Text ms={4} textAlign="center">
 				This text uses logical inline spacing and scalar alignment.
 			</Text>
@@ -123,7 +125,7 @@ export const Colors: Story = {
 	},
 	render: () => (
 		<div {...stylex.props(storyStyles.stack)}>
-			{(["default", "subtle", "muted", "accent", "danger", "success", "warning"] as const).map((textColor) => (
+			{(["default", "subtle", "muted", "accent", "error", "success", "warning"] as const).map((textColor) => (
 				<Text key={textColor} color={textColor} fontWeight="medium">
 					{textColor}
 				</Text>
@@ -171,37 +173,37 @@ const storyStyles = stylex.create({
 		maxWidth: "720px",
 	},
 	sections: {
-		gap: space[8],
+		gap: tokens["--space-8"],
 		display: "flex",
 		flexDirection: "column",
 	},
 	section: {
-		gap: space[3],
+		gap: tokens["--space-3"],
 		display: "flex",
 		flexDirection: "column",
 	},
 	stack: {
-		gap: space[3],
+		gap: tokens["--space-3"],
 		display: "flex",
 		flexDirection: "column",
 	},
 	styleGrid: {
-		gap: space[3],
+		gap: tokens["--space-3"],
 		display: "grid",
 		gridTemplateColumns: "repeat(auto-fit, minmax(12rem, 1fr))",
 	},
 	specimen: {
-		gap: space[4],
+		gap: tokens["--space-4"],
 		alignItems: "baseline",
 		display: "grid",
-		gridTemplateColumns: `${space[6]} minmax(0, 1fr)`,
+		gridTemplateColumns: `${tokens["--space-6"]} minmax(0, 1fr)`,
 	},
 	input: {
-		borderColor: colors["--border-strong"],
+		borderColor: tokens["--border-input"],
 		borderRadius: "0.4375rem",
 		borderStyle: "solid",
 		borderWidth: "1px",
-		paddingInline: space[2],
-		minHeight: space[8],
+		paddingInline: tokens["--space-2"],
+		minHeight: tokens["--space-8"],
 	},
 });

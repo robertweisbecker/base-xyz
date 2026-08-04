@@ -9,9 +9,9 @@ import {
 	positioningThemeProps,
 	sizingThemeProps,
 	verticalFlexThemeProps,
-} from "@/styles/theme-props-layout.stylex";
-import { spacingThemeProps } from "@/styles/theme-props-spacing.stylex";
-import { radiusThemeProps, shadowThemeProps } from "@/styles/theme-props-surface.stylex";
+} from "@/theme/theme-props-layout.stylex";
+import { spacingThemeProps } from "@/theme/theme-props-spacing.stylex";
+import { radiusThemeProps, shadowThemeProps } from "@/theme/theme-props-surface.stylex";
 import type {
 	ChildLayoutProps,
 	DisplayProps,
@@ -23,8 +23,8 @@ import type {
 	SizingProps,
 	SpacingProps,
 } from "@/theme/theme-props.types";
-import { colors, space, shadow } from "@/styles/tokens.stylex";
-import { fontSize, letterSpacing, lineHeight } from "@/styles/tokens.stylex";
+import { tokens } from "@/theme/tokens.stylex";
+
 import { Heading, type HeadingProps } from "../heading/heading";
 import { Text, type TextProps } from "../text/text";
 import { cardVars } from "./card-vars.stylex";
@@ -126,9 +126,9 @@ export function CardFooter({ className, style, ...props }: CardFooterProps) {
 
 const cardParts = stylex.create({
 	root: {
-		gap: space[1],
+		gap: tokens["--space-1"],
 		overflow: "hidden",
-		color: colors["--text"],
+		color: tokens["--fg"],
 		display: "flex",
 		flexDirection: "column",
 		isolation: "isolate",
@@ -149,7 +149,7 @@ const cardParts = stylex.create({
 		lineHeight: cardVars.contentLineHeight,
 	},
 	footer: {
-		gap: space[3],
+		gap: tokens["--space-3"],
 		paddingBlock: cardVars.footerPaddingBlock,
 		paddingInline: cardVars.footerPaddingInline,
 		alignItems: "center",
@@ -161,54 +161,54 @@ const cardParts = stylex.create({
 
 const cardSizeVariants = stylex.create({
 	sm: {
-		[cardVars.contentFontSize]: fontSize.x1,
-		[cardVars.contentLetterSpacing]: letterSpacing.x1,
-		[cardVars.contentLineHeight]: lineHeight.x1,
-		[cardVars.contentPaddingBlock]: space[2],
-		[cardVars.contentPaddingInline]: space[4],
-		[cardVars.footerPaddingBlock]: space[2],
-		[cardVars.footerPaddingInline]: space[2],
-		[cardVars.headerGap]: space[1],
-		[cardVars.headerPaddingBlock]: space[2],
-		[cardVars.headerPaddingInline]: space[4],
+		[cardVars.contentFontSize]: tokens["--font-size-1"],
+		[cardVars.contentLetterSpacing]: tokens["--letter-spacing-1"],
+		[cardVars.contentLineHeight]: tokens["--line-height-1"],
+		[cardVars.contentPaddingBlock]: tokens["--space-2"],
+		[cardVars.contentPaddingInline]: tokens["--space-4"],
+		[cardVars.footerPaddingBlock]: tokens["--space-2"],
+		[cardVars.footerPaddingInline]: tokens["--space-2"],
+		[cardVars.headerGap]: tokens["--space-1"],
+		[cardVars.headerPaddingBlock]: tokens["--space-2"],
+		[cardVars.headerPaddingInline]: tokens["--space-4"],
 	},
 	md: {
-		[cardVars.contentFontSize]: fontSize.x2,
-		[cardVars.contentLetterSpacing]: letterSpacing.x2,
-		[cardVars.contentLineHeight]: lineHeight.x2,
-		[cardVars.contentPaddingBlock]: space[3],
-		[cardVars.contentPaddingInline]: space[5],
-		[cardVars.footerPaddingBlock]: space[3],
-		[cardVars.footerPaddingInline]: space[3],
-		[cardVars.headerGap]: space[1],
-		[cardVars.headerPaddingBlock]: space[3],
-		[cardVars.headerPaddingInline]: space[5],
+		[cardVars.contentFontSize]: tokens["--font-size-2"],
+		[cardVars.contentLetterSpacing]: tokens["--letter-spacing-2"],
+		[cardVars.contentLineHeight]: tokens["--line-height-2"],
+		[cardVars.contentPaddingBlock]: tokens["--space-3"],
+		[cardVars.contentPaddingInline]: tokens["--space-5"],
+		[cardVars.footerPaddingBlock]: tokens["--space-3"],
+		[cardVars.footerPaddingInline]: tokens["--space-3"],
+		[cardVars.headerGap]: tokens["--space-1"],
+		[cardVars.headerPaddingBlock]: tokens["--space-3"],
+		[cardVars.headerPaddingInline]: tokens["--space-5"],
 	},
 	lg: {
-		[cardVars.contentFontSize]: fontSize.x3,
-		[cardVars.contentLetterSpacing]: letterSpacing.x3,
-		[cardVars.contentLineHeight]: lineHeight.x3,
-		[cardVars.contentPaddingBlock]: space[4],
-		[cardVars.contentPaddingInline]: space[6],
-		[cardVars.footerPaddingBlock]: space[4],
-		[cardVars.footerPaddingInline]: space[4],
-		[cardVars.headerGap]: space[1],
-		[cardVars.headerPaddingBlock]: space[4],
-		[cardVars.headerPaddingInline]: space[6],
+		[cardVars.contentFontSize]: tokens["--font-size-3"],
+		[cardVars.contentLetterSpacing]: tokens["--letter-spacing-3"],
+		[cardVars.contentLineHeight]: tokens["--line-height-3"],
+		[cardVars.contentPaddingBlock]: tokens["--space-4"],
+		[cardVars.contentPaddingInline]: tokens["--space-6"],
+		[cardVars.footerPaddingBlock]: tokens["--space-4"],
+		[cardVars.footerPaddingInline]: tokens["--space-4"],
+		[cardVars.headerGap]: tokens["--space-1"],
+		[cardVars.headerPaddingBlock]: tokens["--space-4"],
+		[cardVars.headerPaddingInline]: tokens["--space-6"],
 	},
 });
 
 const cardVariants = stylex.create({
 	elevated: {
 		borderWidth: 0,
-		backgroundColor: colors["--panel"],
-		boxShadow: shadow.md,
+		backgroundColor: tokens["--panel"],
+		boxShadow: tokens["--shadow-md"],
 	},
 	outline: {
-		borderColor: colors["--border"],
+		borderColor: tokens["--border"],
 		borderStyle: "solid",
 		borderWidth: "1px",
-		backgroundColor: colors["--surface"],
+		backgroundColor: tokens["--surface"],
 		boxShadow: "none",
 	},
 });

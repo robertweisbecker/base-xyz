@@ -2,8 +2,8 @@ import { Toolbar as BaseToolbar } from "@base-ui/react/toolbar";
 import * as stylex from "@stylexjs/stylex";
 import type { StyleXStyles } from "@stylexjs/stylex";
 import { focusRing } from "@/styles/recipes/focus";
-import { colors, radius, shadow, size, space } from "@/styles/tokens.stylex";
-import { fontSize, letterSpacing, lineHeight } from "@/styles/tokens.stylex";
+import { tokens } from "@/theme/tokens.stylex";
+
 
 const HOVER_WHEN_INACTIVE =
 	':hover:not([aria-disabled="true"]):not([data-disabled]):not([aria-pressed="true"]):not([data-active]):not([data-panel-open]):not([data-popup-open]):not([data-pressed])';
@@ -131,37 +131,37 @@ const toolbarParts = stylex.create({
 		},
 	},
 	control: {
-		borderRadius: radius.sm,
+		borderRadius: tokens["--radius-sm"],
 		borderStyle: "none",
 		borderWidth: "0",
-		gap: space[2],
+		gap: tokens["--space-2"],
 		paddingBlock: 0,
-		paddingInline: space[2],
+		paddingInline: tokens["--space-2"],
 		textDecoration: "none",
 		alignItems: "center",
 		backgroundColor: {
 			// eslint-disable-next-line @stylexjs/valid-styles -- the compiler supports chained pseudo-class conditions; the lint rule is stricter than the compiler.
 			[HOVER_WHEN_INACTIVE]: {
-				"@media (hover: hover) and (pointer: fine)": colors["--highlight"],
+				"@media (hover: hover) and (pointer: fine)": tokens["--bg-highlight"],
 			},
-			[TOGGLED_ON]: colors["--surface-subtle"],
+			[TOGGLED_ON]: tokens["--surface-subtle"],
 			"[data-disabled]": "transparent",
 			default: "transparent",
-			":active": colors["--surface-subtle-active"],
+			":active": tokens["--surface-subtle-active"],
 		},
 		boxSizing: "border-box",
 		color: {
-			[TOGGLED_ON]: colors["--text"],
-			"[data-disabled]": colors["--text-subtle"],
-			default: colors["--text-muted"],
+			[TOGGLED_ON]: tokens["--fg"],
+			"[data-disabled]": tokens["--fg-subtle"],
+			default: tokens["--fg-muted"],
 		},
 		display: "inline-flex",
 		flexShrink: 0,
 		fontFamily: "inherit",
-		fontSize: fontSize.x2,
+		fontSize: tokens["--font-size-2"],
 		justifyContent: "center",
-		letterSpacing: letterSpacing.x2,
-		lineHeight: lineHeight.x2,
+		letterSpacing: tokens["--letter-spacing-2"],
+		lineHeight: tokens["--line-height-2"],
 		opacity: {
 			"[data-disabled]": 0.48,
 			default: 1,
@@ -169,31 +169,31 @@ const toolbarParts = stylex.create({
 		touchAction: "manipulation",
 		userSelect: "none",
 		whiteSpace: "nowrap",
-		height: size["control.md"],
-		minWidth: size["control.md"],
+		height: tokens["--size-control-md"],
+		minWidth: tokens["--size-control-md"],
 	},
 	button: {
 		appearance: "none",
 	},
 	link: {
-		borderRadius: radius.xs,
-		gap: space[1],
+		borderRadius: tokens["--radius-xs"],
+		gap: tokens["--space-1"],
 		overflow: "hidden",
-		paddingInline: space[2],
+		paddingInline: tokens["--space-2"],
 		textDecoration: "underline",
 		alignItems: "center",
 		color: {
-			"[data-disabled]": colors["--text-subtle"],
-			default: colors["--text"],
+			"[data-disabled]": tokens["--fg-subtle"],
+			default: tokens["--fg"],
 			":hover": {
-				"@media (hover: hover) and (pointer: fine)": colors["--text-accent"],
+				"@media (hover: hover) and (pointer: fine)": tokens["--fg-accent"],
 			},
 		},
 		display: "inline-flex",
-		fontSize: fontSize.x2,
+		fontSize: tokens["--font-size-2"],
 		justifyContent: "center",
-		letterSpacing: letterSpacing.x2,
-		lineHeight: lineHeight.x2,
+		letterSpacing: tokens["--letter-spacing-2"],
+		lineHeight: tokens["--line-height-2"],
 		textDecorationColor: "color-mix(in oklab, currentColor 50%, transparent)",
 		textDecorationStyle: {
 			default: "dotted",
@@ -205,48 +205,48 @@ const toolbarParts = stylex.create({
 		textOverflow: "ellipsis",
 		textUnderlineOffset: 3,
 		whiteSpace: "nowrap",
-		minHeight: size["control.md"],
-		minWidth: size["control.md"],
+		minHeight: tokens["--size-control-md"],
+		minWidth: tokens["--size-control-md"],
 	},
 	input: {
-		borderRadius: radius.sm,
-		paddingInline: space[3],
+		borderRadius: tokens["--radius-sm"],
+		paddingInline: tokens["--space-3"],
 		backgroundColor: {
-			default: colors["--surface-subtle"],
-			":focus-visible": colors["--canvas"],
+			default: tokens["--surface-subtle"],
+			":focus-visible": tokens["--bg-canvas"],
 		},
 		boxSizing: "border-box",
 		color: {
-			"[data-disabled]": colors["--text-subtle"],
-			default: colors["--text"],
+			"[data-disabled]": tokens["--fg-subtle"],
+			default: tokens["--fg"],
 		},
 		flexBasis: 0,
 		flexGrow: 1,
 		flexShrink: 1,
 		fontFamily: "inherit",
-		fontSize: fontSize.x2,
-		letterSpacing: letterSpacing.x2,
-		lineHeight: lineHeight.x2,
+		fontSize: tokens["--font-size-2"],
+		letterSpacing: tokens["--letter-spacing-2"],
+		lineHeight: tokens["--line-height-2"],
 		opacity: {
 			"[data-disabled]": 0.48,
 			default: 1,
 		},
-		height: size["control.md"],
+		height: tokens["--size-control-md"],
 		minWidth: "10rem",
 		"::placeholder": {
-			color: colors["--text-subtle"],
+			color: tokens["--fg-subtle"],
 		},
 	},
 	separator: {
-		margin: space[1],
-		backgroundColor: colors["--border"],
+		margin: tokens["--space-1"],
+		backgroundColor: tokens["--border"],
 		flexShrink: 0,
 		height: {
 			"[data-orientation=horizontal]": "1px",
-			default: space[4],
+			default: tokens["--space-4"],
 		},
 		width: {
-			"[data-orientation=horizontal]": space[4],
+			"[data-orientation=horizontal]": tokens["--space-4"],
 			default: "1px",
 		},
 	},
@@ -254,15 +254,15 @@ const toolbarParts = stylex.create({
 
 const toolbarVariants = stylex.create({
 	surface: {
-		padding: space[1],
-		borderRadius: radius.md,
+		padding: tokens["--space-1"],
+		borderRadius: tokens["--radius-md"],
 		backgroundColor: {
-			"[data-disabled]": colors["--surface"],
-			default: colors["--panel"],
+			"[data-disabled]": tokens["--surface"],
+			default: tokens["--panel"],
 		},
 		boxShadow: {
 			"[data-disabled]": "none",
-			default: shadow.sm,
+			default: tokens["--shadow-sm"],
 		},
 	},
 	unstyled: {

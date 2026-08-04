@@ -1,20 +1,16 @@
 import * as stylex from "@stylexjs/stylex";
 import type { StyleXStyles } from "@stylexjs/stylex";
 import type { ComponentProps, ElementType, ReactNode } from "react";
-import {
-	composeThemeProps,
-	resolveThemeProps,
-	type VerifyThemeProps,
-} from "@/theme/theme-props";
+import { composeThemeProps, resolveThemeProps, type VerifyThemeProps } from "@/theme/theme-props";
 import {
 	childLayoutThemeProps,
 	displayThemeProps,
 	positioningThemeProps,
 	sizingThemeProps,
 	verticalFlexThemeProps,
-} from "@/styles/theme-props-layout.stylex";
-import { spacingThemeProps } from "@/styles/theme-props-spacing.stylex";
-import { radiusThemeProps, shadowThemeProps } from "@/styles/theme-props-surface.stylex";
+} from "@/theme/theme-props-layout.stylex";
+import { spacingThemeProps } from "@/theme/theme-props-spacing.stylex";
+import { radiusThemeProps, shadowThemeProps } from "@/theme/theme-props-surface.stylex";
 import type {
 	ChildLayoutProps,
 	DisplayProps,
@@ -25,14 +21,15 @@ import type {
 	SizingProps,
 	SpacingProps,
 } from "@/theme/theme-props.types";
-import { colors, radius, space } from "@/styles/tokens.stylex";
+import { tokens } from "@/theme/tokens.stylex";
 import { Heading } from "../heading/heading";
 import { Text } from "../text/text";
 
 export type EmptyStateSize = "sm" | "md" | "lg";
 export type EmptyStateHeadingLevel = "h1" | "h2" | "h3" | "h4" | "h5" | "h6";
 export interface EmptyStateThemeProps
-	extends SpacingProps,
+	extends
+		SpacingProps,
 		SizingProps,
 		PositioningProps,
 		ChildLayoutProps,
@@ -58,17 +55,17 @@ export type EmptyStateProps = Omit<
 	"children" | "color" | "height" | "style" | "title" | "width" | keyof VerifiedEmptyStateThemeProps
 > &
 	VerifiedEmptyStateThemeProps & {
-	/** Actions or other supporting content rendered below the description. */
-	children?: ReactNode;
-	description?: ReactNode;
-	/** Semantic heading element used for the title. */
-	headingLevel?: EmptyStateHeadingLevel;
-	icon?: ReactNode;
-	size?: EmptyStateSize;
-	/** StyleX overrides, applied after the component's own styles. */
-	style?: StyleXStyles;
-	title: ReactNode;
-};
+		/** Actions or other supporting content rendered below the description. */
+		children?: ReactNode;
+		description?: ReactNode;
+		/** Semantic heading element used for the title. */
+		headingLevel?: EmptyStateHeadingLevel;
+		icon?: ReactNode;
+		size?: EmptyStateSize;
+		/** StyleX overrides, applied after the component's own styles. */
+		style?: StyleXStyles;
+		title: ReactNode;
+	};
 
 export function EmptyState({
 	children,
@@ -118,7 +115,7 @@ const emptyStateStyles = stylex.create({
 	root: {
 		alignItems: "center",
 		boxSizing: "border-box",
-		color: colors["--text"],
+		color: tokens["--fg"],
 		display: "flex",
 		flexBasis: 0,
 		flexDirection: "column",
@@ -129,14 +126,14 @@ const emptyStateStyles = stylex.create({
 		width: "100%",
 	},
 	icon: {
-		borderRadius: radius.full,
+		borderRadius: tokens["--radius-full"],
 		flex: "none",
 		alignItems: "center",
-		backgroundColor: colors["--highlight"],
+		backgroundColor: tokens["--bg-highlight"],
 		// borderWidth: 1,
 		// borderStyle: "dashed",
-		// borderColor: colors["--border-strong"],
-		color: colors["--text-muted"],
+		// borderColor: colors["--border-input"],
+		color: tokens["--fg-muted"],
 		display: "flex",
 		justifyContent: "center",
 		lineHeight: 0,
@@ -163,21 +160,21 @@ const emptyStateStyles = stylex.create({
 
 const rootSizeStyles = stylex.create({
 	sm: {
-		gap: space[3],
-		paddingBlock: space[6],
-		paddingInline: space[4],
+		gap: tokens["--space-3"],
+		paddingBlock: tokens["--space-6"],
+		paddingInline: tokens["--space-4"],
 		minHeight: "10rem",
 	},
 	md: {
-		gap: space[4],
-		paddingBlock: space[10],
-		paddingInline: space[6],
+		gap: tokens["--space-4"],
+		paddingBlock: tokens["--space-10"],
+		paddingInline: tokens["--space-6"],
 		minHeight: "14rem",
 	},
 	lg: {
-		gap: space[5],
-		paddingBlock: space[16],
-		paddingInline: space[8],
+		gap: tokens["--space-5"],
+		paddingBlock: tokens["--space-16"],
+		paddingInline: tokens["--space-8"],
 		minHeight: "18rem",
 	},
 });
@@ -185,32 +182,32 @@ const rootSizeStyles = stylex.create({
 const iconSizeStyles = stylex.create({
 	sm: {
 		fontSize: "1.25rem",
-		height: space[10],
-		width: space[10],
+		height: tokens["--space-10"],
+		width: tokens["--space-10"],
 	},
 	md: {
 		fontSize: "1.5rem",
-		height: space[12],
-		width: space[12],
+		height: tokens["--space-12"],
+		width: tokens["--space-12"],
 	},
 	lg: {
 		fontSize: "2rem",
-		height: space[16],
-		width: space[16],
+		height: tokens["--space-16"],
+		width: tokens["--space-16"],
 	},
 });
 
 const actionSizeStyles = stylex.create({
 	sm: {
-		gap: space[2],
-		marginBlockStart: space[1],
+		gap: tokens["--space-2"],
+		marginBlockStart: tokens["--space-1"],
 	},
 	md: {
-		gap: space[2],
-		marginBlockStart: space[2],
+		gap: tokens["--space-2"],
+		marginBlockStart: tokens["--space-2"],
 	},
 	lg: {
-		gap: space[3],
-		marginBlockStart: space[3],
+		gap: tokens["--space-3"],
+		marginBlockStart: tokens["--space-3"],
 	},
 });

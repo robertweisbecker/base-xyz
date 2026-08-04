@@ -13,13 +13,9 @@ import { focusRing } from "@/styles/recipes/focus";
 import { modalMotionStyles } from "@/components/dialog/dialog.stylex";
 import { popupMotionStyles, popupStaticPositionerStyles } from "@/components/popover/popover.stylex";
 import { popupVars } from "@/components/popover/popover-vars.stylex";
-import { colors, radius, shadow, size, space } from "@/styles/tokens.stylex";
-import { fontSize, fontWeight, letterSpacing, lineHeight } from "@/styles/tokens.stylex";
-import {
-	menuItemSizeStyles,
-	menuItemStyles,
-	menuItemVariantStyles,
-} from "../menu/menu-item.stylex";
+import { tokens } from "@/theme/tokens.stylex";
+
+import { menuItemSizeStyles, menuItemStyles, menuItemVariantStyles } from "../menu/menu-item.stylex";
 import type { MenuItemVariant } from "../menu/menu.types";
 import { CheckmarkIcon } from "../selection-icons";
 
@@ -320,16 +316,16 @@ export function Separator({ ref, className, style, ...props }: SelectSeparatorPr
 
 const selectParts = stylex.create({
 	panelSurface: {
-		[popupVars.background]: colors["--elevated"],
-		[popupVars.border]: colors["--border"],
-		[popupVars.foreground]: colors["--text"],
-		borderRadius: radius.lg,
+		[popupVars.background]: tokens["--elevated"],
+		[popupVars.border]: tokens["--border"],
+		[popupVars.foreground]: tokens["--fg"],
+		borderRadius: tokens["--radius-lg"],
 		backgroundColor: popupVars.background,
-		boxShadow: shadow.md,
+		boxShadow: tokens["--shadow-md"],
 		color: popupVars.foreground,
 	},
 	root: {
-		gap: space[2],
+		gap: tokens["--space-2"],
 		display: "flex",
 		flexDirection: "column",
 		minWidth: 0,
@@ -338,10 +334,10 @@ const selectParts = stylex.create({
 	trigger: {
 		alignItems: "center",
 		color: {
-			"[data-placeholder]": colors["--text-muted"],
-			default: colors["--text"],
+			"[data-placeholder]": tokens["--fg-muted"],
+			default: tokens["--fg"],
 		},
-		columnGap: space[3],
+		columnGap: tokens["--space-3"],
 		cursor: {
 			"[data-disabled]": "not-allowed",
 			default: "default",
@@ -359,40 +355,40 @@ const selectParts = stylex.create({
 	},
 	inlineTrigger: {
 		borderColor: {
-			"[data-invalid]": colors["--danger"],
+			"[data-invalid]": tokens["--bg-error-primary"],
 			default: "transparent",
 			// eslint-disable-next-line @stylexjs/valid-styles -- the compiler supports chained pseudo-class conditions; the lint rule is stricter than the compiler.
 			":hover:not([data-invalid])": {
 				"@media (hover: hover) and (pointer: fine)": "transparent",
 			},
 		},
-		borderRadius: radius.xs,
+		borderRadius: tokens["--radius-xs"],
 		paddingBlock: 0,
 		textDecoration: "underline",
 		backgroundColor: {
 			// eslint-disable-next-line @stylexjs/valid-styles -- the compiler supports chained pseudo-class conditions; the lint rule is stricter than the compiler.
 			[HOVER_WHEN_INACTIVE]: {
-				"@media (hover: hover) and (pointer: fine)": colors["--surface-subtle"],
+				"@media (hover: hover) and (pointer: fine)": tokens["--surface-subtle"],
 			},
-			"[data-popup-open]": colors["--accent-soft"],
+			"[data-popup-open]": tokens["--bg-accent"],
 			default: "transparent",
-			":active": colors["--accent-soft"],
+			":active": tokens["--bg-accent"],
 		},
 		color: {
-			"[data-placeholder]": colors["--text-subtle"],
-			"[data-placeholder]:hover": colors["--text-accent"],
-			default: colors["--text-accent"],
+			"[data-placeholder]": tokens["--fg-subtle"],
+			"[data-placeholder]:hover": tokens["--fg-accent"],
+			default: tokens["--fg-accent"],
 		},
 		columnGap: "2px",
 		fontWeight: {
-			"[data-placeholder]": fontWeight.regular,
-			default: fontWeight.medium,
+			"[data-placeholder]": tokens["--font-weight-regular"],
+			default: tokens["--font-weight-medium"],
 		},
 		marginBlockEnd: "-1px",
 		marginBlockStart: "-1px",
 		paddingInlineEnd: "2px",
 		paddingInlineStart: "2px",
-		textDecorationColor: colors["--text-subtle"],
+		textDecorationColor: tokens["--fg-subtle"],
 		textDecorationStyle: "dotted",
 		textDecorationThickness: "2px",
 		textUnderlineOffset: "4px",
@@ -412,14 +408,14 @@ const selectParts = stylex.create({
 	},
 	triggerIcon: {
 		alignItems: "center",
-		// color: colors["--text-subtle"],
+		// color: colors["--fg-subtle"],
 		display: "inline-flex",
 		flexShrink: 0,
 		justifyContent: "center",
 		marginInlineEnd: "-2px",
 	},
 	positioner: {
-		minHeight: size["control.md"],
+		minHeight: tokens["--size-control-md"],
 	},
 	popup: {
 		outline: "0",
@@ -427,61 +423,61 @@ const selectParts = stylex.create({
 		minWidth: "var(--anchor-width)",
 	},
 	list: {
-		padding: space[1],
+		padding: tokens["--space-1"],
 		overscrollBehavior: "contain",
 		// eslint-disable-next-line @stylexjs/valid-styles -- scroll-padding-block is valid CSS the lint rule does not know yet; the compiler emits it correctly.
-		scrollPaddingBlock: space[6],
+		scrollPaddingBlock: tokens["--space-6"],
 		maxHeight: "var(--available-height)",
 		overflowY: "auto",
 	},
 	scrollArrow: {
 		insetInline: "1px",
 		alignItems: "center",
-		color: colors["--text-muted"],
+		color: tokens["--fg-muted"],
 		display: "flex",
 		justifyContent: "center",
 		zIndex: 2,
-		height: space[6],
+		height: tokens["--space-6"],
 		width: "auto",
 	},
 	scrollArrowUp: {
-		borderStartEndRadius: `calc(${radius.lg} - 1px)`,
-		borderStartStartRadius: `calc(${radius.lg} - 1px)`,
+		borderStartEndRadius: `calc(${tokens["--radius-lg"]} - 1px)`,
+		borderStartStartRadius: `calc(${tokens["--radius-lg"]} - 1px)`,
 		top: "1px",
 		"::before": {
 			insetInline: 0,
 			backgroundImage: `linear-gradient(
 				to bottom,
-				${colors["--elevated"]} 10%,
+				${tokens["--elevated"]} 10%,
 				transparent 100%
 			)`,
-			borderStartEndRadius: `calc(${radius.lg} - 1px)`,
-			borderStartStartRadius: `calc(${radius.lg} - 1px)`,
+			borderStartEndRadius: `calc(${tokens["--radius-lg"]} - 1px)`,
+			borderStartStartRadius: `calc(${tokens["--radius-lg"]} - 1px)`,
 			content: '""',
 			pointerEvents: "none",
 			position: "absolute",
-			height: space[12],
+			height: tokens["--space-12"],
 			top: 0,
 		},
 	},
 	scrollArrowDown: {
-		borderEndEndRadius: `calc(${radius.lg} - 1px)`,
-		borderEndStartRadius: `calc(${radius.lg} - 1px)`,
+		borderEndEndRadius: `calc(${tokens["--radius-lg"]} - 1px)`,
+		borderEndStartRadius: `calc(${tokens["--radius-lg"]} - 1px)`,
 		bottom: "1px",
 		"::before": {
 			insetInline: 0,
 			backgroundImage: `linear-gradient(
 				to top,
-				${colors["--elevated"]} 10%,
+				${tokens["--elevated"]} 10%,
 				transparent 100%
 			)`,
-			borderEndEndRadius: `calc(${radius.lg} - 1px)`,
-			borderEndStartRadius: `calc(${radius.lg} - 1px)`,
+			borderEndEndRadius: `calc(${tokens["--radius-lg"]} - 1px)`,
+			borderEndStartRadius: `calc(${tokens["--radius-lg"]} - 1px)`,
 			content: '""',
 			pointerEvents: "none",
 			position: "absolute",
 			bottom: 0,
-			height: space[12],
+			height: tokens["--space-12"],
 		},
 	},
 	scrollArrowIcon: {
@@ -498,18 +494,18 @@ const selectParts = stylex.create({
 		flexDirection: "column",
 	},
 	groupLabel: {
-		paddingBlock: space[2],
-		paddingInline: space[3],
-		color: colors["--text-muted"],
-		fontSize: fontSize.x1,
-		fontWeight: fontWeight.semibold,
-		letterSpacing: letterSpacing.x1,
-		lineHeight: lineHeight.x1,
+		paddingBlock: tokens["--space-2"],
+		paddingInline: tokens["--space-3"],
+		color: tokens["--fg-muted"],
+		fontSize: tokens["--font-size-1"],
+		fontWeight: tokens["--font-weight-semibold"],
+		letterSpacing: tokens["--letter-spacing-1"],
+		lineHeight: tokens["--line-height-1"],
 	},
 	separator: {
-		marginBlock: space[1],
-		marginInline: space[3],
-		backgroundColor: colors["--border"],
+		marginBlock: tokens["--space-1"],
+		marginInline: tokens["--space-3"],
+		backgroundColor: tokens["--border"],
 		height: "1px",
 	},
 	backdrop: {

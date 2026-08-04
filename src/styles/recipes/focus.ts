@@ -1,5 +1,5 @@
 import * as stylex from "@stylexjs/stylex";
-import { colors } from "../tokens.stylex";
+import { tokens } from "@/theme/tokens.stylex";
 
 /**
  * Focus rings must look identical on every control, so they are centrally
@@ -18,9 +18,9 @@ export const focusRing = stylex.create({
 	inset: {
 		outlineColor: {
 			default: "transparent",
-			":focus-visible": colors["--focus"],
-			':focus-visible[aria-invalid="true"]': colors["--danger"],
-			":focus-visible[data-invalid]": colors["--danger"],
+			":focus-visible": tokens["--focus"],
+			':focus-visible[aria-invalid="true"]': tokens["--bg-error-primary"],
+			":focus-visible[data-invalid]": tokens["--bg-error-primary"],
 		},
 		outlineOffset: "-1px",
 		outlineStyle: "solid",
@@ -33,9 +33,9 @@ export const focusRing = stylex.create({
 	outset: {
 		outlineColor: {
 			default: "transparent",
-			":focus-visible": colors["--focus"],
-			':focus-visible[aria-invalid="true"]': colors["--danger"],
-			":focus-visible[data-invalid]": colors["--danger"],
+			":focus-visible": tokens["--focus"],
+			':focus-visible[aria-invalid="true"]': tokens["--bg-error-primary"],
+			":focus-visible[data-invalid]": tokens["--bg-error-primary"],
 		},
 		outlineOffset: "2px",
 		outlineStyle: "solid",
@@ -44,7 +44,7 @@ export const focusRing = stylex.create({
 	outsetInteractive: {
 		outlineColor: {
 			default: "transparent",
-			":is(button, a[href]):focus-visible": colors["--focus"],
+			":is(button, a[href]):focus-visible": tokens["--focus"],
 		},
 		outlineOffset: "2px",
 		outlineStyle: "solid",
@@ -53,10 +53,10 @@ export const focusRing = stylex.create({
 	within: {
 		outlineColor: {
 			default: "transparent",
-			":focus-within": colors["--focus"],
-			':focus-within:has([aria-invalid="true"])': colors["--danger"],
-			":focus-within:has([data-invalid])": colors["--danger"],
-			":focus-within[data-invalid]": colors["--danger"],
+			":focus-within": tokens["--focus"],
+			':focus-within:has([aria-invalid="true"])': tokens["--bg-error-primary"],
+			":focus-within:has([data-invalid])": tokens["--bg-error-primary"],
+			":focus-within[data-invalid]": tokens["--bg-error-primary"],
 		},
 		outlineOffset: "-1px",
 		outlineStyle: "solid",

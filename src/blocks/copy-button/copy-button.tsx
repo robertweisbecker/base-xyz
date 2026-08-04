@@ -89,7 +89,7 @@ function CopyButtonControl({
 				},
 				data: {
 					variant: "tooltip",
-					tone: "danger",
+					tone: "error",
 					status: "error",
 					dismissible: false,
 				},

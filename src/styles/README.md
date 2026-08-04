@@ -3,7 +3,7 @@
 StyleX modules are organized by how a value composes, not by how often a name
 appears.
 
-- `tokens.stylex.ts` is the single source for themeable color, spacing, size,
+- `src/theme/tokens.stylex.ts` is the single source for themeable color, spacing, size,
   radius, shadow, typography, and motion values.
 - `src/theme/theme-props.types.ts` owns public token-backed value and capability
   contracts, and `theme-props.ts` owns their StyleX-independent key,
@@ -11,8 +11,8 @@ appears.
   generic `utils` directory.
 - Theme props are scalar. Keep responsive values for one CSS property together
   in a predeclared StyleX style, or promote a repeated set to a named recipe.
-- `theme-props-spacing.stylex.ts`, `theme-props-layout.stylex.ts`, and
-  `theme-props-surface.stylex.ts` bind those contracts to explicit StyleX
+- `src/theme/theme-props-spacing.stylex.ts`, `src/theme/theme-props-layout.stylex.ts`, and
+  `src/theme/theme-props-surface.stylex.ts` bind those contracts to explicit StyleX
   functions. Import the narrow binding directly so unused compiler families can
   be removed from a consumer bundle.
 - `constants.stylex.ts` contains only fixed global selectors and layer order.
@@ -29,9 +29,9 @@ appears.
 - `textColorPropStyles` only implements the `Text` and `Heading` color prop.
   Other owners set colors with semantic tokens directly.
 
-Import StyleX variables and constants directly by their named export. Do not
-re-export them through a barrel or import a `.stylex.ts` module as a namespace;
-the compiler needs to statically resolve the direct binding.
+Import the shared `tokens` binding and StyleX constants directly by their named
+export. Do not re-export them through a barrel or import a `.stylex.ts` module
+as a namespace; the compiler needs to statically resolve the direct binding.
 
 ### Naming
 
@@ -78,13 +78,13 @@ import {
 } from "@/components/popover/popover.stylex";
 import { tooltipStyles } from "@/components/tooltip/tooltip.stylex";
 
-// Normal Menu / Popover / PreviewCard / Tooltip Positioner
+// Normal Menu / Popover / LinkPreview / Tooltip Positioner
 stylex.props(popupPositionerStyles, style);
 
 // Select Positioner (does not track anchor while open)
 stylex.props(popupStaticPositionerStyles, style);
 
-// Panel-style Popup (menu, select, combobox, popover, preview-card)
+// Panel-style Popup (menu, select, combobox, popover, link-preview)
 stylex.props(menuParts.panelSurface, menuParts.popup, popupMotionStyles.anchoredPopup, style);
 
 // Opt-in detached-trigger movement (positioner and popup respectively)
@@ -199,10 +199,10 @@ stylex.props(modalChromeStyles.surface, drawerParts.popup);
   `startSlot` and `endSlot` content entirely in StyleX. `popup-motion.css`
   bridges Base UI's generated payload wrappers only inside an explicitly
   rendered popup `Viewport`.
-- Color values always go through named `colors["--…"]` tokens in
-  `tokens.stylex.ts`.
-  Do not write `"var(--gray-*)"` or other raw palette strings in component
-  styles; if a semantic token is missing, add it to `tokens.stylex.ts` first.
+- Themeable values always go through the single `tokens["--…"]` interface in
+  `src/theme/tokens.stylex.ts`.
+  Do not write raw custom-property strings in component styles; if a semantic
+  token is missing, add it to `src/theme/tokens.stylex.ts` first.
   Base UI-provided variables (`--anchor-width`, `--transform-origin`, ...)
   and narrowly scoped component-owned bridge variables are the only raw
   `var()` references components may use.

@@ -1,7 +1,7 @@
 import * as stylex from "@stylexjs/stylex";
 import type { StyleXStyles } from "@stylexjs/stylex";
 import type { ComponentProps } from "react";
-import { motion } from "@/styles/tokens.stylex";
+import { tokens } from "@/theme/tokens.stylex";
 
 export type LoaderProps = Omit<ComponentProps<"svg">, "children" | "height" | "style" | "width"> & {
 	/** StyleX overrides, applied after the component's own styles. */
@@ -59,7 +59,7 @@ const loaderParts = stylex.create({
 	root: {
 		overflow: "visible",
 		alignItems: "center",
-		animationDuration: `calc(${motion.durationLong} + ${motion.durationLong})`,
+		animationDuration: `calc(${tokens["--motion-duration-long"]} + ${tokens["--motion-duration-long"]})`,
 		animationIterationCount: "infinite",
 		animationName: {
 			default: rotate,
@@ -88,7 +88,7 @@ const loaderParts = stylex.create({
 		strokeDasharray: "14 86",
 		strokeLinecap: "round",
 		strokeWidth: 3,
-		animationDuration: `calc(${motion.durationLong} + ${motion.durationLong} + ${motion.durationLong})`,
+		animationDuration: `calc(${tokens["--motion-duration-long"]} + ${tokens["--motion-duration-long"]} + ${tokens["--motion-duration-long"]})`,
 		animationIterationCount: "infinite",
 		animationName: {
 			default: changeArcLength,

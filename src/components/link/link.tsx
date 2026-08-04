@@ -2,9 +2,9 @@ import { ArrowUpRightIcon } from "@phosphor-icons/react/dist/csr/ArrowUpRight";
 import * as stylex from "@stylexjs/stylex";
 import type { StyleXStyles } from "@stylexjs/stylex";
 import { type ComponentProps } from "react";
-import { motion } from "@/styles/tokens.stylex";
+import { tokens } from "@/theme/tokens.stylex";
 import { focusRing } from "@/styles/recipes/focus";
-import { colors } from "@/styles/tokens.stylex";
+
 
 export type LinkProps = Omit<ComponentProps<"a">, "style"> & {
 	external?: boolean;
@@ -22,8 +22,7 @@ export function Link({ ref, children, className, external = false, rel, style, t
 			style={sx.style}
 			rel={external ? mergeRel(rel, "noopener noreferrer") : rel}
 			target={external ? "_blank" : target}
-			{...props}
-		>
+			{...props}>
 			{children}
 			{external ? <ArrowUpRightIcon aria-hidden size="1em" weight="regular" /> : null}
 		</a>
@@ -38,10 +37,10 @@ const linkStyles = stylex.create({
 	root: {
 		alignItems: "center",
 		color: {
-			default: colors["--text-accent"],
-			":hover": colors["--text-accent-hover"],
+			default: tokens["--fg-accent"],
+			":hover": tokens["--fg-accent-hover"],
 		},
-		columnGap: "0.2em",
+		columnGap: "0.125em",
 		display: "inline-flex",
 		textDecorationColor: {
 			default: "color-mix(in srgb, currentColor 50%, transparent)",
@@ -50,8 +49,8 @@ const linkStyles = stylex.create({
 		textDecorationLine: "underline",
 		textDecorationThickness: "0.075em",
 		textUnderlineOffset: "0.25em",
-		transitionDuration: motion.durationQuick,
+		transitionDuration: tokens["--motion-duration-quick"],
 		transitionProperty: "color, text-decoration-color",
-		transitionTimingFunction: motion.easeOut,
+		transitionTimingFunction: tokens["--motion-ease-out"],
 	},
 });

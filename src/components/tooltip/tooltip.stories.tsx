@@ -3,8 +3,8 @@ import { GearIcon } from "@phosphor-icons/react/dist/csr/Gear";
 import { InfoIcon } from "@phosphor-icons/react/dist/csr/Info";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import * as stylex from "@stylexjs/stylex";
-import { colors, space } from "@/styles/tokens.stylex";
-import { fontSize, letterSpacing, lineHeight } from "@/styles/tokens.stylex";
+import { tokens } from "@/theme/tokens.stylex";
+
 import { Button, IconButton } from "../button/button";
 import { createTooltipHandle } from "../popup-handles";
 import * as Tooltip from "./tooltip";
@@ -127,22 +127,14 @@ export const SharedGroup: Story = {
 							handle={sharedTooltip}
 							payload={copy}
 							render={
-								<IconButton
-									icon={<Icon aria-hidden />}
-									label={label}
-									shape="circle"
-									tooltip={false}
-									variant="ghost"
-								/>
+								<IconButton icon={<Icon aria-hidden />} label={label} shape="circle" tooltip={false} variant="ghost" />
 							}
 						/>
 					))}
 				</div>
 				<Tooltip.Root disabled={disabled} handle={sharedTooltip}>
 					{({ payload }) => (
-						<Tooltip.Popup
-							arrowProps={_showArrow ? {} : undefined}
-							positionerProps={{ side: _side, align: _align }}>
+						<Tooltip.Popup arrowProps={_showArrow ? {} : undefined} positionerProps={{ side: _side, align: _align }}>
 							<Tooltip.Viewport>{payload}</Tooltip.Viewport>
 						</Tooltip.Popup>
 					)}
@@ -168,7 +160,7 @@ const storyParts = stylex.create({
 		width: "min(720px, calc(100vw - 48px))",
 	},
 	positioningRow: {
-		gap: space[6],
+		gap: tokens["--space-6"],
 		alignItems: "center",
 		display: "flex",
 		justifyContent: "center",
@@ -181,20 +173,20 @@ const storyParts = stylex.create({
 		minWidth: "5rem",
 	},
 	stack: {
-		gap: space[3],
+		gap: tokens["--space-3"],
 		alignItems: "center",
 		display: "flex",
 		flexDirection: "column",
 	},
 	hint: {
 		margin: 0,
-		color: colors["--text-muted"],
-		fontSize: fontSize.x1,
-		letterSpacing: letterSpacing.x1,
-		lineHeight: lineHeight.x1,
+		color: tokens["--fg-muted"],
+		fontSize: tokens["--font-size-1"],
+		letterSpacing: tokens["--letter-spacing-1"],
+		lineHeight: tokens["--line-height-1"],
 	},
 	group: {
-		gap: space[2],
+		gap: tokens["--space-2"],
 		display: "flex",
 	},
 });

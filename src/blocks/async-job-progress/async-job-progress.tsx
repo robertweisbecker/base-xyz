@@ -7,8 +7,8 @@ import { createContext, type ComponentProps, createElement, useContext, useId } 
 import { Badge, type BadgeHue } from "@/components/badge/badge";
 import { Loader } from "@/components/loader/loader";
 import * as ProgressPrimitive from "@/components/progress/progress";
-import { colors, space } from "@/styles/tokens.stylex";
-import { fontSize, fontWeight, letterSpacing, lineHeight } from "@/styles/tokens.stylex";
+import { tokens } from "@/theme/tokens.stylex";
+
 
 export type AsyncJobStatus = "queued" | "running" | "complete" | "error";
 export type AsyncJobHeadingLevel = 2 | 3 | 4 | 5 | 6;
@@ -49,7 +49,7 @@ const statusPresentation: Record<AsyncJobStatus, { badgeLabel: string; hue: Badg
 	queued: { badgeLabel: "Queued", hue: "neutral" },
 	running: { badgeLabel: "Running", hue: "accent" },
 	complete: { badgeLabel: "Complete", hue: "neutral" },
-	error: { badgeLabel: "Failed", hue: "danger" },
+	error: { badgeLabel: "Failed", hue: "error" },
 };
 
 export function Root({ status, value, valueText, className, style, ...props }: AsyncJobProgressRootProps) {
@@ -199,45 +199,45 @@ function joinClassNames(...classNames: Array<string | undefined>) {
 
 const parts = stylex.create({
 	root: {
-		gap: space[3],
-		color: colors["--text"],
+		gap: tokens["--space-3"],
+		color: tokens["--fg"],
 		display: "flex",
 		flexDirection: "column",
 		maxWidth: "36rem",
 		width: "100%",
 	},
 	header: {
-		gap: space[4],
+		gap: tokens["--space-4"],
 		alignItems: "flex-start",
 		display: "flex",
 		justifyContent: "space-between",
 	},
 	heading: {
-		gap: space[1],
+		gap: tokens["--space-1"],
 		display: "flex",
 		flexDirection: "column",
 		minWidth: 0,
 	},
 	title: {
 		margin: 0,
-		color: colors["--text"],
-		fontSize: fontSize.x3,
-		fontWeight: fontWeight.semibold,
-		letterSpacing: letterSpacing.x3,
-		lineHeight: lineHeight.x3,
+		color: tokens["--fg"],
+		fontSize: tokens["--font-size-3"],
+		fontWeight: tokens["--font-weight-semibold"],
+		letterSpacing: tokens["--letter-spacing-3"],
+		lineHeight: tokens["--line-height-3"],
 		textWrap: "balance",
 	},
 	description: {
 		margin: 0,
-		color: colors["--text-muted"],
-		fontSize: fontSize.x2,
-		letterSpacing: letterSpacing.x2,
-		lineHeight: lineHeight.x2,
+		color: tokens["--fg-muted"],
+		fontSize: tokens["--font-size-2"],
+		letterSpacing: tokens["--letter-spacing-2"],
+		lineHeight: tokens["--line-height-2"],
 	},
 	status: { display: "inline-flex", flexShrink: 0 },
 	progressValue: { gridColumn: "2" },
 	actions: {
-		gap: space[2],
+		gap: tokens["--space-2"],
 		alignItems: "center",
 		display: "flex",
 		justifyContent: "flex-end",
@@ -245,10 +245,10 @@ const parts = stylex.create({
 });
 
 const indicatorStatus = stylex.create({
-	queued: { backgroundColor: colors["--neutral"] },
+	queued: { backgroundColor: tokens["--bg-neutral"] },
 	running: {},
 	complete: {},
 	error: {
-		backgroundColor: colors["--danger"],
+		backgroundColor: tokens["--bg-error-primary"],
 	},
 });

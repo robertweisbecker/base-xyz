@@ -1,4 +1,4 @@
-import { PreviewCard as BasePreviewCard } from "@base-ui/react/preview-card";
+import { PreviewCard as BaseLinkPreview } from "@base-ui/react/preview-card";
 import * as stylex from "@stylexjs/stylex";
 import type { StyleXStyles } from "@stylexjs/stylex";
 import { type ComponentProps } from "react";
@@ -10,30 +10,30 @@ import {
 	popupViewportStyles,
 } from "@/components/popover/popover.stylex";
 import { popupVars } from "@/components/popover/popover-vars.stylex";
-import { colors, radius, shadow, space } from "@/styles/tokens.stylex";
-import { fontSize, fontWeight, letterSpacing, lineHeight } from "@/styles/tokens.stylex";
+import { tokens } from "@/theme/tokens.stylex";
+
 
 type StyledProps<T> = Omit<T, "className" | "style"> & {
 	className?: string;
 	style?: StyleXStyles;
 };
 
-export type PreviewCardBackdropProps = StyledProps<BasePreviewCard.Backdrop.Props>;
-export type PreviewCardPositionerProps = StyledProps<BasePreviewCard.Positioner.Props>;
-export type PreviewCardViewportProps = StyledProps<BasePreviewCard.Viewport.Props>;
-export type PreviewCardArrowProps = StyledProps<BasePreviewCard.Arrow.Props>;
-export type PreviewCardPopupProps = StyledProps<BasePreviewCard.Popup.Props> & {
-	arrowProps?: PreviewCardArrowProps;
-	backdropProps?: PreviewCardBackdropProps;
-	portalProps?: Omit<BasePreviewCard.Portal.Props, "children">;
-	positionerProps?: PreviewCardPositionerProps;
+export type LinkPreviewBackdropProps = StyledProps<BaseLinkPreview.Backdrop.Props>;
+export type LinkPreviewPositionerProps = StyledProps<BaseLinkPreview.Positioner.Props>;
+export type LinkPreviewViewportProps = StyledProps<BaseLinkPreview.Viewport.Props>;
+export type LinkPreviewArrowProps = StyledProps<BaseLinkPreview.Arrow.Props>;
+export type LinkPreviewPopupProps = StyledProps<BaseLinkPreview.Popup.Props> & {
+	arrowProps?: LinkPreviewArrowProps;
+	backdropProps?: LinkPreviewBackdropProps;
+	portalProps?: Omit<BaseLinkPreview.Portal.Props, "children">;
+	positionerProps?: LinkPreviewPositionerProps;
 };
 
-export function Trigger({ ref, className, style, delay = 100, ...props }: StyledProps<BasePreviewCard.Trigger.Props>) {
-	const { className: sxClassName, style: sxStyle } = stylex.props(previewCardParts.trigger, focusRing.outset, style);
+export function Trigger({ ref, className, style, delay = 100, ...props }: StyledProps<BaseLinkPreview.Trigger.Props>) {
+	const { className: sxClassName, style: sxStyle } = stylex.props(linkPreviewParts.trigger, focusRing.outset, style);
 
 	return (
-		<BasePreviewCard.Trigger
+		<BaseLinkPreview.Trigger
 			ref={ref}
 			delay={delay}
 			className={[sxClassName, className].filter(Boolean).join(" ")}
@@ -43,11 +43,11 @@ export function Trigger({ ref, className, style, delay = 100, ...props }: Styled
 	);
 }
 
-function Positioner({ ref, className, style, sideOffset = 8, ...props }: PreviewCardPositionerProps) {
+function Positioner({ ref, className, style, sideOffset = 8, ...props }: LinkPreviewPositionerProps) {
 	const { className: sxClassName, style: sxStyle } = stylex.props(popupPositionerStyles, style);
 
 	return (
-		<BasePreviewCard.Positioner
+		<BaseLinkPreview.Positioner
 			ref={ref}
 			sideOffset={sideOffset}
 			className={[sxClassName, className].filter(Boolean).join(" ")}
@@ -67,36 +67,36 @@ export function Popup({
 	positionerProps,
 	style,
 	...props
-}: PreviewCardPopupProps) {
+}: LinkPreviewPopupProps) {
 	const { className: sxClassName, style: sxStyle } = stylex.props(
-		previewCardParts.panelSurface,
-		previewCardParts.popup,
+		linkPreviewParts.panelSurface,
+		linkPreviewParts.popup,
 		popupMotionStyles.anchoredPopup,
 		style,
 	);
 
 	return (
-		<BasePreviewCard.Portal {...portalProps}>
+		<BaseLinkPreview.Portal {...portalProps}>
 			{backdropProps ? <Backdrop {...backdropProps} /> : null}
 			<Positioner {...positionerProps}>
-				<BasePreviewCard.Popup
+				<BaseLinkPreview.Popup
 					ref={ref}
 					className={[sxClassName, className].filter(Boolean).join(" ")}
 					style={sxStyle}
 					{...props}>
 					{arrowProps ? <Arrow {...arrowProps} /> : null}
 					{children}
-				</BasePreviewCard.Popup>
+				</BaseLinkPreview.Popup>
 			</Positioner>
-		</BasePreviewCard.Portal>
+		</BaseLinkPreview.Portal>
 	);
 }
 
-export function Viewport({ ref, className, style, ...props }: PreviewCardViewportProps) {
+export function Viewport({ ref, className, style, ...props }: LinkPreviewViewportProps) {
 	const { className: sxClassName, style: sxStyle } = stylex.props(popupViewportStyles, style);
 
 	return (
-		<BasePreviewCard.Viewport
+		<BaseLinkPreview.Viewport
 			ref={ref}
 			className={[sxClassName, "ds-popup-viewport", className].filter(Boolean).join(" ")}
 			style={sxStyle}
@@ -105,11 +105,11 @@ export function Viewport({ ref, className, style, ...props }: PreviewCardViewpor
 	);
 }
 
-function Backdrop({ ref, className, style, ...props }: PreviewCardBackdropProps) {
+function Backdrop({ ref, className, style, ...props }: LinkPreviewBackdropProps) {
 	const { className: sxClassName, style: sxStyle } = stylex.props(style);
 
 	return (
-		<BasePreviewCard.Backdrop
+		<BaseLinkPreview.Backdrop
 			ref={ref}
 			className={[sxClassName, className].filter(Boolean).join(" ") || undefined}
 			style={sxStyle}
@@ -118,11 +118,11 @@ function Backdrop({ ref, className, style, ...props }: PreviewCardBackdropProps)
 	);
 }
 
-function Arrow({ ref, className, style, ...props }: PreviewCardArrowProps) {
+function Arrow({ ref, className, style, ...props }: LinkPreviewArrowProps) {
 	const { className: sxClassName, style: sxStyle } = stylex.props(popupArrowStyles, style);
 
 	return (
-		<BasePreviewCard.Arrow
+		<BaseLinkPreview.Arrow
 			ref={ref}
 			className={[sxClassName, className].filter(Boolean).join(" ")}
 			style={sxStyle}
@@ -132,37 +132,37 @@ function Arrow({ ref, className, style, ...props }: PreviewCardArrowProps) {
 }
 
 export function Content({ className, style, ...props }: StyledProps<ComponentProps<"div">>) {
-	const { className: sxClassName, style: sxStyle } = stylex.props(previewCardParts.content, style);
+	const { className: sxClassName, style: sxStyle } = stylex.props(linkPreviewParts.content, style);
 
 	return <div className={[sxClassName, className].filter(Boolean).join(" ")} style={sxStyle} {...props} />;
 }
 
 export function Title({ className, style, ...props }: StyledProps<ComponentProps<"h3">>) {
-	const { className: sxClassName, style: sxStyle } = stylex.props(previewCardParts.title, style);
+	const { className: sxClassName, style: sxStyle } = stylex.props(linkPreviewParts.title, style);
 
 	return <h3 className={[sxClassName, className].filter(Boolean).join(" ")} style={sxStyle} {...props} />;
 }
 
 export function Description({ className, style, ...props }: StyledProps<ComponentProps<"p">>) {
-	const { className: sxClassName, style: sxStyle } = stylex.props(previewCardParts.description, style);
+	const { className: sxClassName, style: sxStyle } = stylex.props(linkPreviewParts.description, style);
 
 	return <p className={[sxClassName, className].filter(Boolean).join(" ")} style={sxStyle} {...props} />;
 }
 
-export const Root = BasePreviewCard.Root;
+export const Root = BaseLinkPreview.Root;
 
-const previewCardParts = stylex.create({
+const linkPreviewParts = stylex.create({
 	panelSurface: {
-		[popupVars.background]: colors["--elevated"],
-		[popupVars.border]: colors["--border"],
-		[popupVars.foreground]: colors["--text"],
-		borderRadius: radius.lg,
+		[popupVars.background]: tokens["--elevated"],
+		[popupVars.border]: tokens["--border"],
+		[popupVars.foreground]: tokens["--fg"],
+		borderRadius: tokens["--radius-lg"],
 		backgroundColor: popupVars.background,
-		boxShadow: shadow.md,
+		boxShadow: tokens["--shadow-md"],
 		color: popupVars.foreground,
 	},
 	trigger: {
-		borderRadius: radius.xxs,
+		borderRadius: tokens["--radius-xxs"],
 		textDecoration: "underline",
 		textUnderlineOffset: "3px",
 	},
@@ -172,22 +172,22 @@ const previewCardParts = stylex.create({
 		width: "320px",
 	},
 	content: {
-		padding: space[3],
-		gap: space[1],
+		padding: tokens["--space-3"],
+		gap: tokens["--space-1"],
 		display: "flex",
 		flexDirection: "column",
-		fontSize: fontSize.x2,
-		letterSpacing: letterSpacing.x2,
-		lineHeight: lineHeight.x2,
+		fontSize: tokens["--font-size-2"],
+		letterSpacing: tokens["--letter-spacing-2"],
+		lineHeight: tokens["--line-height-2"],
 	},
 	title: {
 		margin: 0,
-		fontWeight: fontWeight.semibold,
-		letterSpacing: letterSpacing.x2,
-		lineHeight: lineHeight.x2,
+		fontWeight: tokens["--font-weight-semibold"],
+		letterSpacing: tokens["--letter-spacing-2"],
+		lineHeight: tokens["--line-height-2"],
 	},
 	description: {
 		margin: 0,
-		color: colors["--text-muted"],
+		color: tokens["--fg-muted"],
 	},
 });

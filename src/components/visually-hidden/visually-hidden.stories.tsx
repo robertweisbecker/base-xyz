@@ -4,7 +4,7 @@ import { Button } from "../button/button";
 import { VisuallyHidden } from "./visually-hidden";
 
 const meta = {
-	title: "Components/Visually hidden",
+	title: "Components/Layout/Visually hidden",
 	component: VisuallyHidden,
 	args: {
 		children: "Opens account details in a new panel.",

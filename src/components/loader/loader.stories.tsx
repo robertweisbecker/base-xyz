@@ -57,7 +57,7 @@ export const Examples: Story = {
 				<Loader aria-hidden /> Loading (16px)
 			</Text>
 
-			<Text size="6" render={<Stack align="center" gap={3} orientation="horizontal" />} color="danger">
+			<Text size="6" render={<Stack align="center" gap={3} orientation="horizontal" />} color="error">
 				<Loader aria-hidden /> Loading (24px)
 			</Text>
 		</Stack>

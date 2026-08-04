@@ -5,7 +5,7 @@ import { createContext, type ComponentPropsWithoutRef, useContext, useMemo } fro
 import { fieldStyles } from "@/components/field/field.stylex";
 import { textSizeStyles, textWeightStyles } from "@/components/text/text.stylex";
 import { focusRing } from "@/styles/recipes/focus";
-import { colors, motion, radius, size, space, shadow } from "@/styles/tokens.stylex";
+import { tokens } from "@/theme/tokens.stylex";
 
 type SliderValue = number | readonly number[];
 
@@ -236,15 +236,15 @@ function mergeClassNames(...classNames: Array<string | undefined>) {
 
 const sliderParts = stylex.create({
 	root: {
-		"--_slider-fill": colors["--accent"],
-		gap: space[2],
+		"--_slider-fill": tokens["--bg-primary"],
+		gap: tokens["--space-2"],
 		display: "flex",
 		flexDirection: "column",
 		minWidth: 0,
 		width: "100%",
 	},
 	header: {
-		gap: space[3],
+		gap: tokens["--space-3"],
 		alignItems: "baseline",
 		display: "flex",
 		justifyContent: "space-between",
@@ -252,8 +252,8 @@ const sliderParts = stylex.create({
 	},
 	label: {
 		color: {
-			"[data-disabled]": colors["--text-muted"],
-			default: colors["--text"],
+			"[data-disabled]": tokens["--fg-muted"],
+			default: tokens["--fg"],
 		},
 		opacity: {
 			"[data-disabled]": 0.48,
@@ -261,7 +261,7 @@ const sliderParts = stylex.create({
 		},
 	},
 	value: {
-		color: colors["--text-muted"],
+		color: tokens["--fg-muted"],
 		display: "inline-grid",
 		opacity: {
 			"[data-disabled]": 0.48,
@@ -280,17 +280,17 @@ const sliderParts = stylex.create({
 		visibility: "hidden",
 	},
 	row: {
-		gap: space[2],
+		gap: tokens["--space-2"],
 		alignItems: "center",
 		display: "flex",
 		minWidth: 0,
 	},
 	control: {
 		"--_slider-fill": {
-			"[data-disabled]": colors["--neutral"],
-			default: colors["--accent"],
+			"[data-disabled]": tokens["--bg-neutral"],
+			default: tokens["--bg-primary"],
 			":hover": {
-				"@media (hover: hover) and (pointer: fine)": colors["--accent-hover"],
+				"@media (hover: hover) and (pointer: fine)": tokens["--bg-primary-highlight"],
 			},
 		},
 		flex: {
@@ -316,16 +316,16 @@ const sliderParts = stylex.create({
 		},
 	},
 	track: {
-		borderRadius: radius.full,
+		borderRadius: tokens["--radius-full"],
 		overflow: "hidden",
 		backgroundColor: {
-			"[data-disabled]": colors["--fill-disabled"],
-			default: colors["--fill-track"],
+			"[data-disabled]": tokens["--fill-disabled"],
+			default: tokens["--fill-track"],
 		},
 		boxShadow: {
 			"[data-disabled]": "none",
-			"[data-invalid]": `0 0 0 2px ${colors["--surface"]}, 0 0 0 4px ${colors["--danger"]}`,
-			default: shadow.inset,
+			"[data-invalid]": `0 0 0 2px ${tokens["--surface"]}, 0 0 0 4px ${tokens["--bg-error-primary"]}`,
+			default: tokens["--shadow-inset"],
 		},
 		height: "100%",
 		width: "100%",
@@ -333,12 +333,12 @@ const sliderParts = stylex.create({
 	indicator: {
 		borderRadius: 0,
 		backgroundColor: {
-			"[data-disabled]": colors["--border"],
+			"[data-disabled]": tokens["--border"],
 			default: "var(--_slider-fill)",
 		},
-		transitionDuration: motion.durationQuick,
+		transitionDuration: tokens["--motion-duration-quick"],
 		transitionProperty: "background-color",
-		transitionTimingFunction: motion.easeOut,
+		transitionTimingFunction: tokens["--motion-ease-out"],
 		height: "100%",
 	},
 	markers: {
@@ -359,30 +359,30 @@ const sliderParts = stylex.create({
 		height: 0,
 		width: 0,
 		"::before": {
-			borderRadius: radius.full,
-			backgroundColor: colors["--border"],
+			borderRadius: tokens["--radius-full"],
+			backgroundColor: tokens["--border"],
 			content: '""',
 			position: "absolute",
 			transform: "translate(-50%, -50%)",
-			height: space[1],
+			height: tokens["--space-1"],
 			left: "50%",
 			top: "50%",
-			width: space[1],
+			width: tokens["--space-1"],
 		},
 	},
 	thumb: {
-		borderRadius: radius.full,
-		backgroundColor: colors["--accent-contrast"],
+		borderRadius: tokens["--radius-full"],
+		backgroundColor: tokens["--fg-accent-contrast"],
 		boxShadow: {
 			"[data-disabled]": "none",
-			default: shadow.sm,
+			default: tokens["--shadow-sm"],
 		},
 		outlineColor: {
 			"[data-disabled]": "transparent",
-			default: colors["--accent"],
-			":has(input:focus-visible)": colors["--focus"],
-			':has(input:focus-visible[aria-invalid="true"])': colors["--danger"],
-			":has(input:focus-visible[data-invalid])": colors["--danger"],
+			default: tokens["--bg-primary"],
+			":has(input:focus-visible)": tokens["--focus"],
+			':has(input:focus-visible[aria-invalid="true"])': tokens["--bg-error-primary"],
+			":has(input:focus-visible[data-invalid])": tokens["--bg-error-primary"],
 		},
 		outlineOffset: {
 			default: 0,
@@ -394,14 +394,14 @@ const sliderParts = stylex.create({
 			":has(input:focus-visible)": 2,
 		},
 		position: "relative",
-		transitionDuration: motion.durationQuick,
+		transitionDuration: tokens["--motion-duration-quick"],
 		transitionProperty: "background-color, box-shadow, scale",
-		transitionTimingFunction: motion.easeOut,
+		transitionTimingFunction: tokens["--motion-ease-out"],
 		zIndex: 2,
 		height: "calc(var(--_slider-visual-size) - 2px)",
 		width: "calc(var(--_slider-visual-size) - 2px)",
 		"::before": {
-			borderRadius: radius.full,
+			borderRadius: tokens["--radius-full"],
 			content: '""',
 			insetInlineStart: "50%",
 			pointerEvents: "auto",
@@ -416,15 +416,15 @@ const sliderParts = stylex.create({
 
 const sizeVariants = stylex.create({
 	sm: {
-		"--_slider-tap-size": size["control.sm"],
-		"--_slider-visual-size": space[5],
+		"--_slider-tap-size": tokens["--size-control-sm"],
+		"--_slider-visual-size": tokens["--space-5"],
 	},
 	md: {
-		"--_slider-tap-size": size["control.md"],
-		"--_slider-visual-size": space[6],
+		"--_slider-tap-size": tokens["--size-control-md"],
+		"--_slider-visual-size": tokens["--space-6"],
 	},
 	lg: {
-		"--_slider-tap-size": size["control.lg"],
-		"--_slider-visual-size": space[7],
+		"--_slider-tap-size": tokens["--size-control-lg"],
+		"--_slider-visual-size": tokens["--space-7"],
 	},
 });

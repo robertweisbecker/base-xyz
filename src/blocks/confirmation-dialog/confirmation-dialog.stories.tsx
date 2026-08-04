@@ -4,8 +4,8 @@ import * as stylex from "@stylexjs/stylex";
 import { Button } from "@/components/button/button";
 import { Checkbox } from "@/components/checkbox/checkbox";
 import { Separator } from "@/components/separator/separator";
-import { colors, space } from "@/styles/tokens.stylex";
-import { fontSize, fontWeight, letterSpacing, lineHeight } from "@/styles/tokens.stylex";
+import { tokens } from "@/theme/tokens.stylex";
+
 import * as ConfirmationDialog from "./confirmation-dialog";
 
 const meta = {
@@ -41,8 +41,8 @@ export const Examples: Story = {
 						</ConfirmationDialog.Description>
 					</ConfirmationDialog.Header>
 					<ConfirmationDialog.Body>
-						Publishing makes the current version available immediately. You can continue editing and publish
-						another version later.
+						Publishing makes the current version available immediately. You can continue editing and publish another
+						version later.
 					</ConfirmationDialog.Body>
 					<ConfirmationDialog.Footer>
 						<ConfirmationDialog.Actions>
@@ -161,46 +161,46 @@ function Example({ children, title }: { children: React.ReactNode; title: string
 
 const storyParts = stylex.create({
 	list: {
-		gap: space[8],
+		gap: tokens["--space-8"],
 		display: "flex",
 		flexDirection: "column",
 	},
 	example: {
-		gap: space[3],
+		gap: tokens["--space-3"],
 		alignItems: "flex-start",
 		display: "flex",
 		flexDirection: "column",
 	},
 	heading: {
 		margin: 0,
-		color: colors["--text-muted"],
-		fontSize: fontSize.x1,
-		fontWeight: fontWeight.regular,
-		letterSpacing: letterSpacing.x1,
-		lineHeight: lineHeight.x1,
+		color: tokens["--fg-muted"],
+		fontSize: tokens["--font-size-1"],
+		fontWeight: tokens["--font-weight-regular"],
+		letterSpacing: tokens["--letter-spacing-1"],
+		lineHeight: tokens["--line-height-1"],
 	},
 	reviewList: {
-		gap: space[3],
+		gap: tokens["--space-3"],
 		display: "flex",
 		flexDirection: "column",
 	},
 	reviewItem: {
-		gap: space[4],
+		gap: tokens["--space-4"],
 		alignItems: "center",
 		display: "flex",
 		justifyContent: "space-between",
 	},
 	reviewLabel: {
-		color: colors["--text"],
-		fontSize: fontSize.x2,
-		fontWeight: fontWeight.medium,
-		letterSpacing: letterSpacing.x2,
-		lineHeight: lineHeight.x2,
+		color: tokens["--fg"],
+		fontSize: tokens["--font-size-2"],
+		fontWeight: tokens["--font-weight-medium"],
+		letterSpacing: tokens["--letter-spacing-2"],
+		lineHeight: tokens["--line-height-2"],
 	},
 	reviewStatus: {
-		color: colors["--text-muted"],
-		fontSize: fontSize.x1,
-		letterSpacing: letterSpacing.x1,
-		lineHeight: lineHeight.x1,
+		color: tokens["--fg-muted"],
+		fontSize: tokens["--font-size-1"],
+		letterSpacing: tokens["--letter-spacing-1"],
+		lineHeight: tokens["--line-height-1"],
 	},
 });

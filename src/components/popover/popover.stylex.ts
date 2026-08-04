@@ -1,11 +1,11 @@
 import * as stylex from "@stylexjs/stylex";
 import { zIndex } from "@/styles/constants.stylex";
-import { motion } from "@/styles/tokens.stylex";
+import { tokens } from "@/theme/tokens.stylex";
 import { popupVars } from "./popover-vars.stylex";
 
 /**
  * Shared behavior for anchored popups (menus, popovers, selects, comboboxes,
- * preview cards, tooltips).
+ * link previews, tooltips).
  *
  * This module owns what must stay consistent across every popup: positioner
  * behavior, enter/exit motion, arrow geometry, and tooltip chrome. Panel
@@ -36,8 +36,8 @@ export const popupMotionStyles = stylex.create({
 		width: "var(--positioner-width)",
 	},
 	anchoredPopup: {
-		[popupVars.duration]: motion.durationPopup,
-		[popupVars.easing]: motion.easePopup,
+		[popupVars.duration]: tokens["--motion-duration-popup"],
+		[popupVars.easing]: tokens["--motion-ease-popup"],
 		opacity: {
 			"[data-ending-style]": 0,
 			"[data-starting-style]": 0,
@@ -70,25 +70,25 @@ export const popupMotionStyles = stylex.create({
 	},
 	movingPositioner: {
 		transitionDuration: {
-			default: motion.durationContent,
+			default: tokens["--motion-duration-content"],
 			":has(> [data-starting-style])": "0ms",
 			"@media (prefers-reduced-motion: reduce)": "0ms",
 		},
 		transitionProperty: "top, right, bottom, left, transform",
-		transitionTimingFunction: motion.easeSmoothOut,
+		transitionTimingFunction: tokens["--motion-ease-smooth-out"],
 	},
 	movingPopup: {
 		transitionDuration: {
 			"[data-instant]": "0ms",
-			default: motion.durationContent,
+			default: tokens["--motion-duration-content"],
 			"@media (prefers-reduced-motion: reduce)": "0ms",
 		},
 		transitionProperty: "width, height, transform, opacity",
-		transitionTimingFunction: motion.easeSmoothOut,
+		transitionTimingFunction: tokens["--motion-ease-smooth-out"],
 	},
 	viewport: {
-		"--popup-motion-duration": motion.durationContent,
-		"--popup-motion-ease": motion.easeSmoothOut,
+		"--popup-motion-duration": tokens["--motion-duration-content"],
+		"--popup-motion-ease": tokens["--motion-ease-smooth-out"],
 		overflow: "clip",
 		boxSizing: "border-box",
 		position: "relative",

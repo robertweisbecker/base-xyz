@@ -13,13 +13,9 @@ import { focusRing } from "@/styles/recipes/focus";
 import { popupMotionStyles, popupPositionerStyles } from "@/components/popover/popover.stylex";
 import { popupVars } from "@/components/popover/popover-vars.stylex";
 import { pressable } from "@/styles/recipes/transitions";
-import { colors, radius, shadow, size, space, motion } from "@/styles/tokens.stylex";
-import { fontSize, letterSpacing, lineHeight } from "@/styles/tokens.stylex";
-import {
-	menuItemSizeStyles,
-	menuItemStyles,
-	menuItemVariantStyles,
-} from "../menu/menu-item.stylex";
+import { tokens } from "@/theme/tokens.stylex";
+
+import { menuItemSizeStyles, menuItemStyles, menuItemVariantStyles } from "../menu/menu-item.stylex";
 import type { MenuItemVariant } from "../menu/menu.types";
 import { CheckmarkIcon } from "../selection-icons";
 import { comboboxMarker } from "./combobox.stylex";
@@ -356,7 +352,7 @@ function ComboboxActions({ showClear = true, size }: { showClear?: boolean; size
 						focusRing.outset,
 						pressable.transition,
 					)}>
-					<XCircleIcon aria-hidden size={"1em"} weight="fill" />
+					<XCircleIcon aria-hidden size={"1.25em"} weight="fill" />
 				</Combobox.Clear>
 			) : null}
 			<Combobox.Trigger
@@ -410,15 +406,11 @@ function ComboboxPopup({
 											<PlusIcon aria-hidden size="1em" weight="bold" />
 										</span>
 									) : (
-										<Combobox.ItemIndicator
-											keepMounted
-											className={stylex.props(menuItemStyles.indicator).className}>
+										<Combobox.ItemIndicator keepMounted className={stylex.props(menuItemStyles.indicator).className}>
 											<CheckmarkIcon width="1em" height="1em" />
 										</Combobox.ItemIndicator>
 									)}
-									<span {...stylex.props(menuItemStyles.label)}>
-										{isCreatableItem ? `Create “${item}”` : item}
-									</span>
+									<span {...stylex.props(menuItemStyles.label)}>{isCreatableItem ? `Create “${item}”` : item}</span>
 								</Combobox.Item>
 							);
 						}}
@@ -458,12 +450,12 @@ function renderChips(values: string[], maxVisibleChips?: number, tooltipAnchorRe
 						positionerProps={
 							tooltipAnchorRefs
 								? {
-									anchor: () => getChipOverflowAnchor(tooltipAnchorRefs),
-									align: "start",
-									collisionAvoidance: { align: "none", side: "none" },
-									side: "bottom",
-									sideOffset: 0,
-								}
+										anchor: () => getChipOverflowAnchor(tooltipAnchorRefs),
+										align: "start",
+										collisionAvoidance: { align: "none", side: "none" },
+										side: "bottom",
+										sideOffset: 0,
+									}
 								: { align: "start", side: "inline-start" }
 						}>
 						<Combobox.Value />
@@ -539,28 +531,28 @@ function normalizeChipLimit(limit?: number) {
 
 const comboboxParts = stylex.create({
 	panelSurface: {
-		[popupVars.background]: colors["--elevated"],
-		[popupVars.border]: colors["--border"],
-		[popupVars.foreground]: colors["--text"],
-		borderRadius: radius.lg,
+		[popupVars.background]: tokens["--elevated"],
+		[popupVars.border]: tokens["--border"],
+		[popupVars.foreground]: tokens["--fg"],
+		borderRadius: tokens["--radius-lg"],
 		backgroundColor: popupVars.background,
-		boxShadow: shadow.md,
+		boxShadow: tokens["--shadow-md"],
 		color: popupVars.foreground,
 	},
 	inputGroup: {
 		borderColor: {
-			"[data-disabled]": colors["--border"],
-			"[data-readonly]": colors["--border"],
-			default: colors["--border-strong"],
-			":focus-within:not([data-disabled]):not([data-readonly])": colors["--focus"],
-			":hover:not(:focus-within):not([data-disabled]):not([data-readonly])": colors["--border-hover"],
+			"[data-disabled]": tokens["--border"],
+			"[data-readonly]": tokens["--border"],
+			default: tokens["--border-input"],
+			":focus-within:not([data-disabled]):not([data-readonly])": tokens["--focus"],
+			":hover:not(:focus-within):not([data-disabled]):not([data-readonly])": tokens["--border-input-hover"],
 		},
 		alignItems: "center",
 		display: "flex",
 		position: "relative",
-		transitionDuration: motion.durationLong,
+		transitionDuration: tokens["--motion-duration-long"],
 		transitionProperty: "height",
-		transitionTimingFunction: motion.easeSmoothOut,
+		transitionTimingFunction: tokens["--motion-ease-smooth-out"],
 	},
 	input: {
 		borderWidth: 0,
@@ -576,7 +568,7 @@ const comboboxParts = stylex.create({
 	},
 	chips: {
 		alignItems: "center",
-		columnGap: space[1],
+		columnGap: tokens["--space-1"],
 		display: "flex",
 		flexWrap: "wrap",
 		rowGap: 2,
@@ -584,51 +576,51 @@ const comboboxParts = stylex.create({
 	},
 	chip: {
 		padding: "2px",
-		borderRadius: radius.sm,
+		borderRadius: tokens["--radius-sm"],
 		cornerShape: "superellipse(1.1)",
 		overflow: "hidden",
 		alignItems: "center",
 		backgroundColor: {
-			default: colors["--surface-subtle"],
-			":focus-within": colors["--accent"],
+			default: tokens["--surface-subtle"],
+			":focus-within": tokens["--bg-primary"],
 		},
 		color: {
-			default: colors["--text"],
-			":focus-within": colors["--accent-contrast"],
+			default: tokens["--fg"],
+			":focus-within": tokens["--fg-accent-contrast"],
 		},
 		display: "inline-flex",
-		fontSize: fontSize.x1,
-		letterSpacing: letterSpacing.x1,
-		lineHeight: lineHeight.x1,
+		fontSize: tokens["--font-size-1"],
+		letterSpacing: tokens["--letter-spacing-1"],
+		lineHeight: tokens["--line-height-1"],
 		height: "24px",
 	},
 	chipLabel: {
-		gap: space[1],
+		gap: tokens["--space-1"],
 		overflow: "hidden",
-		paddingInline: space[1],
+		paddingInline: tokens["--space-1"],
 		textOverflow: "ellipsis",
 		whiteSpace: "nowrap",
 	},
 	chipOverflow: {
-		borderRadius: radius.sm,
-		paddingInline: space[2],
+		borderRadius: tokens["--radius-sm"],
+		paddingInline: tokens["--space-2"],
 		alignItems: "center",
 		backgroundColor: {
-			default: colors["--surface-subtle"],
-			":hover": colors["--highlight"],
+			default: tokens["--surface-subtle"],
+			":hover": tokens["--bg-highlight"],
 		},
-		color: colors["--text"],
+		color: tokens["--fg"],
 		display: "inline-flex",
 		flexShrink: 0,
-		fontSize: fontSize.x1,
+		fontSize: tokens["--font-size-1"],
 		fontVariantNumeric: "tabular-nums",
-		letterSpacing: letterSpacing.x1,
-		lineHeight: lineHeight.x1,
+		letterSpacing: tokens["--letter-spacing-1"],
+		lineHeight: tokens["--line-height-1"],
 		whiteSpace: "nowrap",
 		height: "24px",
 	},
 	chipRemove: {
-		borderRadius: radius.xs,
+		borderRadius: tokens["--radius-xs"],
 		outline: "0",
 		backgroundColor: {
 			default: "transparent",
@@ -636,42 +628,41 @@ const comboboxParts = stylex.create({
 			[stylex.when.ancestor("[data-disabled]", comboboxMarker)]: "transparent",
 			[stylex.when.ancestor("[data-readonly]", comboboxMarker)]: "transparent",
 			":hover": {
-				"@media (hover: hover) and (pointer: fine)": colors["--surface"],
+				"@media (hover: hover) and (pointer: fine)": tokens["--surface"],
 			},
 		},
-		height: space[5],
-		width: space[5],
+		height: tokens["--space-5"],
+		width: tokens["--space-5"],
 	},
 	noChips: {
-		color: colors["--text-muted"],
-		fontSize: fontSize.x1,
-		letterSpacing: letterSpacing.x1,
-		lineHeight: lineHeight.x1,
+		color: tokens["--fg-muted"],
+		fontSize: tokens["--font-size-1"],
+		letterSpacing: tokens["--letter-spacing-1"],
+		lineHeight: tokens["--line-height-1"],
 	},
 	creatableIndicator: {
 		visibility: "visible",
 	},
 	actions: {
-		gap: 2,
+		gap: 0,
 		display: "flex",
 		insetInlineEnd: 2,
 		position: "absolute",
 	},
-		action: {
+	action: {
 		padding: 0,
-		borderRadius: radius.sm,
+		borderRadius: tokens["--radius-sm"],
 		borderWidth: 0,
 		alignItems: "center",
 		color: {
 			// eslint-disable-next-line @stylexjs/valid-styles -- the compiler supports chained pseudo-class conditions; the lint rule is stricter than the compiler.
 			[HOVER_WHEN_INACTIVE]: {
-				"@media (hover: hover) and (pointer: fine)": colors["--text"],
+				"@media (hover: hover) and (pointer: fine)": tokens["--fg"],
 			},
-			"[data-disabled]": colors["--text-subtle"],
-			"[data-popup-open]": colors["--text"],
-			default: colors["--text-subtle"],
-			[stylex.when.ancestor('[aria-readonly="true"]', comboboxMarker)]: colors["--text-subtle"],
-			[stylex.when.ancestor("[data-readonly]", comboboxMarker)]: colors["--text-subtle"],
+			default: tokens["--fg-subtle"],
+			[stylex.when.ancestor('[aria-readonly="true"]', comboboxMarker)]: tokens["--fg-subtle"],
+			[stylex.when.ancestor("[data-disabled]", comboboxMarker)]: tokens["--fg-subtle"],
+			[stylex.when.ancestor("[data-readonly]", comboboxMarker)]: tokens["--fg-subtle"],
 		},
 		cursor: {
 			"[data-disabled]": "not-allowed",
@@ -683,15 +674,16 @@ const comboboxParts = stylex.create({
 		fontSize: "inherit",
 		justifyContent: "center",
 		opacity: {
-			"[data-disabled]": 0.48,
 			default: 1,
 			[stylex.when.ancestor('[aria-readonly="true"]', comboboxMarker)]: 0.48,
+			[stylex.when.ancestor("[data-disabled]", comboboxMarker)]: 0.48,
 			[stylex.when.ancestor("[data-readonly]", comboboxMarker)]: 0.48,
 		},
 		pointerEvents: {
 			"[data-disabled]": "none",
 			default: "auto",
 			[stylex.when.ancestor('[aria-readonly="true"]', comboboxMarker)]: "none",
+			[stylex.when.ancestor("[data-disabled]", comboboxMarker)]: "none",
 			[stylex.when.ancestor("[data-readonly]", comboboxMarker)]: "none",
 		},
 	},
@@ -702,83 +694,83 @@ const comboboxParts = stylex.create({
 	list: {
 		padding: {
 			"[data-empty]": 0,
-			default: space[1],
+			default: tokens["--space-1"],
 		},
 		maxHeight: "260px",
 		overflowY: "auto",
 	},
 	empty: {
 		padding: {
-			default: space[3],
+			default: tokens["--space-3"],
 			":empty": 0,
 		},
 		alignItems: "center",
-		color: colors["--text-muted"],
+		color: tokens["--fg-muted"],
 		display: "flex",
-		fontSize: fontSize.x2,
+		fontSize: tokens["--font-size-2"],
 		justifyContent: "center",
-		letterSpacing: letterSpacing.x2,
-		lineHeight: lineHeight.x2,
+		letterSpacing: tokens["--letter-spacing-2"],
+		lineHeight: tokens["--line-height-2"],
 		textAlign: "center",
 	},
 });
 
 const comboboxGroupSizeVariants = stylex.create({
 	sm: {
-		paddingInlineEnd: size["control.md"],
-		paddingInlineStart: space[1],
+		paddingInlineEnd: tokens["--size-control-md"],
+		paddingInlineStart: tokens["--space-1"],
 	},
 	md: {
-		paddingInlineEnd: space[8],
-		paddingInlineStart: space[1],
+		paddingInlineEnd: tokens["--space-8"],
+		paddingInlineStart: tokens["--space-1"],
 	},
 	lg: {
-		paddingInlineEnd: size["control.lg"],
-		paddingInlineStart: space[2],
+		paddingInlineEnd: tokens["--size-control-lg"],
+		paddingInlineStart: tokens["--space-2"],
 	},
 });
 
 const comboboxInputSizeVariants = stylex.create({
 	sm: {
-		paddingBlock: space[2],
-		paddingInlineStart: space[2],
-		height: size["control.sm"],
+		paddingBlock: tokens["--space-2"],
+		paddingInlineStart: tokens["--space-2"],
+		height: tokens["--size-control-sm"],
 	},
 	md: {
-		paddingBlock: space[3],
-		paddingInlineStart: space[2],
-		height: size["control.md"],
+		paddingBlock: tokens["--space-3"],
+		paddingInlineStart: tokens["--space-2"],
+		height: tokens["--size-control-md"],
 	},
 	lg: {
-		paddingBlock: space[4],
-		paddingInlineStart: space[3],
-		height: size["control.lg"],
+		paddingBlock: tokens["--space-4"],
+		paddingInlineStart: tokens["--space-3"],
+		height: tokens["--size-control-lg"],
 	},
 });
 
 const comboboxActionSizeVariants = stylex.create({
 	sm: {
-		height: size["control.xs"],
-		width: size["control.xs"],
+		height: tokens["--size-control-xs"],
+		width: tokens["--size-control-xs"],
 	},
 	md: {
-		height: size["control.sm"],
-		width: size["control.sm"],
+		height: tokens["--size-control-sm"],
+		width: tokens["--size-control-sm"],
 	},
 	lg: {
-		height: size["control.md"],
-		width: size["control.md"],
+		height: tokens["--size-control-md"],
+		width: tokens["--size-control-md"],
 	},
 });
 
 const inputGroupVariants = stylex.create({
 	withChips: {
-		gap: space[1],
+		gap: tokens["--space-1"],
 		paddingBlock: "3px",
 		flexWrap: "wrap",
 		paddingBlockStart: "3px",
-		paddingInlineEnd: space[8],
-		paddingInlineStart: space[1],
+		paddingInlineEnd: tokens["--space-8"],
+		paddingInlineStart: tokens["--space-1"],
 		height: "auto",
 	},
 });
@@ -786,8 +778,8 @@ const inputGroupVariants = stylex.create({
 const inputVariants = stylex.create({
 	withChips: {
 		paddingBlock: 0,
-		flexBasis: space[16], // acts as a min-width to force newline wrap
-		paddingInlineStart: space[1],
+		flexBasis: tokens["--space-16"], // acts as a min-width to force newline wrap
+		paddingInlineStart: tokens["--space-1"],
 		height: "26px",
 	},
 });

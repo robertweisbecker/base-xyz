@@ -1,8 +1,8 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import * as stylex from "@stylexjs/stylex";
 import type { ButtonSize, ButtonVariant } from "@/components/button/button";
-import { colors, space } from "@/styles/tokens.stylex";
-import { fontSize, letterSpacing, lineHeight } from "@/styles/tokens.stylex";
+import { tokens } from "@/theme/tokens.stylex";
+
 import * as ModelSelector from "./model-selector";
 import {
 	exampleDefaultValue,
@@ -127,23 +127,23 @@ const iconlessModelGroups = [
 
 const storyParts = stylex.create({
 	stack: {
-		gap: space[5],
+		gap: tokens["--space-5"],
 		alignItems: "flex-start",
 		display: "flex",
 		flexDirection: "column",
-		paddingBlockStart: space[8],
+		paddingBlockStart: tokens["--space-8"],
 	},
 	sample: {
-		gap: space[2],
+		gap: tokens["--space-2"],
 		alignItems: "flex-start",
 		display: "flex",
 		flexDirection: "column",
 	},
 	label: {
 		margin: 0,
-		color: colors["--text-muted"],
-		fontSize: fontSize.x1,
-		letterSpacing: letterSpacing.x1,
-		lineHeight: lineHeight.x1,
+		color: tokens["--fg-muted"],
+		fontSize: tokens["--font-size-1"],
+		letterSpacing: tokens["--letter-spacing-1"],
+		lineHeight: tokens["--line-height-1"],
 	},
 });

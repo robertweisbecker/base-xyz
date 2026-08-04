@@ -8,8 +8,8 @@ import {
 	modalPopupStyles,
 	modalTextStyles,
 } from "@/components/dialog/dialog.stylex";
-import { space } from "@/styles/tokens.stylex";
-import { fontSize, letterSpacing, lineHeight } from "@/styles/tokens.stylex";
+import { tokens } from "@/theme/tokens.stylex";
+
 
 type StyledProps<T> = Omit<T, "className" | "style"> & {
 	className?: string;
@@ -126,19 +126,19 @@ const alertDialogParts = stylex.create({
 		maxWidth: "22rem",
 	},
 	header: {
-		padding: space[6],
-		gap: space[2],
+		padding: tokens["--space-6"],
+		gap: tokens["--space-2"],
 		display: "flex",
 		flexDirection: "column",
 	},
 	title: {
-		fontSize: fontSize.x3,
-		letterSpacing: letterSpacing.x3,
-		lineHeight: lineHeight.x3,
+		fontSize: tokens["--font-size-3"],
+		letterSpacing: tokens["--letter-spacing-3"],
+		lineHeight: tokens["--line-height-3"],
 	},
 	footer: {
-		gap: space[2],
-		paddingInline: space[4],
-		paddingBlockEnd: space[4],
+		gap: tokens["--space-2"],
+		paddingInline: tokens["--space-4"],
+		paddingBlockEnd: tokens["--space-4"],
 	},
 });

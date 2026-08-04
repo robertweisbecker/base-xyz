@@ -18,7 +18,7 @@ import {
 	TextField,
 } from "@/components";
 import { breakpoints } from "@/styles/constants.stylex";
-import { space } from "@/styles/tokens.stylex";
+import { tokens } from "@/theme/tokens.stylex";
 
 const meta = {
 	title: "Design system/Theme props verification",
@@ -136,13 +136,13 @@ export const AllCapabilities: Story = {
 
 const styles = stylex.create({
 	fixture: {
-		padding: space[4],
-		gap: space[4],
+		padding: tokens["--space-4"],
+		gap: tokens["--space-4"],
 		display: "flex",
 		flexDirection: "column",
 	},
 	finalPadding: {
-		paddingInlineStart: space[4],
+		paddingInlineStart: tokens["--space-4"],
 	},
 	fixedWidth: {
 		width: "200px",

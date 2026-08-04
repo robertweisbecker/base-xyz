@@ -48,8 +48,8 @@
 	}
 
 	html {
-		background: var(--canvas);
-		font-synthesis: none;
+		background: var(--bg-canvas);
+		/* font-synthesis: none; */
 		text-rendering: optimizeLegibility;
 		-webkit-font-smoothing: antialiased;
 	}
@@ -58,8 +58,8 @@
 		position: relative;
 		min-width: 320px;
 		min-height: 100vh;
-		background: var(--canvas);
-		color: var(--text);
+		background: var(--bg-canvas);
+		color: var(--fg);
 		line-height: inherit;
 	}
 
@@ -263,7 +263,7 @@
 
 	::selection {
 		background: currentColor;
-		color: var(--canvas);
+		color: var(--bg-canvas);
 	}
 
 	[hidden]:where(:not([hidden="until-found"])) {

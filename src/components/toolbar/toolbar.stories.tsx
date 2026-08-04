@@ -17,8 +17,8 @@ import { TextUnderlineIcon } from "@phosphor-icons/react/dist/csr/TextUnderline"
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import * as stylex from "@stylexjs/stylex";
 import { breakpoints } from "@/styles/constants.stylex";
-import { colors, space } from "@/styles/tokens.stylex";
-import { fontSize, fontWeight, letterSpacing, lineHeight } from "@/styles/tokens.stylex";
+import { tokens } from "@/theme/tokens.stylex";
+
 import * as Menu from "../menu/menu";
 import * as Select from "../select/select";
 import * as Toolbar from "./toolbar";
@@ -192,7 +192,7 @@ function PopupToolbar() {
 						<Menu.ItemLabel>Move to project</Menu.ItemLabel>
 					</Menu.Item>
 					<Menu.Separator />
-					<Menu.Item variant="danger">
+					<Menu.Item variant="error">
 						<Menu.ItemLabel>Remove</Menu.ItemLabel>
 					</Menu.Item>
 				</Menu.Popup>
@@ -201,11 +201,7 @@ function PopupToolbar() {
 	);
 }
 
-function CompactToolbar({
-	disabled,
-}: {
-	disabled?: boolean;
-}) {
+function CompactToolbar({ disabled }: { disabled?: boolean }) {
 	return (
 		<Toolbar.Root aria-label="List actions" disabled={disabled}>
 			<Toolbar.Button aria-label="Bulleted list">
@@ -224,7 +220,7 @@ function CompactToolbar({
 
 const storyParts = stylex.create({
 	sections: {
-		gap: space[8],
+		gap: tokens["--space-8"],
 		alignItems: "flex-start",
 		display: "grid",
 		gridTemplateColumns: {
@@ -233,17 +229,17 @@ const storyParts = stylex.create({
 		},
 	},
 	section: {
-		gap: space[3],
+		gap: tokens["--space-3"],
 		display: "flex",
 		flexDirection: "column",
 	},
 	heading: {
 		margin: 0,
-		color: colors["--text-muted"],
-		fontSize: fontSize.x1,
-		fontWeight: fontWeight.regular,
-		letterSpacing: letterSpacing.x1,
-		lineHeight: lineHeight.x1,
+		color: tokens["--fg-muted"],
+		fontSize: tokens["--font-size-1"],
+		fontWeight: tokens["--font-weight-regular"],
+		letterSpacing: tokens["--letter-spacing-1"],
+		lineHeight: tokens["--line-height-1"],
 	},
 	selectButton: {
 		justifyContent: "space-between",

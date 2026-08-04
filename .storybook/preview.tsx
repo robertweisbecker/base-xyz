@@ -1,6 +1,7 @@
 import type { Decorator, Preview } from "@storybook/react-vite";
 import { themes } from "storybook/theming";
 import "../src/styles/index.css";
+import "./docs.css";
 import "./reduced-motion.css";
 import { ReducedMotionFrame } from "./reduced-motion-frame";
 import { ThemeProvider, type ThemeMode, type ThemeName } from "../src/theme";

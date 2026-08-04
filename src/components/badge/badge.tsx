@@ -4,8 +4,8 @@ import type { StyleXStyles } from "@stylexjs/stylex";
 import type { ReactNode } from "react";
 import { useTextTruncation } from "@/hooks/use-text-truncation";
 import { composeThemeProps, resolveThemeProps, type VerifyThemeProps } from "@/theme/theme-props";
-import { childLayoutThemeProps, positioningThemeProps, sizingThemeProps } from "@/styles/theme-props-layout.stylex";
-import { gapThemeProps, spacingThemeProps } from "@/styles/theme-props-spacing.stylex";
+import { childLayoutThemeProps, positioningThemeProps, sizingThemeProps } from "@/theme/theme-props-layout.stylex";
+import { gapThemeProps, spacingThemeProps } from "@/theme/theme-props-spacing.stylex";
 import type {
 	ChildLayoutProps,
 	GapProps,
@@ -14,8 +14,8 @@ import type {
 	SpacingProps,
 } from "@/theme/theme-props.types";
 import { focusRing } from "@/styles/recipes/focus";
-import { colors, radius, shadow, space } from "@/styles/tokens.stylex";
-import { fontSize, fontWeight, letterSpacing } from "@/styles/tokens.stylex";
+import { tokens } from "@/theme/tokens.stylex";
+
 import * as Tooltip from "../tooltip/tooltip";
 import { VisuallyHidden } from "../visually-hidden/visually-hidden";
 
@@ -26,7 +26,7 @@ const badgeParts = stylex.create({
 		boxSizing: "border-box",
 		display: "inline-flex",
 		flexShrink: 1,
-		fontWeight: fontWeight.medium,
+		fontWeight: tokens["--font-weight-medium"],
 		justifyContent: "center",
 		textDecorationLine: {
 			"[href]": "underline",
@@ -91,98 +91,97 @@ const endSlotOffsets = stylex.create({
 const variantAppearance = stylex.create({
 	subtle: {},
 	elevated: {
-		backgroundColor: colors["--elevated"],
-		boxShadow: shadow.xs,
+		backgroundColor: tokens["--panel"],
+		boxShadow: tokens["--shadow-xs"],
 	},
 	solid: {},
 });
 
 const hueColors = stylex.create({
 	accentSubtle: {
-		backgroundColor: colors["--accent-soft-hover"],
-		color: colors["--text-accent"],
+		backgroundColor: tokens["--bg-accent-hover"],
+		color: tokens["--fg-accent"],
 	},
 	accentElevated: {
-		color: colors["--text-accent"],
+		color: tokens["--fg-accent"],
 	},
 	accentSolid: {
-		backgroundColor: colors["--accent"],
-		color: colors["--accent-contrast"],
+		backgroundColor: tokens["--bg-primary"],
+		color: tokens["--fg-accent-contrast"],
 	},
-	dangerSubtle: {
-		backgroundColor: colors["--danger-subtle"],
-		color: colors["--text-danger"],
+	errorSubtle: {
+		backgroundColor: tokens["--bg-error"],
+		color: tokens["--fg-error"],
 	},
-	dangerElevated: {
-		color: colors["--text-danger"],
+	errorElevated: {
+		color: tokens["--fg-error"],
 	},
-	dangerSolid: {
-		backgroundColor: colors["--danger"],
-		color: colors["--accent-contrast"],
+	errorSolid: {
+		backgroundColor: tokens["--bg-error-primary"],
+		color: tokens["--fg-accent-contrast"],
 	},
 	warningSubtle: {
-		backgroundColor: colors["--warning-subtle"],
-		color: colors["--text-warning"],
+		backgroundColor: tokens["--bg-warning-subtle"],
+		color: tokens["--fg-warning"],
 	},
 	warningElevated: {
-		color: colors["--text-warning"],
+		color: tokens["--fg-warning"],
 	},
 	warningSolid: {
-		backgroundColor: colors["--warning"],
-		color: colors["--warning-contrast"],
+		backgroundColor: tokens["--bg-warning-primary"],
+		color: tokens["--fg-warning-contrast"],
 	},
 	successSubtle: {
-		backgroundColor: colors["--success-subtle"],
-		color: colors["--text-success"],
+		backgroundColor: tokens["--bg-success"],
+		color: tokens["--fg-success"],
 	},
 	successElevated: {
-		color: colors["--text-success"],
+		color: tokens["--fg-success"],
 	},
-
 	successSolid: {
-		backgroundColor: colors["--success"],
-		color: colors["--accent-contrast"],
+		backgroundColor: tokens["--bg-success-primary"],
+		color: tokens["--fg-accent-contrast"],
 	},
 	neutralSubtle: {
-		backgroundColor: colors["--gray-a2"],
-		color: colors["--gray-t2"],
+		backgroundColor: tokens["--surface-subtle"],
+		color: tokens["--fg-muted"],
 	},
 	neutralElevated: {
-		color: colors["--text"],
+		color: tokens["--fg"],
 	},
 	neutralSolid: {
-		backgroundColor: colors["--neutral-strong"],
-		color: colors["--neutral-contrast"],
+		backgroundColor: tokens["--bg-neutral"],
+		color: tokens["--fg-neutral-contrast"],
 	},
 });
 
 const sizeVariants = stylex.create({
 	xs: {
-		borderRadius: radius.xs,
-		gap: space[1],
-		paddingInline: space[1],
+		borderRadius: tokens["--radius-xs"],
+		gap: tokens["--space-1"],
+		paddingInline: tokens["--space-1"],
 		fontSize: "11px",
-		letterSpacing: letterSpacing.x1,
-		lineHeight: space[4],
-		height: space[4],
+		letterSpacing: tokens["--letter-spacing-1"],
+		lineHeight: tokens["--space-4"],
+		height: tokens["--space-4"],
 	},
 	sm: {
-		borderRadius: radius.xs,
-		gap: space[1],
-		paddingInline: space[1],
+		borderRadius: tokens["--radius-xs"],
+		gap: tokens["--space-1"],
+		paddingInline: tokens["--space-1"],
 		fontSize: "11px",
-		letterSpacing: letterSpacing.x1,
-		lineHeight: space[4],
-		height: space[4],
+		letterSpacing: tokens["--letter-spacing-1"],
+		lineHeight: tokens["--space-4"],
+		height: tokens["--space-4"],
 	},
 	md: {
-		borderRadius: radius.sm,
-		gap: space[1],
-		paddingInline: space[2],
-		fontSize: fontSize.x1,
-		letterSpacing: letterSpacing.x1,
-		lineHeight: space[5],
-		height: space[5],
+		borderRadius: tokens["--radius-sm"],
+		gap: tokens["--space-1"],
+		paddingInline: tokens["--space-2"],
+		fontSize: tokens["--font-size-1"],
+		letterSpacing: tokens["--letter-spacing-1"],
+		lineHeight: tokens["--space-5"],
+		height: tokens["--space-5"],
 	},
 });
 
@@ -191,15 +190,15 @@ const shapeVariants = stylex.create({
 		cornerShape: "superellipse(1.2)",
 	},
 	pill: {
-		borderRadius: radius.full,
+		borderRadius: tokens["--radius-full"],
 	},
 	circle: {
-		borderRadius: radius.full,
+		borderRadius: tokens["--radius-full"],
 		paddingInline: 0,
 		aspectRatio: 1,
 	},
 	square: {
-		borderRadius: radius.xs,
+		borderRadius: tokens["--radius-xs"],
 		paddingInline: 0,
 		aspectRatio: 1,
 	},
@@ -211,10 +210,10 @@ const stylesByHue = {
 		elevated: hueColors.accentElevated,
 		solid: hueColors.accentSolid,
 	},
-	danger: {
-		subtle: hueColors.dangerSubtle,
-		elevated: hueColors.dangerElevated,
-		solid: hueColors.dangerSolid,
+	error: {
+		subtle: hueColors.errorSubtle,
+		elevated: hueColors.errorElevated,
+		solid: hueColors.errorSolid,
 	},
 	neutral: {
 		subtle: hueColors.neutralSubtle,

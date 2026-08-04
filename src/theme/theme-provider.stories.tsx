@@ -3,7 +3,8 @@ import * as stylex from "@stylexjs/stylex";
 import { useLayoutEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { createRoot, type Root } from "react-dom/client";
-import { colors, radius, space } from "@/styles/tokens.stylex";
+import { Text } from "@/components/text";
+import { tokens } from "@/theme/tokens.stylex";
 import { ThemeProvider, useTheme } from "./index";
 
 const meta = {
@@ -50,10 +51,160 @@ export const Contract: Story = {
 	render: () => <ContractFixture />,
 };
 
+export const StatusRamps: Story = {
+	parameters: { controls: { disable: true } },
+	render: () => (
+		<div {...stylex.props(verificationStyles.contract)}>
+			<ThemeProvider
+				aria-label="MP light status ramps"
+				data-testid="mp-light-ramps"
+				mode="light"
+				render={<section />}
+				style={statusRampStyles.collection}
+				theme="mp">
+				<Text color="muted" render={<h2 />} size="1">
+					Light
+				</Text>
+				<StatusRampSwatches />
+			</ThemeProvider>
+		</div>
+	),
+};
+
 export const MultipleRoots: Story = {
 	parameters: { controls: { disable: true } },
 	render: () => <MultipleRootsFixture />,
 };
+
+function StatusRampSwatches() {
+	return (
+		<>
+			<div aria-hidden {...stylex.props(statusRampStyles.ramp)}>
+				<span />
+				<Text color="muted" render={<span />} size="1">
+					s1
+				</Text>
+				<Text color="muted" render={<span />} size="1">
+					c1
+				</Text>
+				<Text color="muted" render={<span />} size="1">
+					p1
+				</Text>
+				<Text color="muted" render={<span />} size="1">
+					p2
+				</Text>
+				<Text color="muted" render={<span />} size="1">
+					t1
+				</Text>
+			</div>
+			<section data-ramp="error" {...stylex.props(statusRampStyles.ramp)}>
+				<Text render={<h3 />} size="1">
+					Error
+				</Text>
+				<span
+					aria-label="Error s1"
+					data-step="s1"
+					role="img"
+					{...stylex.props(statusRampStyles.swatch, statusRampStyles.errorS1)}
+				/>
+				<span
+					aria-label="Error c1"
+					data-step="c1"
+					role="img"
+					{...stylex.props(statusRampStyles.swatch, statusRampStyles.errorC1)}
+				/>
+				<span
+					aria-label="Error p1"
+					data-step="p1"
+					role="img"
+					{...stylex.props(statusRampStyles.swatch, statusRampStyles.errorP1)}
+				/>
+				<span
+					aria-label="Error p2"
+					data-step="p2"
+					role="img"
+					{...stylex.props(statusRampStyles.swatch, statusRampStyles.errorP2)}
+				/>
+				<span
+					aria-label="Error t1"
+					data-step="t1"
+					role="img"
+					{...stylex.props(statusRampStyles.swatch, statusRampStyles.errorT1)}
+				/>
+			</section>
+			<section data-ramp="success" {...stylex.props(statusRampStyles.ramp)}>
+				<Text render={<h3 />} size="1">
+					Success
+				</Text>
+				<span
+					aria-label="Success s1"
+					data-step="s1"
+					role="img"
+					{...stylex.props(statusRampStyles.swatch, statusRampStyles.successS1)}
+				/>
+				<span
+					aria-label="Success c1"
+					data-step="c1"
+					role="img"
+					{...stylex.props(statusRampStyles.swatch, statusRampStyles.successC1)}
+				/>
+				<span
+					aria-label="Success p1"
+					data-step="p1"
+					role="img"
+					{...stylex.props(statusRampStyles.swatch, statusRampStyles.successP1)}
+				/>
+				<span
+					aria-label="Success p2"
+					data-step="p2"
+					role="img"
+					{...stylex.props(statusRampStyles.swatch, statusRampStyles.successP2)}
+				/>
+				<span
+					aria-label="Success t1"
+					data-step="t1"
+					role="img"
+					{...stylex.props(statusRampStyles.swatch, statusRampStyles.successT1)}
+				/>
+			</section>
+			<section data-ramp="warning" {...stylex.props(statusRampStyles.ramp)}>
+				<Text render={<h3 />} size="1">
+					Warning
+				</Text>
+				<span
+					aria-label="Warning s1"
+					data-step="s1"
+					role="img"
+					{...stylex.props(statusRampStyles.swatch, statusRampStyles.warningS1)}
+				/>
+				<span
+					aria-label="Warning c1"
+					data-step="c1"
+					role="img"
+					{...stylex.props(statusRampStyles.swatch, statusRampStyles.warningC1)}
+				/>
+				<span
+					aria-label="Warning p1"
+					data-step="p1"
+					role="img"
+					{...stylex.props(statusRampStyles.swatch, statusRampStyles.warningP1)}
+				/>
+				<span
+					aria-label="Warning p2"
+					data-step="p2"
+					role="img"
+					{...stylex.props(statusRampStyles.swatch, statusRampStyles.warningP2)}
+				/>
+				<span
+					aria-label="Warning t1"
+					data-step="t1"
+					role="img"
+					{...stylex.props(statusRampStyles.swatch, statusRampStyles.warningT1)}
+				/>
+			</section>
+		</>
+	);
+}
 
 function MultipleRootsFixture() {
 	const firstContainerRef = useRef<HTMLDivElement>(null);
@@ -66,12 +217,12 @@ function MultipleRootsFixture() {
 		const second = createRoot(secondContainerRef.current);
 		rootsRef.current = { first, second };
 		first.render(
-			<ThemeProvider data-testid="first-independent-root" mode="dark" theme="mp">
+			<ThemeProvider data-testid="first-independent-root" mode="light" theme="mp">
 				First root
 			</ThemeProvider>,
 		);
 		second.render(
-			<ThemeProvider data-testid="second-independent-root" mode="dark" theme="mp">
+			<ThemeProvider data-testid="second-independent-root" mode="light" theme="mp">
 				Second root
 			</ThemeProvider>,
 		);
@@ -123,19 +274,16 @@ function ContractFixture() {
 			<ThemeProvider
 				ref={providerRef}
 				data-testid="custom-theme-host"
-				mode="dark"
+				mode="light"
 				onClick={() => setProviderClicks((count) => count + 1)}
 				render={
-					<main
-						ref={renderRef}
-						aria-label="Custom theme host"
-						onClick={() => setRenderClicks((count) => count + 1)}
-					/>
+					<main ref={renderRef} aria-label="Custom theme host" onClick={() => setRenderClicks((count) => count + 1)} />
 				}
 				style={verificationStyles.callerOverride}
 				theme="mp">
 				<div data-testid="custom-theme-content" {...stylex.props(verificationStyles.content)}>
 					<span data-testid="custom-accent" {...stylex.props(verificationStyles.swatch)} />
+					<span data-testid="custom-error-s1" {...stylex.props(statusRampStyles.errorS1)} />
 					<span data-testid="warning-reference" {...stylex.props(verificationStyles.warningReference)} />
 					<ThemeSnapshot />
 					<span data-testid="merged-refs">{String(refsMerged)}</span>
@@ -147,6 +295,7 @@ function ContractFixture() {
 						render={<section aria-label="Nested default theme" />}
 						theme="default">
 						<span data-testid="nested-default-accent" {...stylex.props(verificationStyles.swatch)} />
+						<span data-testid="nested-default-error-s1" {...stylex.props(statusRampStyles.errorS1)} />
 						<ThemeSnapshot />
 					</ThemeProvider>
 				</div>
@@ -159,8 +308,9 @@ function ContractFixture() {
 				</div>
 			</ThemeProvider>
 
-			<ThemeProvider data-testid="default-dark-theme-host" mode="dark" theme="default">
-				<span data-testid="default-dark-accent" {...stylex.props(verificationStyles.swatch)} />
+			<ThemeProvider data-testid="default-light-theme-host" mode="light" theme="default">
+				<span data-testid="default-light-accent" {...stylex.props(verificationStyles.swatch)} />
+				<span data-testid="default-light-error-s1" {...stylex.props(statusRampStyles.errorS1)} />
 			</ThemeProvider>
 		</div>
 	);
@@ -219,62 +369,87 @@ function PortalFixture() {
 function OuterThemeSnapshot() {
 	const { mode, resolvedMode, theme } = useTheme();
 	return (
-		<span
-			data-testid="outer-theme-context"
-			data-mode={mode}
-			data-resolved-mode={resolvedMode}
-			data-theme={theme}
-		/>
+		<span data-testid="outer-theme-context" data-mode={mode} data-resolved-mode={resolvedMode} data-theme={theme} />
 	);
 }
 
 function ThemeSnapshot() {
 	const { mode, resolvedMode, theme } = useTheme();
-	return (
-		<span
-			data-testid="theme-context"
-			data-mode={mode}
-			data-resolved-mode={resolvedMode}
-			data-theme={theme}
-		/>
-	);
+	return <span data-testid="theme-context" data-mode={mode} data-resolved-mode={resolvedMode} data-theme={theme} />;
 }
 
 const verificationStyles = stylex.create({
 	callerOverride: {
-		color: colors["--warning"],
+		color: tokens["--bg-warning-primary"],
 	},
 	content: {
-		gap: space[2],
+		gap: tokens["--space-2"],
 		alignItems: "center",
 		display: "flex",
 	},
 	contract: {
-		gap: space[4],
+		gap: tokens["--space-4"],
 		display: "grid",
 	},
 	preview: {
-		padding: space[4],
-		borderColor: colors["--border"],
-		borderRadius: radius.md,
+		padding: tokens["--space-4"],
+		borderColor: tokens["--border"],
+		borderRadius: tokens["--radius-md"],
 		borderStyle: "solid",
 		borderWidth: 1,
-		gap: space[3],
+		gap: tokens["--space-3"],
 		alignItems: "center",
-		backgroundColor: colors["--surface"],
+		backgroundColor: tokens["--surface"],
 		display: "flex",
 	},
 	swatch: {
-		borderRadius: radius.full,
-		backgroundColor: colors["--accent"],
+		borderRadius: tokens["--radius-full"],
+		backgroundColor: tokens["--bg-primary"],
 		display: "inline-block",
-		height: space[4],
-		width: space[4],
+		height: tokens["--space-4"],
+		width: tokens["--space-4"],
 	},
 	warningReference: {
-		backgroundColor: colors["--warning"],
+		backgroundColor: tokens["--bg-warning-primary"],
 		display: "inline-block",
 		height: 1,
 		width: 1,
+	},
+});
+
+const statusRampStyles = stylex.create({
+	collection: {
+		padding: tokens["--space-4"],
+		borderRadius: tokens["--radius-md"],
+		gap: tokens["--space-3"],
+		backgroundColor: tokens["--surface"],
+		display: "grid",
+	},
+	successC1: { backgroundColor: tokens["--color-success-c1"] },
+	successP1: { backgroundColor: tokens["--color-success-p1"] },
+	successP2: { backgroundColor: tokens["--color-success-p2"] },
+	successS1: { backgroundColor: tokens["--color-success-s1"] },
+	successT1: { backgroundColor: tokens["--color-success-t1"] },
+	warningC1: { backgroundColor: tokens["--color-warning-c1"] },
+	warningP1: { backgroundColor: tokens["--color-warning-p1"] },
+	warningP2: { backgroundColor: tokens["--color-warning-p2"] },
+	warningS1: { backgroundColor: tokens["--color-warning-s1"] },
+	warningT1: { backgroundColor: tokens["--color-warning-t1"] },
+	ramp: {
+		gap: tokens["--space-1"],
+		alignItems: "center",
+		display: "grid",
+		gridTemplateColumns: `5rem repeat(5, ${tokens["--space-8"]})`,
+	},
+	errorC1: { backgroundColor: tokens["--color-error-c1"] },
+	errorP1: { backgroundColor: tokens["--color-error-p1"] },
+	errorP2: { backgroundColor: tokens["--color-error-p2"] },
+	errorS1: { backgroundColor: tokens["--color-error-s1"] },
+	errorT1: { backgroundColor: tokens["--color-error-t1"] },
+	swatch: {
+		borderRadius: tokens["--radius-xs"],
+		display: "block",
+		height: tokens["--space-8"],
+		width: tokens["--space-8"],
 	},
 });

@@ -11,8 +11,8 @@ import { XIcon } from "@phosphor-icons/react/dist/csr/X";
 import * as stylex from "@stylexjs/stylex";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { useEffect, useRef, useState } from "react";
-import { colors, space } from "@/styles/tokens.stylex";
-import { fontSize, letterSpacing, lineHeight } from "@/styles/tokens.stylex";
+import { tokens } from "@/theme/tokens.stylex";
+
 import { Button, IconButton } from "../button/button";
 import * as Tooltip from "../tooltip/tooltip";
 import * as Toast from "./index";
@@ -192,11 +192,7 @@ function DefaultAnchoredExample({ _side, _align }: Pick<StoryArgs, "_side" | "_a
 
 	return (
 		<AnchoredStage hint="A standard toast positioned relative to its trigger.">
-			<Button
-				ref={anchorRef}
-				onClick={showFeedback}
-				startSlot={<FloppyDiskIcon aria-hidden />}
-			>
+			<Button ref={anchorRef} onClick={showFeedback} startSlot={<FloppyDiskIcon aria-hidden />}>
 				Save preferences
 			</Button>
 		</AnchoredStage>
@@ -218,8 +214,8 @@ function TooltipAnchoredExample({ _side, _align }: Pick<StoryArgs, "_side" | "_a
 			onClose: () => setFeedbackVisible(false),
 			positionerProps: {
 				anchor: anchorRef.current,
-					side: _side,
-					align: _align,
+				side: _side,
+				align: _align,
 				sideOffset: 10,
 			},
 			data: {
@@ -239,13 +235,7 @@ function TooltipAnchoredExample({ _side, _align }: Pick<StoryArgs, "_side" | "_a
 					closeOnClick={false}
 					render={
 						<IconButton
-							icon={
-								feedbackVisible ? (
-									<CheckIcon aria-hidden weight="bold" />
-								) : (
-									<CopyIcon aria-hidden />
-								)
-							}
+							icon={feedbackVisible ? <CheckIcon aria-hidden weight="bold" /> : <CopyIcon aria-hidden />}
 							label="Copy design system link"
 							onClick={copyLink}
 							tooltip={false}
@@ -296,7 +286,7 @@ function PopoverAnchoredExample({ _side, _align }: Pick<StoryArgs, "_side" | "_a
 				},
 				data: {
 					variant: "popover",
-					tone: "danger",
+					tone: "error",
 					status: "error",
 					icon: <WarningCircleIcon aria-hidden size={20} weight="fill" />,
 					dismissible: true,
@@ -406,7 +396,7 @@ function PillAnchoredExample({ _side, _align }: Pick<StoryArgs, "_side" | "_alig
 			onClose: () => setStatus("idle"),
 			data: {
 				variant: "pill",
-				tone: nextStatus === "success" ? "success" : "danger",
+				tone: nextStatus === "success" ? "success" : "error",
 				status: nextStatus,
 				icon:
 					nextStatus === "success" ? (
@@ -439,7 +429,7 @@ function PillAnchoredExample({ _side, _align }: Pick<StoryArgs, "_side" | "_alig
 					Complete goal
 				</Button>
 				<Button
-					variant="danger"
+					variant="error"
 					disabled={status !== "ongoing"}
 					onClick={() => finishGoal("error")}
 					startSlot={<PlugIcon aria-hidden />}>
@@ -530,7 +520,7 @@ const storyStyles = stylex.create({
 		justifyContent: "center",
 	},
 	anchoredVariants: {
-		gap: space[6],
+		gap: tokens["--space-6"],
 		display: "grid",
 		gridTemplateColumns: {
 			default: "repeat(2, minmax(0, 1fr))",
@@ -539,8 +529,8 @@ const storyStyles = stylex.create({
 		width: "min(1100px, calc(100vw - 48px))",
 	},
 	stage: {
-		padding: space[6],
-		gap: space[6],
+		padding: tokens["--space-6"],
+		gap: tokens["--space-6"],
 		alignItems: "center",
 		display: "flex",
 		flexDirection: "column",
@@ -556,16 +546,16 @@ const storyStyles = stylex.create({
 	},
 	hint: {
 		margin: 0,
-		color: colors["--text-muted"],
-		fontSize: fontSize.x1,
-		letterSpacing: letterSpacing.x1,
-		lineHeight: lineHeight.x1,
+		color: tokens["--fg-muted"],
+		fontSize: tokens["--font-size-1"],
+		letterSpacing: tokens["--letter-spacing-1"],
+		lineHeight: tokens["--line-height-1"],
 		textAlign: "center",
 		textWrap: "balance",
 		maxWidth: "440px",
 	},
 	pillControls: {
-		gap: space[2],
+		gap: tokens["--space-2"],
 		alignItems: "center",
 		display: "flex",
 		flexWrap: "wrap",
@@ -581,13 +571,13 @@ const storyStyles = stylex.create({
 		animationTimingFunction: "linear",
 	},
 	changeCount: {
-		gap: space[1],
+		gap: tokens["--space-1"],
 		display: "inline-flex",
 	},
 	additions: {
-		color: colors["--success"],
+		color: tokens["--bg-success-primary"],
 	},
 	deletions: {
-		color: colors["--danger"],
+		color: tokens["--bg-error-primary"],
 	},
 });

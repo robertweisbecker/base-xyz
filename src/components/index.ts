@@ -96,11 +96,11 @@ export {
 export * as Dialog from "./dialog/dialog";
 export * as Drawer from "./drawer/drawer";
 export { Link, type LinkProps } from "./link/link";
+export * as LinkPreview from "./link-preview/link-preview";
 export { Loader, type LoaderProps } from "./loader/loader";
 export * as Menu from "./menu/menu";
 export * as Popover from "./popover/popover";
-export { createDrawerHandle, createPopoverHandle, createPreviewCardHandle, createTooltipHandle } from "./popup-handles";
-export * as PreviewCard from "./preview-card/preview-card";
+export { createDrawerHandle, createLinkPreviewHandle, createPopoverHandle, createTooltipHandle } from "./popup-handles";
 export { Radio, RadioGroup, type RadioGroupProps, type RadioProps, type RadioSize } from "./radio/radio";
 export { ScrollArea, type ScrollAreaProps } from "./scroll-area/scroll-area";
 export * as Select from "./select/select";

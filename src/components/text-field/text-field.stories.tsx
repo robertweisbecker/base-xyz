@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from "@storybook/react-vite";
 import * as stylex from "@stylexjs/stylex";
 import type { ReactNode } from "react";
 import { textStyles, textWeightStyles } from "@/components/text/text.stylex";
-import { colors, space } from "@/styles/tokens.stylex";
+import { tokens } from "@/theme/tokens.stylex";
 import { ComboboxField } from "../combobox/combobox-field";
 import { NumberField } from "../number-field/number-field";
 import * as Select from "../select/select";
@@ -203,11 +203,7 @@ function StateSpecimen({ attribute, children, label }: { attribute?: string; chi
 		<section {...stylex.props(styles.stateSpecimen)}>
 			<div {...stylex.props(styles.stateHeader)}>
 				<h2 {...stylex.props(textStyles.body, textWeightStyles.semibold, styles.stateTitle)}>{label}</h2>
-				{attribute ? (
-					<code {...stylex.props(textStyles.supporting, styles.stateAttribute)}>
-						{attribute}
-					</code>
-				) : null}
+				{attribute ? <code {...stylex.props(textStyles.supporting, styles.stateAttribute)}>{attribute}</code> : null}
 			</div>
 			{children}
 		</section>
@@ -219,7 +215,7 @@ const styles = stylex.create({
 		maxWidth: "360px",
 	},
 	stateGrid: {
-		gap: space[8],
+		gap: tokens["--space-8"],
 		display: "grid",
 		gridTemplateColumns: {
 			default: "repeat(2, minmax(0, 1fr))",
@@ -228,12 +224,12 @@ const styles = stylex.create({
 		maxWidth: "800px",
 	},
 	stateSpecimen: {
-		gap: space[3],
+		gap: tokens["--space-3"],
 		display: "flex",
 		flexDirection: "column",
 	},
 	stateHeader: {
-		gap: space[2],
+		gap: tokens["--space-2"],
 		alignItems: "baseline",
 		display: "flex",
 		justifyContent: "space-between",
@@ -242,18 +238,18 @@ const styles = stylex.create({
 		margin: 0,
 	},
 	stateAttribute: {
-		color: colors["--text-muted"],
+		color: tokens["--fg-muted"],
 	},
 	familyOverflow: {
 		overflowX: "auto",
-		paddingBottom: space[2],
+		paddingBottom: tokens["--space-2"],
 	},
 	familyGrid: {
 		alignItems: "start",
-		columnGap: space[6],
+		columnGap: tokens["--space-6"],
 		display: "grid",
 		gridTemplateColumns: "max-content repeat(3, minmax(16rem, 1fr))",
-		rowGap: space[6],
+		rowGap: tokens["--space-6"],
 		minWidth: "58rem",
 	},
 	familyColumnLabel: {
@@ -262,7 +258,7 @@ const styles = stylex.create({
 	},
 	familyRowLabel: {
 		whiteSpace: "nowrap",
-		paddingTop: space[2],
+		paddingTop: tokens["--space-2"],
 	},
 	familyControl: {
 		minWidth: 0,

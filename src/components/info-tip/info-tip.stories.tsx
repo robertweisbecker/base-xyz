@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import * as stylex from "@stylexjs/stylex";
-import { space } from "@/styles/tokens.stylex";
+import { tokens } from "@/theme/tokens.stylex";
 import { Text } from "../text/text";
 import { InfoTip } from "./info-tip";
 
@@ -82,18 +82,18 @@ export const Examples: Story = {
 
 const styles = stylex.create({
 	stage: {
-		padding: space[8],
+		padding: tokens["--space-8"],
 		display: "flex",
 		justifyContent: "center",
 	},
 	examples: {
-		gap: space[5],
+		gap: tokens["--space-5"],
 		alignItems: "start",
 		display: "flex",
 		flexDirection: "column",
 	},
 	option: {
-		gap: space[4],
+		gap: tokens["--space-4"],
 		alignItems: "center",
 		display: "flex",
 	},
@@ -101,13 +101,13 @@ const styles = stylex.create({
 		minWidth: "5rem",
 	},
 	sizes: {
-		gap: space[3],
+		gap: tokens["--space-3"],
 		alignItems: "center",
 		display: "flex",
 		flexWrap: "wrap",
 	},
 	content: {
-		gap: space[1],
+		gap: tokens["--space-1"],
 		display: "flex",
 		flexDirection: "column",
 	},

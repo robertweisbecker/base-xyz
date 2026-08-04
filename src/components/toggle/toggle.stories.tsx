@@ -8,8 +8,8 @@ import { TextItalicIcon } from "@phosphor-icons/react/dist/csr/TextItalic";
 import { TextUnderlineIcon } from "@phosphor-icons/react/dist/csr/TextUnderline";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import * as stylex from "@stylexjs/stylex";
-import { colors, radius, space } from "@/styles/tokens.stylex";
-import { fontSize, fontWeight, letterSpacing, lineHeight } from "@/styles/tokens.stylex";
+import { tokens } from "@/theme/tokens.stylex";
+
 import { Toggle, ToggleGroup, type ToggleVariant } from "./toggle";
 import { firstToggleMarker, secondToggleMarker, thirdToggleMarker } from "./toggle-radius-testing.stylex";
 
@@ -38,7 +38,7 @@ const meta = {
 		disabled: { control: "boolean" },
 		variant: {
 			control: "select",
-			options: ["primary", "subtle", "secondary", "neutral", "ghost", "danger"],
+			options: ["primary", "subtle", "secondary", "neutral", "ghost", "error"],
 		},
 		size: { control: "select", options: ["xs", "sm", "md", "lg"] },
 		shape: { control: "select", options: ["default", "pill", "circle", "square"] },
@@ -67,7 +67,7 @@ export const Playground: Story = {
 	render: (args) => <Toggle key={`${args.defaultPressed}-${args.disabled}`} {...args} />,
 };
 
-const variants: ToggleVariant[] = ["primary", "subtle", "secondary", "neutral", "ghost", "danger"];
+const variants: ToggleVariant[] = ["primary", "subtle", "secondary", "neutral", "ghost", "error"];
 
 export const Variants: Story = {
 	parameters: {
@@ -252,43 +252,43 @@ export const RadiusTesting: Story = {
 
 const styles = stylex.create({
 	story: {
-		gap: space[8],
+		gap: tokens["--space-8"],
 		display: "flex",
 		flexDirection: "column",
 	},
 	section: {
-		gap: space[4],
+		gap: tokens["--space-4"],
 		alignItems: "flex-start",
 		display: "flex",
 		flexDirection: "column",
 	},
 	heading: {
 		margin: 0,
-		color: colors["--text-muted"],
-		fontSize: fontSize.x1,
-		fontWeight: fontWeight.regular,
-		letterSpacing: letterSpacing.x1,
-		lineHeight: lineHeight.x1,
+		color: tokens["--fg-muted"],
+		fontSize: tokens["--font-size-1"],
+		fontWeight: tokens["--font-weight-regular"],
+		letterSpacing: tokens["--letter-spacing-1"],
+		lineHeight: tokens["--line-height-1"],
 	},
 	variantRows: {
-		gap: space[5],
+		gap: tokens["--space-5"],
 		display: "flex",
 		flexDirection: "column",
 	},
 	variantRow: {
-		gap: space[3],
+		gap: tokens["--space-3"],
 		display: "grid",
 		gridTemplateColumns: "6rem minmax(0, 1fr)",
 	},
 	rowLabel: {
 		alignSelf: "center",
-		color: colors["--text-muted"],
-		fontSize: fontSize.x1,
-		letterSpacing: letterSpacing.x1,
-		lineHeight: lineHeight.x1,
+		color: tokens["--fg-muted"],
+		fontSize: tokens["--font-size-1"],
+		letterSpacing: tokens["--letter-spacing-1"],
+		lineHeight: tokens["--line-height-1"],
 	},
 	row: {
-		gap: space[3],
+		gap: tokens["--space-3"],
 		alignItems: "center",
 		display: "flex",
 		flexWrap: "wrap",
@@ -296,100 +296,100 @@ const styles = stylex.create({
 	horizontalFirst: {
 		borderEndEndRadius: {
 			"[data-pressed]": 0,
-			default: radius.md,
+			default: tokens["--radius-md"],
 			[stylex.when.siblingAfter("[data-pressed]", secondToggleMarker)]: 0,
 		},
-		borderEndStartRadius: radius.md,
+		borderEndStartRadius: tokens["--radius-md"],
 		borderStartEndRadius: {
 			"[data-pressed]": 0,
-			default: radius.md,
+			default: tokens["--radius-md"],
 			[stylex.when.siblingAfter("[data-pressed]", secondToggleMarker)]: 0,
 		},
-		borderStartStartRadius: radius.md,
+		borderStartStartRadius: tokens["--radius-md"],
 	},
 	horizontalSecond: {
 		borderEndEndRadius: {
 			"[data-pressed]": 0,
-			default: radius.md,
+			default: tokens["--radius-md"],
 			[stylex.when.siblingAfter("[data-pressed]", thirdToggleMarker)]: 0,
 		},
 		borderEndStartRadius: {
 			"[data-pressed]": 0,
-			default: radius.md,
+			default: tokens["--radius-md"],
 			[stylex.when.siblingBefore("[data-pressed]", firstToggleMarker)]: 0,
 		},
 		borderStartEndRadius: {
 			"[data-pressed]": 0,
-			default: radius.md,
+			default: tokens["--radius-md"],
 			[stylex.when.siblingAfter("[data-pressed]", thirdToggleMarker)]: 0,
 		},
 		borderStartStartRadius: {
 			"[data-pressed]": 0,
-			default: radius.md,
+			default: tokens["--radius-md"],
 			[stylex.when.siblingBefore("[data-pressed]", firstToggleMarker)]: 0,
 		},
 	},
 	horizontalThird: {
-		borderEndEndRadius: radius.md,
+		borderEndEndRadius: tokens["--radius-md"],
 		borderEndStartRadius: {
 			"[data-pressed]": 0,
-			default: radius.md,
+			default: tokens["--radius-md"],
 			[stylex.when.siblingBefore("[data-pressed]", secondToggleMarker)]: 0,
 		},
-		borderStartEndRadius: radius.md,
+		borderStartEndRadius: tokens["--radius-md"],
 		borderStartStartRadius: {
 			"[data-pressed]": 0,
-			default: radius.md,
+			default: tokens["--radius-md"],
 			[stylex.when.siblingBefore("[data-pressed]", secondToggleMarker)]: 0,
 		},
 	},
 	verticalFirst: {
 		borderEndEndRadius: {
 			"[data-pressed]": 0,
-			default: radius.md,
+			default: tokens["--radius-md"],
 			[stylex.when.siblingAfter("[data-pressed]", secondToggleMarker)]: 0,
 		},
 		borderEndStartRadius: {
 			"[data-pressed]": 0,
-			default: radius.md,
+			default: tokens["--radius-md"],
 			[stylex.when.siblingAfter("[data-pressed]", secondToggleMarker)]: 0,
 		},
-		borderStartEndRadius: radius.md,
-		borderStartStartRadius: radius.md,
+		borderStartEndRadius: tokens["--radius-md"],
+		borderStartStartRadius: tokens["--radius-md"],
 	},
 	verticalSecond: {
 		borderEndEndRadius: {
 			"[data-pressed]": 0,
-			default: radius.md,
+			default: tokens["--radius-md"],
 			[stylex.when.siblingAfter("[data-pressed]", thirdToggleMarker)]: 0,
 		},
 		borderEndStartRadius: {
 			"[data-pressed]": 0,
-			default: radius.md,
+			default: tokens["--radius-md"],
 			[stylex.when.siblingAfter("[data-pressed]", thirdToggleMarker)]: 0,
 		},
 		borderStartEndRadius: {
 			"[data-pressed]": 0,
-			default: radius.md,
+			default: tokens["--radius-md"],
 			[stylex.when.siblingBefore("[data-pressed]", firstToggleMarker)]: 0,
 		},
 		borderStartStartRadius: {
 			"[data-pressed]": 0,
-			default: radius.md,
+			default: tokens["--radius-md"],
 			[stylex.when.siblingBefore("[data-pressed]", firstToggleMarker)]: 0,
 		},
 	},
 	verticalThird: {
-		borderEndEndRadius: radius.md,
-		borderEndStartRadius: radius.md,
+		borderEndEndRadius: tokens["--radius-md"],
+		borderEndStartRadius: tokens["--radius-md"],
 		borderStartEndRadius: {
 			"[data-pressed]": 0,
-			default: radius.md,
+			default: tokens["--radius-md"],
 			[stylex.when.siblingBefore("[data-pressed]", secondToggleMarker)]: 0,
 		},
 		borderStartStartRadius: {
 			"[data-pressed]": 0,
-			default: radius.md,
+			default: tokens["--radius-md"],
 			[stylex.when.siblingBefore("[data-pressed]", secondToggleMarker)]: 0,
 		},
 	},

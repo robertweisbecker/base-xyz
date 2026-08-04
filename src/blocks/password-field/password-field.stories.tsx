@@ -3,8 +3,8 @@ import * as stylex from "@stylexjs/stylex";
 import { useState } from "react";
 import { Separator } from "@/components/separator/separator";
 import { breakpoints } from "@/styles/constants.stylex";
-import { colors, space } from "@/styles/tokens.stylex";
-import { fontSize, fontWeight, letterSpacing, lineHeight } from "@/styles/tokens.stylex";
+import { tokens } from "@/theme/tokens.stylex";
+
 import * as PasswordField from "./password-field";
 
 const passwordRequirements = [/.{8,}/, /[0-9]/, /[a-z]/, /[A-Z]/] as const;
@@ -139,9 +139,7 @@ function PasswordExample({
 					<PasswordField.VisibilityToggle disabled={inputProps.disabled} />
 				</PasswordField.Actions>
 			</PasswordField.Control>
-			{inputProps.description ? (
-				<PasswordField.Description>{inputProps.description}</PasswordField.Description>
-			) : null}
+			{inputProps.description ? <PasswordField.Description>{inputProps.description}</PasswordField.Description> : null}
 		</PasswordField.Root>
 	);
 }
@@ -160,7 +158,9 @@ function ControlledExample() {
 						<PasswordField.VisibilityToggle />
 					</PasswordField.Actions>
 				</PasswordField.Control>
-				<PasswordField.Description>The value and visibility state are controlled by the caller.</PasswordField.Description>
+				<PasswordField.Description>
+					The value and visibility state are controlled by the caller.
+				</PasswordField.Description>
 			</PasswordField.Root>
 		</div>
 	);
@@ -186,12 +186,12 @@ function State({ children, title }: { children: React.ReactNode; title: string }
 
 const storyParts = stylex.create({
 	list: {
-		gap: space[8],
+		gap: tokens["--space-8"],
 		display: "flex",
 		flexDirection: "column",
 	},
 	section: {
-		gap: space[3],
+		gap: tokens["--space-3"],
 		display: "flex",
 		flexDirection: "column",
 	},
@@ -199,7 +199,7 @@ const storyParts = stylex.create({
 		maxWidth: "32rem",
 	},
 	grid: {
-		gap: space[8],
+		gap: tokens["--space-8"],
 		display: "grid",
 		gridTemplateColumns: {
 			default: "1fr",
@@ -208,24 +208,24 @@ const storyParts = stylex.create({
 		maxWidth: "56rem",
 	},
 	state: {
-		gap: space[3],
+		gap: tokens["--space-3"],
 		display: "flex",
 		flexDirection: "column",
 	},
 	heading: {
 		margin: 0,
-		color: colors["--text-muted"],
-		fontSize: fontSize.x1,
-		fontWeight: fontWeight.regular,
-		letterSpacing: letterSpacing.x1,
-		lineHeight: lineHeight.x1,
+		color: tokens["--fg-muted"],
+		fontSize: tokens["--font-size-1"],
+		fontWeight: tokens["--font-weight-regular"],
+		letterSpacing: tokens["--letter-spacing-1"],
+		lineHeight: tokens["--line-height-1"],
 	},
 	subheading: {
 		margin: 0,
-		color: colors["--text-muted"],
-		fontSize: fontSize.x1,
-		fontWeight: fontWeight.regular,
-		letterSpacing: letterSpacing.x1,
-		lineHeight: lineHeight.x1,
+		color: tokens["--fg-muted"],
+		fontSize: tokens["--font-size-1"],
+		fontWeight: tokens["--font-weight-regular"],
+		letterSpacing: tokens["--letter-spacing-1"],
+		lineHeight: tokens["--line-height-1"],
 	},
 });

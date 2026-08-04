@@ -8,7 +8,7 @@ import { textStyles, textWeightStyles } from "@/components/text/text.stylex";
 import { createContext, type ComponentProps, type ReactNode, useContext } from "react";
 import { Badge, type BadgeHue, type BadgeProps } from "@/components/badge/badge";
 import { Loader } from "@/components/loader/loader";
-import { colors, radius, space } from "@/styles/tokens.stylex";
+import { tokens } from "@/theme/tokens.stylex";
 
 type StyledProps<T> = Omit<T, "style"> & {
 	/** StyleX overrides, applied after the component's own styles. */
@@ -42,7 +42,7 @@ const statusPresentation: Record<ToolActivityStatus, { label: string; hue: Badge
 	running: { label: "Running", hue: "accent" },
 	complete: { label: "Complete", hue: "neutral" },
 	approval: { label: "Needs approval", hue: "accent" },
-	error: { label: "Failed", hue: "danger" },
+	error: { label: "Failed", hue: "error" },
 };
 
 export function Root({
@@ -104,16 +104,19 @@ export function Meta({ className, style, ...props }: ToolActivityTimelineMetaPro
 	return <span className={joinClassNames(sx.className, className)} style={sx.style} {...props} />;
 }
 
-export function Status({ children, endSlot, hue, icon, size = "sm", startSlot, ...props }: ToolActivityTimelineStatusProps) {
+export function Status({
+	children,
+	endSlot,
+	hue,
+	icon,
+	size = "sm",
+	startSlot,
+	...props
+}: ToolActivityTimelineStatusProps) {
 	const status = useToolActivityStatus("Status");
 	const presentation = statusPresentation[status];
 	return (
-		<Badge
-			endSlot={endSlot}
-			hue={hue ?? presentation.hue}
-			size={size}
-			startSlot={startSlot ?? icon}
-			{...props}>
+		<Badge endSlot={endSlot} hue={hue ?? presentation.hue} size={size} startSlot={startSlot ?? icon} {...props}>
 			{children ?? presentation.label}
 		</Badge>
 	);
@@ -156,37 +159,37 @@ const parts = stylex.create({
 		maxWidth: "42rem",
 	},
 	item: {
-		gap: space[3],
+		gap: tokens["--space-3"],
 		display: "grid",
-		gridTemplateColumns: `${space[6]} minmax(0, 1fr)`,
-		paddingBlockEnd: space[5],
+		gridTemplateColumns: `${tokens["--space-6"]} minmax(0, 1fr)`,
+		paddingBlockEnd: tokens["--space-5"],
 		position: "relative",
 		"::before": {
-			backgroundColor: colors["--border"],
+			backgroundColor: tokens["--border"],
 			content: '""',
 			display: {
 				default: "block",
 				":last-child": "none",
 			},
-			insetBlockStart: space[6],
+			insetBlockStart: tokens["--space-6"],
 			insetInlineStart: "0.71875rem",
 			position: "absolute",
-			height: `calc(100% - ${space[5]})`,
+			height: `calc(100% - ${tokens["--space-5"]})`,
 			width: "1px",
 		},
 	},
 	marker: {
-		borderRadius: radius.full,
+		borderRadius: tokens["--radius-full"],
 		alignItems: "center",
 		display: "flex",
 		justifyContent: "center",
 		position: "relative",
 		zIndex: 1,
-		height: space[6],
-		width: space[6],
+		height: tokens["--space-6"],
+		width: tokens["--space-6"],
 	},
 	content: {
-		gap: space[3],
+		gap: tokens["--space-3"],
 		display: "flex",
 		flexDirection: "column",
 		paddingBlockStart: "0.125rem",
@@ -194,10 +197,10 @@ const parts = stylex.create({
 	},
 	header: {
 		alignItems: "flex-start",
-		columnGap: space[4],
+		columnGap: tokens["--space-4"],
 		display: "grid",
 		gridTemplateColumns: "minmax(0, 1fr) auto",
-		rowGap: space[1],
+		rowGap: tokens["--space-1"],
 	},
 	title: {
 		gridColumn: "1",
@@ -207,11 +210,11 @@ const parts = stylex.create({
 	description: {
 		gridColumn: "1",
 		gridRow: "2",
-		color: colors["--text-muted"],
+		color: tokens["--fg-muted"],
 		minWidth: 0,
 	},
 	metadata: {
-		gap: space[2],
+		gap: tokens["--space-2"],
 		gridColumn: "2",
 		gridRow: "1 / span 2",
 		alignItems: "center",
@@ -219,15 +222,15 @@ const parts = stylex.create({
 		display: "flex",
 	},
 	meta: {
-		color: colors["--text-muted"],
+		color: tokens["--fg-muted"],
 		fontVariantNumeric: "tabular-nums",
 	},
 });
 
 const markerStatus = stylex.create({
-	queued: { backgroundColor: colors["--surface-subtle"], color: colors["--text-muted"] },
-	running: { backgroundColor: colors["--accent-soft"], color: colors["--accent"] },
-	complete: { backgroundColor: colors["--surface-subtle"], color: colors["--text"] },
-	approval: { backgroundColor: colors["--accent-soft"], color: colors["--accent"] },
-	error: { backgroundColor: colors["--danger-subtle"], color: colors["--danger"] },
+	queued: { backgroundColor: tokens["--surface-subtle"], color: tokens["--fg-muted"] },
+	running: { backgroundColor: tokens["--bg-accent"], color: tokens["--bg-primary"] },
+	complete: { backgroundColor: tokens["--surface-subtle"], color: tokens["--fg"] },
+	approval: { backgroundColor: tokens["--bg-accent"], color: tokens["--bg-primary"] },
+	error: { backgroundColor: tokens["--bg-error"], color: tokens["--bg-error-primary"] },
 });

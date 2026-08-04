@@ -11,7 +11,7 @@ import {
 	type Ref,
 	type ReactNode,
 } from "react";
-import { colors, fontFamily } from "@/styles/tokens.stylex";
+import { tokens } from "@/theme/tokens.stylex";
 import {
 	ThemeContext,
 	type ResolvedThemeMode,
@@ -19,7 +19,7 @@ import {
 	type ThemeMode,
 	type ThemeName,
 } from "./theme-context";
-import { getThemeStyles } from "./themes.stylex";
+import { getThemeStyle } from "./themes.stylex";
 
 type ThemeProviderState = {
 	theme: ThemeName;
@@ -54,9 +54,9 @@ export function ThemeProvider({
 	const resolvedMode = mode === "system" ? systemMode : mode;
 	const isRootProvider = parentTheme === null;
 	const documentThemeOwner = useRef(Symbol("ThemeProvider"));
-	const themeStyles = getThemeStyles(theme);
-	const ownedStyleProps = stylex.props(themeStyles, providerStyles.root, modeStyles[resolvedMode]);
-	const hostStyleProps = stylex.props(themeStyles, providerStyles.root, modeStyles[resolvedMode], style);
+	const themeStyle = getThemeStyle(theme);
+	const ownedStyleProps = stylex.props(themeStyle, providerStyles.root, modeStyles[resolvedMode]);
+	const hostStyleProps = stylex.props(themeStyle, providerStyles.root, modeStyles[resolvedMode], style);
 
 	useLayoutEffect(() => {
 		if (!isRootProvider) return;
@@ -97,9 +97,7 @@ function subscribeToSystemMode(onStoreChange: () => void) {
 }
 
 function getSystemMode(): ResolvedThemeMode {
-	return typeof window !== "undefined" && window.matchMedia("(prefers-color-scheme: dark)").matches
-		? "dark"
-		: "light";
+	return typeof window !== "undefined" && window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
 }
 
 function getServerMode(): ResolvedThemeMode {
@@ -230,8 +228,8 @@ function toCssProperty(property: string) {
 
 const providerStyles = stylex.create({
 	root: {
-		color: colors["--text"],
-		fontFamily: fontFamily.sans,
+		color: tokens["--fg"],
+		fontFamily: tokens["--font-family-sans"],
 	},
 });
 

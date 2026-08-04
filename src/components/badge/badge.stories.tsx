@@ -2,8 +2,8 @@ import { CheckCircleIcon } from "@phosphor-icons/react/dist/csr/CheckCircle";
 import { WarningIcon } from "@phosphor-icons/react/dist/csr/Warning";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import * as stylex from "@stylexjs/stylex";
-import { colors, space } from "@/styles/tokens.stylex";
-import { fontSize, fontWeight, letterSpacing, lineHeight } from "@/styles/tokens.stylex";
+import { tokens } from "@/theme/tokens.stylex";
+
 import { Badge } from "./badge";
 
 const iconOptions = {
@@ -31,7 +31,7 @@ const meta = {
 		},
 		hue: {
 			control: "inline-radio",
-			options: ["neutral", "accent", "danger", "warning", "success"],
+			options: ["neutral", "accent", "error", "warning", "success"],
 		},
 		size: {
 			control: "inline-radio",
@@ -69,7 +69,7 @@ export const Playground: Story = {};
 
 const variants = ["subtle", "elevated", "solid"] as const;
 const shapes = ["default", "pill", "circle", "square"] as const;
-const hues = ["neutral", "accent", "danger", "warning", "success"] as const;
+const hues = ["neutral", "accent", "error", "warning", "success"] as const;
 
 export const Variants: Story = {
 	parameters: {
@@ -188,9 +188,7 @@ export const TruncationTooltip: Story = {
 		<div {...stylex.props(storyStyles.truncationFrame)}>
 			<div {...stylex.props(storyStyles.truncationRow)}>
 				<span {...stylex.props(storyStyles.rowLabel)}>Status</span>
-				<Badge
-					hue="accent"
-					startSlot={<CheckCircleIcon aria-hidden weight="fill" />}>
+				<Badge hue="accent" startSlot={<CheckCircleIcon aria-hidden weight="fill" />}>
 					Approved for the upcoming production release
 				</Badge>
 			</div>
@@ -201,68 +199,68 @@ export const TruncationTooltip: Story = {
 
 const storyStyles = stylex.create({
 	story: {
-		padding: space[4],
-		gap: space[8],
+		padding: tokens["--space-4"],
+		gap: tokens["--space-8"],
 		display: "flex",
 		flexDirection: "column",
 	},
 	section: {
-		gap: space[4],
+		gap: tokens["--space-4"],
 		display: "flex",
 		flexDirection: "column",
 	},
 	sections: {
-		gap: space[6],
+		gap: tokens["--space-6"],
 		display: "flex",
 		flexDirection: "column",
 	},
 	heading: {
 		margin: 0,
-		color: colors["--text-muted"],
-		fontSize: fontSize.x1,
-		fontWeight: fontWeight.regular,
-		letterSpacing: letterSpacing.x1,
-		lineHeight: lineHeight.x1,
+		color: tokens["--fg-muted"],
+		fontSize: tokens["--font-size-1"],
+		fontWeight: tokens["--font-weight-regular"],
+		letterSpacing: tokens["--letter-spacing-1"],
+		lineHeight: tokens["--line-height-1"],
 		textTransform: "capitalize",
 	},
 	variantGroups: {
-		gap: space[5],
+		gap: tokens["--space-5"],
 		display: "flex",
 		flexDirection: "column",
 	},
 	variantGroup: {
-		gap: space[2],
+		gap: tokens["--space-2"],
 		display: "flex",
 		flexDirection: "column",
 	},
 	specimen: {
-		gap: space[2],
+		gap: tokens["--space-2"],
 		alignItems: "flex-start",
 		display: "flex",
 		flexDirection: "column",
 	},
 	gridHeader: {
-		color: colors["--text-muted"],
-		fontSize: fontSize.x1,
-		letterSpacing: letterSpacing.x1,
-		lineHeight: lineHeight.x1,
+		color: tokens["--fg-muted"],
+		fontSize: tokens["--font-size-1"],
+		letterSpacing: tokens["--letter-spacing-1"],
+		lineHeight: tokens["--line-height-1"],
 		textTransform: "capitalize",
 	},
 	rowLabel: {
 		margin: 0,
-		color: colors["--text-muted"],
-		fontSize: fontSize.x1,
-		letterSpacing: letterSpacing.x1,
-		lineHeight: lineHeight.x1,
+		color: tokens["--fg-muted"],
+		fontSize: tokens["--font-size-1"],
+		letterSpacing: tokens["--letter-spacing-1"],
+		lineHeight: tokens["--line-height-1"],
 		textTransform: "capitalize",
 	},
 	row: {
-		gap: space[3],
+		gap: tokens["--space-3"],
 		alignItems: "center",
 		display: "flex",
 	},
 	truncationFrame: {
-		gap: space[3],
+		gap: tokens["--space-3"],
 		alignItems: "flex-start",
 		display: "flex",
 		flexDirection: "column",
@@ -270,7 +268,7 @@ const storyStyles = stylex.create({
 		maxWidth: "180px",
 	},
 	truncationRow: {
-		gap: space[2],
+		gap: tokens["--space-2"],
 		alignItems: "center",
 		display: "flex",
 		maxWidth: "100%",
@@ -278,9 +276,9 @@ const storyStyles = stylex.create({
 	},
 	hint: {
 		margin: 0,
-		color: colors["--text-muted"],
-		fontSize: fontSize.x1,
-		letterSpacing: letterSpacing.x1,
-		lineHeight: lineHeight.x1,
+		color: tokens["--fg-muted"],
+		fontSize: tokens["--font-size-1"],
+		letterSpacing: tokens["--letter-spacing-1"],
+		lineHeight: tokens["--line-height-1"],
 	},
 });

@@ -2,9 +2,9 @@ import { Drawer as BaseDrawer } from "@base-ui/react/drawer";
 import * as stylex from "@stylexjs/stylex";
 import type { StyleXStyles } from "@stylexjs/stylex";
 import { type ComponentProps } from "react";
-import { motion } from "@/styles/tokens.stylex";
+import { tokens } from "@/theme/tokens.stylex";
 import { modalChromeStyles, modalTextStyles } from "@/components/dialog/dialog.stylex";
-import { colors, radius, space } from "@/styles/tokens.stylex";
+
 
 type StyledProps<T> = Omit<T, "className" | "style"> & {
 	className?: string;
@@ -163,7 +163,7 @@ const drawerParts = stylex.create({
 		transitionDuration: {
 			"[data-ending-style]": `calc(var(--drawer-swipe-strength) * ${DRAWER_RELEASE_DURATION})`,
 			"[data-swiping]": "0ms",
-			default: motion.durationLong,
+			default: tokens["--motion-duration-long"],
 			"@media (prefers-reduced-motion: reduce)": "0ms",
 		},
 		transitionProperty: "opacity",
@@ -205,7 +205,7 @@ const drawerParts = stylex.create({
 			"[data-ending-style]": `calc(var(--drawer-swipe-strength) * ${DRAWER_RELEASE_DURATION})`,
 			"[data-nested-drawer-swiping]": "0ms",
 			"[data-swiping]": "0ms",
-			default: motion.durationLong,
+			default: tokens["--motion-duration-long"],
 			"@media (prefers-reduced-motion: reduce)": "0ms",
 		},
 		transitionProperty: "transform, height, opacity",
@@ -213,8 +213,8 @@ const drawerParts = stylex.create({
 		willChange: "transform",
 		borderBottomLeftRadius: 0,
 		borderBottomRightRadius: 0,
-		borderTopLeftRadius: radius.xl,
-		borderTopRightRadius: radius.xl,
+		borderTopLeftRadius: tokens["--radius-xl"],
+		borderTopRightRadius: tokens["--radius-xl"],
 		height: {
 			"[data-nested-drawer-open]": "calc(var(--_drawer-stack-height) + var(--_drawer-bleed))",
 			default: "var(--drawer-height, auto)",
@@ -234,7 +234,7 @@ const drawerParts = stylex.create({
 				default: "rgb(0 0 0 / 0%)",
 			},
 			transitionDuration: {
-				default: motion.durationLong,
+				default: tokens["--motion-duration-long"],
 				"@media (prefers-reduced-motion: reduce)": "0ms",
 			},
 			transitionProperty: "background-color, opacity",
@@ -243,9 +243,9 @@ const drawerParts = stylex.create({
 	},
 	snapPointPopup: {
 		"--_drawer-bleed": "0px",
-		height: `calc(100dvh - ${space[4]})`,
+		height: `calc(100dvh - ${tokens["--space-4"]})`,
 		marginBottom: 0,
-		maxHeight: `calc(100dvh - ${space[4]})`,
+		maxHeight: `calc(100dvh - ${tokens["--space-4"]})`,
 		overflowY: "hidden",
 		paddingBottom: 0,
 	},
@@ -259,11 +259,11 @@ const drawerParts = stylex.create({
 			[stylex.when.ancestor("[data-nested-drawer-open][data-nested-drawer-swiping]")]: "1",
 		},
 		transitionDuration: {
-			default: motion.durationMedium,
+			default: tokens["--motion-duration-medium"],
 			"@media (prefers-reduced-motion: reduce)": "0ms",
 		},
 		transitionProperty: "opacity",
-		transitionTimingFunction: motion.easeOut,
+		transitionTimingFunction: tokens["--motion-ease-out"],
 		width: "100%",
 	},
 	scrollableContent: {
@@ -273,43 +273,43 @@ const drawerParts = stylex.create({
 		overflowY: "auto",
 	},
 	handle: {
-		borderRadius: radius.full,
-		marginBlock: space[1],
+		borderRadius: tokens["--radius-full"],
+		marginBlock: tokens["--space-1"],
 		marginInline: "auto",
-		backgroundColor: colors["--border"],
+		backgroundColor: tokens["--border"],
 		opacity: {
 			default: "1",
 			[stylex.when.ancestor("[data-nested-drawer-open]")]: "0",
 			[stylex.when.ancestor("[data-nested-drawer-open][data-nested-drawer-swiping]")]: "1",
 		},
 		transitionDuration: {
-			default: motion.durationShort,
+			default: tokens["--motion-duration-short"],
 			"@media (prefers-reduced-motion: reduce)": "0ms",
 		},
 		transitionProperty: "opacity",
-		transitionTimingFunction: motion.easeOut,
+		transitionTimingFunction: tokens["--motion-ease-out"],
 		height: "4px",
 		width: "58px",
 	},
 	header: {
-		gap: space[2],
-		paddingInline: space[5],
+		gap: tokens["--space-2"],
+		paddingInline: tokens["--space-5"],
 		display: "flex",
 		flexDirection: "column",
-		paddingBlockEnd: space[3],
-		paddingBlockStart: space[2],
-		borderBottomColor: colors["--border"],
+		paddingBlockEnd: tokens["--space-3"],
+		paddingBlockStart: tokens["--space-2"],
+		borderBottomColor: tokens["--border"],
 		borderBottomStyle: "solid",
 		borderBottomWidth: "0.5px",
 	},
 	body: {
-		padding: space[5],
+		padding: tokens["--space-5"],
 	},
 	footer: {
-		gap: space[3],
-		paddingInline: space[5],
-		paddingBlockStart: space[3],
-		borderTopColor: colors["--border"],
+		gap: tokens["--space-3"],
+		paddingInline: tokens["--space-5"],
+		paddingBlockStart: tokens["--space-3"],
+		borderTopColor: tokens["--border"],
 		borderTopStyle: "solid",
 		borderTopWidth: "1px",
 	},

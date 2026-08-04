@@ -10,7 +10,7 @@ import {
 	popupViewportStyles,
 } from "@/components/popover/popover.stylex";
 import { popupVars } from "@/components/popover/popover-vars.stylex";
-import { colors, radius, shadow, space } from "@/styles/tokens.stylex";
+import { tokens } from "@/theme/tokens.stylex";
 import { CloseButton as CloseButtonControl } from "../button/close-button";
 
 type StyledProps<T> = Omit<T, "className" | "style"> & {
@@ -197,45 +197,45 @@ export const Trigger = BasePopover.Trigger;
 
 const popoverParts = stylex.create({
 	panelSurface: {
-		[popupVars.background]: colors["--panel"],
-		[popupVars.border]: colors["--border"],
-		[popupVars.foreground]: colors["--text"],
-		borderRadius: radius.lg,
+		[popupVars.background]: tokens["--panel"],
+		[popupVars.border]: tokens["--border"],
+		[popupVars.foreground]: tokens["--fg"],
+		borderRadius: tokens["--radius-lg"],
 		backgroundColor: popupVars.background,
-		boxShadow: shadow.md,
+		boxShadow: tokens["--shadow-md"],
 		color: popupVars.foreground,
 	},
 	popup: {
-		gap: space[2],
+		gap: tokens["--space-2"],
 		outline: "0",
-		paddingBlock: space[3],
-		paddingInline: space[3],
+		paddingBlock: tokens["--space-3"],
+		paddingInline: tokens["--space-3"],
 		display: "flex",
 		flexDirection: "column",
 		position: "relative",
 		maxWidth: "min(calc(100vw - 32px), 28rem)",
 	},
 	viewport: {
-		gap: space[2],
+		gap: tokens["--space-2"],
 		display: "flex",
 		flexDirection: "column",
 	},
 	closeButton: {
 		position: "absolute",
 		zIndex: 1,
-		right: space[1],
-		top: space[1],
+		right: tokens["--space-1"],
+		top: tokens["--space-1"],
 	},
 	footer: {
 		display: "flex",
 		justifyContent: "flex-end",
-		paddingBlockStart: space[1],
+		paddingBlockStart: tokens["--space-1"],
 	},
 });
 
 const popoverTextParts = stylex.create({
 	title: { marginTop: `-.25em` },
-	description: { margin: 0, color: colors["--text-muted"] },
+	description: { margin: 0, color: tokens["--fg-muted"] },
 });
 
 const popoverText = {

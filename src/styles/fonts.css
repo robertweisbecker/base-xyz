@@ -1,0 +1,15 @@
+@font-face {
+	font-display: swap;
+	font-family: "Apercu";
+	font-style: normal;
+	font-weight: 400;
+	src: url("../assets/fonts/apercu-regular-pro.woff2") format("woff2");
+}
+
+@font-face {
+	font-display: swap;
+	font-family: "Apercu";
+	font-style: normal;
+	font-weight: 700;
+	src: url("../assets/fonts/apercu-bold-pro.woff2") format("woff2");
+}

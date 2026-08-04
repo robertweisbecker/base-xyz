@@ -3,7 +3,7 @@ import * as stylex from "@stylexjs/stylex";
 import type { StyleXStyles } from "@stylexjs/stylex";
 import { textStyles } from "@/components/text/text.stylex";
 import { createContext, useContext, type CSSProperties } from "react";
-import { colors, motion, shadow, size, space } from "@/styles/tokens.stylex";
+import { tokens } from "@/theme/tokens.stylex";
 
 type StyledProps<T> = Omit<T, "className" | "style"> & {
 	className?: string;
@@ -49,9 +49,9 @@ type ResolvedMeterValues = {
 const MeterVariantContext = createContext<MeterVariant>("bar");
 
 const meterStateColors = {
-	optimum: colors["--success"],
-	suboptimum: colors["--warning"],
-	critical: colors["--danger"],
+	optimum: tokens["--bg-success-primary"],
+	suboptimum: tokens["--bg-warning-primary"],
+	critical: tokens["--bg-error-primary"],
 } satisfies Record<MeterState, string>;
 
 export function Root({
@@ -238,10 +238,10 @@ export function Indicator({ ref, className, style, ...props }: IndicatorProps) {
 
 const meterParts = stylex.create({
 	root: {
-		columnGap: space[3],
+		columnGap: tokens["--space-3"],
 		display: "grid",
 		gridTemplateColumns: "minmax(0, 1fr) auto",
-		rowGap: space[1.5],
+		rowGap: tokens["--space-1-5"],
 		width: "100%",
 	},
 	segmentedRoot: {
@@ -251,7 +251,7 @@ const meterParts = stylex.create({
 	},
 	label: {
 		overflow: "hidden",
-		color: colors["--text-muted"],
+		color: tokens["--fg-muted"],
 		textOverflow: "ellipsis",
 		whiteSpace: "nowrap",
 		minWidth: 0,
@@ -261,7 +261,7 @@ const meterParts = stylex.create({
 		gridRow: "1",
 	},
 	value: {
-		color: colors["--text"],
+		color: tokens["--fg"],
 		fontVariantNumeric: "tabular-nums",
 		textAlign: "end",
 		whiteSpace: "nowrap",
@@ -274,35 +274,35 @@ const meterParts = stylex.create({
 		borderRadius: "2px",
 		gridColumn: "1 / -1",
 		overflow: "hidden",
-		backgroundColor: colors["--fill-track"],
-		height: space[2],
+		backgroundColor: tokens["--fill-track"],
+		height: tokens["--space-2"],
 	},
 	segmentedTrack: {
 		borderRadius: 0,
 		gridColumn: "1",
 		gridRow: "1",
-		backgroundColor: colors["--fill-track"],
+		backgroundColor: tokens["--fill-track"],
 		boxShadow: "none",
 		maskImage:
 			"url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 10 16'%3E%3Crect width='6' height='16' rx='1' fill='black'/%3E%3C/svg%3E\")",
 		maskPosition: "left center",
 		maskRepeat: "repeat-x",
-		maskSize: `calc(10px) ${size["indicator.sm"]}`,
+		maskSize: `calc(10px) ${tokens["--size-indicator-sm"]}`,
 		outlineWidth: 0,
-		height: size["indicator.sm"],
-		width: `calc(var(--_meter-segment-count) * (10px) - ${space[1]})`,
+		height: tokens["--size-indicator-sm"],
+		width: `calc(var(--_meter-segment-count) * (10px) - ${tokens["--space-1"]})`,
 	},
 	indicator: {
-		backgroundColor: `var(--_meter-indicator-color, ${colors["--gray-p1"]})`,
+		backgroundColor: `var(--_meter-indicator-color, ${tokens["--color-gray-p1"]})`,
 		borderEndStartRadius: "inherit",
 		borderStartStartRadius: "inherit",
-		boxShadow: shadow.sm,
+		boxShadow: tokens["--shadow-sm"],
 		transitionDuration: {
-			default: motion.durationMedium,
+			default: tokens["--motion-duration-medium"],
 			"@media (prefers-reduced-motion: reduce)": "0ms",
 		},
 		transitionProperty: "width, background-color",
-		transitionTimingFunction: motion.easeSmoothOut,
+		transitionTimingFunction: tokens["--motion-ease-smooth-out"],
 	},
 	segmentedIndicator: {
 		borderRadius: 0,

@@ -8,14 +8,14 @@ import type { ToastManager } from "@base-ui/react/toast";
 import * as stylex from "@stylexjs/stylex";
 import type { StyleXStyles } from "@stylexjs/stylex";
 import { zIndex } from "@/styles/constants.stylex";
-import { motion } from "@/styles/tokens.stylex";
+import { tokens } from "@/theme/tokens.stylex";
 import { focusRing } from "@/styles/recipes/focus";
 import { popupMotionStyles } from "@/components/popover/popover.stylex";
 import { tooltipStyles } from "@/components/tooltip/tooltip.stylex";
 import { popupVars } from "@/components/popover/popover-vars.stylex";
 import { pressable } from "@/styles/recipes/transitions";
-import { colors, radius, shadow, size, space } from "@/styles/tokens.stylex";
-import { fontSize, fontWeight, letterSpacing, lineHeight } from "@/styles/tokens.stylex";
+
+
 import {
 	anchoredToastManager,
 	type AnchoredToastData,
@@ -234,7 +234,7 @@ function AnchoredToastList({
 
 function toneForStatus(status: AnchoredToastStatus): AnchoredToastTone {
 	if (status === "success") return "success";
-	if (status === "error") return "danger";
+	if (status === "error") return "error";
 	if (status === "loading" || status === "ongoing") return "accent";
 	return "neutral";
 }
@@ -264,8 +264,8 @@ const rotate = stylex.keyframes({
 
 const anchoredMotion = stylex.create({
 	feedbackPopup: {
-		[popupVars.duration]: motion.durationMedium,
-		[popupVars.easing]: motion.easeOut,
+		[popupVars.duration]: tokens["--motion-duration-medium"],
+		[popupVars.easing]: tokens["--motion-ease-out"],
 	},
 	renotifyEven: {
 		animationDuration: {
@@ -299,12 +299,12 @@ const anchoredMotion = stylex.create({
 
 const anchoredParts = stylex.create({
 	panelSurface: {
-		[popupVars.background]: colors["--elevated"],
-		[popupVars.border]: colors["--border"],
-		[popupVars.foreground]: colors["--text"],
-		borderRadius: radius.lg,
+		[popupVars.background]: tokens["--elevated"],
+		[popupVars.border]: tokens["--border"],
+		[popupVars.foreground]: tokens["--fg"],
+		borderRadius: tokens["--radius-lg"],
 		backgroundColor: popupVars.background,
-		boxShadow: shadow.md,
+		boxShadow: tokens["--shadow-md"],
 		color: popupVars.foreground,
 	},
 	viewport: {
@@ -336,7 +336,7 @@ const anchoredParts = stylex.create({
 		display: "flex",
 	},
 	text: {
-		gap: space[1],
+		gap: tokens["--space-1"],
 		display: "flex",
 		flexDirection: "column",
 		flexGrow: 1,
@@ -348,7 +348,7 @@ const anchoredParts = stylex.create({
 		lineHeight: "inherit",
 	},
 	icon: {
-		borderRadius: radius.full,
+		borderRadius: tokens["--radius-full"],
 		alignItems: "center",
 		display: "inline-flex",
 		flexShrink: 0,
@@ -372,29 +372,29 @@ const anchoredParts = stylex.create({
 		height: "100%",
 	},
 	pillText: {
-		gap: space[2],
+		gap: tokens["--space-2"],
 		overflow: "hidden",
 		alignItems: "center",
 		flexDirection: "row",
 	},
 	pillTitle: {
 		overflow: "hidden",
-		color: colors["--inverse-text-muted"],
+		color: tokens["--fg-inverse-muted"],
 		flexShrink: 1,
-		fontSize: fontSize.x2,
-		fontWeight: fontWeight.regular,
-		letterSpacing: letterSpacing.x2,
-		lineHeight: lineHeight.x2,
+		fontSize: tokens["--font-size-2"],
+		fontWeight: tokens["--font-weight-regular"],
+		letterSpacing: tokens["--letter-spacing-2"],
+		lineHeight: tokens["--line-height-2"],
 		textOverflow: "ellipsis",
 		whiteSpace: "nowrap",
 	},
 	pillDescription: {
-		color: colors["--inverse-text-muted"],
+		color: tokens["--fg-inverse-muted"],
 		display: "inline-flex",
 		flexShrink: 0,
-		fontSize: fontSize.x2,
-		letterSpacing: letterSpacing.x2,
-		lineHeight: lineHeight.x2,
+		fontSize: tokens["--font-size-2"],
+		letterSpacing: tokens["--letter-spacing-2"],
+		lineHeight: tokens["--line-height-2"],
 		whiteSpace: "nowrap",
 	},
 });
@@ -410,18 +410,18 @@ const rootVariants = stylex.create({
 		maxWidth: "min(320px, calc(100vw - 24px))",
 	},
 	pill: {
-		[popupVars.background]: colors["--inverse-surface"],
+		[popupVars.background]: tokens["--bg-inverse"],
 		[popupVars.border]: "rgb(255 255 255 / 9%)",
-		[popupVars.foreground]: colors["--inverse-text"],
-		borderRadius: radius.md,
+		[popupVars.foreground]: tokens["--fg-inverse"],
+		borderRadius: tokens["--radius-md"],
 		backgroundColor: popupVars.background,
-		boxShadow: shadow.md,
+		boxShadow: tokens["--shadow-md"],
 		color: popupVars.foreground,
 		outlineColor: popupVars.border,
 		outlineOffset: "-1px",
 		outlineStyle: "solid",
 		outlineWidth: "1px",
-		height: size["control.md"],
+		height: tokens["--size-control-md"],
 		maxWidth: "min(360px, calc(100vw - 24px))",
 		minWidth: 0,
 	},
@@ -429,54 +429,54 @@ const rootVariants = stylex.create({
 
 const contentVariants = stylex.create({
 	default: {
-		padding: space[3],
-		gap: space[3],
+		padding: tokens["--space-3"],
+		gap: tokens["--space-3"],
 	},
 	tooltip: {
 		padding: 0,
-		gap: space[1],
+		gap: tokens["--space-1"],
 	},
 	popover: {
-		padding: space[3],
-		gap: space[3],
+		padding: tokens["--space-3"],
+		gap: tokens["--space-3"],
 	},
 	pill: {
-		gap: space[2],
+		gap: tokens["--space-2"],
 		paddingBlock: "0",
-		paddingInline: space[3],
+		paddingInline: tokens["--space-3"],
 	},
 });
 
 const iconToneVariants = stylex.create({
 	neutral: {
-		backgroundColor: colors["--surface-subtle"],
-		color: colors["--text-muted"],
+		backgroundColor: tokens["--surface-subtle"],
+		color: tokens["--fg-muted"],
 	},
 	accent: {
-		backgroundColor: colors["--accent-soft"],
-		color: colors["--accent"],
+		backgroundColor: tokens["--bg-accent"],
+		color: tokens["--bg-primary"],
 	},
 	success: {
-		backgroundColor: colors["--success-subtle"],
-		color: colors["--text-success"],
+		backgroundColor: tokens["--bg-success"],
+		color: tokens["--fg-success"],
 	},
-	danger: {
-		backgroundColor: colors["--danger-subtle"],
-		color: colors["--text-danger"],
+	error: {
+		backgroundColor: tokens["--bg-error"],
+		color: tokens["--fg-error"],
 	},
 });
 
 const pillIconToneVariants = stylex.create({
 	neutral: {
-		color: colors["--inverse-text-muted"],
+		color: tokens["--fg-inverse-muted"],
 	},
 	accent: {
-		color: colors["--accent"],
+		color: tokens["--bg-primary"],
 	},
 	success: {
-		color: colors["--text-success"],
+		color: tokens["--fg-success"],
 	},
-	danger: {
-		color: colors["--text-danger"],
+	error: {
+		color: tokens["--fg-error"],
 	},
 });

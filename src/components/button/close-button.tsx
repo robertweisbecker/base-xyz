@@ -4,7 +4,7 @@ import type { StyleXStyles } from "@stylexjs/stylex";
 import type { ComponentProps } from "react";
 import { focusRing } from "@/styles/recipes/focus";
 import { pressable } from "@/styles/recipes/transitions";
-import { colors, radius, size } from "@/styles/tokens.stylex";
+import { tokens } from "@/theme/tokens.stylex";
 
 export type CloseButtonProps = Omit<ComponentProps<"button">, "aria-label" | "children" | "style"> & {
 	className?: string;
@@ -37,28 +37,28 @@ export function CloseButton({ ref, className, label = "Close", style, type = "bu
 const closeButtonParts = stylex.create({
 	control: {
 		padding: 0,
-		borderRadius: radius.full,
+		borderRadius: tokens["--radius-full"],
 		borderWidth: 0,
 		alignItems: "center",
 		backgroundColor: {
-			default: colors["--gray-a1"],
+			default: tokens["--color-gray-a1"],
 			// eslint-disable-next-line @stylexjs/valid-styles -- the compiler supports chained pseudo-class conditions; the lint rule is stricter than the compiler.
 			":hover:not(:active)": {
-				"@media (hover: hover) and (pointer: fine)": colors["--gray-a3"],
+				"@media (hover: hover) and (pointer: fine)": tokens["--color-gray-a3"],
 			},
-			":active": colors["--gray-a2"],
+			":active": tokens["--color-gray-a2"],
 		},
 		color: {
-			default: colors["--gray-a5"],
+			default: tokens["--color-gray-a5"],
 			":hover": {
-				"@media (hover: hover) and (pointer: fine)": colors["--gray-t2"],
+				"@media (hover: hover) and (pointer: fine)": tokens["--color-gray-t2"],
 			},
 		},
 		display: "inline-flex",
 		fontSize: ".75rem",
 		justifyContent: "center",
 		lineHeight: 0,
-		height: size["control.xs"],
-		width: size["control.xs"],
+		height: tokens["--size-control-xs"],
+		width: tokens["--size-control-xs"],
 	},
 });

@@ -3,10 +3,10 @@ import { CaretDownIcon } from "@phosphor-icons/react/dist/csr/CaretDown";
 import * as stylex from "@stylexjs/stylex";
 import type { StyleXStyles } from "@stylexjs/stylex";
 import type { ComponentProps } from "react";
-import { motion } from "@/styles/tokens.stylex";
+import { tokens } from "@/theme/tokens.stylex";
 import { focusRing } from "@/styles/recipes/focus";
-import { colors, radius, size, space } from "@/styles/tokens.stylex";
-import { fontSize, fontWeight, letterSpacing, lineHeight } from "@/styles/tokens.stylex";
+
+
 import type { ButtonShape, ButtonSize } from "../button/button";
 
 const HOVER_WHEN_INACTIVE = ":hover:not([data-disabled]):not([data-panel-open])";
@@ -118,14 +118,14 @@ export function Icon({ ref, children, className, style, side = "end", ...props }
 
 const collapsibleParts = stylex.create({
 	root: {
-		color: colors["--text"],
+		color: tokens["--fg"],
 		display: "flex",
 		flexDirection: "column",
 		width: "100%",
 	},
 	trigger: {
 		borderColor: "transparent",
-		borderRadius: radius.md,
+		borderRadius: tokens["--radius-md"],
 		borderStyle: "solid",
 		borderWidth: "1px",
 		flex: "1",
@@ -133,12 +133,12 @@ const collapsibleParts = stylex.create({
 		backgroundColor: {
 			// eslint-disable-next-line @stylexjs/valid-styles -- the compiler supports chained pseudo-class conditions; the lint rule is stricter than the compiler.
 			[HOVER_WHEN_INACTIVE]: {
-				"@media (hover: hover) and (pointer: fine)": colors["--surface-subtle"],
+				"@media (hover: hover) and (pointer: fine)": tokens["--surface-subtle"],
 			},
-			"[data-panel-open]": colors["--surface-subtle"],
+			"[data-panel-open]": tokens["--surface-subtle"],
 			default: "transparent",
 		},
-		color: colors["--text"],
+		color: tokens["--fg"],
 		cursor: {
 			"[data-disabled]": "not-allowed",
 			default: "default",
@@ -151,11 +151,11 @@ const collapsibleParts = stylex.create({
 		},
 		textAlign: "start",
 		transitionDuration: {
-			default: motion.durationShort,
+			default: tokens["--motion-duration-short"],
 			"@media (prefers-reduced-motion: reduce)": "0ms",
 		},
 		transitionProperty: "background-color, color",
-		transitionTimingFunction: motion.easeOut,
+		transitionTimingFunction: tokens["--motion-ease-out"],
 	},
 	panel: {
 		overflow: "hidden",
@@ -164,11 +164,11 @@ const collapsibleParts = stylex.create({
 			':is([hidden]:not([hidden="until-found"]))': "none",
 		},
 		transitionDuration: {
-			default: motion.durationShort,
+			default: tokens["--motion-duration-short"],
 			"@media (prefers-reduced-motion: reduce)": "0ms",
 		},
 		transitionProperty: "height",
-		transitionTimingFunction: motion.easeOut,
+		transitionTimingFunction: tokens["--motion-ease-out"],
 		height: {
 			"[data-ending-style]": 0,
 			"[data-starting-style]": 0,
@@ -177,14 +177,14 @@ const collapsibleParts = stylex.create({
 	},
 	content: {
 		// paddingInlineStart: space[3],
-		gap: space[2],
-		color: colors["--text-muted"],
+		gap: tokens["--space-2"],
+		color: tokens["--fg-muted"],
 		display: "flex",
 		flexDirection: "column",
-		fontSize: fontSize.x2,
-		letterSpacing: letterSpacing.x2,
-		lineHeight: lineHeight.x2,
-		marginTop: space[1],
+		fontSize: tokens["--font-size-2"],
+		letterSpacing: tokens["--letter-spacing-2"],
+		lineHeight: tokens["--line-height-2"],
+		marginTop: tokens["--space-1"],
 	},
 	icon: {
 		alignItems: "center",
@@ -196,11 +196,11 @@ const collapsibleParts = stylex.create({
 			[stylex.when.ancestor("[data-panel-open]")]: "rotate(180deg)",
 		},
 		transitionDuration: {
-			default: motion.durationShort,
+			default: tokens["--motion-duration-short"],
 			"@media (prefers-reduced-motion: reduce)": "0ms",
 		},
 		transitionProperty: "transform",
-		transitionTimingFunction: motion.easeSmoothOut,
+		transitionTimingFunction: tokens["--motion-ease-smooth-out"],
 	},
 	iconAtStart: {
 		marginInlineStart: 0,
@@ -212,52 +212,52 @@ const collapsibleParts = stylex.create({
 
 const triggerSizes = stylex.create({
 	xs: {
-		borderRadius: radius.sm,
-		gap: space[1],
-		paddingBlock: space[2],
-		paddingInline: space[2],
-		fontSize: fontSize.x1,
-		fontWeight: fontWeight.medium,
-		letterSpacing: letterSpacing.x1,
-		lineHeight: lineHeight.x1,
-		height: size["control.xs"],
-		minWidth: size["control.xs"],
+		borderRadius: tokens["--radius-sm"],
+		gap: tokens["--space-1"],
+		paddingBlock: tokens["--space-2"],
+		paddingInline: tokens["--space-2"],
+		fontSize: tokens["--font-size-1"],
+		fontWeight: tokens["--font-weight-medium"],
+		letterSpacing: tokens["--letter-spacing-1"],
+		lineHeight: tokens["--line-height-1"],
+		height: tokens["--size-control-xs"],
+		minWidth: tokens["--size-control-xs"],
 	},
 	sm: {
-		borderRadius: radius.sm,
-		gap: space[2],
-		paddingBlock: space[1],
-		paddingInline: space[2],
-		fontSize: fontSize.x1,
-		fontWeight: fontWeight.medium,
-		letterSpacing: letterSpacing.x1,
-		lineHeight: lineHeight.x1,
-		height: size["control.sm"],
-		minWidth: size["control.sm"],
+		borderRadius: tokens["--radius-sm"],
+		gap: tokens["--space-2"],
+		paddingBlock: tokens["--space-1"],
+		paddingInline: tokens["--space-2"],
+		fontSize: tokens["--font-size-1"],
+		fontWeight: tokens["--font-weight-medium"],
+		letterSpacing: tokens["--letter-spacing-1"],
+		lineHeight: tokens["--line-height-1"],
+		height: tokens["--size-control-sm"],
+		minWidth: tokens["--size-control-sm"],
 	},
 	md: {
-		borderRadius: radius.md,
-		gap: space[2],
-		paddingBlock: space[2],
-		paddingInline: space[3],
-		fontSize: fontSize.x2,
-		fontWeight: fontWeight.medium,
-		letterSpacing: letterSpacing.x2,
-		lineHeight: lineHeight.x2,
-		height: size["control.md"],
-		minWidth: size["control.md"],
+		borderRadius: tokens["--radius-md"],
+		gap: tokens["--space-2"],
+		paddingBlock: tokens["--space-2"],
+		paddingInline: tokens["--space-3"],
+		fontSize: tokens["--font-size-2"],
+		fontWeight: tokens["--font-weight-medium"],
+		letterSpacing: tokens["--letter-spacing-2"],
+		lineHeight: tokens["--line-height-2"],
+		height: tokens["--size-control-md"],
+		minWidth: tokens["--size-control-md"],
 	},
 	lg: {
-		borderRadius: radius.lg,
-		gap: space[2],
-		paddingBlock: space[3],
-		paddingInline: space[5],
-		fontSize: fontSize.x3,
-		fontWeight: fontWeight.medium,
-		letterSpacing: letterSpacing.x3,
-		lineHeight: lineHeight.x3,
-		height: size["control.lg"],
-		minWidth: size["control.lg"],
+		borderRadius: tokens["--radius-lg"],
+		gap: tokens["--space-2"],
+		paddingBlock: tokens["--space-3"],
+		paddingInline: tokens["--space-5"],
+		fontSize: tokens["--font-size-3"],
+		fontWeight: tokens["--font-weight-medium"],
+		letterSpacing: tokens["--letter-spacing-3"],
+		lineHeight: tokens["--line-height-3"],
+		height: tokens["--size-control-lg"],
+		minWidth: tokens["--size-control-lg"],
 	},
 });
 
@@ -267,7 +267,7 @@ const triggerShapes = stylex.create({
 	},
 	square: {
 		padding: 0,
-		borderRadius: radius.sm,
+		borderRadius: tokens["--radius-sm"],
 		aspectRatio: 1,
 	},
 });
@@ -286,10 +286,10 @@ const triggerVariants = stylex.create({
 		color: {
 			// eslint-disable-next-line @stylexjs/valid-styles -- the compiler supports chained pseudo-class conditions; the lint rule is stricter than the compiler.
 			[HOVER_WHEN_INACTIVE]: {
-				"@media (hover: hover) and (pointer: fine)": colors["--text"],
+				"@media (hover: hover) and (pointer: fine)": tokens["--fg"],
 			},
-			"[data-panel-open]": colors["--text"],
-			default: colors["--text-muted"],
+			"[data-panel-open]": tokens["--fg"],
+			default: tokens["--fg-muted"],
 		},
 		minWidth: 0,
 		width: "fit-content",

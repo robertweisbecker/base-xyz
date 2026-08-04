@@ -6,8 +6,8 @@ import type { ReactNode } from "react";
 import { CodeBlock } from "@/components/code-block/code-block";
 import * as Collapsible from "@/components/collapsible/collapsible";
 import { Separator } from "@/components/separator/separator";
-import { colors, space } from "@/styles/tokens.stylex";
-import { fontSize, letterSpacing, lineHeight } from "@/styles/tokens.stylex";
+import { tokens } from "@/theme/tokens.stylex";
+
 import * as Timeline from "./tool-activity-timeline";
 
 const meta = {
@@ -29,7 +29,9 @@ function Details({ children }: { children: ReactNode }) {
 				<Collapsible.Icon />
 			</Collapsible.Trigger>
 			<Collapsible.Panel>
-				<Collapsible.Content><CodeBlock>{children}</CodeBlock></Collapsible.Content>
+				<Collapsible.Content>
+					<CodeBlock>{children}</CodeBlock>
+				</Collapsible.Content>
 			</Collapsible.Panel>
 		</Collapsible.Root>
 	);
@@ -99,11 +101,7 @@ export const Examples: Story = {
 						description="Permission is required before pushing changes."
 						endSlot={<ArrowRightIcon aria-hidden weight="bold" />}
 					/>
-					<Activity
-						status="queued"
-						title="Run verification"
-						description="Typecheck, lint, and build Storybook."
-					/>
+					<Activity status="queued" title="Run verification" description="Typecheck, lint, and build Storybook." />
 				</Timeline.Root>
 			</section>
 			<Separator />
@@ -126,21 +124,21 @@ export const Examples: Story = {
 
 const storyParts = stylex.create({
 	examples: {
-		gap: space[6],
+		gap: tokens["--space-6"],
 		display: "flex",
 		flexDirection: "column",
 		maxWidth: "46rem",
 	},
 	example: {
-		gap: space[3],
+		gap: tokens["--space-3"],
 		display: "flex",
 		flexDirection: "column",
 	},
 	label: {
 		margin: 0,
-		color: colors["--text-muted"],
-		fontSize: fontSize.x1,
-		letterSpacing: letterSpacing.x1,
-		lineHeight: lineHeight.x1,
+		color: tokens["--fg-muted"],
+		fontSize: tokens["--font-size-1"],
+		letterSpacing: tokens["--letter-spacing-1"],
+		lineHeight: tokens["--line-height-1"],
 	},
 });
