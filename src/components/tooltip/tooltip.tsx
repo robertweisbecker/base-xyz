@@ -1,8 +1,12 @@
 import { Tooltip as BaseTooltip } from "@base-ui/react/tooltip";
+import { useRender } from "@base-ui/react/use-render";
 import * as stylex from "@stylexjs/stylex";
 import type { StyleXStyles } from "@stylexjs/stylex";
+import { createContext, useContext, useRef, type MouseEvent, type RefObject } from "react";
 import { zIndex } from "@/styles/constants.stylex";
 import { popupArrowStyles, popupPositionerStyles, popupViewportStyles } from "@/components/popover/popover.stylex";
+import { size, space } from "@/styles/tokens.stylex";
+import { CloseButton as CloseButtonControl } from "../button/close-button";
 import { tooltipStyles } from "./tooltip.stylex";
 
 type StyledProps<T> = Omit<T, "className" | "style"> & {
@@ -17,7 +21,14 @@ export type TooltipPopupProps = StyledProps<BaseTooltip.Popup.Props> & {
 	arrowProps?: TooltipArrowProps;
 	portalProps?: Omit<BaseTooltip.Portal.Props, "children">;
 	positionerProps?: TooltipPositionerProps;
+	showClose?: boolean;
 };
+export type TooltipCloseProps = StyledProps<useRender.ComponentProps<"button">>;
+export type TooltipCloseButtonProps = Omit<TooltipCloseProps, "aria-label" | "children" | "render"> & {
+	"aria-label"?: string;
+};
+
+const TooltipActionsContext = createContext<RefObject<BaseTooltip.Root.Actions | null> | null>(null);
 
 function Positioner({ ref, className, style, sideOffset = 4, ...props }: TooltipPositionerProps) {
 	const { className: sxClassName, style: sxStyle } = stylex.props(
@@ -44,10 +55,16 @@ export function Popup({
 	className,
 	portalProps,
 	positionerProps,
+	showClose = false,
 	style,
 	...props
 }: TooltipPopupProps) {
-	const { className: sxClassName, style: sxStyle } = stylex.props(tooltipStyles.popup, tooltipParts.popup, style);
+	const { className: sxClassName, style: sxStyle } = stylex.props(
+		tooltipStyles.popup,
+		tooltipParts.popup,
+		showClose && tooltipParts.popupWithClose,
+		style,
+	);
 
 	return (
 		<BaseTooltip.Portal {...portalProps}>
@@ -59,6 +76,7 @@ export function Popup({
 					{...props}>
 					{arrowProps ? <Arrow {...arrowProps} /> : null}
 					{children}
+					{showClose && <CloseButton />}
 				</BaseTooltip.Popup>
 			</Positioner>
 		</BaseTooltip.Portal>
@@ -81,7 +99,7 @@ export function Viewport({ ref, className, style, ...props }: TooltipViewportPro
 export function Trigger({
 	ref,
 	closeDelay = 400,
-	delay = 150,
+	delay = 250,
 	className,
 	style,
 	...props
@@ -101,7 +119,63 @@ export function Trigger({
 }
 
 export const Provider = BaseTooltip.Provider;
-export const Root = BaseTooltip.Root;
+
+export function Root<Payload>({ actionsRef, children, ...props }: BaseTooltip.Root.Props<Payload>) {
+	const internalActionsRef = useRef<BaseTooltip.Root.Actions>(null);
+	const resolvedActionsRef = actionsRef ?? internalActionsRef;
+
+	return (
+		<TooltipActionsContext.Provider value={resolvedActionsRef}>
+			<BaseTooltip.Root actionsRef={resolvedActionsRef} {...props}>
+				{children}
+			</BaseTooltip.Root>
+		</TooltipActionsContext.Provider>
+	);
+}
+
+/** Unstyled close primitive for custom buttons and actions. */
+export function Close({ ref, className, style, render, onClick, type = "button", ...props }: TooltipCloseProps) {
+	const actionsRef = useContext(TooltipActionsContext);
+	const { className: sxClassName, style: sxStyle } = stylex.props(style);
+
+	return useRender({
+		defaultTagName: "button",
+		ref,
+		render,
+		props: {
+			...props,
+			type,
+			className: [sxClassName, className].filter(Boolean).join(" ") || undefined,
+			style: sxStyle,
+			onClick(event: MouseEvent<HTMLButtonElement>) {
+				onClick?.(event);
+				if (!event.defaultPrevented) {
+					actionsRef?.current?.close();
+				}
+			},
+		},
+	});
+}
+
+/** Neutral circular X button, absolutely positioned in the popup by default. */
+export function CloseButton({
+	ref,
+	"aria-label": ariaLabel = "Close",
+	className,
+	style,
+	...props
+}: TooltipCloseButtonProps) {
+	return (
+		<Close
+			ref={ref}
+			aria-label={ariaLabel}
+			className={className}
+			render={<CloseButtonControl label={ariaLabel} />}
+			style={[tooltipParts.closeButton, style]}
+			{...props}
+		/>
+	);
+}
 
 function Arrow({ ref, className, style, ...props }: TooltipArrowProps) {
 	const { className: sxClassName, style: sxStyle } = stylex.props(popupArrowStyles, style);
@@ -120,9 +194,20 @@ const tooltipParts = stylex.create({
 	positioner: {
 		zIndex: zIndex.tooltip,
 	},
+	closeButton: {
+		position: "absolute",
+		zIndex: 1,
+		right: space[1],
+		top: space[1],
+	},
 	popup: {
 		hyphens: "auto",
 		overflowWrap: "anywhere",
+		position: "relative",
 		wordBreak: "break-word",
+	},
+	popupWithClose: {
+		paddingInlineEnd: space[8],
+		minHeight: size["control.sm"],
 	},
 });

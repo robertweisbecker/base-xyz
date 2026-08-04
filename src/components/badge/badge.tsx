@@ -1,11 +1,23 @@
 import { useRender } from "@base-ui/react/use-render";
 import * as stylex from "@stylexjs/stylex";
 import type { StyleXStyles } from "@stylexjs/stylex";
-import { type ReactNode, useCallback, useLayoutEffect, useState } from "react";
+import type { ReactNode } from "react";
+import { useTextTruncation } from "@/hooks/use-text-truncation";
+import { composeThemeProps, resolveThemeProps, type VerifyThemeProps } from "@/theme/theme-props";
+import { childLayoutThemeProps, positioningThemeProps, sizingThemeProps } from "@/styles/theme-props-layout.stylex";
+import { gapThemeProps, spacingThemeProps } from "@/styles/theme-props-spacing.stylex";
+import type {
+	ChildLayoutProps,
+	GapProps,
+	PositioningProps,
+	SizingProps,
+	SpacingProps,
+} from "@/theme/theme-props.types";
 import { focusRing } from "@/styles/recipes/focus";
 import { color, radius, shadow, space } from "@/styles/tokens.stylex";
 import { fontSize, fontWeight, letterSpacing } from "@/styles/tokens.stylex";
 import * as Tooltip from "../tooltip/tooltip";
+import { VisuallyHidden } from "../visually-hidden/visually-hidden";
 
 const badgeParts = stylex.create({
 	root: {
@@ -25,6 +37,9 @@ const badgeParts = stylex.create({
 		whiteSpace: "nowrap",
 		maxWidth: "fit-content",
 		minWidth: 0,
+	},
+	unboundedWidth: {
+		maxWidth: "none",
 	},
 	slot: {
 		alignItems: "center",
@@ -47,17 +62,6 @@ const badgeParts = stylex.create({
 	tooltipTrigger: {
 		cursor: "help",
 	},
-	visuallyHidden: {
-		margin: "-1px",
-		padding: 0,
-		borderWidth: 0,
-		overflow: "hidden",
-		clip: "rect(0 0 0 0)",
-		position: "absolute",
-		whiteSpace: "nowrap",
-		height: "1px",
-		width: "1px",
-	},
 });
 
 const labeledSlotSizes = stylex.create({
@@ -73,14 +77,14 @@ const iconOnlySlotSizes = stylex.create({
 });
 
 const startSlotOffsets = stylex.create({
-	xs: { marginInlineStart: "-0.0625rem" },
-	sm: { marginInlineStart: "-0.0625rem" },
+	xs: { marginInlineStart: "-0.125rem" },
+	sm: { marginInlineStart: "-0.125rem" },
 	md: { marginInlineStart: "-0.125rem" },
 });
 
 const endSlotOffsets = stylex.create({
-	xs: { marginInlineEnd: "-0.0625rem" },
-	sm: { marginInlineEnd: "-0.0625rem" },
+	xs: { marginInlineEnd: "-0.125rem" },
+	sm: { marginInlineEnd: "-0.125rem" },
 	md: { marginInlineEnd: "-0.125rem" },
 });
 
@@ -88,7 +92,7 @@ const variantAppearance = stylex.create({
 	subtle: {},
 	elevated: {
 		backgroundColor: color.bgElevated,
-		boxShadow: shadow.sm,
+		boxShadow: shadow.xs,
 	},
 	solid: {},
 });
@@ -99,7 +103,7 @@ const hueColors = stylex.create({
 		color: color.fgAccent,
 	},
 	accentElevated: {
-		color: color.bgAccent,
+		color: color.fgAccent,
 	},
 	accentSolid: {
 		backgroundColor: color.bgAccent,
@@ -123,10 +127,9 @@ const hueColors = stylex.create({
 	warningElevated: {
 		color: color.fgWarning,
 	},
-
 	warningSolid: {
 		backgroundColor: color.bgWarning,
-		color: color.fgAccentContrast,
+		color: color.fgWarningContrast,
 	},
 	successSubtle: {
 		backgroundColor: color.bgSuccessSubtle,
@@ -141,8 +144,8 @@ const hueColors = stylex.create({
 		color: color.fgAccentContrast,
 	},
 	neutralSubtle: {
-		backgroundColor: color.surfaceSubtleHover,
-		color: color.fgMuted,
+		backgroundColor: "var(--gray-a2)",
+		color: "var(--gray-t2)",
 	},
 	neutralElevated: {
 		color: color.fg,
@@ -156,30 +159,30 @@ const hueColors = stylex.create({
 const sizeVariants = stylex.create({
 	xs: {
 		borderRadius: radius.xs,
-		gap: space.x1,
-		paddingInline: space.x1,
+		gap: space[1],
+		paddingInline: space[1],
 		fontSize: "11px",
 		letterSpacing: letterSpacing.x1,
-		lineHeight: space.x4,
-		height: space.x4,
+		lineHeight: space[4],
+		height: space[4],
 	},
 	sm: {
 		borderRadius: radius.xs,
-		gap: space.x1,
-		paddingInline: space.x1,
+		gap: space[1],
+		paddingInline: space[1],
 		fontSize: "11px",
 		letterSpacing: letterSpacing.x1,
-		lineHeight: space.x4,
-		height: space.x4,
+		lineHeight: space[4],
+		height: space[4],
 	},
 	md: {
 		borderRadius: radius.sm,
-		gap: space.x1,
-		paddingInline: space.x2,
+		gap: space[1],
+		paddingInline: space[2],
 		fontSize: fontSize.x1,
 		letterSpacing: letterSpacing.x1,
-		lineHeight: space.x5,
-		height: space.x5,
+		lineHeight: space[5],
+		height: space[5],
 	},
 });
 
@@ -234,17 +237,30 @@ export type BadgeVariant = keyof (typeof stylesByHue)["neutral"];
 export type BadgeHue = keyof typeof stylesByHue;
 export type BadgeSize = keyof typeof sizeVariants;
 export type BadgeShape = keyof typeof shapeVariants;
+export interface BadgeThemeProps extends SpacingProps, SizingProps, PositioningProps, ChildLayoutProps, GapProps {}
+const badgeThemeProps = composeThemeProps(
+	spacingThemeProps,
+	sizingThemeProps,
+	positioningThemeProps,
+	childLayoutThemeProps,
+	gapThemeProps,
+);
+type VerifiedBadgeThemeProps = VerifyThemeProps<BadgeThemeProps, typeof badgeThemeProps>;
 
-type BadgeSharedProps = Omit<useRender.ComponentProps<"span">, "className" | "children" | "render" | "style"> & {
-	className?: string;
-	hue?: BadgeHue;
-	render?: useRender.RenderProp;
-	shape?: BadgeShape;
-	size?: BadgeSize;
-	/** StyleX overrides, applied after the component's own styles. */
-	style?: StyleXStyles;
-	variant?: BadgeVariant;
-};
+type BadgeSharedProps = Omit<
+	useRender.ComponentProps<"span">,
+	"className" | "children" | "color" | "height" | "render" | "style" | "width" | keyof VerifiedBadgeThemeProps
+> &
+	VerifiedBadgeThemeProps & {
+		className?: string;
+		hue?: BadgeHue;
+		render?: useRender.RenderProp;
+		shape?: BadgeShape;
+		size?: BadgeSize;
+		/** StyleX overrides, applied after the component's own styles. */
+		style?: StyleXStyles;
+		variant?: BadgeVariant;
+	};
 
 type BadgeWithLabelProps = BadgeSharedProps & {
 	children: ReactNode;
@@ -281,46 +297,9 @@ export function Badge({
 	variant = "subtle",
 	...props
 }: BadgeProps) {
-	const [labelElement, setLabelElement] = useState<HTMLSpanElement | null>(null);
-	const [tooltipText, setTooltipText] = useState("");
-	const [isOverflowing, setIsOverflowing] = useState(false);
-
-	const measureOverflow = useCallback(() => {
-		if (!labelElement) {
-			setIsOverflowing(false);
-			setTooltipText("");
-			return;
-		}
-
-		setIsOverflowing(labelElement.scrollWidth > labelElement.clientWidth);
-		setTooltipText(labelElement.textContent?.replace(/\s+/g, " ").trim() ?? "");
-	}, [labelElement]);
-
-	useLayoutEffect(() => {
-		measureOverflow();
-
-		if (!labelElement || typeof ResizeObserver === "undefined") {
-			return;
-		}
-
-		const observer = new ResizeObserver(measureOverflow);
-		observer.observe(labelElement);
-
-		const mutationObserver = new MutationObserver(measureOverflow);
-		mutationObserver.observe(labelElement, {
-			characterData: true,
-			childList: true,
-			subtree: true,
-		});
-
-		document.fonts?.addEventListener("loadingdone", measureOverflow);
-
-		return () => {
-			observer.disconnect();
-			mutationObserver.disconnect();
-			document.fonts?.removeEventListener("loadingdone", measureOverflow);
-		};
-	}, [children, labelElement, measureOverflow]);
+	const unboundedWidth = props.width !== undefined && props.maxWidth === undefined;
+	const { restProps, styles } = resolveThemeProps(props, badgeThemeProps);
+	const truncation = useTextTruncation<HTMLSpanElement>({ normalizeWhitespace: true });
 
 	const sx = stylex.props(
 		badgeParts.root,
@@ -329,11 +308,15 @@ export function Badge({
 		stylesByHue[hue][variant],
 		sizeVariants[size],
 		shapeVariants[shape],
+		unboundedWidth && badgeParts.unboundedWidth,
+		...styles,
 		style,
 	);
 	const iconOnly = children == null;
 	const resolvedTooltipText =
-		tooltip === false ? "" : (tooltip ?? (iconOnly ? (label ?? "") : isOverflowing ? tooltipText : ""));
+		tooltip === false
+			? ""
+			: (tooltip ?? (iconOnly ? (label ?? "") : truncation.isTruncated ? truncation.fullText : ""));
 	const hasTooltip = resolvedTooltipText.length > 0;
 
 	const element = useRender<{}, HTMLElement>({
@@ -341,7 +324,7 @@ export function Badge({
 		render,
 		ref,
 		props: {
-			...props,
+			...restProps,
 			className: [sx.className, className].filter(Boolean).join(" "),
 			style: sx.style,
 			tabIndex: tabIndex ?? (hasTooltip ? 0 : undefined),
@@ -349,11 +332,11 @@ export function Badge({
 				<>
 					{renderSlot(startSlot, "start", size, iconOnly)}
 					{children != null ? (
-						<span ref={setLabelElement} {...stylex.props(badgeParts.label)}>
+						<span ref={truncation.ref} {...stylex.props(badgeParts.label)}>
 							{children}
 						</span>
 					) : null}
-					{iconOnly && label ? <span {...stylex.props(badgeParts.visuallyHidden)}>{label}</span> : null}
+					{iconOnly && label ? <VisuallyHidden>{label}</VisuallyHidden> : null}
 					{renderSlot(endSlot, "end", size, iconOnly)}
 				</>
 			),

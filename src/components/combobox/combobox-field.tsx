@@ -1,24 +1,38 @@
 import { Combobox } from "@base-ui/react/combobox";
 import { CaretDownIcon } from "@phosphor-icons/react/dist/csr/CaretDown";
+import { XCircleIcon } from "@phosphor-icons/react/dist/csr/XCircle";
 import { PlusIcon } from "@phosphor-icons/react/dist/csr/Plus";
 import { XIcon } from "@phosphor-icons/react/dist/csr/X";
 import * as stylex from "@stylexjs/stylex";
-import { useId, useMemo, useRef, useState, type KeyboardEvent } from "react";
-import { fieldStyles, fieldControlSizes, fieldTextStyles, type FieldSize } from "@/components/field/field.stylex";
+import type { StyleXStyles } from "@stylexjs/stylex";
+import { useId, useMemo, useRef, useState, type KeyboardEvent, type RefObject } from "react";
+import { resolveThemeProps } from "@/theme/theme-props";
+import type { FieldSize, FieldThemeProps } from "@/components/field/field.types";
+import { fieldStyles, fieldControlSizes, fieldTextStyles, fieldThemeProps } from "@/components/field/field.stylex";
 import { focusRing } from "@/styles/recipes/focus";
 import { popupMotionStyles, popupPositionerStyles } from "@/components/popover/popover.stylex";
 import { popupVars } from "@/components/popover/popover-vars.stylex";
 import { pressable } from "@/styles/recipes/transitions";
 import { color, radius, shadow, size, space, motion } from "@/styles/tokens.stylex";
 import { fontSize, letterSpacing, lineHeight } from "@/styles/tokens.stylex";
-import { menuItemStyles, menuItemVariantStyles, type MenuItemVariant } from "../menu/menu-item.stylex";
+import {
+	menuItemSizeStyles,
+	menuItemStyles,
+	menuItemVariantStyles,
+} from "../menu/menu-item.stylex";
+import type { MenuItemVariant } from "../menu/menu.types";
 import { CheckmarkIcon } from "../selection-icons";
 import { comboboxMarker } from "./combobox.stylex";
 import * as Tooltip from "@/components/tooltip/tooltip";
 
 const HOVER_WHEN_INACTIVE = ":hover:not([data-disabled]):not([data-popup-open]):not([data-pressed])";
 
-export type ComboboxFieldProps = {
+type ChipOverflowAnchorRefs = {
+	inputGroupRef: RefObject<HTMLDivElement | null>;
+	triggerRef: RefObject<HTMLButtonElement | null>;
+};
+
+export type ComboboxFieldProps = FieldThemeProps & {
 	label: string;
 	items: readonly string[];
 	placeholder?: string;
@@ -26,6 +40,9 @@ export type ComboboxFieldProps = {
 	itemVariant?: MenuItemVariant;
 	readOnly?: boolean;
 	size?: FieldSize;
+	className?: string;
+	/** StyleX overrides, applied after the component's own styles. */
+	style?: StyleXStyles;
 };
 
 export type ComboboxMultipleProps = ComboboxFieldProps & {
@@ -47,18 +64,24 @@ export function ComboboxField({
 	itemVariant = "default",
 	readOnly,
 	size = "md",
+	className,
+	style,
+	...props
 }: ComboboxFieldProps) {
+	const { styles } = resolveThemeProps(props, fieldThemeProps);
 	const id = useId();
+	const rootSx = stylex.props(fieldStyles.root, ...styles, style);
 
 	return (
 		<Combobox.Root items={[...items]} disabled={disabled} readOnly={readOnly}>
-			<div {...stylex.props(fieldStyles.root)}>
+			<div className={[rootSx.className, className].filter(Boolean).join(" ")} style={rootSx.style}>
 				<label htmlFor={id} {...stylex.props(fieldStyles.label)}>
 					{label}
 				</label>
 				<Combobox.InputGroup
 					{...stylex.props(
 						fieldStyles.inputBase,
+						fieldTextStyles[size],
 						comboboxParts.inputGroup,
 						fieldControlSizes[size],
 						comboboxGroupSizeVariants[size],
@@ -80,7 +103,7 @@ export function ComboboxField({
 					<ComboboxActions size={size} />
 				</Combobox.InputGroup>
 			</div>
-			<ComboboxPopup itemVariant={itemVariant} />
+			<ComboboxPopup itemVariant={itemVariant} size={size} />
 		</Combobox.Root>
 	);
 }
@@ -101,14 +124,21 @@ export function ComboboxMultiple({
 	onValueChange,
 	size = "md",
 	value,
+	className,
+	style,
+	...props
 }: ComboboxMultipleProps) {
+	const { styles } = resolveThemeProps(props, fieldThemeProps);
 	const id = useId();
+	const rootSx = stylex.props(fieldStyles.root, ...styles, style);
 	const chipsInside = chipPlacement === "inside";
 	const [createdItems, setCreatedItems] = useState<string[]>([]);
 	const [inputFocused, setInputFocused] = useState(false);
 	const [inputValue, setInputValue] = useState("");
 	const [uncontrolledValue, setUncontrolledValue] = useState<string[]>(() => [...defaultValue]);
 	const highlightedItemRef = useRef<string | undefined>(undefined);
+	const inputGroupRef = useRef<HTMLDivElement>(null);
+	const chipOverflowTriggerRef = useRef<HTMLButtonElement>(null);
 	const selectedValues = value === undefined ? uncontrolledValue : [...value];
 	const availableItems = useMemo(() => mergeUniqueItems(items, createdItems), [items, createdItems]);
 	const trimmedInputValue = inputValue.trim();
@@ -221,7 +251,7 @@ export function ComboboxMultiple({
 						}
 					: undefined
 			}>
-			<div {...stylex.props(fieldStyles.root)}>
+			<div className={[rootSx.className, className].filter(Boolean).join(" ")} style={rootSx.style}>
 				<label htmlFor={id} {...stylex.props(fieldStyles.label)}>
 					{label}
 				</label>
@@ -241,8 +271,10 @@ export function ComboboxMultiple({
 				) : null}
 
 				<Combobox.InputGroup
+					ref={inputGroupRef}
 					{...stylex.props(
 						fieldStyles.inputBase,
+						fieldTextStyles[size],
 						comboboxParts.inputGroup,
 						fieldControlSizes[size],
 						comboboxGroupSizeVariants[size],
@@ -255,7 +287,10 @@ export function ComboboxMultiple({
 							<Combobox.Value>
 								{(value: string[]) => (
 									<>
-										{renderChips(value, chipLimit)}
+										{renderChips(value, chipLimit, {
+											inputGroupRef,
+											triggerRef: chipOverflowTriggerRef,
+										})}
 										<Combobox.Input
 											id={id}
 											placeholder={value.length > 0 ? "" : placeholder}
@@ -304,7 +339,7 @@ export function ComboboxMultiple({
 					<ComboboxActions showClear={false} size={size} />
 				</Combobox.InputGroup>
 			</div>
-			<ComboboxPopup itemVariant={itemVariant} creatableItem={creatableItem} />
+			<ComboboxPopup itemVariant={itemVariant} creatableItem={creatableItem} size={size} />
 		</Combobox.Root>
 	);
 }
@@ -321,7 +356,7 @@ function ComboboxActions({ showClear = true, size }: { showClear?: boolean; size
 						focusRing.outset,
 						pressable.transition,
 					)}>
-					<XIcon aria-hidden size={14} weight="bold" />
+					<XCircleIcon aria-hidden size={"1em"} weight="fill" />
 				</Combobox.Clear>
 			) : null}
 			<Combobox.Trigger
@@ -332,13 +367,21 @@ function ComboboxActions({ showClear = true, size }: { showClear?: boolean; size
 					focusRing.outset,
 					pressable.transition,
 				)}>
-				<CaretDownIcon aria-hidden size={14} weight="bold" />
+				<CaretDownIcon aria-hidden size="1em" weight="bold" />
 			</Combobox.Trigger>
 		</div>
 	);
 }
 
-function ComboboxPopup({ itemVariant, creatableItem }: { itemVariant: MenuItemVariant; creatableItem?: string }) {
+function ComboboxPopup({
+	itemVariant,
+	creatableItem,
+	size,
+}: {
+	itemVariant: MenuItemVariant;
+	creatableItem?: string;
+	size: FieldSize;
+}) {
 	return (
 		<Combobox.Portal>
 			<Combobox.Positioner sideOffset={6} align="center" {...stylex.props(popupPositionerStyles)}>
@@ -355,18 +398,27 @@ function ComboboxPopup({ itemVariant, creatableItem }: { itemVariant: MenuItemVa
 									key={isCreatableItem ? `create:${item}` : item}
 									value={item}
 									className={
-										stylex.props(menuItemStyles.item, menuItemVariantStyles[itemVariant], focusRing.inset).className
+										stylex.props(
+											menuItemStyles.item,
+											menuItemSizeStyles[size],
+											menuItemVariantStyles[itemVariant],
+											focusRing.inset,
+										).className
 									}>
 									{isCreatableItem ? (
-										<span className={stylex.props(menuItemStyles.indicator).className}>
-											<PlusIcon aria-hidden size={14} weight="bold" />
+										<span {...stylex.props(menuItemStyles.indicator, comboboxParts.creatableIndicator)}>
+											<PlusIcon aria-hidden size="1em" weight="bold" />
 										</span>
 									) : (
-										<Combobox.ItemIndicator keepMounted className={stylex.props(menuItemStyles.indicator).className}>
-											<CheckmarkIcon />
+										<Combobox.ItemIndicator
+											keepMounted
+											className={stylex.props(menuItemStyles.indicator).className}>
+											<CheckmarkIcon width="1em" height="1em" />
 										</Combobox.ItemIndicator>
 									)}
-									<span {...stylex.props(menuItemStyles.label)}>{isCreatableItem ? `Create “${item}”` : item}</span>
+									<span {...stylex.props(menuItemStyles.label)}>
+										{isCreatableItem ? `Create “${item}”` : item}
+									</span>
 								</Combobox.Item>
 							);
 						}}
@@ -377,7 +429,7 @@ function ComboboxPopup({ itemVariant, creatableItem }: { itemVariant: MenuItemVa
 	);
 }
 
-function renderChips(values: string[], maxVisibleChips?: number) {
+function renderChips(values: string[], maxVisibleChips?: number, tooltipAnchorRefs?: ChipOverflowAnchorRefs) {
 	const visibleValues = maxVisibleChips === undefined ? values : values.slice(0, maxVisibleChips);
 	const hiddenCount = values.length - visibleValues.length;
 	const overflowLabel = visibleValues.length === 0 ? `${hiddenCount} selected` : `+${hiddenCount}`;
@@ -396,16 +448,67 @@ function renderChips(values: string[], maxVisibleChips?: number) {
 			))}
 			{hiddenCount > 0 ? (
 				<Tooltip.Root>
-					<Tooltip.Trigger aria-label={overflowLabel} {...stylex.props(comboboxParts.chipOverflow)}>
+					<Tooltip.Trigger
+						ref={tooltipAnchorRefs?.triggerRef}
+						aria-label={overflowLabel}
+						{...stylex.props(comboboxParts.chipOverflow)}>
 						{overflowLabel}
 					</Tooltip.Trigger>
-					<Tooltip.Popup positionerProps={{ align: "start", side: "inline-end" }}>
+					<Tooltip.Popup
+						positionerProps={
+							tooltipAnchorRefs
+								? {
+									anchor: () => getChipOverflowAnchor(tooltipAnchorRefs),
+									align: "start",
+									collisionAvoidance: { align: "none", side: "none" },
+									side: "bottom",
+									sideOffset: 0,
+								}
+								: { align: "start", side: "inline-start" }
+						}>
 						<Combobox.Value />
 					</Tooltip.Popup>
 				</Tooltip.Root>
 			) : null}
 		</>
 	);
+}
+
+function getChipOverflowAnchor({ inputGroupRef, triggerRef }: ChipOverflowAnchorRefs) {
+	const inputGroup = inputGroupRef.current;
+	const trigger = triggerRef.current;
+
+	if (!inputGroup || !trigger) {
+		return null;
+	}
+
+	return {
+		contextElement: inputGroup,
+		getBoundingClientRect() {
+			const inputGroupRect = inputGroup.getBoundingClientRect();
+			const triggerRect = trigger.getBoundingClientRect();
+			const inputGroupStyle = getComputedStyle(inputGroup);
+			const inlineStartInset =
+				Number.parseFloat(inputGroupStyle.borderInlineStartWidth) +
+				Number.parseFloat(inputGroupStyle.paddingInlineStart);
+			const x =
+				inputGroupStyle.direction === "rtl"
+					? inputGroupRect.right - inlineStartInset
+					: inputGroupRect.left + inlineStartInset;
+			const y = triggerRect.top;
+
+			return {
+				bottom: y,
+				height: 0,
+				left: x,
+				right: x,
+				top: y,
+				width: 0,
+				x,
+				y,
+			};
+		},
+	};
 }
 
 function normalizeItemValue(value: string) {
@@ -446,17 +549,17 @@ const comboboxParts = stylex.create({
 	},
 	inputGroup: {
 		borderColor: {
-			default: color.borderStrong,
 			"[data-disabled]": color.border,
 			"[data-readonly]": color.border,
+			default: color.borderStrong,
 			":focus-within:not([data-disabled]):not([data-readonly])": color.focus,
 			":hover:not(:focus-within):not([data-disabled]):not([data-readonly])": color.borderHover,
 		},
 		alignItems: "center",
 		display: "flex",
 		position: "relative",
-		transitionProperty: "height",
 		transitionDuration: motion.durationLong,
+		transitionProperty: "height",
 		transitionTimingFunction: motion.easeSmoothOut,
 	},
 	input: {
@@ -473,7 +576,7 @@ const comboboxParts = stylex.create({
 	},
 	chips: {
 		alignItems: "center",
-		columnGap: space.x1,
+		columnGap: space[1],
 		display: "flex",
 		flexWrap: "wrap",
 		rowGap: 2,
@@ -500,15 +603,15 @@ const comboboxParts = stylex.create({
 		height: "24px",
 	},
 	chipLabel: {
-		gap: space.x1,
+		gap: space[1],
 		overflow: "hidden",
-		paddingInline: space.x1,
+		paddingInline: space[1],
 		textOverflow: "ellipsis",
 		whiteSpace: "nowrap",
 	},
 	chipOverflow: {
 		borderRadius: radius.sm,
-		paddingInline: space.x2,
+		paddingInline: space[2],
 		alignItems: "center",
 		backgroundColor: {
 			default: color.surfaceSubtle,
@@ -518,11 +621,11 @@ const comboboxParts = stylex.create({
 		display: "inline-flex",
 		flexShrink: 0,
 		fontSize: fontSize.x1,
+		fontVariantNumeric: "tabular-nums",
 		letterSpacing: letterSpacing.x1,
 		lineHeight: lineHeight.x1,
 		whiteSpace: "nowrap",
 		height: "24px",
-		fontVariantNumeric: "tabular-nums",
 	},
 	chipRemove: {
 		borderRadius: radius.xs,
@@ -536,14 +639,17 @@ const comboboxParts = stylex.create({
 				"@media (hover: hover) and (pointer: fine)": color.surface,
 			},
 		},
-		height: space.x5,
-		width: space.x5,
+		height: space[5],
+		width: space[5],
 	},
 	noChips: {
 		color: color.fgMuted,
 		fontSize: fontSize.x1,
 		letterSpacing: letterSpacing.x1,
 		lineHeight: lineHeight.x1,
+	},
+	creatableIndicator: {
+		visibility: "visible",
 	},
 	actions: {
 		gap: 2,
@@ -573,6 +679,7 @@ const comboboxParts = stylex.create({
 			[stylex.when.ancestor("[data-readonly]", comboboxMarker)]: "default",
 		},
 		display: "flex",
+		fontSize: "inherit",
 		justifyContent: "center",
 		opacity: {
 			"[data-disabled]": 0.48,
@@ -594,14 +701,14 @@ const comboboxParts = stylex.create({
 	list: {
 		padding: {
 			"[data-empty]": 0,
-			default: space.x1,
+			default: space[1],
 		},
 		maxHeight: "260px",
 		overflowY: "auto",
 	},
 	empty: {
 		padding: {
-			default: space.x3,
+			default: space[3],
 			":empty": 0,
 		},
 		alignItems: "center",
@@ -618,32 +725,32 @@ const comboboxParts = stylex.create({
 const comboboxGroupSizeVariants = stylex.create({
 	sm: {
 		paddingInlineEnd: size["control.md"],
-		paddingInlineStart: space.x1,
+		paddingInlineStart: space[1],
 	},
 	md: {
-		paddingInlineEnd: space.x8,
-		paddingInlineStart: space.x1,
+		paddingInlineEnd: space[8],
+		paddingInlineStart: space[1],
 	},
 	lg: {
 		paddingInlineEnd: size["control.lg"],
-		paddingInlineStart: space.x2,
+		paddingInlineStart: space[2],
 	},
 });
 
 const comboboxInputSizeVariants = stylex.create({
 	sm: {
-		paddingBlock: space.x2,
-		paddingInlineStart: space.x2,
+		paddingBlock: space[2],
+		paddingInlineStart: space[2],
 		height: size["control.sm"],
 	},
 	md: {
-		paddingBlock: space.x3,
-		paddingInlineStart: space.x2,
+		paddingBlock: space[3],
+		paddingInlineStart: space[2],
 		height: size["control.md"],
 	},
 	lg: {
-		paddingBlock: space.x4,
-		paddingInlineStart: space.x3,
+		paddingBlock: space[4],
+		paddingInlineStart: space[3],
 		height: size["control.lg"],
 	},
 });
@@ -665,11 +772,12 @@ const comboboxActionSizeVariants = stylex.create({
 
 const inputGroupVariants = stylex.create({
 	withChips: {
-		gap: space.x1,
+		gap: space[1],
 		paddingBlock: "3px",
 		flexWrap: "wrap",
-		paddingInlineEnd: space.x8,
-		paddingInlineStart: space.x1,
+		paddingBlockStart: "3px",
+		paddingInlineEnd: space[8],
+		paddingInlineStart: space[1],
 		height: "auto",
 	},
 });
@@ -677,8 +785,8 @@ const inputGroupVariants = stylex.create({
 const inputVariants = stylex.create({
 	withChips: {
 		paddingBlock: 0,
-		flexBasis: space.x16, // acts as a min-width to force newline wrap
-		paddingInlineStart: space.x1,
+		flexBasis: space[16], // acts as a min-width to force newline wrap
+		paddingInlineStart: space[1],
 		height: "26px",
 	},
 });

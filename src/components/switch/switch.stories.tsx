@@ -25,7 +25,7 @@ const meta = {
 		required: { control: "boolean" },
 		size: {
 			control: "inline-radio",
-			options: ["sm", "md"],
+			options: ["sm", "md", "lg"],
 		},
 	},
 	parameters: {
@@ -57,6 +57,7 @@ export const Sizes: Story = {
 		<section {...stylex.props(styles.section)}>
 			<Switch label="Small" size="sm" defaultChecked />
 			<Switch label="Medium" size="md" defaultChecked />
+			<Switch label="Large" size="lg" defaultChecked />
 		</section>
 	),
 };
@@ -85,12 +86,12 @@ export const States: Story = {
 const styles = stylex.create({
 	frame: { maxWidth: "420px" },
 	story: {
-		gap: space.x8,
+		gap: space[8],
 		display: "flex",
 		flexDirection: "column",
 	},
 	section: {
-		gap: space.x4,
+		gap: space[4],
 		display: "flex",
 		flexDirection: "column",
 	},

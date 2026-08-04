@@ -5,6 +5,16 @@ appears.
 
 - `tokens.stylex.ts` is the single source for themeable color, spacing, size,
   radius, shadow, typography, and motion values.
+- `src/theme/theme-props.types.ts` owns public token-backed value and capability
+  contracts, and `theme-props.ts` owns their StyleX-independent key,
+  extraction, and composition logic. These domain helpers do not belong in a
+  generic `utils` directory.
+- Theme props are scalar. Keep responsive values for one CSS property together
+  in a predeclared StyleX style, or promote a repeated set to a named recipe.
+- `theme-props-spacing.stylex.ts`, `theme-props-layout.stylex.ts`, and
+  `theme-props-surface.stylex.ts` bind those contracts to explicit StyleX
+  functions. Import the narrow binding directly so unused compiler families can
+  be removed from a consumer bundle.
 - `constants.stylex.ts` contains only fixed global selectors and layer order.
   These compile inline rather than creating themeable CSS variables.
 - Component-owned `*.stylex.ts` files are canonical style APIs. Borrowers
@@ -16,6 +26,8 @@ appears.
 - Text owns the reusable type styles. Compose `textStyles`,
   `textSizeStyles`, `textFamilyStyles`, and `textWeightStyles` instead of
   hand-rolling font-size/line-height/letter-spacing triples.
+- `textColorPropStyles` only implements the `Text` and `Heading` color prop.
+  Other owners set colors with semantic tokens directly.
 
 Import StyleX variables and constants directly by their named export. Do not
 re-export them through a barrel or import a `.stylex.ts` module as a namespace;
@@ -25,7 +37,7 @@ the compiler needs to statically resolve the direct binding.
 
 - Exported component-owned style maps end in `Styles`: use the owner name for
   the primary map (`textStyles`, `tooltipStyles`) and add the narrow concern
-  before the suffix when needed (`textColorStyles`, `fieldInputStyles`).
+  before the suffix when needed (`textSizeStyles`, `fieldInputStyles`).
 - Reserve `*Vars` for `stylex.defineVars()` contracts and `*Marker` for
   `stylex.defineMarker()` scopes.
 - Private maps that describe JSX anatomy may use `*Parts`. Ownerless interaction
@@ -129,7 +141,8 @@ Field's style module exposes one export per element role and two size bundles:
 | Button-like trigger (select, combobox shell) | `fieldControlStyles[size]`                                          |
 
 ```tsx
-import { fieldStyles, fieldInputStyles, fieldControlStyles, type FieldSize } from "@/components/field/field.stylex";
+import { fieldStyles, fieldInputStyles, fieldControlStyles } from "@/components/field/field.stylex";
+import type { FieldSize } from "@/components/field/field.types";
 
 stylex.props(fieldInputStyles.md, focusRing.inset); // text field
 stylex.props(fieldControlStyles.md, selectParts.trigger, focusRing.inset); // select trigger

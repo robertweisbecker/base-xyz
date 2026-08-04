@@ -1,20 +1,23 @@
 import { useRender } from "@base-ui/react/use-render";
 import * as stylex from "@stylexjs/stylex";
 import type { StyleXStyles } from "@stylexjs/stylex";
+import { resolveThemeProps } from "@/theme/theme-props";
 import {
-	getTextMarginStyle,
-	textAlignStyles,
-	textColorStyles,
+	textColorPropStyles,
 	textFamilyStyles,
 	textSizeStyles,
 	textBaseStyles,
 	textTruncationStyles,
 	textWeightStyles,
 	textWrapStyles,
-	type TypographyStyleProps,
+	textThemeProps,
 } from "../text/text.stylex";
+import type { TypographyStyleProps } from "../text/text.types";
 
-export type HeadingProps = Omit<useRender.ComponentProps<"h2">, "className" | "color" | "render" | "style"> &
+export type HeadingProps = Omit<
+	useRender.ComponentProps<"h2">,
+	"align" | "className" | "color" | "render" | "style" | keyof TypographyStyleProps
+> &
 	TypographyStyleProps & {
 		className?: string;
 		render?: useRender.RenderProp;
@@ -24,18 +27,10 @@ export type HeadingProps = Omit<useRender.ComponentProps<"h2">, "className" | "c
 
 export function Heading({
 	ref,
-	align,
 	className,
 	color = "default",
 	fontFamily = "sans",
 	fontWeight = "semibold",
-	m,
-	mb,
-	ml,
-	mr,
-	mt,
-	mx,
-	my,
 	render,
 	size = "5",
 	style,
@@ -43,15 +38,16 @@ export function Heading({
 	wrap = "balance",
 	...props
 }: HeadingProps) {
+	const { restProps, styles } = resolveThemeProps(props, textThemeProps);
 	const sx = stylex.props(
 		textBaseStyles.root,
 		textFamilyStyles[fontFamily],
 		textSizeStyles[size],
 		textWeightStyles[fontWeight],
-		textColorStyles[color],
-		align && textAlignStyles[align],
+		textColorPropStyles[color],
 		textWrapStyles[wrap],
 		truncate && textTruncationStyles.singleLine,
+		...styles,
 		style,
 	);
 
@@ -60,12 +56,9 @@ export function Heading({
 		render,
 		ref,
 		props: {
-			...props,
+			...restProps,
 			className: [sx.className, className].filter(Boolean).join(" "),
-			style: {
-				...getTextMarginStyle({ m, mb, ml, mr, mt, mx, my }),
-				...sx.style,
-			},
+			style: sx.style,
 		},
 	});
 }

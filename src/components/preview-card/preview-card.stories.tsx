@@ -144,7 +144,7 @@ const storyParts = stylex.create({
 		lineHeight: lineHeight.x2,
 	},
 	stack: {
-		gap: space.x3,
+		gap: space[3],
 		alignItems: "center",
 		display: "flex",
 		flexDirection: "column",
@@ -157,7 +157,7 @@ const storyParts = stylex.create({
 		lineHeight: lineHeight.x1,
 	},
 	links: {
-		gap: space.x4,
+		gap: space[4],
 		display: "flex",
 	},
 });

@@ -32,7 +32,7 @@ export const BasicTransfer: Story = {
 export const SortableBoard: Story = {
 	render: () => (
 		<div>
-			<Text size="1" mb={"3"} color="subtle">
+			<Text size="1" mb={3} color="subtle">
 				Notice insertion targeting on the left and live geometric reflow on the right.
 			</Text>
 			<DemoComparison>

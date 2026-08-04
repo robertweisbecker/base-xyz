@@ -36,7 +36,7 @@ export const modalChromeStyles = stylex.create({
 	},
 	viewport: {
 		inset: 0,
-		padding: space.x4,
+		padding: space[4],
 		alignItems: "center",
 		display: "flex",
 		justifyContent: "center",
@@ -48,7 +48,7 @@ export const modalChromeStyles = stylex.create({
 		backgroundColor: {
 			"[data-close-confirmation-open]": color.surface,
 			"[data-nested-dialog-open]": color.surface,
-			default: color.bgElevated,
+			default: color.bgPanel,
 		},
 		boxShadow: shadow.lg,
 		color: color.fg,
@@ -135,7 +135,7 @@ export const modalMotionStyles = stylex.create({
 /** Text roles inside a modal; keep these consistent across dialog kinds. */
 const modalTextParts = stylex.create({
 	title: {
-		margin: 0,
+		marginBlockStart: "-.25em",
 		textWrap: "balance",
 	},
 	description: {
@@ -161,10 +161,18 @@ export const modalTextStyles = {
 } as const;
 
 /** Apply to a dialog `Backdrop`. */
-export const modalBackdropStyles = [modalChromeStyles.backdrop, modalChromeStyles.modalBackdropLayer, modalMotionStyles.backdrop] as const;
+export const modalBackdropStyles = [
+	modalChromeStyles.backdrop,
+	modalChromeStyles.modalBackdropLayer,
+	modalMotionStyles.backdrop,
+] as const;
 
 /** Apply to an alert dialog `Backdrop`. */
-export const alertBackdropStyles = [modalChromeStyles.backdrop, modalChromeStyles.alertBackdropLayer, modalMotionStyles.backdrop] as const;
+export const alertBackdropStyles = [
+	modalChromeStyles.backdrop,
+	modalChromeStyles.alertBackdropLayer,
+	modalMotionStyles.backdrop,
+] as const;
 
 /** Apply to a dialog viewport wrapper. */
 export const modalViewportStyles = [modalChromeStyles.viewport, modalChromeStyles.modalLayer] as const;

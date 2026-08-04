@@ -1,20 +1,23 @@
 import { useRender } from "@base-ui/react/use-render";
 import * as stylex from "@stylexjs/stylex";
 import type { StyleXStyles } from "@stylexjs/stylex";
+import { resolveThemeProps } from "@/theme/theme-props";
 import {
-	getTextMarginStyle,
-	textAlignStyles,
-	textColorStyles,
+	textColorPropStyles,
 	textFamilyStyles,
 	textSizeStyles,
 	textBaseStyles,
 	textTruncationStyles,
 	textWeightStyles,
 	textWrapStyles,
-	type TypographyStyleProps,
+	textThemeProps,
 } from "./text.stylex";
+import type { TypographyStyleProps } from "./text.types";
 
-export type TextProps = Omit<useRender.ComponentProps<"p">, "className" | "color" | "render" | "style"> &
+export type TextProps = Omit<
+	useRender.ComponentProps<"p">,
+	"align" | "className" | "color" | "render" | "style" | keyof TypographyStyleProps
+> &
 	TypographyStyleProps & {
 		className?: string;
 		render?: useRender.RenderProp;
@@ -24,18 +27,10 @@ export type TextProps = Omit<useRender.ComponentProps<"p">, "className" | "color
 
 export function Text({
 	ref,
-	align,
 	className,
 	color = "default",
 	fontFamily = "sans",
 	fontWeight = "regular",
-	m,
-	mb,
-	ml,
-	mr,
-	mt,
-	mx,
-	my,
 	render,
 	size = "2",
 	style,
@@ -43,15 +38,16 @@ export function Text({
 	wrap = "wrap",
 	...props
 }: TextProps) {
+	const { restProps, styles } = resolveThemeProps(props, textThemeProps);
 	const sx = stylex.props(
 		textBaseStyles.root,
 		textFamilyStyles[fontFamily],
 		textSizeStyles[size],
 		textWeightStyles[fontWeight],
-		textColorStyles[color],
-		align && textAlignStyles[align],
+		textColorPropStyles[color],
 		textWrapStyles[wrap],
 		truncate && textTruncationStyles.singleLine,
+		...styles,
 		style,
 	);
 
@@ -60,12 +56,9 @@ export function Text({
 		render,
 		ref,
 		props: {
-			...props,
+			...restProps,
 			className: [sx.className, className].filter(Boolean).join(" "),
-			style: {
-				...getTextMarginStyle({ m, mb, ml, mr, mt, mx, my }),
-				...sx.style,
-			},
+			style: sx.style,
 		},
 	});
 }

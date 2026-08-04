@@ -20,7 +20,7 @@ const meta = {
 		required: false,
 		step: 1,
 		size: "md",
-		width: "12rem",
+		inputWidth: "12rem",
 	},
 	argTypes: {
 		label: { control: "text" },
@@ -38,7 +38,7 @@ const meta = {
 		required: { control: "boolean" },
 		size: { control: "inline-radio", options: ["sm", "md", "lg"] },
 		step: { control: "number" },
-		width: {
+		inputWidth: {
 			control: "text",
 			description: 'Use "fill" or any CSS width such as "10ch" or "80px".',
 		},
@@ -57,7 +57,7 @@ const meta = {
 				"required",
 				"step",
 				"size",
-				"width",
+				"inputWidth",
 			],
 		},
 	},
@@ -89,7 +89,7 @@ export const Formatting: Story = {
 				min={0}
 				step={50}
 				format={{ style: "currency", currency: "USD", maximumFractionDigits: 0 }}
-				width="11rem"
+				inputWidth="11rem"
 			/>
 			<NumberField
 				label="Completion"
@@ -98,7 +98,7 @@ export const Formatting: Story = {
 				max={1}
 				step={0.05}
 				format={{ style: "percent" }}
-				width="10rem"
+				inputWidth="10rem"
 			/>
 		</div>
 	),
@@ -110,9 +110,9 @@ export const Sizes: Story = {
 	},
 	render: () => (
 		<div {...stylex.props(styles.row)}>
-			<NumberField label="Small" defaultValue={8} size="sm" width="8rem" />
-			<NumberField label="Medium" defaultValue={8} size="md" width="8rem" />
-			<NumberField label="Large" defaultValue={8} size="lg" width="8rem" />
+			<NumberField label="Small" defaultValue={8} size="sm" inputWidth="8rem" />
+			<NumberField label="Medium" defaultValue={8} size="md" inputWidth="8rem" />
+			<NumberField label="Large" defaultValue={8} size="lg" inputWidth="8rem" />
 		</div>
 	),
 };
@@ -165,13 +165,13 @@ const styles = stylex.create({
 		maxWidth: "320px",
 	},
 	row: {
-		gap: space.x8,
+		gap: space[8],
 		display: "flex",
 		flexWrap: "wrap",
 		maxWidth: "680px",
 	},
 	stateGrid: {
-		gap: space.x8,
+		gap: space[8],
 		display: "grid",
 		gridTemplateColumns: {
 			default: "repeat(2, minmax(0, 1fr))",
@@ -180,7 +180,7 @@ const styles = stylex.create({
 		maxWidth: "700px",
 	},
 	stateSpecimen: {
-		gap: space.x3,
+		gap: space[3],
 		display: "flex",
 		flexDirection: "column",
 	},

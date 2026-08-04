@@ -3,10 +3,10 @@ import { Input as BaseInput } from "@base-ui/react/input";
 import * as stylex from "@stylexjs/stylex";
 import type { StyleXStyles } from "@stylexjs/stylex";
 import { type ComponentProps, type ReactElement } from "react";
-import { fieldStyles, fieldControlSizes, fieldTextStyles, type FieldSize } from "@/components/field/field.stylex";
+import { fieldStyles, fieldControlSizes, fieldTextStyles } from "@/components/field/field.stylex";
+import type { FieldSize } from "@/components/field/field.types";
 import { focusRing } from "@/styles/recipes/focus";
 import { color, shadow, space } from "@/styles/tokens.stylex";
-import { fontSize, letterSpacing, lineHeight } from "@/styles/tokens.stylex";
 
 const GROUP_HOVER =
 	':hover:not(:focus-within):not(:has([aria-invalid="true"])):not(:has([data-disabled])):not(:has([data-invalid])):not(:has([readonly]))';
@@ -162,7 +162,7 @@ const inputGroupParts = stylex.create({
 			":has([data-invalid])": color.bgDanger,
 			":has([readonly])": color.border,
 		},
-		gap: space.x1,
+		gap: space[1],
 		overflow: "hidden",
 		alignItems: "center",
 		backgroundColor: {
@@ -177,7 +177,7 @@ const inputGroupParts = stylex.create({
 		flex: "1 1 8rem",
 		outline: "0",
 		paddingBlock: 0,
-		paddingInline: "var(--ds-input-group-child-padding-inline)",
+		paddingInline: "var(--_input-group-child-padding-inline)",
 		appearance: "none",
 		backgroundColor: "transparent",
 		fontFamily: "inherit",
@@ -201,32 +201,32 @@ const inputGroupParts = stylex.create({
 		minHeight: "5.5rem",
 	},
 	addon: {
-		paddingInline: "var(--ds-input-group-child-padding-inline)",
-		paddingInlineStart: {
-			"[data-position=end]": "0",
-		},
-		paddingInlineEnd: {
-			"[data-position=start]": "0",
-			"[data-position=end]:has(button)": "0",
-		},
+		paddingInline: "var(--_input-group-child-padding-inline)",
 		alignItems: "center",
 		color: color.fgMuted,
 		cursor: "text",
 		display: "inline-flex",
 		flexShrink: 0,
-		fontSize: fontSize.x1,
-		letterSpacing: letterSpacing.x1,
-		lineHeight: lineHeight.x1,
+		paddingInlineEnd: {
+			"[data-position=end]:has(button)": "0",
+			"[data-position=start]": "0",
+		},
+		paddingInlineStart: {
+			"[data-position=end]": "0",
+		},
+		// fontSize: fontSize.x1,
+		// letterSpacing: letterSpacing.x1,
+		// lineHeight: lineHeight.x1,
 	},
 	actions: {
-		gap: space.x1,
+		gap: space[1],
 		alignItems: "center",
 		display: "flex",
 		flexShrink: 0,
 	},
 	footer: {
-		gap: space.x2,
-		paddingInline: "var(--ds-input-group-child-padding-inline)",
+		gap: space[2],
+		paddingInline: "var(--_input-group-child-padding-inline)",
 		alignItems: "center",
 		display: "flex",
 		flexBasis: {
@@ -252,7 +252,7 @@ const inputGroupOrientations = stylex.create({
 		flexDirection: "row",
 	},
 	vertical: {
-		paddingBlock: "var(--ds-input-group-vertical-padding-block)",
+		paddingBlock: "var(--_input-group-vertical-padding-block)",
 		alignItems: "stretch",
 		flexDirection: "column",
 		height: "auto",
@@ -261,24 +261,24 @@ const inputGroupOrientations = stylex.create({
 
 const inputGroupSizes = stylex.create({
 	sm: {
-		"--ds-input-group-child-padding-inline": space.x1,
-		"--ds-input-group-icon-size": "0.875rem",
-		"--ds-input-group-vertical-padding-block": space.x2,
-		paddingBlock: space.x1,
-		paddingInline: space.x1,
+		"--_input-group-child-padding-inline": space[1],
+		"--_input-group-icon-size": "0.875rem",
+		"--_input-group-vertical-padding-block": space[2],
+		paddingBlock: space[1],
+		paddingInline: space[1],
 	},
 	md: {
-		"--ds-input-group-child-padding-inline": space.x1,
-		"--ds-input-group-icon-size": "1rem",
-		"--ds-input-group-vertical-padding-block": space.x3,
-		paddingBlock: space.x1,
-		paddingInline: space.x1,
+		"--_input-group-child-padding-inline": space[1],
+		"--_input-group-icon-size": "1rem",
+		"--_input-group-vertical-padding-block": space[3],
+		paddingBlock: space[1],
+		paddingInline: space[1],
 	},
 	lg: {
-		"--ds-input-group-child-padding-inline": space.x1,
-		"--ds-input-group-icon-size": "1rem",
-		"--ds-input-group-vertical-padding-block": space.x4,
-		paddingBlock: space.x2,
-		paddingInline: space.x2,
+		"--_input-group-child-padding-inline": space[1],
+		"--_input-group-icon-size": "1rem",
+		"--_input-group-vertical-padding-block": space[4],
+		paddingBlock: space[2],
+		paddingInline: space[2],
 	},
 });

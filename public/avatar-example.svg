@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" role="img" aria-label="Illustrated profile portrait">
+  <defs>
+    <linearGradient id="background" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="hsl(316deg 84% 51%)"/>
+      <stop offset="1" stop-color="hsl(276deg 66% 54%)"/>
+    </linearGradient>
+  </defs>
+  <rect width="128" height="128" fill="url(#background)"/>
+  <circle cx="64" cy="48" r="24" fill="white" fillOpacity="0.5"/>
+  <path d="M22 128c3-30 19-46 42-46s39 16 42 46" fill="white" fillOpacity="0.5"/>
+  <!-- <path d="M41 46c0-19 9-29 24-29 16 0 25 11 25 29-7-7-16-11-26-11-9 0-17 4-23 11Z" fill="#312e81"/> -->
+</svg>

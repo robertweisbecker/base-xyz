@@ -44,7 +44,7 @@ export const Orientation: Story = {
 			<section {...stylex.props(storyStyles.section)}>
 				<h2 {...stylex.props(storyStyles.heading)}>Horizontal</h2>
 				<div {...stylex.props(storyStyles.stack)}>
-					<p {...stylex.props(storyStyles.text)}>Workspace activity</p>
+					<p {...stylex.props(storyStyles.text)}>The quick brown fox</p>
 					<Separator />
 					<p {...stylex.props(storyStyles.mutedText)}>No updates in the last hour.</p>
 				</div>
@@ -66,15 +66,15 @@ export const Orientation: Story = {
 const storyStyles = stylex.create({
 	frame: {
 		maxWidth: "560px",
-		minHeight: space.x4,
+		minHeight: space[4],
 	},
 	story: {
-		gap: space.x8,
+		gap: space[8],
 		display: "flex",
 		flexDirection: "column",
 	},
 	section: {
-		gap: space.x4,
+		gap: space[4],
 		display: "flex",
 		flexDirection: "column",
 	},
@@ -87,12 +87,12 @@ const storyStyles = stylex.create({
 		lineHeight: lineHeight.x1,
 	},
 	stack: {
-		gap: space.x3,
+		gap: space[3],
 		display: "flex",
 		flexDirection: "column",
 	},
 	row: {
-		gap: space.x3,
+		gap: space[3],
 		alignItems: "center",
 		color: color.fg,
 		display: "flex",

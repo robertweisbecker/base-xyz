@@ -1,7 +1,49 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import * as stylex from "@stylexjs/stylex";
-import { color, fontSize, letterSpacing, lineHeight, space } from "@/styles/tokens.stylex";
+import { useEffect, useState } from "react";
+import { Text } from "@/components/text/text";
+import { space } from "@/styles/tokens.stylex";
+import { Button } from "../button/button";
 import * as Progress from "./progress";
+
+function SimulatedProgress() {
+	const [value, setValue] = useState<number | null>(null);
+
+	useEffect(() => {
+		if (value === 100) {
+			return;
+		}
+
+		const timeout = window.setTimeout(() => {
+			setValue((current) => {
+				if (current === null) {
+					return 20;
+				}
+
+				return Math.min(100, current + Math.max(1, Math.round(Math.random() * 25)));
+			});
+		}, 1000);
+
+		return () => window.clearTimeout(timeout);
+	}, [value]);
+
+	const label = value === null ? "Preparing workspace" : value === 100 ? "Workspace ready" : "Processing workspace";
+
+	return (
+		<>
+			<Progress.Root aria-valuetext={value === null ? label : undefined} value={value}>
+				<Progress.Label>{label}</Progress.Label>
+				{value === null ? <Progress.Value>{() => "In progress"}</Progress.Value> : <Progress.Value />}
+				<Progress.Track>
+					<Progress.Indicator />
+				</Progress.Track>
+			</Progress.Root>
+			<Button onClick={() => setValue(null)} size="sm" variant="secondary" width="fit-content">
+				Restart
+			</Button>
+		</>
+	);
+}
 
 const meta = {
 	title: "Components/Progress",
@@ -52,7 +94,7 @@ export const States: Story = {
 	render: () => (
 		<div {...stylex.props(storyStyles.stack)}>
 			<section {...stylex.props(storyStyles.specimen)}>
-				<span {...stylex.props(storyStyles.label)}>Determinate</span>
+				<Text>Determinate</Text>
 				<Progress.Root value={42}>
 					<Progress.Label>Uploading design assets</Progress.Label>
 					<Progress.Value />
@@ -62,17 +104,17 @@ export const States: Story = {
 				</Progress.Root>
 			</section>
 			<section {...stylex.props(storyStyles.specimen)}>
-				<span {...stylex.props(storyStyles.label)}>Indeterminate</span>
+				<Text>Indeterminate</Text>
 				<Progress.Root aria-valuetext="Preparing workspace" value={null}>
 					<Progress.Label>Preparing workspace</Progress.Label>
-					<Progress.Value>{() => "In progress"}</Progress.Value>
+					<Progress.Value>{() => "Initializing…"}</Progress.Value>
 					<Progress.Track>
 						<Progress.Indicator />
 					</Progress.Track>
 				</Progress.Root>
 			</section>
 			<section {...stylex.props(storyStyles.specimen)}>
-				<span {...stylex.props(storyStyles.label)}>Complete</span>
+				<Text>Complete</Text>
 				<Progress.Root value={100}>
 					<Progress.Label>Workspace ready</Progress.Label>
 					<Progress.Value />
@@ -80,6 +122,10 @@ export const States: Story = {
 						<Progress.Indicator />
 					</Progress.Track>
 				</Progress.Root>
+			</section>
+			<section {...stylex.props(storyStyles.specimen)}>
+				<Text>Simulated states</Text>
+				<SimulatedProgress />
 			</section>
 		</div>
 	),
@@ -91,19 +137,13 @@ const storyStyles = stylex.create({
 		width: "100%",
 	},
 	stack: {
-		gap: space.x8,
+		gap: space[8],
 		display: "flex",
 		flexDirection: "column",
 	},
 	specimen: {
-		gap: space.x2,
+		gap: space[2],
 		display: "flex",
 		flexDirection: "column",
-	},
-	label: {
-		color: color.fgMuted,
-		fontSize: fontSize.x1,
-		letterSpacing: letterSpacing.x1,
-		lineHeight: lineHeight.x1,
 	},
 });

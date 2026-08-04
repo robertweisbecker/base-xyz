@@ -127,14 +127,14 @@ const iconlessModelGroups = [
 
 const storyParts = stylex.create({
 	stack: {
-		gap: space.x5,
+		gap: space[5],
 		alignItems: "flex-start",
 		display: "flex",
 		flexDirection: "column",
-		paddingBlockStart: space.x8,
+		paddingBlockStart: space[8],
 	},
 	sample: {
-		gap: space.x2,
+		gap: space[2],
 		alignItems: "flex-start",
 		display: "flex",
 		flexDirection: "column",

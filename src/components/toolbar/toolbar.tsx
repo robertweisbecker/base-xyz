@@ -117,8 +117,8 @@ const toolbarParts = stylex.create({
 			default: "row",
 		},
 		width: {
-			default: "100%",
 			"[data-orientation=vertical]": "fit-content",
+			default: "100%",
 		},
 	},
 	group: {
@@ -134,9 +134,9 @@ const toolbarParts = stylex.create({
 		borderRadius: radius.sm,
 		borderStyle: "none",
 		borderWidth: "0",
-		gap: space.x2,
+		gap: space[2],
 		paddingBlock: 0,
-		paddingInline: space.x2,
+		paddingInline: space[2],
 		textDecoration: "none",
 		alignItems: "center",
 		backgroundColor: {
@@ -145,15 +145,15 @@ const toolbarParts = stylex.create({
 				"@media (hover: hover) and (pointer: fine)": color.highlight,
 			},
 			[TOGGLED_ON]: color.surfaceSubtle,
+			"[data-disabled]": "transparent",
 			default: "transparent",
 			":active": color.surfaceSubtleActive,
-			"[data-disabled]": "transparent",
 		},
 		boxSizing: "border-box",
 		color: {
 			[TOGGLED_ON]: color.fg,
-			default: color.fgMuted,
 			"[data-disabled]": color.fgSubtle,
+			default: color.fgMuted,
 		},
 		display: "inline-flex",
 		flexShrink: 0,
@@ -177,9 +177,9 @@ const toolbarParts = stylex.create({
 	},
 	link: {
 		borderRadius: radius.xs,
-		gap: space.x1,
+		gap: space[1],
 		overflow: "hidden",
-		paddingInline: space.x2,
+		paddingInline: space[2],
 		textDecoration: "underline",
 		alignItems: "center",
 		color: {
@@ -210,7 +210,7 @@ const toolbarParts = stylex.create({
 	},
 	input: {
 		borderRadius: radius.sm,
-		paddingInline: space.x3,
+		paddingInline: space[3],
 		backgroundColor: {
 			default: color.surfaceSubtle,
 			":focus-visible": color.canvas,
@@ -238,15 +238,15 @@ const toolbarParts = stylex.create({
 		},
 	},
 	separator: {
-		margin: space.x1,
+		margin: space[1],
 		backgroundColor: color.border,
 		flexShrink: 0,
 		height: {
 			"[data-orientation=horizontal]": "1px",
-			default: space.x4,
+			default: space[4],
 		},
 		width: {
-			"[data-orientation=horizontal]": space.x4,
+			"[data-orientation=horizontal]": space[4],
 			default: "1px",
 		},
 	},
@@ -254,15 +254,15 @@ const toolbarParts = stylex.create({
 
 const toolbarVariants = stylex.create({
 	surface: {
-		padding: space.x1,
+		padding: space[1],
 		borderRadius: radius.md,
 		backgroundColor: {
-			default: color.bgElevated,
 			"[data-disabled]": color.surface,
+			default: color.bgPanel,
 		},
 		boxShadow: {
-			default: shadow.sm,
 			"[data-disabled]": "none",
+			default: shadow.sm,
 		},
 	},
 	unstyled: {

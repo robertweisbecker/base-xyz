@@ -2,8 +2,15 @@ import { Dialog as BaseDialog } from "@base-ui/react/dialog";
 import * as stylex from "@stylexjs/stylex";
 import type { StyleXStyles } from "@stylexjs/stylex";
 import { type ComponentProps } from "react";
-import { modalBackdropStyles, modalPopupStyles, modalTextStyles, modalViewportStyles } from "@/components/dialog/dialog.stylex";
+import {
+	modalBackdropStyles,
+	modalPopupStyles,
+	modalTextStyles,
+	modalViewportStyles,
+} from "@/components/dialog/dialog.stylex";
 import { color, space } from "@/styles/tokens.stylex";
+import { XIcon } from "@phosphor-icons/react";
+import { IconButton } from "../button";
 
 type StyledProps<T> = Omit<T, "className" | "style"> & {
 	className?: string;
@@ -18,7 +25,13 @@ export type DialogPopupProps = StyledProps<BaseDialog.Popup.Props> & {
 	backdropProps?: DialogBackdropProps | false;
 	portalProps?: Omit<BaseDialog.Portal.Props, "children">;
 	scrollBehavior?: DialogScrollBehavior;
+	showClose?: boolean;
 	viewportProps?: DialogViewportProps;
+};
+
+export type DialogCloseProps = StyledProps<BaseDialog.Close.Props>;
+export type DialogCloseButtonProps = Omit<DialogCloseProps, "aria-label" | "children" | "render"> & {
+	"aria-label"?: string;
 };
 
 type InternalDialogViewportProps = DialogViewportProps & {
@@ -62,6 +75,7 @@ export function Popup({
 	className,
 	portalProps,
 	scrollBehavior = "popup",
+	showClose = true,
 	style,
 	viewportProps,
 	...props
@@ -81,9 +95,9 @@ export function Popup({
 					ref={ref}
 					className={[sxClassName, className].filter(Boolean).join(" ")}
 					style={sxStyle}
-					{...props}
-				>
+					{...props}>
 					{children}
+					{showClose && <CloseButton />}
 				</BaseDialog.Popup>
 			</Viewport>
 		</BaseDialog.Portal>
@@ -134,34 +148,81 @@ export function Footer({ className, style, ...props }: StyledProps<ComponentProp
 	return <div className={[sxClassName, className].filter(Boolean).join(" ")} style={sxStyle} {...props} />;
 }
 
+/** Unstyled close primitive for custom buttons and footer actions. */
+export function Close({ ref, className, style, ...props }: DialogCloseProps) {
+	const { className: sxClassName, style: sxStyle } = stylex.props(style);
+
+	return (
+		<BaseDialog.Close
+			ref={ref}
+			className={[sxClassName, className].filter(Boolean).join(" ") || undefined}
+			style={sxStyle}
+			{...props}
+		/>
+	);
+}
+
+/** Neutral circular X button, absolutely positioned in the popup by default. */
+export function CloseButton({
+	ref,
+	"aria-label": ariaLabel = "Close",
+	className,
+	style,
+	...props
+}: DialogCloseButtonProps) {
+	return (
+		<Close
+			ref={ref}
+			aria-label={ariaLabel}
+			className={className}
+			nativeButton
+			render={
+				<IconButton
+					icon={<XIcon aria-hidden weight="bold" />}
+					label={ariaLabel}
+					variant="neutral"
+					shape="circle"
+					style={[dialogParts.closeButton, style]}
+				/>
+			}
+			{...props}
+		/>
+	);
+}
+
 export const Root = BaseDialog.Root;
 export const Trigger = BaseDialog.Trigger;
-export const Close = BaseDialog.Close;
 
 const dialogParts = stylex.create({
 	popup: {
 		maxWidth: "440px",
 	},
+	closeButton: {
+		position: "absolute",
+		zIndex: 1,
+		right: space[4],
+		top: space[4],
+	},
 	outsideScrollViewport: {
-		paddingBlock: space.x8,
+		paddingBlock: space[8],
 		alignItems: "flex-start",
 		overflowY: "auto",
 	},
 	header: {
-		gap: space.x1,
-		paddingInline: space.x6,
+		gap: space[1],
+		paddingInline: space[6],
 		display: "flex",
 		flexDirection: "column",
-		paddingBlockStart: space.x6,
+		paddingBlockStart: space[6],
 	},
 	body: {
-		padding: space.x6,
+		padding: space[6],
 	},
 	footer: {
-		gap: space.x3,
-		paddingBlock: space.x4,
-		paddingInlineEnd: space.x4,
-		paddingInlineStart: space.x6,
+		gap: space[3],
+		paddingBlock: space[4],
+		paddingInlineEnd: space[4],
+		paddingInlineStart: space[6],
 		borderTopColor: color.border,
 		borderTopStyle: "solid",
 		borderTopWidth: "0.5px",
@@ -171,11 +232,11 @@ const dialogParts = stylex.create({
 const dialogScrollBehavior = stylex.create({
 	popup: {
 		overflow: "auto",
-		maxHeight: `calc(100dvh - ${space.x8})`,
+		maxHeight: `calc(100dvh - ${space[8]})`,
 	},
 	inside: {
 		overflow: "hidden",
-		maxHeight: `calc(100dvh - ${space.x8})`,
+		maxHeight: `calc(100dvh - ${space[8]})`,
 	},
 	outside: {
 		overflow: "visible",

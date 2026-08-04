@@ -17,7 +17,7 @@ type PlaygroundArgs = {
 	_positioning: Positioning;
 	readOnly: boolean;
 	required: boolean;
-	_size: Select.SelectTriggerProps["size"];
+	_size: Select.SelectRootProps<string>["size"];
 	_variant: Select.SelectTriggerVariant;
 };
 
@@ -107,6 +107,7 @@ function PlaygroundExample({
 		invalid,
 		readOnly,
 		required,
+		size: _size,
 	};
 
 	if (multiple) {
@@ -121,7 +122,6 @@ function PlaygroundExample({
 				<Select.Trigger
 					aria-label={selectLabel || "Framework"}
 					placeholder={_placeholder}
-					size={_size}
 					variant={_variant}>
 					{formatMultipleFrameworks}
 				</Select.Trigger>
@@ -136,7 +136,6 @@ function PlaygroundExample({
 			<Select.Trigger
 				aria-label={selectLabel || "Framework"}
 				placeholder={_placeholder}
-				size={_size}
 				variant={_variant}
 			/>
 			<FrameworkPopup itemVariant={_itemVariant} positioning={_positioning} />
@@ -185,9 +184,9 @@ export const Sizes: Story = {
 	render: () => (
 		<div {...stylex.props(storyParts.sizeStack)}>
 			{(["sm", "md", "lg"] as const).map((size) => (
-				<Select.Root<string> key={size} defaultValue="React" items={frameworkItems}>
+				<Select.Root<string> key={size} defaultValue="React" items={frameworkItems} size={size}>
 					<Select.Label>{size === "sm" ? "Small" : size === "md" ? "Medium" : "Large"}</Select.Label>
-					<Select.Trigger size={size} />
+					<Select.Trigger />
 					<FrameworkPopup />
 				</Select.Root>
 			))}
@@ -562,15 +561,15 @@ function formatMultipleValue(value: string[], placeholder: string) {
 
 const storyParts = stylex.create({
 	frame: {
-		padding: space.x8,
+		padding: space[8],
 	},
 	story: {
-		gap: space.x8,
+		gap: space[8],
 		display: "flex",
 		flexDirection: "column",
 	},
 	section: {
-		gap: space.x4,
+		gap: space[4],
 		alignItems: "flex-start",
 		display: "flex",
 		flexDirection: "column",
@@ -584,7 +583,7 @@ const storyParts = stylex.create({
 		lineHeight: lineHeight.x1,
 	},
 	fieldGrid: {
-		gap: space.x6,
+		gap: space[6],
 		display: "grid",
 		gridTemplateColumns: {
 			default: "repeat(3, minmax(0, 1fr))",
@@ -593,7 +592,7 @@ const storyParts = stylex.create({
 		width: "100%",
 	},
 	stateGrid: {
-		gap: space.x8,
+		gap: space[8],
 		display: "grid",
 		gridTemplateColumns: {
 			default: "repeat(2, minmax(0, 1fr))",
@@ -601,7 +600,7 @@ const storyParts = stylex.create({
 		},
 	},
 	state: {
-		gap: space.x3,
+		gap: space[3],
 		display: "flex",
 		flexDirection: "column",
 	},
@@ -614,19 +613,19 @@ const storyParts = stylex.create({
 		lineHeight: lineHeight.x1,
 	},
 	sizeStack: {
-		gap: space.x6,
+		gap: space[6],
 		display: "flex",
 		flexDirection: "column",
 	},
 	countryValue: {
-		gap: space.x2,
+		gap: space[2],
 		alignItems: "center",
 		display: "inline-flex",
 		minWidth: 0,
 	},
 	countryItem: {
 		alignItems: "center",
-		columnGap: space.x2,
+		columnGap: space[2],
 		display: "grid",
 		gridTemplateColumns: "auto minmax(0, 1fr) auto",
 		minWidth: "16rem",
@@ -648,7 +647,7 @@ const storyParts = stylex.create({
 		opacity: 0.68,
 	},
 	inlineUseCase: {
-		gap: space.x6,
+		gap: space[6],
 		display: "flex",
 		flexDirection: "column",
 		minHeight: "12rem",
@@ -656,7 +655,7 @@ const storyParts = stylex.create({
 	adLibSentence: {
 		alignItems: "baseline",
 		color: color.fg,
-		columnGap: space.x1,
+		columnGap: space[1],
 		display: "flex",
 		flexWrap: "wrap",
 		fontSize: fontSize.x2,

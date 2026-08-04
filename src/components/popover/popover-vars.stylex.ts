@@ -6,9 +6,9 @@ import { color, motion } from "@/styles/tokens.stylex";
  * generated viewport payload wrappers.
  */
 export const popupVars = stylex.defineVars({
-	background: color.bgElevated,
+	background: color.bgInverse,
 	border: color.border,
-	foreground: color.fg,
+	foreground: color.fgInverse,
 	duration: motion.durationContent,
 	easing: motion.easeSmoothOut,
 	distance: "12px",

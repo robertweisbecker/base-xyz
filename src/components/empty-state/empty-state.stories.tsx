@@ -140,7 +140,7 @@ const storyStyles = stylex.create({
 		maxWidth: "48rem",
 	},
 	stack: {
-		gap: space.x8,
+		gap: space[8],
 		display: "flex",
 		flexDirection: "column",
 	},

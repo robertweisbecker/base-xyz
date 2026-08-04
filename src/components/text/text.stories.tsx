@@ -39,13 +39,13 @@ const meta = {
 			control: "select",
 			options: ["default", "subtle", "muted", "accent", "danger", "success", "warning", "inverse", "inverse-muted"],
 		},
-		align: { control: "inline-radio", options: ["start", "center", "end", "justify"] },
+		textAlign: { control: "inline-radio", options: ["start", "center", "end", "justify"] },
 		wrap: { control: "inline-radio", options: ["wrap", "nowrap", "pretty", "balance"] },
 		truncate: { control: "boolean" },
 		m: { control: false },
 		mb: { control: false },
-		ml: { control: false },
-		mr: { control: false },
+		ms: { control: false },
+		me: { control: false },
 		mt: { control: false },
 		mx: { control: false },
 		my: { control: false },
@@ -53,7 +53,7 @@ const meta = {
 	},
 	parameters: {
 		controls: {
-			include: ["children", "size", "fontFamily", "fontWeight", "color", "align", "wrap", "truncate"],
+			include: ["children", "size", "fontFamily", "fontWeight", "color", "textAlign", "wrap", "truncate"],
 		},
 	},
 	decorators: [
@@ -69,6 +69,18 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const Playground: Story = {};
+
+export const Layout: Story = {
+	parameters: { controls: { disable: true } },
+	render: () => (
+		<div {...stylex.props(storyStyles.frame)}>
+			<Heading mb={3} textAlign="center" size="4">Logical, token-backed spacing</Heading>
+			<Text ms={4} textAlign="center">
+				This text uses logical inline spacing and scalar alignment.
+			</Text>
+		</div>
+	),
+};
 
 export const Sizes: Story = {
 	parameters: {
@@ -159,37 +171,37 @@ const storyStyles = stylex.create({
 		maxWidth: "720px",
 	},
 	sections: {
-		gap: space.x8,
+		gap: space[8],
 		display: "flex",
 		flexDirection: "column",
 	},
 	section: {
-		gap: space.x3,
+		gap: space[3],
 		display: "flex",
 		flexDirection: "column",
 	},
 	stack: {
-		gap: space.x3,
+		gap: space[3],
 		display: "flex",
 		flexDirection: "column",
 	},
 	styleGrid: {
-		gap: space.x3,
+		gap: space[3],
 		display: "grid",
 		gridTemplateColumns: "repeat(auto-fit, minmax(12rem, 1fr))",
 	},
 	specimen: {
-		gap: space.x4,
+		gap: space[4],
 		alignItems: "baseline",
 		display: "grid",
-		gridTemplateColumns: `${space.x6} minmax(0, 1fr)`,
+		gridTemplateColumns: `${space[6]} minmax(0, 1fr)`,
 	},
 	input: {
 		borderColor: color.borderStrong,
 		borderRadius: "0.4375rem",
 		borderStyle: "solid",
 		borderWidth: "1px",
-		paddingInline: space.x2,
-		minHeight: space.x8,
+		paddingInline: space[2],
+		minHeight: space[8],
 	},
 });

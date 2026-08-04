@@ -66,8 +66,8 @@ const meta = {
 				"required",
 				"indeterminate",
 				"size",
-					"_groupDefaultValue",
-					"_groupDisabled",
+				"_groupDefaultValue",
+				"_groupDisabled",
 			],
 		},
 	},
@@ -87,8 +87,8 @@ export const Playground: Story = {
 		required,
 		indeterminate,
 		size,
-			_groupDefaultValue,
-			_groupDisabled,
+		_groupDefaultValue,
+		_groupDisabled,
 	}) => (
 		<div {...stylex.props(storyParts.story)}>
 			<section {...stylex.props(storyParts.section)}>
@@ -182,8 +182,14 @@ export const States: Story = {
 				<h2 {...stylex.props(storyParts.heading)}>Interaction</h2>
 				<div {...stylex.props(storyParts.stateList)}>
 					<Checkbox label="Disabled" disabled />
+					<Checkbox label="Disabled, checked" defaultChecked disabled />
 					<Checkbox label="Invalid" invalid />
-					<Checkbox label="Read-only" defaultChecked readOnly />
+					<Checkbox label="Invalid, checked" invalid defaultChecked />
+					<Checkbox label="Read-only" readOnly />
+					<Checkbox label="Read-only, disabled" disabled readOnly />
+					<Checkbox label="Read-only, checked" defaultChecked readOnly />
+					<Checkbox label="Read-only, invalid" invalid readOnly />
+					<Checkbox label="Read-only, invalid, checked" invalid defaultChecked readOnly />
 					<Checkbox label="Required" required />
 				</div>
 			</section>
@@ -253,13 +259,13 @@ export const NestedParent: Story = {
 
 const storyParts = stylex.create({
 	story: {
-		padding: space.x4,
-		gap: space.x8,
+		padding: space[4],
+		gap: space[8],
 		display: "flex",
 		flexDirection: "column",
 	},
 	section: {
-		gap: space.x4,
+		gap: space[4],
 		display: "flex",
 		flexDirection: "column",
 	},
@@ -272,17 +278,17 @@ const storyParts = stylex.create({
 		lineHeight: lineHeight.x1,
 	},
 	stateList: {
-		gap: space.x3,
+		gap: space[3],
 		display: "grid",
 	},
 	permissionChildren: {
-		gap: space.x3,
+		gap: space[3],
 		borderInlineStartColor: color.border,
 		borderInlineStartStyle: "solid",
 		borderInlineStartWidth: "1px",
 		display: "flex",
 		flexDirection: "column",
-		marginInlineStart: space.x2,
-		paddingInlineStart: space.x5,
+		marginInlineStart: space[2],
+		paddingInlineStart: space[5],
 	},
 });

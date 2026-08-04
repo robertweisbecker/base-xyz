@@ -530,7 +530,7 @@ const storyStyles = stylex.create({
 		justifyContent: "center",
 	},
 	anchoredVariants: {
-		gap: space.x6,
+		gap: space[6],
 		display: "grid",
 		gridTemplateColumns: {
 			default: "repeat(2, minmax(0, 1fr))",
@@ -539,8 +539,8 @@ const storyStyles = stylex.create({
 		width: "min(1100px, calc(100vw - 48px))",
 	},
 	stage: {
-		padding: space.x6,
-		gap: space.x6,
+		padding: space[6],
+		gap: space[6],
 		alignItems: "center",
 		display: "flex",
 		flexDirection: "column",
@@ -565,7 +565,7 @@ const storyStyles = stylex.create({
 		maxWidth: "440px",
 	},
 	pillControls: {
-		gap: space.x2,
+		gap: space[2],
 		alignItems: "center",
 		display: "flex",
 		flexWrap: "wrap",
@@ -581,7 +581,7 @@ const storyStyles = stylex.create({
 		animationTimingFunction: "linear",
 	},
 	changeCount: {
-		gap: space.x1,
+		gap: space[1],
 		display: "inline-flex",
 	},
 	additions: {

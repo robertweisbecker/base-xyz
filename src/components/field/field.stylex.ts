@@ -1,11 +1,36 @@
 import * as stylex from "@stylexjs/stylex";
-import { textColorStyles, textStyles, textWeightStyles } from "@/components/text/text.stylex";
+import type { FieldSize, FieldThemeProps } from "@/components/field/field.types";
+import { textStyles, textWeightStyles } from "@/components/text/text.stylex";
 import { breakpoints } from "@/styles/constants.stylex";
+import { composeThemeProps, type ThemePropDefinition, type VerifyThemeProps } from "@/theme/theme-props";
+import {
+	childLayoutThemeProps,
+	displayThemeProps,
+	positioningThemeProps,
+	sizingThemeProps,
+	verticalFlexThemeProps,
+} from "@/styles/theme-props-layout.stylex";
+import { spacingThemeProps } from "@/styles/theme-props-spacing.stylex";
+import { radiusThemeProps, shadowThemeProps } from "@/styles/theme-props-surface.stylex";
 import { color, radius, size, space } from "@/styles/tokens.stylex";
 import { fontSize, letterSpacing, lineHeight } from "@/styles/tokens.stylex";
 
 const INTERACTIVE_CONTROL_HOVER =
 	':hover:not(:focus-within):not([aria-invalid="true"]):not([data-active]):not([data-disabled]):not([data-invalid]):not([data-panel-open]):not([data-popup-open]):not([data-pressed]):not([data-readonly]):not([readonly])';
+
+const fieldThemePropsDefinition = composeThemeProps(
+	spacingThemeProps,
+	sizingThemeProps,
+	positioningThemeProps,
+	childLayoutThemeProps,
+	radiusThemeProps,
+	shadowThemeProps,
+	verticalFlexThemeProps,
+	displayThemeProps,
+);
+
+export const fieldThemeProps: ThemePropDefinition<VerifyThemeProps<FieldThemeProps, typeof fieldThemePropsDefinition>> =
+	fieldThemePropsDefinition;
 
 /**
  * Canonical styles for the Field component family.
@@ -27,29 +52,36 @@ const INTERACTIVE_CONTROL_HOVER =
  */
 const parts = stylex.create({
 	root: {
-		gap: space.x1,
+		gap: space[1],
 		display: "flex",
 		flexDirection: "column",
 		minWidth: 0,
 	},
-	label: {},
+	label: {
+		opacity: {
+			"[data-disabled]": 0.5,
+			default: 1,
+			[stylex.when.ancestor('[aria-disabled="true"]')]: 0.5,
+		},
+	},
 	groupLabel: {
 		opacity: {
-			default: 1,
 			"[data-disabled]": 0.5,
+			default: 1,
 			[stylex.when.ancestor('[aria-disabled="true"]')]: 0.5,
 		},
 	},
 	itemLabel: {},
-	description: {},
+	description: { color: color.fgMuted },
 	error: {
-		gap: space.x1,
+		gap: space[1],
 		alignItems: "center",
+		color: color.fgDanger,
 		display: "inline-flex",
 	},
 	requiredIndicator: {
 		color: color.fgDanger,
-		marginInlineStart: space.x1,
+		marginInlineStart: space[1],
 	},
 	inputBase: {
 		borderColor: {
@@ -57,6 +89,7 @@ const parts = stylex.create({
 			[INTERACTIVE_CONTROL_HOVER]: {
 				"@media (hover: hover) and (pointer: fine)": color.borderHover,
 			},
+			"[data-disabled]": color.borderDisabled,
 			"[data-invalid]": color.bgDanger,
 			"[data-popup-open]": color.borderHover,
 			"[data-readonly]": color.border,
@@ -65,7 +98,7 @@ const parts = stylex.create({
 		borderStyle: "solid",
 		borderWidth: "1px",
 		backgroundColor: {
-			"[data-disabled]": color.surfaceSubtle,
+			"[data-disabled]": "transparent",
 			default: color.surface,
 		},
 		color: {
@@ -77,11 +110,22 @@ const parts = stylex.create({
 			"[data-disabled]": "not-allowed",
 			default: null,
 		},
+		opacity: {
+			"[data-disabled]": 0.5,
+			default: 1,
+			[stylex.when.ancestor('[data-disabled="true"]')]: 0.5,
+		},
 		width: "100%",
 	},
 	inputUnstyled: {
+		outline: {
+			default: "none",
+			[stylex.when.ancestor(":focus-visible")]: "none",
+			[stylex.when.anySibling(":focus-visible")]: "none",
+			":focus-visible": "none",
+		},
 		color: {
-			"[data-disabled]": color.fgMuted,
+			"[data-disabled]": color.fgSubtle,
 			"[data-readonly]": color.fg,
 			"[readonly]": color.fg,
 			default: color.fg,
@@ -90,12 +134,6 @@ const parts = stylex.create({
 		},
 		"::placeholder": {
 			color: color.fgMuted,
-		},
-		outline: {
-			default: "none",
-			[stylex.when.ancestor(":focus-visible")]: "none",
-			[stylex.when.anySibling(":focus-visible")]: "none",
-			":focus-visible": "none",
 		},
 	},
 	inputStandard: {
@@ -116,27 +154,48 @@ export const fieldStyles = {
 	label: [textStyles.supporting, textWeightStyles.medium, parts.label],
 	groupLabel: [textStyles.body, textWeightStyles.semibold, parts.groupLabel],
 	itemLabel: [textStyles.label, parts.itemLabel],
-	description: [textStyles.supporting, textColorStyles.muted, parts.description],
-	error: [textStyles.supporting, textColorStyles.danger, parts.error],
+	description: [textStyles.supporting, parts.description],
+	error: [textStyles.supporting, parts.error],
 	requiredIndicator: parts.requiredIndicator,
 	inputBase: parts.inputBase,
 	inputUnstyled: parts.inputUnstyled,
 	inputStandard: parts.inputStandard,
 } as const;
 
+/** Shared row/column layout for CheckboxGroup and RadioGroup. */
+export const fieldChoiceGroupStyles = stylex.create({
+	root: {
+		alignItems: "stretch",
+		columnGap: space[3],
+		display: "flex",
+		flexDirection: "column",
+		flexWrap: "nowrap",
+		rowGap: space[3],
+	},
+	inline: {
+		alignItems: "start",
+		columnGap: space[6],
+		flexDirection: "row",
+		flexWrap: "wrap",
+	},
+});
+
 export const fieldControlSizes = stylex.create({
 	sm: {
-		borderRadius: radius.sm,
+		borderRadius: radius.md,
+		cornerShape: "superellipse(1.6)",
 		height: size["control.sm"],
 		minHeight: size["control.sm"],
 	},
 	md: {
 		borderRadius: radius.md,
+		cornerShape: "superellipse(1.3)",
 		height: size["control.md"],
 		minHeight: size["control.md"],
 	},
 	lg: {
 		borderRadius: radius.lg,
+		cornerShape: "superellipse(1.6)",
 		height: size["control.lg"],
 		minHeight: size["control.lg"],
 	},
@@ -144,16 +203,19 @@ export const fieldControlSizes = stylex.create({
 
 export const fieldPaddingSizes = stylex.create({
 	sm: {
-		paddingBlock: space.x2,
-		paddingInline: space.x3,
+		paddingBlock: space[1],
+		paddingInlineEnd: space[2],
+		paddingInlineStart: space[2],
 	},
 	md: {
-		paddingBlock: space.x3,
-		paddingInline: space.x3,
+		paddingBlock: space[1.5],
+		paddingInlineEnd: space[2],
+		paddingInlineStart: space[3],
 	},
 	lg: {
-		paddingBlock: space.x4,
-		paddingInline: space.x5,
+		paddingBlock: space[2],
+		paddingInlineEnd: space[3],
+		paddingInlineStart: space[4],
 	},
 });
 
@@ -178,8 +240,6 @@ const fieldFontSizes = stylex.create({
 		lineHeight: lineHeight.x3,
 	},
 });
-
-export type FieldSize = keyof typeof fieldControlSizes;
 
 export const fieldTextStyles = {
 	sm: fieldFontSizes.responsive,

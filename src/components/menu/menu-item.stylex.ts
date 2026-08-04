@@ -1,15 +1,16 @@
 import * as stylex from "@stylexjs/stylex";
-import { textStyles } from "@/components/text/text.stylex";
+import { textSizeStyles, textStyles } from "@/components/text/text.stylex";
 import { color, radius, size, space } from "@/styles/tokens.stylex";
+import type { MenuItemSize } from "./menu.types";
 
 /** Inherited layout variables for Menu items and components that intentionally match them. */
 export const menuItemVars = stylex.defineVars({
-	columns: `${space.x4} minmax(0, 1fr) auto`,
-	columnGap: space.x2,
+	columns: `${space[4]} minmax(0, 1fr) auto`,
+	columnGap: space[2],
 	minHeight: size["control.md"],
-	paddingBlock: space.x1,
-	paddingInlineEnd: space.x2,
-	paddingInlineStart: space.x3,
+	paddingBlock: space[1],
+	paddingInlineEnd: space[2],
+	paddingInlineStart: space[3],
 	rowGap: "0px",
 });
 
@@ -57,8 +58,17 @@ const menuItemParts = stylex.create({
 			"[data-selected]": "visible",
 			default: "hidden",
 		},
-		height: space.x4,
-		width: space.x4,
+		height: space[4],
+		width: space[4],
+	},
+	itemSm: {
+		minHeight: size["control.sm"],
+	},
+	itemMd: {
+		minHeight: size["control.md"],
+	},
+	itemLg: {
+		minHeight: size["control.lg"],
 	},
 });
 
@@ -67,6 +77,13 @@ export const menuItemStyles = {
 	label: menuItemParts.label,
 	indicator: menuItemParts.indicatorSizing,
 } as const;
+
+/** Selectable-row typography and height aligned with the shared field-control sizes. */
+export const menuItemSizeStyles = {
+	sm: [textSizeStyles["2"], menuItemParts.itemSm],
+	md: [textSizeStyles["2"], menuItemParts.itemMd],
+	lg: [textSizeStyles["3"], menuItemParts.itemLg],
+} as const satisfies Record<MenuItemSize, unknown>;
 
 export const menuItemVariantStyles = stylex.create({
 	default: {
@@ -100,5 +117,3 @@ export const menuItemVariantStyles = stylex.create({
 		},
 	},
 });
-
-export type MenuItemVariant = keyof typeof menuItemVariantStyles;

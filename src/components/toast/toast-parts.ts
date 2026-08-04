@@ -1,5 +1,5 @@
 import * as stylex from "@stylexjs/stylex";
-import { textColorStyles, textStyles, textWeightStyles } from "@/components/text/text.stylex";
+import { textStyles, textWeightStyles } from "@/components/text/text.stylex";
 import { color, radius } from "@/styles/tokens.stylex";
 
 const toastTextParts = stylex.create({
@@ -8,12 +8,13 @@ const toastTextParts = stylex.create({
 	},
 	description: {
 		margin: 0,
+		color: color.fgMuted,
 	},
 });
 
 export const toastTextStyles = {
 	title: [textStyles.body, textWeightStyles.semibold, toastTextParts.title],
-	description: [textStyles.supporting, textColorStyles.muted, toastTextParts.description],
+	description: [textStyles.supporting, toastTextParts.description],
 } as const;
 
 const toastControlParts = stylex.create({

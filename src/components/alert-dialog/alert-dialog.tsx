@@ -126,8 +126,8 @@ const alertDialogParts = stylex.create({
 		maxWidth: "22rem",
 	},
 	header: {
-		padding: space.x6,
-		gap: space.x2,
+		padding: space[6],
+		gap: space[2],
 		display: "flex",
 		flexDirection: "column",
 	},
@@ -137,8 +137,8 @@ const alertDialogParts = stylex.create({
 		lineHeight: lineHeight.x3,
 	},
 	footer: {
-		gap: space.x2,
-		paddingInline: space.x4,
-		paddingBlockEnd: space.x4,
+		gap: space[2],
+		paddingInline: space[4],
+		paddingBlockEnd: space[4],
 	},
 });

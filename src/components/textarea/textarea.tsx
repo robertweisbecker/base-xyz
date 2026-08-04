@@ -2,10 +2,16 @@ import { Field } from "@base-ui/react/field";
 import * as stylex from "@stylexjs/stylex";
 import type { StyleXStyles } from "@stylexjs/stylex";
 import { useId, type ComponentProps } from "react";
-import { fieldStyles, fieldInputStyles, type FieldSize } from "@/components/field/field.stylex";
+import { resolveThemeProps } from "@/theme/theme-props";
+import type { FieldSize, FieldThemeProps } from "@/components/field/field.types";
+import { fieldStyles, fieldInputStyles, fieldThemeProps } from "@/components/field/field.stylex";
 import { focusRing } from "@/styles/recipes/focus";
 
-export type TextareaProps = Omit<ComponentProps<"textarea">, "className" | "style"> & {
+export type TextareaProps = Omit<
+	ComponentProps<"textarea">,
+	"className" | "color" | "height" | "style" | "width" | keyof FieldThemeProps
+> &
+	FieldThemeProps & {
 	label: string;
 	description?: string;
 	error?: string;
@@ -31,11 +37,12 @@ export function Textarea({
 	"aria-invalid": ariaInvalid,
 	...props
 }: TextareaProps) {
+	const { restProps, styles } = resolveThemeProps(props, fieldThemeProps);
 	const generatedId = useId();
 	const id = providedId ?? generatedId;
 	const descriptionId = description ? `${id}-description` : undefined;
 	const errorId = error ? `${id}-error` : undefined;
-	const rootSx = stylex.props(fieldStyles.root, style);
+	const rootSx = stylex.props(fieldStyles.root, ...styles, style);
 
 	return (
 		<Field.Root
@@ -59,7 +66,7 @@ export function Textarea({
 				readOnly={readOnly}
 				rows={rows}
 				{...stylex.props(fieldInputStyles[size], textareaParts.control, focusRing.inset)}
-				{...props}
+				{...restProps}
 			/>
 			{description ? (
 				<Field.Description id={descriptionId} {...stylex.props(fieldStyles.description)}>

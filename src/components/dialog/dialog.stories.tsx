@@ -15,6 +15,7 @@ type StoryArgs = {
 	modal: boolean | "trap-focus";
 	_scrollBehavior: Dialog.DialogScrollBehavior;
 	_showBackdrop: boolean;
+	_showClose: boolean;
 };
 
 const meta = {
@@ -25,6 +26,7 @@ const meta = {
 		modal: true,
 		_scrollBehavior: "popup",
 		_showBackdrop: true,
+		_showClose: true,
 	},
 	argTypes: {
 		defaultOpen: { control: "boolean" },
@@ -32,6 +34,7 @@ const meta = {
 		modal: { control: "select", options: [true, false, "trap-focus"] },
 		_scrollBehavior: { control: "inline-radio", options: ["popup", "inside", "outside"] },
 		_showBackdrop: { control: "boolean" },
+		_showClose: { control: "boolean" },
 	},
 	parameters: {
 		docs: {
@@ -49,12 +52,14 @@ type Story = StoryObj<StoryArgs>;
 function DialogFrame({
 	scrollBehavior = "popup",
 	showBackdrop = true,
+	showClose = true,
 }: {
 	scrollBehavior?: Dialog.DialogScrollBehavior;
 	showBackdrop?: boolean;
+	showClose?: boolean;
 }) {
 	return (
-		<Dialog.Popup backdropProps={showBackdrop ? {} : false} scrollBehavior={scrollBehavior}>
+		<Dialog.Popup backdropProps={showBackdrop ? {} : false} scrollBehavior={scrollBehavior} showClose={showClose}>
 			<Dialog.Header>
 				<Dialog.Title>Edit profile</Dialog.Title>
 				<Dialog.Description>Make changes to how your name appears to teammates.</Dialog.Description>
@@ -69,14 +74,14 @@ function DialogFrame({
 }
 
 export const Playground: Story = {
-	render: ({ defaultOpen, disablePointerDismissal, modal, _scrollBehavior, _showBackdrop }) => (
+	render: ({ defaultOpen, disablePointerDismissal, modal, _scrollBehavior, _showBackdrop, _showClose }) => (
 		<Dialog.Root
-			key={`${defaultOpen}-${disablePointerDismissal}-${modal}-${_scrollBehavior}-${_showBackdrop}`}
+			key={`${defaultOpen}-${disablePointerDismissal}-${modal}-${_scrollBehavior}-${_showBackdrop}-${_showClose}`}
 			defaultOpen={defaultOpen}
 			disablePointerDismissal={disablePointerDismissal}
 			modal={modal}>
 			<Dialog.Trigger render={<Button />}>Edit profile</Dialog.Trigger>
-			<DialogFrame scrollBehavior={_scrollBehavior} showBackdrop={_showBackdrop} />
+			<DialogFrame scrollBehavior={_scrollBehavior} showBackdrop={_showBackdrop} showClose={_showClose} />
 		</Dialog.Root>
 	),
 };
@@ -365,22 +370,22 @@ export const CloseToConfirm: Story = {
 
 const storyParts = stylex.create({
 	insideScrollPopup: {
-		height: `min(620px, calc(100dvh - ${space.x8}))`,
+		height: `min(620px, calc(100dvh - ${space[8]}))`,
 	},
 	insideScrollArea: {
 		flex: "1 1 auto",
 		minHeight: 0,
 	},
 	insideScrollContent: {
-		padding: space.x5,
+		padding: space[5],
 	},
 	sections: {
-		gap: space.x5,
+		gap: space[5],
 		display: "flex",
 		flexDirection: "column",
 	},
 	section: {
-		gap: space.x1,
+		gap: space[1],
 		display: "flex",
 		flexDirection: "column",
 	},
@@ -400,14 +405,14 @@ const storyParts = stylex.create({
 		lineHeight: lineHeight.x2,
 	},
 	nonModalStage: {
-		gap: space.x5,
+		gap: space[5],
 		alignItems: "center",
 		display: "flex",
 		flexDirection: "column",
 		minWidth: "min(680px, calc(100vw - 48px))",
 	},
 	outsidePanel: {
-		gap: space.x6,
+		gap: space[6],
 		alignItems: "center",
 		display: "flex",
 		justifyContent: "space-between",
@@ -420,7 +425,7 @@ const storyParts = stylex.create({
 		lineHeight: lineHeight.x2,
 	},
 	copy: {
-		marginBlock: space.x1,
+		marginBlock: space[1],
 		color: color.fgMuted,
 		fontSize: fontSize.x1,
 		letterSpacing: letterSpacing.x1,

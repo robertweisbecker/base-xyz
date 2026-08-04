@@ -3,10 +3,17 @@ import { ToggleGroup as BaseToggleGroup } from "@base-ui/react/toggle-group";
 import * as stylex from "@stylexjs/stylex";
 import type { StyleXStyles } from "@stylexjs/stylex";
 import type { ReactNode } from "react";
+import { extractThemeProps } from "@/theme/theme-props";
 import { Button, type ButtonProps, type ButtonShape, type ButtonSize, type ButtonVariant } from "../button/button";
+import { buttonThemeProps, type ButtonThemeProps } from "../button/button-theme-props";
+import { space } from "../../styles/tokens.stylex";
 
-export type ToggleProps = Omit<BaseToggle.Props, "className" | "nativeButton" | "render" | "style"> &
-	Pick<ButtonProps, "variant" | "size" | "shape"> & {
+export type ToggleProps = Omit<
+	BaseToggle.Props,
+	"className" | "color" | "height" | "nativeButton" | "render" | "style" | "width" | keyof ButtonThemeProps
+> &
+	Pick<ButtonProps, "variant" | "size" | "shape"> &
+	ButtonThemeProps & {
 		className?: string;
 		/** Visual content positioned before the label. */
 		icon?: ReactNode;
@@ -37,6 +44,7 @@ export function Toggle({
 	variant = "ghost",
 	...props
 }: ToggleProps) {
+	const { restProps, themeProps } = extractThemeProps(props, buttonThemeProps);
 	return (
 		<BaseToggle
 			ref={ref}
@@ -49,9 +57,10 @@ export function Toggle({
 					startSlot={state.pressed && pressedIcon !== undefined ? pressedIcon : icon}
 					style={style}
 					variant={variant}
+					{...themeProps}
 				/>
 			)}
-			{...props}
+			{...restProps}
 		/>
 	);
 }
@@ -71,8 +80,8 @@ export function ToggleGroup({ ref, className, style, ...props }: ToggleGroupProp
 
 const toggleParts = stylex.create({
 	group: {
-		gap: 1,
-		alignItems: "center",
+		gap: space[0.5],
+		alignItems: "stretch",
 		display: "inline-flex",
 		flexDirection: {
 			"[data-orientation=vertical]": "column",

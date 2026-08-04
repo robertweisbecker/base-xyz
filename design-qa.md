@@ -88,3 +88,98 @@ the full Codex plugin inventory.
 ## Final result
 
 final result: passed
+
+---
+
+# Loader design QA
+
+- Source visual truth: `/var/folders/2m/5k18f02x68g2v04w4k_z3x840000gn/T/codex-clipboard-5f284736-a0a9-4f1e-85c6-8213d458fe34.png`
+- Implementation capture: `/tmp/stylex-loader-implementation-crop.png`
+- Comparison image: `/tmp/stylex-loader-comparison.png`
+- Comparison viewport: 114 × 99 CSS px, dark theme.
+
+The implementation matches the reference's two-ring construction: a low-contrast
+complete track and a stronger rounded progress arc. Its size is intentionally
+context-owned at `1lh`, with a `1em` minimum only for icon-slot containers whose
+line height is zero.
+
+Motion was verified from computed styles: the SVG rotates continuously while the
+foreground circle independently animates its normalized dash array and dash
+offset. Reduced-motion rules stop both animations. Button, Async job progress,
+Streaming response, and Tool activity timeline stories render without an error
+overlay, and the Collapsible module that previously failed now loads directly.
+
+## Loader findings
+
+No actionable visual, accessibility, or integration differences remain.
+
+## Loader final result
+
+final result: passed
+
+---
+
+# Slider design QA
+
+- Source visual truth:
+  - `/Users/robertweisbecker/.codex/attachments/f34c5f47-6351-4389-b244-009967b427ff/image-1.png`
+  - `/Users/robertweisbecker/.codex/attachments/f34c5f47-6351-4389-b244-009967b427ff/image-2.png`
+  - `/var/folders/2m/5k18f02x68g2v04w4k_z3x840000gn/T/codex-clipboard-25571726-c98e-4d4c-a14a-0bae6012ec7e.png`
+- Implementation capture: `/private/tmp/stylex-slider-qa/implementation.png`
+- Focused comparison: `/private/tmp/stylex-slider-qa/comparison.png`
+- Desktop viewport: 1280 × 720 CSS px.
+- Responsive layout check: 390 × 844 CSS px.
+- States: dark and light themes, horizontal and vertical orientation, single and
+  range values, default, invalid, and disabled.
+
+The implementation preserves the references' defining geometry: the track,
+indicator, and visible thumb are the same height, with full pill radii and a
+contrasting circular thumb. The dark treatment uses the design system's accent
+fill over an inset neutral track; the light theme retains the same structure
+and adds the token-backed thumb edge and shadow. Semi-transparent markers sit
+above both filled and unfilled regions without intercepting pointer input.
+The indicator itself has square corners, while the overflow-hidden track clips
+the outer endpoint into a pill. This keeps the fill edge flush beneath every
+thumb instead of exposing a rounded accent crescent.
+
+The component follows the existing Switch sizing vocabulary with small,
+medium, and large variants. Its visible thumb remains 20, 24, or 28 px while a
+transparent `::before` target expands interaction geometry to the matching
+28, 32, or 40 px control size. At the default size, live computed geometry
+confirmed a 24 px track and thumb with a 32 px pseudo-element target.
+
+## Slider interaction and semantics
+
+- A single slider derives its accessible name from `Slider.Label`; ArrowRight
+  advanced the Playground value from 65 to 70 by its configured 5-point step.
+- A two-thumb range exposes distinct "Minimum price" and "Maximum price"
+  sliders at 20 and 75, with the indicator rendered only between the thumbs.
+- Vertical orientation exposes `aria-orientation="vertical"`; ArrowUp advanced
+  the verified value from 40 to 50.
+- Disabled state reaches the native range input and Base UI data attributes,
+  cannot be changed with the keyboard, removes the inset/thumb shadows, and
+  uses neutral fill, track, label, and value treatments.
+- Invalid state is provided through `Field.Root`, reaches the hidden range input
+  as `aria-invalid="true"`, and renders the Slider track's danger outline.
+- Playground exposes a visible Marker increment control in value units. A 30
+  increment on a 0–100 slider rendered dots at exactly 0%, 30%, 60%, and 90%;
+  vertical markers likewise measured from 0% through 100% in 10% increments.
+  Marker anchors also measured on the track centerline in both orientations.
+- Label-adjacent values, control-adjacent values, and arbitrary content on both
+  sides of the control rendered without changing slider semantics.
+- Value output reserves the larger formatted endpoint in an `aria-hidden`
+  overlay. Its measured width remained 36.43 px while changing from `9%` to
+  `100%`, so adjacent labels and controls no longer shift.
+- The Controlled story verifies two-way synchronization with Number field,
+  minimum and maximum Toggle presets, and bounded decrement/increment buttons.
+- The Slider stories produced no browser console warnings or errors.
+
+## Slider findings
+
+No actionable visual, accessibility, interaction, or responsive P0, P1, or P2
+differences remain. The accent color intentionally comes from the repository's
+semantic token rather than hard-coding either reference image's fill color.
+
+## Slider final result
+
+final result: passed

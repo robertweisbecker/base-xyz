@@ -278,16 +278,29 @@ function SpacingAndShapeSection() {
 				</div>
 				<div {...stylex.props(styles.spacingExample)}>
 					<div {...stylex.props(styles.spacingCard)}>
-						<span {...stylex.props(styles.exampleEyebrow)}>space.x3 gap</span>
+						<span {...stylex.props(styles.exampleEyebrow)}>space[3] gap</span>
 						<strong {...stylex.props(styles.exampleTitle)}>A composed card</strong>
 						<p {...stylex.props(styles.exampleCopy)}>
 							The x6 inset gives content room to breathe while x3 keeps related text together.
 						</p>
 					</div>
 					<p {...stylex.props(styles.exampleAnnotation)}>
-						This specimen uses <code>space.x6</code> for card padding, <code>space.x3</code> between related items, and{" "}
-						<code>space.x8</code> around the example.
+						This specimen uses <code>space[6]</code> for card padding, <code>space[3]</code> between related items, and{" "}
+						<code>space[8]</code> around the example.
 					</p>
+				</div>
+			</FoundationSection>
+
+			<FoundationSection
+				title="Container sizes"
+				description="Named maximum widths keep common page and panel measures on the shared size scale.">
+				<div {...stylex.props(styles.tokenRows)}>
+					{containerSizeTokens.map((token) => (
+						<div key={token.name} {...stylex.props(styles.tokenRow)}>
+							<TokenName name={token.name} value={token.value} />
+							<span {...stylex.props(styles.usage)}>{token.usage}</span>
+						</div>
+					))}
 				</div>
 			</FoundationSection>
 
@@ -312,11 +325,11 @@ import { radius, space } from "@/styles/tokens.stylex";
 const styles = stylex.create({
   card: {
     borderRadius: radius.md,
-    padding: space.x6,
+    padding: space[6],
   },
   controlRow: {
     display: "flex",
-    gap: space.x3,
+    gap: space[3],
   },
 });`}
 			/>
@@ -508,49 +521,49 @@ function ThemePalette({ name, theme }: { name: string; theme: "light" | "dark" }
 							title="Surfaces"
 							subtitle="Page and container elevation"
 							colors={{
-								canvas: "var(--ds-color-canvas)",
-								surface: "var(--ds-color-surface)",
-								raised: "var(--ds-color-elevated)",
-								subtle: "var(--ds-color-surface-subtle)",
+								canvas: "var(--color-canvas)",
+								surface: "var(--color-surface)",
+								raised: "var(--color-elevated)",
+								subtle: "var(--color-surface-subtle)",
 							}}
 						/>
 						<ColorItem
 							title="Content"
 							subtitle="Default, quiet, and emphasized text"
 							colors={{
-								text: "var(--ds-color-text)",
-								muted: "var(--ds-color-text-muted)",
-								accent: "var(--ds-color-text-accent)",
-								inverse: "var(--ds-color-inverse-text)",
+								text: "var(--color-text)",
+								muted: "var(--color-text-muted)",
+								accent: "var(--color-text-accent)",
+								inverse: "var(--color-inverse-text)",
 							}}
 						/>
 						<ColorItem
 							title="Boundaries"
 							subtitle="Dividers, control borders, and focus"
 							colors={{
-								border: "var(--ds-color-border)",
-								strong: "var(--ds-color-border-strong)",
-								focus: "var(--ds-color-focus)",
+								border: "var(--color-border)",
+								strong: "var(--color-border-strong)",
+								focus: "var(--color-focus)",
 							}}
 						/>
 						<ColorItem
 							title="Interaction"
 							subtitle="Primary actions and hover feedback"
 							colors={{
-								accent: "var(--ds-color-accent)",
-								hover: "var(--ds-color-accent-hover)",
-								soft: "var(--ds-color-accent-soft)",
-								contrast: "var(--ds-color-accent-contrast)",
+								accent: "var(--color-accent)",
+								hover: "var(--color-accent-hover)",
+								soft: "var(--color-accent-soft)",
+								contrast: "var(--color-accent-contrast)",
 							}}
 						/>
 						<ColorItem
 							title="Feedback"
 							subtitle="Destructive and successful outcomes"
 							colors={{
-								danger: "var(--ds-color-danger)",
-								"danger soft": "var(--ds-color-danger-subtle)",
-								success: "var(--ds-color-success)",
-								"success soft": "var(--ds-color-success-subtle)",
+								danger: "var(--color-danger)",
+								"danger soft": "var(--color-danger-subtle)",
+								success: "var(--color-success)",
+								"success soft": "var(--color-success-subtle)",
 							}}
 						/>
 					</ColorPalette>
@@ -695,17 +708,30 @@ function TokenSource({ code }: { code: string }) {
 }
 
 const spacingTokens = [
-	{ name: "space.x1", value: "0.25rem", usage: "Fine alignment" },
-	{ name: "space.x2", value: "0.5rem", usage: "Icon and label" },
-	{ name: "space.x3", value: "0.75rem", usage: "Related controls" },
-	{ name: "space.x4", value: "1rem", usage: "Compact inset" },
-	{ name: "space.x5", value: "1.25rem", usage: "Form rhythm" },
-	{ name: "space.x6", value: "1.5rem", usage: "Card inset" },
-	{ name: "space.x8", value: "2rem", usage: "Section grouping" },
-	{ name: "space.x9", value: "2.25rem", usage: "Large control rhythm" },
-	{ name: "space.x10", value: "2.5rem", usage: "Panel spacing" },
-	{ name: "space.x12", value: "3rem", usage: "Major separation" },
-	{ name: "space.x16", value: "4rem", usage: "Page sections" },
+	{ name: "space[0]", value: "0", usage: "Remove token spacing" },
+	{ name: "space[1]", value: "0.25rem", usage: "Fine alignment" },
+	{ name: "space[1.5]", value: "0.375rem", usage: "Optical adjustment" },
+	{ name: "space[2]", value: "0.5rem", usage: "Icon and label" },
+	{ name: "space[3]", value: "0.75rem", usage: "Related controls" },
+	{ name: "space[4]", value: "1rem", usage: "Compact inset" },
+	{ name: "space[5]", value: "1.25rem", usage: "Form rhythm" },
+	{ name: "space[6]", value: "1.5rem", usage: "Card inset" },
+	{ name: "space[7]", value: "1.75rem", usage: "Roomy control rhythm" },
+	{ name: "space[8]", value: "2rem", usage: "Section grouping" },
+	{ name: "space[9]", value: "2.25rem", usage: "Large control rhythm" },
+	{ name: "space[10]", value: "2.5rem", usage: "Panel spacing" },
+	{ name: "space[12]", value: "3rem", usage: "Major separation" },
+	{ name: "space[16]", value: "4rem", usage: "Page sections" },
+];
+
+const containerSizeTokens = [
+	{ name: 'size["container.xs"]', value: "20rem", usage: "Compact panels" },
+	{ name: 'size["container.sm"]', value: "24rem", usage: "Narrow forms" },
+	{ name: 'size["container.md"]', value: "28rem", usage: "Dialogs" },
+	{ name: 'size["container.lg"]', value: "32rem", usage: "Reading panels" },
+	{ name: 'size["container.xl"]', value: "36rem", usage: "Wide forms" },
+	{ name: 'size["container.2xl"]', value: "42rem", usage: "Content panels" },
+	{ name: 'size["container.3xl"]', value: "48rem", usage: "Page sections" },
 ];
 
 const radiusTokens = [
@@ -736,7 +762,7 @@ const styles = stylex.create({
 		maxWidth: "1120px",
 	},
 	pageHeader: {
-		paddingBlockEnd: space.x8,
+		paddingBlockEnd: space[8],
 		borderBottomColor: color.border,
 		borderBottomStyle: "solid",
 		borderBottomWidth: "1px",
@@ -747,7 +773,7 @@ const styles = stylex.create({
 		fontWeight: fontWeight.semibold,
 		letterSpacing: letterSpacing.x8,
 		lineHeight: lineHeight.x8,
-		marginBlockEnd: space.x3,
+		marginBlockEnd: space[3],
 		marginBlockStart: 0,
 	},
 	pageDescription: {
@@ -759,7 +785,7 @@ const styles = stylex.create({
 		maxWidth: "720px",
 	},
 	category: {
-		paddingBlock: space.x12,
+		paddingBlock: space[12],
 		borderTopColor: color.border,
 		borderTopStyle: "solid",
 		borderTopWidth: {
@@ -768,7 +794,7 @@ const styles = stylex.create({
 		},
 	},
 	categoryHeader: {
-		marginBlockEnd: space.x2,
+		marginBlockEnd: space[2],
 		maxWidth: "760px",
 	},
 	categoryTitle: {
@@ -785,13 +811,13 @@ const styles = stylex.create({
 		letterSpacing: letterSpacing.x3,
 		lineHeight: lineHeight.x3,
 		marginBlockEnd: 0,
-		marginBlockStart: space.x2,
+		marginBlockStart: space[2],
 	},
 	section: {
-		paddingBlock: space.x8,
+		paddingBlock: space[8],
 	},
 	sectionHeader: {
-		marginBlockEnd: space.x5,
+		marginBlockEnd: space[5],
 		maxWidth: "760px",
 	},
 	sectionTitle: {
@@ -808,14 +834,14 @@ const styles = stylex.create({
 		letterSpacing: letterSpacing.x2,
 		lineHeight: lineHeight.x2,
 		marginBlockEnd: 0,
-		marginBlockStart: space.x2,
+		marginBlockStart: space[2],
 	},
 	themePalettes: {
-		gap: space.x8,
+		gap: space[8],
 		display: "grid",
 	},
 	themePalette: {
-		padding: space.x6,
+		padding: space[6],
 		borderColor: color.border,
 		borderRadius: radius.md,
 		borderStyle: "solid",
@@ -825,7 +851,7 @@ const styles = stylex.create({
 	},
 	paletteTitle: {
 		margin: 0,
-		color: "var(--ds-color-text)",
+		color: "var(--color-text)",
 		fontSize: fontSize.x4,
 		fontWeight: fontWeight.semibold,
 		letterSpacing: letterSpacing.x4,
@@ -845,8 +871,8 @@ const styles = stylex.create({
 		overflow: "hidden",
 	},
 	typeRole: {
-		padding: space.x5,
-		gap: space.x8,
+		padding: space[5],
+		gap: space[8],
 		alignItems: "center",
 		backgroundColor: color.surface,
 		display: "grid",
@@ -862,7 +888,7 @@ const styles = stylex.create({
 		},
 	},
 	typeMeta: {
-		gap: space.x1,
+		gap: space[1],
 		alignItems: "start",
 		display: "flex",
 		flexDirection: "column",
@@ -902,7 +928,7 @@ const styles = stylex.create({
 		lineHeight: lineHeight.x1,
 	},
 	weightGrid: {
-		gap: space.x4,
+		gap: space[4],
 		display: "grid",
 		gridTemplateColumns: {
 			default: "1fr",
@@ -924,9 +950,9 @@ const styles = stylex.create({
 		overflow: "hidden",
 	},
 	tokenRow: {
-		gap: space.x4,
-		paddingBlock: space.x3,
-		paddingInline: space.x4,
+		gap: space[4],
+		paddingBlock: space[3],
+		paddingInline: space[4],
 		alignItems: "center",
 		backgroundColor: color.surface,
 		display: "grid",
@@ -943,7 +969,7 @@ const styles = stylex.create({
 		minHeight: "56px",
 	},
 	tokenName: {
-		gap: space.x1,
+		gap: space[1],
 		alignItems: "start",
 		display: "flex",
 		flexDirection: "column",
@@ -964,7 +990,7 @@ const styles = stylex.create({
 	measureTrack: {
 		borderRadius: radius.full,
 		overflow: "hidden",
-		paddingInline: space.x1,
+		paddingInline: space[1],
 		alignItems: "center",
 		backgroundColor: color.surfaceSubtle,
 		display: "flex",
@@ -978,9 +1004,9 @@ const styles = stylex.create({
 		minWidth: "4px",
 	},
 	spacingExample: {
-		padding: space.x8,
+		padding: space[8],
 		borderRadius: radius.lg,
-		gap: space.x8,
+		gap: space[8],
 		alignItems: "center",
 		backgroundColor: color.surfaceSubtle,
 		display: "grid",
@@ -988,12 +1014,12 @@ const styles = stylex.create({
 			default: "minmax(260px, 0.8fr) minmax(0, 1.2fr)",
 			"@media (max-width: 700px)": "1fr",
 		},
-		marginBlockStart: space.x6,
+		marginBlockStart: space[6],
 	},
 	spacingCard: {
-		padding: space.x6,
+		padding: space[6],
 		borderRadius: radius.md,
-		gap: space.x3,
+		gap: space[3],
 		backgroundColor: color.surface,
 		boxShadow: shadow.sm,
 		display: "flex",
@@ -1027,7 +1053,7 @@ const styles = stylex.create({
 		lineHeight: lineHeight.x2,
 	},
 	radiusGrid: {
-		gap: space.x4,
+		gap: space[4],
 		display: "grid",
 		gridTemplateColumns: {
 			default: "repeat(4, minmax(0, 1fr))",
@@ -1036,12 +1062,12 @@ const styles = stylex.create({
 		},
 	},
 	radiusToken: {
-		padding: space.x4,
+		padding: space[4],
 		borderColor: color.border,
 		borderRadius: radius.md,
 		borderStyle: "solid",
 		borderWidth: "1px",
-		gap: space.x3,
+		gap: space[3],
 		backgroundColor: color.surface,
 		display: "flex",
 		flexDirection: "column",
@@ -1055,8 +1081,8 @@ const styles = stylex.create({
 		width: "100%",
 	},
 	shadowGrid: {
-		gap: space.x8,
-		paddingBlock: space.x6,
+		gap: space[8],
+		paddingBlock: space[6],
 		display: "grid",
 		gridTemplateColumns: {
 			default: "repeat(3, minmax(0, 1fr))",
@@ -1064,7 +1090,7 @@ const styles = stylex.create({
 		},
 	},
 	shadowSpecimen: {
-		padding: space.x5,
+		padding: space[5],
 		borderRadius: radius.md,
 		backgroundColor: color.surface,
 		minHeight: "132px",
@@ -1087,8 +1113,8 @@ const styles = stylex.create({
 		backgroundColor: color.surface,
 	},
 	motionToolbar: {
-		padding: space.x4,
-		gap: space.x4,
+		padding: space[4],
+		gap: space[4],
 		alignItems: "center",
 		backgroundColor: color.surfaceSubtle,
 		display: "flex",
@@ -1101,8 +1127,8 @@ const styles = stylex.create({
 	},
 	playButton: {
 		borderRadius: radius.sm,
-		gap: space.x2,
-		paddingInline: space.x3,
+		gap: space[2],
+		paddingInline: space[3],
 		alignItems: "center",
 		backgroundColor: {
 			default: color.bgAccent,
@@ -1120,8 +1146,8 @@ const styles = stylex.create({
 		flexDirection: "column",
 	},
 	motionRow: {
-		padding: space.x4,
-		gap: space.x4,
+		padding: space[4],
+		gap: space[4],
 		alignItems: "center",
 		display: "grid",
 		gridTemplateColumns: {
@@ -1178,8 +1204,8 @@ const styles = stylex.create({
 		},
 	},
 	easingNotes: {
-		padding: space.x4,
-		gap: space.x4,
+		padding: space[4],
+		gap: space[4],
 		display: "grid",
 		gridTemplateColumns: {
 			default: "repeat(3, minmax(0, 1fr))",
@@ -1187,7 +1213,7 @@ const styles = stylex.create({
 		},
 	},
 	layerLayout: {
-		gap: space.x8,
+		gap: space[8],
 		alignItems: "center",
 		display: "grid",
 		gridTemplateColumns: {
@@ -1219,13 +1245,13 @@ const styles = stylex.create({
 		width: "180px",
 	},
 	layerModal: {
-		insetBlockStart: space.x5,
-		insetInlineStart: space.x5,
+		insetBlockStart: space[5],
+		insetInlineStart: space[5],
 		zIndex: zIndex.modal,
 	},
 	layerPopup: {
-		insetBlockStart: space.x16,
-		insetInlineStart: space.x16,
+		insetBlockStart: space[16],
+		insetInlineStart: space[16],
 		zIndex: zIndex.popup,
 	},
 	layerTooltip: {
@@ -1246,8 +1272,8 @@ const styles = stylex.create({
 		overflow: "hidden",
 	},
 	layerRow: {
-		padding: space.x3,
-		gap: space.x3,
+		padding: space[3],
+		gap: space[3],
 		backgroundColor: color.surface,
 		display: "grid",
 		gridTemplateColumns: "130px minmax(0, 1fr)",
@@ -1259,7 +1285,7 @@ const styles = stylex.create({
 		},
 	},
 	iconExamples: {
-		gap: space.x4,
+		gap: space[4],
 		display: "grid",
 		gridTemplateColumns: {
 			default: "repeat(3, minmax(0, 1fr))",
@@ -1267,12 +1293,12 @@ const styles = stylex.create({
 		},
 	},
 	iconExample: {
-		padding: space.x4,
+		padding: space[4],
 		borderColor: color.border,
 		borderRadius: radius.md,
 		borderStyle: "solid",
 		borderWidth: "1px",
-		gap: space.x4,
+		gap: space[4],
 		alignItems: "center",
 		backgroundColor: color.surface,
 		color: color.fg,

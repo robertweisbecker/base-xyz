@@ -1,11 +1,11 @@
 import { CheckIcon } from "@phosphor-icons/react/dist/csr/Check";
 import { ClockIcon } from "@phosphor-icons/react/dist/csr/Clock";
-import { SpinnerGapIcon } from "@phosphor-icons/react/dist/csr/SpinnerGap";
 import { WarningIcon } from "@phosphor-icons/react/dist/csr/Warning";
 import * as stylex from "@stylexjs/stylex";
 import type { StyleXStyles } from "@stylexjs/stylex";
 import { createContext, type ComponentProps, createElement, useContext, useId } from "react";
 import { Badge, type BadgeHue } from "@/components/badge/badge";
+import { Loader } from "@/components/loader/loader";
 import * as ProgressPrimitive from "@/components/progress/progress";
 import { color, space } from "@/styles/tokens.stylex";
 import { fontSize, fontWeight, letterSpacing, lineHeight } from "@/styles/tokens.stylex";
@@ -185,7 +185,7 @@ function renderStatusIcon(status: AsyncJobStatus) {
 		case "queued":
 			return <ClockIcon aria-hidden weight="bold" />;
 		case "running":
-			return <SpinnerGapIcon aria-hidden weight="bold" {...stylex.props(parts.spinner)} />;
+			return <Loader aria-hidden />;
 		case "complete":
 			return <CheckIcon aria-hidden weight="bold" />;
 		case "error":
@@ -197,11 +197,9 @@ function joinClassNames(...classNames: Array<string | undefined>) {
 	return classNames.filter(Boolean).join(" ");
 }
 
-const spin = stylex.keyframes({ to: { transform: "rotate(360deg)" } });
-
 const parts = stylex.create({
 	root: {
-		gap: space.x3,
+		gap: space[3],
 		color: color.fg,
 		display: "flex",
 		flexDirection: "column",
@@ -209,13 +207,13 @@ const parts = stylex.create({
 		width: "100%",
 	},
 	header: {
-		gap: space.x4,
+		gap: space[4],
 		alignItems: "flex-start",
 		display: "flex",
 		justifyContent: "space-between",
 	},
 	heading: {
-		gap: space.x1,
+		gap: space[1],
 		display: "flex",
 		flexDirection: "column",
 		minWidth: 0,
@@ -239,19 +237,10 @@ const parts = stylex.create({
 	status: { display: "inline-flex", flexShrink: 0 },
 	progressValue: { gridColumn: "2" },
 	actions: {
-		gap: space.x2,
+		gap: space[2],
 		alignItems: "center",
 		display: "flex",
 		justifyContent: "flex-end",
-	},
-	spinner: {
-		animationDuration: "900ms",
-		animationIterationCount: "infinite",
-		animationName: {
-			default: spin,
-			"@media (prefers-reduced-motion: reduce)": "none",
-		},
-		animationTimingFunction: "linear",
 	},
 });
 

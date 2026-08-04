@@ -126,13 +126,13 @@ export const Examples: Story = {
 
 const storyParts = stylex.create({
 	examples: {
-		gap: space.x6,
+		gap: space[6],
 		display: "flex",
 		flexDirection: "column",
 		maxWidth: "46rem",
 	},
 	example: {
-		gap: space.x3,
+		gap: space[3],
 		display: "flex",
 		flexDirection: "column",
 	},

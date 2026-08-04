@@ -280,7 +280,7 @@ function joinClassNames(...classNames: Array<string | undefined>) {
 
 const parts = stylex.create({
 	root: {
-		gap: space.x2,
+		gap: space[2],
 		color: color.fg,
 		display: "flex",
 		flexDirection: "column",
@@ -288,14 +288,14 @@ const parts = stylex.create({
 		width: "100%",
 	},
 	options: {
-		gap: space.x1,
+		gap: space[1],
 		alignItems: "center",
 		display: "flex",
 		minWidth: 0,
 	},
 	addMenu: { minWidth: "15rem" },
 	addMenuCopy: {
-		gap: space.x2,
+		gap: space[2],
 		gridColumn: "2 / 4",
 		alignItems: "baseline",
 		display: "flex",

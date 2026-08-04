@@ -1,21 +1,26 @@
 import { Button as BaseButton } from "@base-ui/react/button";
 import * as stylex from "@stylexjs/stylex";
 import type { StyleXStyles } from "@stylexjs/stylex";
-import { isValidElement, type ReactNode } from "react";
+import type { ReactNode } from "react";
+import { resolveThemeProps } from "@/theme/theme-props";
 import { focusRing } from "@/styles/recipes/focus";
 import { pressable } from "@/styles/recipes/transitions";
 import { color, radius, size, space, shadow } from "@/styles/tokens.stylex";
 import { fontSize, fontWeight, letterSpacing, lineHeight } from "@/styles/tokens.stylex";
+import { Loader } from "../loader/loader";
 import * as Tooltip from "../tooltip/tooltip";
+import { buttonThemeProps, type ButtonThemeProps } from "./button-theme-props";
 
-const HOVER_WHEN_INACTIVE =
+export type { ButtonThemeProps } from "./button-theme-props";
+
+const HOVER_NOT_PRESSED_OR_OPEN =
 	':hover:not(:disabled):not([aria-disabled="true"]):not([data-disabled]):not([aria-pressed="true"]):not([data-active]):not([data-panel-open]):not([data-popup-open]):not([data-pressed])';
-const PRESSED_OR_ACTIVATED =
+const PRESSED =
 	':is(:active, [aria-pressed="true"], [data-active], [data-panel-open], [data-popup-open], [data-pressed])';
 
 const buttonParts = stylex.create({
 	root: {
-		gap: space.x2,
+		gap: space[2],
 		overflow: "hidden",
 		textDecoration: "none",
 		alignItems: "center",
@@ -37,6 +42,7 @@ const buttonParts = stylex.create({
 			default: "auto",
 			":disabled": "none",
 		},
+		position: "relative",
 		transform: {
 			default: "scale(1)",
 			":active": "scale(0.98)",
@@ -63,7 +69,33 @@ const slotParts = stylex.create({
 	},
 });
 
-const labeledSlotSizes = stylex.create({
+const contentParts = stylex.create({
+	resting: {
+		display: "contents",
+	},
+	transparent: {
+		color: "transparent",
+		textShadow: "none",
+	},
+	loading: {
+		inset: space[1],
+		gap: "inherit",
+		alignItems: "center",
+		display: "flex",
+		justifyContent: "center",
+		pointerEvents: "none",
+		position: "absolute",
+		minWidth: 0,
+	},
+	loadingText: {
+		overflow: "hidden",
+		textOverflow: "ellipsis",
+		whiteSpace: "nowrap",
+		minWidth: 0,
+	},
+});
+
+const slotSizes = stylex.create({
 	xs: { fontSize: "0.875em" },
 	sm: { fontSize: "1em" },
 	md: { fontSize: "1rem" },
@@ -71,10 +103,33 @@ const labeledSlotSizes = stylex.create({
 });
 
 const iconOnlySlotSizes = stylex.create({
-	xs: { fontSize: "0.875rem" },
-	sm: { fontSize: "1em" },
-	md: { fontSize: "1.125em" },
-	lg: { fontSize: "1em" },
+	xs: { fontSize: "1rem" }, // 16px
+	sm: { fontSize: "1rem" }, // 16px
+	md: { fontSize: "1.125rem" }, // 18px
+	lg: { fontSize: "1.25rem" }, // 20px
+});
+
+const iconOnlyControlSizes = stylex.create({
+	xs: {
+		height: size["control.xs"],
+		maxWidth: size["control.xs"],
+		minWidth: size["control.xs"],
+	},
+	sm: {
+		height: size["control.sm"],
+		maxWidth: size["control.sm"],
+		minWidth: size["control.sm"],
+	},
+	md: {
+		height: size["control.md"],
+		maxWidth: size["control.md"],
+		minWidth: size["control.md"],
+	},
+	lg: {
+		height: size["control.lg"],
+		maxWidth: size["control.lg"],
+		minWidth: size["control.lg"],
+	},
 });
 
 const startSlotOffsets = stylex.create({
@@ -95,93 +150,97 @@ const colorVariants = stylex.create({
 	primary: {
 		backgroundColor: {
 			// eslint-disable-next-line @stylexjs/valid-styles -- the compiler supports chained pseudo-class conditions; the lint rule is stricter than the compiler.
-			[HOVER_WHEN_INACTIVE]: {
+			[HOVER_NOT_PRESSED_OR_OPEN]: {
 				"@media (hover: hover) and (pointer: fine)": color.bgAccentHover,
 			},
-			[PRESSED_OR_ACTIVATED]: color.bgAccentHover,
+			[PRESSED]: color.bgAccentHover,
 			default: color.bgAccent,
 		},
-		boxShadow: `inset 0 0 0 1px color-mix(in oklch, ${color.bgAccent} 90%, black), inset 0 1px 0 1px color-mix(in oklch, white 20%, ${color.bgAccent})`,
+		backgroundImage: `linear-gradient(to bottom, ${color.bgAccentHover},transparent 40%)`,
+		boxShadow: {
+			[PRESSED]: `inset 0 0 0.08em color-mix(in oklch, black 20%, ${color.bgAccent}), inset 0 0.08em 0.16em 0.08em color-mix(in oklch, black 10%, ${color.bgAccent})`,
+			"[data-disabled]": null,
+			default: `inset 0 0 0.04em 0.08em color-mix(in srgb, ${color.bgAccent} 90%, ${color.fg}), inset 0 0.04em 0.04em 0.08em color-mix(in oklch, white 40%, ${color.bgAccent}), var(--shadow-ring)`,
+		},
 		color: color.fgAccentContrast,
+		textShadow: `0 .03em .06em oklch(from ${color.bgAccent} calc(l*0.7) calc(c*1.1) h)`,
 	},
 	subtle: {
 		backgroundColor: {
 			// eslint-disable-next-line @stylexjs/valid-styles -- the compiler supports chained pseudo-class conditions; the lint rule is stricter than the compiler.
-			[HOVER_WHEN_INACTIVE]: {
+			[HOVER_NOT_PRESSED_OR_OPEN]: {
 				"@media (hover: hover) and (pointer: fine)": color.bgAccentSoftHover,
 			},
-			[PRESSED_OR_ACTIVATED]: color.bgAccentMuted,
+			[PRESSED]: color.bgAccentMuted,
 			default: color.bgAccentSoft,
 		},
 		color: {
-			[PRESSED_OR_ACTIVATED]: color.fgAccentStrong,
+			[PRESSED]: color.fgAccentStrong,
 			default: color.fgAccent,
 		},
 	},
 	secondary: {
 		backgroundColor: {
-			// eslint-disable-next-line @stylexjs/valid-styles -- the compiler supports chained pseudo-class conditions; the lint rule is stricter than the compiler.
-			[HOVER_WHEN_INACTIVE]: {
-				"@media (hover: hover) and (pointer: fine)": color.highlight,
-			},
-			[PRESSED_OR_ACTIVATED]: color.canvasSubtle,
+			[HOVER_NOT_PRESSED_OR_OPEN]: color.highlight,
+			[PRESSED]: color.bgElevatedActive,
 			default: color.bgElevated,
 		},
 		boxShadow: {
-			[PRESSED_OR_ACTIVATED]: shadow.inset,
+			[PRESSED]: shadow.inset,
 			default: shadow.sm,
 		},
+		color: color.fg,
 	},
 	neutral: {
 		backgroundColor: {
 			// eslint-disable-next-line @stylexjs/valid-styles -- the compiler supports chained pseudo-class conditions; the lint rule is stricter than the compiler.
-			[HOVER_WHEN_INACTIVE]: {
+			[HOVER_NOT_PRESSED_OR_OPEN]: {
 				"@media (hover: hover) and (pointer: fine)": color.surfaceSubtleHover,
 			},
-			[PRESSED_OR_ACTIVATED]: color.surfaceSubtleHover,
+			[PRESSED]: color.surfaceSubtleHover,
 			default: color.surfaceSubtle,
 			":active": color.surfaceSubtleActive,
 		},
 		color: {
-			[HOVER_WHEN_INACTIVE]: {
+			[HOVER_NOT_PRESSED_OR_OPEN]: {
 				"@media (hover: hover) and (pointer: fine)": color.fg,
 			},
-			[PRESSED_OR_ACTIVATED]: color.fg,
-			default: color.fg,
+			[PRESSED]: color.fgSubtle,
+			default: color.fgMuted,
+			":active": color.fgSubtle,
 		},
 	},
 	ghost: {
 		borderColor: "transparent",
 		backgroundColor: {
 			// eslint-disable-next-line @stylexjs/valid-styles -- the compiler supports chained pseudo-class conditions; the lint rule is stricter than the compiler.
-			[HOVER_WHEN_INACTIVE]: {
+			[HOVER_NOT_PRESSED_OR_OPEN]: {
 				"@media (hover: hover) and (pointer: fine)": color.highlight,
 			},
-			[PRESSED_OR_ACTIVATED]: color.surfaceSubtle,
+			[PRESSED]: color.surfaceSubtle,
 			default: "transparent",
 		},
 		color: {
-			[HOVER_WHEN_INACTIVE]: {
+			[HOVER_NOT_PRESSED_OR_OPEN]: {
 				"@media (hover: hover) and (pointer: fine)": color.fgMuted,
 			},
-			[PRESSED_OR_ACTIVATED]: color.fg,
+			[PRESSED]: color.fg,
 			default: color.fgMuted,
 		},
 	},
 	plain: {
 		backgroundColor: {
 			// eslint-disable-next-line @stylexjs/valid-styles -- the compiler supports chained pseudo-class conditions; the lint rule is stricter than the compiler.
-			[HOVER_WHEN_INACTIVE]: {
+			[HOVER_NOT_PRESSED_OR_OPEN]: {
 				"@media (hover: hover) and (pointer: fine)": color.highlight,
 			},
-			[PRESSED_OR_ACTIVATED]: color.surfaceSubtle,
 			default: "transparent",
 		},
 		color: {
-			[HOVER_WHEN_INACTIVE]: {
+			[HOVER_NOT_PRESSED_OR_OPEN]: {
 				"@media (hover: hover) and (pointer: fine)": color.fg,
 			},
-			[PRESSED_OR_ACTIVATED]: color.fg,
+			[PRESSED]: color.fg,
 			default: color.fgMuted,
 		},
 	},
@@ -189,17 +248,17 @@ const colorVariants = stylex.create({
 		borderColor: color.bgDanger,
 		backgroundColor: {
 			// eslint-disable-next-line @stylexjs/valid-styles -- the compiler supports chained pseudo-class conditions; the lint rule is stricter than the compiler.
-			[HOVER_WHEN_INACTIVE]: {
+			[HOVER_NOT_PRESSED_OR_OPEN]: {
 				"@media (hover: hover) and (pointer: fine)": color.bgDanger,
 			},
-			[PRESSED_OR_ACTIVATED]: color.bgDanger,
+			[PRESSED]: color.bgDanger,
 			default: color.bgDangerSubtle,
 		},
 		color: {
-			[HOVER_WHEN_INACTIVE]: {
+			[HOVER_NOT_PRESSED_OR_OPEN]: {
 				"@media (hover: hover) and (pointer: fine)": color.fgAccentContrast,
 			},
-			[PRESSED_OR_ACTIVATED]: color.fgAccentContrast,
+			[PRESSED]: color.fgAccentContrast,
 			default: color.bgDanger,
 		},
 	},
@@ -208,9 +267,9 @@ const colorVariants = stylex.create({
 const sizeVariants = stylex.create({
 	xs: {
 		borderRadius: radius.sm,
-		gap: space.x1,
-		paddingBlock: space.x2,
-		paddingInline: space.x2,
+		gap: space[1],
+		paddingBlock: space[2],
+		paddingInline: space[2],
 		fontSize: fontSize.x1,
 		fontWeight: fontWeight.medium,
 		letterSpacing: letterSpacing.x1,
@@ -220,9 +279,9 @@ const sizeVariants = stylex.create({
 	},
 	sm: {
 		borderRadius: radius.sm,
-		gap: space.x1_5,
-		paddingBlock: space.x2,
-		paddingInline: space.x3,
+		gap: space[1.5],
+		paddingBlock: space[2],
+		paddingInline: space[3],
 		fontSize: "13px",
 		fontWeight: fontWeight.medium,
 		letterSpacing: "-.0125em",
@@ -232,16 +291,16 @@ const sizeVariants = stylex.create({
 	},
 	md: {
 		borderRadius: radius.md,
-		paddingBlock: space.x3,
-		paddingInline: space.x3,
+		paddingBlock: space[3],
+		paddingInline: space[3],
 		fontWeight: fontWeight.medium,
 		height: size["control.md"],
 		minWidth: size["control.md"],
 	},
 	lg: {
 		borderRadius: radius.lg,
-		paddingBlock: space.x4,
-		paddingInline: space.x5,
+		paddingBlock: space[4],
+		paddingInline: space[5],
 		fontSize: fontSize.x3,
 		letterSpacing: letterSpacing.x3,
 		lineHeight: lineHeight.x3,
@@ -253,8 +312,8 @@ const sizeVariants = stylex.create({
 const shapeVariants = stylex.create({
 	default: {
 		cornerShape: {
-			default: "superellipse(1.3)",
 			"[data-size='sm']": "superellipse(1)",
+			default: "superellipse(1.3)",
 		},
 	},
 	pill: {
@@ -263,33 +322,40 @@ const shapeVariants = stylex.create({
 	circle: {
 		padding: 0,
 		borderRadius: radius.full,
-		aspectRatio: 1,
+		aspectRatio: "1 / 1",
 	},
 	square: {
 		padding: 0,
 		cornerShape: "superellipse(1.3)",
-		aspectRatio: 1,
+		aspectRatio: "1 / 1",
 	},
 });
 
 export type ButtonVariant = keyof typeof colorVariants;
 export type ButtonSize = keyof typeof sizeVariants;
 export type ButtonShape = keyof typeof shapeVariants;
+export type ButtonProps = Omit<BaseButton.Props, "className" | "color" | "style" | keyof ButtonThemeProps> &
+	ButtonThemeProps & {
+		variant?: ButtonVariant;
+		size?: ButtonSize;
+		shape?: ButtonShape;
+		className?: string;
+		/** Visual content positioned before the label. */
+		startSlot?: ReactNode;
+		/** Visual content positioned after the label. */
+		endSlot?: ReactNode;
+		/** Whether the button shows its loading state and ignores interaction. */
+		loading?: boolean;
+		/** Visible loading label. Defaults to `"Loading…"`; use an empty string for a loader only. */
+		loadingText?: string;
+		/** StyleX overrides, applied after the component's own styles. */
+		style?: StyleXStyles;
+	};
 
-export type ButtonProps = Omit<BaseButton.Props, "className" | "style"> & {
-	variant?: ButtonVariant;
-	size?: ButtonSize;
-	shape?: ButtonShape;
-	className?: string;
-	/** Visual content positioned before the label. */
-	startSlot?: ReactNode;
-	/** Visual content positioned after the label. */
-	endSlot?: ReactNode;
-	/** StyleX overrides, applied after the component's own styles. */
-	style?: StyleXStyles;
-};
-
-export type IconButtonProps = Omit<ButtonProps, "aria-label" | "children" | "endSlot" | "shape" | "startSlot"> & {
+export type IconButtonProps = Omit<
+	ButtonProps,
+	"aria-label" | "children" | "endSlot" | "loadingText" | "shape" | "startSlot"
+> & {
 	icon: ReactNode;
 	label: string;
 	shape?: Extract<ButtonShape, "circle" | "square">;
@@ -333,9 +399,15 @@ function ButtonRoot({
 	children,
 	startSlot,
 	endSlot,
+	loading = false,
+	loadingText = "Loading…",
+	disabled,
+	focusableWhenDisabled,
+	"aria-busy": ariaBusy,
 	iconOnly = false,
 	...props
 }: ButtonRootProps) {
+	const { restProps, styles } = resolveThemeProps(props, buttonThemeProps);
 	const sx = stylex.props(
 		buttonParts.root,
 		focusRing.outset,
@@ -343,46 +415,62 @@ function ButtonRoot({
 		colorVariants[variant],
 		sizeVariants[size],
 		shapeVariants[shape],
+		...styles,
+		iconOnly && iconOnlyControlSizes[size],
 		style,
 	);
-	const rendersNativeButton = nativeButton ?? (render == null || (isValidElement(render) && render.type === "button"));
+	const resolvedLoadingText = iconOnly ? "" : loadingText;
 
 	return (
 		<BaseButton
 			ref={ref}
 			type={type}
 			render={render}
-			nativeButton={rendersNativeButton}
+			nativeButton={nativeButton}
+			aria-busy={loading ? true : ariaBusy}
+			disabled={loading || disabled}
+			focusableWhenDisabled={loading || focusableWhenDisabled}
 			data-icon-only={iconOnly ? "" : undefined}
+			data-loading={loading ? "" : undefined}
 			data-shape={shape}
 			data-size={size}
 			data-variant={variant}
 			className={[sx.className, className].filter(Boolean).join(" ")}
 			style={sx.style}
-			{...props}>
-			{renderSlot(startSlot, "start", size, variant, iconOnly)}
-			{children}
-			{renderSlot(endSlot, "end", size, variant, iconOnly)}
+			{...restProps}>
+			<span {...stylex.props(contentParts.resting, loading && contentParts.transparent)}>
+				{renderSlot(startSlot, "start", size, variant, iconOnly)}
+				{children}
+				{renderSlot(endSlot, "end", size, variant, iconOnly)}
+			</span>
+			{loading && (
+				<span aria-hidden {...stylex.props(contentParts.loading)}>
+					{renderSlot(<Loader aria-hidden />, "loading", size, variant, iconOnly || resolvedLoadingText.length === 0)}
+					{resolvedLoadingText.length > 0 && (
+						<span {...stylex.props(contentParts.loadingText)}>{resolvedLoadingText}</span>
+					)}
+				</span>
+			)}
 		</BaseButton>
 	);
 }
 
 function renderSlot(
 	slot: ReactNode,
-	position: "start" | "end",
+	role: "start" | "end" | "loading",
 	size: ButtonSize,
 	variant: ButtonVariant,
 	iconOnly: boolean,
 ) {
-	if (slot == null) {
+	if (slot == null || typeof slot === "boolean") {
 		return null;
 	}
 
 	const sx = stylex.props(
 		slotParts.root,
-		iconOnly ? iconOnlySlotSizes[size] : labeledSlotSizes[size],
-		!iconOnly && position === "start" && startSlotOffsets[size],
-		!iconOnly && position === "end" && endSlotOffsets[size],
+		iconOnly ? iconOnlySlotSizes[size] : slotSizes[size],
+		!iconOnly && role === "start" && startSlotOffsets[size],
+		!iconOnly && role === "end" && endSlotOffsets[size],
 		!iconOnly && (variant === "neutral" || variant === "secondary" || variant === "ghost") && slotParts.muted,
 	);
 

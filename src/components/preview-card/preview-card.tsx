@@ -172,8 +172,8 @@ const previewCardParts = stylex.create({
 		width: "320px",
 	},
 	content: {
-		padding: space.x3,
-		gap: space.x1,
+		padding: space[3],
+		gap: space[1],
 		display: "flex",
 		flexDirection: "column",
 		fontSize: fontSize.x2,

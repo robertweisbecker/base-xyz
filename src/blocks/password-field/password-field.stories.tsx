@@ -186,12 +186,12 @@ function State({ children, title }: { children: React.ReactNode; title: string }
 
 const storyParts = stylex.create({
 	list: {
-		gap: space.x8,
+		gap: space[8],
 		display: "flex",
 		flexDirection: "column",
 	},
 	section: {
-		gap: space.x3,
+		gap: space[3],
 		display: "flex",
 		flexDirection: "column",
 	},
@@ -199,7 +199,7 @@ const storyParts = stylex.create({
 		maxWidth: "32rem",
 	},
 	grid: {
-		gap: space.x8,
+		gap: space[8],
 		display: "grid",
 		gridTemplateColumns: {
 			default: "1fr",
@@ -208,7 +208,7 @@ const storyParts = stylex.create({
 		maxWidth: "56rem",
 	},
 	state: {
-		gap: space.x3,
+		gap: space[3],
 		display: "flex",
 		flexDirection: "column",
 	},

@@ -9,6 +9,8 @@ import { color } from "../tokens.stylex";
  *   triggers) where an outer ring would clip against neighbors.
  * - `outset` — ring offset outside the edge; for filled or borderless controls
  *   (buttons, links, toolbar items).
+ * - `outsetInteractive` — the same outset ring, limited to elements that
+ *   ultimately render as a native button or link.
  * - `within` — ring on a wrapper when a descendant input holds focus (input
  *   groups, composite fields).
  */
@@ -34,6 +36,15 @@ export const focusRing = stylex.create({
 			":focus-visible": color.focus,
 			':focus-visible[aria-invalid="true"]': color.bgDanger,
 			":focus-visible[data-invalid]": color.bgDanger,
+		},
+		outlineOffset: "2px",
+		outlineStyle: "solid",
+		outlineWidth: "2px",
+	},
+	outsetInteractive: {
+		outlineColor: {
+			default: "transparent",
+			":is(button, a[href]):focus-visible": color.focus,
 		},
 		outlineOffset: "2px",
 		outlineStyle: "solid",

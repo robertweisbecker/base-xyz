@@ -35,25 +35,25 @@ const claudeModels: readonly ModelOption[] = [
 	{
 		id: "claude-fable-5",
 		label: "Fable 5",
-		description: "Long-running agents",
+		description: "Anthropic's most powerful model, great for difficult tasks.",
 		provider: "claude",
 	},
 	{
 		id: "claude-opus-5",
 		label: "Opus 5",
-		description: "Complex agentic coding",
+		description: "Anthropic's mid-size model class, great for everyday use.",
 		provider: "claude",
 	},
 	{
 		id: "claude-sonnet-5",
 		label: "Sonnet 5",
-		description: "Speed and intelligence",
+		description: "Anthropic's mid-size model class, great for everyday use.",
 		provider: "claude",
 	},
 	{
 		id: "claude-haiku-4-5",
 		label: "Haiku 4.5",
-		description: "Fast near-frontier work",
+		description: "Fastest for quick answers",
 		provider: "claude",
 	},
 ];

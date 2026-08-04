@@ -33,6 +33,7 @@ type MenuStoryArgs = {
 	_showSelectionItems: boolean;
 	_disabledItem: boolean;
 	_itemVariant: Menu.MenuItemVariant;
+	size: Menu.MenuItemSize;
 };
 
 const meta = {
@@ -45,6 +46,7 @@ const meta = {
 		_showSelectionItems: true,
 		_disabledItem: true,
 		_itemVariant: "default",
+		size: "md",
 	},
 	argTypes: {
 		_side: {
@@ -60,6 +62,7 @@ const meta = {
 		_showSelectionItems: { control: "boolean" },
 		_disabledItem: { control: "boolean" },
 		_itemVariant: { control: "select", options: ["default", "primary", "danger"] },
+		size: { control: "inline-radio", options: ["sm", "md", "lg"] },
 	},
 } satisfies Meta<MenuStoryArgs>;
 
@@ -67,10 +70,11 @@ export default meta;
 type Story = StoryObj<MenuStoryArgs>;
 
 export const Playground: Story = {
-	render: ({ _side, _align, defaultOpen, _showShortcuts, _showSelectionItems, _disabledItem, _itemVariant }) => (
+	render: ({ _side, _align, defaultOpen, _showShortcuts, _showSelectionItems, _disabledItem, _itemVariant, size }) => (
 		<Menu.Root
-			key={`${_side}-${_align}-${defaultOpen}-${_showShortcuts}-${_showSelectionItems}-${_disabledItem}-${_itemVariant}`}
-			defaultOpen={defaultOpen}>
+			key={`${_side}-${_align}-${defaultOpen}-${_showShortcuts}-${_showSelectionItems}-${_disabledItem}-${_itemVariant}-${size}`}
+			defaultOpen={defaultOpen}
+			size={size}>
 			<Menu.Trigger render={<Button variant="neutral" />}>Open menu</Menu.Trigger>
 			<Menu.Popup positionerProps={{ side: _side, align: _align }}>
 				<Menu.Item variant={_itemVariant}>
@@ -285,7 +289,7 @@ export const MenuTypes: Story = {
 	render: () => (
 		<div style={{ display: "flex", flexWrap: "wrap", flexDirection: "column", gap: 8 }}>
 			<section>
-				<Text my="2" color="subtle">
+				<Text my={2} color="subtle">
 					Actions
 				</Text>
 				<MenuExample trigger="Project actions">
@@ -311,7 +315,7 @@ export const MenuTypes: Story = {
 				</MenuExample>
 			</section>
 			<section>
-				<Text my="2" color="subtle">
+				<Text my={2} color="subtle">
 					Links
 				</Text>
 				<MenuExample trigger="Resources">
@@ -330,7 +334,7 @@ export const MenuTypes: Story = {
 				</MenuExample>
 			</section>
 			<section>
-				<Text my="2" color="subtle">
+				<Text my={2} color="subtle">
 					Submenu
 				</Text>
 				<MenuExample trigger="Project actions">
@@ -377,7 +381,7 @@ export const MenuTypes: Story = {
 				</MenuExample>
 			</section>
 			<section>
-				<Text my="2" color="subtle">
+				<Text my={2} color="subtle">
 					Radio items
 				</Text>
 				<MenuExample trigger="Sort by">
@@ -398,7 +402,7 @@ export const MenuTypes: Story = {
 				</MenuExample>
 			</section>
 			<section>
-				<Text my="2" color="subtle">
+				<Text my={2} color="subtle">
 					Checkbox items
 				</Text>
 				<MenuExample trigger="View options">
@@ -417,7 +421,7 @@ export const MenuTypes: Story = {
 				</MenuExample>
 			</section>
 			<section>
-				<Text my="2" color="subtle">
+				<Text my={2} color="subtle">
 					Switch items
 				</Text>
 				<MenuExample trigger="Preferences">
@@ -436,7 +440,7 @@ export const MenuTypes: Story = {
 				</MenuExample>
 			</section>
 			<section>
-				<Text my="2" color="subtle">
+				<Text my={2} color="subtle">
 					Complex
 				</Text>
 				<MenuExample trigger="File options">
@@ -594,7 +598,7 @@ function formatPosition(side: MenuStoryArgs["_side"], align: MenuStoryArgs["_ali
 
 const storyStyles = stylex.create({
 	positioningGrid: {
-		gap: space.x4,
+		gap: space[4],
 		paddingBlock: "10rem",
 		display: "grid",
 		gridTemplateColumns: {
@@ -617,13 +621,13 @@ const storyStyles = stylex.create({
 		width: "22rem",
 	},
 	parityGrid: {
-		gap: space.x6,
+		gap: space[6],
 		display: "grid",
 		gridTemplateColumns: "repeat(3, minmax(0, 1fr))",
 		maxWidth: "54rem",
 	},
 	paritySection: {
-		gap: space.x2,
+		gap: space[2],
 		display: "flex",
 		flexDirection: "column",
 	},

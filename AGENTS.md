@@ -14,16 +14,21 @@
 - Controls own direct-icon sizing and alignment. If StyleX cannot express the relationship, use a narrow component marker/direct-child CSS rule; do not clone icons or add styling-only icon parts.
 - Never set `cursor: pointer` on native-button controls. Reserve it for navigation.
 - Avoid all-caps or accent-colored decorative eyebrows. Supporting metadata is sentence case, regular weight, smallest semantic type, and muted neutral.
+
+## Storybook
+
 - Make `Playground` the first exported story for every core component. Give it a curated set of controls for representative public props; omit styling and layout escape hatches.
+- Whenever a new variant or major component-specific prop is added, make sure to update the `Playground` story to include it in the controls.
 - For blocks, default to one long, neutral, clearly labeled `Examples` story that shows meaningful options, states, and use cases together. Add a `Playground` only when controls demonstrate dynamic behavior that static examples cannot communicate.
 - Consolidate fragmented block use cases when they remain easy to scan. Separate examples with semantic labels and a shared Base UI Separator when useful, and disable controls when the story does not consume args.
 - Use readable, sentence-case component names in Storybook navigation (for example, `Input group`, not `InputGroup`).
 - Map every icon or slot prop on the component or principal compound part documented by a Playground to a generic-icon select. Include `None` when the prop is optional. Keep secondary-story icons fixed.
 - Prefix story-only args and controls with `_` so they cannot be mistaken for public component props; keep actual prop names unchanged.
+- If a component allows passing props objects to children (ie. `positionerProps`), expose this in Storybook via a nested control object labelled as such. Only expose nested props that are relevant to the story; use judgement as to which are not necessary for demonstrating a component's capabilities.
 - Group props in a comparison story only when seeing them together makes another property easier to verify (for example, icons across Button sizes reveal optical sizing). Do not combine unrelated axes merely to reduce story count.
 - Consolidate genuinely related props and states instead of creating one story per value. Keep important states immediately inspectable.
 - Keep all practical supported form states together in one `States` story; for a block’s consolidated `Examples` story, put them in one clearly labeled states section. Split states only when a genuine technical constraint prevents a useful comparison.
-- Prefer concrete story names such as `Sizes`, `Variants`, `Options`, `Examples`, and `States`. Use `Composition` only for genuine component composition.
+- Prefer concrete story names such as `Sizes`, `Variants`, `Options`, `Examples`, and `States`. Use `Composition` only for genuine component composition or customization with other elements.
 - Disable controls on fixed comparison and use-case stories that do not consume their args.
 - Keep stories functional: no decorative wells, tinted panels, or specimen cards. Use realistic content for use cases and explicit state or variant labels for comparisons. Standardize explanatory labels as sentence case, regular weight, smallest semantic type, and muted neutral; use a shared Base UI Separator when it improves scanning.
 

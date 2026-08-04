@@ -1,8 +1,8 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import * as stylex from "@stylexjs/stylex";
 import type { ReactNode } from "react";
-import { textColorStyles, textStyles, textWeightStyles } from "@/components/text/text.stylex";
-import { space } from "@/styles/tokens.stylex";
+import { textStyles, textWeightStyles } from "@/components/text/text.stylex";
+import { color, space } from "@/styles/tokens.stylex";
 import { ComboboxField } from "../combobox/combobox-field";
 import { NumberField } from "../number-field/number-field";
 import * as Select from "../select/select";
@@ -68,6 +68,14 @@ export const Playground: Story = {
 	),
 };
 
+export const WrapperLayout: Story = {
+	args: {
+		gap: 3,
+		orientation: "horizontal",
+	},
+	parameters: { controls: { disable: true } },
+};
+
 export const States: Story = {
 	parameters: {
 		controls: { disable: true },
@@ -118,28 +126,77 @@ export const FieldFamilyParity: Story = {
 		controls: { disable: true },
 	},
 	render: () => (
-		<div {...stylex.props(styles.familyStack)}>
-			{(["sm", "md", "lg"] as const).map((size) => (
-				<section key={size} {...stylex.props(styles.familySection)}>
-					<h2 {...stylex.props(textStyles.body, textWeightStyles.semibold)}>{size}</h2>
-					<TextField label="Text field" defaultValue="Shared control surface" size={size} />
-					<Textarea label="Textarea" defaultValue="Shared control surface" size={size} />
-					<NumberField label="Number field" defaultValue={8} size={size} width="fill" />
-					<Select.Root<string> defaultValue="React" items={[{ label: "React", value: "React" }]}>
-						<Select.Label>Select</Select.Label>
-						<Select.Trigger size={size} />
-						<Select.Popup>
-							<Select.List>
-								<Select.Item value="React">React</Select.Item>
-							</Select.List>
-						</Select.Popup>
-					</Select.Root>
-					<ComboboxField label="Combobox" items={["React"]} placeholder="Shared control surface" size={size} />
-				</section>
-			))}
+		<div {...stylex.props(styles.familyOverflow)}>
+			<style>{`
+				[data-field-family-control] > * > :first-child {
+					clip: rect(0 0 0 0);
+					clip-path: inset(50%);
+					height: 1px;
+					overflow: hidden;
+					position: absolute;
+					white-space: nowrap;
+					width: 1px;
+				}
+			`}</style>
+			<div {...stylex.props(styles.familyGrid)}>
+				<span aria-hidden />
+				{FIELD_SIZES.map((size) => (
+					<span key={size} {...stylex.props(textStyles.body, textWeightStyles.semibold, styles.familyColumnLabel)}>
+						{size}
+					</span>
+				))}
+				<FamilyRow label="Text field">
+					{(size) => <TextField label="Text field" defaultValue="Shared control surface" size={size} />}
+				</FamilyRow>
+				<FamilyRow label="Textarea">
+					{(size) => <Textarea label="Textarea" defaultValue="Shared control surface" size={size} />}
+				</FamilyRow>
+				<FamilyRow label="Number field">
+					{(size) => <NumberField label="Number field" defaultValue={8} size={size} inputWidth="fill" />}
+				</FamilyRow>
+				<FamilyRow label="Select">
+					{(size) => (
+						<Select.Root<string> defaultValue="React" items={[{ label: "React", value: "React" }]} size={size}>
+							<Select.Label>Select</Select.Label>
+							<Select.Trigger />
+							<Select.Popup>
+								<Select.List>
+									<Select.Item value="React">React</Select.Item>
+								</Select.List>
+							</Select.Popup>
+						</Select.Root>
+					)}
+				</FamilyRow>
+				<FamilyRow label="Combobox">
+					{(size) => (
+						<ComboboxField label="Combobox" items={["React"]} placeholder="Shared control surface" size={size} />
+					)}
+				</FamilyRow>
+			</div>
 		</div>
 	),
 };
+
+const FIELD_SIZES = ["sm", "md", "lg"] as const;
+
+function FamilyRow({
+	children,
+	label,
+}: {
+	children: (size: (typeof FIELD_SIZES)[number]) => ReactNode;
+	label: string;
+}) {
+	return (
+		<>
+			<span {...stylex.props(textStyles.body, textWeightStyles.semibold, styles.familyRowLabel)}>{label}</span>
+			{FIELD_SIZES.map((size) => (
+				<div key={size} data-field-family-control {...stylex.props(styles.familyControl)}>
+					{children(size)}
+				</div>
+			))}
+		</>
+	);
+}
 
 function StateSpecimen({ attribute, children, label }: { attribute?: string; children: ReactNode; label: string }) {
 	return (
@@ -147,7 +204,7 @@ function StateSpecimen({ attribute, children, label }: { attribute?: string; chi
 			<div {...stylex.props(styles.stateHeader)}>
 				<h2 {...stylex.props(textStyles.body, textWeightStyles.semibold, styles.stateTitle)}>{label}</h2>
 				{attribute ? (
-					<code {...stylex.props(textStyles.supporting, textColorStyles.muted, styles.stateAttribute)}>
+					<code {...stylex.props(textStyles.supporting, styles.stateAttribute)}>
 						{attribute}
 					</code>
 				) : null}
@@ -162,7 +219,7 @@ const styles = stylex.create({
 		maxWidth: "360px",
 	},
 	stateGrid: {
-		gap: space.x8,
+		gap: space[8],
 		display: "grid",
 		gridTemplateColumns: {
 			default: "repeat(2, minmax(0, 1fr))",
@@ -171,12 +228,12 @@ const styles = stylex.create({
 		maxWidth: "800px",
 	},
 	stateSpecimen: {
-		gap: space.x3,
+		gap: space[3],
 		display: "flex",
 		flexDirection: "column",
 	},
 	stateHeader: {
-		gap: space.x2,
+		gap: space[2],
 		alignItems: "baseline",
 		display: "flex",
 		justifyContent: "space-between",
@@ -185,16 +242,29 @@ const styles = stylex.create({
 		margin: 0,
 	},
 	stateAttribute: {
+		color: color.fgMuted,
 	},
-	familyStack: {
-		gap: space.x8,
-		display: "flex",
-		flexDirection: "column",
-		maxWidth: "48rem",
+	familyOverflow: {
+		overflowX: "auto",
+		paddingBottom: space[2],
 	},
-	familySection: {
-		gap: space.x4,
+	familyGrid: {
+		alignItems: "start",
+		columnGap: space[6],
 		display: "grid",
-		gridTemplateColumns: "repeat(2, minmax(0, 1fr))",
+		gridTemplateColumns: "max-content repeat(3, minmax(16rem, 1fr))",
+		rowGap: space[6],
+		minWidth: "58rem",
+	},
+	familyColumnLabel: {
+		textAlign: "center",
+		whiteSpace: "nowrap",
+	},
+	familyRowLabel: {
+		whiteSpace: "nowrap",
+		paddingTop: space[2],
+	},
+	familyControl: {
+		minWidth: 0,
 	},
 });

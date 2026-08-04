@@ -1,21 +1,30 @@
 import { Switch as BaseSwitch } from "@base-ui/react/switch";
 import * as stylex from "@stylexjs/stylex";
+import type { StyleXStyles } from "@stylexjs/stylex";
 import { useId } from "react";
-import { fieldStyles } from "@/components/field/field.stylex";
+import { resolveThemeProps } from "@/theme/theme-props";
+import type { FieldThemeProps } from "@/components/field/field.types";
+import { fieldStyles, fieldThemeProps } from "@/components/field/field.stylex";
 import { focusRing } from "@/styles/recipes/focus";
 import { color, motion, radius, space, shadow } from "@/styles/tokens.stylex";
+import { CheckmarkIcon } from "@/components/selection-icons";
+export type SwitchSize = "sm" | "md" | "lg";
 
-export type SwitchSize = "sm" | "md";
-
-export type SwitchProps = Omit<BaseSwitch.Root.Props, "className"> & {
-	label: string;
-	description?: string;
-	size?: SwitchSize;
-};
+export type SwitchProps = Omit<BaseSwitch.Root.Props, "className" | "color" | "style" | keyof FieldThemeProps> &
+	FieldThemeProps & {
+		label: string;
+		description?: string;
+		size?: SwitchSize;
+		className?: string;
+		/** StyleX overrides, applied after the component's own styles. */
+		style?: StyleXStyles;
+	};
 
 export function Switch({
 	label,
 	description,
+	className,
+	style,
 	size = "md",
 	disabled,
 	readOnly,
@@ -24,17 +33,19 @@ export function Switch({
 	"aria-describedby": ariaDescribedBy,
 	...props
 }: SwitchProps) {
+	const { restProps, styles } = resolveThemeProps(props, fieldThemeProps);
 	const generatedId = useId();
 	const id = providedId ?? generatedId;
 	const descriptionId = description ? `${generatedId}-description` : undefined;
 
+	const rootSx = stylex.props(switchParts.root, ...styles, style);
+
 	return (
-		<div {...stylex.props(switchParts.root)}>
+		<div className={[rootSx.className, className].filter(Boolean).join(" ")} style={rootSx.style}>
 			<label htmlFor={id} {...stylex.props(switchParts.labelRoot)}>
 				<span
 					{...stylex.props(
 						fieldStyles.itemLabel,
-						switchParts.label,
 						disabled && switchParts.labelDisabled,
 						readOnly && switchParts.labelReadOnly,
 					)}>
@@ -54,8 +65,10 @@ export function Switch({
 					nativeButton
 					render={<button type="button" />}
 					{...stylex.props(switchParts.track, sizeVariants[size], focusRing.outset)}
-					{...props}>
-					<BaseSwitch.Thumb {...stylex.props(switchParts.thumb)} />
+					{...restProps}>
+					<BaseSwitch.Thumb {...stylex.props(switchParts.thumb)}>
+						<CheckmarkIcon {...stylex.props(switchParts.icon)} strokeWidth={3} />
+					</BaseSwitch.Thumb>
 				</BaseSwitch.Root>
 			</label>
 			{description ? (
@@ -73,36 +86,34 @@ function mergeIds(...ids: Array<string | undefined>) {
 
 const switchParts = stylex.create({
 	root: {
-		alignItems: "center",
-		columnGap: space.x4,
-		display: "grid",
-		gridTemplateColumns: "minmax(0, 1fr) auto",
-		rowGap: space.x1,
+		gap: space[1],
+		alignItems: "stretch",
+		display: "flex",
+		flexDirection: "column",
 	},
 	labelRoot: {
-		"--ds-switch-border-color": {
+		"--_switch-border-color": {
 			default: color.borderStrong,
 			":hover": {
 				"@media (hover: hover) and (pointer: fine)": color.borderHover,
 			},
 			":active": color.bgAccentHover,
 		},
-		"--ds-switch-press-scale": {
+		"--_switch-press-scale": {
 			default: "1",
 			":active": "0.94",
 		},
-		"--ds-switch-selected-color": {
+		"--_switch-selected-color": {
 			default: color.bgAccent,
 			":hover": {
 				"@media (hover: hover) and (pointer: fine)": color.bgAccentHover,
 			},
 			":active": color.bgAccentHover,
 		},
-		display: "contents",
-	},
-	label: {
-		gridColumn: "1",
-		gridRow: "1",
+		gap: space[2],
+		alignItems: "center",
+		display: "flex",
+		justifyContent: "space-between",
 	},
 	labelDisabled: {
 		color: color.fgMuted,
@@ -113,31 +124,34 @@ const switchParts = stylex.create({
 		color: color.fgMuted,
 	},
 	description: {
-		margin: 0,
-		gridColumn: "1",
-		gridRow: "2",
+		// margin: 0,
 	},
 	track: {
-		padding: "calc(var(--ds-switch-track-height) / 14)",
+		padding: "calc(var(--_switch-track-height) / 14)",
 		borderColor: {
-			"[data-checked]": "var(--ds-switch-selected-color)",
-			"[data-checked][data-disabled]": color.bgNeutral,
-			"[data-checked][data-readonly]": color.fgMuted,
+			"[data-checked]": "var(--_switch-selected-color)",
+			"[data-checked][data-disabled]": color.borderDisabled,
+			"[data-checked][data-readonly]": color.border,
 			"[data-disabled]": color.borderDisabled,
 			"[data-readonly]": color.border,
-			default: "var(--ds-switch-border-color)",
+			default: "var(--_switch-border-color)",
 		},
 		borderRadius: radius.full,
-		borderStyle: "solid",
-		borderWidth: "1px",
-		gridColumn: "2",
-		gridRow: "1 / span 2",
 		alignItems: "center",
+		alignSelf: "start",
 		backgroundColor: {
-			"[data-checked]": "var(--ds-switch-selected-color)",
-			"[data-checked][data-disabled]": color.bgNeutral,
-			"[data-checked][data-readonly]": color.fillDisabled,
+			"[data-checked]": "var(--_switch-selected-color)",
+			"[data-checked][data-disabled]": color.fillDisabled,
+			"[data-checked][data-readonly]": color.bgNeutral,
+			"[data-disabled]": color.fillDisabled,
 			default: color.fillTrack,
+		},
+		// borderStyle: "solid",
+		// borderWidth: "1px",
+		boxShadow: {
+			"[data-disabled]": "none",
+			"[data-readonly]": null,
+			default: shadow.inset,
 		},
 		cursor: {
 			"[data-disabled]": "not-allowed",
@@ -148,22 +162,31 @@ const switchParts = stylex.create({
 		transform: {
 			"[data-disabled]": "scale(1)",
 			"[data-readonly]": "scale(1)",
-			default: "scale(var(--ds-switch-press-scale))",
+			default: "scale(var(--_switch-press-scale))",
 		},
 		transitionDuration: motion.durationQuick,
 		transitionProperty: "background-color, border-color, transform",
 		transitionTimingFunction: "ease-out",
-		height: "var(--ds-switch-track-height)",
-		width: "calc(var(--ds-switch-track-height) * 1.5)",
+		height: "var(--_switch-track-height)",
+		width: "calc(var(--_switch-track-height) * 1.5)",
 	},
 	thumb: {
 		borderRadius: radius.full,
+		alignItems: "center",
 		aspectRatio: 1,
-		backgroundColor: "#ffffff",
-		boxShadow: shadow.sm,
-		display: "block",
+		backgroundColor: {
+			"[data-disabled]": color.fillDisabled,
+			default: "var(--color-white)",
+		},
+		boxShadow: {
+			"[data-disabled]": "none",
+			default: shadow.sm,
+		},
+		display: "flex",
+		flexShrink: 0,
+		justifyContent: "center",
 		transform: {
-			"[data-checked]": "translateX(calc(var(--ds-switch-track-height) / 2))",
+			"[data-checked]": "translateX(calc(var(--_switch-track-height) / 2))",
 			default: "translateX(0)",
 		},
 		transitionDuration: motion.durationShort,
@@ -171,13 +194,29 @@ const switchParts = stylex.create({
 		transitionTimingFunction: motion.easeOut,
 		height: "100%",
 	},
+	icon: {
+		stroke: "currentColor",
+		color: {
+			"[data-checked]": color.fgAccent,
+			default: color.fg,
+		},
+		display: {
+			default: "none",
+			[stylex.when.ancestor("[data-checked]")]: "block",
+		},
+		height: ".75em",
+		width: ".75em",
+	},
 });
 
 const sizeVariants = stylex.create({
 	sm: {
-		"--ds-switch-track-height": space.x6,
+		"--_switch-track-height": space[5],
 	},
 	md: {
-		"--ds-switch-track-height": space.x7,
+		"--_switch-track-height": space[6],
+	},
+	lg: {
+		"--_switch-track-height": space[7],
 	},
 });

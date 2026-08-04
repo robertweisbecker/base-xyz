@@ -18,6 +18,7 @@ type StoryArgs = {
 	_delay: number;
 	disabled: boolean;
 	_showArrow: boolean;
+	_showClose: boolean;
 };
 
 const meta = {
@@ -29,6 +30,7 @@ const meta = {
 		_delay: 150,
 		disabled: false,
 		_showArrow: false,
+		_showClose: false,
 	},
 	argTypes: {
 		_side: {
@@ -43,6 +45,7 @@ const meta = {
 		_delay: { control: { type: "number", min: 0, step: 50 } },
 		disabled: { control: "boolean" },
 		_showArrow: { control: "boolean" },
+		_showClose: { control: "boolean" },
 	},
 } satisfies Meta<StoryArgs>;
 
@@ -50,7 +53,7 @@ export default meta;
 type Story = StoryObj<StoryArgs>;
 
 export const Playground: Story = {
-	render: ({ _side, _align, _closeDelay, _delay, disabled, _showArrow }) => (
+	render: ({ _side, _align, _closeDelay, _delay, disabled, _showArrow, _showClose }) => (
 		<div {...stylex.props(storyParts.stage)}>
 			<Tooltip.Provider>
 				<Tooltip.Root disabled={disabled}>
@@ -69,7 +72,8 @@ export const Playground: Story = {
 					/>
 					<Tooltip.Popup
 						arrowProps={_showArrow ? {} : undefined}
-						positionerProps={{ side: _side, align: _align }}>
+						positionerProps={{ side: _side, align: _align }}
+						showClose={_showClose}>
 						More information about this setting
 					</Tooltip.Popup>
 				</Tooltip.Root>
@@ -164,7 +168,7 @@ const storyParts = stylex.create({
 		width: "min(720px, calc(100vw - 48px))",
 	},
 	positioningRow: {
-		gap: space.x6,
+		gap: space[6],
 		alignItems: "center",
 		display: "flex",
 		justifyContent: "center",
@@ -177,7 +181,7 @@ const storyParts = stylex.create({
 		minWidth: "5rem",
 	},
 	stack: {
-		gap: space.x3,
+		gap: space[3],
 		alignItems: "center",
 		display: "flex",
 		flexDirection: "column",
@@ -190,7 +194,7 @@ const storyParts = stylex.create({
 		lineHeight: lineHeight.x1,
 	},
 	group: {
-		gap: space.x2,
+		gap: space[2],
 		display: "flex",
 	},
 });

@@ -6,7 +6,9 @@ import { PlusIcon } from "@phosphor-icons/react/dist/csr/Plus";
 import * as stylex from "@stylexjs/stylex";
 import type { StyleXStyles } from "@stylexjs/stylex";
 import { useId, type CSSProperties } from "react";
-import { fieldStyles, fieldTextStyles, type FieldSize } from "@/components/field/field.stylex";
+import { resolveThemeProps } from "@/theme/theme-props";
+import type { FieldSize, FieldThemeProps } from "@/components/field/field.types";
+import { fieldStyles, fieldTextStyles, fieldThemeProps } from "@/components/field/field.stylex";
 import { focusRing } from "@/styles/recipes/focus";
 import { pressable } from "@/styles/recipes/transitions";
 import { color, radius, size, space, shadow } from "@/styles/tokens.stylex";
@@ -17,7 +19,11 @@ const STEPPER_ACTIVE = ":active:not([data-disabled]):not([data-readonly])";
 const INPUT_HOVER =
 	':hover:not(:focus-visible):not([aria-invalid="true"]):not([data-disabled]):not([data-invalid]):not([data-readonly]):not([readonly])';
 
-export type NumberFieldProps = Omit<BaseNumberField.Root.Props, "children" | "className" | "id" | "style"> & {
+export type NumberFieldProps = Omit<
+	BaseNumberField.Root.Props,
+	"children" | "className" | "color" | "id" | "style" | keyof FieldThemeProps
+> &
+	FieldThemeProps & {
 	label: string;
 	description?: string;
 	error?: string;
@@ -26,17 +32,17 @@ export type NumberFieldProps = Omit<BaseNumberField.Root.Props, "children" | "cl
 	style?: StyleXStyles;
 	id?: string;
 	/**
-	 * Width of the entire fieldStyles. Use `"fill"` to occupy the available inline
+	 * Width of the nested input. Use `"fill"` to occupy the available inline
 	 * space, or provide any CSS width such as `"10ch"`, `"80px"`, or `240`.
 	 * @default "5ch"
 	 */
-	width?: NumberFieldWidth;
+	inputWidth?: NumberFieldInputWidth;
 	decrementLabel?: string;
 	incrementLabel?: string;
 	size?: FieldSize;
 };
 
-export type NumberFieldWidth = CSSProperties["width"] | "fill";
+export type NumberFieldInputWidth = CSSProperties["width"] | "fill";
 
 export function NumberField({
 	label,
@@ -52,14 +58,20 @@ export function NumberField({
 	readOnly,
 	required,
 	size: fieldSize = "md",
-	width = "5ch",
+	inputWidth = "5ch",
 	...props
 }: NumberFieldProps) {
+	const { restProps, styles } = resolveThemeProps(props, fieldThemeProps);
 	const generatedId = useId();
 	const id = providedId ?? generatedId;
 	const descriptionId = description ? `${id}-description` : undefined;
 	const errorId = error ? `${id}-error` : undefined;
-	const rootSx = stylex.props(fieldStyles.root, numberFieldParts.root, style);
+	const rootSx = stylex.props(
+		fieldStyles.root,
+		numberFieldParts.root,
+		...styles,
+		style,
+	);
 
 	return (
 		<Field.Root
@@ -68,7 +80,7 @@ export function NumberField({
 			disabled={disabled}
 			invalid={Boolean(error)}
 			name={name}
-			render={<BaseNumberField.Root id={id} disabled={disabled} readOnly={readOnly} required={required} {...props} />}>
+			render={<BaseNumberField.Root id={id} disabled={disabled} readOnly={readOnly} required={required} {...restProps} />}>
 			<BaseNumberField.ScrubArea {...stylex.props(numberFieldParts.scrubArea)}>
 				<Field.Label htmlFor={id} {...stylex.props(fieldStyles.label, numberFieldParts.label)}>
 					{label}
@@ -105,7 +117,7 @@ export function NumberField({
 						numberFieldInputPaddingSizes[fieldSize],
 						focusRing.inset,
 					)}
-					style={{ width: width === "fill" ? "100%" : width }}
+					style={{ width: inputWidth === "fill" ? "100%" : inputWidth }}
 				/>
 				<BaseNumberField.Increment
 					aria-label={incrementLabel}
@@ -136,7 +148,7 @@ export function NumberField({
 
 const numberFieldParts = stylex.create({
 	root: {
-		gap: space.x1,
+		gap: space[1],
 		display: "flex",
 		flexDirection: "column",
 		minWidth: 0,
@@ -155,8 +167,8 @@ const numberFieldParts = stylex.create({
 	},
 	scrubCursor: {
 		borderRadius: radius.full,
-		paddingBlock: space.x1,
-		paddingInline: space.x2,
+		paddingBlock: space[1],
+		paddingInline: space[2],
 		alignItems: "center",
 		backgroundColor: color.bgInverse,
 		boxShadow: shadow.sm,
@@ -277,13 +289,13 @@ const numberFieldStepperSizes = stylex.create({
 
 const numberFieldInputPaddingSizes = stylex.create({
 	sm: {
-		paddingInline: space.x3,
+		paddingInline: space[3],
 	},
 	md: {
-		paddingInline: space.x3,
+		paddingInline: space[3],
 	},
 	lg: {
-		paddingInline: space.x5,
+		paddingInline: space[5],
 	},
 });
 

@@ -139,6 +139,12 @@ export const Options: Story = {
 	render: () => (
 		<div {...stylex.props(storyStyles.sections)}>
 			<section {...stylex.props(storyStyles.section)}>
+				<span {...stylex.props(storyStyles.rowLabel)}>Width</span>
+				<Badge data-testid="full-width-badge" width="full">
+					Full-width badge
+				</Badge>
+			</section>
+			<section {...stylex.props(storyStyles.section)}>
 				<span {...stylex.props(storyStyles.rowLabel)}>Slots</span>
 				<div {...stylex.props(storyStyles.row)}>
 					<Badge hue="success" startSlot={<CheckCircleIcon aria-hidden weight="fill" />}>
@@ -195,18 +201,18 @@ export const TruncationTooltip: Story = {
 
 const storyStyles = stylex.create({
 	story: {
-		padding: space.x4,
-		gap: space.x8,
+		padding: space[4],
+		gap: space[8],
 		display: "flex",
 		flexDirection: "column",
 	},
 	section: {
-		gap: space.x4,
+		gap: space[4],
 		display: "flex",
 		flexDirection: "column",
 	},
 	sections: {
-		gap: space.x6,
+		gap: space[6],
 		display: "flex",
 		flexDirection: "column",
 	},
@@ -220,17 +226,17 @@ const storyStyles = stylex.create({
 		textTransform: "capitalize",
 	},
 	variantGroups: {
-		gap: space.x5,
+		gap: space[5],
 		display: "flex",
 		flexDirection: "column",
 	},
 	variantGroup: {
-		gap: space.x2,
+		gap: space[2],
 		display: "flex",
 		flexDirection: "column",
 	},
 	specimen: {
-		gap: space.x2,
+		gap: space[2],
 		alignItems: "flex-start",
 		display: "flex",
 		flexDirection: "column",
@@ -251,12 +257,12 @@ const storyStyles = stylex.create({
 		textTransform: "capitalize",
 	},
 	row: {
-		gap: space.x3,
+		gap: space[3],
 		alignItems: "center",
 		display: "flex",
 	},
 	truncationFrame: {
-		gap: space.x3,
+		gap: space[3],
 		alignItems: "flex-start",
 		display: "flex",
 		flexDirection: "column",
@@ -264,7 +270,7 @@ const storyStyles = stylex.create({
 		maxWidth: "180px",
 	},
 	truncationRow: {
-		gap: space.x2,
+		gap: space[2],
 		alignItems: "center",
 		display: "flex",
 		maxWidth: "100%",

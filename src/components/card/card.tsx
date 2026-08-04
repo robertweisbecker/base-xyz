@@ -1,73 +1,132 @@
 import * as stylex from "@stylexjs/stylex";
 import type { StyleXStyles } from "@stylexjs/stylex";
 import type { ComponentProps } from "react";
-import { color, radius as radiusToken, space, shadow } from "@/styles/tokens.stylex";
-import { fontSize, fontWeight, letterSpacing, lineHeight } from "@/styles/tokens.stylex";
+import { composeThemeProps, resolveThemeProps, type VerifyThemeProps } from "@/theme/theme-props";
+import {
+	childLayoutThemeProps,
+	displayThemeProps,
+	horizontalFlexThemeProps,
+	positioningThemeProps,
+	sizingThemeProps,
+	verticalFlexThemeProps,
+} from "@/styles/theme-props-layout.stylex";
+import { spacingThemeProps } from "@/styles/theme-props-spacing.stylex";
+import { radiusThemeProps, shadowThemeProps } from "@/styles/theme-props-surface.stylex";
+import type {
+	ChildLayoutProps,
+	DisplayProps,
+	FlexProps,
+	PositioningProps,
+	RadiusValue,
+	RadiusThemeProps,
+	ShadowThemeProps,
+	SizingProps,
+	SpacingProps,
+} from "@/theme/theme-props.types";
+import { color, space, shadow } from "@/styles/tokens.stylex";
+import { fontSize, letterSpacing, lineHeight } from "@/styles/tokens.stylex";
+import { Heading, type HeadingProps } from "../heading/heading";
+import { Text, type TextProps } from "../text/text";
 import { cardVars } from "./card-vars.stylex";
 
-type StyledProps<T> = Omit<T, "style"> & {
-	/** StyleX overrides, applied after the component's own styles. */
-	style?: StyleXStyles;
-};
-
-type DivProps = StyledProps<ComponentProps<"div">>;
+type StyledProps<T, ThemeProps = {}> = Omit<
+	T,
+	"align" | "className" | "color" | "height" | "style" | "width" | keyof ThemeProps
+> &
+	ThemeProps & {
+		className?: string;
+		/** StyleX overrides, applied after the component's own styles. */
+		style?: StyleXStyles;
+	};
 
 export type CardVariant = "elevated" | "outline";
 export type CardSize = keyof typeof cardSizeVariants;
-export type CardRadius = keyof typeof cardRadiusVariants;
+export type CardRadius = RadiusValue;
+export interface CardThemeProps
+	extends
+		SpacingProps,
+		SizingProps,
+		PositioningProps,
+		ChildLayoutProps,
+		RadiusThemeProps,
+		ShadowThemeProps,
+		FlexProps,
+		DisplayProps {}
+interface CardSectionThemeProps extends SpacingProps, FlexProps {}
+interface CardContentThemeProps extends SpacingProps, SizingProps, PositioningProps, ChildLayoutProps {}
 
-export type CardProps = DivProps & {
-	radius?: CardRadius;
+const cardThemeProps = composeThemeProps(
+	spacingThemeProps,
+	sizingThemeProps,
+	positioningThemeProps,
+	childLayoutThemeProps,
+	radiusThemeProps,
+	shadowThemeProps,
+	verticalFlexThemeProps,
+	displayThemeProps,
+);
+const cardHeaderThemeProps = composeThemeProps(spacingThemeProps, verticalFlexThemeProps);
+const cardFooterThemeProps = composeThemeProps(spacingThemeProps, horizontalFlexThemeProps);
+const cardContentThemeProps = composeThemeProps(
+	spacingThemeProps,
+	sizingThemeProps,
+	positioningThemeProps,
+	childLayoutThemeProps,
+);
+type VerifiedCardThemeProps = VerifyThemeProps<CardThemeProps, typeof cardThemeProps>;
+type VerifiedCardSectionThemeProps = VerifyThemeProps<CardSectionThemeProps, typeof cardHeaderThemeProps>;
+type VerifiedCardFooterThemeProps = VerifyThemeProps<CardSectionThemeProps, typeof cardFooterThemeProps>;
+type VerifiedCardContentThemeProps = VerifyThemeProps<CardContentThemeProps, typeof cardContentThemeProps>;
+
+export type CardProps = StyledProps<ComponentProps<"div">, VerifiedCardThemeProps> & {
 	size?: CardSize;
 	variant?: CardVariant;
 };
+export type CardHeaderProps = StyledProps<ComponentProps<"div">, VerifiedCardSectionThemeProps>;
+export type CardFooterProps = StyledProps<ComponentProps<"div">, VerifiedCardFooterThemeProps>;
+export type CardContentProps = StyledProps<ComponentProps<"div">, VerifiedCardContentThemeProps>;
+export type CardTitleProps = HeadingProps;
+export type CardDescriptionProps = TextProps;
 
 export function Card({ className, radius = "lg", size = "md", style, variant = "elevated", ...props }: CardProps) {
-	const sx = stylex.props(
-		cardParts.root,
-		cardSizeVariants[size],
-		cardRadiusVariants[radius],
-		cardVariants[variant],
-		style,
-	);
+	const { restProps, styles } = resolveThemeProps({ ...props, radius }, cardThemeProps);
+	const sx = stylex.props(cardParts.root, cardSizeVariants[size], cardVariants[variant], ...styles, style);
 
-	return <div className={[sx.className, className].filter(Boolean).join(" ")} style={sx.style} {...props} />;
+	return <div className={[sx.className, className].filter(Boolean).join(" ")} style={sx.style} {...restProps} />;
 }
 
-export function CardHeader({ className, style, ...props }: DivProps) {
-	const sx = stylex.props(cardParts.header, style);
+export function CardHeader({ className, style, ...props }: CardHeaderProps) {
+	const { restProps, styles } = resolveThemeProps(props, cardHeaderThemeProps);
+	const sx = stylex.props(cardParts.header, ...styles, style);
 
-	return <div className={[sx.className, className].filter(Boolean).join(" ")} style={sx.style} {...props} />;
+	return <div className={[sx.className, className].filter(Boolean).join(" ")} style={sx.style} {...restProps} />;
 }
 
-export function CardTitle({ className, style, ...props }: StyledProps<ComponentProps<"h3">>) {
-	const sx = stylex.props(cardParts.title, style);
-
-	return <h3 className={[sx.className, className].filter(Boolean).join(" ")} style={sx.style} {...props} />;
+export function CardTitle(props: CardTitleProps) {
+	return <Heading render={<h3 />} size="3" {...props} />;
 }
 
-export function CardDescription({ className, style, ...props }: StyledProps<ComponentProps<"p">>) {
-	const sx = stylex.props(cardParts.description, style);
-
-	return <p className={[sx.className, className].filter(Boolean).join(" ")} style={sx.style} {...props} />;
+export function CardDescription(props: CardDescriptionProps) {
+	return <Text size="2" color="muted" {...props} />;
 }
 
-export function CardContent({ className, style, ...props }: DivProps) {
-	const sx = stylex.props(cardParts.content, style);
+export function CardContent({ className, style, ...props }: CardContentProps) {
+	const { restProps, styles } = resolveThemeProps(props, cardContentThemeProps);
+	const sx = stylex.props(cardParts.content, ...styles, style);
 
-	return <div className={[sx.className, className].filter(Boolean).join(" ")} style={sx.style} {...props} />;
+	return <div className={[sx.className, className].filter(Boolean).join(" ")} style={sx.style} {...restProps} />;
 }
 
-export function CardFooter({ className, style, ...props }: DivProps) {
-	const sx = stylex.props(cardParts.footer, style);
+export function CardFooter({ className, style, ...props }: CardFooterProps) {
+	const { restProps, styles } = resolveThemeProps(props, cardFooterThemeProps);
+	const sx = stylex.props(cardParts.footer, ...styles, style);
 
-	return <div className={[sx.className, className].filter(Boolean).join(" ")} style={sx.style} {...props} />;
+	return <div className={[sx.className, className].filter(Boolean).join(" ")} style={sx.style} {...restProps} />;
 }
 
 const cardParts = stylex.create({
 	root: {
-		borderRadius: cardVars.radius,
-		gap: space.x1,
+		gap: space[1],
 		overflow: "hidden",
 		color: color.fg,
 		display: "flex",
@@ -79,23 +138,8 @@ const cardParts = stylex.create({
 		paddingInline: cardVars.headerPaddingInline,
 		display: "flex",
 		flexDirection: "column",
-		paddingBlockStart: cardVars.headerPaddingBlockStart,
-	},
-	title: {
-		margin: 0,
-		color: color.fg,
-		fontSize: cardVars.titleFontSize,
-		fontWeight: fontWeight.semibold,
-		letterSpacing: cardVars.titleLetterSpacing,
-		lineHeight: cardVars.titleLineHeight,
-		textWrap: "balance",
-	},
-	description: {
-		margin: 0,
-		color: color.fgMuted,
-		fontSize: cardVars.descriptionFontSize,
-		letterSpacing: cardVars.descriptionLetterSpacing,
-		lineHeight: cardVars.descriptionLineHeight,
+		paddingBlockEnd: `calc(${cardVars.headerPaddingBlock} / 1.5)`,
+		paddingBlockStart: cardVars.headerPaddingBlock,
 	},
 	content: {
 		paddingBlock: cardVars.contentPaddingBlock,
@@ -105,16 +149,13 @@ const cardParts = stylex.create({
 		lineHeight: cardVars.contentLineHeight,
 	},
 	footer: {
-		margin: "1px",
-		gap: space.x3,
+		gap: space[3],
+		paddingBlock: cardVars.footerPaddingBlock,
 		paddingInline: cardVars.footerPaddingInline,
 		alignItems: "center",
-		backgroundColor: color.canvas,
+		borderEndEndRadius: "inherit",
+		borderEndStartRadius: "inherit",
 		display: "flex",
-		paddingBlockEnd: cardVars.footerPaddingBlock,
-		paddingBlockStart: `calc(${cardVars.footerPaddingBlock} / 2)`,
-		borderBottomLeftRadius: `calc(${cardVars.radius} - 1px)`,
-		borderBottomRightRadius: `calc(${cardVars.radius} - 1px)`,
 	},
 });
 
@@ -123,93 +164,51 @@ const cardSizeVariants = stylex.create({
 		[cardVars.contentFontSize]: fontSize.x1,
 		[cardVars.contentLetterSpacing]: letterSpacing.x1,
 		[cardVars.contentLineHeight]: lineHeight.x1,
-		[cardVars.contentPaddingBlock]: space.x4,
-		[cardVars.contentPaddingInline]: space.x4,
-		[cardVars.descriptionFontSize]: fontSize.x1,
-		[cardVars.descriptionLetterSpacing]: letterSpacing.x1,
-		[cardVars.descriptionLineHeight]: lineHeight.x1,
-		[cardVars.footerPaddingBlock]: space.x2,
-		[cardVars.footerPaddingInline]: space.x2,
-		[cardVars.headerGap]: space.x1,
-		[cardVars.headerPaddingBlockStart]: space.x4,
-		[cardVars.headerPaddingInline]: space.x4,
-		[cardVars.titleFontSize]: fontSize.x2,
-		[cardVars.titleLetterSpacing]: letterSpacing.x2,
-		[cardVars.titleLineHeight]: lineHeight.x2,
+		[cardVars.contentPaddingBlock]: space[2],
+		[cardVars.contentPaddingInline]: space[4],
+		[cardVars.footerPaddingBlock]: space[2],
+		[cardVars.footerPaddingInline]: space[2],
+		[cardVars.headerGap]: space[1],
+		[cardVars.headerPaddingBlock]: space[2],
+		[cardVars.headerPaddingInline]: space[4],
 	},
 	md: {
 		[cardVars.contentFontSize]: fontSize.x2,
 		[cardVars.contentLetterSpacing]: letterSpacing.x2,
 		[cardVars.contentLineHeight]: lineHeight.x2,
-		[cardVars.contentPaddingBlock]: space.x5,
-		[cardVars.contentPaddingInline]: space.x5,
-		[cardVars.descriptionFontSize]: fontSize.x2,
-		[cardVars.descriptionLetterSpacing]: letterSpacing.x2,
-		[cardVars.descriptionLineHeight]: lineHeight.x2,
-		[cardVars.footerPaddingBlock]: space.x3,
-		[cardVars.footerPaddingInline]: space.x3,
-		[cardVars.headerGap]: space.x1,
-		[cardVars.headerPaddingBlockStart]: space.x5,
-		[cardVars.headerPaddingInline]: space.x5,
-		[cardVars.titleFontSize]: fontSize.x3,
-		[cardVars.titleLetterSpacing]: letterSpacing.x3,
-		[cardVars.titleLineHeight]: lineHeight.x3,
+		[cardVars.contentPaddingBlock]: space[3],
+		[cardVars.contentPaddingInline]: space[5],
+		[cardVars.footerPaddingBlock]: space[3],
+		[cardVars.footerPaddingInline]: space[3],
+		[cardVars.headerGap]: space[1],
+		[cardVars.headerPaddingBlock]: space[3],
+		[cardVars.headerPaddingInline]: space[5],
 	},
 	lg: {
 		[cardVars.contentFontSize]: fontSize.x3,
 		[cardVars.contentLetterSpacing]: letterSpacing.x3,
 		[cardVars.contentLineHeight]: lineHeight.x3,
-		[cardVars.contentPaddingBlock]: space.x6,
-		[cardVars.contentPaddingInline]: space.x6,
-		[cardVars.descriptionFontSize]: fontSize.x3,
-		[cardVars.descriptionLetterSpacing]: letterSpacing.x3,
-		[cardVars.descriptionLineHeight]: lineHeight.x3,
-		[cardVars.footerPaddingBlock]: space.x4,
-		[cardVars.footerPaddingInline]: space.x4,
-		[cardVars.headerGap]: space.x2,
-		[cardVars.headerPaddingBlockStart]: space.x6,
-		[cardVars.headerPaddingInline]: space.x6,
-		[cardVars.titleFontSize]: fontSize.x4,
-		[cardVars.titleLetterSpacing]: letterSpacing.x3,
-		[cardVars.titleLineHeight]: lineHeight.x4,
-	},
-});
-
-const cardRadiusVariants = stylex.create({
-	xxs: {
-		[cardVars.radius]: radiusToken.xxs,
-	},
-	xs: {
-		[cardVars.radius]: radiusToken.xs,
-	},
-	sm: {
-		[cardVars.radius]: radiusToken.sm,
-	},
-	md: {
-		[cardVars.radius]: radiusToken.md,
-	},
-	lg: {
-		[cardVars.radius]: radiusToken.lg,
-	},
-	xl: {
-		[cardVars.radius]: radiusToken.xl,
-	},
-	full: {
-		[cardVars.radius]: radiusToken.full,
+		[cardVars.contentPaddingBlock]: space[4],
+		[cardVars.contentPaddingInline]: space[6],
+		[cardVars.footerPaddingBlock]: space[4],
+		[cardVars.footerPaddingInline]: space[4],
+		[cardVars.headerGap]: space[1],
+		[cardVars.headerPaddingBlock]: space[4],
+		[cardVars.headerPaddingInline]: space[6],
 	},
 });
 
 const cardVariants = stylex.create({
 	elevated: {
 		borderWidth: 0,
+		backgroundColor: color.bgPanel,
 		boxShadow: shadow.md,
-		backgroundColor: color.bgElevated,
 	},
 	outline: {
 		borderColor: color.border,
 		borderStyle: "solid",
 		borderWidth: "1px",
-		boxShadow: "none",
 		backgroundColor: color.surface,
+		boxShadow: "none",
 	},
 });

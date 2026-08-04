@@ -29,10 +29,10 @@ export function DemoPanel({
 	return (
 		<section {...stylex.props(demoStyles.panel)} aria-label={title}>
 			<div {...stylex.props(demoStyles.panelHeader)}>
-				<Heading size="3" mb="0">
+				<Heading size="3" mb={0}>
 					{title}
 				</Heading>
-				<Text color="muted" size="2" mb="0">
+				<Text color="muted" size="2" mb={0}>
 					{description}
 				</Text>
 			</div>

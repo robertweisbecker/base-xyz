@@ -380,7 +380,7 @@ export const CloseToConfirm: Story = {
 
 const storyParts = stylex.create({
 	stack: {
-		gap: space.x3,
+		gap: space[3],
 		alignItems: "center",
 		display: "flex",
 		flexDirection: "column",
@@ -393,30 +393,30 @@ const storyParts = stylex.create({
 		lineHeight: lineHeight.x1,
 	},
 	triggerGroup: {
-		gap: space.x2,
+		gap: space[2],
 		display: "flex",
 		flexWrap: "wrap",
 	},
 	snapPointControls: {
-		gap: space.x2,
+		gap: space[2],
 		display: "flex",
 		flexWrap: "wrap",
-		marginBlockEnd: space.x5,
+		marginBlockEnd: space[5],
 	},
 	snapPointFooter: {
-		paddingBlockEnd: space.x4,
+		paddingBlockEnd: space[4],
 	},
 	activityCards: {
-		gap: space.x3,
+		gap: space[3],
 		display: "grid",
 	},
 	activityCard: {
-		padding: space.x3,
+		padding: space[3],
 		borderColor: color.border,
 		borderRadius: radius.md,
 		borderStyle: "solid",
 		borderWidth: "1px",
-		gap: space.x1,
+		gap: space[1],
 		backgroundColor: color.surfaceSubtle,
 		display: "flex",
 		flexDirection: "column",

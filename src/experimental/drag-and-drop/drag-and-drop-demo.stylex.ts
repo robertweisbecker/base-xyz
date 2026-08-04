@@ -18,11 +18,11 @@ const invalidTarget = ":is([data-invalid], [data-invalid='true'], [data-invalid=
 
 export const demoStyles = stylex.create({
 	stack: {
-		gap: space.x5,
+		gap: space[5],
 		display: "grid",
 	},
 	comparison: {
-		gap: space.x5,
+		gap: space[5],
 		alignItems: "start",
 		display: "grid",
 		gridTemplateColumns: {
@@ -31,22 +31,22 @@ export const demoStyles = stylex.create({
 		},
 	},
 	panel: {
-		padding: space.x4,
+		padding: space[4],
 		borderColor: color.border,
 		borderRadius: radius.md,
 		borderStyle: "solid",
 		borderWidth: border.width,
-		gap: space.x4,
+		gap: space[4],
 		backgroundColor: color.surface,
 		display: "grid",
 		minWidth: 0,
 	},
 	panelHeader: {
-		gap: space.x1,
+		gap: space[1],
 		display: "grid",
 	},
 	panelFooter: {
-		gap: space.x3,
+		gap: space[3],
 		alignItems: "center",
 		display: "flex",
 		flexWrap: "wrap",
@@ -54,7 +54,7 @@ export const demoStyles = stylex.create({
 	},
 	instructions: {
 		margin: 0,
-		gap: space.x1,
+		gap: space[1],
 		color: color.fgMuted,
 		fontSize: fontSize.x1,
 		lineHeight: lineHeight.x1,
@@ -63,7 +63,7 @@ export const demoStyles = stylex.create({
 		display: "list-item",
 		listStylePosition: "inside",
 		listStyleType: "auto",
-		paddingInlineStart: space.x5,
+		paddingInlineStart: space[5],
 	},
 	status: {
 		margin: 0,
@@ -72,11 +72,11 @@ export const demoStyles = stylex.create({
 		lineHeight: lineHeight.x1,
 	},
 	workArea: {
-		gap: space.x4,
+		gap: space[4],
 		display: "grid",
 	},
 	transferGrid: {
-		gap: space.x3,
+		gap: space[3],
 		alignItems: "stretch",
 		display: "grid",
 		gridTemplateColumns: {
@@ -85,15 +85,15 @@ export const demoStyles = stylex.create({
 		},
 	},
 	sourceTray: {
-		gap: space.x3,
+		gap: space[3],
 		alignContent: "start",
 		display: "grid",
 		minHeight: "7rem",
 	},
 	card: {
-		padding: space.x2,
+		padding: space[2],
 		borderRadius: radius.sm,
-		gap: space.x3,
+		gap: space[3],
 		alignItems: "center",
 		backgroundColor: color.bgElevated,
 		boxShadow: {
@@ -122,7 +122,7 @@ export const demoStyles = stylex.create({
 		minHeight: "3.25rem",
 	},
 	cardText: {
-		gap: space.x1,
+		gap: space[1],
 		display: "grid",
 		flexGrow: 1,
 		minWidth: 0,
@@ -160,9 +160,9 @@ export const demoStyles = stylex.create({
 		width: size["control.md"],
 	},
 	dropZone: {
-		padding: space.x4,
+		padding: space[4],
 		borderRadius: radius.md,
-		gap: space.x2,
+		gap: space[2],
 		alignItems: "stretch",
 		backgroundColor: {
 			[activeDropTarget]: color.bgAccentSoft,
@@ -196,7 +196,7 @@ export const demoStyles = stylex.create({
 		color: color.fgDanger,
 	},
 	board: {
-		gap: space.x3,
+		gap: space[3],
 		display: "grid",
 		gridTemplateColumns: {
 			default: "minmax(0, 1fr)",
@@ -204,9 +204,9 @@ export const demoStyles = stylex.create({
 		},
 	},
 	column: {
-		padding: space.x3,
+		padding: space[3],
 		borderRadius: radius.md,
-		gap: space.x3,
+		gap: space[3],
 		alignContent: "start",
 		backgroundColor: {
 			default: color.canvasSubtle,
@@ -223,7 +223,7 @@ export const demoStyles = stylex.create({
 		minHeight: "18rem",
 	},
 	columnHeader: {
-		gap: space.x2,
+		gap: space[2],
 		alignItems: "center",
 		display: "flex",
 		justifyContent: "space-between",
@@ -241,14 +241,14 @@ export const demoStyles = stylex.create({
 	list: {
 		margin: 0,
 		padding: 0,
-		gap: space.x2,
+		gap: space[2],
 		listStyle: "none",
 		display: "flex",
 		flexDirection: "column",
 		minHeight: "12rem",
 	},
 	empty: {
-		// padding: space.x3,
+		// padding: space[3],
 		// borderColor: color.fg,
 		// backgroundColor: color.highlight,
 		// borderRadius: radius.sm,
@@ -266,8 +266,8 @@ export const demoStyles = stylex.create({
 	},
 	dropIndicator: {
 		// borderRadius: radius.full,
-		// marginInline: `-${space.x2}`,
-		// width: `calc(100% + ${space.x2})`,
+		// marginInline: `-${space[2]}`,
+		// width: `calc(100% + ${space[2]})`,
 		// outline: `1px solid ${color.bgAccent}`,
 		// outlineColor: color.bgAccent,
 		// outlineColor: "CanvasText",
@@ -302,17 +302,17 @@ export const demoStyles = stylex.create({
 		transform: "rotate(1deg)",
 	},
 	shortList: {
-		gap: space.x2,
+		gap: space[2],
 		display: "grid",
 		maxWidth: "24rem",
 	},
 	menuDemo: {
 		alignItems: "start",
-		columnGap: `calc(${space.x8} * 4)`,
+		columnGap: `calc(${space[8]} * 4)`,
 		display: "flex",
 		flexWrap: "wrap",
 		position: "relative",
-		rowGap: space.x3,
+		rowGap: space[3],
 		minHeight: "18rem",
 	},
 	sortableMenuPopup: {
@@ -340,35 +340,35 @@ export const demoStyles = stylex.create({
 	},
 	emptyMenuItem: {
 		color: color.fgMuted,
-		fontStyle: "italic",
 		display: "flex",
-		outlineStyle: "dashed",
-		outlineWidth: "1px",
+		fontStyle: "italic",
 		outlineColor: color.borderStrong,
 		outlineOffset: "-1px",
+		outlineStyle: "dashed",
+		outlineWidth: "1px",
 	},
 	menuOverlay: {
 		borderRadius: radius.md,
-		paddingBlock: space.x2,
-		paddingInline: space.x2,
+		overflow: "hidden",
+		paddingBlock: space[2],
+		paddingInline: space[2],
 		alignItems: "center",
 		backgroundColor: color.canvas,
+		boxShadow: shadow.lg,
+		color: color.fg,
+		columnGap: space[2],
+		display: "flex",
+		fontSize: fontSize.x2,
+		letterSpacing: letterSpacing.x2,
+		lineHeight: lineHeight.x2,
 		outlineColor: color.bgElevated,
 		outlineOffset: "-2px",
 		outlineStyle: "solid",
 		outlineWidth: "2px",
-		boxShadow: shadow.lg,
-		color: color.fg,
-		columnGap: space.x2,
-		display: "flex",
 		// gridTemplateColumns: "auto minmax(0, 1fr)",
 		pointerEvents: "none",
-		fontSize: fontSize.x2,
-		lineHeight: lineHeight.x2,
-		letterSpacing: letterSpacing.x2,
 		textOverflow: "ellipsis",
 		whiteSpace: "nowrap",
-		overflow: "hidden",
 
 		// minWidth: "12rem",
 	},

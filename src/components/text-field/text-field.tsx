@@ -3,10 +3,16 @@ import { Input } from "@base-ui/react/input";
 import * as stylex from "@stylexjs/stylex";
 import type { StyleXStyles } from "@stylexjs/stylex";
 import { useId, type ComponentProps } from "react";
-import { fieldStyles, fieldInputStyles, type FieldSize } from "@/components/field/field.stylex";
+import { resolveThemeProps } from "@/theme/theme-props";
+import type { FieldSize, FieldThemeProps } from "@/components/field/field.types";
+import { fieldStyles, fieldInputStyles, fieldThemeProps } from "@/components/field/field.stylex";
 import { focusRing } from "@/styles/recipes/focus";
 
-export type TextFieldProps = Omit<ComponentProps<typeof Input>, "className" | "size" | "style"> & {
+export type TextFieldProps = Omit<
+	ComponentProps<typeof Input>,
+	"className" | "color" | "height" | "size" | "style" | "width" | keyof FieldThemeProps
+> &
+	FieldThemeProps & {
 	label: string;
 	description?: string;
 	error?: string;
@@ -26,11 +32,12 @@ export function TextField({
 	size = "md",
 	...props
 }: TextFieldProps) {
+	const { restProps, styles } = resolveThemeProps(props, fieldThemeProps);
 	const generatedId = useId();
 	const id = providedId ?? generatedId;
 	const descriptionId = description ? `${id}-description` : undefined;
 	const errorId = error ? `${id}-error` : undefined;
-	const rootSx = stylex.props(fieldStyles.root, style);
+	const rootSx = stylex.props(fieldStyles.root, ...styles, style);
 
 	return (
 		<Field.Root
@@ -45,7 +52,7 @@ export function TextField({
 				aria-describedby={[descriptionId, errorId].filter(Boolean).join(" ") || undefined}
 				aria-invalid={Boolean(error)}
 				{...stylex.props(fieldInputStyles[size], focusRing.inset)}
-				{...props}
+				{...restProps}
 			/>
 			{description ? (
 				<Field.Description id={descriptionId} {...stylex.props(fieldStyles.description)}>

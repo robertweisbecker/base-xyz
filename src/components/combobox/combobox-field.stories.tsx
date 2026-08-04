@@ -21,7 +21,7 @@ import { Text } from "@/components/text/text";
 
 const frameworks = ["React", "Vue", "Svelte", "Solid", "Preact", "Qwik", "Angular"];
 const languages = ["JavaScript", "TypeScript", "Python", "Rust", "Go", "Swift", "Kotlin"];
-const colors = ["Black", "Blue", "Cyan", "Gray", "Green", "Magenta", "Orange", "Purple", "Red", "White", "Yellow"];
+const apps = ["Codex", "Claude", "Cursor", "Zed"];
 const summaryOptions = ["Option X", "Option Y", "Option Z", "Option W", "Option V"];
 
 const meta = {
@@ -248,9 +248,9 @@ function CreatableTagsExample() {
 	return (
 		<div {...stylex.props(styles.exampleStack)}>
 			<ComboboxMultiple
-				label="Colors"
-				items={colors}
-				placeholder="Red, Green, Blue…"
+				label="Harness"
+				items={apps}
+				placeholder="Type to choose…"
 				creatable
 				onCreate={(item) => {
 					setCreatedItems((currentItems) => [...currentItems, item]);
@@ -297,8 +297,18 @@ function SingleSelectPopupExample() {
 			<div {...stylex.props(fieldStyles.root, styles.fieldLayout)}>
 				<Combobox.Label {...stylex.props(fieldStyles.label)}>Framework</Combobox.Label>
 				<Combobox.Trigger
-					render={<Button variant="secondary" endSlot={<CaretUpDownIcon aria-hidden weight="bold" />} />}>
-					<Combobox.Value placeholder="Select framework" />
+					render={
+						<Button
+							variant="secondary"
+							style={styles.trigger}
+							endSlot={<CaretUpDownIcon aria-hidden weight="bold" />}
+						/>
+					}>
+					<Combobox.Value>
+						{(selectedValue: string | null) =>
+							selectedValue ?? <span {...stylex.props(styles.triggerPlaceholder)}>Select framework</span>
+						}
+					</Combobox.Value>
 				</Combobox.Trigger>
 			</div>
 			<PopupContent label="frameworks" />
@@ -312,13 +322,19 @@ function MultipleSummaryPopupExample() {
 			<div {...stylex.props(fieldStyles.root, styles.fieldLayout)}>
 				<Combobox.Label {...stylex.props(fieldStyles.label)}>Options</Combobox.Label>
 				<Combobox.Trigger
-					render={<Button variant="secondary" endSlot={<CaretUpDownIcon aria-hidden weight="bold" />} />}>
+					render={
+						<Button
+							variant="secondary"
+							style={styles.trigger}
+							endSlot={<CaretUpDownIcon aria-hidden weight="bold" />}
+						/>
+					}>
 					<Combobox.Value placeholder="Select">
 						{(selectedValue: string[]) => {
 							const hiddenCount = Math.max(0, selectedValue.length - 1);
 							return selectedValue.length > 0
 								? `${selectedValue[0]}${hiddenCount > 0 ? `, +${hiddenCount} more` : ""}`
-								: "Select options";
+								: <span {...stylex.props(styles.triggerPlaceholder)}>Select options</span>;
 						}}
 					</Combobox.Value>
 				</Combobox.Trigger>
@@ -429,28 +445,28 @@ const styles = stylex.create({
 		maxWidth: "420px",
 	},
 	sizeStack: {
-		gap: space.x6,
+		gap: space[6],
 		display: "flex",
 		flexDirection: "column",
 		maxWidth: "420px",
 	},
 	exampleStack: {
-		gap: space.x2,
+		gap: space[2],
 		display: "flex",
 		flexDirection: "column",
 	},
 	variantStack: {
-		gap: space.x8,
+		gap: space[8],
 		display: "flex",
 		flexDirection: "column",
 	},
 	exampleSection: {
-		gap: space.x3,
+		gap: space[3],
 		display: "flex",
 		flexDirection: "column",
 	},
 	exampleHeading: {
-		gap: space.x1,
+		gap: space[1],
 		display: "flex",
 		flexDirection: "column",
 	},
@@ -482,9 +498,12 @@ const styles = stylex.create({
 		justifyContent: "space-between",
 		minWidth: "240px",
 	},
+	triggerPlaceholder: {
+		color: color.fgSubtle,
+	},
 	filterChips: {
 		alignItems: "center",
-		columnGap: space.x1,
+		columnGap: space[1],
 		display: "flex",
 		flexWrap: "wrap",
 		rowGap: 2,
@@ -494,7 +513,7 @@ const styles = stylex.create({
 		flexShrink: 0,
 	},
 	chip: {
-		padding: space.x1,
+		padding: space[1],
 		borderRadius: radius.sm,
 		overflow: "hidden",
 		alignItems: "center",
@@ -514,7 +533,7 @@ const styles = stylex.create({
 	},
 	chipLabel: {
 		overflow: "hidden",
-		paddingInline: space.x1,
+		paddingInline: space[1],
 		textOverflow: "ellipsis",
 		whiteSpace: "nowrap",
 	},
@@ -536,8 +555,8 @@ const styles = stylex.create({
 		},
 		display: "flex",
 		justifyContent: "center",
-		height: space.x5,
-		width: space.x5,
+		height: space[5],
+		width: space[5],
 	},
 	panelSurface: {
 		[popupVars.background]: color.bgElevated,
@@ -555,11 +574,11 @@ const styles = stylex.create({
 		width: "var(--anchor-width)",
 	},
 	popupInputRegion: {
-		padding: space.x1,
+		padding: space[1],
 	},
 	popupInputControl: {
-		gap: space.x2,
-		paddingInline: space.x3,
+		gap: space[2],
+		paddingInline: space[3],
 		alignItems: "center",
 		display: "flex",
 	},
@@ -582,23 +601,23 @@ const styles = stylex.create({
 	list: {
 		padding: {
 			"[data-empty]": 0,
-			default: space.x1,
+			default: space[1],
 		},
 		maxHeight: "240px",
 		overflowY: "auto",
 	},
 	empty: {
 		padding: {
-			default: space.x3,
+			default: space[3],
 			":empty": 0,
 		},
-		textAlign: "center",
+		alignItems: "center",
 		color: color.fgMuted,
 		display: "flex",
 		fontSize: fontSize.x2,
+		justifyContent: "center",
 		letterSpacing: letterSpacing.x2,
 		lineHeight: lineHeight.x2,
-		alignItems: "center",
-		justifyContent: "center",
+		textAlign: "center",
 	},
 });

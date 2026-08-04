@@ -5,7 +5,9 @@ import { Fieldset } from "@base-ui/react/fieldset";
 import * as stylex from "@stylexjs/stylex";
 import type { StyleXStyles } from "@stylexjs/stylex";
 import { createContext, useContext, useId, type ReactNode } from "react";
-import { fieldStyles } from "@/components/field/field.stylex";
+import { resolveThemeProps } from "@/theme/theme-props";
+import type { FieldThemeProps } from "@/components/field/field.types";
+import { fieldChoiceGroupStyles, fieldStyles, fieldThemeProps } from "@/components/field/field.stylex";
 import { textStyles } from "@/components/text/text.stylex";
 import { focusRing } from "@/styles/recipes/focus";
 import { pressable } from "@/styles/recipes/transitions";
@@ -13,25 +15,30 @@ import { color, motion, radius, size as sizeToken, space } from "@/styles/tokens
 
 export type RadioSize = "sm" | "md";
 
-export type RadioProps = Omit<BaseRadio.Root.Props, "children" | "className" | "style"> & {
-	label: ReactNode;
-	description?: ReactNode;
-	size?: RadioSize;
-	className?: string;
-	/** StyleX overrides, applied after the component's own styles. */
-	style?: StyleXStyles;
-};
+export type RadioProps = Omit<
+	BaseRadio.Root.Props,
+	"children" | "className" | "color" | "style" | keyof FieldThemeProps
+> &
+	FieldThemeProps & {
+		label: ReactNode;
+		description?: ReactNode;
+		size?: RadioSize;
+		className?: string;
+		/** StyleX overrides, applied after the component's own styles. */
+		style?: StyleXStyles;
+	};
 
-export type RadioGroupProps = Omit<BaseRadioGroup.Props, "className" | "style"> & {
-	label: ReactNode;
-	description?: ReactNode;
-	/** Displays the group items in a horizontal row that wraps when needed. */
-	inline?: boolean;
-	size?: RadioSize;
-	className?: string;
-	/** StyleX overrides, applied after the component's own styles. */
-	style?: StyleXStyles;
-};
+export type RadioGroupProps = Omit<BaseRadioGroup.Props, "className" | "color" | "style" | keyof FieldThemeProps> &
+	FieldThemeProps & {
+		label: ReactNode;
+		description?: ReactNode;
+		/** Displays the group items in a horizontal row that wraps when needed. */
+		inline?: boolean;
+		size?: RadioSize;
+		className?: string;
+		/** StyleX overrides, applied after the component's own styles. */
+		style?: StyleXStyles;
+	};
 
 const RadioGroupStateContext = createContext<{
 	disabled: boolean;
@@ -52,6 +59,7 @@ export function Radio({
 	"aria-describedby": ariaDescribedBy,
 	...props
 }: RadioProps) {
+	const { restProps, styles } = resolveThemeProps(props, fieldThemeProps);
 	const groupState = useContext(RadioGroupStateContext);
 	const selfOrGroupDisabled = Boolean(disabled || groupState.disabled);
 	// const selfOrGroupReadOnly = Boolean(readOnly || groupState.readOnly);
@@ -59,7 +67,7 @@ export function Radio({
 	const generatedId = useId();
 	const id = providedId ?? `${generatedId}-control`;
 	const descriptionId = description ? `${generatedId}-description` : undefined;
-	const itemSx = stylex.props(radioParts.item, style);
+	const itemSx = stylex.props(radioParts.item, ...styles, style);
 	const itemClassName = [itemSx.className, className].filter(Boolean).join(" ");
 
 	return (
@@ -85,7 +93,7 @@ export function Radio({
 						focusRing.outset,
 						pressable.transition,
 					)}
-					{...props}>
+					{...restProps}>
 					<BaseRadio.Indicator
 						{...stylex.props(
 							radioParts.indicator,
@@ -131,51 +139,50 @@ export function RadioGroup({
 	name,
 	...props
 }: RadioGroupProps) {
+	const { restProps, styles } = resolveThemeProps(props, fieldThemeProps);
 	const generatedId = useId();
 	const descriptionId = description ? `${generatedId}-description` : undefined;
-	const groupSx = stylex.props(radioParts.fieldset, style);
+	const groupSx = stylex.props(radioParts.fieldset, ...styles, style);
 
 	return (
 		<Field.Root
 			name={name}
 			// disabled={disabled}
-		>
-			<Fieldset.Root
-				// disabled={disabled}
-				// data-readonly={readOnly ? "" : undefined}
-				// data-required={required ? "" : undefined}
-				render={
-					<BaseRadioGroup
-						ref={ref}
-						name={name}
-						// disabled={disabled}
-						// readOnly={readOnly}
-						// required={required}
-						aria-describedby={mergeIds(ariaDescribedBy, descriptionId)}
-						{...props}
-					/>
-				}
-				className={[groupSx.className, className].filter(Boolean).join(" ")}
-				style={groupSx.style}>
-				<div {...stylex.props(radioParts.title)}>
-					<Fieldset.Legend {...stylex.props(fieldStyles.groupLabel)}>
-						{label}
-						{required ? (
-							<span aria-hidden {...stylex.props(fieldStyles.requiredIndicator)}>
-								*
-							</span>
-						) : null}
-					</Fieldset.Legend>
-					{description ? (
-						<p id={descriptionId} {...stylex.props(fieldStyles.description, radioParts.fieldsetDescription)}>
-							{description}
-						</p>
+			render={
+				<Fieldset.Root
+					render={
+						<BaseRadioGroup
+							ref={ref}
+							name={name}
+							// disabled={disabled}
+							// readOnly={readOnly}
+							// required={required}
+							aria-describedby={mergeIds(ariaDescribedBy, descriptionId)}
+							{...restProps}
+						/>
+					}
+				/>
+			}
+			className={[groupSx.className, className].filter(Boolean).join(" ")}
+			style={groupSx.style}>
+			<div {...stylex.props(radioParts.title)}>
+				<Fieldset.Legend {...stylex.props(fieldStyles.groupLabel)}>
+					{label}
+					{required ? (
+						<span aria-hidden {...stylex.props(fieldStyles.requiredIndicator)}>
+							*
+						</span>
 					) : null}
-				</div>
-				<RadioGroupStateContext.Provider value={{ disabled: Boolean(disabled), readOnly: Boolean(readOnly), size }}>
-					<div {...stylex.props(radioParts.group, inline && radioParts.groupInline)}>{children}</div>
-				</RadioGroupStateContext.Provider>
-			</Fieldset.Root>
+				</Fieldset.Legend>
+				{description ? (
+					<p id={descriptionId} {...stylex.props(fieldStyles.description, radioParts.fieldsetDescription)}>
+						{description}
+					</p>
+				) : null}
+			</div>
+			<RadioGroupStateContext.Provider value={{ disabled: Boolean(disabled), readOnly: Boolean(readOnly), size }}>
+				<div {...stylex.props(fieldChoiceGroupStyles.root, inline && fieldChoiceGroupStyles.inline)}>{children}</div>
+			</RadioGroupStateContext.Provider>
 		</Field.Root>
 	);
 }
@@ -202,10 +209,10 @@ const radioLabelStyles = {
 
 const radioDescriptionStyles = stylex.create({
 	sm: {
-		paddingInlineStart: `calc(${sizeToken["indicator.sm"]} + ${space.x2} + 2px)`,
+		paddingInlineStart: `calc(${sizeToken["indicator.sm"]} + ${space[2]} + 2px)`,
 	},
 	md: {
-		paddingInlineStart: `calc(${sizeToken["indicator.md"]} + ${space.x2} + 2px)`,
+		paddingInlineStart: `calc(${sizeToken["indicator.md"]} + ${space[2]} + 2px)`,
 	},
 });
 
@@ -225,15 +232,15 @@ const radioParts = stylex.create({
 		margin: 0,
 		padding: 0,
 		borderWidth: 0,
-		gap: space.x3,
+		gap: space[3],
 		display: "flex",
 		flexDirection: "column",
 		minInlineSize: 0,
 	},
 	title: {
+		gap: space[1],
 		display: "flex",
 		flexDirection: "column",
-		gap: space.x1,
 	},
 	fieldsetLegend: {
 		// fontWeight: fontWeight.regular,
@@ -241,20 +248,8 @@ const radioParts = stylex.create({
 	fieldsetDescription: {
 		// margin: 0,
 	},
-	group: {
-		gap: space.x3,
-		display: "flex",
-		flexDirection: "column",
-	},
-	groupInline: {
-		alignItems: "flex-start",
-		columnGap: space.x6,
-		flexDirection: "row",
-		flexWrap: "wrap",
-		rowGap: space.x3,
-	},
 	item: {
-		gap: space.x1,
+		gap: space[1],
 		cursor: {
 			"[data-disabled]": "not-allowed",
 			"[data-readonly]": "default",
@@ -269,25 +264,32 @@ const radioParts = stylex.create({
 		width: "fit-content",
 	},
 	labelRoot: {
-		"--ds-radio-border-color": {
-			default: color.borderStrong,
+		"--_radio-bg": {
+			default: color.surface,
 			":hover": {
-				"@media (hover: hover) and (pointer: fine)": color.borderHover,
+				"@media (hover: hover) and (pointer: fine)": color.surfaceSubtle,
 			},
-			":active": color.bgAccentHover,
+			":active": color.surfaceSubtleActive,
 		},
-		"--ds-radio-press-scale": {
-			default: "1",
-			":active": "0.94",
-		},
-		"--ds-radio-selected-color": {
+		"--_radio-bg-checked": {
 			default: color.bgAccent,
 			":hover": {
 				"@media (hover: hover) and (pointer: fine)": color.bgAccentHover,
 			},
 			":active": color.bgAccentHover,
 		},
-		gap: space.x2,
+		"--_radio-border": {
+			default: color.borderStrong,
+			":hover": {
+				"@media (hover: hover) and (pointer: fine)": color.borderHover,
+			},
+			":active": color.bgAccentHover,
+		},
+		"--_radio-press-scale": {
+			default: "1",
+			":active": "0.94",
+		},
+		gap: space[2],
 		alignItems: "flex-start",
 		color: color.fg,
 		cursor: "inherit",
@@ -295,48 +297,63 @@ const radioParts = stylex.create({
 	},
 	control: {
 		borderColor: {
-			"[data-checked]": "var(--ds-radio-selected-color)",
+			"[data-checked]": "var(--_radio-bg-checked)",
 			"[data-checked][data-disabled]": color.bgNeutral,
 			"[data-checked][data-readonly]": color.fgMuted,
 			"[data-disabled]": color.borderDisabled,
 			"[data-readonly]": color.border,
-			default: "var(--ds-radio-border-color)",
+			default: "var(--_radio-border)",
 		},
 		borderRadius: radius.full,
 		borderStyle: "solid",
 		borderWidth: "1px",
 		alignItems: "center",
 		backgroundColor: {
-			"[data-checked]": "var(--ds-radio-selected-color)",
+			"[data-checked]": "var(--_radio-bg-checked)",
 			"[data-checked][data-disabled]": color.bgNeutral,
-			"[data-checked][data-readonly]": color.fgMuted,
-			default: color.surface,
+			"[data-checked][data-readonly]": color.bgNeutral,
+			default: "var(--_radio-bg)",
 		},
 		display: "inline-flex",
 		flexShrink: 0,
 		justifyContent: "center",
 		marginBlockStart: "1px",
+		position: "relative",
 		transform: {
 			"[data-disabled]": "scale(1)",
 			"[data-readonly]": "scale(1)",
-			default: "scale(var(--ds-radio-press-scale))",
+			default: "scale(var(--_radio-press-scale))",
+		},
+		"::after": {
+			inset: 0,
+			borderRadius: "inherit",
+			boxShadow: `0 -1px 0 var(--white-a3), 0 1px 0 var(--black-a2)`,
+			content: "''",
+			position: "absolute",
+			zIndex: 1,
 		},
 	},
 	indicator: {
 		borderRadius: radius.full,
 		backgroundColor: color.fgAccentContrast,
+		boxShadow: `0 -1px 1px var(--gray-a2), 0 1px 0  var(--black-a3)`,
 	},
 	indicatorTransition: {
+		opacity: {
+			"[data-ending-style]": 1,
+			"[data-starting-style]": 0,
+			default: 1,
+		},
 		transform: {
 			"[data-ending-style]": "scale(0.5)",
 			"[data-starting-style]": "scale(0.5)",
 			default: "scale(1)",
 		},
 		transitionDuration: {
-			default: motion.durationMedium,
+			default: motion.durationQuick,
 			"@media (prefers-reduced-motion: reduce)": "0ms",
 		},
-		transitionProperty: "transform",
+		transitionProperty: "transform, opacity",
 		transitionTimingFunction: motion.easeOut,
 	},
 	description: {

@@ -151,13 +151,13 @@ export const States: Story = {
 
 const storyStyles = stylex.create({
 	story: {
-		padding: space.x4,
-		gap: space.x8,
+		padding: space[4],
+		gap: space[8],
 		display: "flex",
 		flexDirection: "column",
 	},
 	section: {
-		gap: space.x4,
+		gap: space[4],
 		display: "flex",
 		flexDirection: "column",
 	},

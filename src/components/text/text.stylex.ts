@@ -1,50 +1,12 @@
 import * as stylex from "@stylexjs/stylex";
-import {
-	color,
-	fontFamily,
-	fontSize,
-	fontWeight,
-	letterSpacing,
-	lineHeight,
-	space,
-	typeScale,
-} from "@/styles/tokens.stylex";
+import { composeThemeProps, type ThemePropDefinition, type VerifyThemeProps } from "@/theme/theme-props";
+import { marginThemeProps, textAlignThemeProps } from "@/styles/theme-props-spacing.stylex";
+import { color, fontFamily, fontSize, fontWeight, letterSpacing, lineHeight, typeScale } from "@/styles/tokens.stylex";
+import type { TextThemeProps } from "./text.types";
 
-export type TypographySize = "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9";
-export type TypographyFontFamily = "sans" | "serif" | "mono";
-export type TypographyFontWeight = "regular" | "medium" | "semibold" | "bold";
-export type TypographyColor =
-	| "default"
-	| "subtle"
-	| "muted"
-	| "accent"
-	| "danger"
-	| "success"
-	| "warning"
-	| "inverse"
-	| "inverse-muted";
-export type TypographyAlign = "start" | "center" | "end" | "justify";
-export type TypographyWrap = "wrap" | "nowrap" | "pretty" | "balance";
-export type TypographySpace = "0" | "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9" | "10" | "12" | "16";
-export type TextType = "body" | "large" | "label" | "code" | "supporting" | "display";
-export type HeadingLevel = "1" | "2" | "3" | "4" | "5" | "6";
-
-export type TypographyStyleProps = {
-	align?: TypographyAlign;
-	color?: TypographyColor;
-	fontFamily?: TypographyFontFamily;
-	fontWeight?: TypographyFontWeight;
-	m?: TypographySpace;
-	mb?: TypographySpace;
-	ml?: TypographySpace;
-	mr?: TypographySpace;
-	mt?: TypographySpace;
-	mx?: TypographySpace;
-	my?: TypographySpace;
-	size?: TypographySize;
-	truncate?: boolean;
-	wrap?: TypographyWrap;
-};
+const textThemePropsDefinition = composeThemeProps(marginThemeProps, textAlignThemeProps);
+export const textThemeProps: ThemePropDefinition<VerifyThemeProps<TextThemeProps, typeof textThemePropsDefinition>> =
+	textThemePropsDefinition;
 
 export const textBaseStyles = stylex.create({
 	root: {
@@ -53,7 +15,8 @@ export const textBaseStyles = stylex.create({
 	},
 });
 
-export const textColorStyles = stylex.create({
+/** Internal implementation for the Text and Heading `color` prop. Other owners use color tokens directly. */
+export const textColorPropStyles = stylex.create({
 	default: { color: color.fg },
 	muted: { color: color.fgMuted },
 	subtle: { color: color.fgSubtle },
@@ -129,7 +92,7 @@ export const textSizeStyles = stylex.create({
 	},
 });
 
-const textRoleSizeStyles = stylex.create({
+const textStyleSizes = stylex.create({
 	body: {
 		fontSize: typeScale.bodySize,
 		letterSpacing: typeScale.bodyLetterSpacing,
@@ -163,22 +126,22 @@ const textRoleSizeStyles = stylex.create({
 	},
 });
 
-const textRoleWeightStyles = stylex.create({
-	body: { fontWeight: typeScale.bodyWeight },
-	large: { fontWeight: typeScale.largeWeight },
-	label: { fontWeight: typeScale.labelWeight },
-	code: { fontWeight: typeScale.codeWeight },
-	supporting: { fontWeight: typeScale.supportingWeight },
-	display: { fontWeight: typeScale.display1Weight },
+const textStyleDefaultWeights = stylex.create({
+	body: { fontWeight: fontWeight.regular },
+	large: { fontWeight: fontWeight.regular },
+	label: { fontWeight: fontWeight.medium },
+	code: { fontWeight: fontWeight.regular },
+	supporting: { fontWeight: fontWeight.regular },
+	display: { fontWeight: fontWeight.semibold },
 });
 
 export const textStyles = {
-	body: [textRoleSizeStyles.body, textRoleWeightStyles.body],
-	large: [textRoleSizeStyles.large, textRoleWeightStyles.large],
-	label: [textRoleSizeStyles.label, textRoleWeightStyles.label],
-	code: [textRoleSizeStyles.code, textRoleWeightStyles.code],
-	supporting: [textRoleSizeStyles.supporting, textRoleWeightStyles.supporting],
-	display: [textRoleSizeStyles.display, textRoleWeightStyles.display],
+	body: [textStyleSizes.body, textStyleDefaultWeights.body],
+	large: [textStyleSizes.large, textStyleDefaultWeights.large],
+	label: [textStyleSizes.label, textStyleDefaultWeights.label],
+	code: [textStyleSizes.code, textStyleDefaultWeights.code],
+	supporting: [textStyleSizes.supporting, textStyleDefaultWeights.supporting],
+	display: [textStyleSizes.display, textStyleDefaultWeights.display],
 } as const;
 
 export const headingStyles = stylex.create({
@@ -220,13 +183,6 @@ export const headingStyles = stylex.create({
 	},
 });
 
-export const textAlignStyles = stylex.create({
-	start: { textAlign: "start" },
-	center: { textAlign: "center" },
-	end: { textAlign: "end" },
-	justify: { textAlign: "justify" },
-});
-
 export const textWrapStyles = stylex.create({
 	wrap: { textWrap: "wrap" },
 	nowrap: { textWrap: "nowrap" },
@@ -242,43 +198,3 @@ export const textTruncationStyles = stylex.create({
 		overflowX: "clip",
 	},
 });
-
-const spacingByStep = {
-	"0": 0,
-	"1": space.x1,
-	"2": space.x2,
-	"3": space.x3,
-	"4": space.x4,
-	"5": space.x5,
-	"6": space.x6,
-	"7": space.x7,
-	"8": space.x8,
-	"9": space.x9,
-	"10": space.x10,
-	"12": space.x12,
-	"16": space.x16,
-} as const;
-
-export function getTextMarginStyle({
-	m,
-	mb,
-	ml,
-	mr,
-	mt,
-	mx,
-	my,
-}: Pick<TypographyStyleProps, "m" | "mb" | "ml" | "mr" | "mt" | "mx" | "my">) {
-	const margin = m === undefined ? undefined : spacingByStep[m];
-	const marginBlock = my === undefined ? undefined : spacingByStep[my];
-	const marginInline = mx === undefined ? undefined : spacingByStep[mx];
-
-	return {
-		margin,
-		marginBlock,
-		marginInline,
-		marginTop: mt === undefined ? undefined : spacingByStep[mt],
-		marginRight: mr === undefined ? undefined : spacingByStep[mr],
-		marginBottom: mb === undefined ? undefined : spacingByStep[mb],
-		marginLeft: ml === undefined ? undefined : spacingByStep[ml],
-	};
-}

@@ -336,7 +336,7 @@ const anchoredParts = stylex.create({
 		display: "flex",
 	},
 	text: {
-		gap: space.x1,
+		gap: space[1],
 		display: "flex",
 		flexDirection: "column",
 		flexGrow: 1,
@@ -372,7 +372,7 @@ const anchoredParts = stylex.create({
 		height: "100%",
 	},
 	pillText: {
-		gap: space.x2,
+		gap: space[2],
 		overflow: "hidden",
 		alignItems: "center",
 		flexDirection: "row",
@@ -429,21 +429,21 @@ const rootVariants = stylex.create({
 
 const contentVariants = stylex.create({
 	default: {
-		padding: space.x3,
-		gap: space.x3,
+		padding: space[3],
+		gap: space[3],
 	},
 	tooltip: {
 		padding: 0,
-		gap: space.x1,
+		gap: space[1],
 	},
 	popover: {
-		padding: space.x3,
-		gap: space.x3,
+		padding: space[3],
+		gap: space[3],
 	},
 	pill: {
-		gap: space.x2,
+		gap: space[2],
 		paddingBlock: "0",
-		paddingInline: space.x3,
+		paddingInline: space[3],
 	},
 });
 

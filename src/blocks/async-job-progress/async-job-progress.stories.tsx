@@ -158,12 +158,12 @@ function State({ children, title }: { children: React.ReactNode; title: string }
 
 const storyParts = stylex.create({
 	list: {
-		gap: space.x8,
+		gap: space[8],
 		display: "flex",
 		flexDirection: "column",
 	},
 	state: {
-		gap: space.x3,
+		gap: space[3],
 		display: "flex",
 		flexDirection: "column",
 	},
@@ -176,7 +176,7 @@ const storyParts = stylex.create({
 		lineHeight: lineHeight.x1,
 	},
 	controls: {
-		gap: space.x3,
+		gap: space[3],
 		alignItems: "flex-start",
 		display: "flex",
 		justifyContent: "space-between",

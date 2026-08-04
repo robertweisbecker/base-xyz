@@ -127,13 +127,13 @@ const toastParts = stylex.create({
 		position: "fixed",
 		zIndex: zIndex.toast,
 		bottom: {
-			default: space.x4,
-			"@media (min-width: 500px)": space.x8,
+			default: space[4],
+			"@media (min-width: 500px)": space[8],
 		},
 		left: "auto",
 		right: {
-			default: space.x4,
-			"@media (min-width: 500px)": space.x8,
+			default: space[4],
+			"@media (min-width: 500px)": space[8],
 		},
 		top: "auto",
 		width: {
@@ -144,8 +144,8 @@ const toastParts = stylex.create({
 	root: {
 		"--toast-expanded-offset-y":
 			"calc((var(--toast-offset-y) * -1) + (var(--toast-index) * var(--toast-gap) * -1) + var(--toast-swipe-movement-y))",
-		"--toast-gap": space.x3,
-		"--toast-peek": space.x3,
+		"--toast-gap": space[3],
+		"--toast-peek": space[3],
 		"--toast-scale": "calc(max(0, 1 - (var(--toast-index) * 0.1)))",
 		"--toast-shrink": "calc(1 - var(--toast-scale))",
 		"--toast-stack-height": "var(--toast-frontmost-height, var(--toast-height))",
@@ -205,8 +205,8 @@ const toastParts = stylex.create({
 		},
 	},
 	content: {
-		padding: space.x4,
-		gap: space.x3,
+		padding: space[4],
+		gap: space[3],
 		overflow: "hidden",
 		alignItems: "center",
 		boxSizing: "border-box",
@@ -225,7 +225,7 @@ const toastParts = stylex.create({
 		height: "100%",
 	},
 	text: {
-		gap: space.x1,
+		gap: space[1],
 		display: "flex",
 		flexDirection: "column",
 		flexGrow: 1,

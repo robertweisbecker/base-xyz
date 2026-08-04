@@ -1,10 +1,8 @@
 import { Popover as BasePopover } from "@base-ui/react/popover";
-import { XIcon } from "@phosphor-icons/react";
 import * as stylex from "@stylexjs/stylex";
 import type { StyleXStyles } from "@stylexjs/stylex";
 import { type ComponentProps } from "react";
-import { textColorStyles, textStyles, textWeightStyles } from "@/components/text/text.stylex";
-import { focusRing } from "@/styles/recipes/focus";
+import { textStyles, textWeightStyles } from "@/components/text/text.stylex";
 import {
 	popupArrowStyles,
 	popupMotionStyles,
@@ -12,9 +10,8 @@ import {
 	popupViewportStyles,
 } from "@/components/popover/popover.stylex";
 import { popupVars } from "@/components/popover/popover-vars.stylex";
-import { pressable } from "@/styles/recipes/transitions";
-import { color, radius, shadow, size, space } from "@/styles/tokens.stylex";
-import { IconButton } from "../button/button";
+import { color, radius, shadow, space } from "@/styles/tokens.stylex";
+import { CloseButton as CloseButtonControl } from "../button/close-button";
 
 type StyledProps<T> = Omit<T, "className" | "style"> & {
 	className?: string;
@@ -77,7 +74,7 @@ export function Popup({
 					{...props}>
 					{arrowProps ? <Arrow {...arrowProps} /> : null}
 					{children}
-					{showClose && <Close variant="iconButton" />}
+					{showClose && <CloseButton />}
 				</BasePopover.Popup>
 			</Positioner>
 		</BasePopover.Portal>
@@ -149,33 +146,43 @@ export function Description({ ref, className, style, ...props }: StyledProps<Bas
 	);
 }
 
-export type PopoverCloseVariant = "iconButton" | "button";
+export type PopoverCloseProps = StyledProps<BasePopover.Close.Props>;
+export type PopoverCloseButtonProps = Omit<PopoverCloseProps, "aria-label" | "children" | "render"> & {
+	"aria-label"?: string;
+};
 
-export function Close({
-	ref,
-	"aria-label": ariaLabel,
-	variant = "iconButton",
-	className,
-	style,
-	...props
-}: StyledProps<BasePopover.Close.Props> & { variant?: PopoverCloseVariant }) {
-	const { className: sxClassName, style: sxStyle } = stylex.props(
-		variant === "button" && popoverText.button,
-		popoverCloseVariants[variant],
-		focusRing.outset,
-		pressable.transition,
-		style,
-	);
+/** Unstyled close primitive for custom buttons and footer actions. */
+export function Close({ ref, className, style, ...props }: PopoverCloseProps) {
+	const { className: sxClassName, style: sxStyle } = stylex.props(style);
 
 	return (
 		<BasePopover.Close
 			ref={ref}
-			aria-label={ariaLabel ?? (variant === "iconButton" ? "Close" : undefined)}
-			className={[sxClassName, className].filter(Boolean).join(" ")}
+			className={[sxClassName, className].filter(Boolean).join(" ") || undefined}
 			style={sxStyle}
-			{...props}>
-			{variant === "iconButton" ? <XIcon weight="bold" size={12} /> : <>{props.children}</>}
-		</BasePopover.Close>
+			{...props}
+		/>
+	);
+}
+
+/** Neutral circular X button, absolutely positioned in the popup by default. */
+export function CloseButton({
+	ref,
+	"aria-label": ariaLabel = "Close",
+	className,
+	style,
+	...props
+}: PopoverCloseButtonProps) {
+	return (
+		<Close
+			ref={ref}
+			aria-label={ariaLabel}
+			className={className}
+			nativeButton
+			render={<CloseButtonControl label={ariaLabel} />}
+			style={[popoverParts.closeButton, style]}
+			{...props}
+		/>
 	);
 }
 
@@ -185,41 +192,12 @@ export function Footer({ className, style, ...props }: StyledProps<ComponentProp
 	return <div className={[sxClassName, className].filter(Boolean).join(" ")} style={sxStyle} {...props} />;
 }
 
-export function HeaderClose({
-	ref,
-	"aria-label": ariaLabel = "Close",
-	className,
-	style,
-	...props
-}: StyledProps<BasePopover.Close.Props>) {
-	const { className: sxClassName, style: sxStyle } = stylex.props(popoverParts.headerClose, style);
-
-	return (
-		<BasePopover.Close
-			aria-label={ariaLabel}
-			className={[sxClassName, className].filter(Boolean).join(" ")}
-			ref={ref}
-			render={
-				<IconButton
-					icon={<XIcon aria-hidden weight="bold" />}
-					label={ariaLabel}
-					size="xs"
-					tooltip={false}
-					variant="neutral"
-				/>
-			}
-			style={sxStyle}
-			{...props}
-		/>
-	);
-}
-
 export const Root = BasePopover.Root;
 export const Trigger = BasePopover.Trigger;
 
 const popoverParts = stylex.create({
 	panelSurface: {
-		[popupVars.background]: color.bgElevated,
+		[popupVars.background]: color.bgPanel,
 		[popupVars.border]: color.border,
 		[popupVars.foreground]: color.fg,
 		borderRadius: radius.lg,
@@ -228,86 +206,39 @@ const popoverParts = stylex.create({
 		color: popupVars.foreground,
 	},
 	popup: {
-		gap: space.x2,
+		gap: space[2],
 		outline: "0",
-		paddingBlock: space.x3,
-		paddingInline: space.x3,
+		paddingBlock: space[3],
+		paddingInline: space[3],
 		display: "flex",
 		flexDirection: "column",
 		position: "relative",
 		maxWidth: "min(calc(100vw - 32px), 28rem)",
 	},
 	viewport: {
-		gap: space.x2,
+		gap: space[2],
 		display: "flex",
 		flexDirection: "column",
 	},
-	headerClose: {
+	closeButton: {
 		position: "absolute",
 		zIndex: 1,
-		right: space.x1,
-		top: space.x1,
+		right: space[1],
+		top: space[1],
 	},
 	footer: {
 		display: "flex",
 		justifyContent: "flex-end",
-		paddingBlockStart: space.x1,
+		paddingBlockStart: space[1],
 	},
 });
 
 const popoverTextParts = stylex.create({
 	title: { marginTop: `-.25em` },
-	description: { margin: 0 },
+	description: { margin: 0, color: color.fgMuted },
 });
 
 const popoverText = {
 	title: [textStyles.body, textWeightStyles.medium, popoverTextParts.title],
-	description: [textStyles.body, textColorStyles.muted, popoverTextParts.description],
-	button: [textStyles.supporting, textWeightStyles.medium],
+	description: [textStyles.body, popoverTextParts.description],
 } as const;
-
-const popoverCloseVariants = stylex.create({
-	iconButton: {
-		padding: 0,
-		borderRadius: radius.full,
-		alignItems: "center",
-		backgroundColor: {
-			default: color.surfaceSubtle,
-			":hover": {
-				"@media (hover: hover) and (pointer: fine)": color.surfaceSubtleHover,
-			},
-			":active": {
-				"@media (hover: hover) and (pointer: fine)": color.surfaceSubtleActive,
-			},
-		},
-		color: {
-			default: color.fgMuted,
-			":hover": {
-				"@media (hover: hover) and (pointer: fine)": color.fg,
-			},
-		},
-		display: "flex",
-		justifyContent: "center",
-		position: "absolute",
-		zIndex: 1,
-		height: size["control.xs"],
-		right: space.x1,
-		top: space.x1,
-		width: size["control.xs"],
-	},
-	button: {
-		// bg: color.border,
-		borderRadius: radius.full,
-		paddingInline: space.x3,
-		alignSelf: "flex-start",
-		backgroundColor: {
-			default: color.surfaceSubtle,
-			":hover": {
-				"@media (hover: hover) and (pointer: fine)": color.surfaceSubtle,
-			},
-		},
-		color: color.fg,
-		height: "28px",
-		minWidth: "28px",
-	},
-});

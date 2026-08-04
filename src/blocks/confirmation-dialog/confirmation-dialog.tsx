@@ -203,12 +203,12 @@ function ToastList() {
 
 const confirmationDialogParts = stylex.create({
 	popup: {
-		maxHeight: `calc(100dvh - ${space.x8})`,
+		maxHeight: `calc(100dvh - ${space[8]})`,
 	},
 	header: {
 		alignItems: "stretch",
 		flexShrink: 0,
-		paddingBlockStart: space.x5,
+		paddingBlockStart: space[5],
 		textAlign: "start",
 	},
 	visual: {
@@ -219,9 +219,9 @@ const confirmationDialogParts = stylex.create({
 		color: color.fg,
 		display: "flex",
 		justifyContent: "center",
-		marginBlockEnd: space.x2,
-		height: space.x10,
-		width: space.x10,
+		marginBlockEnd: space[2],
+		height: space[10],
+		width: space[10],
 	},
 	body: {
 		flex: "1 1 auto",
@@ -231,7 +231,7 @@ const confirmationDialogParts = stylex.create({
 		maxHeight: "min(50dvh, 28rem)",
 	},
 	bodyContent: {
-		padding: space.x5,
+		padding: space[5],
 	},
 	footer: {
 		flexShrink: 0,
@@ -239,7 +239,7 @@ const confirmationDialogParts = stylex.create({
 	},
 	footerActions: {
 		flex: "0 0 auto",
-		gap: space.x2,
+		gap: space[2],
 		alignItems: "center",
 		display: "flex",
 		marginInlineStart: "auto",

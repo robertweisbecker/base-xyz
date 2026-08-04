@@ -188,7 +188,7 @@ const styles = stylex.create({
 		maxWidth: "32rem",
 	},
 	states: {
-		gap: space.x8,
+		gap: space[8],
 		display: "grid",
 		gridTemplateColumns: {
 			default: "1fr",
@@ -197,13 +197,13 @@ const styles = stylex.create({
 		maxWidth: "56rem",
 	},
 	variants: {
-		gap: space.x8,
+		gap: space[8],
 		display: "flex",
 		flexDirection: "column",
 		maxWidth: "32rem",
 	},
 	state: {
-		gap: space.x3,
+		gap: space[3],
 		display: "flex",
 		flexDirection: "column",
 	},
@@ -216,7 +216,7 @@ const styles = stylex.create({
 		lineHeight: lineHeight.x1,
 	},
 	sizeRow: {
-		gap: space.x3,
+		gap: space[3],
 		alignItems: "center",
 		display: "grid",
 		gridTemplateColumns: "minmax(0, 1fr) auto",

@@ -101,17 +101,17 @@ function Example({ children, title }: { children: React.ReactNode; title: string
 
 const storyParts = stylex.create({
 	list: {
-		gap: space.x8,
+		gap: space[8],
 		display: "flex",
 		flexDirection: "column",
 	},
 	example: {
-		gap: space.x3,
+		gap: space[3],
 		display: "flex",
 		flexDirection: "column",
 	},
 	row: {
-		gap: space.x3,
+		gap: space[3],
 		alignItems: "center",
 		display: "flex",
 		flexWrap: "wrap",

@@ -1,7 +1,7 @@
 import { Progress as BaseProgress } from "@base-ui/react/progress";
 import * as stylex from "@stylexjs/stylex";
 import type { StyleXStyles } from "@stylexjs/stylex";
-import { textColorStyles, textStyles } from "@/components/text/text.stylex";
+import { textStyles } from "@/components/text/text.stylex";
 import { motion } from "@/styles/tokens.stylex";
 import { color, radius, space } from "@/styles/tokens.stylex";
 
@@ -31,7 +31,7 @@ export function Root({ ref, className, style, ...props }: RootProps) {
 }
 
 export function Label({ ref, className, style, ...props }: LabelProps) {
-	const sx = stylex.props(textStyles.supporting, textColorStyles.muted, progressParts.label, style);
+	const sx = stylex.props(textStyles.supporting, progressParts.label, style);
 
 	return (
 		<BaseProgress.Label
@@ -82,26 +82,29 @@ export function Indicator({ ref, className, style, ...props }: IndicatorProps) {
 	);
 }
 
-const indeterminateSlide = stylex.keyframes({
+const indeterminatePingPong = stylex.keyframes({
 	"0%": {
-		transform: "translateX(-110%)",
+		backgroundPosition: "100% 0",
 	},
 	"100%": {
-		transform: "translateX(260%)",
+		backgroundPosition: "0% 0",
 	},
 });
+
+const indeterminatePingPongDuration = "2500ms";
 
 const progressParts = stylex.create({
 	root: {
 		color: color.fg,
-		columnGap: space.x3,
+		columnGap: space[3],
 		display: "grid",
 		gridTemplateColumns: "minmax(0, 1fr) auto",
-		rowGap: space.x2,
+		rowGap: space[2],
 		width: "100%",
 	},
 	label: {
 		overflow: "hidden",
+		color: color.fgMuted,
 		textOverflow: "ellipsis",
 		whiteSpace: "nowrap",
 		minWidth: 0,
@@ -113,16 +116,19 @@ const progressParts = stylex.create({
 		whiteSpace: "nowrap",
 	},
 	track: {
+		backgroundPosition: {
+			"[data-indeterminate]": "50% 0",
+			default: "0% 0",
+		},
 		borderRadius: radius.full,
 		gridColumn: "1 / -1",
 		overflow: "hidden",
-		backgroundColor: color.fillTrack,
-		height: "0.375rem",
-	},
-	indicator: {
-		borderRadius: radius.full,
+		animationDirection: {
+			"[data-indeterminate]": "alternate",
+			default: "normal",
+		},
 		animationDuration: {
-			"[data-indeterminate]": motion.durationLong,
+			"[data-indeterminate]": indeterminatePingPongDuration,
 			default: "0ms",
 		},
 		animationIterationCount: {
@@ -131,17 +137,35 @@ const progressParts = stylex.create({
 		},
 		animationName: {
 			"[data-indeterminate]": {
-				default: indeterminateSlide,
+				default: indeterminatePingPong,
 				"@media (prefers-reduced-motion: reduce)": "none",
 			},
 			default: "none",
 		},
-		animationTimingFunction: motion.easeSmoothOut,
+		animationTimingFunction: "ease-in-out",
+		backgroundColor: color.fillTrack,
+		backgroundImage: {
+			"[data-indeterminate]": `linear-gradient(90deg, transparent 0%, transparent 28%, ${color.fillTrack} 40%, ${color.bgAccent} 48%, ${color.bgAccent} 52%, ${color.fillTrack} 60%, transparent 72%, transparent 100%)`,
+			default: `linear-gradient(90deg, transparent 0%, transparent 100%)`,
+		},
+		backgroundRepeat: "no-repeat",
+		backgroundSize: {
+			"[data-indeterminate]": "200% 100%",
+			default: "auto",
+		},
+		outlineColor: color.border,
+		outlineOffset: -1,
+		outlineStyle: "solid",
+		outlineWidth: 1,
+		height: "0.375rem",
+	},
+	indicator: {
+		borderRadius: radius.full,
 		backgroundColor: {
 			"[data-complete]": color.bgSuccess,
+			"[data-indeterminate]": "transparent",
 			default: color.bgAccent,
 		},
-		transform: "translateX(0)",
 		transitionDuration: {
 			default: motion.durationMedium,
 			"@media (prefers-reduced-motion: reduce)": "0ms",
@@ -149,7 +173,7 @@ const progressParts = stylex.create({
 		transitionProperty: "width, background-color",
 		transitionTimingFunction: motion.easeSmoothOut,
 		width: {
-			"[data-indeterminate]": "40%",
+			"[data-indeterminate]": 0,
 			default: 0,
 		},
 	},

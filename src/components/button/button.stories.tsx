@@ -2,6 +2,7 @@ import { ArrowRightIcon } from "@phosphor-icons/react/dist/csr/ArrowRight";
 import { PlusIcon } from "@phosphor-icons/react/dist/csr/Plus";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import * as stylex from "@stylexjs/stylex";
+import { useState } from "react";
 import { color, space } from "@/styles/tokens.stylex";
 import { fontSize, letterSpacing, lineHeight } from "@/styles/tokens.stylex";
 import { Button } from "./button";
@@ -19,6 +20,8 @@ const meta = {
 		children: "Create project",
 		disabled: false,
 		endSlot: undefined,
+		loading: false,
+		loadingText: "Loading…",
 		variant: "primary",
 		size: "md",
 		shape: "default",
@@ -27,9 +30,11 @@ const meta = {
 	argTypes: {
 		children: { control: "text" },
 		disabled: { control: "boolean" },
+		loading: { control: "boolean" },
+		loadingText: { control: "text" },
 		variant: {
 			control: "select",
-			options: ["primary", "subtle", "secondary", "neutral", "ghost", "danger"],
+			options: ["primary", "subtle", "secondary", "neutral", "ghost", "plain", "danger"],
 		},
 		size: { control: "select", options: ["xs", "sm", "md", "lg"] },
 		shape: { control: "select", options: ["default", "pill", "circle", "square"] },
@@ -47,7 +52,17 @@ const meta = {
 	},
 	parameters: {
 		controls: {
-			include: ["children", "variant", "size", "shape", "startSlot", "endSlot", "disabled"],
+			include: [
+				"children",
+				"variant",
+				"size",
+				"shape",
+				"startSlot",
+				"endSlot",
+				"disabled",
+				"loading",
+				"loadingText",
+			],
 		},
 	},
 } satisfies Meta<typeof Button>;
@@ -56,6 +71,14 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const Playground: Story = {};
+
+export const FullWidth: Story = {
+	args: {
+		children: "Continue",
+		width: "full",
+	},
+	parameters: { controls: { disable: true } },
+};
 
 const sizes = ["xs", "sm", "md", "lg"] as const;
 
@@ -83,7 +106,7 @@ export const SizesAndIcons: Story = {
 	),
 };
 
-const variants = ["primary", "subtle", "secondary", "neutral", "ghost", "danger"] as const;
+const variants = ["primary", "subtle", "secondary", "neutral", "ghost", "plain", "danger"] as const;
 
 export const Variants: Story = {
 	parameters: {
@@ -104,28 +127,99 @@ export const States: Story = {
 	parameters: {
 		controls: { disable: true },
 	},
-	render: () => (
-		<div {...stylex.props(storyStyles.variantRows)}>
-			<section {...stylex.props(storyStyles.variantRow)}>
-				<span {...stylex.props(storyStyles.rowLabel)}>Enabled</span>
-				<Button>Create project</Button>
-			</section>
-			<section {...stylex.props(storyStyles.variantRow)}>
-				<span {...stylex.props(storyStyles.rowLabel)}>Disabled</span>
-				<Button disabled>Create project</Button>
-			</section>
-		</div>
-	),
+	render: () => <ButtonStates />,
 };
+
+function ButtonStates() {
+	const [loading, setLoading] = useState(false);
+
+	return (
+		<div {...stylex.props(storyStyles.states)}>
+			<Button size="md" variant="secondary" onClick={() => setLoading((current) => !current)}>
+				{loading ? "Stop loading" : "Start loading"}
+			</Button>
+			<div {...stylex.props(storyStyles.stateGrid)}>
+				{variants.map((variant) => (
+					<section key={variant} {...stylex.props(storyStyles.stateColumn)}>
+						<span {...stylex.props(storyStyles.rowLabel)}>{variant}</span>
+						<div {...stylex.props(storyStyles.stateSpecimen)}>
+							<span {...stylex.props(storyStyles.rowLabel)}>Enabled</span>
+							<Button size="md" variant={variant}>
+								Create project
+							</Button>
+						</div>
+						<div {...stylex.props(storyStyles.stateSpecimen)}>
+							<span {...stylex.props(storyStyles.rowLabel)}>Disabled</span>
+							<Button disabled size="md" variant={variant}>
+								Create project
+							</Button>
+						</div>
+						<div {...stylex.props(storyStyles.stateSpecimen)}>
+							<span {...stylex.props(storyStyles.rowLabel)}>Default loading text</span>
+							<Button loading={loading} size="md" variant={variant}>
+								Create project
+							</Button>
+						</div>
+						<div {...stylex.props(storyStyles.stateSpecimen)}>
+							<span {...stylex.props(storyStyles.rowLabel)}>Custom loading text</span>
+							<Button
+								loading={loading}
+								loadingText="Creating…"
+								size="md"
+								startSlot={<PlusIcon aria-hidden weight="bold" />}
+								variant={variant}>
+								Create project
+							</Button>
+						</div>
+						<div {...stylex.props(storyStyles.stateSpecimen)}>
+							<span {...stylex.props(storyStyles.rowLabel)}>Loader only</span>
+							<Button loading={loading} loadingText="" size="md" variant={variant}>
+								Create project
+							</Button>
+						</div>
+					</section>
+				))}
+			</div>
+		</div>
+	);
+}
 
 const storyStyles = stylex.create({
 	variantRows: {
-		gap: space.x5,
+		gap: space[5],
 		display: "flex",
 		flexDirection: "column",
 	},
 	variantRow: {
-		gap: space.x2,
+		gap: space[2],
+		alignItems: "flex-start",
+		display: "flex",
+		flexDirection: "column",
+	},
+	states: {
+		gap: space[6],
+		alignItems: "flex-start",
+		display: "flex",
+		flexDirection: "column",
+		maxWidth: "100%",
+	},
+	stateGrid: {
+		gap: space[6],
+		display: "grid",
+		gridTemplateColumns: "repeat(7, max-content)",
+		paddingBlockEnd: space[2],
+		maxWidth: "100%",
+		overflowX: "auto",
+	},
+	stateColumn: {
+		gap: space[5],
+		alignItems: "flex-start",
+		display: "flex",
+		flexDirection: "column",
+	},
+	stateSpecimen: {
+		gap: space[2],
+		alignItems: "flex-start",
 		display: "flex",
 		flexDirection: "column",
 	},
@@ -134,10 +228,9 @@ const storyStyles = stylex.create({
 		fontSize: fontSize.x1,
 		letterSpacing: letterSpacing.x1,
 		lineHeight: lineHeight.x1,
-		textTransform: "capitalize",
 	},
 	row: {
-		gap: space.x3,
+		gap: space[3],
 		alignItems: "center",
 		display: "flex",
 		flexWrap: "wrap",

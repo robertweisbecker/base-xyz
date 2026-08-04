@@ -3,6 +3,7 @@ import * as stylex from "@stylexjs/stylex";
 import { space } from "@/styles/tokens.stylex";
 import { Text } from "../text/text";
 import { Heading } from "./heading";
+import { Code } from "../code/code";
 
 const sizeOptions = ["1", "2", "3", "4", "5", "6", "7", "8", "9"] as const;
 
@@ -10,7 +11,7 @@ const meta = {
 	title: "Components/Heading",
 	component: Heading,
 	args: {
-		children: "Workspace activity",
+		children: "The quick brown fox",
 		color: "default",
 		fontFamily: "sans",
 		fontWeight: "semibold",
@@ -27,13 +28,13 @@ const meta = {
 			control: "select",
 			options: ["default", "subtle", "muted", "accent", "danger", "success", "warning", "inverse", "inverse-muted"],
 		},
-		align: { control: "inline-radio", options: ["start", "center", "end", "justify"] },
+		textAlign: { control: "inline-radio", options: ["start", "center", "end", "justify"] },
 		wrap: { control: "inline-radio", options: ["wrap", "nowrap", "pretty", "balance"] },
 		truncate: { control: "boolean" },
 		m: { control: false },
 		mb: { control: false },
-		ml: { control: false },
-		mr: { control: false },
+		ms: { control: false },
+		me: { control: false },
 		mt: { control: false },
 		mx: { control: false },
 		my: { control: false },
@@ -41,7 +42,7 @@ const meta = {
 	},
 	parameters: {
 		controls: {
-			include: ["children", "size", "fontFamily", "fontWeight", "color", "align", "wrap", "truncate"],
+			include: ["children", "size", "fontFamily", "fontWeight", "color", "textAlign", "wrap", "truncate"],
 		},
 	},
 	decorators: [
@@ -86,8 +87,8 @@ export const Styles: Story = {
 		<div {...stylex.props(storyStyles.styleGrid)}>
 			{(["sans", "serif", "mono"] as const).flatMap((fontFamily) =>
 				(["regular", "medium", "semibold", "bold"] as const).map((fontWeight) => (
-					<Heading key={`${fontFamily}-${fontWeight}`} fontFamily={fontFamily} fontWeight={fontWeight} size="4">
-						{fontFamily} · {fontWeight}
+					<Heading key={`${fontFamily}-${fontWeight}`} fontFamily={fontFamily} fontWeight={fontWeight} size="3">
+						{fontFamily} {fontWeight}
 					</Heading>
 				)),
 			)}
@@ -117,22 +118,22 @@ export const SemanticLevels: Story = {
 	render: () => (
 		<section {...stylex.props(storyStyles.stack)}>
 			<Heading render={<h2 />} size="6">
-				Account settings
+				Account settings <Code>h2</Code>
 			</Heading>
-			<Text render={<p />} color="muted" size="3">
+			<Text color="muted" size="3">
 				The semantic heading level and visual size are configured independently.
 			</Text>
 			<section {...stylex.props(storyStyles.subsection)}>
 				<Heading render={<h3 />} size="4">
-					Profile
+					Profile <Code>h3</Code>
 				</Heading>
-				<Text render={<p />}>Update your public name and account details.</Text>
+				<Text>Update your public name and account details.</Text>
 			</section>
 			<section {...stylex.props(storyStyles.subsection)}>
 				<Heading render={(props) => <h3 {...props} data-story-element="render-callback" />} size="4">
-					Notifications
+					Notifications <Code>h3</Code>
 				</Heading>
-				<Text render={<p />}>Choose when the workspace should contact you.</Text>
+				<Text>Choose when the workspace should contact you.</Text>
 			</section>
 		</section>
 	),
@@ -143,30 +144,30 @@ const storyStyles = stylex.create({
 		maxWidth: "760px",
 	},
 	stack: {
-		gap: space.x4,
+		gap: space[4],
 		display: "flex",
 		flexDirection: "column",
 	},
 	sections: {
-		gap: space.x8,
+		gap: space[8],
 		display: "flex",
 		flexDirection: "column",
 	},
 	styleGrid: {
-		gap: space.x4,
+		gap: space[4],
 		display: "grid",
-		gridTemplateColumns: "repeat(auto-fit, minmax(14rem, 1fr))",
+		gridTemplateColumns: "repeat(4, minmax(0, 1fr))",
 	},
 	specimen: {
-		gap: space.x4,
+		gap: space[4],
 		alignItems: "baseline",
 		display: "grid",
-		gridTemplateColumns: `${space.x6} minmax(0, 1fr)`,
+		gridTemplateColumns: `${space[6]} minmax(0, 1fr)`,
 	},
 	subsection: {
-		gap: space.x2,
+		gap: space[2],
 		display: "flex",
 		flexDirection: "column",
-		marginBlockStart: space.x4,
+		marginBlockStart: space[4],
 	},
 });

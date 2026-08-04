@@ -8,10 +8,12 @@
     "build": "tsc -b && vite build",
     "lint": "oxlint && npm run lint:stylex",
     "lint:stylex": "eslint src",
+    "test:theme-props": "npm run build-storybook && playwright test && npm run test:theme-props:bundle",
+    "test:theme-props:bundle": "node tests/theme-props/bundle-boundary.mjs",
     "preview": "vite preview",
     "storybook": "WATCHPACK_POLLING=true WATCHPACK_POLLING_INTERVAL=1000 storybook dev -p 6006",
     "build-storybook": "storybook build",
-    "preview-storybook": "vite preview --outDir storybook-static -p 6006"
+    "preview-storybook": "vite preview --outDir storybook-static --port 6006"
   },
   "dependencies": {
     "@base-ui/react": "^1.6.0",
@@ -26,6 +28,7 @@
     "react-dom": "^19.2.7"
   },
   "devDependencies": {
+    "@playwright/test": "^1.62.1",
     "@storybook/addon-a11y": "^10.5.0",
     "@storybook/addon-docs": "^10.5.0",
     "@storybook/react-vite": "^10.5.0",

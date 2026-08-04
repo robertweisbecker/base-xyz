@@ -224,7 +224,7 @@ function CompactToolbar({
 
 const storyParts = stylex.create({
 	sections: {
-		gap: space.x8,
+		gap: space[8],
 		alignItems: "flex-start",
 		display: "grid",
 		gridTemplateColumns: {
@@ -233,7 +233,7 @@ const storyParts = stylex.create({
 		},
 	},
 	section: {
-		gap: space.x3,
+		gap: space[3],
 		display: "flex",
 		flexDirection: "column",
 	},

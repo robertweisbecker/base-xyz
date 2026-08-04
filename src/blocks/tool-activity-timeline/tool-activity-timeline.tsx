@@ -1,13 +1,13 @@
 import { CheckIcon } from "@phosphor-icons/react/dist/csr/Check";
 import { CircleIcon } from "@phosphor-icons/react/dist/csr/Circle";
 import { ClockIcon } from "@phosphor-icons/react/dist/csr/Clock";
-import { SpinnerGapIcon } from "@phosphor-icons/react/dist/csr/SpinnerGap";
 import { WarningIcon } from "@phosphor-icons/react/dist/csr/Warning";
 import * as stylex from "@stylexjs/stylex";
 import type { StyleXStyles } from "@stylexjs/stylex";
-import { textColorStyles, textStyles, textWeightStyles } from "@/components/text/text.stylex";
+import { textStyles, textWeightStyles } from "@/components/text/text.stylex";
 import { createContext, type ComponentProps, type ReactNode, useContext } from "react";
 import { Badge, type BadgeHue, type BadgeProps } from "@/components/badge/badge";
+import { Loader } from "@/components/loader/loader";
 import { color, radius, space } from "@/styles/tokens.stylex";
 
 type StyledProps<T> = Omit<T, "style"> & {
@@ -90,7 +90,7 @@ export function Title({ className, style, ...props }: ToolActivityTimelineTitleP
 }
 
 export function Description({ className, style, ...props }: ToolActivityTimelineDescriptionProps) {
-	const sx = stylex.props(textStyles.body, textColorStyles.muted, parts.description, style);
+	const sx = stylex.props(textStyles.body, parts.description, style);
 	return <div className={joinClassNames(sx.className, className)} style={sx.style} {...props} />;
 }
 
@@ -100,7 +100,7 @@ export function Metadata({ className, style, ...props }: ToolActivityTimelineMet
 }
 
 export function Meta({ className, style, ...props }: ToolActivityTimelineMetaProps) {
-	const sx = stylex.props(textStyles.supporting, textColorStyles.muted, parts.meta, style);
+	const sx = stylex.props(textStyles.supporting, parts.meta, style);
 	return <span className={joinClassNames(sx.className, className)} style={sx.style} {...props} />;
 }
 
@@ -132,7 +132,7 @@ function renderStatusIcon(status: ToolActivityStatus) {
 		case "queued":
 			return <CircleIcon aria-hidden weight="bold" />;
 		case "running":
-			return <SpinnerGapIcon aria-hidden weight="bold" {...stylex.props(parts.spinner)} />;
+			return <Loader aria-hidden />;
 		case "complete":
 			return <CheckIcon aria-hidden weight="bold" />;
 		case "approval":
@@ -146,8 +146,6 @@ function joinClassNames(...classNames: Array<string | undefined>) {
 	return classNames.filter(Boolean).join(" ");
 }
 
-const spin = stylex.keyframes({ to: { transform: "rotate(360deg)" } });
-
 const parts = stylex.create({
 	timeline: {
 		margin: 0,
@@ -158,10 +156,10 @@ const parts = stylex.create({
 		maxWidth: "42rem",
 	},
 	item: {
-		gap: space.x3,
+		gap: space[3],
 		display: "grid",
-		gridTemplateColumns: `${space.x6} minmax(0, 1fr)`,
-		paddingBlockEnd: space.x5,
+		gridTemplateColumns: `${space[6]} minmax(0, 1fr)`,
+		paddingBlockEnd: space[5],
 		position: "relative",
 		"::before": {
 			backgroundColor: color.border,
@@ -170,10 +168,10 @@ const parts = stylex.create({
 				default: "block",
 				":last-child": "none",
 			},
-			insetBlockStart: space.x6,
+			insetBlockStart: space[6],
 			insetInlineStart: "0.71875rem",
 			position: "absolute",
-			height: `calc(100% - ${space.x5})`,
+			height: `calc(100% - ${space[5]})`,
 			width: "1px",
 		},
 	},
@@ -184,11 +182,11 @@ const parts = stylex.create({
 		justifyContent: "center",
 		position: "relative",
 		zIndex: 1,
-		height: space.x6,
-		width: space.x6,
+		height: space[6],
+		width: space[6],
 	},
 	content: {
-		gap: space.x3,
+		gap: space[3],
 		display: "flex",
 		flexDirection: "column",
 		paddingBlockStart: "0.125rem",
@@ -196,10 +194,10 @@ const parts = stylex.create({
 	},
 	header: {
 		alignItems: "flex-start",
-		columnGap: space.x4,
+		columnGap: space[4],
 		display: "grid",
 		gridTemplateColumns: "minmax(0, 1fr) auto",
-		rowGap: space.x1,
+		rowGap: space[1],
 	},
 	title: {
 		gridColumn: "1",
@@ -209,10 +207,11 @@ const parts = stylex.create({
 	description: {
 		gridColumn: "1",
 		gridRow: "2",
+		color: color.fgMuted,
 		minWidth: 0,
 	},
 	metadata: {
-		gap: space.x2,
+		gap: space[2],
 		gridColumn: "2",
 		gridRow: "1 / span 2",
 		alignItems: "center",
@@ -220,13 +219,8 @@ const parts = stylex.create({
 		display: "flex",
 	},
 	meta: {
+		color: color.fgMuted,
 		fontVariantNumeric: "tabular-nums",
-	},
-	spinner: {
-		animationDuration: "900ms",
-		animationIterationCount: "infinite",
-		animationName: { default: spin, "@media (prefers-reduced-motion: reduce)": "none" },
-		animationTimingFunction: "linear",
 	},
 });
 

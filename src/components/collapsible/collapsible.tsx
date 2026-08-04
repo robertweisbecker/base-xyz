@@ -111,7 +111,7 @@ export function Icon({ ref, children, className, style, side = "end", ...props }
 			className={[sxClassName, className].filter(Boolean).join(" ")}
 			style={sxStyle}
 			{...props}>
-			{children ?? <CaretDownIcon size="1em" weight="bold" />}
+			{children ?? <CaretDownIcon size="1em" weight="regular" />}
 		</span>
 	);
 }
@@ -176,15 +176,15 @@ const collapsibleParts = stylex.create({
 		},
 	},
 	content: {
-		// paddingInlineStart: space.x3,
-		gap: space.x2,
+		// paddingInlineStart: space[3],
+		gap: space[2],
 		color: color.fgMuted,
 		display: "flex",
 		flexDirection: "column",
 		fontSize: fontSize.x2,
 		letterSpacing: letterSpacing.x2,
 		lineHeight: lineHeight.x2,
-		marginTop: space.x1,
+		marginTop: space[1],
 	},
 	icon: {
 		alignItems: "center",
@@ -213,9 +213,9 @@ const collapsibleParts = stylex.create({
 const triggerSizes = stylex.create({
 	xs: {
 		borderRadius: radius.sm,
-		gap: space.x1,
-		paddingBlock: space.x2,
-		paddingInline: space.x2,
+		gap: space[1],
+		paddingBlock: space[2],
+		paddingInline: space[2],
 		fontSize: fontSize.x1,
 		fontWeight: fontWeight.medium,
 		letterSpacing: letterSpacing.x1,
@@ -225,9 +225,9 @@ const triggerSizes = stylex.create({
 	},
 	sm: {
 		borderRadius: radius.sm,
-		gap: space.x2,
-		paddingBlock: space.x1,
-		paddingInline: space.x2,
+		gap: space[2],
+		paddingBlock: space[1],
+		paddingInline: space[2],
 		fontSize: fontSize.x1,
 		fontWeight: fontWeight.medium,
 		letterSpacing: letterSpacing.x1,
@@ -237,9 +237,9 @@ const triggerSizes = stylex.create({
 	},
 	md: {
 		borderRadius: radius.md,
-		gap: space.x2,
-		paddingBlock: space.x2,
-		paddingInline: space.x3,
+		gap: space[2],
+		paddingBlock: space[2],
+		paddingInline: space[3],
 		fontSize: fontSize.x2,
 		fontWeight: fontWeight.medium,
 		letterSpacing: letterSpacing.x2,
@@ -249,9 +249,9 @@ const triggerSizes = stylex.create({
 	},
 	lg: {
 		borderRadius: radius.lg,
-		gap: space.x2,
-		paddingBlock: space.x3,
-		paddingInline: space.x5,
+		gap: space[2],
+		paddingBlock: space[3],
+		paddingInline: space[5],
 		fontSize: fontSize.x3,
 		fontWeight: fontWeight.medium,
 		letterSpacing: letterSpacing.x3,
@@ -274,7 +274,7 @@ const triggerShapes = stylex.create({
 
 const triggerVariants = stylex.create({
 	default: {
-		// marginInline: `calc(${space.x3} * -1)`,
+		// marginInline: `calc(${space[3]} * -1)`,
 	},
 	link: {
 		paddingInline: 0,

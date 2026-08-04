@@ -16,7 +16,7 @@ const meta = {
 		locale: { control: false },
 		variant: { control: false },
 		value: {
-			control: { type: "number", min: 0, max: 100, step: 1 },
+			control: { type: "range", min: 0, max: 100, step: 1 },
 		},
 	},
 	parameters: {
@@ -72,35 +72,20 @@ export const Variants: Story = {
 					<Meter.Indicator />
 				</Meter.Track>
 			</Meter.Root>
-			<Meter.Root
-				{...confidenceThresholds}
-				aria-valuetext="High confidence"
-				max={3}
-				value={3}
-				variant="segmented">
+			<Meter.Root {...confidenceThresholds} aria-valuetext="High confidence" max={3} value={3} variant="segmented">
 				<Meter.Label>High confidence</Meter.Label>
 				<Meter.Track>
 					<Meter.Indicator />
 				</Meter.Track>
 			</Meter.Root>
-			<Meter.Root
-				{...confidenceThresholds}
-				aria-valuetext="Needs review"
-				max={3}
-				value={2}
-				variant="segmented">
+			<Meter.Root {...confidenceThresholds} aria-valuetext="Needs review" max={3} value={2} variant="segmented">
 				<Meter.Label>Switch to vanilla_madagascar</Meter.Label>
 				<Meter.Value>{() => "Needs review"}</Meter.Value>
 				<Meter.Track>
 					<Meter.Indicator />
 				</Meter.Track>
 			</Meter.Root>
-			<Meter.Root
-				{...confidenceThresholds}
-				aria-valuetext="No signal"
-				max={3}
-				value={0}
-				variant="segmented">
+			<Meter.Root {...confidenceThresholds} aria-valuetext="No signal" max={3} value={0} variant="segmented">
 				<Meter.Label>Full restock across every SKU</Meter.Label>
 				<Meter.Value>{() => "No signal"}</Meter.Value>
 				<Meter.Track>
@@ -169,7 +154,7 @@ const storyStyles = stylex.create({
 		width: "100%",
 	},
 	stack: {
-		gap: space.x8,
+		gap: space[8],
 		display: "flex",
 		flexDirection: "column",
 	},

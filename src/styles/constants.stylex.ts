@@ -16,6 +16,21 @@ export const breakpoints = stylex.defineConsts({
 });
 
 /**
+ * Non-overlapping ranges for component-owned responsive style sets.
+ *
+ * Use these only when a component intentionally needs one active slot at a
+ * time. General responsive styles should prefer the mobile-first selectors.
+ */
+export const breakpointRanges = stylex.defineConsts({
+	xs: "@media (20rem <= width < 34rem)",
+	sm: "@media (34rem <= width < 48rem)",
+	md: "@media (48rem <= width < 63.25rem)",
+	lg: "@media (63.25rem <= width < 80rem)",
+	xl: "@media (80rem <= width < 87.5rem)",
+	xxl: "@media (width >= 87.5rem)",
+});
+
+/**
  * Shared stacking order for surfaces that escape normal document flow.
  *
  * Keep related backdrop/content pairs adjacent so nested confirmation dialogs

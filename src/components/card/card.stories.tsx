@@ -11,6 +11,7 @@ import {
 	CardHeader,
 	CardTitle,
 	type CardRadius,
+	type CardProps,
 	type CardSize,
 	type CardVariant,
 } from "./card";
@@ -23,6 +24,7 @@ const meta = {
 	component: Card,
 	args: {
 		radius: "lg",
+		shadow: undefined,
 		size: "md",
 		variant: "elevated",
 	},
@@ -39,10 +41,11 @@ const meta = {
 			control: "select",
 			options: radii,
 		},
+		shadow: { control: "select", options: [undefined, "none", "sm", "md", "lg"] },
 	},
 	parameters: {
 		controls: {
-			include: ["variant", "size", "radius"],
+			include: ["variant", "size", "radius", "shadow"],
 		},
 	},
 	decorators: [
@@ -58,8 +61,34 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const Playground: Story = {
-	render: ({ radius, size, variant }) => (
-		<CardExample radius={radius ?? "lg"} size={size ?? "md"} variant={variant ?? "elevated"} />
+	render: ({ radius, shadow, size, variant }) => (
+		<CardExample
+			radius={typeof radius === "string" ? radius : "lg"}
+			shadow={shadow}
+			size={size ?? "md"}
+			variant={variant ?? "elevated"}
+		/>
+	),
+};
+
+export const HorizontalLayout: Story = {
+	parameters: { controls: { disable: true } },
+	render: () => (
+		<Card
+			gap={0}
+			orientation="horizontal"
+			radius="sm"
+			shadow="lg">
+			<CardHeader gap={2} justify="center">
+				<CardTitle>Horizontal card</CardTitle>
+				<CardDescription>Uses scalar composition props without a dedicated variant.</CardDescription>
+			</CardHeader>
+			<CardContent flexGrow={1}>Content expands without a dedicated horizontal variant.</CardContent>
+			<CardFooter gap={2} justify="end">
+				<Button size="sm" variant="secondary">Cancel</Button>
+				<Button size="sm">Save</Button>
+			</CardFooter>
+		</Card>
 	),
 };
 
@@ -97,15 +126,17 @@ export const Sizes: Story = {
 
 function CardExample({
 	radius = "lg",
+	shadow,
 	size = "md",
 	variant,
 }: {
 	radius?: CardRadius;
+	shadow?: CardProps["shadow"];
 	size?: CardSize;
 	variant: CardVariant;
 }) {
 	return (
-		<Card radius={radius} size={size} variant={variant}>
+		<Card radius={radius} shadow={shadow} size={size} variant={variant}>
 			<CardHeader>
 				<CardTitle>Team workspace</CardTitle>
 				<CardDescription>Invite collaborators and organize shared project files.</CardDescription>
@@ -124,13 +155,13 @@ function CardExample({
 const styles = stylex.create({
 	frame: { maxWidth: "64rem" },
 	cards: {
-		gap: space.x4,
+		gap: space[4],
 		alignItems: "start",
 		display: "grid",
 		gridTemplateColumns: "repeat(auto-fit, minmax(min(16rem, 100%), 1fr))",
 	},
 	specimen: {
-		gap: space.x2,
+		gap: space[2],
 		display: "flex",
 		flexDirection: "column",
 	},

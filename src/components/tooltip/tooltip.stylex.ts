@@ -2,22 +2,23 @@ import * as stylex from "@stylexjs/stylex";
 import { textStyles } from "@/components/text/text.stylex";
 import { popupMotionStyles } from "@/components/popover/popover.stylex";
 import { popupVars } from "@/components/popover/popover-vars.stylex";
-import { color, radius, shadow, space } from "@/styles/tokens.stylex";
+import { color, radius, shadow, space, size } from "@/styles/tokens.stylex";
 
 const styles = stylex.create({
 	surface: {
-		[popupVars.background]: color.bgTooltip,
+		[popupVars.background]: color.bgInverse,
 		[popupVars.border]: color.border,
-		[popupVars.foreground]: color.fg,
-		borderRadius: radius.sm,
-		paddingBlock: space.x1,
-		paddingInline: space.x2,
+		[popupVars.foreground]: color.fgInverse,
+		borderRadius: radius.md,
+		cornerShape: "superEllipse(1.5)",
+		paddingBlock: space[1],
+		paddingInline: space[2],
 		backgroundColor: popupVars.background,
 		boxShadow: shadow.md,
 		color: popupVars.foreground,
 		hyphens: "auto",
 		textAlign: "center",
-		maxWidth: "320px",
+		maxWidth: size["container.lg"],
 	},
 });
 

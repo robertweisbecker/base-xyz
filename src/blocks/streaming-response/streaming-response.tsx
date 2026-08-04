@@ -1,11 +1,11 @@
 import { CheckCircleIcon } from "@phosphor-icons/react/dist/csr/CheckCircle";
-import { SpinnerGapIcon } from "@phosphor-icons/react/dist/csr/SpinnerGap";
 import { SquareIcon } from "@phosphor-icons/react/dist/csr/Square";
 import { WarningCircleIcon } from "@phosphor-icons/react/dist/csr/WarningCircle";
 import * as stylex from "@stylexjs/stylex";
 import type { StyleXStyles } from "@stylexjs/stylex";
 import { createContext, type ComponentProps, useContext } from "react";
 import * as ToolbarPrimitive from "@/components/toolbar/toolbar";
+import { Loader } from "@/components/loader/loader";
 import { textSizeStyles, textStyles } from "@/components/text/text.stylex";
 import { shimmerTextStyles } from "./shimmer-text.stylex";
 import { typingTextStyles } from "./typing-text.stylex";
@@ -107,7 +107,7 @@ function useStreamingResponseContext(part: string) {
 function renderStatusIcon(status: StreamingResponseStatus) {
 	switch (status) {
 		case "streaming":
-			return <SpinnerGapIcon aria-hidden size={14} weight="bold" {...stylex.props(parts.spinner)} />;
+			return <Loader aria-hidden />;
 		case "complete":
 			return <CheckCircleIcon aria-hidden size={14} weight="fill" />;
 		case "stopped":
@@ -121,11 +121,9 @@ function joinClassNames(...classNames: Array<string | undefined>) {
 	return classNames.filter(Boolean).join(" ");
 }
 
-const spin = stylex.keyframes({ to: { transform: "rotate(360deg)" } });
-
 const parts = stylex.create({
 	root: {
-		gap: space.x3,
+		gap: space[3],
 		color: color.fg,
 		display: "flex",
 		flexDirection: "column",
@@ -134,7 +132,7 @@ const parts = stylex.create({
 		width: "100%",
 	},
 	status: {
-		gap: space.x1,
+		gap: space[1],
 		alignItems: "center",
 		display: "inline-flex",
 		width: "fit-content",
@@ -149,15 +147,6 @@ const parts = stylex.create({
 		alignSelf: "flex-start",
 		backgroundColor: "transparent",
 		boxShadow: "none",
-	},
-	spinner: {
-		animationDuration: "900ms",
-		animationIterationCount: "infinite",
-		animationName: {
-			default: spin,
-			"@media (prefers-reduced-motion: reduce)": "none",
-		},
-		animationTimingFunction: "linear",
 	},
 });
 

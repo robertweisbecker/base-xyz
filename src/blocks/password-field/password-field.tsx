@@ -91,8 +91,7 @@ export function Root({
 				visible: currentVisible,
 				setValue,
 				setVisible,
-			}}
-		>
+			}}>
 			<Field.Root className={joinClassNames(rootSx.className, className)} style={rootSx.style} {...props} />
 		</PasswordFieldContext.Provider>
 	);
@@ -133,7 +132,7 @@ export function VisibilityToggle({
 	"aria-label": ariaLabel,
 	children,
 	shape = "square",
-	size = "sm",
+	size = "xs",
 	variant = "plain",
 	...props
 }: PasswordFieldVisibilityToggleProps) {
@@ -147,14 +146,13 @@ export function VisibilityToggle({
 			shape={shape}
 			size={size}
 			variant={variant}
-			{...props}
-		>
+			{...props}>
 			{children ?? (
 				<span aria-hidden {...stylex.props(iconSwapTransition.slot)}>
 					<EyeIcon
 						aria-hidden
 						size={"16"}
-						weight="duotone"
+						weight="bold"
 						{...stylex.props(
 							iconSwapTransition.icon,
 							iconSwapTransition.from,
@@ -165,7 +163,7 @@ export function VisibilityToggle({
 					<EyeSlashIcon
 						aria-hidden
 						size={"16"}
-						weight="duotone"
+						weight="bold"
 						{...stylex.props(
 							iconSwapTransition.icon,
 							iconSwapTransition.to,
@@ -185,9 +183,7 @@ export function Description({ className, style, ...props }: PasswordFieldDescrip
 
 export function Error({ className, match = true, style, ...props }: PasswordFieldErrorProps) {
 	const sx = stylex.props(fieldStyles.error, style);
-	return (
-		<Field.Error className={joinClassNames(sx.className, className)} match={match} style={sx.style} {...props} />
-	);
+	return <Field.Error className={joinClassNames(sx.className, className)} match={match} style={sx.style} {...props} />;
 }
 
 export function Meter({
@@ -212,8 +208,7 @@ export function Meter({
 			min={0}
 			value={score}
 			{...props}
-			style={[parts.meter, style]}
-		>
+			style={[parts.meter, style]}>
 			<MeterPrimitive.Track>
 				<MeterPrimitive.Indicator />
 			</MeterPrimitive.Track>
@@ -255,6 +250,6 @@ const meterToneColors = {
 
 const parts = stylex.create({
 	meter: {
-		marginBlockStart: space.x2,
+		marginBlockStart: space[2],
 	},
 });

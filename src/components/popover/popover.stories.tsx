@@ -169,7 +169,7 @@ const storyParts = stylex.create({
 		width: "min(720px, calc(100vw - 48px))",
 	},
 	positioningGrid: {
-		gap: space.x4,
+		gap: space[4],
 		paddingBlock: "10rem",
 		display: "grid",
 		gridTemplateColumns: {
@@ -189,7 +189,7 @@ const storyParts = stylex.create({
 		maxWidth: "17rem",
 	},
 	stack: {
-		gap: space.x3,
+		gap: space[3],
 		alignItems: "center",
 		display: "flex",
 		flexDirection: "column",
@@ -202,7 +202,7 @@ const storyParts = stylex.create({
 		lineHeight: lineHeight.x1,
 	},
 	triggerGroup: {
-		gap: space.x2,
+		gap: space[2],
 		display: "flex",
 		flexWrap: "wrap",
 	},

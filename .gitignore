@@ -11,6 +11,8 @@ node_modules
 dist
 dist-ssr
 storybook-static
+playwright-report
+test-results
 .vercel
 *.local
 
@@ -20,6 +22,7 @@ src/assets/hero.png
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json
+!.vscode/settings.json
 .idea
 .DS_Store
 *.suo

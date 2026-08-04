@@ -252,12 +252,12 @@ export const RadiusTesting: Story = {
 
 const styles = stylex.create({
 	story: {
-		gap: space.x8,
+		gap: space[8],
 		display: "flex",
 		flexDirection: "column",
 	},
 	section: {
-		gap: space.x4,
+		gap: space[4],
 		alignItems: "flex-start",
 		display: "flex",
 		flexDirection: "column",
@@ -271,12 +271,12 @@ const styles = stylex.create({
 		lineHeight: lineHeight.x1,
 	},
 	variantRows: {
-		gap: space.x5,
+		gap: space[5],
 		display: "flex",
 		flexDirection: "column",
 	},
 	variantRow: {
-		gap: space.x3,
+		gap: space[3],
 		display: "grid",
 		gridTemplateColumns: "6rem minmax(0, 1fr)",
 	},
@@ -288,7 +288,7 @@ const styles = stylex.create({
 		lineHeight: lineHeight.x1,
 	},
 	row: {
-		gap: space.x3,
+		gap: space[3],
 		alignItems: "center",
 		display: "flex",
 		flexWrap: "wrap",

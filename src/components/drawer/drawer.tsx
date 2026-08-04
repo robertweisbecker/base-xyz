@@ -120,9 +120,7 @@ export function Description({ ref, className, style, ...props }: StyledProps<Bas
 export function Handle({ className, style, ...props }: StyledProps<ComponentProps<"div">>) {
 	const { className: sxClassName, style: sxStyle } = stylex.props(drawerParts.handle, style);
 
-	return (
-		<div aria-hidden className={[sxClassName, className].filter(Boolean).join(" ")} style={sxStyle} {...props} />
-	);
+	return <div aria-hidden className={[sxClassName, className].filter(Boolean).join(" ")} style={sxStyle} {...props} />;
 }
 
 export function Header({ className, style, ...props }: StyledProps<ComponentProps<"div">>) {
@@ -177,20 +175,20 @@ const drawerParts = stylex.create({
 		alignItems: "flex-end",
 	},
 	popup: {
-		"--ds-drawer-bleed": "3rem",
-		"--ds-drawer-peek": ".5rem",
-		"--ds-drawer-stack-height":
-			"max(0px, calc(var(--drawer-frontmost-height, var(--drawer-height)) - var(--ds-drawer-bleed)))",
-		"--ds-drawer-stack-peek-offset":
-			"max(0px, calc((var(--nested-drawers) - var(--ds-drawer-stack-progress)) * var(--ds-drawer-peek)))",
-		"--ds-drawer-stack-progress": "clamp(0, var(--drawer-swipe-progress), 1)",
-		"--ds-drawer-stack-scale":
-			"calc(var(--ds-drawer-stack-scale-base) + (var(--ds-drawer-stack-step) * var(--ds-drawer-stack-progress)))",
-		"--ds-drawer-stack-scale-base": "max(0, calc(1 - (var(--nested-drawers) * var(--ds-drawer-stack-step))))",
-		"--ds-drawer-stack-shrink": "calc(1 - var(--ds-drawer-stack-scale))",
-		"--ds-drawer-stack-step": 0.05,
-		"--ds-drawer-translate-y":
-			"calc(var(--drawer-snap-point-offset, 0px) + var(--drawer-swipe-movement-y) - var(--ds-drawer-stack-peek-offset) - (var(--ds-drawer-stack-shrink) * var(--ds-drawer-stack-height)))",
+		"--_drawer-bleed": "3rem",
+		"--_drawer-peek": ".5rem",
+		"--_drawer-stack-height":
+			"max(0px, calc(var(--drawer-frontmost-height, var(--drawer-height)) - var(--_drawer-bleed)))",
+		"--_drawer-stack-peek-offset":
+			"max(0px, calc((var(--nested-drawers) - var(--_drawer-stack-progress)) * var(--_drawer-peek)))",
+		"--_drawer-stack-progress": "clamp(0, var(--drawer-swipe-progress), 1)",
+		"--_drawer-stack-scale":
+			"calc(var(--_drawer-stack-scale-base) + (var(--_drawer-stack-step) * var(--_drawer-stack-progress)))",
+		"--_drawer-stack-scale-base": "max(0, calc(1 - (var(--nested-drawers) * var(--_drawer-stack-step))))",
+		"--_drawer-stack-shrink": "calc(1 - var(--_drawer-stack-scale))",
+		"--_drawer-stack-step": 0.05,
+		"--_drawer-translate-y":
+			"calc(var(--drawer-snap-point-offset, 0px) + var(--drawer-swipe-movement-y) - var(--_drawer-stack-peek-offset) - (var(--_drawer-stack-shrink) * var(--_drawer-stack-height)))",
 		overscrollBehavior: "contain",
 		boxSizing: "border-box",
 		opacity: {
@@ -198,11 +196,11 @@ const drawerParts = stylex.create({
 			default: 1,
 		},
 		transform: {
-			"[data-ending-style]": "translateY(calc(100% - var(--ds-drawer-bleed) + 2px)) scale(1)",
-			"[data-starting-style]": "translateY(calc(100% - var(--ds-drawer-bleed) + 2px)) scale(1)",
-			default: "translateY(var(--ds-drawer-translate-y)) scale(var(--ds-drawer-stack-scale))",
+			"[data-ending-style]": "translateY(calc(100% - var(--_drawer-bleed) + 2px)) scale(1)",
+			"[data-starting-style]": "translateY(calc(100% - var(--_drawer-bleed) + 2px)) scale(1)",
+			default: "translateY(var(--_drawer-translate-y)) scale(var(--_drawer-stack-scale))",
 		},
-		transformOrigin: "50% calc(100% - var(--ds-drawer-bleed))",
+		transformOrigin: "50% calc(100% - var(--_drawer-bleed))",
 		transitionDuration: {
 			"[data-ending-style]": `calc(var(--drawer-swipe-strength) * ${DRAWER_RELEASE_DURATION})`,
 			"[data-nested-drawer-swiping]": "0ms",
@@ -218,17 +216,17 @@ const drawerParts = stylex.create({
 		borderTopLeftRadius: radius.xl,
 		borderTopRightRadius: radius.xl,
 		height: {
-			"[data-nested-drawer-open]": "calc(var(--ds-drawer-stack-height) + var(--ds-drawer-bleed))",
+			"[data-nested-drawer-open]": "calc(var(--_drawer-stack-height) + var(--_drawer-bleed))",
 			default: "var(--drawer-height, auto)",
 		},
-		marginBottom: "calc(-1 * var(--ds-drawer-bleed))",
-		maxHeight: "calc(80vh + var(--ds-drawer-bleed))",
+		marginBottom: "calc(-1 * var(--_drawer-bleed))",
+		maxHeight: "calc(80vh + var(--_drawer-bleed))",
 		maxWidth: "640px",
 		overflowY: {
 			"[data-nested-drawer-open]": "hidden",
 			default: "auto",
 		},
-		paddingBottom: "calc(1.5rem + env(safe-area-inset-bottom, 0px) + var(--ds-drawer-bleed))",
+		paddingBottom: "calc(1.5rem + env(safe-area-inset-bottom, 0px) + var(--_drawer-bleed))",
 		"::after": {
 			backgroundColor: {
 				"[data-close-confirmation-open]": "rgb(0 0 0 / 5%)",
@@ -244,10 +242,10 @@ const drawerParts = stylex.create({
 		},
 	},
 	snapPointPopup: {
-		"--ds-drawer-bleed": "0px",
-		height: `calc(100dvh - ${space.x4})`,
+		"--_drawer-bleed": "0px",
+		height: `calc(100dvh - ${space[4]})`,
 		marginBottom: 0,
-		maxHeight: `calc(100dvh - ${space.x4})`,
+		maxHeight: `calc(100dvh - ${space[4]})`,
 		overflowY: "hidden",
 		paddingBottom: 0,
 	},
@@ -276,7 +274,7 @@ const drawerParts = stylex.create({
 	},
 	handle: {
 		borderRadius: radius.full,
-		marginBlock: space.x1,
+		marginBlock: space[1],
 		marginInline: "auto",
 		backgroundColor: color.border,
 		opacity: {
@@ -294,23 +292,23 @@ const drawerParts = stylex.create({
 		width: "58px",
 	},
 	header: {
-		gap: space.x2,
-		paddingInline: space.x5,
+		gap: space[2],
+		paddingInline: space[5],
 		display: "flex",
 		flexDirection: "column",
-		paddingBlockEnd: space.x3,
-		paddingBlockStart: space.x2,
+		paddingBlockEnd: space[3],
+		paddingBlockStart: space[2],
 		borderBottomColor: color.border,
 		borderBottomStyle: "solid",
 		borderBottomWidth: "0.5px",
 	},
 	body: {
-		padding: space.x5,
+		padding: space[5],
 	},
 	footer: {
-		gap: space.x3,
-		paddingInline: space.x5,
-		paddingBlockStart: space.x3,
+		gap: space[3],
+		paddingInline: space[5],
+		paddingBlockStart: space[3],
 		borderTopColor: color.border,
 		borderTopStyle: "solid",
 		borderTopWidth: "1px",

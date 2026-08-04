@@ -60,13 +60,9 @@ export function GoalToolbar({ active, description }: GoalToolbarProps) {
 						<span {...stylex.props(parts.elapsed)}>12m 24s</span>
 						<Toolbar.Group aria-label="Goal actions" style={parts.actions}>
 							<IconButton
-								icon={<PencilIcon aria-hidden weight="bold" />}
+								icon={<PencilIcon aria-hidden weight="regular" />}
 								label="Edit goal"
-								render={
-									<Dialog.Trigger
-										render={<Toolbar.Button style={parts.wideAction} />}
-									/>
-								}
+								render={<Dialog.Trigger render={<Toolbar.Button style={parts.wideAction} />} />}
 								nativeButton
 								variant="ghost"
 							/>
@@ -79,7 +75,7 @@ export function GoalToolbar({ active, description }: GoalToolbarProps) {
 												iconSwapTransition.from,
 												currentActive ? iconSwapTransition.visible : iconSwapTransition.hidden,
 											)}>
-											<PauseCircleIcon aria-hidden weight="bold" />
+											<PauseCircleIcon aria-hidden weight="duotone" />
 										</span>
 										<span
 											{...stylex.props(
@@ -87,7 +83,7 @@ export function GoalToolbar({ active, description }: GoalToolbarProps) {
 												iconSwapTransition.to,
 												currentActive ? iconSwapTransition.hidden : iconSwapTransition.visible,
 											)}>
-											<PlayCircleIcon aria-hidden weight="bold" />
+											<PlayCircleIcon aria-hidden weight="fill" />
 										</span>
 									</span>
 								}
@@ -98,7 +94,7 @@ export function GoalToolbar({ active, description }: GoalToolbarProps) {
 								variant="ghost"
 							/>
 							<IconButton
-								icon={<TrashIcon aria-hidden weight="bold" />}
+								icon={<TrashIcon aria-hidden weight="regular" />}
 								label="Delete goal"
 								nativeButton
 								render={<Toolbar.Button style={parts.wideAction} />}
@@ -108,58 +104,54 @@ export function GoalToolbar({ active, description }: GoalToolbarProps) {
 								icon={<Collapsible.Icon />}
 								label={detailsLabel}
 								nativeButton
-								render={
-									<Collapsible.Trigger
-										render={<Toolbar.Button />}
-										shape="square"
-										size="md"
-									/>
-								}
+								render={<Collapsible.Trigger render={<Toolbar.Button />} shape="square" size="md" />}
 								variant="ghost"
 							/>
 						</Toolbar.Group>
 					</Toolbar.Root>
-					<Collapsible.Panel style={parts.details}>
-						<ScrollArea
-							label="Goal description"
-							size="content"
-							style={parts.descriptionScroll}
-							viewportStyle={parts.descriptionScrollViewport}
-							contentStyle={parts.descriptionScrollContent}>
-							{currentDescription}
-						</ScrollArea>
-						<Toolbar.Root aria-label="Additional goal actions" variant="unstyled">
-							<Toolbar.Group>
-								<Dialog.Trigger render={<Toolbar.Button style={parts.compactAction} />}>
-									<PencilIcon aria-hidden size={16} weight="regular" /> Edit
-								</Dialog.Trigger>
-								<Toolbar.Button style={parts.compactAction}>
-									<TrashIcon aria-hidden size={16} weight="regular" /> Delete
-								</Toolbar.Button>
-							</Toolbar.Group>
-						</Toolbar.Root>
+					<Collapsible.Panel>
+						<Collapsible.Content style={parts.details}>
+							<ScrollArea
+								label="Goal description"
+								size="content"
+								style={parts.descriptionScroll}
+								viewportStyle={parts.descriptionScrollViewport}
+								contentStyle={parts.descriptionScrollContent}>
+								{currentDescription}
+							</ScrollArea>
+							<Toolbar.Root aria-label="Additional goal actions" variant="unstyled">
+								<Toolbar.Group>
+									<Dialog.Trigger render={<Toolbar.Button style={parts.compactAction} />}>
+										<PencilIcon aria-hidden size={16} weight="regular" /> Edit
+									</Dialog.Trigger>
+									<Toolbar.Button style={parts.compactAction}>
+										<TrashIcon aria-hidden size={16} weight="regular" /> Delete
+									</Toolbar.Button>
+								</Toolbar.Group>
+							</Toolbar.Root>
+						</Collapsible.Content>
 					</Collapsible.Panel>
 				</Collapsible.Root>
 				<Dialog.Popup>
-							<Dialog.Header>
-								<Dialog.Title>Edit goal</Dialog.Title>
-								<Dialog.Description>Update the description for this goal.</Dialog.Description>
-							</Dialog.Header>
-							<form onSubmit={handleSave}>
-								<Dialog.Body>
-									<Textarea
-										autoFocus
-										label="Goal description"
-										rows={5}
-										value={draftDescription}
-										onChange={(event) => setDraftDescription(event.currentTarget.value)}
-									/>
-								</Dialog.Body>
-								<Dialog.Footer>
-									<Dialog.Close render={<Button variant="neutral" />}>Cancel</Dialog.Close>
-									<Button type="submit">Save changes</Button>
-								</Dialog.Footer>
-							</form>
+					<Dialog.Header>
+						<Dialog.Title>Edit goal</Dialog.Title>
+						<Dialog.Description>Update the description for this goal.</Dialog.Description>
+					</Dialog.Header>
+					<form onSubmit={handleSave}>
+						<Dialog.Body>
+							<Textarea
+								autoFocus
+								label="Goal description"
+								rows={5}
+								value={draftDescription}
+								onChange={(event) => setDraftDescription(event.currentTarget.value)}
+							/>
+						</Dialog.Body>
+						<Dialog.Footer>
+							<Dialog.Close render={<Button variant="neutral" />}>Cancel</Dialog.Close>
+							<Button type="submit">Save changes</Button>
+						</Dialog.Footer>
+					</form>
 				</Dialog.Popup>
 			</Dialog.Root>
 		</Tooltip.Provider>
@@ -179,8 +171,8 @@ const parts = stylex.create({
 		borderTopRightRadius: radius.lg,
 	},
 	summary: {
-		padding: space.x1,
-		gap: space.x2,
+		padding: space[1],
+		gap: space[2],
 		alignItems: "center",
 		display: "flex",
 		minHeight: size["control.lg"],
@@ -191,11 +183,11 @@ const parts = stylex.create({
 		display: "inline-flex",
 		flexShrink: 0,
 		opacity: 0.64,
-		paddingInlineEnd: space.x1,
-		paddingInlineStart: space.x2,
+		paddingInlineEnd: space[1],
+		paddingInlineStart: space[2],
 	},
 	statusLabel: {
-		gap: space.x1,
+		gap: space[1],
 		alignItems: "center",
 		color: color.fg,
 		display: "flex",
@@ -239,14 +231,9 @@ const parts = stylex.create({
 		},
 	},
 	details: {
-		gap: space.x2,
 		color: color.fgSubtle,
-		display: "flex",
-		flexDirection: "column",
-		fontSize: fontSize.x2,
-		letterSpacing: letterSpacing.x2,
 		lineHeight: 1.5,
-		paddingInlineStart: space.x3,
+		paddingInlineStart: space[3],
 	},
 	descriptionScroll: {
 		minWidth: 0,
@@ -256,6 +243,6 @@ const parts = stylex.create({
 		maxHeight: "8lh",
 	},
 	descriptionScrollContent: {
-		paddingInlineEnd: space.x3,
+		paddingInlineEnd: space[3],
 	},
 });

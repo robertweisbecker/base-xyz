@@ -4,21 +4,31 @@ import { CaretDownIcon } from "@phosphor-icons/react/dist/csr/CaretDown";
 import { CaretRightIcon } from "@phosphor-icons/react/dist/csr/CaretRight";
 import * as stylex from "@stylexjs/stylex";
 import type { StyleXStyles } from "@stylexjs/stylex";
-import type { ReactNode } from "react";
+import { createContext, useContext, type ReactNode } from "react";
 import { textFamilyStyles, textStyles, textWeightStyles } from "@/components/text/text.stylex";
 import { motion } from "@/styles/tokens.stylex";
 import { popupMotionStyles, popupPositionerStyles, popupViewportStyles } from "@/components/popover/popover.stylex";
 import { popupVars } from "@/components/popover/popover-vars.stylex";
 import { color, radius, shadow, space } from "@/styles/tokens.stylex";
 import { CheckmarkIcon } from "../selection-icons";
-import { menuItemStyles, menuItemVariantStyles, type MenuItemVariant } from "./menu-item.stylex";
+import {
+	menuItemSizeStyles,
+	menuItemStyles,
+	menuItemVariantStyles,
+} from "./menu-item.stylex";
+import type { MenuItemSize, MenuItemVariant } from "./menu.types";
+
+const MenuSizeContext = createContext<MenuItemSize>("md");
 
 type StyledProps<T> = Omit<T, "className" | "style"> & {
 	className?: string;
 	style?: StyleXStyles;
 };
 
-export type { MenuItemVariant } from "./menu-item.stylex";
+export type { MenuItemSize, MenuItemVariant } from "./menu.types";
+export type MenuRootProps<Payload = unknown> = Omit<BaseMenu.Root.Props<Payload>, "size"> & {
+	size?: MenuItemSize;
+};
 export type MenuPositionerProps = StyledProps<BaseMenu.Positioner.Props>;
 export type MenuViewportProps = StyledProps<BaseMenu.Viewport.Props>;
 export type MenuPopupProps = StyledProps<BaseMenu.Popup.Props> & {
@@ -32,6 +42,18 @@ export type MenuItemProps = StyledProps<BaseMenu.Item.Props> & {
 export type CollapsibleGroupProps = StyledProps<BaseCollapsible.Root.Props>;
 export type CollapsibleGroupTriggerProps = Omit<MenuItemProps, "closeOnClick" | "nativeButton" | "render" | "variant">;
 export type CollapsibleGroupPanelProps = StyledProps<BaseCollapsible.Panel.Props>;
+
+export function Root<Payload = unknown>({ children, size = "md", ...props }: MenuRootProps<Payload>) {
+	return (
+		<MenuSizeContext.Provider value={size}>
+			<BaseMenu.Root {...props}>{children}</BaseMenu.Root>
+		</MenuSizeContext.Provider>
+	);
+}
+
+function useMenuItemSizeStyle() {
+	return menuItemSizeStyles[useContext(MenuSizeContext)];
+}
 
 function Positioner({
 	ref,
@@ -95,8 +117,10 @@ export function Viewport({ ref, className, style, ...props }: MenuViewportProps)
 }
 
 export function Item({ ref, className, style, variant = "default", ...props }: MenuItemProps) {
+	const sizeStyle = useMenuItemSizeStyle();
 	const { className: sxClassName, style: sxStyle } = stylex.props(
 		menuItemStyles.item,
+		sizeStyle,
 		menuItemVariantStyles[variant],
 		style,
 	);
@@ -112,8 +136,10 @@ export function Item({ ref, className, style, variant = "default", ...props }: M
 }
 
 export function LinkItem({ ref, className, style, ...props }: StyledProps<BaseMenu.LinkItem.Props>) {
+	const sizeStyle = useMenuItemSizeStyle();
 	const { className: sxClassName, style: sxStyle } = stylex.props(
 		menuItemStyles.item,
+		sizeStyle,
 		menuItemVariantStyles.default,
 		style,
 	);
@@ -129,8 +155,10 @@ export function LinkItem({ ref, className, style, ...props }: StyledProps<BaseMe
 }
 
 export function CheckboxItem({ ref, children, className, style, ...props }: StyledProps<BaseMenu.CheckboxItem.Props>) {
+	const sizeStyle = useMenuItemSizeStyle();
 	const { className: sxClassName, style: sxStyle } = stylex.props(
 		menuItemStyles.item,
+		sizeStyle,
 		menuItemVariantStyles.default,
 		style,
 	);
@@ -142,7 +170,7 @@ export function CheckboxItem({ ref, children, className, style, ...props }: Styl
 			style={sxStyle}
 			{...props}>
 			<BaseMenu.CheckboxItemIndicator keepMounted {...stylex.props(menuItemStyles.indicator)}>
-				<CheckmarkIcon />
+				<CheckmarkIcon width="1em" height="1em" />
 			</BaseMenu.CheckboxItemIndicator>
 			{children}
 		</BaseMenu.CheckboxItem>
@@ -150,8 +178,10 @@ export function CheckboxItem({ ref, children, className, style, ...props }: Styl
 }
 
 export function SwitchItem({ ref, children, className, style, ...props }: StyledProps<BaseMenu.CheckboxItem.Props>) {
+	const sizeStyle = useMenuItemSizeStyle();
 	const { className: sxClassName, style: sxStyle } = stylex.props(
 		menuItemStyles.item,
+		sizeStyle,
 		menuItemVariantStyles.default,
 		style,
 	);
@@ -177,8 +207,10 @@ export function SwitchItem({ ref, children, className, style, ...props }: Styled
 }
 
 export function RadioItem({ ref, children, className, style, ...props }: StyledProps<BaseMenu.RadioItem.Props>) {
+	const sizeStyle = useMenuItemSizeStyle();
 	const { className: sxClassName, style: sxStyle } = stylex.props(
 		menuItemStyles.item,
+		sizeStyle,
 		menuItemVariantStyles.default,
 		style,
 	);
@@ -204,8 +236,10 @@ export function SubmenuTrigger({
 	style,
 	...props
 }: StyledProps<BaseMenu.SubmenuTrigger.Props>) {
+	const sizeStyle = useMenuItemSizeStyle();
 	const { className: sxClassName, style: sxStyle } = stylex.props(
 		menuItemStyles.item,
+		sizeStyle,
 		menuItemVariantStyles.default,
 		menuParts.submenuTrigger,
 		style,
@@ -218,7 +252,7 @@ export function SubmenuTrigger({
 			style={sxStyle}
 			{...props}>
 			{children}
-			<CaretRightIcon aria-hidden size={14} weight="bold" {...stylex.props(menuParts.submenuIcon)} />
+			<CaretRightIcon aria-hidden size="1em" weight="bold" {...stylex.props(menuParts.submenuIcon)} />
 		</BaseMenu.SubmenuTrigger>
 	);
 }
@@ -237,8 +271,10 @@ export function CollapsibleGroup({ ref, className, style, ...props }: Collapsibl
 }
 
 export function CollapsibleGroupTrigger({ ref, children, className, style, ...props }: CollapsibleGroupTriggerProps) {
+	const sizeStyle = useMenuItemSizeStyle();
 	const { className: sxClassName, style: sxStyle } = stylex.props(
 		menuItemStyles.item,
+		sizeStyle,
 		menuItemVariantStyles.default,
 		menuParts.collapsibleGroupTrigger,
 		stylex.defaultMarker(),
@@ -257,7 +293,7 @@ export function CollapsibleGroupTrigger({ ref, children, className, style, ...pr
 			{children}
 			<CaretDownIcon
 				aria-hidden
-				size={14}
+				size="1em"
 				weight="bold"
 				{...stylex.props(menuParts.submenuIcon, menuParts.collapsibleGroupIcon)}
 			/>
@@ -342,7 +378,6 @@ export function ItemShortcut({ children }: { children: ReactNode }) {
 	return <kbd {...stylex.props(menuText.shortcut, menuParts.itemShortcut)}>{children}</kbd>;
 }
 
-export const Root = BaseMenu.Root;
 export const Trigger = BaseMenu.Trigger;
 export const Group = BaseMenu.Group;
 export const RadioGroup = BaseMenu.RadioGroup;
@@ -350,7 +385,7 @@ export const SubmenuRoot = BaseMenu.SubmenuRoot;
 
 const menuParts = stylex.create({
 	panelSurface: {
-		[popupVars.background]: color.bgElevated,
+		[popupVars.background]: color.bgPanel,
 		[popupVars.border]: color.border,
 		[popupVars.foreground]: color.fg,
 		borderRadius: radius.lg,
@@ -359,7 +394,7 @@ const menuParts = stylex.create({
 		color: popupVars.foreground,
 	},
 	popup: {
-		padding: space.x1,
+		padding: space[1],
 		outline: "0",
 		minWidth: "8rem",
 	},
@@ -377,8 +412,8 @@ const menuParts = stylex.create({
 		alignItems: "center",
 		display: "inline-flex",
 		justifyContent: "center",
-		height: space.x4,
-		width: space.x4,
+		height: space[4],
+		width: space[4],
 	},
 	submenuTrigger: {
 		backgroundColor: {
@@ -458,8 +493,8 @@ const menuParts = stylex.create({
 	indicatorDot: {
 		borderRadius: radius.full,
 		backgroundColor: "currentColor",
-		height: space.x2,
-		width: space.x2,
+		height: space[2],
+		width: space[2],
 	},
 	switchIndicator: {
 		borderRadius: radius.full,
@@ -478,8 +513,8 @@ const menuParts = stylex.create({
 		},
 		transitionProperty: "background-color",
 		transitionTimingFunction: motion.easeSmoothOut,
-		height: space.x4,
-		width: space.x6,
+		height: space[4],
+		width: space[6],
 	},
 	switchThumb: {
 		borderRadius: radius.full,
@@ -487,7 +522,7 @@ const menuParts = stylex.create({
 		aspectRatio: 1,
 		backgroundColor: color.fgInverse,
 		transform: {
-			"[data-checked]": `translateX(${space.x2})`,
+			"[data-checked]": `translateX(${space[2]})`,
 			default: "translateX(0)",
 		},
 		transitionDuration: {
@@ -499,15 +534,15 @@ const menuParts = stylex.create({
 		height: "calc(100% - 0.25rem)",
 	},
 	groupLabel: {
-		paddingBlock: space.x1,
-		paddingInline: space.x2,
+		paddingBlock: space[1],
+		paddingInline: space[2],
 		color: color.fgSubtle,
 	},
 	separator: {
-		marginBlock: space.x1,
+		marginBlock: space[1],
 		backgroundColor: color.border,
-		marginInlineEnd: space.x1,
-		marginInlineStart: space.x2,
+		marginInlineEnd: `calc(-1 * ${space[1]})`,
+		marginInlineStart: space[3],
 		height: "1px",
 	},
 });

@@ -5,40 +5,52 @@ import { CaretUpIcon } from "@phosphor-icons/react/dist/csr/CaretUp";
 import { CaretUpDownIcon } from "@phosphor-icons/react/dist/csr/CaretUpDown";
 import * as stylex from "@stylexjs/stylex";
 import type { StyleXStyles } from "@stylexjs/stylex";
-import type { ReactNode } from "react";
-import { fieldStyles, fieldControlStyles, type FieldSize } from "@/components/field/field.stylex";
+import { createContext, useContext, type ReactNode } from "react";
+import { resolveThemeProps } from "@/theme/theme-props";
+import type { FieldSize, FieldThemeProps } from "@/components/field/field.types";
+import { fieldStyles, fieldControlStyles, fieldThemeProps } from "@/components/field/field.stylex";
 import { focusRing } from "@/styles/recipes/focus";
 import { modalMotionStyles } from "@/components/dialog/dialog.stylex";
 import { popupMotionStyles, popupStaticPositionerStyles } from "@/components/popover/popover.stylex";
 import { popupVars } from "@/components/popover/popover-vars.stylex";
 import { color, radius, shadow, size, space } from "@/styles/tokens.stylex";
 import { fontSize, fontWeight, letterSpacing, lineHeight } from "@/styles/tokens.stylex";
-import { menuItemStyles, menuItemVariantStyles, type MenuItemVariant } from "../menu/menu-item.stylex";
+import {
+	menuItemSizeStyles,
+	menuItemStyles,
+	menuItemVariantStyles,
+} from "../menu/menu-item.stylex";
+import type { MenuItemVariant } from "../menu/menu.types";
 import { CheckmarkIcon } from "../selection-icons";
 
 const HOVER_WHEN_INACTIVE = ":hover:not([data-disabled]):not([data-popup-open]):not([data-pressed])";
+const SelectSizeContext = createContext<FieldSize>("md");
 
 type SelectMultiple = boolean | undefined;
 
 export type SelectRootProps<Value, Multiple extends SelectMultiple = false> = Omit<
 	BaseSelect.Root.Props<Value, Multiple>,
-	"className" | "style"
-> & {
-	className?: string;
-	invalid?: boolean;
-	/** StyleX overrides, applied after the component's own styles. */
-	style?: StyleXStyles;
-};
+	"className" | "color" | "size" | "style" | keyof FieldThemeProps
+> &
+	FieldThemeProps & {
+		className?: string;
+		invalid?: boolean;
+		size?: FieldSize;
+		/** StyleX overrides, applied after the component's own styles. */
+		style?: StyleXStyles;
+	};
 
 export function Root<Value, Multiple extends SelectMultiple = false>({
 	children,
 	className,
 	disabled,
 	invalid,
+	size = "md",
 	style,
 	...props
 }: SelectRootProps<Value, Multiple>) {
-	const sx = stylex.props(selectParts.root, style);
+	const { restProps, styles } = resolveThemeProps(props, fieldThemeProps);
+	const sx = stylex.props(selectParts.root, ...styles, style);
 
 	return (
 		<Field.Root
@@ -46,9 +58,11 @@ export function Root<Value, Multiple extends SelectMultiple = false>({
 			invalid={invalid}
 			className={[sx.className, className].filter(Boolean).join(" ")}
 			style={sx.style}>
-			<BaseSelect.Root disabled={disabled} {...props}>
-				{children}
-			</BaseSelect.Root>
+			<SelectSizeContext.Provider value={size}>
+				<BaseSelect.Root disabled={disabled} {...restProps}>
+					{children}
+				</BaseSelect.Root>
+			</SelectSizeContext.Provider>
 		</Field.Root>
 	);
 }
@@ -76,7 +90,6 @@ export type SelectTriggerProps = Omit<BaseSelect.Trigger.Props, "children" | "cl
 	children?: BaseSelect.Value.Props["children"];
 	className?: string;
 	placeholder?: ReactNode;
-	size?: FieldSize;
 	/** StyleX overrides, applied after the component's own styles. */
 	style?: StyleXStyles;
 	variant?: SelectTriggerVariant;
@@ -89,11 +102,11 @@ export function Trigger({
 	children,
 	className,
 	placeholder = "Select an option",
-	size = "md",
 	style,
 	variant = "default",
 	...props
 }: SelectTriggerProps) {
+	const size = useContext(SelectSizeContext);
 	const sx = stylex.props(
 		fieldControlStyles[size],
 		selectParts.trigger,
@@ -239,7 +252,14 @@ export type SelectItemProps = Omit<BaseSelect.Item.Props, "children" | "classNam
 export type SelectItemVariant = MenuItemVariant;
 
 export function Item({ ref, children, className, style, variant = "primary", ...props }: SelectItemProps) {
-	const sx = stylex.props(menuItemStyles.item, menuItemVariantStyles[variant], focusRing.inset, style);
+	const size = useContext(SelectSizeContext);
+	const sx = stylex.props(
+		menuItemStyles.item,
+		menuItemSizeStyles[size],
+		menuItemVariantStyles[variant],
+		focusRing.inset,
+		style,
+	);
 
 	return (
 		<BaseSelect.Item
@@ -248,7 +268,7 @@ export function Item({ ref, children, className, style, variant = "primary", ...
 			style={sx.style}
 			{...props}>
 			<BaseSelect.ItemIndicator keepMounted className={stylex.props(menuItemStyles.indicator).className}>
-				<CheckmarkIcon />
+				<CheckmarkIcon width="1em" height="1em" />
 			</BaseSelect.ItemIndicator>
 			<BaseSelect.ItemText {...stylex.props(menuItemStyles.label, selectParts.itemText)}>
 				{children}
@@ -309,7 +329,7 @@ const selectParts = stylex.create({
 		color: popupVars.foreground,
 	},
 	root: {
-		gap: space.x2,
+		gap: space[2],
 		display: "flex",
 		flexDirection: "column",
 		minWidth: 0,
@@ -321,7 +341,7 @@ const selectParts = stylex.create({
 			"[data-placeholder]": color.fgMuted,
 			default: color.fg,
 		},
-		columnGap: space.x3,
+		columnGap: space[3],
 		cursor: {
 			"[data-disabled]": "not-allowed",
 			default: "default",
@@ -348,6 +368,7 @@ const selectParts = stylex.create({
 		},
 		borderRadius: radius.xs,
 		paddingBlock: 0,
+		textDecoration: "underline",
 		backgroundColor: {
 			// eslint-disable-next-line @stylexjs/valid-styles -- the compiler supports chained pseudo-class conditions; the lint rule is stricter than the compiler.
 			[HOVER_WHEN_INACTIVE]: {
@@ -359,14 +380,22 @@ const selectParts = stylex.create({
 		},
 		color: {
 			"[data-placeholder]": color.fgSubtle,
-			default: color.fg,
+			"[data-placeholder]:hover": color.fgAccent,
+			default: color.fgAccent,
 		},
 		columnGap: "2px",
-		fontWeight: fontWeight.medium,
+		fontWeight: {
+			"[data-placeholder]": fontWeight.regular,
+			default: fontWeight.medium,
+		},
 		marginBlockEnd: "-1px",
 		marginBlockStart: "-1px",
 		paddingInlineEnd: "2px",
 		paddingInlineStart: "2px",
+		textDecorationColor: color.fgSubtle,
+		textDecorationStyle: "dotted",
+		textDecorationThickness: "2px",
+		textUnderlineOffset: "4px",
 		height: "auto",
 		minHeight: 0,
 		minWidth: 0,
@@ -383,7 +412,7 @@ const selectParts = stylex.create({
 	},
 	triggerIcon: {
 		alignItems: "center",
-		color: color.fgSubtle,
+		// color: color.fgSubtle,
 		display: "inline-flex",
 		flexShrink: 0,
 		justifyContent: "center",
@@ -398,10 +427,10 @@ const selectParts = stylex.create({
 		minWidth: "var(--anchor-width)",
 	},
 	list: {
-		padding: space.x1,
+		padding: space[1],
 		overscrollBehavior: "contain",
 		// eslint-disable-next-line @stylexjs/valid-styles -- scroll-padding-block is valid CSS the lint rule does not know yet; the compiler emits it correctly.
-		scrollPaddingBlock: space.x6,
+		scrollPaddingBlock: space[6],
 		maxHeight: "var(--available-height)",
 		overflowY: "auto",
 	},
@@ -412,7 +441,7 @@ const selectParts = stylex.create({
 		display: "flex",
 		justifyContent: "center",
 		zIndex: 2,
-		height: space.x6,
+		height: space[6],
 		width: "auto",
 	},
 	scrollArrowUp: {
@@ -431,7 +460,7 @@ const selectParts = stylex.create({
 			content: '""',
 			pointerEvents: "none",
 			position: "absolute",
-			height: space.x12,
+			height: space[12],
 			top: 0,
 		},
 	},
@@ -452,7 +481,7 @@ const selectParts = stylex.create({
 			pointerEvents: "none",
 			position: "absolute",
 			bottom: 0,
-			height: space.x12,
+			height: space[12],
 		},
 	},
 	scrollArrowIcon: {
@@ -469,8 +498,8 @@ const selectParts = stylex.create({
 		flexDirection: "column",
 	},
 	groupLabel: {
-		paddingBlock: space.x2,
-		paddingInline: space.x3,
+		paddingBlock: space[2],
+		paddingInline: space[3],
 		color: color.fgMuted,
 		fontSize: fontSize.x1,
 		fontWeight: fontWeight.semibold,
@@ -478,8 +507,8 @@ const selectParts = stylex.create({
 		lineHeight: lineHeight.x1,
 	},
 	separator: {
-		marginBlock: space.x1,
-		marginInline: space.x2,
+		marginBlock: space[1],
+		marginInline: space[3],
 		backgroundColor: color.border,
 		height: "1px",
 	},

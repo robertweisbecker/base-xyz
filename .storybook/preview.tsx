@@ -1,6 +1,8 @@
 import type { Decorator, Preview } from "@storybook/react-vite";
 import { themes } from "storybook/theming";
 import "../src/styles/index.css";
+import "./reduced-motion.css";
+import { ReducedMotionFrame } from "./reduced-motion-frame";
 import { ThemeFrame } from "./theme-frame";
 
 let focusAccessorGuarded = false;
@@ -44,23 +46,41 @@ const withTheme: Decorator = (Story, context) => {
 	);
 };
 
+const withReducedMotion: Decorator = (Story, context) => (
+	<ReducedMotionFrame reducedMotion={context.globals.reducedMotion === "reduce"}>
+		<Story />
+	</ReducedMotionFrame>
+);
+
 const preview: Preview = {
-	decorators: [withStorybookFocusCompatibility, withTheme],
+	decorators: [withStorybookFocusCompatibility, withTheme, withReducedMotion],
 	globalTypes: {
+		reducedMotion: {
+			description: "Global motion preference",
+			toolbar: {
+				dynamicTitle: false,
+				title: "Motion",
+				items: [
+					{ value: "system", title: "On", icon: "lightning" },
+					{ value: "reduce", title: "Off", icon: "lightningoff" },
+				],
+			},
+		},
 		theme: {
 			description: "Global color theme",
 			toolbar: {
-				dynamicTitle: true,
-				icon: "paintbrush",
+				dynamicTitle: false,
+				title: "Theme",
 				items: [
-					{ value: "system", title: "System" },
-					{ value: "light", title: "Light" },
-					{ value: "dark", title: "Dark" },
+					{ value: "system", title: "Auto", icon: "paintbrush" },
+					{ value: "light", title: "Light", icon: "sun" },
+					{ value: "dark", title: "Dark", icon: "moon" },
 				],
 			},
 		},
 	},
 	initialGlobals: {
+		reducedMotion: "system",
 		theme: "system",
 	},
 	parameters: {

@@ -57,12 +57,12 @@ export const Examples: Story = {
 
 const storyStyles = stylex.create({
 	examples: {
-		gap: space.x6,
+		gap: space[6],
 		display: "flex",
 		flexDirection: "column",
 	},
 	example: {
-		gap: space.x2,
+		gap: space[2],
 		display: "flex",
 		flexDirection: "column",
 	},

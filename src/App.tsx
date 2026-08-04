@@ -4,6 +4,7 @@ import * as Blocks from "./blocks";
 import { BlueprintIcon } from "@phosphor-icons/react/dist/csr/Blueprint";
 import { CopyIcon } from "@phosphor-icons/react/dist/csr/Copy";
 import { FolderOpenIcon } from "@phosphor-icons/react/dist/csr/FolderOpen";
+import { InfoIcon } from "@phosphor-icons/react/dist/csr/Info";
 import { MagnifyingGlassIcon } from "@phosphor-icons/react/dist/csr/MagnifyingGlass";
 import { StairsIcon } from "@phosphor-icons/react/dist/csr/Stairs";
 import { MoonIcon } from "@phosphor-icons/react/dist/csr/Moon";
@@ -12,8 +13,10 @@ import { SunIcon } from "@phosphor-icons/react/dist/csr/Sun";
 import { XIcon } from "@phosphor-icons/react/dist/csr/X";
 import {
 	AlertDialog,
+	Avatar,
 	Badge,
 	Button,
+	Callout,
 	Card,
 	CardDescription,
 	CardFooter,
@@ -31,8 +34,10 @@ import {
 	EmptyState,
 	Heading,
 	IconButton,
+	InfoTip,
 	InputGroup,
 	Link,
+	Loader,
 	Menu,
 	Meter,
 	NumberField,
@@ -44,6 +49,7 @@ import {
 	ScrollArea,
 	Select,
 	Separator,
+	Slider,
 	Switch,
 	Tabs,
 	Text,
@@ -104,6 +110,10 @@ function getComponentCells(): GalleryCell[] {
 			),
 		},
 		{
+			title: "Avatar",
+			content: <Avatar image="/avatar-example.svg" name="Ada Lovelace" size={10} />,
+		},
+		{
 			title: "Badge",
 			content: (
 				<div {...stylex.props(styles.badgeStack)}>
@@ -136,6 +146,17 @@ function getComponentCells(): GalleryCell[] {
 						Create worker
 					</Button>
 				</div>
+			),
+		},
+		{
+			title: "Callout",
+			content: (
+				<Callout
+					description="A new version is ready to install."
+					hue="accent"
+					icon={<InfoIcon aria-hidden weight="fill" />}
+					title="Update available"
+				/>
 			),
 		},
 		{
@@ -268,14 +289,18 @@ function getComponentCells(): GalleryCell[] {
 		{
 			title: "Heading",
 			content: (
-				<Heading align="center" size="6">
-					Workspace activity
+				<Heading textAlign="center" size="6">
+					The quick brown fox
 				</Heading>
 			),
 		},
 		{
 			title: "IconButton",
 			content: <IconButton icon={<PlusIcon aria-hidden weight="bold" />} label="Add item" variant="secondary" />,
+		},
+		{
+			title: "InfoTip",
+			content: <InfoTip content="This setting applies to everyone in the workspace." />,
 		},
 		{
 			title: "InputGroup",
@@ -312,6 +337,10 @@ function getComponentCells(): GalleryCell[] {
 			),
 		},
 		{
+			title: "Loader",
+			content: <Loader aria-label="Loading" />,
+		},
+		{
 			title: "Menu",
 			content: (
 				<Menu.Root>
@@ -337,7 +366,7 @@ function getComponentCells(): GalleryCell[] {
 		{
 			title: "Meter",
 			content: (
-				<Meter.Root value={100} max={500} color="var(--ds-color-warning)">
+				<Meter.Root value={100} max={500} color="var(--color-warning)">
 					<Meter.Label>My meter</Meter.Label>
 					<Meter.Value />
 					<Meter.Track>
@@ -348,7 +377,7 @@ function getComponentCells(): GalleryCell[] {
 		},
 		{
 			title: "NumberField",
-			content: <NumberField label="Seats" defaultValue={12} width="7ch" />,
+			content: <NumberField label="Seats" defaultValue={12} inputWidth="7ch" />,
 		},
 		{
 			title: "Popover",
@@ -445,6 +474,22 @@ function getComponentCells(): GalleryCell[] {
 			),
 		},
 		{
+			title: "Slider",
+			content: (
+				<Slider.Root defaultValue={60} step={10}>
+					<Slider.Header>
+						<Slider.Label>Volume</Slider.Label>
+						<Slider.Value />
+					</Slider.Header>
+					<Slider.Row>
+						<Slider.Control markers={{ every: 2 }}>
+							<Slider.Thumb />
+						</Slider.Control>
+					</Slider.Row>
+				</Slider.Root>
+			),
+		},
+		{
 			title: "Switch",
 			content: <Switch label="Realtime sync" defaultChecked size="sm" />,
 		},
@@ -470,7 +515,7 @@ function getComponentCells(): GalleryCell[] {
 		{
 			title: "Text",
 			content: (
-				<Text align="center" color="muted" size="3" wrap="balance">
+				<Text textAlign="center" color="muted" size="3" wrap="balance">
 					Reusable typography for interface copy.
 				</Text>
 			),
@@ -916,12 +961,12 @@ function GallerySection({
 
 const styles = stylex.create({
 	app: {
-		backgroundColor: color.canvas,
+		backgroundColor: "light-dark(white,black)",
 		color: color.fg,
 		minHeight: "100svh",
 	},
 	header: {
-		paddingInline: { default: space.x4, [breakpoints.sm]: space.x4 },
+		paddingInline: { default: space[4], [breakpoints.sm]: space[4] },
 		alignItems: "center",
 		backgroundImage: `linear-gradient(to bottom, ${color.canvas}, transparent)`,
 		display: "flex",
@@ -932,7 +977,7 @@ const styles = stylex.create({
 		top: 0,
 	},
 	brand: {
-		gap: space.x2,
+		gap: space[2],
 		textDecoration: "none",
 		alignItems: "center",
 		color: color.fg,
@@ -950,7 +995,7 @@ const styles = stylex.create({
 		height: "20px",
 	},
 	headerMeta: {
-		gap: space.x3,
+		gap: space[3],
 		alignItems: "center",
 		display: "flex",
 	},
@@ -969,9 +1014,9 @@ const styles = stylex.create({
 		width: "100%",
 	},
 	sectionHeader: {
-		gap: space.x2,
-		paddingBlock: space.x4,
-		paddingInline: space.x4,
+		gap: space[2],
+		paddingBlock: space[4],
+		paddingInline: space[4],
 		alignItems: "center",
 		// backgroundColor: color.surface,
 		// borderBottomColor: color.border,
@@ -1025,9 +1070,9 @@ const styles = stylex.create({
 		},
 	},
 	componentCell: {
-		padding: space.x4,
+		padding: space[4],
 		borderRadius: radius.sm,
-		backgroundColor: color.surface,
+		backgroundColor: "var(--gray-s2)",
 		boxSizing: "border-box",
 		display: "grid",
 		gridTemplateRows: "minmax(0, 1fr) auto",
@@ -1035,9 +1080,9 @@ const styles = stylex.create({
 		minWidth: 0,
 	},
 	blockCell: {
-		padding: space.x4,
+		padding: space[4],
 		borderRadius: radius.md,
-		backgroundColor: color.surface,
+		backgroundColor: "var(--gray-s2)",
 		boxSizing: "border-box",
 		display: "grid",
 		gridTemplateRows: "minmax(0, 1fr) auto",
@@ -1046,7 +1091,7 @@ const styles = stylex.create({
 	},
 	componentFillerCell: {
 		borderRadius: radius.md,
-		backgroundColor: color.canvas,
+		backgroundColor: "var(--gray-s2)",
 		boxSizing: "border-box",
 		minHeight: { default: "220px", [breakpoints.sm]: "248px" },
 	},
@@ -1077,7 +1122,7 @@ const styles = stylex.create({
 		textAlign: "center",
 	},
 	cellContent: {
-		paddingBlock: space.x4,
+		paddingBlock: space[4],
 		alignItems: "center",
 		display: "flex",
 		justifyContent: "center",
@@ -1085,13 +1130,13 @@ const styles = stylex.create({
 		minWidth: 0,
 	},
 	buttonStack: {
-		gap: space.x2,
+		gap: space[2],
 		alignItems: "center",
 		display: "flex",
 		flexDirection: "column",
 	},
 	controlStack: {
-		gap: space.x3,
+		gap: space[3],
 		display: "flex",
 		flexDirection: "column",
 		width: "min(100%, 180px)",
@@ -1106,7 +1151,7 @@ const styles = stylex.create({
 		width: "min(100%, 230px)",
 	},
 	badgeStack: {
-		gap: space.x2,
+		gap: space[2],
 		alignItems: "center",
 		display: "flex",
 		flexWrap: "wrap",
@@ -1118,7 +1163,7 @@ const styles = stylex.create({
 		width: "min(100%, 240px)",
 	},
 	linkStack: {
-		gap: space.x1,
+		gap: space[1],
 		display: "flex",
 		flexDirection: "column",
 		fontSize: fontSize.x1,
@@ -1135,22 +1180,22 @@ const styles = stylex.create({
 		width: "min(100%, 210px)",
 	},
 	scrollAreaContent: {
-		padding: space.x2,
-		gap: space.x1,
+		padding: space[2],
+		gap: space[1],
 		display: "flex",
 		flexDirection: "column",
 	},
 	scrollItem: {
 		borderRadius: radius.sm,
-		paddingBlock: space.x2,
-		paddingInline: space.x3,
+		paddingBlock: space[2],
+		paddingInline: space[3],
 		backgroundColor: color.surface,
 		fontSize: fontSize.x1,
 		letterSpacing: letterSpacing.x1,
 		lineHeight: lineHeight.x1,
 	},
 	separatorSample: {
-		gap: space.x2,
+		gap: space[2],
 		alignItems: "center",
 		color: color.fgMuted,
 		display: "flex",

@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import * as stylex from "@stylexjs/stylex";
-import { color, fontSize, fontWeight, letterSpacing, lineHeight, radius, space } from "@/styles/tokens.stylex";
+import { color, fontSize, fontWeight, letterSpacing, lineHeight, radius, shadow, space } from "@/styles/tokens.stylex";
 import { ScrollArea } from "./scroll-area";
 
 const items = Array.from({ length: 16 }, (_, index) => ({
@@ -37,8 +37,6 @@ const meta = {
 		showScrollbar: { control: "inline-radio", options: ["always", "scroll", "hover"] },
 		size: { control: "inline-radio", options: ["fill", "content"] },
 		style: { control: false },
-		thumbClassName: { control: false },
-		thumbStyle: { control: false },
 		viewportClassName: { control: false },
 		viewportStyle: { control: false },
 	},
@@ -138,11 +136,7 @@ export const Orientations: Story = {
 			<section {...stylex.props(styles.orientationExample)}>
 				<h3 {...stylex.props(styles.exampleHeading)}>Both axes</h3>
 				<div {...stylex.props(styles.bothFrame)}>
-					<ScrollArea
-						label="Planning board"
-						orientation="both"
-						style={styles.surface}
-						contentStyle={styles.padding}>
+					<ScrollArea label="Planning board" orientation="both" style={styles.surface} contentStyle={styles.padding}>
 						<div {...stylex.props(styles.board)}>
 							{Array.from({ length: 48 }, (_, index) => (
 								<div key={index} {...stylex.props(styles.boardItem)}>
@@ -256,12 +250,12 @@ const styles = stylex.create({
 		maxWidth: "360px",
 	},
 	orientationExamples: {
-		gap: space.x6,
+		gap: space[6],
 		display: "flex",
 		flexWrap: "wrap",
 	},
 	orientationExample: {
-		gap: space.x2,
+		gap: space[2],
 		display: "grid",
 	},
 	visibilityFrame: {
@@ -269,22 +263,22 @@ const styles = stylex.create({
 		width: "280px",
 	},
 	behaviorGroups: {
-		gap: space.x8,
+		gap: space[8],
 		display: "flex",
 		flexDirection: "column",
 	},
 	behaviorGroup: {
-		gap: space.x4,
+		gap: space[4],
 		display: "flex",
 		flexDirection: "column",
 	},
 	behaviorExamples: {
-		gap: space.x6,
+		gap: space[6],
 		display: "flex",
 		flexWrap: "wrap",
 	},
 	behaviorExample: {
-		gap: space.x2,
+		gap: space[2],
 		display: "grid",
 	},
 	fadeFrame: {
@@ -307,22 +301,23 @@ const styles = stylex.create({
 	},
 	surface: {
 		borderRadius: radius.md,
-		backgroundColor: color.surfaceSubtle,
+		backgroundColor: color.canvasSubtle,
 	},
 	padding: {
-		padding: space.x4,
+		padding: space[3],
 	},
 	list: {
-		gap: space.x2,
+		gap: space[2],
 		display: "flex",
 		flexDirection: "column",
 	},
 	listItem: {
 		borderRadius: radius.sm,
-		paddingBlock: space.x2,
-		paddingInline: space.x3,
+		paddingBlock: space[2],
+		paddingInline: space[3],
 		alignItems: "center",
 		backgroundColor: color.bgElevated,
+		boxShadow: shadow.sm,
 		display: "flex",
 		fontSize: fontSize.x2,
 		justifyContent: "space-between",
@@ -331,14 +326,14 @@ const styles = stylex.create({
 		minHeight: "44px",
 	},
 	horizontalList: {
-		gap: space.x2,
+		gap: space[2],
 		display: "flex",
 		width: "980px",
 	},
 	milestone: {
 		borderRadius: radius.sm,
-		gap: space.x1,
-		paddingInline: space.x4,
+		gap: space[1],
+		paddingInline: space[4],
 		backgroundColor: color.bgElevated,
 		display: "flex",
 		flexDirection: "column",
@@ -357,7 +352,7 @@ const styles = stylex.create({
 		lineHeight: lineHeight.x1,
 	},
 	board: {
-		gap: space.x2,
+		gap: space[2],
 		display: "grid",
 		gridTemplateColumns: "repeat(8, 72px)",
 		width: "632px",

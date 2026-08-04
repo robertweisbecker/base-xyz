@@ -1,7 +1,7 @@
 import { Meter as BaseMeter } from "@base-ui/react/meter";
 import * as stylex from "@stylexjs/stylex";
 import type { StyleXStyles } from "@stylexjs/stylex";
-import { textColorStyles, textStyles } from "@/components/text/text.stylex";
+import { textStyles } from "@/components/text/text.stylex";
 import { createContext, useContext, type CSSProperties } from "react";
 import { color, motion, shadow, size, space } from "@/styles/tokens.stylex";
 
@@ -12,8 +12,8 @@ type StyledProps<T> = Omit<T, "className" | "style"> & {
 };
 
 type MeterStyle = CSSProperties & {
-	"--ds-meter-indicator-color"?: string;
-	"--ds-meter-segment-count"?: number;
+	"--_meter-indicator-color"?: string;
+	"--_meter-segment-count"?: number;
 };
 
 export type MeterVariant = "bar" | "segmented";
@@ -76,10 +76,10 @@ export function Root({
 	const meterStyle: MeterStyle = {
 		...sx.style,
 		...(resolvedIndicatorColor && {
-			"--ds-meter-indicator-color": resolvedIndicatorColor,
+			"--_meter-indicator-color": resolvedIndicatorColor,
 		}),
 		...(variant === "segmented" && {
-			"--ds-meter-segment-count": getSegmentCount(meterValues.minimumValue, meterValues.maximumValue),
+			"--_meter-segment-count": getSegmentCount(meterValues.minimumValue, meterValues.maximumValue),
 		}),
 	};
 
@@ -174,7 +174,6 @@ export function Label({ ref, className, style, ...props }: LabelProps) {
 	const variant = useContext(MeterVariantContext);
 	const sx = stylex.props(
 		textStyles.supporting,
-		textColorStyles.muted,
 		meterParts.label,
 		variant === "segmented" && meterParts.segmentedLabel,
 		style,
@@ -239,10 +238,10 @@ export function Indicator({ ref, className, style, ...props }: IndicatorProps) {
 
 const meterParts = stylex.create({
 	root: {
-		columnGap: space.x3,
+		columnGap: space[3],
 		display: "grid",
 		gridTemplateColumns: "minmax(0, 1fr) auto",
-		rowGap: space.x1,
+		rowGap: space[1.5],
 		width: "100%",
 	},
 	segmentedRoot: {
@@ -252,6 +251,7 @@ const meterParts = stylex.create({
 	},
 	label: {
 		overflow: "hidden",
+		color: color.fgMuted,
 		textOverflow: "ellipsis",
 		whiteSpace: "nowrap",
 		minWidth: 0,
@@ -275,7 +275,7 @@ const meterParts = stylex.create({
 		gridColumn: "1 / -1",
 		overflow: "hidden",
 		backgroundColor: color.fillTrack,
-		height: space.x2,
+		height: space[2],
 	},
 	segmentedTrack: {
 		borderRadius: 0,
@@ -290,10 +290,10 @@ const meterParts = stylex.create({
 		maskSize: `calc(10px) ${size["indicator.sm"]}`,
 		outlineWidth: 0,
 		height: size["indicator.sm"],
-		width: `calc(var(--ds-meter-segment-count) * (10px) - ${space.x1})`,
+		width: `calc(var(--_meter-segment-count) * (10px) - ${space[1]})`,
 	},
 	indicator: {
-		backgroundColor: "var(--ds-meter-indicator-color, var(--gray-p1))",
+		backgroundColor: "var(--_meter-indicator-color, var(--gray-p1))",
 		borderEndStartRadius: "inherit",
 		borderStartStartRadius: "inherit",
 		boxShadow: shadow.sm,
