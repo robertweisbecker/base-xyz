@@ -8,20 +8,27 @@ import { MagnifyingGlassIcon } from "@phosphor-icons/react/dist/csr/MagnifyingGl
 import * as stylex from "@stylexjs/stylex";
 import type { StyleXStyles } from "@stylexjs/stylex";
 import {
+	columnFilteringFeature,
+	columnVisibilityFeature,
+	createExpandedRowModel,
+	createFilteredRowModel,
+	createSortedRowModel,
 	flexRender,
-	getCoreRowModel,
-	getExpandedRowModel,
-	getFilteredRowModel,
-	getSortedRowModel,
-	useReactTable,
+	globalFilteringFeature,
+	rowExpandingFeature,
+	rowSelectionFeature,
+	rowSortingFeature,
+	tableFeatures,
+	useTable,
 	type Column,
+	type ColumnVisibilityState,
 	type ColumnDef,
 	type ExpandedState,
 	type Header,
 	type Row,
+	type RowData,
 	type RowSelectionState,
 	type SortingState,
-	type VisibilityState,
 } from "@tanstack/react-table";
 import { Fragment, useMemo, useState, type ComponentProps, type ReactNode } from "react";
 import { Badge } from "@/components/badge/badge";
@@ -32,15 +39,29 @@ import * as Menu from "@/components/menu/menu";
 import { VisuallyHidden } from "@/components/visually-hidden/visually-hidden";
 import { tokens } from "@/theme/tokens.stylex";
 
-export type DataTableColumnDef<TData, TValue = unknown> = ColumnDef<TData, TValue>;
-export type DataTableRow<TData> = Row<TData>;
-export type DataTableColumn<TData> = Column<TData, unknown>;
+const dataTableFeatures = tableFeatures({
+	columnFilteringFeature,
+	columnVisibilityFeature,
+	globalFilteringFeature,
+	rowExpandingFeature,
+	rowSelectionFeature,
+	rowSortingFeature,
+	expandedRowModel: createExpandedRowModel(),
+	filteredRowModel: createFilteredRowModel(),
+	sortedRowModel: createSortedRowModel(),
+});
 
-export type DataTableRowAction<TData> = {
+type DataTableFeatures = typeof dataTableFeatures;
+
+export type DataTableColumnDef<TData extends RowData, TValue = unknown> = ColumnDef<DataTableFeatures, TData, TValue>;
+export type DataTableRow<TData extends RowData> = Row<DataTableFeatures, TData>;
+export type DataTableColumn<TData extends RowData> = Column<DataTableFeatures, TData, unknown>;
+
+export type DataTableRowAction<TData extends RowData> = {
 	label: ReactNode;
 	disabled?: boolean;
 	variant?: "default" | "danger";
-	onSelect?: (row: Row<TData>) => void;
+	onSelect?: (row: DataTableRow<TData>) => void;
 };
 
 export type DataTableFilterOption = {
@@ -55,19 +76,19 @@ export type DataTableFilter = {
 	options: DataTableFilterOption[];
 };
 
-export type DataTableProps<TData, TValue = unknown> = Omit<ComponentProps<"div">, "children" | "style"> & {
-	columns: Array<ColumnDef<TData, TValue>>;
+export type DataTableProps<TData extends RowData, TValue = unknown> = Omit<ComponentProps<"div">, "children" | "style"> & {
+	columns: Array<DataTableColumnDef<TData, TValue>>;
 	data: TData[];
 	emptyLabel?: ReactNode;
 	filterColumnId?: string;
 	filters?: DataTableFilter[];
 	filterPlaceholder?: string;
-	getColumnLabel?: (column: Column<TData, unknown>) => ReactNode;
-	getRowActions?: (row: Row<TData>) => Array<DataTableRowAction<TData>>;
-	getRowCanExpand?: (row: Row<TData>) => boolean;
-	getRowId?: (originalRow: TData, index: number, parent?: Row<TData>) => string;
-	initialColumnVisibility?: VisibilityState;
-	renderExpandedRow?: (row: Row<TData>) => ReactNode;
+	getColumnLabel?: (column: DataTableColumn<TData>) => ReactNode;
+	getRowActions?: (row: DataTableRow<TData>) => Array<DataTableRowAction<TData>>;
+	getRowCanExpand?: (row: DataTableRow<TData>) => boolean;
+	getRowId?: (originalRow: TData, index: number, parent?: DataTableRow<TData>) => string;
+	initialColumnVisibility?: ColumnVisibilityState;
+	renderExpandedRow?: (row: DataTableRow<TData>) => ReactNode;
 	rowSelection?: boolean;
 	showExpandColumn?: boolean;
 	toolbarEndSlot?: ReactNode;
@@ -75,7 +96,7 @@ export type DataTableProps<TData, TValue = unknown> = Omit<ComponentProps<"div">
 	style?: StyleXStyles;
 };
 
-export function DataTable<TData, TValue = unknown>({
+export function DataTable<TData extends RowData, TValue = unknown>({
 	className,
 	columns,
 	data,
@@ -97,14 +118,14 @@ export function DataTable<TData, TValue = unknown>({
 }: DataTableProps<TData, TValue>) {
 	const [sorting, setSorting] = useState<SortingState>([]);
 	const [globalFilter, setGlobalFilter] = useState("");
-	const [columnVisibility, setColumnVisibility] = useState<VisibilityState>(initialColumnVisibility ?? {});
+	const [columnVisibility, setColumnVisibility] = useState<ColumnVisibilityState>(initialColumnVisibility ?? {});
 	const [rowSelectionState, setRowSelectionState] = useState<RowSelectionState>({});
 	const [expanded, setExpanded] = useState<ExpandedState>({});
 	const supportsExpansion = Boolean(renderExpandedRow);
 	const supportsActions = Boolean(getRowActions);
 
-	const tableColumns = useMemo<Array<ColumnDef<TData, unknown>>>(() => {
-		const internalColumns: Array<ColumnDef<TData, unknown>> = [];
+	const tableColumns = useMemo<Array<DataTableColumnDef<TData, unknown>>>(() => {
+		const internalColumns: Array<DataTableColumnDef<TData, unknown>> = [];
 		const defaultFilterColumnIds = new Set([
 			...(filterColumnId ? [filterColumnId] : []),
 			...(filters?.map((filter) => filter.columnId) ?? []),
@@ -161,7 +182,7 @@ export function DataTable<TData, TValue = unknown>({
 			});
 		}
 
-		const typedColumns = (columns as Array<ColumnDef<TData, unknown>>).map((column) => {
+		const typedColumns = (columns as Array<DataTableColumnDef<TData, unknown>>).map((column) => {
 			const columnId = getColumnDefId(column);
 			if (columnId && defaultFilterColumnIds.has(columnId) && column.filterFn == null) {
 				return { ...column, filterFn: dataTableFilter };
@@ -186,15 +207,12 @@ export function DataTable<TData, TValue = unknown>({
 		return [...internalColumns, ...typedColumns];
 	}, [columns, filterColumnId, filters, getRowActions, rowSelection, showExpandColumn, supportsActions, supportsExpansion]);
 
-	const table = useReactTable({
+	const table = useTable<DataTableFeatures, TData>({
+		features: dataTableFeatures,
 		data,
 		columns: tableColumns,
 		getRowId,
 		enableRowSelection: rowSelection,
-		getCoreRowModel: getCoreRowModel(),
-		getExpandedRowModel: getExpandedRowModel(),
-		getFilteredRowModel: getFilteredRowModel(),
-		getSortedRowModel: getSortedRowModel(),
 		getRowCanExpand: getRowCanExpand ?? (() => supportsExpansion),
 		onColumnVisibilityChange: setColumnVisibility,
 		onExpandedChange: setExpanded,
@@ -308,7 +326,13 @@ export function DataTable<TData, TValue = unknown>({
 	);
 }
 
-function HeaderContent<TData>({ column, header }: { column: Column<TData, unknown>; header: Header<TData, unknown> }) {
+function HeaderContent<TData extends RowData>({
+	column,
+	header,
+}: {
+	column: DataTableColumn<TData>;
+	header: Header<DataTableFeatures, TData, unknown>;
+}) {
 	const content = flexRender(column.columnDef.header, header.getContext());
 	const sorted = column.getIsSorted();
 
@@ -352,7 +376,13 @@ function getSortLabel(content: ReactNode, sorted: false | "asc" | "desc") {
 	return `Sort ${label} ascending`;
 }
 
-function ColumnFilterMenu<TData>({ column, filter }: { column: Column<TData, unknown>; filter: DataTableFilter }) {
+function ColumnFilterMenu<TData extends RowData>({
+	column,
+	filter,
+}: {
+	column: DataTableColumn<TData>;
+	filter: DataTableFilter;
+}) {
 	const selectedValues = normalizeSelectedFilterValues(column.getFilterValue());
 	const selectedSet = new Set(selectedValues);
 
@@ -460,12 +490,12 @@ function RowSelectionCheckbox({
 	);
 }
 
-function RowActions<TData>({
+function RowActions<TData extends RowData>({
 	getRowActions,
 	row,
 }: {
 	getRowActions: DataTableProps<TData>["getRowActions"];
-	row: Row<TData>;
+	row: DataTableRow<TData>;
 }) {
 	const actions = getRowActions?.(row) ?? [];
 
@@ -503,12 +533,12 @@ function RowActions<TData>({
 	);
 }
 
-function ColumnVisibilityMenu<TData>({
+function ColumnVisibilityMenu<TData extends RowData>({
 	getColumnLabel,
 	tableColumns,
 }: {
-	getColumnLabel: (column: Column<TData, unknown>) => ReactNode;
-	tableColumns: Array<Column<TData, unknown>>;
+	getColumnLabel: (column: DataTableColumn<TData>) => ReactNode;
+	tableColumns: Array<DataTableColumn<TData>>;
 }) {
 	const hideableColumns = tableColumns.filter((column) => column.getCanHide());
 
@@ -545,7 +575,7 @@ function ColumnVisibilityMenu<TData>({
 	);
 }
 
-function getDefaultColumnLabel<TData>(column: Column<TData, unknown>) {
+function getDefaultColumnLabel<TData extends RowData>(column: DataTableColumn<TData>) {
 	const header = column.columnDef.header;
 	if (typeof header === "string") {
 		return header;
@@ -553,7 +583,7 @@ function getDefaultColumnLabel<TData>(column: Column<TData, unknown>) {
 	return column.id;
 }
 
-function getAriaSort<TData>(column: Column<TData, unknown>) {
+function getAriaSort<TData extends RowData>(column: DataTableColumn<TData>) {
 	const sorted = column.getIsSorted();
 	if (sorted === "asc") return "ascending";
 	if (sorted === "desc") return "descending";
@@ -567,7 +597,7 @@ function getColumnTone(columnId: string) {
 	return null;
 }
 
-function getColumnDefId<TData>(column: ColumnDef<TData, unknown>) {
+function getColumnDefId<TData extends RowData>(column: DataTableColumnDef<TData, unknown>) {
 	const columnWithIds = column as { accessorKey?: unknown; id?: unknown };
 	if (typeof columnWithIds.id === "string") {
 		return columnWithIds.id;
@@ -578,7 +608,7 @@ function getColumnDefId<TData>(column: ColumnDef<TData, unknown>) {
 	return undefined;
 }
 
-function dataTableFilter<TData>(row: Row<TData>, columnId: string, filterValue: unknown) {
+function dataTableFilter<TData extends RowData>(row: DataTableRow<TData>, columnId: string, filterValue: unknown) {
 	const rowValue = row.getValue(columnId);
 
 	if (Array.isArray(filterValue)) {
