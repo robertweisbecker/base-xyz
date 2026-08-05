@@ -2,7 +2,6 @@ import type { Meta, StoryObj } from "@storybook/react-vite";
 import { CubeIcon } from "@phosphor-icons/react/dist/csr/Cube";
 import { GearIcon } from "@phosphor-icons/react/dist/csr/Gear";
 import { HouseIcon } from "@phosphor-icons/react/dist/csr/House";
-import { ShieldIcon } from "@phosphor-icons/react/dist/csr/Shield";
 import { UsersIcon } from "@phosphor-icons/react/dist/csr/Users";
 import * as stylex from "@stylexjs/stylex";
 import { useState } from "react";
@@ -12,6 +11,7 @@ import * as Drawer from "@/components/drawer/drawer";
 import { tokens } from "@/theme/tokens.stylex";
 import * as NavList from "./nav-list";
 import { Separator } from "@/components/separator/separator";
+import { ShieldChevronIcon } from "@phosphor-icons/react/dist/csr/ShieldChevron";
 
 type StoryArgs = {
 	size: NavList.NavListSize;
@@ -92,7 +92,7 @@ export const Examples: Story = {
 					<NavList.Item label="Disabled link" href="#disabled" disabled />
 				</NavList.Section>
 				<Separator />
-				<NavList.Section label="Hidden section label" labelHidden>
+				<NavList.Section label="Hidden section label" visuallyHideLabel>
 					<NavList.Item
 						label="A very long navigation row label that truncates cleanly inside the available column"
 						href="#long"
@@ -157,7 +157,7 @@ export const CollapsedChildPopovers: Story = {
 		<div {...stylex.props(storyParts.rail)}>
 			<NavList.NavListPresentationProvider presentation="icon">
 				<NavList.Root aria-label="Collapsed project navigation">
-					<NavList.Section label="Project" labelHidden>
+					<NavList.Section label="Project" visuallyHideLabel>
 						<NavList.Item label="Overview" href="#overview" icon={<HouseIcon weight="duotone" />} current="page" />
 						<NavList.CollapsibleGroup>
 							<NavList.CollapsibleGroupTrigger label="Deploy" icon={<CubeIcon weight="duotone" />} />
@@ -183,20 +183,20 @@ function DrilldownExample() {
 				<NavList.Drilldown value={value} defaultValue="account" onValueChange={setValue}>
 					<NavList.DrilldownPanel value="account" label="Account navigation">
 						<NavList.Section label="Account">
-							<NavList.Item label="Overview" icon={<HouseIcon weight="duotone" />} href="#account" current="page" />
+							<NavList.Item label="Overview" icon={<HouseIcon weight="duotone" />} href="#account" />
 							<NavList.DrilldownTrigger to="project" label="Project settings" icon={<GearIcon weight="duotone" />} />
-							<NavList.DrilldownTrigger to="security" label="Security" icon={<ShieldIcon />} />
+							<NavList.DrilldownTrigger to="security" label="Security" icon={<ShieldChevronIcon weight="duotone" />} />
 						</NavList.Section>
 					</NavList.DrilldownPanel>
-					<NavList.DrilldownPanel value="project" label="Project settings">
+					<NavList.DrilldownPanel value="project" label="Project">
 						<NavList.DrilldownBack to="account" />
-						<NavList.Section label="Project">
+						<NavList.Section label="Project" visuallyHideLabel>
 							<NavList.Item label="Members" href="#members" />
 							<NavList.Item label="Billing" href="#billing" />
 							<NavList.Item label="Environments" href="#environments" />
 						</NavList.Section>
 					</NavList.DrilldownPanel>
-					<NavList.DrilldownPanel value="security" label="Security settings">
+					<NavList.DrilldownPanel value="security" label="Security">
 						<NavList.DrilldownBack to="account" />
 						<NavList.Section label="Security">
 							<NavList.Item label="Single sign-on" href="#sso" />
@@ -215,9 +215,9 @@ function DrilldownNavigation() {
 			<NavList.DrilldownPanel value="account" label="Account navigation">
 				<NavList.DrilldownTrigger to="project" label="Project settings" icon={<GearIcon />} />
 			</NavList.DrilldownPanel>
-			<NavList.DrilldownPanel value="project" label="Project settings">
+			<NavList.DrilldownPanel value="project" label="Project">
 				<NavList.DrilldownBack to="account" />
-				<NavList.Section label="Project">
+				<NavList.Section label="Project" visuallyHideLabel>
 					<NavList.Item label="Members" href="#members" />
 					<NavList.Item label="Billing" href="#billing" />
 				</NavList.Section>

@@ -55,11 +55,12 @@ export const Playground: Story = {
 							<PrimaryNavigation />
 						</NavList.Root>
 					</Sidebar.Content>
+					<WorkspaceFooter />
 				</Sidebar.Panel>
 				<main {...stylex.props(storyParts.main)}>
-					<Sidebar.Trigger />
 					<p {...stylex.props(storyParts.copy)}>
-						Sidebar controls state only. The page owns layout and mobile composition.
+						The sidebar trigger lives in the footer here. The same trigger can still render elsewhere when the page owns
+						layout or mobile composition.
 					</p>
 				</main>
 			</div>
@@ -91,6 +92,7 @@ export const ChildPopovers: Story = {
 							<PrimaryNavigation includeChildren />
 						</NavList.Root>
 					</Sidebar.Content>
+					<WorkspaceFooter />
 				</Sidebar.Panel>
 				<main {...stylex.props(storyParts.main)}>
 					<p {...stylex.props(storyParts.copy)}>
@@ -116,10 +118,9 @@ export const SideEnd: Story = {
 							<PrimaryNavigation />
 						</NavList.Root>
 					</Sidebar.Content>
+					<WorkspaceFooter />
 				</Sidebar.Panel>
-				<main {...stylex.props(storyParts.main)}>
-					<Sidebar.Trigger />
-				</main>
+				<main {...stylex.props(storyParts.main)} />
 			</div>
 		</Sidebar.Root>
 	),
@@ -151,6 +152,7 @@ function ModeExample({
 							<PrimaryNavigation includeChildren />
 						</NavList.Root>
 					</Sidebar.Content>
+					<WorkspaceFooter />
 				</Sidebar.Panel>
 			</Sidebar.Root>
 		</div>
@@ -159,12 +161,18 @@ function ModeExample({
 
 function WorkspaceHeader() {
 	return (
-		<Sidebar.Header
-			startSlot={<Avatar aria-label="Acme workspace" initials="AC" shape="rounded" size={6} />}
-			endSlot={<Sidebar.Trigger />}>
+		<Sidebar.Header startSlot={<Avatar aria-label="Acme workspace" initials="AC" shape="rounded" size={10} />}>
 			<Sidebar.Title>Acme</Sidebar.Title>
 			<Sidebar.Description>Production</Sidebar.Description>
 		</Sidebar.Header>
+	);
+}
+
+function WorkspaceFooter() {
+	return (
+		<Sidebar.Footer>
+			<Sidebar.Trigger />
+		</Sidebar.Footer>
 	);
 }
 
@@ -194,31 +202,31 @@ function ExternalTriggerExample() {
 
 function PrimaryNavigation({ includeChildren = false }: { includeChildren?: boolean }) {
 	return (
-		<NavList.Section label="Project" labelHidden>
-			<NavList.Item label="Overview" href="#overview" icon={<HouseIcon weight="duotone" />} current="page" />
-			<NavList.Item label="Members" href="#members" icon={<UsersIcon weight="duotone" />} />
-			{includeChildren ? (
-				<NavList.CollapsibleGroup>
-					<NavList.CollapsibleGroupTrigger label="Deploy" icon={<CubeIcon weight="duotone" />} />
-					<NavList.CollapsibleGroupPanel>
-						<NavList.Item label="Deployments" href="#deployments" />
-						<NavList.Item label="Workers" href="#workers" />
-					</NavList.CollapsibleGroupPanel>
-				</NavList.CollapsibleGroup>
-			) : null}
-			<NavList.Drilldown defaultValue="account">
-				<NavList.DrilldownPanel value="account" label="Account navigation">
+		<NavList.Drilldown defaultValue="account">
+			<NavList.DrilldownPanel value="account" label="Account navigation">
+				<NavList.Section label="Project" visuallyHideLabel>
+					<NavList.Item label="Overview" href="#overview" icon={<HouseIcon weight="duotone" />} current="page" />
+					<NavList.Item label="Members" href="#members" icon={<UsersIcon weight="duotone" />} />
+					{includeChildren ? (
+						<NavList.CollapsibleGroup>
+							<NavList.CollapsibleGroupTrigger label="Deploy" icon={<CubeIcon weight="duotone" />} />
+							<NavList.CollapsibleGroupPanel>
+								<NavList.Item label="Deployments" href="#deployments" />
+								<NavList.Item label="Workers" href="#workers" />
+							</NavList.CollapsibleGroupPanel>
+						</NavList.CollapsibleGroup>
+					) : null}
 					<NavList.DrilldownTrigger to="settings" label="Settings" icon={<GearIcon weight="duotone" />} />
-				</NavList.DrilldownPanel>
-				<NavList.DrilldownPanel value="settings" label="Settings">
-					<NavList.DrilldownBack to="account" />
-					<NavList.Section label="Settings">
-						<NavList.Item label="Profile" href="#profile" />
-						<NavList.Item label="Billing" href="#billing" />
-					</NavList.Section>
-				</NavList.DrilldownPanel>
-			</NavList.Drilldown>
-		</NavList.Section>
+				</NavList.Section>
+			</NavList.DrilldownPanel>
+			<NavList.DrilldownPanel value="settings" label="Settings">
+				<NavList.DrilldownBack to="account" />
+				<NavList.Section label="Settings" visuallyHideLabel>
+					<NavList.Item label="Profile" href="#profile" />
+					<NavList.Item label="Billing" href="#billing" />
+				</NavList.Section>
+			</NavList.DrilldownPanel>
+		</NavList.Drilldown>
 	);
 }
 
@@ -246,14 +254,14 @@ const storyParts = stylex.create({
 	},
 	examples: {
 		gap: tokens["--space-4"],
-		alignItems: "stretch",
+		alignItems: "start",
 		display: "flex",
 	},
 	mode: {
 		overflow: "hidden",
-		blockSize: "24rem",
 		display: "flex",
 		flexDirection: "column",
+		minBlockSize: "24rem",
 	},
 	label: {
 		margin: 0,

@@ -1,6 +1,4 @@
 import { useRender } from "@base-ui/react/use-render";
-import { ArrowLineLeftIcon } from "@phosphor-icons/react/dist/csr/ArrowLineLeft";
-import { ArrowLineRightIcon } from "@phosphor-icons/react/dist/csr/ArrowLineRight";
 import * as stylex from "@stylexjs/stylex";
 import type { StyleXStyles } from "@stylexjs/stylex";
 import { createContext, useContext, useMemo, useRef, useState, type ComponentProps, type ReactNode } from "react";
@@ -169,11 +167,7 @@ export function Header({ startSlot, endSlot, children, className, style, ...prop
 			data-side={sidebar.side}
 			style={sx.style}>
 			{hasStartSlot ? <span {...stylex.props(sidebarParts.headerStartSlot)}>{startSlot}</span> : null}
-			<div
-				{...stylex.props(
-					sidebarParts.headerContent,
-					iconCollapsed && sidebarParts.headerContentIconCollapsed,
-				)}>
+			<div {...stylex.props(sidebarParts.headerContent, iconCollapsed && sidebarParts.headerContentIconCollapsed)}>
 				{children}
 			</div>
 			{hasEndSlot ? <span {...stylex.props(sidebarParts.headerEndSlot)}>{endSlot}</span> : null}
@@ -216,14 +210,11 @@ export function Trigger({
 }: SidebarTriggerProps) {
 	const sidebar = useSidebarContext("Sidebar.Trigger");
 	const label = sidebar.collapsed ? expandLabel : collapseLabel;
-	const CollapseIcon = sidebar.side === "start" ? ArrowLineLeftIcon : ArrowLineRightIcon;
-	const ExpandIcon = sidebar.side === "start" ? ArrowLineRightIcon : ArrowLineLeftIcon;
-	const TriggerIcon = sidebar.collapsed ? ExpandIcon : CollapseIcon;
 
 	return (
 		<IconButton
 			{...props}
-			icon={<TriggerIcon />}
+			icon={<SidebarPanelIcon collapsed={sidebar.collapsed} side={sidebar.side} />}
 			label={label}
 			tooltip={tooltip}
 			variant={variant}
@@ -235,6 +226,36 @@ export function Trigger({
 			}}
 			style={style}
 		/>
+	);
+}
+
+function SidebarPanelIcon({ collapsed, side }: { collapsed: boolean; side: SidebarSide }) {
+	const expandedStyle =
+		side === "start" ? sidebarParts.triggerIconDividerStartExpanded : sidebarParts.triggerIconDividerEndExpanded;
+	const collapsedStyle =
+		side === "start" ? sidebarParts.triggerIconDividerStartCollapsed : sidebarParts.triggerIconDividerEndCollapsed;
+
+	return (
+		<svg
+			aria-hidden="true"
+			data-collapsed={collapsed ? "" : undefined}
+			data-side={side}
+			data-sidebar-trigger-icon=""
+			focusable="false"
+			fill="none"
+			height="16"
+			stroke="currentColor"
+			strokeLinecap="round"
+			strokeWidth="1.5"
+			viewBox="0 0 24 24"
+			width="16"
+			{...stylex.props(sidebarParts.triggerIcon)}>
+			<path d="M21.25 6.72v10.56a2.97 2.97 0 0 1-2.97 2.97H5.72a2.97 2.97 0 0 1-2.97-2.97V6.72a2.97 2.97 0 0 1 2.97-2.97h12.56a2.97 2.97 0 0 1 2.97 2.97" />
+			<path
+				d="M6.25 7.25v9.5"
+				{...stylex.props(sidebarParts.triggerIconDivider, collapsed ? collapsedStyle : expandedStyle)}
+			/>
+		</svg>
 	);
 }
 
@@ -251,10 +272,8 @@ const sidebarParts = stylex.create({
 	panel: {
 		flex: "0 0 auto",
 		overflow: "hidden",
-		backgroundColor: tokens["--surface"],
-		borderInlineEndColor: tokens["--border"],
-		borderInlineEndStyle: "solid",
-		borderInlineEndWidth: tokens["--border-width"],
+		backgroundColor: tokens["--surface-subtle"],
+		boxShadow: `inset -1px 0 0 0 ${tokens["--border"]}`,
 		display: "block",
 		inlineSize: tokens["--size-sidebar"],
 		minBlockSize: 0,
@@ -266,10 +285,7 @@ const sidebarParts = stylex.create({
 		transitionTimingFunction: tokens["--motion-ease-smooth-out"],
 	},
 	panelEnd: {
-		borderInlineEndWidth: 0,
-		borderInlineStartColor: tokens["--border"],
-		borderInlineStartStyle: "solid",
-		borderInlineStartWidth: tokens["--border-width"],
+		boxShadow: `inset 1px 0 0 0 ${tokens["--border"]}`,
 	},
 	panelIconCollapsed: {
 		inlineSize: tokens["--size-sidebar-rail"],
@@ -287,9 +303,10 @@ const sidebarParts = stylex.create({
 		inlineSize: tokens["--size-sidebar-rail"],
 	},
 	content: {
-		padding: tokens["--space-3"],
+		paddingInline: tokens["--space-3"],
 		blockSize: "100%",
 		boxSizing: "border-box",
+		// paddingBlock: tokens["--space-2"],
 		display: "flex",
 		flexDirection: "column",
 		inlineSize: tokens["--size-sidebar"],
@@ -308,7 +325,7 @@ const sidebarParts = stylex.create({
 		minInlineSize: 0,
 	},
 	contentIconCollapsed: {
-		paddingBlock: tokens["--space-3"],
+		// paddingBlock: tokens["--space-3"],
 		paddingInline: tokens["--space-2"],
 		inlineSize: tokens["--size-sidebar-rail"],
 	},
@@ -321,6 +338,7 @@ const sidebarParts = stylex.create({
 		minBlockSize: 0,
 	},
 	scrollContent: {
+		gap: "1px",
 		display: "flex",
 		minBlockSize: "100%",
 	},
@@ -335,15 +353,22 @@ const sidebarParts = stylex.create({
 		},
 	},
 	header: {
-		gap: tokens["--space-2"],
-		paddingInline: tokens["--space-3"],
+		gap: tokens["--space-3"],
+		paddingInline: tokens["--space-0"],
 		alignItems: "center",
+		borderBlockEndColor: tokens["--border"],
+		borderBlockEndStyle: "solid",
+		borderBlockEndWidth: tokens["--border-width"],
 		color: tokens["--fg"],
 		display: "flex",
-		minBlockSize: tokens["--size-control-lg"],
+		// marginBlockEnd: tokens["--space-2"],
+		// minBlockSize: tokens["--size-control-lg"],
 		minInlineSize: 0,
+		paddingBlockEnd: tokens["--space-3"],
+		paddingBlockStart: tokens["--space-4"],
 	},
 	headerRailCollapsed: {
+		gap: tokens["--space-1"],
 		paddingInline: 0,
 		alignItems: "center",
 		flexDirection: "column",
@@ -389,10 +414,40 @@ const sidebarParts = stylex.create({
 	footer: {
 		flex: "none",
 		gap: tokens["--space-2"],
+		paddingBlock: tokens["--space-2"],
+		paddingInline: tokens["--space-1"],
+		borderBlockStartColor: tokens["--border"],
+		borderBlockStartStyle: "solid",
+		borderBlockStartWidth: tokens["--border-width"],
 		display: "flex",
 		justifyContent: {
 			"[data-collapsed] &": "center",
 			default: "flex-start",
 		},
+	},
+	triggerIcon: {
+		display: "block",
+		flexShrink: 0,
+	},
+	triggerIconDivider: {
+		transformBox: "fill-box",
+		transitionDuration: {
+			default: tokens["--motion-duration-medium"],
+			"@media (prefers-reduced-motion: reduce)": "0ms",
+		},
+		transitionProperty: "transform",
+		transitionTimingFunction: tokens["--motion-ease-smooth-out"],
+	},
+	triggerIconDividerStartExpanded: {
+		transform: "translateX(1px)",
+	},
+	triggerIconDividerStartCollapsed: {
+		transform: "translateX(10.5px)",
+	},
+	triggerIconDividerEndExpanded: {
+		transform: "translateX(10.5px)",
+	},
+	triggerIconDividerEndCollapsed: {
+		transform: "translateX(1px)",
 	},
 });

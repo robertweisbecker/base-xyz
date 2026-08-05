@@ -1,8 +1,7 @@
 import { Collapsible as BaseCollapsible } from "@base-ui/react/collapsible";
 import { useRender } from "@base-ui/react/use-render";
 import { Icon as CollapsibleIcon } from "@/components/collapsible/collapsible";
-import { CaretLeftIcon } from "@phosphor-icons/react/dist/csr/CaretLeft";
-import { CaretRightIcon } from "@phosphor-icons/react/dist/csr/CaretRight";
+import { ArrowLeftIcon, ArrowRightIcon } from "@phosphor-icons/react";
 import * as stylex from "@stylexjs/stylex";
 import type { StyleXStyles } from "@stylexjs/stylex";
 import {
@@ -55,7 +54,7 @@ export type NavListSectionProps = {
 	label: string;
 	description?: string;
 	endSlot?: ReactNode;
-	labelHidden?: boolean;
+	visuallyHideLabel?: boolean;
 	children: ReactNode;
 	className?: string;
 	style?: StyleXStyles;
@@ -169,7 +168,7 @@ export function Section({
 	label,
 	description,
 	endSlot,
-	labelHidden = false,
+	visuallyHideLabel = false,
 	children,
 	className,
 	style,
@@ -208,7 +207,7 @@ export function Section({
 			aria-labelledby={headingId}
 			className={[sxClassName, className].filter(Boolean).join(" ")}
 			style={sxStyle}>
-			{labelHidden ? <VisuallyHidden render={<div id={headingId} />}>{label}</VisuallyHidden> : heading}
+			{visuallyHideLabel ? <VisuallyHidden id={headingId}>{label}</VisuallyHidden> : heading}
 			<ul {...stylex.props(navListParts.list)}>{children}</ul>
 		</section>
 	);
@@ -274,7 +273,7 @@ function Row({
 	const isStatic = !isLink && !isAction;
 	const renderedIcon = backIcon ? (
 		<span aria-hidden {...stylex.props(navListParts.icon)}>
-			<CaretLeftIcon size="1em" weight="bold" />
+			<ArrowLeftIcon />
 		</span>
 	) : visualIcon ? (
 		<span aria-hidden {...stylex.props(navListParts.icon)}>
@@ -288,18 +287,11 @@ function Row({
 	) : (
 		<>
 			{renderedIcon}
-			<span
-				{...stylex.props(
-					menuItemStyles.label,
-					navListParts.labelCell,
-					isTextRow && navListParts.textRowLabelCell,
-				)}>
+			<span {...stylex.props(menuItemStyles.label, navListParts.labelCell, isTextRow && navListParts.textRowLabelCell)}>
 				<span {...stylex.props(navListParts.labelText)}>{children ?? label}</span>
 			</span>
 			{resolvedEndSlot ? (
-				<span {...stylex.props(navListParts.endSlot, isTextRow && navListParts.textRowEndSlot)}>
-					{resolvedEndSlot}
-				</span>
+				<span {...stylex.props(navListParts.endSlot, isTextRow && navListParts.textRowEndSlot)}>{resolvedEndSlot}</span>
 			) : null}
 			{disclosure && disclosure !== "back" ? (
 				<span
@@ -310,7 +302,7 @@ function Row({
 						disclosure === "collapse" && navListParts.collapseIcon,
 						disclosure === "collapse" && collapseOpen && navListParts.collapseIconOpen,
 					)}>
-					{disclosure === "collapse" ? <CollapsibleIcon /> : <CaretRightIcon size="1em" weight="bold" />}
+					{disclosure === "collapse" ? <CollapsibleIcon /> : <ArrowRightIcon />}
 				</span>
 			) : null}
 		</>
@@ -364,12 +356,13 @@ function Row({
 		menuItemStyles.item,
 		menuItemSizeStyles[size],
 		menuItemVariantStyles.default,
-		focusRing.outset,
+		focusRing.inset,
 		navListParts.row,
 		(current || active) && !disabled && navListParts.currentRow,
+		disclosure === "collapse" && collapseOpen && !disabled && navListParts.collapsibleTriggerOpen,
 		disclosure === "back" && navListParts.backRow,
 		isTextRow && navListParts.textRow,
-		isNestedTextRow && navListParts.subitemRow,
+		isNestedTextRow && navListParts.nestedItemRow,
 		isIconMode && navListParts.iconModeRow,
 		style,
 	]);
@@ -675,25 +668,29 @@ export function Drilldown({ value, defaultValue, onValueChange, children }: NavL
 		() => ({ value: currentValue, direction, panels, setValue }),
 		[currentValue, direction, panels, setValue],
 	);
+	const panelEntries = Array.from(panels);
+	const currentIndex = panelEntries.findIndex(([panelValue]) => panelValue === currentValue);
 
 	return (
 		<DrilldownContext.Provider value={context}>
 			<div ref={drilldownRef} {...stylex.props(navListParts.drilldown)} data-direction={direction}>
-				{Array.from(panels, ([panelValue, panel]) => {
+				{panelEntries.map(([panelValue, panel], panelIndex) => {
 					const active = panelValue === currentValue;
+					const position = active ? "active" : panelIndex < currentIndex ? "before" : "after";
 
 					return (
-						<div
+						<section
 							key={panelValue}
 							aria-hidden={active ? undefined : true}
 							aria-label={panel.label}
 							data-active={active ? "" : undefined}
+							data-position={position}
 							inert={active ? undefined : true}
 							role="group"
 							tabIndex={active ? -1 : undefined}
 							{...stylex.props(navListParts.drilldownPanel)}>
 							{panel.node}
-						</div>
+						</section>
 					);
 				})}
 			</div>
@@ -760,10 +757,12 @@ export function DrilldownTrigger({
 	);
 }
 
-export function DrilldownBack({ to, label = "Back", className, style }: NavListDrilldownBackProps) {
+export function DrilldownBack({ to, label, className, style }: NavListDrilldownBackProps) {
 	const drilldown = useContext(DrilldownContext);
 	const destinationLabel = drilldown?.panels.get(to)?.label;
-	const accessibleLabel = destinationLabel ? `${label} to ${destinationLabel}` : label;
+	const visibleLabel = label ?? drilldown?.panels.get(drilldown.value)?.label ?? "Back";
+	const accessibleLabelPrefix = label ?? "Back";
+	const accessibleLabel = destinationLabel ? `${accessibleLabelPrefix} to ${destinationLabel}` : accessibleLabelPrefix;
 
 	if (drilldown?.hideBack) {
 		return null;
@@ -777,7 +776,7 @@ export function DrilldownBack({ to, label = "Back", className, style }: NavListD
 			dataNavListBack
 			disclosure="back"
 			forceButton
-			label={label}
+			label={visibleLabel}
 			onDisclosureClick={() => drilldown?.setValue(to, "back")}
 			style={[navListParts.backControl, style]}
 			tooltip={false}
@@ -851,7 +850,7 @@ function CollapsedChildrenPopover({
 				}
 			/>
 			<Popover.Popup
-				positionerProps={{ side: popoverSide, align: "start" }}
+				positionerProps={{ side: popoverSide, align: "start", sideOffset: -8 }}
 				showClose={false}
 				style={navListParts.childPopover}>
 				<NavListPresentationProvider presentation="expanded" popoverSide={popoverSide}>
@@ -1010,9 +1009,9 @@ const navListParts = stylex.create({
 		[menuItemVars.columns]: `${tokens["--space-4"]} minmax(0, 1fr) auto`,
 		[menuItemVars.columnGap]: tokens["--space-2"],
 		[menuItemVars.paddingInlineEnd]: tokens["--space-2"],
-		[menuItemVars.paddingInlineStart]: tokens["--space-3"],
+		[menuItemVars.paddingInlineStart]: tokens["--space-2"],
 		borderColor: "transparent",
-		borderRadius: tokens["--radius-sm"],
+		borderRadius: tokens["--radius-md"],
 		borderStyle: "solid",
 		borderWidth: "1px",
 		backgroundColor: {
@@ -1025,13 +1024,12 @@ const navListParts = stylex.create({
 		color: {
 			"[data-current]": tokens["--fg"],
 			"[data-disabled]": tokens["--fg-subtle"],
-			default: tokens["--fg-muted"],
+			default: tokens["--fg"],
 			":hover": {
 				"@media (hover: hover) and (pointer: fine)": tokens["--fg"],
 			},
 		},
 		fontFamily: "inherit",
-		fontWeight: tokens["--font-weight-medium"],
 		textAlign: "start",
 		width: "100%",
 	},
@@ -1039,9 +1037,15 @@ const navListParts = stylex.create({
 		backgroundColor: tokens["--surface-subtle-active"],
 		color: tokens["--fg"],
 	},
+	collapsibleTriggerOpen: {
+		color: tokens["--fg"],
+	},
 	backRow: {
-		color: tokens["--fg-muted"],
+		color: tokens["--fg-subtle"],
 		marginBlockEnd: tokens["--space-1"],
+		// fontSize: tokens["--font-size-1"],
+		// lineHeight: tokens["--line-height-1"],
+		// letterSpacing: tokens["--letter-spacing-1"],
 	},
 	iconModeRow: {
 		[menuItemVars.columns]: "1fr",
@@ -1049,13 +1053,13 @@ const navListParts = stylex.create({
 		[menuItemVars.minHeight]: tokens["--size-control-lg"],
 		[menuItemVars.paddingInlineEnd]: 0,
 		[menuItemVars.paddingInlineStart]: 0,
-		inlineSize: tokens["--size-control-lg"],
 		justifyContent: "center",
+		minInlineSize: tokens["--size-control-lg"],
 	},
 	textRow: {
 		[menuItemVars.columns]: "minmax(0, 1fr) auto",
 	},
-	subitemRow: {
+	nestedItemRow: {
 		[menuItemVars.paddingInlineStart]: tokens["--space-2"],
 		marginInlineStart: `calc(${tokens["--space-1-5"]} * -1)`,
 	},
@@ -1068,6 +1072,7 @@ const navListParts = stylex.create({
 		justifySelf: "center",
 		height: tokens["--space-4"],
 		width: tokens["--space-4"],
+		// marginInlineStart: `calc(${tokens["--space-1-5"]} * -1)`,
 	},
 	iconPlaceholder: {
 		gridColumn: "1",
@@ -1130,7 +1135,11 @@ const navListParts = stylex.create({
 		paddingBlock: tokens["--space-1"],
 		paddingInline: tokens["--space-3"],
 		display: "grid",
+		fontSize: tokens["--font-size-1"],
+		fontWeight: tokens["--font-weight-regular"],
 		gridTemplateColumns: "1fr auto",
+		letterSpacing: tokens["--letter-spacing-1"],
+		lineHeight: tokens["--line-height-1"],
 		rowGap: tokens["--space-0-5"],
 	},
 	sectionLabelText: {
@@ -1164,7 +1173,7 @@ const navListParts = stylex.create({
 		boxSizing: "border-box",
 		display: "flex",
 		flexDirection: "column",
-		marginInlineStart: tokens["--space-5"],
+		marginInlineStart: tokens["--space-4"],
 		paddingInlineEnd: tokens["--space-1"],
 		paddingInlineStart: tokens["--space-3"],
 		transitionDuration: {
@@ -1200,10 +1209,15 @@ const navListParts = stylex.create({
 			default: "auto",
 		},
 		transform: {
-			'[aria-hidden="true"]': {
+			"[data-active]": "translateX(0)",
+			'[data-position="after"]': {
+				"[dir='rtl'] &": "translateX(-16px)",
 				default: "translateX(16px)",
 			},
-			"[data-active]": "translateX(0)",
+			'[data-position="before"]': {
+				"[dir='rtl'] &": "translateX(16px)",
+				default: "translateX(-16px)",
+			},
 		},
 		transitionDuration: {
 			default: tokens["--motion-duration-medium"],
@@ -1217,9 +1231,11 @@ const navListParts = stylex.create({
 		marginBlockEnd: tokens["--space-1"],
 	},
 	childPopover: {
-		padding: tokens["--space-2"],
-		inlineSize: "min(18rem, calc(100vw - 2rem))",
-		minWidth: "14rem",
+		gap: tokens["--space-1"],
+		paddingBlock: tokens["--space-1"],
+		paddingInline: tokens["--space-1"],
+		inlineSize: "min(16rem, calc(100vw - 2rem))",
+		minWidth: "12rem",
 	},
 });
 

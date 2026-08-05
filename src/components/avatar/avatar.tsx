@@ -141,9 +141,9 @@ const avatarParts = stylex.create({
 	icon: {
 		alignItems: "center",
 		display: "inline-flex",
+		fontSize: "1.5em",
 		justifyContent: "center",
 		lineHeight: 0,
-		fontSize: "1.5em",
 		// height: "2em",
 		// width: "2em",
 	},
@@ -157,24 +157,14 @@ const avatarParts = stylex.create({
 	root: {
 		overflow: "hidden",
 		alignItems: "center",
-		backgroundColor: tokens["--color-gray-a3"],
+		backgroundColor: tokens["--color-warning-c3"],
 		boxSizing: "border-box",
-		color: tokens["--fg-muted"],
+		color: tokens["--color-warning-t2"],
 		display: "inline-flex",
 		flexShrink: 0,
 		fontWeight: tokens["--font-weight-semibold"],
 		isolation: "isolate",
 		justifyContent: "center",
-		outlineColor: {
-			default: tokens["--border-input"],
-			// // eslint-disable-next-line @stylexjs/valid-styles -- the compiler supports nested pseudo-class conditions; the lint rule is stricter than the compiler.
-			// ":is(button)": {
-			// 	":hover": tokens["--border-input"],
-			// },
-		},
-		outlineOffset: "-1px",
-		outlineStyle: "solid",
-		outlineWidth: "1px",
 		position: "relative",
 		userSelect: "none",
 		verticalAlign: "middle",
