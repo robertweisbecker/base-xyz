@@ -15,7 +15,6 @@ import { tooltipStyles } from "@/components/tooltip/tooltip.stylex";
 import { popupVars } from "@/components/popover/popover-vars.stylex";
 import { pressable } from "@/styles/recipes/transitions";
 
-
 import {
 	anchoredToastManager,
 	type AnchoredToastData,
@@ -162,7 +161,7 @@ export function AnchoredToast({ toast, className, positionerClassName, style, po
 					)}
 					{variant !== "tooltip" && toast.actionProps != null ? (
 						<BaseToast.Action
-							className={stylex.props(toastControlStyles.action, focusRing.outset, pressable.transition).className}
+							className={stylex.props(toastControlStyles.action, focusRing.offset, pressable.transition).className}
 						/>
 					) : null}
 					{variant !== "tooltip" && dismissible ? (
@@ -172,7 +171,7 @@ export function AnchoredToast({ toast, className, positionerClassName, style, po
 								stylex.props(
 									toastControlStyles.close,
 									toastControlStyles.anchoredClose,
-									focusRing.outset,
+									focusRing.offset,
 									pressable.transition,
 								).className
 							}>

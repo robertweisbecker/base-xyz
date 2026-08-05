@@ -12,6 +12,7 @@ import { textStyles } from "@/components/text/text.stylex";
 import { focusRing } from "@/styles/recipes/focus";
 import { pressable } from "@/styles/recipes/transitions";
 import { tokens } from "@/theme/tokens.stylex";
+import { VisuallyHidden } from "@/components/visually-hidden/visually-hidden";
 import { Checkmark, Minus } from "../selection-icons";
 
 export type CheckboxSize = "sm" | "md";
@@ -23,6 +24,8 @@ export type CheckboxProps = Omit<
 	FieldThemeProps & {
 		label: ReactNode;
 		description?: ReactNode;
+		/** Hides the label visually while keeping it available to assistive tech. */
+		visuallyHideLabel?: boolean;
 		invalid?: boolean;
 		size?: CheckboxSize;
 		className?: string;
@@ -56,6 +59,7 @@ export function Checkbox({
 	ref,
 	label,
 	description,
+	visuallyHideLabel = false,
 	className,
 	style,
 	disabled,
@@ -74,6 +78,16 @@ export function Checkbox({
 	const generatedId = useId();
 	const id = providedId ?? `${generatedId}-control`;
 	const descriptionId = description ? `${generatedId}-description` : undefined;
+	const labelContent = (
+		<>
+			{label}
+			{required ? (
+				<span aria-hidden {...stylex.props(fieldStyles.requiredIndicator)}>
+					*
+				</span>
+			) : null}
+		</>
+	);
 	const content = (
 		<>
 			<Field.Label {...stylex.props(checkboxParts.labelRoot)}>
@@ -89,7 +103,7 @@ export function Checkbox({
 					{...stylex.props(
 						checkboxParts.control,
 						checkboxControlSizeStyles[resolvedSize],
-						focusRing.outset,
+						focusRing.offset,
 						pressable.transition,
 					)}
 					{...restProps}>
@@ -106,14 +120,11 @@ export function Checkbox({
 						)}
 					/>
 				</BaseCheckbox.Root>
-				<span {...stylex.props(checkboxLabelStyles[resolvedSize])}>
-					{label}
-					{required ? (
-						<span aria-hidden {...stylex.props(fieldStyles.requiredIndicator)}>
-							*
-						</span>
-					) : null}
-				</span>
+				{visuallyHideLabel ? (
+					<VisuallyHidden>{labelContent}</VisuallyHidden>
+				) : (
+					<span {...stylex.props(checkboxLabelStyles[resolvedSize])}>{labelContent}</span>
+				)}
 			</Field.Label>
 			{description ? (
 				<Field.Description

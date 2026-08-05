@@ -74,7 +74,7 @@ export function Avatar({
 	const hasName = normalizedName.length > 0;
 	const sx = stylex.props(
 		avatarParts.root,
-		focusRing.outsetInteractive,
+		focusRing.offsetInteractive,
 		responsiveSizeStyle(size),
 		shapeVariants[shape],
 		style,

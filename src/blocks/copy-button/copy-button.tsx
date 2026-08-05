@@ -113,7 +113,7 @@ function CopyButtonControl({
 					iconSwapTransition.to,
 					copied ? iconSwapTransition.visible : iconSwapTransition.hidden,
 				)}>
-				<Checkmark width="1em" height="1em" strokeWidth={1.5} />
+				<Checkmark />
 			</span>
 		</span>
 	);

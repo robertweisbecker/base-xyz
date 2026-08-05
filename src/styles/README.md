@@ -55,7 +55,7 @@ element roles in a header comment.
 | Popup position + motion                 | `components/popover/popover.stylex.ts` | Popover owns anchored-surface behavior composed by other popups                                                     |
 | Popup panel chrome (bg, radius, shadow) | **component file**                     | Each popup owns its own `panelSurface` beside its parts                                                             |
 | Modal backdrop, viewport, surface, text | `components/dialog/dialog.stylex.ts`   | Dialog owns modal behavior; alert dialogs and drawers compose it                                                    |
-| Focus rings                             | `focus.ts`                             | `focusRing.inset` on bordered controls, `focusRing.outset` on buttons/links, `focusRing.within` on composite shells |
+| Focus rings                             | `focus.ts`                             | `focusRing.inset` on bordered controls, `focusRing.offset` on buttons/links, `focusRing.within` on composite shells |
 | Press / icon-swap feedback              | `transitions.ts`                       | Buttons, toggles, close controls                                                                                    |
 | Checkbox, Radio, and Switch             | **component files**                    | Each control owns its marker, state styles, sizing, and indicator treatment                                         |
 | Text styles                             | `components/text/text.stylex.ts`       | Components, headings, body copy, and specimens                                                                      |
@@ -102,9 +102,7 @@ Popup composites render their children directly. Opt into Base UI's content
 swapping and detached-trigger movement only where they are actually needed:
 
 ```tsx
-<Popover.Popup
-	positionerProps={{ style: popupMotionStyles.movingPositioner }}
-	style={popupMotionStyles.movingPopup}>
+<Popover.Popup positionerProps={{ style: popupMotionStyles.movingPositioner }} style={popupMotionStyles.movingPopup}>
 	<Popover.Viewport>{content}</Popover.Viewport>
 </Popover.Popup>
 ```

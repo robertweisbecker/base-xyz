@@ -5,11 +5,11 @@ import { type ComponentProps } from "react";
 import { tokens } from "@/theme/tokens.stylex";
 import { focusRing } from "@/styles/recipes/focus";
 
-export type LinkVariant = "accent" | "neutral";
+export type LinkColor = keyof typeof linkColors;
 
 export type LinkProps = Omit<ComponentProps<"a">, "style"> & {
 	external?: boolean;
-	variant?: LinkVariant;
+	color?: LinkColor;
 	/** StyleX overrides, applied after the component's own styles. */
 	style?: StyleXStyles;
 };
@@ -22,10 +22,10 @@ export function Link({
 	rel,
 	style,
 	target,
-	variant = "accent",
+	color = "accent",
 	...props
 }: LinkProps) {
-	const sx = stylex.props(linkStyles.root, linkVariants[variant], focusRing.outset, style);
+	const sx = stylex.props(linkStyles.root, linkColors[color], focusRing.offset, style);
 
 	return (
 		<a
@@ -51,7 +51,7 @@ const linkStyles = stylex.create({
 		columnGap: "0.125em",
 		display: "inline-flex",
 		textDecorationColor: {
-			default: "color-mix(in srgb, currentColor 50%, transparent)",
+			default: "color-mix(in srgb, currentColor 40%, transparent)",
 			":hover": "currentColor",
 		},
 		textDecorationLine: "underline",
@@ -63,17 +63,23 @@ const linkStyles = stylex.create({
 	},
 });
 
-const linkVariants = stylex.create({
+const linkColors = stylex.create({
 	accent: {
 		color: {
 			default: tokens["--fg-accent"],
-			":hover": tokens["--fg-accent-hover"],
+			":hover": tokens["--bg-primary"],
 		},
 	},
 	neutral: {
 		color: {
 			default: tokens["--fg-muted"],
 			":hover": tokens["--fg"],
+		},
+	},
+	inherit: {
+		color: {
+			default: "currentColor",
+			":hover": tokens["--fg-accent"],
 		},
 	},
 });

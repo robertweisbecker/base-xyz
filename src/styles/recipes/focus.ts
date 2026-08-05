@@ -30,7 +30,7 @@ export const focusRing = stylex.create({
 			":focus-visible": 1,
 		},
 	},
-	outset: {
+	offset: {
 		outlineColor: {
 			default: "transparent",
 			":focus-visible": tokens["--focus"],
@@ -41,7 +41,7 @@ export const focusRing = stylex.create({
 		outlineStyle: "solid",
 		outlineWidth: "2px",
 	},
-	outsetInteractive: {
+	offsetInteractive: {
 		outlineColor: {
 			default: "transparent",
 			":is(button, a[href]):focus-visible": tokens["--focus"],
@@ -53,7 +53,7 @@ export const focusRing = stylex.create({
 	within: {
 		outlineColor: {
 			default: "transparent",
-			":focus-within": tokens["--focus"],
+			":has(input:focus-visible)": tokens["--focus"],
 			':focus-within:has([aria-invalid="true"])': tokens["--bg-error-primary"],
 			":focus-within:has([data-invalid])": tokens["--bg-error-primary"],
 			":focus-within[data-invalid]": tokens["--bg-error-primary"],
@@ -61,5 +61,9 @@ export const focusRing = stylex.create({
 		outlineOffset: "-1px",
 		outlineStyle: "solid",
 		outlineWidth: "2px",
+		boxShadow: {
+			default: null,
+			":focus-visible": "0 0 0 3px color-mix(in srgb, var(--focus) 30%, transparent)",
+		},
 	},
 });

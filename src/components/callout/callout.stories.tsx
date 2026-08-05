@@ -28,7 +28,11 @@ const actionOptions = {
 		</Button>
 	),
 	Close: <CloseButton label="Dismiss callout" />,
-	Link: <Link href="#details">View details</Link>,
+	Link: (
+		<Link href="#details" color="inherit">
+			View details
+		</Link>
+	),
 };
 
 const positionOptions = {

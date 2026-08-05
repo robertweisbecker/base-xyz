@@ -32,7 +32,7 @@ const colorValues = {
 	surface: tokens["--surface"],
 	bgPanel: tokens["--panel"],
 	bgElevated: tokens["--elevated"],
-	bgElevatedActive: tokens["--elevated-active"],
+	bgElevatedActive: tokens["--inset"],
 	surfaceSubtle: tokens["--surface-subtle"],
 	surfaceSubtleHover: tokens["--surface-subtle-hover"],
 	surfaceSubtleActive: tokens["--surface-subtle-active"],

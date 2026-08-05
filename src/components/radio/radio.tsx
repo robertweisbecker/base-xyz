@@ -12,6 +12,7 @@ import { textStyles } from "@/components/text/text.stylex";
 import { focusRing } from "@/styles/recipes/focus";
 import { pressable } from "@/styles/recipes/transitions";
 import { tokens } from "@/theme/tokens.stylex";
+import { VisuallyHidden } from "@/components/visually-hidden/visually-hidden";
 
 export type RadioSize = "sm" | "md";
 
@@ -22,6 +23,8 @@ export type RadioProps = Omit<
 	FieldThemeProps & {
 		label: ReactNode;
 		description?: ReactNode;
+		/** Hides the label visually while keeping it available to assistive tech. */
+		visuallyHideLabel?: boolean;
 		size?: RadioSize;
 		className?: string;
 		/** StyleX overrides, applied after the component's own styles. */
@@ -50,6 +53,7 @@ export function Radio({
 	ref,
 	label,
 	description,
+	visuallyHideLabel = false,
 	className,
 	style,
 	disabled,
@@ -69,6 +73,16 @@ export function Radio({
 	const descriptionId = description ? `${generatedId}-description` : undefined;
 	const itemSx = stylex.props(radioParts.item, ...styles, style);
 	const itemClassName = [itemSx.className, className].filter(Boolean).join(" ");
+	const labelContent = (
+		<>
+			{label}
+			{required ? (
+				<span aria-hidden {...stylex.props(fieldStyles.requiredIndicator)}>
+					*
+				</span>
+			) : null}
+		</>
+	);
 
 	return (
 		<Field.Item
@@ -90,7 +104,7 @@ export function Radio({
 					{...stylex.props(
 						radioParts.control,
 						radioControlSizeStyles[resolvedSize],
-						focusRing.outset,
+						focusRing.offset,
 						pressable.transition,
 					)}
 					{...restProps}>
@@ -102,14 +116,11 @@ export function Radio({
 						)}
 					/>
 				</BaseRadio.Root>
-				<span {...stylex.props(radioLabelStyles[resolvedSize])}>
-					{label}
-					{required ? (
-						<span aria-hidden {...stylex.props(fieldStyles.requiredIndicator)}>
-							*
-						</span>
-					) : null}
-				</span>
+				{visuallyHideLabel ? (
+					<VisuallyHidden>{labelContent}</VisuallyHidden>
+				) : (
+					<span {...stylex.props(radioLabelStyles[resolvedSize])}>{labelContent}</span>
+				)}
 			</Field.Label>
 			{/* Place description outside of the label so ariaDescribedBy doesn't read twice */}
 			{description ? (

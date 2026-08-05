@@ -121,7 +121,7 @@ export type DemoHandleProps = Omit<useRender.ComponentProps<"button">, "children
 };
 
 export function DemoHandle({ ref, label, className, style, type = "button", ...props }: DemoHandleProps) {
-	const sx = stylex.props(demoStyles.handle, focusRing.outset, style);
+	const sx = stylex.props(demoStyles.handle, focusRing.offset, style);
 
 	return (
 		<button

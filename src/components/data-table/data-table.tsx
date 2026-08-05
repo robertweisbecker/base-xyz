@@ -81,7 +81,10 @@ export type DataTableFilter = {
 	options: DataTableFilterOption[];
 };
 
-export type DataTableProps<TData extends RowData, TValue = unknown> = Omit<ComponentProps<"div">, "children" | "style"> & {
+export type DataTableProps<TData extends RowData, TValue = unknown> = Omit<
+	ComponentProps<"div">,
+	"children" | "style"
+> & {
 	columns: Array<DataTableColumnDef<TData, TValue>>;
 	data: TData[];
 	emptyLabel?: ReactNode;
@@ -210,7 +213,16 @@ export function DataTable<TData extends RowData, TValue = unknown>({
 		}
 
 		return [...internalColumns, ...typedColumns];
-	}, [columns, filterColumnId, filters, getRowActions, rowSelection, showExpandColumn, supportsActions, supportsExpansion]);
+	}, [
+		columns,
+		filterColumnId,
+		filters,
+		getRowActions,
+		rowSelection,
+		showExpandColumn,
+		supportsActions,
+		supportsExpansion,
+	]);
 
 	const table = useTable<DataTableFeatures, TData>({
 		features: dataTableFeatures,
@@ -736,14 +748,14 @@ const tableParts = stylex.create({
 		backgroundColor: {
 			"[data-selected]": tokens["--bg-accent"],
 			default: "transparent",
-			":hover": tokens["--surface-subtle"],
+			":hover": tokens["--bg-highlight"],
 		},
 	},
 	expandedRow: {
-		backgroundColor: tokens["--surface-subtle"],
+		backgroundColor: tokens["--inset"],
 	},
 	cell: {
-		paddingBlock: tokens["--space-3"],
+		paddingBlock: tokens["--space-2"],
 		paddingInline: tokens["--space-3"],
 		borderBlockEndColor: tokens["--border"],
 		borderBlockEndStyle: "solid",
@@ -752,12 +764,11 @@ const tableParts = stylex.create({
 		verticalAlign: "middle",
 	},
 	expandedCell: {
-		paddingBlock: tokens["--space-4"],
+		paddingBlock: tokens["--space-3"],
 		paddingInline: tokens["--space-10"],
 		borderBlockEndColor: tokens["--border"],
 		borderBlockEndStyle: "solid",
 		borderBlockEndWidth: "1px",
-		color: tokens["--fg-muted"],
 	},
 	emptyCell: {
 		paddingBlock: tokens["--space-10"],
@@ -767,7 +778,8 @@ const tableParts = stylex.create({
 	},
 	utilityColumn: {
 		textAlign: "center",
-		width: "1%",
+		minWidth: "1%",
+		paddingInline: tokens["--space-2"],
 	},
 	iconButton: {
 		font: "inherit",
@@ -777,7 +789,7 @@ const tableParts = stylex.create({
 		alignItems: "center",
 		backgroundColor: {
 			default: "transparent",
-			":hover": tokens["--surface-subtle-hover"],
+			":hover": tokens["--bg-highlight"],
 		},
 		color: tokens["--fg-muted"],
 		cursor: "default",

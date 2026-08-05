@@ -12,7 +12,6 @@ import {
 import { popupVars } from "@/components/popover/popover-vars.stylex";
 import { tokens } from "@/theme/tokens.stylex";
 
-
 type StyledProps<T> = Omit<T, "className" | "style"> & {
 	className?: string;
 	style?: StyleXStyles;
@@ -30,7 +29,7 @@ export type LinkPreviewPopupProps = StyledProps<BaseLinkPreview.Popup.Props> & {
 };
 
 export function Trigger({ ref, className, style, delay = 100, ...props }: StyledProps<BaseLinkPreview.Trigger.Props>) {
-	const { className: sxClassName, style: sxStyle } = stylex.props(linkPreviewParts.trigger, focusRing.outset, style);
+	const { className: sxClassName, style: sxStyle } = stylex.props(linkPreviewParts.trigger, focusRing.offset, style);
 
 	return (
 		<BaseLinkPreview.Trigger

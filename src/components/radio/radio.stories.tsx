@@ -12,6 +12,7 @@ type RadioStoryArgs = {
 	readOnly: boolean;
 	required: boolean;
 	size: RadioSize;
+	visuallyHideLabel: boolean;
 };
 
 const meta = {
@@ -24,6 +25,7 @@ const meta = {
 		readOnly: false,
 		required: false,
 		size: "md",
+		visuallyHideLabel: false,
 	},
 	argTypes: {
 		_label: { control: "text" },
@@ -39,10 +41,20 @@ const meta = {
 			control: "inline-radio",
 			options: ["sm", "md"],
 		},
+		visuallyHideLabel: { control: "boolean" },
 	},
 	parameters: {
 		controls: {
-			include: ["_label", "_description", "defaultValue", "disabled", "readOnly", "required", "size"],
+			include: [
+				"_label",
+				"_description",
+				"defaultValue",
+				"disabled",
+				"readOnly",
+				"required",
+				"size",
+				"visuallyHideLabel",
+			],
 		},
 	},
 } satisfies Meta<RadioStoryArgs>;
@@ -51,7 +63,7 @@ export default meta;
 type Story = StoryObj<RadioStoryArgs>;
 
 export const Playground: Story = {
-	render: ({ _label, _description, defaultValue, disabled, readOnly, required, size }) => (
+	render: ({ _label, _description, defaultValue, disabled, readOnly, required, size, visuallyHideLabel }) => (
 		<RadioGroup
 			key={defaultValue}
 			label="Notification channel"
@@ -61,9 +73,9 @@ export const Playground: Story = {
 			readOnly={readOnly}
 			required={required}
 			size={size}>
-			<Radio value="email" label={_label} description={_description} />
-			<Radio value="push" label="Push" description="Show updates on this device." />
-			<Radio value="none" label="None" description="Do not send updates." />
+			<Radio value="email" label={_label} description={_description} visuallyHideLabel={visuallyHideLabel} />
+			<Radio value="push" label="Push" description="Show updates on this device." visuallyHideLabel={visuallyHideLabel} />
+			<Radio value="none" label="None" description="Do not send updates." visuallyHideLabel={visuallyHideLabel} />
 		</RadioGroup>
 	),
 };

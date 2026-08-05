@@ -21,7 +21,7 @@ export type InputGroupRootProps = Omit<ComponentProps<"div">, "className" | "sty
 };
 
 export type InputGroupOrientation = "horizontal" | "vertical";
-export type InputGroupVariant = "standard" | "elevated";
+export type InputGroupVariant = "standard" | "elevated" | "subtle";
 
 export type InputGroupInputProps = Omit<BaseInput.Props, "className" | "style"> & {
 	className?: string;
@@ -244,6 +244,12 @@ const inputGroupVariants = stylex.create({
 		borderWidth: 0,
 		backgroundColor: tokens["--elevated"],
 		boxShadow: tokens["--shadow-sm"],
+	},
+	subtle: {
+		backgroundColor: {
+			default: tokens["--surface-subtle"],
+			":has([data-disabled])": tokens["--surface-subtle"],
+		},
 	},
 });
 

@@ -349,7 +349,7 @@ function ComboboxActions({ showClear = true, size }: { showClear?: boolean; size
 					{...stylex.props(
 						comboboxParts.action,
 						comboboxActionSizeVariants[size],
-						focusRing.outset,
+						focusRing.offset,
 						pressable.transition,
 					)}>
 					<XCircleIcon aria-hidden size={"1.25em"} weight="fill" />
@@ -360,7 +360,7 @@ function ComboboxActions({ showClear = true, size }: { showClear?: boolean; size
 				{...stylex.props(
 					comboboxParts.action,
 					comboboxActionSizeVariants[size],
-					focusRing.outset,
+					focusRing.offset,
 					pressable.transition,
 				)}>
 				<CaretDownIcon aria-hidden size="1em" weight="bold" />
@@ -433,7 +433,7 @@ function renderChips(values: string[], maxVisibleChips?: number, tooltipAnchorRe
 					<span {...stylex.props(comboboxParts.chipLabel)}>{value}</span>
 					<Combobox.ChipRemove
 						aria-label={`Remove ${value}`}
-						{...stylex.props(comboboxParts.action, comboboxParts.chipRemove, focusRing.outset, pressable.transition)}>
+						{...stylex.props(comboboxParts.action, comboboxParts.chipRemove, focusRing.offset, pressable.transition)}>
 						<XIcon aria-hidden size={12} weight="bold" />
 					</Combobox.ChipRemove>
 				</Combobox.Chip>

@@ -23,7 +23,7 @@ const meta = {
 	argTypes: {
 		orientation: { control: "inline-radio", options: ["horizontal", "vertical"] },
 		size: { control: "inline-radio", options: ["sm", "md", "lg"] },
-		variant: { control: "inline-radio", options: ["standard", "elevated"] },
+		variant: { control: "inline-radio", options: ["standard", "elevated", "subtle"] },
 	},
 	parameters: {
 		controls: {
@@ -97,6 +97,11 @@ export const Variants: Story = {
 			<State label="Elevated">
 				<InputGroup.Root variant="elevated">
 					<InputGroup.Input aria-label="Elevated input group" placeholder="Ask anything…" />
+				</InputGroup.Root>
+			</State>
+			<State label="Subtle">
+				<InputGroup.Root variant="subtle">
+					<InputGroup.Input aria-label="Subtle input group" placeholder="Enter a value…" />
 				</InputGroup.Root>
 			</State>
 		</div>

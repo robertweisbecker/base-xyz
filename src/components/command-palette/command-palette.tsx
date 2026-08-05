@@ -505,6 +505,7 @@ const commandPaletteParts = stylex.create({
 	},
 	item: {
 		gridTemplateColumns: `${tokens["--space-6"]} minmax(0, 1fr) auto`,
+		paddingBlock: tokens["--space-2"],
 	},
 	itemIcon: {
 		gridColumn: "1",

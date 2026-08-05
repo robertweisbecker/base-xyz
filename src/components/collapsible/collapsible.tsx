@@ -60,7 +60,7 @@ export function Trigger({
 		triggerSizes[size],
 		triggerShapes[shape],
 		triggerVariants[variant],
-		focusRing.outset,
+		focusRing.offset,
 		stylex.defaultMarker(),
 		style,
 	);

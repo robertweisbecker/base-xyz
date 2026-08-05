@@ -8,12 +8,16 @@ import { fieldStyles, fieldThemeProps } from "@/components/field/field.stylex";
 import { focusRing } from "@/styles/recipes/focus";
 import { tokens } from "@/theme/tokens.stylex";
 import { Checkmark } from "@/components/selection-icons";
+import { VisuallyHidden } from "@/components/visually-hidden/visually-hidden";
+
 export type SwitchSize = "sm" | "md" | "lg";
 
 export type SwitchProps = Omit<BaseSwitch.Root.Props, "className" | "color" | "style" | keyof FieldThemeProps> &
 	FieldThemeProps & {
 		label: string;
 		description?: string;
+		/** Hides the label visually while keeping it available to assistive tech. */
+		visuallyHideLabel?: boolean;
 		size?: SwitchSize;
 		className?: string;
 		/** StyleX overrides, applied after the component's own styles. */
@@ -23,6 +27,7 @@ export type SwitchProps = Omit<BaseSwitch.Root.Props, "className" | "color" | "s
 export function Switch({
 	label,
 	description,
+	visuallyHideLabel = false,
 	className,
 	style,
 	size = "md",
@@ -39,23 +44,32 @@ export function Switch({
 	const descriptionId = description ? `${generatedId}-description` : undefined;
 
 	const rootSx = stylex.props(switchParts.root, ...styles, style);
+	const labelContent = (
+		<>
+			{label}
+			{required ? (
+				<span aria-hidden {...stylex.props(fieldStyles.requiredIndicator)}>
+					*
+				</span>
+			) : null}
+		</>
+	);
 
 	return (
 		<div className={[rootSx.className, className].filter(Boolean).join(" ")} style={rootSx.style}>
 			<label htmlFor={id} {...stylex.props(switchParts.labelRoot)}>
-				<span
-					{...stylex.props(
-						fieldStyles.itemLabel,
-						disabled && switchParts.labelDisabled,
-						readOnly && switchParts.labelReadOnly,
-					)}>
-					{label}
-					{required ? (
-						<span aria-hidden {...stylex.props(fieldStyles.requiredIndicator)}>
-							*
-						</span>
-					) : null}
-				</span>
+				{visuallyHideLabel ? (
+					<VisuallyHidden>{labelContent}</VisuallyHidden>
+				) : (
+					<span
+						{...stylex.props(
+							fieldStyles.itemLabel,
+							disabled && switchParts.labelDisabled,
+							readOnly && switchParts.labelReadOnly,
+						)}>
+						{labelContent}
+					</span>
+				)}
 				<BaseSwitch.Root
 					id={id}
 					disabled={disabled}
@@ -64,7 +78,7 @@ export function Switch({
 					aria-describedby={mergeIds(ariaDescribedBy, descriptionId)}
 					nativeButton
 					render={<button type="button" />}
-					{...stylex.props(switchParts.track, sizeVariants[size], focusRing.outset)}
+					{...stylex.props(switchParts.track, sizeVariants[size], focusRing.offset)}
 					{...restProps}>
 					<BaseSwitch.Thumb {...stylex.props(switchParts.thumb)}>
 						<Checkmark {...stylex.props(switchParts.icon)} strokeWidth={3} />

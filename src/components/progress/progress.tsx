@@ -90,7 +90,7 @@ const indeterminatePingPong = stylex.keyframes({
 	},
 });
 
-const indeterminatePingPongDuration = "2000ms";
+const indeterminatePingPongDuration = "1500ms";
 
 const progressParts = stylex.create({
 	root: {
@@ -116,7 +116,7 @@ const progressParts = stylex.create({
 	},
 	track: {
 		backgroundPosition: {
-			"[data-indeterminate]": "50% 0",
+			"[data-indeterminate]": "100% 0",
 			default: "0% 0",
 		},
 		borderRadius: tokens["--radius-full"],
@@ -141,15 +141,15 @@ const progressParts = stylex.create({
 			},
 			default: "none",
 		},
-		animationTimingFunction: "ease-in-out",
+		animationTimingFunction: "cubic-bezier(0.455, 0.03, 0.515, 0.955)",
 		backgroundColor: tokens["--fill-track"],
 		backgroundImage: {
-			"[data-indeterminate]": `linear-gradient(90deg, transparent 0%, transparent 28%, ${tokens["--fill-track"]} 40%, ${tokens["--icon-accent"]} 48%, ${tokens["--icon-accent"]} 52%, ${tokens["--fill-track"]} 60%, transparent 72%, transparent 100%)`,
+			"[data-indeterminate]": `linear-gradient(90deg, transparent 0%, transparent 28%, ${tokens["--fill-track"]} 40%, ${tokens["--border-input"]} 48%, ${tokens["--border-input"]} 52%, ${tokens["--fill-track"]} 60%, transparent 72%, transparent 100%)`,
 			default: `linear-gradient(90deg, transparent 0%, transparent 100%)`,
 		},
 		backgroundRepeat: "no-repeat",
 		backgroundSize: {
-			"[data-indeterminate]": "200% 100%",
+			"[data-indeterminate]": "250% 100%",
 			default: "auto",
 		},
 		outlineColor: tokens["--border"],

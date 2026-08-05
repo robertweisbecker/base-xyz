@@ -13,10 +13,9 @@ import { buttonThemeProps, type ButtonThemeProps } from "./button-theme-props";
 
 export type { ButtonThemeProps } from "./button-theme-props";
 
-const HOVER_NOT_PRESSED_OR_OPEN =
-	':hover:not(:disabled):not([aria-disabled="true"]):not([data-disabled]):not([aria-pressed="true"]):not([data-active]):not([data-panel-open]):not([data-popup-open]):not([data-pressed])';
+const HOVER_NOT_PRESSED_OR_OPEN = ":hover:not([data-disabled]):not(:active)";
 const PRESSED =
-	':is(:active, [aria-pressed="true"], [data-active], [data-panel-open], [data-popup-open], [data-pressed])';
+	':is(:active, [aria-pressed="true"], [data-active], [data-panel-open], [data-popup-open], [data-pressed]):not([data-disabled])';
 
 const buttonParts = stylex.create({
 	root: {
@@ -27,6 +26,9 @@ const buttonParts = stylex.create({
 		cursor: {
 			default: "default",
 			":is(a[href])": "pointer",
+			"[data-disabled]": "not-allowed",
+			":disabled": "not-allowed",
+			"[aria-busy]": "wait",
 		},
 		display: "inline-flex",
 		fontSize: tokens["--font-size-2"],
@@ -36,16 +38,16 @@ const buttonParts = stylex.create({
 		lineHeight: tokens["--line-height-2"],
 		opacity: {
 			default: 1,
-			":disabled": 0.48,
+			"[data-disabled]": 0.48,
 		},
 		pointerEvents: {
 			default: "auto",
-			":disabled": "none",
+			"[aria-busy]": "none",
 		},
 		position: "relative",
 		transform: {
 			default: "scale(1)",
-			":active": "scale(0.98)",
+			":active:not([data-disabled])": "scale(0.98)",
 		},
 		userSelect: "none",
 		whiteSpace: "nowrap",
@@ -71,7 +73,13 @@ const slotParts = stylex.create({
 
 const contentParts = stylex.create({
 	resting: {
-		display: "contents",
+		// Real box required so loading `opacity: 0` hides slotted icons that set
+		// their own color (e.g. muted start slots). `display: contents` drops opacity.
+		alignItems: "center",
+		display: "inline-flex",
+		gap: "inherit",
+		justifyContent: "center",
+		minWidth: 0,
 	},
 	transparent: {
 		color: "transparent",
@@ -173,17 +181,20 @@ const colorVariants = stylex.create({
 				"@media (hover: hover) and (pointer: fine)": tokens["--bg-accent-hover"],
 			},
 			[PRESSED]: tokens["--bg-accent-active"],
+			":active": tokens["--bg-accent-active"],
 			default: tokens["--bg-accent"],
 		},
 		color: {
+			"[HOVER_NOT_PRESSED_OR_OPEN]": tokens["--fg-accent-strong"],
 			[PRESSED]: tokens["--fg-accent-strong"],
 			default: tokens["--fg-accent"],
 		},
 	},
 	secondary: {
 		backgroundColor: {
-			[HOVER_NOT_PRESSED_OR_OPEN]: tokens["--bg-highlight"],
-			[PRESSED]: tokens["--elevated-active"],
+			[HOVER_NOT_PRESSED_OR_OPEN]: tokens["--elevated-hover"],
+			[PRESSED]: tokens["--inset"],
+			":active": tokens["--inset"],
 			default: tokens["--elevated"],
 		},
 		boxShadow: {
@@ -414,7 +425,7 @@ function ButtonRoot({
 	const { restProps, styles } = resolveThemeProps(props, buttonThemeProps);
 	const sx = stylex.props(
 		buttonParts.root,
-		focusRing.outset,
+		focusRing.offset,
 		pressable.transition,
 		colorVariants[variant],
 		sizeVariants[size],

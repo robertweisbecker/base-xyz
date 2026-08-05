@@ -175,7 +175,7 @@ function Markers({ every = 1 }: SliderMarkersOptions) {
 }
 
 export function Thumb({ className, style, ...props }: SliderThumbProps) {
-	const sx = stylex.props(focusRing.outset, sliderParts.thumb, style);
+	const sx = stylex.props(focusRing.offset, sliderParts.thumb, style);
 	return <BaseSlider.Thumb {...props} className={mergeClassNames(sx.className, className)} style={sx.style} />;
 }
 

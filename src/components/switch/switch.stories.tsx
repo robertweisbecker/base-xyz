@@ -15,6 +15,7 @@ const meta = {
 		readOnly: false,
 		required: false,
 		size: "md",
+		visuallyHideLabel: false,
 	},
 	argTypes: {
 		label: { control: "text" },
@@ -27,10 +28,20 @@ const meta = {
 			control: "inline-radio",
 			options: ["sm", "md", "lg"],
 		},
+		visuallyHideLabel: { control: "boolean" },
 	},
 	parameters: {
 		controls: {
-			include: ["label", "description", "defaultChecked", "disabled", "readOnly", "required", "size"],
+			include: [
+				"label",
+				"description",
+				"defaultChecked",
+				"disabled",
+				"readOnly",
+				"required",
+				"size",
+				"visuallyHideLabel",
+			],
 		},
 	},
 	decorators: [

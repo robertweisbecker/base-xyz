@@ -4,7 +4,6 @@ import type { StyleXStyles } from "@stylexjs/stylex";
 import { focusRing } from "@/styles/recipes/focus";
 import { tokens } from "@/theme/tokens.stylex";
 
-
 const HOVER_WHEN_INACTIVE =
 	':hover:not([aria-disabled="true"]):not([data-disabled]):not([aria-pressed="true"]):not([data-active]):not([data-panel-open]):not([data-popup-open]):not([data-pressed])';
 const TOGGLED_ON =
@@ -54,7 +53,7 @@ export function Group({ ref, className, style, ...props }: ToolbarGroupProps) {
 }
 
 export function Button({ ref, className, style, type = "button", ...props }: ToolbarButtonProps) {
-	const sx = stylex.props(toolbarParts.control, toolbarParts.button, focusRing.outset, style);
+	const sx = stylex.props(toolbarParts.control, toolbarParts.button, focusRing.offset, style);
 
 	return (
 		<BaseToolbar.Button
@@ -68,7 +67,7 @@ export function Button({ ref, className, style, type = "button", ...props }: Too
 }
 
 export function Link({ ref, className, style, ...props }: ToolbarLinkProps) {
-	const sx = stylex.props(toolbarParts.link, focusRing.outset, style);
+	const sx = stylex.props(toolbarParts.link, focusRing.offset, style);
 
 	return (
 		<BaseToolbar.Link

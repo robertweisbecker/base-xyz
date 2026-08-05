@@ -11,20 +11,20 @@ const meta = {
 		children: "Read the documentation",
 		href: "#documentation",
 		external: false,
-		variant: "accent",
+		color: "accent",
 	},
 	argTypes: {
 		children: { control: "text" },
 		href: { control: "text" },
 		external: { control: "boolean" },
-		variant: {
+		color: {
 			control: "inline-radio",
-			options: ["accent", "neutral"],
+			options: ["accent", "neutral", "inherit"],
 		},
 	},
 	parameters: {
 		controls: {
-			include: ["children", "href", "external", "variant"],
+			include: ["children", "href", "external", "color"],
 		},
 	},
 } satisfies Meta<typeof Link>;
@@ -46,7 +46,7 @@ export const Examples: Story = {
 			</section>
 			<section {...stylex.props(storyStyles.example)}>
 				<span {...stylex.props(storyStyles.label)}>Neutral link</span>
-				<Link href="#project-overview" variant="neutral">
+				<Link href="#project-overview" color="neutral">
 					Project overview
 				</Link>
 			</section>

@@ -64,6 +64,24 @@ const badgeParts = stylex.create({
 	},
 });
 
+const slotColors = stylex.create({
+	accent: {
+		color: tokens["--fill-accent"],
+	},
+	error: {
+		color: tokens["--fill-error"],
+	},
+	neutral: {
+		color: tokens["--fg-muted"],
+	},
+	warning: {
+		color: tokens["--fg-warning"],
+	},
+	success: {
+		color: tokens["--fg-success"],
+	},
+});
+
 const labeledSlotSizes = stylex.create({
 	xs: { fontSize: ".875rem" },
 	sm: { fontSize: "0.75rem" },
@@ -302,7 +320,7 @@ export function Badge({
 
 	const sx = stylex.props(
 		badgeParts.root,
-		focusRing.outset,
+		focusRing.offset,
 		variantAppearance[variant],
 		stylesByHue[hue][variant],
 		sizeVariants[size],
@@ -329,14 +347,14 @@ export function Badge({
 			tabIndex: tabIndex ?? (hasTooltip ? 0 : undefined),
 			children: (
 				<>
-					{renderSlot(startSlot, "start", size, iconOnly)}
+					{renderSlot(startSlot, "start", size, iconOnly, hue)}
 					{children != null ? (
 						<span ref={truncation.ref} {...stylex.props(badgeParts.label)}>
 							{children}
 						</span>
 					) : null}
 					{iconOnly && label ? <VisuallyHidden>{label}</VisuallyHidden> : null}
-					{renderSlot(endSlot, "end", size, iconOnly)}
+					{renderSlot(endSlot, "end", size, iconOnly, hue)}
 				</>
 			),
 		},
@@ -350,7 +368,7 @@ export function Badge({
 	);
 }
 
-function renderSlot(slot: ReactNode, position: "start" | "end", size: BadgeSize, iconOnly: boolean) {
+function renderSlot(slot: ReactNode, position: "start" | "end", size: BadgeSize, iconOnly: boolean, hue: BadgeHue) {
 	if (slot == null) {
 		return null;
 	}
@@ -358,6 +376,7 @@ function renderSlot(slot: ReactNode, position: "start" | "end", size: BadgeSize,
 	const sx = stylex.props(
 		badgeParts.slot,
 		iconOnly ? iconOnlySlotSizes[size] : labeledSlotSizes[size],
+		slotColors[hue],
 		!iconOnly && position === "start" && startSlotOffsets[size],
 		!iconOnly && position === "end" && endSlotOffsets[size],
 	);

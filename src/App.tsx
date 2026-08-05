@@ -397,9 +397,14 @@ function getComponentCells(): GalleryCell[] {
 			title: "Link",
 			content: (
 				<div {...stylex.props(styles.linkStack)}>
-					<Link href="#top">Default link</Link>
-					<Link aria-current="page" href="#top">
-						Current color link
+					<Link href="#top" color="accent">
+						Default (accent) link
+					</Link>
+					<Link href="#top" color="neutral">
+						Neutral link
+					</Link>
+					<Link aria-current="page" href="#top" color="inherit">
+						Inherited color link
 					</Link>
 					<Link href="https://base-ui.com/" external>
 						External link

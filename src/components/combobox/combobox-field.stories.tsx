@@ -359,7 +359,7 @@ function FilterChipsPopupExample() {
 									<span {...stylex.props(styles.chipLabel)}>{item}</span>
 									<Combobox.ChipRemove
 										aria-label={`Remove ${item}`}
-										{...stylex.props(styles.chipRemove, focusRing.outset, pressable.transition)}>
+										{...stylex.props(styles.chipRemove, focusRing.offset, pressable.transition)}>
 										<XIcon aria-hidden size={12} weight="bold" />
 									</Combobox.ChipRemove>
 								</Combobox.Chip>
@@ -418,7 +418,7 @@ function PopupContent({ label }: { label: string }) {
 								value={item}
 								className={stylex.props(menuItemStyles.item, menuItemVariantStyles.default).className}>
 								<Combobox.ItemIndicator keepMounted className={stylex.props(menuItemStyles.indicator).className}>
-									<Checkmark />
+									<Checkmark width="1em" height="1em" strokeWidth={1.5} />
 								</Combobox.ItemIndicator>
 								<span {...stylex.props(menuItemStyles.label)}>{item}</span>
 							</Combobox.Item>

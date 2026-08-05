@@ -16,7 +16,7 @@ export type CloseButtonProps = Omit<ComponentProps<"button">, "aria-label" | "ch
 export function CloseButton({ ref, className, label = "Close", style, type = "button", ...props }: CloseButtonProps) {
 	const { className: sxClassName, style: sxStyle } = stylex.props(
 		closeButtonParts.control,
-		focusRing.outset,
+		focusRing.offset,
 		pressable.transition,
 		style,
 	);

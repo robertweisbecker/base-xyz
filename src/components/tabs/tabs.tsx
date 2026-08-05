@@ -123,7 +123,7 @@ export type TabsTabProps = Omit<BaseTabs.Tab.Props, "children" | "className" | "
 export function Tab({ ref, children, className, endSlot, startSlot, style, type = "button", ...props }: TabsTabProps) {
 	const { orientation, size: tabsSize } = useTabsContext();
 	const sx = stylex.props(
-		focusRing.outset,
+		focusRing.offset,
 		tabsParts.tab,
 		textWeightStyles.medium,
 		tabTextSizeStyles[tabsSize],

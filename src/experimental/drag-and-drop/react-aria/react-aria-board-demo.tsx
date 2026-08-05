@@ -165,7 +165,7 @@ function ReactAriaBoardColumn({
 								<AriaButton
 									slot="drag"
 									aria-label={`Move ${item.label}`}
-									className={stylex.props(demoStyles.handle, focusRing.outset).className}>
+									className={stylex.props(demoStyles.handle, focusRing.offset).className}>
 									<DotsSixVerticalIcon aria-hidden focusable="false" size={18} weight="bold" />
 								</AriaButton>
 							}

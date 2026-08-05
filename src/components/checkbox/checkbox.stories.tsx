@@ -15,6 +15,7 @@ type CheckboxStoryArgs = {
 	required: boolean;
 	indeterminate: boolean;
 	size: CheckboxSize;
+	visuallyHideLabel: boolean;
 	_groupDefaultValue: string[];
 	_groupDisabled: boolean;
 };
@@ -32,6 +33,7 @@ const meta = {
 		required: false,
 		indeterminate: false,
 		size: "md",
+		visuallyHideLabel: false,
 		_groupDefaultValue: ["email"],
 		_groupDisabled: false,
 	},
@@ -48,6 +50,7 @@ const meta = {
 			control: "inline-radio",
 			options: ["sm", "md"],
 		},
+		visuallyHideLabel: { control: "boolean" },
 		_groupDefaultValue: {
 			control: "check",
 			options: ["email", "push", "sms"],
@@ -66,6 +69,7 @@ const meta = {
 				"required",
 				"indeterminate",
 				"size",
+				"visuallyHideLabel",
 				"_groupDefaultValue",
 				"_groupDisabled",
 			],
@@ -87,6 +91,7 @@ export const Playground: Story = {
 		required,
 		indeterminate,
 		size,
+		visuallyHideLabel,
 		_groupDefaultValue,
 		_groupDisabled,
 	}) => (
@@ -104,6 +109,7 @@ export const Playground: Story = {
 					required={required}
 					indeterminate={indeterminate}
 					size={size}
+					visuallyHideLabel={visuallyHideLabel}
 				/>
 			</section>
 			<section {...stylex.props(storyParts.section)}>
@@ -114,9 +120,9 @@ export const Playground: Story = {
 					defaultValue={_groupDefaultValue}
 					disabled={_groupDisabled}
 					size={size}>
-					<Checkbox value="email" label="Email" />
-					<Checkbox value="push" label="Push" />
-					<Checkbox value="sms" label="SMS" />
+					<Checkbox value="email" label="Email" visuallyHideLabel={visuallyHideLabel} />
+					<Checkbox value="push" label="Push" visuallyHideLabel={visuallyHideLabel} />
+					<Checkbox value="sms" label="SMS" visuallyHideLabel={visuallyHideLabel} />
 				</CheckboxGroup>
 			</section>
 		</div>
