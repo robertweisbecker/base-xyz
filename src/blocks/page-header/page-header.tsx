@@ -1,8 +1,7 @@
 import * as stylex from "@stylexjs/stylex";
 import type { StyleXStyles } from "@stylexjs/stylex";
 import { createElement, type ComponentProps, type ReactNode } from "react";
-import { Box, Stack } from "@/components/layout/layout";
-import { Text } from "@/components/text/text";
+import { Box, Stack, Text } from "@/components";
 import { tokens } from "@/theme/tokens.stylex";
 
 export type PageHeaderHeadingLevel = 1 | 2 | 3 | 4 | 5 | 6;

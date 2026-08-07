@@ -177,3 +177,7 @@ const progressParts = stylex.create({
 		},
 	},
 });
+
+export const Progress = {
+	Root, Label, Value, Track, Indicator,
+} as const;

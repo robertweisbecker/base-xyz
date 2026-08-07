@@ -7,14 +7,14 @@ import * as stylex from "@stylexjs/stylex";
 import { useState } from "react";
 import { Badge } from "@/components/badge/badge";
 import { Button } from "@/components/button/button";
-import * as Drawer from "@/components/drawer/drawer";
+import { Drawer } from "@/components/drawer/drawer";
 import { tokens } from "@/theme/tokens.stylex";
-import * as NavList from "./nav-list";
+import { NavList, type NavListSize } from "./nav-list";
 import { Separator } from "@/components/separator/separator";
 import { ShieldChevronIcon } from "@phosphor-icons/react/dist/csr/ShieldChevron";
 
 type StoryArgs = {
-	size: NavList.NavListSize;
+	size: NavListSize;
 	current: "overview" | "deployments" | "members";
 	disabled: boolean;
 	_icon: "House" | "Cube" | "None";

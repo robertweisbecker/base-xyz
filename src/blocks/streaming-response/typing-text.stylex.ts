@@ -61,8 +61,8 @@ export const typingTextStyles = stylex.create({
 		},
 	},
 	chunks: {
-		whiteSpace: "inherit",
 		display: "inline-block",
+		whiteSpace: "inherit",
 	},
 	caret: {
 		"--_streaming-text-caret-delay": "0ms",

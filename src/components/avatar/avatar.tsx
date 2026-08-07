@@ -6,7 +6,7 @@ import type { ReactNode } from "react";
 import { breakpointRanges } from "@/styles/constants.stylex";
 import { focusRing } from "@/styles/recipes/focus";
 import { tokens } from "@/theme/tokens.stylex";
-import * as Tooltip from "../tooltip/tooltip";
+import { Tooltip } from "@/components/tooltip/tooltip";
 
 const avatarSizeTokens = {
 	4: tokens["--space-4"],

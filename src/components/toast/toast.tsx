@@ -205,7 +205,7 @@ const toastParts = stylex.create({
 		},
 	},
 	content: {
-		padding: tokens["--space-4"],
+		padding: tokens["--space-3"],
 		gap: tokens["--space-3"],
 		overflow: "hidden",
 		alignItems: "center",

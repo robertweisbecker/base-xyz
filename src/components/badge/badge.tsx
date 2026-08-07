@@ -16,8 +16,8 @@ import type {
 import { focusRing } from "@/styles/recipes/focus";
 import { tokens } from "@/theme/tokens.stylex";
 
-import * as Tooltip from "../tooltip/tooltip";
-import { VisuallyHidden } from "../visually-hidden/visually-hidden";
+import { Tooltip } from "@/components/tooltip/tooltip";
+import { VisuallyHidden } from "@/components/visually-hidden/visually-hidden";
 
 const badgeParts = stylex.create({
 	root: {
@@ -72,38 +72,38 @@ const slotColors = stylex.create({
 		color: tokens["--fill-error"],
 	},
 	neutral: {
-		color: tokens["--fg-muted"],
+		color: tokens["--fill-neutral"],
 	},
 	warning: {
-		color: tokens["--fg-warning"],
+		color: tokens["--fill-warning"],
 	},
 	success: {
-		color: tokens["--fg-success"],
+		color: tokens["--fill-success"],
 	},
 });
 
 const labeledSlotSizes = stylex.create({
-	xs: { fontSize: ".875rem" },
-	sm: { fontSize: "0.75rem" },
+	xs: { fontSize: "0.75rem" },
+	sm: { fontSize: "0.875rem" },
 	md: { fontSize: "0.875rem" },
 });
 
 const iconOnlySlotSizes = stylex.create({
 	xs: { fontSize: "0.75rem" },
-	sm: { fontSize: "0.875rem" },
+	sm: { fontSize: "1rem" },
 	md: { fontSize: "1rem" },
 });
 
 const startSlotOffsets = stylex.create({
-	xs: { marginInlineStart: "-0.2em" },
-	sm: { marginInlineStart: "-0.125em" },
-	md: { marginInlineStart: "-0.35em" },
+	xs: { marginInlineStart: "-0.125em" },
+	sm: { marginInlineStart: "-0.2em" },
+	md: { marginInlineStart: "-0.25em" },
 });
 
 const endSlotOffsets = stylex.create({
 	xs: { marginInlineEnd: "-0.2em" },
-	sm: { marginInlineEnd: "-0.125em" },
-	md: { marginInlineEnd: "-0.35em" },
+	sm: { marginInlineEnd: "-0.2em" },
+	md: { marginInlineEnd: "-0.25em" },
 });
 
 const variantAppearance = stylex.create({
@@ -347,14 +347,14 @@ export function Badge({
 			tabIndex: tabIndex ?? (hasTooltip ? 0 : undefined),
 			children: (
 				<>
-					{renderSlot(startSlot, "start", size, iconOnly, hue)}
+					{renderSlot(startSlot, "start", size, iconOnly, hue, variant)}
 					{children != null ? (
 						<span ref={truncation.ref} {...stylex.props(badgeParts.label)}>
 							{children}
 						</span>
 					) : null}
 					{iconOnly && label ? <VisuallyHidden>{label}</VisuallyHidden> : null}
-					{renderSlot(endSlot, "end", size, iconOnly, hue)}
+					{renderSlot(endSlot, "end", size, iconOnly, hue, variant)}
 				</>
 			),
 		},
@@ -363,12 +363,19 @@ export function Badge({
 	return (
 		<Tooltip.Root disabled={!hasTooltip}>
 			<Tooltip.Trigger render={element} style={hasTooltip ? badgeParts.tooltipTrigger : undefined} />
-			<Tooltip.Popup>{resolvedTooltipText}</Tooltip.Popup>
+			<Tooltip.Popup positionerProps={{ side: "inline-start" }}>{resolvedTooltipText}</Tooltip.Popup>
 		</Tooltip.Root>
 	);
 }
 
-function renderSlot(slot: ReactNode, position: "start" | "end", size: BadgeSize, iconOnly: boolean, hue: BadgeHue) {
+function renderSlot(
+	slot: ReactNode,
+	position: "start" | "end",
+	size: BadgeSize,
+	iconOnly: boolean,
+	hue: BadgeHue,
+	variant: BadgeVariant,
+) {
 	if (slot == null) {
 		return null;
 	}
@@ -376,7 +383,7 @@ function renderSlot(slot: ReactNode, position: "start" | "end", size: BadgeSize,
 	const sx = stylex.props(
 		badgeParts.slot,
 		iconOnly ? iconOnlySlotSizes[size] : labeledSlotSizes[size],
-		slotColors[hue],
+		variant !== "solid" && slotColors[hue],
 		!iconOnly && position === "start" && startSlotOffsets[size],
 		!iconOnly && position === "end" && endSlotOffsets[size],
 	);

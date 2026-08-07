@@ -1,8 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import * as stylex from "@stylexjs/stylex";
 import { tokens } from "@/theme/tokens.stylex";
-import * as Meter from "./meter";
-
+import { Meter } from "./meter";
 const meta = {
 	title: "Components/Meter",
 	component: Meter.Root,

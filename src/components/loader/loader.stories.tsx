@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { Stack } from "../layout/layout";
+import { Stack } from "@/components/layout/layout";
 import { Text } from "@/components/text/text";
 import { Loader, type LoaderProps } from "./loader";
 

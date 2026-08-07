@@ -2,16 +2,10 @@ import { ChatCircleDotsIcon } from "@phosphor-icons/react/dist/csr/ChatCircleDot
 import { GitPullRequestIcon } from "@phosphor-icons/react/dist/csr/GitPullRequest";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import * as stylex from "@stylexjs/stylex";
-import { Badge, Code } from "@/components";
-import { Button } from "@/components/button/button";
-import { Checkbox } from "@/components/checkbox/checkbox";
-import { CodeBlock } from "@/components/code-block/code-block";
-import * as Collapsible from "@/components/collapsible/collapsible";
-import { Separator } from "@/components/separator/separator";
+import { Badge, Code, Button, Checkbox, CodeBlock, Collapsible, Separator } from "@/components";
 import { tokens } from "@/theme/tokens.stylex";
 
-import * as AgentActionApproval from "./agent-action-approval";
-
+import { AgentActionApproval } from "./agent-action-approval";
 const meta = {
 	title: "Blocks/Agent action approval",
 	component: AgentActionApproval.Root,

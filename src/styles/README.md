@@ -196,7 +196,10 @@ stylex.props(modalChromeStyles.surface, drawerParts.popup);
   part of the public composition API; Button and Badge size and align their
   `startSlot` and `endSlot` content entirely in StyleX. `popup-motion.css`
   bridges Base UI's generated payload wrappers only inside an explicitly
-  rendered popup `Viewport`.
+  rendered popup `Viewport`.   `scroll-fade.css` provides opt-in `xyz-scroll-fade*`
+  classes for scroll-edge mask fades (scroll-timeline driven, with a static
+  fallback). Size via `--scroll-fade-size` / `--scroll-fade-{t,b,s,e}-size`.
+  When overflow can come and go, gate the class with `useScrollFade`.
 - Themeable values always go through the single `tokens["--…"]` interface in
   `src/theme/tokens.stylex.ts`.
   Do not write raw custom-property strings in component styles; if a semantic

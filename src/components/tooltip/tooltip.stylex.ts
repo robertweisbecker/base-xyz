@@ -9,7 +9,7 @@ const styles = stylex.create({
 		[popupVars.background]: tokens["--bg-inverse"],
 		[popupVars.border]: tokens["--border"],
 		[popupVars.foreground]: tokens["--fg-inverse"],
-		borderRadius: tokens["--radius-md"],
+		borderRadius: tokens["--radius-sm"],
 		cornerShape: "superEllipse(1.5)",
 		paddingBlock: tokens["--space-1"],
 		paddingInline: tokens["--space-2"],

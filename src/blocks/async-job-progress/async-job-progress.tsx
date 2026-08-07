@@ -4,9 +4,8 @@ import { WarningIcon } from "@phosphor-icons/react/dist/csr/Warning";
 import * as stylex from "@stylexjs/stylex";
 import type { StyleXStyles } from "@stylexjs/stylex";
 import { createContext, type ComponentProps, createElement, useContext, useId } from "react";
-import { Badge, type BadgeHue } from "@/components/badge/badge";
-import { Loader } from "@/components/loader/loader";
-import * as ProgressPrimitive from "@/components/progress/progress";
+import { Badge, Loader, Progress as ProgressPrimitive } from "@/components";
+import type { BadgeHue } from "@/components";
 import { tokens } from "@/theme/tokens.stylex";
 
 
@@ -252,3 +251,14 @@ const indicatorStatus = stylex.create({
 		backgroundColor: tokens["--bg-error-primary"],
 	},
 });
+
+export const AsyncJobProgress = {
+	Root,
+	Header,
+	Heading,
+	Title,
+	Description,
+	Status,
+	Progress,
+	Actions,
+} as const;

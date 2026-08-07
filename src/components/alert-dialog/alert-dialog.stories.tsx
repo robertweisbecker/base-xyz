@@ -1,7 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { Button } from "../button/button";
-import * as AlertDialog from "./alert-dialog";
-
+import { Button } from "@/components/button/button";
+import { AlertDialog } from "./alert-dialog";
 type StoryArgs = {
 	defaultOpen: boolean;
 	_triggerDisabled: boolean;

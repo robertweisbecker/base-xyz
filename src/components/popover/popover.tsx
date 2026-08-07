@@ -11,7 +11,7 @@ import {
 } from "@/components/popover/popover.stylex";
 import { popupVars } from "@/components/popover/popover-vars.stylex";
 import { tokens } from "@/theme/tokens.stylex";
-import { CloseButton as CloseButtonControl } from "../button/close-button";
+import { CloseButton as CloseButtonControl } from "@/components/button/close-button";
 
 type StyledProps<T> = Omit<T, "className" | "style"> & {
 	className?: string;
@@ -87,7 +87,7 @@ export function Viewport({ ref, className, style, ...props }: PopoverViewportPro
 	return (
 		<BasePopover.Viewport
 			ref={ref}
-			className={[sxClassName, "ds-popup-viewport", className].filter(Boolean).join(" ")}
+			className={[sxClassName, "xyz-popup-viewport", className].filter(Boolean).join(" ")}
 			style={sxStyle}
 			{...props}
 		/>
@@ -241,4 +241,16 @@ const popoverTextParts = stylex.create({
 const popoverText = {
 	title: [textStyles.body, textWeightStyles.medium, popoverTextParts.title],
 	description: [textStyles.body, popoverTextParts.description],
+} as const;
+
+export const Popover = {
+	Root,
+	Trigger,
+	Popup,
+	Viewport,
+	Title,
+	Description,
+	Close,
+	CloseButton,
+	Footer,
 } as const;

@@ -10,7 +10,7 @@ import { tokens } from "@/theme/tokens.stylex";
 import { popupMotionStyles, popupPositionerStyles, popupViewportStyles } from "@/components/popover/popover.stylex";
 import { popupVars } from "@/components/popover/popover-vars.stylex";
 
-import { Checkmark } from "../selection-icons";
+import { Icon } from "@/components/icons";
 import { menuItemSizeStyles, menuItemStyles, menuItemVariantStyles } from "./menu-item.stylex";
 import type { MenuItemSize, MenuItemVariant } from "./menu.types";
 
@@ -105,7 +105,7 @@ export function Viewport({ ref, className, style, ...props }: MenuViewportProps)
 	return (
 		<BaseMenu.Viewport
 			ref={ref}
-			className={[sxClassName, "ds-popup-viewport", className].filter(Boolean).join(" ")}
+			className={[sxClassName, "xyz-popup-viewport", className].filter(Boolean).join(" ")}
 			style={sxStyle}
 			{...props}
 		/>
@@ -166,7 +166,7 @@ export function CheckboxItem({ ref, children, className, style, ...props }: Styl
 			style={sxStyle}
 			{...props}>
 			<BaseMenu.CheckboxItemIndicator keepMounted {...stylex.props(menuItemStyles.indicator)}>
-				<Checkmark width="1em" height="1em" />
+				<Icon.Checkmark width="1em" height="1em" />
 			</BaseMenu.CheckboxItemIndicator>
 			{children}
 		</BaseMenu.CheckboxItem>
@@ -546,4 +546,28 @@ const menuParts = stylex.create({
 const menuText = {
 	shortcut: [textStyles.supporting, textFamilyStyles.sans],
 	groupLabel: [textStyles.supporting, textWeightStyles.medium],
+} as const;
+
+export const Menu = {
+	Root,
+	Trigger,
+	Popup,
+	Viewport,
+	Item,
+	LinkItem,
+	CheckboxItem,
+	SwitchItem,
+	RadioItem,
+	SubmenuRoot,
+	SubmenuTrigger,
+	Group,
+	GroupLabel,
+	RadioGroup,
+	Separator,
+	CollapsibleGroup,
+	CollapsibleGroupTrigger,
+	CollapsibleGroupPanel,
+	ItemLabel,
+	ItemIcon,
+	ItemShortcut,
 } as const;

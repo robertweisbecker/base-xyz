@@ -9,7 +9,7 @@ import {
 	modalViewportStyles,
 } from "@/components/dialog/dialog.stylex";
 import { tokens } from "@/theme/tokens.stylex";
-import { CloseButton as CloseButtonControl } from "../button/close-button";
+import { CloseButton as CloseButtonControl } from "@/components/button/close-button";
 
 type StyledProps<T> = Omit<T, "className" | "style"> & {
 	className?: string;
@@ -242,3 +242,16 @@ const dialogScrollBehavior = stylex.create({
 		maxHeight: "none",
 	},
 });
+
+export const Dialog = {
+	Root,
+	Trigger,
+	Popup,
+	Title,
+	Description,
+	Header,
+	Body,
+	Footer,
+	Close,
+	CloseButton,
+} as const;

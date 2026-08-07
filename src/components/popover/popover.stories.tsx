@@ -2,9 +2,9 @@ import type { Meta, StoryObj } from "@storybook/react-vite";
 import * as stylex from "@stylexjs/stylex";
 import { tokens } from "@/theme/tokens.stylex";
 
-import { Button } from "../button/button";
-import { createPopoverHandle } from "../popup-handles";
-import * as Popover from "./popover";
+import { Button } from "@/components/button/button";
+import { createPopoverHandle } from "@/components/popup-handles";
+import { Popover } from "./popover";
 import { popupMotionStyles } from "./popover.stylex";
 
 type PopupSide = "top" | "right" | "bottom" | "left";

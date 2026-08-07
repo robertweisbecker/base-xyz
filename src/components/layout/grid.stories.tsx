@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from "@storybook/react-vite";
 import * as stylex from "@stylexjs/stylex";
 import { breakpoints } from "@/styles/constants.stylex";
 import { tokens } from "@/theme/tokens.stylex";
-import { Card, CardContent, CardTitle } from "../card/card";
+import { Card, CardContent, CardTitle } from "@/components/card/card";
 import { Box, Grid } from "./layout";
 
 const meta = {

@@ -30,7 +30,7 @@ export const tokens = stylex.defineVars({
 	"--color-gray-a3": "light-dark(var(--color-black-a3), var(--color-white-a3))",
 	"--color-gray-a4": "light-dark(var(--color-black-a4), var(--color-white-a4))",
 	"--color-gray-a5": "light-dark(var(--color-black-a5), var(--color-white-a5))",
-	"--color-gray-contrast": "var(--color-white)",
+	"--color-gray-contrast": "var(--color-gray-t1)",
 	"--fg-success-contrast": "var(--color-white)",
 	"--fg-error-contrast": "var(--color-white)",
 
@@ -46,8 +46,7 @@ export const tokens = stylex.defineVars({
 	"--color-accent-p2": "light-dark(hsl(207deg 96% 48%), oklch(72.163% 0.14676 246.443))",
 	"--color-accent-t1": "light-dark(oklch(53.072% 0.20334 262.925), oklch(69.483% 0.15223 255.815))",
 	"--color-accent-t2": "light-dark(oklch(28.072% 0.09716 262.82), oklch(87.811% 0.0624 249.313))",
-	"--fill-accent": "var(--color-accent-p1)",
-	"--fill-error": "var(--color-error-p1)",
+
 	"--color-white-a1": "hsl(0deg 0% 100% / 3%)",
 	"--color-white-a2": "hsl(0deg 0% 100% / 6%)",
 	"--color-white-a3": "hsl(0deg 0% 100% / 10%)",
@@ -58,6 +57,7 @@ export const tokens = stylex.defineVars({
 	"--color-black-a3": "hsl(0deg 0% 0% / 12%)",
 	"--color-black-a4": "hsl(0deg 0% 0% / 24%)",
 	"--color-black-a5": "hsl(0deg 0% 0% / 60%)",
+
 	"--color-success-s1": "light-dark(hsl(137 85% 98.5%), oklch(19.814% 0.07179 148.353))",
 	"--color-success-s2": "light-dark(oklch(98.491% 0.018 156.15), oklch(21% 0.08 148))",
 	"--color-success-c1": "light-dark(oklch(95.855% 0.0334 148.209), oklch(25.209% 0.08652 145.386))",
@@ -70,6 +70,7 @@ export const tokens = stylex.defineVars({
 	"--color-success-p2": "light-dark(hsl(152 56% 39%), oklch(71.462% 0.1267 158.328))",
 	"--color-success-t1": "light-dark(oklch(54.347% 0.15 159.526), oklch(78.941% 0.15826 161.688))",
 	"--color-success-t2": "light-dark(oklch(41.478% 0.1 164.273), oklch(88.191% 0.0941 163.629))",
+
 	"--color-error-s1": "light-dark(hsl(0 100% 99.25%), oklch(19% 0.032 14.353))",
 	"--color-error-s2": "light-dark(hsl(0 100% 98.5%), oklch(21% 0.06 19.353))",
 	"--color-error-c1": "light-dark(hsl(0 100% 96.75%), oklch(25.21% 0.09 22.386))",
@@ -82,6 +83,7 @@ export const tokens = stylex.defineVars({
 	"--color-error-p2": "light-dark(hsl(358 69% 55%), oklch(71.463% 0.18 27.125))",
 	"--color-error-t1": "light-dark(oklch(51.11% 0.21 29.2), oklch(75.463% 0.15 17.125))",
 	"--color-error-t2": "light-dark(hsl(351 63% 24%), oklch(85.463% 0.15 17.125))",
+
 	"--color-warning-s1": "light-dark(hsl(38 100% 98.5%), oklch(20% 0.04 72))",
 	"--color-warning-s2": "light-dark(hsl(36 100% 97%), oklch(22.5% 0.09 75))",
 	"--color-warning-c1": "light-dark(hsl(37 100% 92.5%), oklch(25% 0.06 85))",
@@ -94,12 +96,15 @@ export const tokens = stylex.defineVars({
 	"--color-warning-p2": "light-dark(hsl(24 100% 47%), oklch(71.5% 0.16 42.125))",
 	"--color-warning-t1": "light-dark(hsl(14deg 96% 52.5%), oklch(76.41% 0.16 54.7))",
 	"--color-warning-t2": "light-dark(hsl(16 50% 23%), oklch(86% 0.12 57.125))",
+
 	"--color-poppy-t1": "oklch(59.982% 0.216 32.49)",
 	"--color-poppy-t2": "oklch(50.279% 0.19 28.88)",
+
 	"--color-blue-t1": "light-dark(hsl(211deg 100% 49%), hsl(210deg 98% 66%))",
 	"--color-pink-t1": "light-dark(hsl(316deg 84% 51%), hsl(316deg 86% 68%))",
 	"--color-grape-t1": "light-dark(hsl(276deg 66% 54%), hsl(276deg 86% 70%))",
 	"--color-lime-t1": "light-dark(hsl(91deg 64% 38.75%), hsl(91deg 72% 56%))",
+
 	"--bg-canvas": "light-dark(var(--color-white), #050506)",
 	"--bg-inset": "var(--color-gray-s2)",
 	"--surface": "var(--color-gray-s1)",
@@ -108,8 +113,8 @@ export const tokens = stylex.defineVars({
 	"--elevated-hover": "color-mix(in srgb, var(--elevated), var(--fg) 5%)",
 	"--inset": "color-mix(in srgb, var(--surface), black 5%)",
 	"--surface-subtle": "var(--color-gray-a1)",
-	"--surface-subtle-hover": "var(--color-gray-a3)",
-	"--surface-subtle-active": "var(--color-gray-a2)",
+	"--surface-subtle-hover": "var(--color-gray-a2)",
+	"--surface-subtle-active": "var(--color-gray-a3)",
 	"--bg-highlight": "var(--color-gray-a1)",
 	"--fg": "var(--color-gray-t3)",
 	"--fg-muted": "var(--color-gray-t2)",
@@ -127,7 +132,7 @@ export const tokens = stylex.defineVars({
 	"--bg-accent-hover": "var(--color-accent-c2)",
 	"--bg-accent-active": "var(--color-accent-c3)",
 	"--fg-accent-contrast": "var(--color-white)",
-	"--bg-neutral": "var(--color-gray-p1)",
+	"--bg-neutral": "var(--color-gray-p3)",
 	"--bg-neutral-strong": "var(--color-gray-t2)",
 	"--fg-neutral-contrast": "var(--color-gray-s1)",
 	"--bg-error-primary": "var(--color-error-p1)",
@@ -137,6 +142,7 @@ export const tokens = stylex.defineVars({
 	"--bg-success-primary": "var(--color-success-p1)",
 	"--bg-success": "var(--color-success-c1)",
 	"--fg-warning": "var(--color-warning-t1)",
+
 	"--bg-warning-primary": "var(--color-warning-p1)",
 	"--bg-warning-subtle": "var(--color-warning-c1)",
 	"--fg-warning-contrast": "var(--color-black)",
@@ -145,9 +151,15 @@ export const tokens = stylex.defineVars({
 	"--fg-inverse-muted": "#b8bbc3",
 	"--focus": "var(--color-accent-p2)",
 	"--overlay": "light-dark(rgb(0 0 0 / 20%), rgb(0 0 0 / 48%))",
+	"--tooltip": "light-dark(var(--color-white), var(--color-gray-c2))",
 	"--fill-track": "var(--color-gray-a2)",
 	"--fill-disabled": "var(--color-gray-a1)",
-	"--tooltip": "light-dark(var(--color-white), var(--color-gray-c2))",
+	"--fill-neutral": "var(--color-gray-p1)",
+	"--fill-warning": "var(--color-warning-p1)",
+	"--fill-success": "var(--color-success-p1)",
+
+	"--fill-accent": "var(--color-accent-p1)",
+	"--fill-error": "var(--color-error-p1)",
 
 	"--radius-xxs": "0.1875rem",
 	"--radius-xs": "0.3125rem",

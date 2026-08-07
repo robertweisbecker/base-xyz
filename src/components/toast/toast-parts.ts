@@ -4,7 +4,7 @@ import { tokens } from "@/theme/tokens.stylex";
 
 const toastTextParts = stylex.create({
 	title: {
-		margin: 0,
+		marginBlockStart: "-.25em",
 	},
 	description: {
 		margin: 0,
@@ -27,6 +27,7 @@ const toastControlParts = stylex.create({
 	},
 	close: {
 		padding: 0,
+		borderRadius: tokens["--radius-sm"],
 		borderWidth: 0,
 		alignItems: "center",
 		backgroundColor: {
@@ -35,24 +36,26 @@ const toastControlParts = stylex.create({
 				"@media (hover: hover) and (pointer: fine)": tokens["--surface-subtle"],
 			},
 		},
-		color: "currentColor",
+		color: {
+			default: tokens["--fg-subtle"],
+			":hover": {
+				"@media (hover: hover) and (pointer: fine)": tokens["--fg-muted"],
+			},
+		},
 		display: "inline-flex",
 		flexShrink: 0,
 		justifyContent: "center",
+		height: tokens["--size-control-sm"],
+		width: tokens["--size-control-sm"],
 	},
 	stackedClose: {
-		borderRadius: tokens["--radius-sm"],
 		marginBlock: "-8px",
-		color: tokens["--fg-muted"],
+		alignSelf: "flex-start",
 		marginInlineEnd: "-8px",
-		height: "36px",
-		width: "36px",
 	},
 	anchoredClose: {
 		borderRadius: tokens["--radius-full"],
 		marginInlineEnd: "-6px",
-		height: "28px",
-		width: "28px",
 	},
 });
 

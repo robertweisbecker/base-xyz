@@ -46,19 +46,19 @@ export function ScrollArea({
 	size = "fill",
 	...props
 }: ScrollAreaProps) {
-	const rootSx = stylex.props(scrollAreaParts.root, sizeVariants[size], style);
-	const viewportSx = stylex.props(scrollAreaParts.viewport, !disableFade && scrollAreaParts.fade, viewportStyle);
-	const contentSx = stylex.props(contentStyle);
+	const rootSx = stylex.props(parts.root, sizeVariants[size], style);
+	const viewportSx = stylex.props(parts.viewport, !disableFade && parts.fade, viewportStyle);
+	const contentSx = stylex.props(parts.content, contentStyle);
 	const verticalScrollbarSx = stylex.props(
-		scrollAreaParts.scrollbar,
-		scrollbarVisibilityVariants[showScrollbar],
-		scrollbarVariants.vertical,
+		parts.scrollbar,
+		scrollbarVisibilities[showScrollbar],
+		scrollbarOrientations.vertical,
 		scrollbarStyle,
 	);
 	const horizontalScrollbarSx = stylex.props(
-		scrollAreaParts.scrollbar,
-		scrollbarVisibilityVariants[showScrollbar],
-		scrollbarVariants.horizontal,
+		parts.scrollbar,
+		scrollbarVisibilities[showScrollbar],
+		scrollbarOrientations.horizontal,
 		scrollbarStyle,
 	);
 
@@ -87,7 +87,7 @@ export function ScrollArea({
 					orientation="vertical"
 					className={[verticalScrollbarSx.className, scrollbarClassName].filter(Boolean).join(" ")}
 					style={verticalScrollbarSx.style}>
-					<BaseScrollArea.Thumb {...stylex.props(scrollAreaParts.thumb, thumbVariants.vertical)} />
+					<BaseScrollArea.Thumb {...stylex.props(parts.thumb, thumbOrientationVariants.vertical)} />
 				</BaseScrollArea.Scrollbar>
 			) : null}
 			{orientation !== "vertical" ? (
@@ -95,15 +95,15 @@ export function ScrollArea({
 					orientation="horizontal"
 					className={[horizontalScrollbarSx.className, scrollbarClassName].filter(Boolean).join(" ")}
 					style={horizontalScrollbarSx.style}>
-					<BaseScrollArea.Thumb {...stylex.props(scrollAreaParts.thumb, thumbVariants.horizontal)} />
+					<BaseScrollArea.Thumb {...stylex.props(parts.thumb, thumbOrientationVariants.horizontal)} />
 				</BaseScrollArea.Scrollbar>
 			) : null}
-			{orientation === "both" ? <BaseScrollArea.Corner {...stylex.props(scrollAreaParts.corner)} /> : null}
+			{orientation === "both" ? <BaseScrollArea.Corner {...stylex.props(parts.corner)} /> : null}
 		</BaseScrollArea.Root>
 	);
 }
 
-const scrollAreaParts = stylex.create({
+const parts = stylex.create({
 	root: {
 		overflow: "hidden",
 		position: "relative",
@@ -114,18 +114,24 @@ const scrollAreaParts = stylex.create({
 		height: "100%",
 		width: "100%",
 	},
+	content: {
+		"--scroll-area-overflow-x-end": "inherit",
+		"--scroll-area-overflow-x-start": "inherit",
+		"--scroll-area-overflow-y-end": "inherit",
+		"--scroll-area-overflow-y-start": "inherit",
+	},
 	fade: {
 		"--scroll-area-mask-x-end": {
-			"[data-overflow-x-end]": tokens["--space-6"],
+			"[data-overflow-x-end]": tokens["--space-10"],
 		},
 		"--scroll-area-mask-x-start": {
-			"[data-overflow-x-start]": tokens["--space-6"],
+			"[data-overflow-x-start]": tokens["--space-10"],
 		},
 		"--scroll-area-mask-y-end": {
-			"[data-overflow-y-end]": tokens["--space-6"],
+			"[data-overflow-y-end]": tokens["--space-10"],
 		},
 		"--scroll-area-mask-y-start": {
-			"[data-overflow-y-start]": tokens["--space-6"],
+			"[data-overflow-y-start]": tokens["--space-10"],
 		},
 		maskComposite: "intersect",
 		maskImage:
@@ -158,7 +164,7 @@ const scrollAreaParts = stylex.create({
 	},
 });
 
-const scrollbarVisibilityVariants = stylex.create({
+const scrollbarVisibilities = stylex.create({
 	always: {
 		opacity: 1,
 		pointerEvents: "auto",
@@ -201,7 +207,7 @@ const scrollbarVisibilityVariants = stylex.create({
 	},
 });
 
-const scrollbarVariants = stylex.create({
+const scrollbarOrientations = stylex.create({
 	vertical: {
 		insetBlock: 0,
 		marginBlock: tokens["--space-2"],
@@ -219,7 +225,7 @@ const scrollbarVariants = stylex.create({
 	},
 });
 
-const thumbVariants = stylex.create({
+const thumbOrientationVariants = stylex.create({
 	vertical: {
 		minHeight: "36px",
 		width: {

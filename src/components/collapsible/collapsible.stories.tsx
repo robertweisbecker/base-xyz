@@ -2,16 +2,15 @@ import type { Meta, StoryObj } from "@storybook/react-vite";
 import * as stylex from "@stylexjs/stylex";
 import { tokens } from "@/theme/tokens.stylex";
 
-import { CodeBlock } from "../code-block/code-block";
-import * as Collapsible from "./collapsible";
-
+import { CodeBlock } from "@/components/code-block/code-block";
+import { Collapsible, type CollapsibleTriggerSize, type CollapsibleTriggerVariant } from "./collapsible";
 type StoryArgs = {
 	defaultOpen: boolean;
 	disabled: boolean;
 	_hiddenUntilFound: boolean;
 	_iconSide: "start" | "end";
-	_size: Collapsible.CollapsibleTriggerSize;
-	_variant: Collapsible.CollapsibleTriggerVariant;
+	_size: CollapsibleTriggerSize;
+	_variant: CollapsibleTriggerVariant;
 };
 
 const meta = {
@@ -141,7 +140,7 @@ function Example({
 	defaultOpen?: boolean;
 	disabled?: boolean;
 	label: string;
-	variant?: Collapsible.CollapsibleTriggerVariant;
+	variant?: CollapsibleTriggerVariant;
 }) {
 	return (
 		<Collapsible.Root defaultOpen={defaultOpen} disabled={disabled}>

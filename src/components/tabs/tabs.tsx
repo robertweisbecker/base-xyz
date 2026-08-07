@@ -391,3 +391,7 @@ const endSlotOffsetStyles = stylex.create({
 	md: { marginInlineEnd: "-0.25rem" },
 	lg: { marginInlineEnd: "-0.1875rem" },
 });
+
+export const Tabs = {
+	Root, List, Tab, Content, Panel,
+} as const;

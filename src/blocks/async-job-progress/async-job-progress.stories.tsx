@@ -1,12 +1,9 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import * as stylex from "@stylexjs/stylex";
-import { Button } from "@/components/button/button";
-import * as Collapsible from "@/components/collapsible/collapsible";
-import { Separator } from "@/components/separator/separator";
+import { Button, Collapsible, Separator } from "@/components";
 import { tokens } from "@/theme/tokens.stylex";
 
-import * as AsyncJobProgress from "./async-job-progress";
-
+import { AsyncJobProgress, type AsyncJobHeadingLevel } from "./async-job-progress";
 const meta = {
 	title: "Blocks/Async job progress",
 	component: AsyncJobProgress.Root,
@@ -24,7 +21,7 @@ function JobHeader({
 	title,
 }: {
 	description: string;
-	level?: AsyncJobProgress.AsyncJobHeadingLevel;
+	level?: AsyncJobHeadingLevel;
 	title: string;
 }) {
 	return (

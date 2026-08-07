@@ -5,10 +5,9 @@ import type { Meta, StoryObj } from "@storybook/react-vite";
 import * as stylex from "@stylexjs/stylex";
 import { tokens } from "@/theme/tokens.stylex";
 
-import { Button, IconButton } from "../button/button";
-import { createTooltipHandle } from "../popup-handles";
-import * as Tooltip from "./tooltip";
-
+import { Button, IconButton } from "@/components/button/button";
+import { createTooltipHandle } from "@/components/popup-handles";
+import { Tooltip } from "./tooltip";
 type PopupSide = "top" | "right" | "bottom" | "left";
 type PopupAlign = "start" | "center" | "end";
 type StoryArgs = {

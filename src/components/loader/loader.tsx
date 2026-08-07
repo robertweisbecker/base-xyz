@@ -88,7 +88,7 @@ const loaderParts = stylex.create({
 		strokeDasharray: "14 86",
 		strokeLinecap: "round",
 		strokeWidth: 3,
-		animationDuration: `calc(${tokens["--motion-duration-long"]} + ${tokens["--motion-duration-long"]} + ${tokens["--motion-duration-long"]})`,
+		animationDuration: `calc(${tokens["--motion-duration-long"]} * 5)`,
 		animationIterationCount: "infinite",
 		animationName: {
 			default: changeArcLength,

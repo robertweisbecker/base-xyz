@@ -2,7 +2,7 @@
  * InputGroup.Addon owns direct icon geometry. Artwork and semantic weight
  * remain caller-controlled.
  */
-.ds-input-group-addon > svg {
+.xyz-input-group-addon > svg {
 	block-size: var(--_input-group-icon-size);
 	display: block;
 	flex: none;

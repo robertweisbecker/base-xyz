@@ -3,9 +3,8 @@ import * as stylex from "@stylexjs/stylex";
 import { useEffect, useState } from "react";
 import { Text } from "@/components/text/text";
 import { tokens } from "@/theme/tokens.stylex";
-import { Button } from "../button/button";
-import * as Progress from "./progress";
-
+import { Button } from "@/components/button/button";
+import { Progress } from "./progress";
 function SimulatedProgress() {
 	const [value, setValue] = useState<number | null>(null);
 

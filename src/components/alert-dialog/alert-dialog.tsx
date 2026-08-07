@@ -142,3 +142,14 @@ const alertDialogParts = stylex.create({
 		paddingBlockEnd: tokens["--space-4"],
 	},
 });
+
+export const AlertDialog = {
+	Root,
+	Trigger,
+	Close,
+	Popup,
+	Title,
+	Description,
+	Header,
+	Footer,
+} as const;

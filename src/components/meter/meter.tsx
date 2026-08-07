@@ -309,3 +309,7 @@ const meterParts = stylex.create({
 		boxShadow: "none",
 	},
 });
+
+export const Meter = {
+	Root, Label, Value, Track, Indicator,
+} as const;

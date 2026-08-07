@@ -37,8 +37,8 @@ import { Fragment, useMemo, useState, type ComponentProps, type ReactNode } from
 import { Badge } from "@/components/badge/badge";
 import { Button, IconButton } from "@/components/button/button";
 import { Checkbox } from "@/components/checkbox/checkbox";
-import * as InputGroup from "@/components/input-group/input-group";
-import * as Menu from "@/components/menu/menu";
+import { InputGroup } from "@/components/input-group/input-group";
+import { Menu } from "@/components/menu/menu";
 import { VisuallyHidden } from "@/components/visually-hidden/visually-hidden";
 import { tokens } from "@/theme/tokens.stylex";
 
@@ -777,9 +777,9 @@ const tableParts = stylex.create({
 		textAlign: "center",
 	},
 	utilityColumn: {
+		paddingInline: tokens["--space-2"],
 		textAlign: "center",
 		minWidth: "1%",
-		paddingInline: tokens["--space-2"],
 	},
 	iconButton: {
 		font: "inherit",

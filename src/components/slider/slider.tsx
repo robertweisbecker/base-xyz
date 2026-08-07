@@ -236,7 +236,7 @@ function mergeClassNames(...classNames: Array<string | undefined>) {
 
 const sliderParts = stylex.create({
 	root: {
-		"--_slider-fill": tokens["--bg-primary"],
+		"--_slider-fill": tokens["--bg-neutral"],
 		gap: tokens["--space-2"],
 		display: "flex",
 		flexDirection: "column",
@@ -360,8 +360,9 @@ const sliderParts = stylex.create({
 		width: 0,
 		"::before": {
 			borderRadius: tokens["--radius-full"],
-			backgroundColor: tokens["--border-input"],
+			backgroundColor: tokens["--fill-neutral"],
 			content: '""',
+			opacity: 0.5,
 			position: "absolute",
 			transform: "translate(-50%, -50%)",
 			height: tokens["--space-1"],
@@ -375,12 +376,14 @@ const sliderParts = stylex.create({
 		backgroundColor: tokens["--fg-accent-contrast"],
 		boxShadow: {
 			"[data-disabled]": "none",
-			default: tokens["--shadow-sm"],
+			default: null,
+			":has(input:focus-visible)": "0 0 0 8px var(--bg-canvas)",
 		},
 		outlineColor: {
 			"[data-disabled]": "transparent",
-			default: tokens["--bg-primary"],
-			":has(input:focus-visible)": tokens["--focus"],
+			default: "var(--_slider-fill)",
+			":active:not([data-disabled])": tokens["--fg-accent"],
+			":has(input:focus-visible)": tokens["--fg"],
 			':has(input:focus-visible[aria-invalid="true"])': tokens["--bg-error-primary"],
 			":has(input:focus-visible[data-invalid])": tokens["--bg-error-primary"],
 		},
@@ -390,7 +393,7 @@ const sliderParts = stylex.create({
 		},
 		outlineWidth: {
 			"[data-disabled]": 0,
-			default: 1,
+			default: 2,
 			":has(input:focus-visible)": 2,
 		},
 		position: "relative",
@@ -398,8 +401,8 @@ const sliderParts = stylex.create({
 		transitionProperty: "background-color, box-shadow, scale",
 		transitionTimingFunction: tokens["--motion-ease-out"],
 		zIndex: 2,
-		height: "calc(var(--_slider-visual-size) - 2px)",
-		width: "calc(var(--_slider-visual-size) - 2px)",
+		height: "calc(var(--_slider-visual-size) - 4px)",
+		width: "calc(var(--_slider-visual-size) - 4px)",
 		"::before": {
 			borderRadius: tokens["--radius-full"],
 			content: '""',
@@ -416,15 +419,25 @@ const sliderParts = stylex.create({
 
 const sizeVariants = stylex.create({
 	sm: {
-		"--_slider-tap-size": tokens["--size-control-sm"],
-		"--_slider-visual-size": tokens["--space-5"],
+		"--_slider-tap-size": tokens["--size-control-md"],
+		"--_slider-visual-size": tokens["--size-indicator-sm"],
 	},
 	md: {
 		"--_slider-tap-size": tokens["--size-control-md"],
-		"--_slider-visual-size": tokens["--space-6"],
+		"--_slider-visual-size": tokens["--size-indicator-md"],
 	},
 	lg: {
 		"--_slider-tap-size": tokens["--size-control-lg"],
 		"--_slider-visual-size": tokens["--space-7"],
 	},
 });
+
+export const Slider = {
+	Root,
+	Header,
+	Label,
+	Value,
+	Row,
+	Control,
+	Thumb,
+} as const;

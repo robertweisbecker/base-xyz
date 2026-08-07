@@ -13,7 +13,7 @@ import { focusRing } from "@/styles/recipes/focus";
 import { pressable } from "@/styles/recipes/transitions";
 import { tokens } from "@/theme/tokens.stylex";
 import { VisuallyHidden } from "@/components/visually-hidden/visually-hidden";
-import { Checkmark, Minus } from "../selection-icons";
+import { Icon } from "@/components/icons";
 
 export type CheckboxSize = "sm" | "md";
 
@@ -112,9 +112,9 @@ export function Checkbox({
 						render={(indicatorProps, state) => (
 							<span {...indicatorProps}>
 								{state.indeterminate ? (
-									<Minus width="100%" height="100%" strokeWidth={3} />
+									<Icon.Minus width="100%" height="100%" strokeWidth={3} />
 								) : (
-									<Checkmark width="100%" height="100%" strokeWidth={3} />
+									<Icon.Checkmark width="100%" height="100%" strokeWidth={3} />
 								)}
 							</span>
 						)}

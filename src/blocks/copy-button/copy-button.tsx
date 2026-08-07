@@ -2,9 +2,8 @@ import { CopyIcon } from "@phosphor-icons/react/dist/csr/Copy";
 import * as stylex from "@stylexjs/stylex";
 import { useCallback, type ReactNode, useId, useRef, useState } from "react";
 import { flushSync } from "react-dom";
-import { Button, type ButtonProps, IconButton } from "@/components/button/button";
-import { Checkmark } from "@/components/selection-icons";
-import * as Toast from "@/components/toast";
+import { Button, IconButton, Icon, Toast } from "@/components";
+import type { ButtonProps } from "@/components";
 import { iconSwapTransition } from "@/styles/recipes/transitions";
 
 export type CopyButtonProps = Omit<ButtonProps, "children"> & {
@@ -113,7 +112,7 @@ function CopyButtonControl({
 					iconSwapTransition.to,
 					copied ? iconSwapTransition.visible : iconSwapTransition.hidden,
 				)}>
-				<Checkmark />
+				<Icon.Checkmark strokeWidth={props.size === "md" || props.size === "lg" ? 2 : 1.5} />
 			</span>
 		</span>
 	);

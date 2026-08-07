@@ -6,14 +6,13 @@ import { UsersIcon } from "@phosphor-icons/react/dist/csr/Users";
 import * as stylex from "@stylexjs/stylex";
 import { useState } from "react";
 import { Avatar } from "@/components/avatar/avatar";
-import * as NavList from "@/components/nav-list/nav-list";
+import { NavList } from "@/components/nav-list/nav-list";
 import { tokens } from "@/theme/tokens.stylex";
-import * as Sidebar from "./sidebar";
-
+import { Sidebar, type SidebarCollapseMode, type SidebarSide } from "./sidebar";
 type StoryArgs = {
-	collapseMode: Sidebar.SidebarCollapseMode;
+	collapseMode: SidebarCollapseMode;
 	defaultCollapsed: boolean;
-	side: Sidebar.SidebarSide;
+	side: SidebarSide;
 };
 
 const meta = {
@@ -138,7 +137,7 @@ function ModeExample({
 	defaultCollapsed = false,
 }: {
 	label: string;
-	collapseMode: Sidebar.SidebarCollapseMode;
+	collapseMode: SidebarCollapseMode;
 	defaultCollapsed?: boolean;
 }) {
 	return (

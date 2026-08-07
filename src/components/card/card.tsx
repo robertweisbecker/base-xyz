@@ -25,8 +25,8 @@ import type {
 } from "@/theme/theme-props.types";
 import { tokens } from "@/theme/tokens.stylex";
 
-import { Heading, type HeadingProps } from "../heading/heading";
-import { Text, type TextProps } from "../text/text";
+import { Heading, type HeadingProps } from "@/components/heading/heading";
+import { Text, type TextProps } from "@/components/text/text";
 import { cardVars } from "./card-vars.stylex";
 
 type StyledProps<T, ThemeProps = {}> = Omit<

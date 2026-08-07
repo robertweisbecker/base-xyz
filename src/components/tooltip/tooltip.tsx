@@ -6,7 +6,7 @@ import { createContext, useContext, useRef, type MouseEvent, type RefObject } fr
 import { zIndex } from "@/styles/constants.stylex";
 import { popupArrowStyles, popupPositionerStyles, popupViewportStyles } from "@/components/popover/popover.stylex";
 import { tokens } from "@/theme/tokens.stylex";
-import { CloseButton as CloseButtonControl } from "../button/close-button";
+import { CloseButton as CloseButtonControl } from "@/components/button/close-button";
 import { tooltipStyles } from "./tooltip.stylex";
 
 type StyledProps<T> = Omit<T, "className" | "style"> & {
@@ -89,7 +89,7 @@ export function Viewport({ ref, className, style, ...props }: TooltipViewportPro
 	return (
 		<BaseTooltip.Viewport
 			ref={ref}
-			className={[sxClassName, "ds-popup-viewport", className].filter(Boolean).join(" ")}
+			className={[sxClassName, "xyz-popup-viewport", className].filter(Boolean).join(" ")}
 			style={sxStyle}
 			{...props}
 		/>
@@ -211,3 +211,13 @@ const tooltipParts = stylex.create({
 		minHeight: tokens["--size-control-sm"],
 	},
 });
+
+export const Tooltip = {
+	Provider,
+	Root,
+	Trigger,
+	Popup,
+	Viewport,
+	Close,
+	CloseButton,
+} as const;

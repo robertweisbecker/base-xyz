@@ -4,22 +4,19 @@ import { PaperclipIcon } from "@phosphor-icons/react/dist/csr/Paperclip";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import * as stylex from "@stylexjs/stylex";
 import { useState, type ReactNode } from "react";
-import * as Menu from "@/components/menu/menu";
-import { Separator } from "@/components/separator/separator";
-import * as Toolbar from "@/components/toolbar/toolbar";
+import { Menu, Separator, Toolbar } from "@/components";
 import { tokens } from "@/theme/tokens.stylex";
 
-import * as ModelSelector from "../model-selector/model-selector";
+import { ModelSelector } from "@/blocks/model-selector/model-selector";
 import {
 	exampleDefaultValue,
 	exampleEffortOptions,
 	exampleModelGroups,
 	exampleSpeedOptions,
 	getExampleModelLabel,
-} from "../model-selector/model-selector.examples";
-import * as PromptComposer from "./prompt-composer";
-
-type ComposerDemoProps = Pick<PromptComposer.PromptComposerRootProps, "clearOnSubmit" | "defaultValue" | "disabled">;
+} from "@/blocks/model-selector/model-selector.examples";
+import { PromptComposer, type PromptComposerRootProps } from "./prompt-composer";
+type ComposerDemoProps = Pick<PromptComposerRootProps, "clearOnSubmit" | "defaultValue" | "disabled">;
 
 const meta = {
 	title: "Blocks/Prompt composer",

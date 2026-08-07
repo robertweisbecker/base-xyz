@@ -2,10 +2,10 @@ import type { Meta, StoryObj } from "@storybook/react-vite";
 import * as stylex from "@stylexjs/stylex";
 import { tokens } from "@/theme/tokens.stylex";
 
-import { createLinkPreviewHandle } from "../popup-handles";
-import { popupMotionStyles } from "../popover/popover.stylex";
-import * as LinkPreview from "./link-preview";
-import { Link } from "../link/link";
+import { createLinkPreviewHandle } from "@/components/popup-handles";
+import { popupMotionStyles } from "@/components/popover/popover.stylex";
+import { LinkPreview } from "./link-preview";
+import { Link } from "@/components/link/link";
 
 type PopupSide = "top" | "right" | "bottom" | "left";
 type PopupAlign = "start" | "center" | "end";

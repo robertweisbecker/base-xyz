@@ -4,16 +4,22 @@ import type { Meta, StoryObj } from "@storybook/react-vite";
 import * as stylex from "@stylexjs/stylex";
 import { Separator } from "@/components/separator/separator";
 import { tokens } from "@/theme/tokens.stylex";
-import * as Breadcrumbs from "./breadcrumbs";
+import { Breadcrumbs } from "./breadcrumbs";
+import type { LinkColor } from "@/components/link/link";
 
 const meta = {
 	title: "Components/Breadcrumbs",
 	component: Breadcrumbs.Root,
 	args: {
 		size: "md",
+		color: "accent",
 	},
 	argTypes: {
 		label: { control: "text" },
+		color: {
+			control: "inline-radio",
+			options: ["inherit", "accent", "neutral"],
+		},
 		size: {
 			control: "inline-radio",
 			options: ["sm", "md"],
@@ -28,14 +34,18 @@ type Story = StoryObj<typeof meta>;
 export const Playground: Story = {
 	render: (args) => (
 		<Breadcrumbs.Root {...args}>
-			<Breadcrumbs.Link href="#" startSlot={<HouseIcon aria-hidden weight="bold" />}>
+			<Breadcrumbs.Link href="#" startSlot={<HouseIcon aria-hidden weight="duotone" />} color={args.color as LinkColor}>
 				Home
 			</Breadcrumbs.Link>
 			<Breadcrumbs.Separator />
-			<Breadcrumbs.Link href="#">Projects</Breadcrumbs.Link>
+			<Breadcrumbs.Link href="#" color={args.color as LinkColor}>
+				Docs
+			</Breadcrumbs.Link>
 			<Breadcrumbs.Separator />
-			<Breadcrumbs.Current startSlot={<BookOpenIcon aria-hidden weight="bold" />}>Design system</Breadcrumbs.Current>
-			<Breadcrumbs.Copy text="/projects/design-system" />
+			<Breadcrumbs.Current startSlot={<BookOpenIcon aria-hidden weight="duotone" />}>
+				Getting started
+			</Breadcrumbs.Current>
+			<Breadcrumbs.Copy text="/docs/getting-started" />
 		</Breadcrumbs.Root>
 	),
 };
@@ -58,11 +68,11 @@ export const Examples: Story = {
 			<Separator />
 			<Example title="Compact">
 				<Breadcrumbs.Root size="sm">
-					<Breadcrumbs.Link href="#" startSlot={<HouseIcon aria-hidden weight="bold" />}>
+					<Breadcrumbs.Link href="#" startSlot={<HouseIcon aria-hidden weight="duotone" />}>
 						Home
 					</Breadcrumbs.Link>
 					<Breadcrumbs.Separator />
-					<Breadcrumbs.Current>Worker Analytics</Breadcrumbs.Current>
+					<Breadcrumbs.Current>Getting started</Breadcrumbs.Current>
 				</Breadcrumbs.Root>
 			</Example>
 			<Separator />

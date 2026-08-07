@@ -1,12 +1,11 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import * as stylex from "@stylexjs/stylex";
 import { useState } from "react";
-import { Separator } from "@/components/separator/separator";
+import { Separator } from "@/components";
 import { breakpoints } from "@/styles/constants.stylex";
 import { tokens } from "@/theme/tokens.stylex";
 
-import * as PasswordField from "./password-field";
-
+import { PasswordField } from "./password-field";
 const passwordRequirements = [/.{8,}/, /[0-9]/, /[a-z]/, /[A-Z]/] as const;
 
 const meta = {

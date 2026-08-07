@@ -244,7 +244,6 @@ const storyStyles = stylex.create({
 		fontSize: tokens["--font-size-1"],
 		letterSpacing: tokens["--letter-spacing-1"],
 		lineHeight: tokens["--line-height-1"],
-		textTransform: "capitalize",
 	},
 	rowLabel: {
 		margin: 0,
@@ -252,7 +251,6 @@ const storyStyles = stylex.create({
 		fontSize: tokens["--font-size-1"],
 		letterSpacing: tokens["--letter-spacing-1"],
 		lineHeight: tokens["--line-height-1"],
-		textTransform: "capitalize",
 	},
 	row: {
 		gap: tokens["--space-3"],

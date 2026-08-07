@@ -5,9 +5,8 @@ import * as stylex from "@stylexjs/stylex";
 import type { StyleXStyles } from "@stylexjs/stylex";
 import { createContext, type ComponentProps, useContext, useState } from "react";
 import { fieldStyles } from "@/components/field/field.stylex";
-import * as InputGroup from "@/components/input-group/input-group";
-import * as MeterPrimitive from "@/components/meter/meter";
-import { Toggle, type ToggleProps } from "@/components/toggle/toggle";
+import { InputGroup, Meter as MeterPrimitive, Toggle } from "@/components";
+import type { ToggleIconButtonProps } from "@/components";
 import { iconSwapTransition } from "@/styles/recipes/transitions";
 import { tokens } from "@/theme/tokens.stylex";
 
@@ -38,7 +37,13 @@ export type PasswordFieldLabelProps = StyledProps<Field.Label.Props>;
 export type PasswordFieldControlProps = ComponentProps<typeof InputGroup.Root>;
 export type PasswordFieldInputProps = Omit<ComponentProps<typeof InputGroup.Input>, "defaultValue" | "type" | "value">;
 export type PasswordFieldActionsProps = ComponentProps<typeof InputGroup.Actions>;
-export type PasswordFieldVisibilityToggleProps = Omit<ToggleProps, "pressed" | "onPressedChange">;
+export type PasswordFieldVisibilityToggleProps = Omit<
+	ToggleIconButtonProps,
+	"icon" | "label" | "pressed" | "onPressedChange"
+> & {
+	icon?: ToggleIconButtonProps["icon"];
+	label?: string;
+};
 export type PasswordFieldDescriptionProps = StyledProps<Field.Description.Props>;
 export type PasswordFieldErrorProps = StyledProps<Field.Error.Props>;
 export type PasswordFieldMeterProps = Omit<
@@ -129,10 +134,11 @@ export function Input({ onChange, ...props }: PasswordFieldInputProps) {
 export const Actions = InputGroup.Actions;
 
 export function VisibilityToggle({
-	"aria-label": ariaLabel,
-	children,
+	icon,
+	label,
 	shape = "square",
 	size = "xs",
+	tooltip = false,
 	variant = "plain",
 	...props
 }: PasswordFieldVisibilityToggleProps) {
@@ -140,39 +146,42 @@ export function VisibilityToggle({
 
 	return (
 		<Toggle
-			aria-label={ariaLabel ?? (visible ? "Hide password" : "Show password")}
+			{...props}
+			icon={
+				icon ?? (
+					<span aria-hidden {...stylex.props(iconSwapTransition.slot)}>
+						<EyeIcon
+							aria-hidden
+							size={"16"}
+							weight="bold"
+							{...stylex.props(
+								iconSwapTransition.icon,
+								iconSwapTransition.from,
+								visible ? iconSwapTransition.hidden : iconSwapTransition.visible,
+							)}
+						/>
+
+						<EyeSlashIcon
+							aria-hidden
+							size={"16"}
+							weight="bold"
+							{...stylex.props(
+								iconSwapTransition.icon,
+								iconSwapTransition.to,
+								visible ? iconSwapTransition.visible : iconSwapTransition.hidden,
+							)}
+						/>
+					</span>
+				)
+			}
+			label={label ?? (visible ? "Hide password" : "Show password")}
 			pressed={visible}
 			onPressedChange={setVisible}
 			shape={shape}
 			size={size}
+			tooltip={tooltip}
 			variant={variant}
-			{...props}>
-			{children ?? (
-				<span aria-hidden {...stylex.props(iconSwapTransition.slot)}>
-					<EyeIcon
-						aria-hidden
-						size={"16"}
-						weight="bold"
-						{...stylex.props(
-							iconSwapTransition.icon,
-							iconSwapTransition.from,
-							visible ? iconSwapTransition.hidden : iconSwapTransition.visible,
-						)}
-					/>
-
-					<EyeSlashIcon
-						aria-hidden
-						size={"16"}
-						weight="bold"
-						{...stylex.props(
-							iconSwapTransition.icon,
-							iconSwapTransition.to,
-							visible ? iconSwapTransition.visible : iconSwapTransition.hidden,
-						)}
-					/>
-				</span>
-			)}
-		</Toggle>
+		/>
 	);
 }
 
@@ -253,3 +262,15 @@ const parts = stylex.create({
 		marginBlockStart: tokens["--space-2"],
 	},
 });
+
+export const PasswordField = {
+	Root,
+	Label,
+	Control,
+	Input,
+	Actions,
+	VisibilityToggle,
+	Description,
+	Error,
+	Meter,
+} as const;

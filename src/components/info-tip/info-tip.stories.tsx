@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import * as stylex from "@stylexjs/stylex";
 import { tokens } from "@/theme/tokens.stylex";
-import { Text } from "../text/text";
+import { Text } from "@/components/text/text";
 import { InfoTip } from "./info-tip";
 
 const sizes = ["xs", "sm", "md", "lg"] as const;

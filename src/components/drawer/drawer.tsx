@@ -314,3 +314,20 @@ const drawerParts = stylex.create({
 		borderTopWidth: "1px",
 	},
 });
+
+export const Drawer = {
+	Root,
+	Trigger,
+	Portal,
+	Close,
+	Backdrop,
+	Viewport,
+	Popup,
+	Content,
+	Title,
+	Description,
+	Handle,
+	Header,
+	Body,
+	Footer,
+} as const;

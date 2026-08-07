@@ -451,3 +451,14 @@ const sidebarParts = stylex.create({
 		transform: "translateX(1px)",
 	},
 });
+
+export const Sidebar = {
+	Root,
+	Panel,
+	Content,
+	Header,
+	Footer,
+	Title,
+	Description,
+	Trigger,
+} as const;

@@ -4,12 +4,7 @@ import { LockIcon } from "@phosphor-icons/react/dist/csr/Lock";
 import { StarIcon } from "@phosphor-icons/react/dist/csr/Star";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import * as stylex from "@stylexjs/stylex";
-import { Avatar } from "@/components/avatar/avatar";
-import { Badge } from "@/components/badge/badge";
-import * as Breadcrumbs from "@/components/breadcrumbs/breadcrumbs";
-import { Button } from "@/components/button/button";
-import { Separator } from "@/components/separator/separator";
-import * as Tabs from "@/components/tabs/tabs";
+import { Avatar, Badge, Breadcrumbs, Button, Separator, Tabs } from "@/components";
 import { PageHeader } from "./page-header";
 
 const meta = {

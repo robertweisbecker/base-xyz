@@ -34,6 +34,7 @@ import { menuItemSizeStyles, menuItemStyles, menuItemVariantStyles } from "@/com
 import { ScrollArea } from "@/components/scroll-area/scroll-area";
 import { VisuallyHidden } from "@/components/visually-hidden/visually-hidden";
 import { tokens } from "@/theme/tokens.stylex";
+import { SmileyMeltingIcon } from "@phosphor-icons/react";
 
 type StyledProps<T> = Omit<T, "className" | "style"> & {
 	className?: string;
@@ -159,8 +160,8 @@ export function Root<ItemValue = unknown>({
 			{...(props as AutocompleteRootProps<unknown>)}
 			inline
 			open
-			autoHighlight={autoHighlight}
-			keepHighlight>
+			autoHighlight={inline ? false : autoHighlight}
+			keepHighlight={inline ? false : true}>
 			<CommandPaletteContext.Provider value={contextValue}>
 				<div
 					aria-label={label}
@@ -195,9 +196,9 @@ export function Root<ItemValue = unknown>({
 	);
 }
 
-export function Trigger({ children = "Open command palette", shortcut = "⌘K", ...props }: CommandPaletteTriggerProps) {
+export function Trigger({ children = "Search", shortcut = "⌘K", ...props }: CommandPaletteTriggerProps) {
 	return (
-		<Button variant="secondary" {...props}>
+		<Button variant="neutral" {...props}>
 			{children}
 			{shortcut ? <Shortcut>{shortcut}</Shortcut> : undefined}
 		</Button>
@@ -349,7 +350,9 @@ export function Item({
 				<span {...stylex.props(commandPaletteParts.itemLabel)}>{children}</span>
 				{description ? <span {...stylex.props(commandPaletteParts.itemDescription)}>{description}</span> : null}
 			</span>
-			{endSlot ?? (shortcut ? <Shortcut>{shortcut}</Shortcut> : null)}
+			<span {...stylex.props(commandPaletteParts.itemEndSlot)}>
+				{endSlot ?? (shortcut ? <Shortcut>{shortcut}</Shortcut> : null)}
+			</span>
 		</Autocomplete.Item>
 	);
 }
@@ -360,7 +363,7 @@ export function Empty({
 		<EmptyState
 			size="sm"
 			headingLevel="h3"
-			icon={<MagnifyingGlassIcon aria-hidden weight="duotone" />}
+			icon={<SmileyMeltingIcon aria-hidden weight="duotone" />}
 			title="No commands found"
 			description="Try a different search term."
 		/>
@@ -427,13 +430,13 @@ const commandPaletteParts = stylex.create({
 	},
 	popup: {
 		padding: 0,
+		borderRadius: tokens["--radius-xl"],
 		overflow: "hidden",
 		boxShadow: {
-			default: tokens["--shadow-md"],
+			default: tokens["--shadow-sm"],
 			":focus-within": `inset 0 0 0 2px ${tokens["--focus"]}, ${tokens["--shadow-md"]}`,
 		},
-		maxWidth: "680px",
-		borderRadius: tokens["--radius-lg"],
+		maxWidth: tokens["--size-container-3xl"],
 	},
 	panel: {
 		overflow: "hidden",
@@ -450,20 +453,22 @@ const commandPaletteParts = stylex.create({
 		borderWidth: "1px",
 	},
 	inputGroup: {
-		gap: tokens["--space-3"],
-		paddingBlock: tokens["--space-3"],
+		gap: tokens["--space-2"],
 		paddingInline: tokens["--space-4"],
 		alignItems: "center",
-		borderBlockEndColor: tokens["--border"],
-		borderBlockEndStyle: "solid",
-		borderBlockEndWidth: "1px",
+		// borderBlockEndColor: tokens["--border"],
+		// borderBlockEndStyle: "solid",
+		// borderBlockEndWidth: "1px",
 		display: "flex",
+		paddingBlockEnd: tokens["--space-2"],
+		paddingBlockStart: tokens["--space-4"],
 	},
 	inputSlot: {
 		alignItems: "center",
 		color: tokens["--fg-subtle"],
 		display: "inline-flex",
 		flexShrink: 0,
+		fontSize: tokens["--font-size-3"],
 		justifyContent: "center",
 		height: tokens["--space-5"],
 		width: tokens["--space-5"],
@@ -471,6 +476,8 @@ const commandPaletteParts = stylex.create({
 	input: {
 		flex: "1 1 auto",
 		color: tokens["--fg"],
+		fontSize: tokens["--font-size-3"],
+		letterSpacing: tokens["--letter-spacing-3"],
 		minWidth: 0,
 	},
 	inputEndSlot: {
@@ -482,9 +489,7 @@ const commandPaletteParts = stylex.create({
 		maxHeight: "min(420px, 52dvh)",
 	},
 	listContent: {
-		paddingInline: tokens["--space-1"],
-		paddingBlockEnd: tokens["--space-4"],
-		paddingBlockStart: tokens["--space-1"],
+		padding: tokens["--space-1"],
 	},
 	list: {
 		display: "flex",
@@ -499,13 +504,13 @@ const commandPaletteParts = stylex.create({
 		paddingInline: tokens["--space-3"],
 		color: tokens["--fg-subtle"],
 		fontSize: tokens["--font-size-1"],
-		fontWeight: tokens["--font-weight-medium"],
 		letterSpacing: tokens["--letter-spacing-1"],
 		lineHeight: tokens["--line-height-1"],
 	},
 	item: {
-		gridTemplateColumns: `${tokens["--space-6"]} minmax(0, 1fr) auto`,
 		paddingBlock: tokens["--space-2"],
+		gridTemplateColumns: `${tokens["--space-5"]} minmax(0, 1fr) auto`,
+		paddingInlineEnd: tokens["--space-4"],
 	},
 	itemIcon: {
 		gridColumn: "1",
@@ -514,10 +519,9 @@ const commandPaletteParts = stylex.create({
 		color: tokens["--fg-subtle"],
 		display: "inline-flex",
 		justifyContent: "center",
-		// height: tokens["--space-6"],
-		// width: tokens["--space-6"],
-		fontSize: tokens["--font-size-3"],
+		height: tokens["--space-6"],
 		minHeight: "1lh",
+		width: tokens["--space-6"],
 	},
 	itemText: {
 		gridColumn: "2",
@@ -527,13 +531,18 @@ const commandPaletteParts = stylex.create({
 	},
 	itemLabel: {
 		overflow: "hidden",
+		color: tokens["--fg"],
+		fontSize: tokens["--font-size-2"],
+		fontWeight: tokens["--font-weight-medium"],
+		letterSpacing: tokens["--letter-spacing-2"],
+		lineHeight: tokens["--line-height-2"],
 		textOverflow: "ellipsis",
 		whiteSpace: "nowrap",
 		minWidth: 0,
 	},
 	itemDescription: {
 		overflow: "hidden",
-		color: tokens["--fg-subtle"],
+		color: tokens["--fg-muted"],
 		fontSize: tokens["--font-size-1"],
 		letterSpacing: tokens["--letter-spacing-1"],
 		lineHeight: tokens["--line-height-1"],
@@ -541,9 +550,30 @@ const commandPaletteParts = stylex.create({
 		whiteSpace: "nowrap",
 		minWidth: 0,
 	},
+	itemEndSlot: {
+		gridColumn: "3",
+		overflow: "hidden",
+		alignItems: "center",
+		color: tokens["--fg-subtle"],
+		display: "inline-flex",
+		flexShrink: 0,
+		fontSize: tokens["--font-size-1"],
+		fontWeight: tokens["--font-weight-medium"],
+		letterSpacing: tokens["--letter-spacing-1"],
+		lineHeight: tokens["--line-height-1"],
+		textOverflow: "ellipsis",
+		whiteSpace: "nowrap",
+		minWidth: 0,
+	},
 	empty: {
-		paddingBlock: tokens["--space-6"],
-		paddingInline: tokens["--space-4"],
+		padding: {
+			default: tokens["--space-1"],
+			":empty": 0,
+		},
+		height: {
+			default: null,
+			":empty": 0,
+		},
 	},
 	loading: {
 		gap: tokens["--space-2"],
@@ -572,14 +602,29 @@ const commandPaletteParts = stylex.create({
 	shortcut: {
 		borderRadius: tokens["--radius-xs"],
 		paddingBlock: "1px",
-		paddingInline: tokens["--space-1"],
+		paddingInline: tokens["--space-1-5"],
 		backgroundColor: tokens["--surface-subtle"],
 		color: tokens["--fg-muted"],
 		fontFamily: "inherit",
-		fontSize: "10px",
+		fontSize: tokens["--font-size-1"],
 		fontWeight: tokens["--font-weight-medium"],
 		letterSpacing: tokens["--letter-spacing-1"],
 		lineHeight: tokens["--line-height-1"],
 		whiteSpace: "nowrap",
 	},
 });
+
+export const CommandPalette = {
+	Root,
+	Trigger,
+	Input,
+	List,
+	Group,
+	GroupLabel,
+	Items,
+	Item,
+	Empty,
+	Loading,
+	Footer,
+	Shortcut,
+} as const;

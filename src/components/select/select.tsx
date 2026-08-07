@@ -15,9 +15,9 @@ import { popupMotionStyles, popupStaticPositionerStyles } from "@/components/pop
 import { popupVars } from "@/components/popover/popover-vars.stylex";
 import { tokens } from "@/theme/tokens.stylex";
 
-import { menuItemSizeStyles, menuItemStyles, menuItemVariantStyles } from "../menu/menu-item.stylex";
-import type { MenuItemVariant } from "../menu/menu.types";
-import { Checkmark } from "../selection-icons";
+import { menuItemSizeStyles, menuItemStyles, menuItemVariantStyles } from "@/components/menu/menu-item.stylex";
+import type { MenuItemVariant } from "@/components/menu/menu.types";
+import { Icon } from "@/components/icons";
 
 const HOVER_WHEN_INACTIVE = ":hover:not([data-disabled]):not([data-popup-open]):not([data-pressed])";
 const SelectSizeContext = createContext<FieldSize>("md");
@@ -264,7 +264,7 @@ export function Item({ ref, children, className, style, variant = "primary", ...
 			style={sx.style}
 			{...props}>
 			<BaseSelect.ItemIndicator keepMounted className={stylex.props(menuItemStyles.indicator).className}>
-				<Checkmark width="1em" height="1em" />
+				<Icon.Checkmark width="1em" height="1em" />
 			</BaseSelect.ItemIndicator>
 			<BaseSelect.ItemText {...stylex.props(menuItemStyles.label, selectParts.itemText)}>
 				{children}
@@ -515,3 +515,14 @@ const selectParts = stylex.create({
 		position: "fixed",
 	},
 });
+
+export const Select = {
+	Root,
+	Label,
+	Trigger,
+	Popup,
+	List,
+	Item,
+	Group,
+	Separator,
+} as const;

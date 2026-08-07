@@ -1,9 +1,13 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import * as stylex from "@stylexjs/stylex";
-import type { ButtonSize, ButtonVariant } from "@/components/button/button";
+import type { ButtonSize, ButtonVariant } from "@/components";
 import { tokens } from "@/theme/tokens.stylex";
 
-import * as ModelSelector from "./model-selector";
+import {
+	ModelSelector,
+	type ModelSelectorGroup,
+	type ModelSelectorValue,
+} from "./model-selector";
 import {
 	exampleDefaultValue,
 	exampleEffortOptions,
@@ -66,8 +70,8 @@ function ModelSelectorSample({
 	size,
 	variant,
 }: {
-	defaultValue: ModelSelector.ModelSelectorValue;
-	groups: readonly ModelSelector.ModelSelectorGroup[];
+	defaultValue: ModelSelectorValue;
+	groups: readonly ModelSelectorGroup[];
 	label: string;
 	showEffort?: boolean;
 	size: ButtonSize;
@@ -123,7 +127,7 @@ const iconlessModelGroups = [
 			},
 		],
 	},
-] satisfies readonly ModelSelector.ModelSelectorGroup[];
+] satisfies readonly ModelSelectorGroup[];
 
 const storyParts = stylex.create({
 	stack: {

@@ -22,8 +22,8 @@ import type {
 	SpacingProps,
 } from "@/theme/theme-props.types";
 import { tokens } from "@/theme/tokens.stylex";
-import { Heading } from "../heading/heading";
-import { Text } from "../text/text";
+import { Heading } from "@/components/heading/heading";
+import { Text } from "@/components/text/text";
 
 export type EmptyStateSize = "sm" | "md" | "lg";
 export type EmptyStateHeadingLevel = "h1" | "h2" | "h3" | "h4" | "h5" | "h6";
@@ -161,13 +161,13 @@ const emptyStateStyles = stylex.create({
 const rootSizeStyles = stylex.create({
 	sm: {
 		gap: tokens["--space-3"],
-		paddingBlock: tokens["--space-6"],
+		paddingBlock: tokens["--space-4"],
 		paddingInline: tokens["--space-4"],
 		minHeight: "10rem",
 	},
 	md: {
 		gap: tokens["--space-4"],
-		paddingBlock: tokens["--space-10"],
+		paddingBlock: tokens["--space-8"],
 		paddingInline: tokens["--space-6"],
 		minHeight: "14rem",
 	},

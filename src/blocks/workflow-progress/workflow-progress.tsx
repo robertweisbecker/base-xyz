@@ -1,13 +1,12 @@
 import { ListChecksIcon } from "@phosphor-icons/react/dist/csr/ListChecks";
-import { Circle } from "@/components/selection-icons";
+import { Icon, Badge, Loader } from "@/components";
+import type { BadgeHue, BadgeProps } from "@/components";
 import { ClockIcon } from "@phosphor-icons/react/dist/csr/Clock";
 import { WarningDiamondIcon } from "@phosphor-icons/react/dist/csr/WarningDiamond";
 import * as stylex from "@stylexjs/stylex";
 import type { StyleXStyles } from "@stylexjs/stylex";
 import { textStyles, textWeightStyles } from "@/components/text/text.stylex";
 import { createContext, type ComponentProps, type ReactNode, useContext } from "react";
-import { Badge, type BadgeHue, type BadgeProps } from "@/components/badge/badge";
-import { Loader } from "@/components/loader/loader";
 import { tokens } from "@/theme/tokens.stylex";
 
 type StyledProps<T> = Omit<T, "style"> & {
@@ -133,7 +132,7 @@ function useWorkflowProgressStatus(part: string) {
 function renderStatusIcon(status: WorkflowProgressStatus) {
 	switch (status) {
 		case "queued":
-			return <Circle aria-hidden />;
+			return <Icon.Circle aria-hidden />;
 		case "running":
 			return <Loader aria-hidden />;
 		case "complete":
@@ -234,3 +233,16 @@ const markerStatus = stylex.create({
 	approval: { backgroundColor: tokens["--bg-accent"], color: tokens["--bg-primary"] },
 	error: { backgroundColor: tokens["--bg-error"], color: tokens["--bg-error-primary"] },
 });
+
+export const WorkflowProgress = {
+	Root,
+	Item,
+	Marker,
+	Content,
+	Header,
+	Title,
+	Description,
+	Metadata,
+	Meta,
+	Status,
+} as const;

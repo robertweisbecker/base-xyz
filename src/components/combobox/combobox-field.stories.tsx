@@ -8,7 +8,7 @@ import * as stylex from "@stylexjs/stylex";
 import { type ReactNode, useState } from "react";
 import { fieldStyles, fieldTextStyles } from "@/components/field/field.stylex";
 import { focusRing } from "@/styles/recipes/focus";
-import { menuItemStyles, menuItemVariantStyles } from "../menu/menu-item.stylex";
+import { menuItemStyles, menuItemVariantStyles } from "@/components/menu/menu-item.stylex";
 import { popupMotionStyles, popupPositionerStyles } from "@/components/popover/popover.stylex";
 import { popupVars } from "@/components/popover/popover-vars.stylex";
 import { pressable } from "@/styles/recipes/transitions";
@@ -16,7 +16,7 @@ import { tokens } from "@/theme/tokens.stylex";
 
 import { Button } from "@/components/button/button";
 import { ComboboxField, ComboboxMultiple, type ComboboxMultipleProps } from "@/components/combobox/combobox-field";
-import { Checkmark } from "@/components/selection-icons";
+import { Icon } from "@/components/icons";
 import { Text } from "@/components/text/text";
 
 const frameworks = ["React", "Vue", "Svelte", "Solid", "Preact", "Qwik", "Angular"];
@@ -418,7 +418,7 @@ function PopupContent({ label }: { label: string }) {
 								value={item}
 								className={stylex.props(menuItemStyles.item, menuItemVariantStyles.default).className}>
 								<Combobox.ItemIndicator keepMounted className={stylex.props(menuItemStyles.indicator).className}>
-									<Checkmark width="1em" height="1em" strokeWidth={1.5} />
+									<Icon.Checkmark width="1em" height="1em" strokeWidth={1.5} />
 								</Combobox.ItemIndicator>
 								<span {...stylex.props(menuItemStyles.label)}>{item}</span>
 							</Combobox.Item>

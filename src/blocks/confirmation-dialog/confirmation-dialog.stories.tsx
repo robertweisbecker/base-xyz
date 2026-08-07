@@ -1,13 +1,10 @@
 import { PaperPlaneTiltIcon } from "@phosphor-icons/react/dist/csr/PaperPlaneTilt";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import * as stylex from "@stylexjs/stylex";
-import { Button } from "@/components/button/button";
-import { Checkbox } from "@/components/checkbox/checkbox";
-import { Separator } from "@/components/separator/separator";
+import { Button, Checkbox, Separator } from "@/components";
 import { tokens } from "@/theme/tokens.stylex";
 
-import * as ConfirmationDialog from "./confirmation-dialog";
-
+import { ConfirmationDialog } from "./confirmation-dialog";
 const meta = {
 	title: "Blocks/Confirmation dialog",
 	component: ConfirmationDialog.Root,

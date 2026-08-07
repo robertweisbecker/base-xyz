@@ -1,5 +1,5 @@
 import * as stylex from "@stylexjs/stylex";
-import { shimmerTextVars } from "./shimmer-text-vars.stylex";
+import { shimmerTextVars } from "@/styles/recipes/shimmer-text-vars.stylex";
 import { tokens } from "@/theme/tokens.stylex";
 
 const shimmerSweep = stylex.keyframes({

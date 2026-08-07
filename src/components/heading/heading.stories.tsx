@@ -1,9 +1,9 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import * as stylex from "@stylexjs/stylex";
 import { tokens } from "@/theme/tokens.stylex";
-import { Text } from "../text/text";
+import { Text } from "@/components/text/text";
 import { Heading } from "./heading";
-import { Code } from "../code/code";
+import { Code } from "@/components/code/code";
 
 const sizeOptions = ["1", "2", "3", "4", "5", "6", "7", "8", "9"] as const;
 

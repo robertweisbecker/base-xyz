@@ -3,7 +3,7 @@ import type { StyleXStyles } from "@stylexjs/stylex";
 import { type ComponentProps } from "react";
 import { tokens } from "@/theme/tokens.stylex";
 
-import { ScrollArea } from "../scroll-area/scroll-area";
+import { ScrollArea } from "@/components/scroll-area/scroll-area";
 
 export type CodeBlockProps = Omit<ComponentProps<"pre">, "className" | "style"> & {
 	className?: string;

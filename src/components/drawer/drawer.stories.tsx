@@ -3,12 +3,11 @@ import * as stylex from "@stylexjs/stylex";
 import { useState } from "react";
 import { tokens } from "@/theme/tokens.stylex";
 
-import * as AlertDialog from "../alert-dialog/alert-dialog";
-import { Button } from "../button/button";
-import { createDrawerHandle } from "../popup-handles";
-import { Textarea } from "../textarea/textarea";
-import * as Drawer from "./drawer";
-
+import { AlertDialog } from "@/components/alert-dialog/alert-dialog";
+import { Button } from "@/components/button/button";
+import { createDrawerHandle } from "@/components/popup-handles";
+import { Textarea } from "@/components/textarea/textarea";
+import { Drawer } from "./drawer";
 type StoryArgs = {
 	defaultOpen: boolean;
 	disablePointerDismissal: boolean;

@@ -1,6 +1,6 @@
 import { Collapsible as BaseCollapsible } from "@base-ui/react/collapsible";
 import { useRender } from "@base-ui/react/use-render";
-import { Icon as CollapsibleIcon } from "@/components/collapsible/collapsible";
+import { Collapsible } from "@/components/collapsible/collapsible";
 import { ArrowLeftIcon, ArrowRightIcon } from "@phosphor-icons/react";
 import * as stylex from "@stylexjs/stylex";
 import type { StyleXStyles } from "@stylexjs/stylex";
@@ -29,9 +29,9 @@ import {
 	menuItemVars,
 	menuItemVariantStyles,
 } from "@/components/menu/menu-item.stylex";
-import * as Popover from "@/components/popover/popover";
+import { Popover } from "@/components/popover/popover";
 import { textSizeStyles, textStyles, textWeightStyles } from "@/components/text/text.stylex";
-import * as Tooltip from "@/components/tooltip/tooltip";
+import { Tooltip } from "@/components/tooltip/tooltip";
 import { VisuallyHidden } from "@/components/visually-hidden/visually-hidden";
 import { focusRing } from "@/styles/recipes/focus";
 import { tokens } from "@/theme/tokens.stylex";
@@ -302,7 +302,7 @@ function Row({
 						disclosure === "collapse" && navListParts.collapseIcon,
 						disclosure === "collapse" && collapseOpen && navListParts.collapseIconOpen,
 					)}>
-					{disclosure === "collapse" ? <CollapsibleIcon /> : <ArrowRightIcon />}
+					{disclosure === "collapse" ? <Collapsible.Icon /> : <ArrowRightIcon />}
 				</span>
 			) : null}
 		</>
@@ -1247,3 +1247,17 @@ const navListText = stylex.create({
 		color: tokens["--fg-muted"],
 	},
 });
+
+export const NavList = {
+	NavListPresentationProvider,
+	Root,
+	Section,
+	Item,
+	CollapsibleGroup,
+	CollapsibleGroupTrigger,
+	CollapsibleGroupPanel,
+	Drilldown,
+	DrilldownPanel,
+	DrilldownTrigger,
+	DrilldownBack,
+} as const;

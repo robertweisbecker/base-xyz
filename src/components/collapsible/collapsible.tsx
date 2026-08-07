@@ -6,7 +6,7 @@ import type { ComponentProps } from "react";
 import { tokens } from "@/theme/tokens.stylex";
 import { focusRing } from "@/styles/recipes/focus";
 
-import type { ButtonShape, ButtonSize } from "../button/button";
+import type { ButtonShape, ButtonSize } from "@/components/button/button";
 
 const HOVER_WHEN_INACTIVE = ":hover:not([data-disabled]):not([data-panel-open])";
 
@@ -294,3 +294,7 @@ const triggerVariants = stylex.create({
 		width: "fit-content",
 	},
 });
+
+export const Collapsible = {
+	Root, Trigger, Panel, Content, Icon,
+} as const;

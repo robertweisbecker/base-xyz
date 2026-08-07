@@ -1,6 +1,18 @@
 import { useLayoutEffect, useState, type ReactNode } from "react";
 import * as stylex from "@stylexjs/stylex";
-import * as Blocks from "./blocks";
+import {
+	AgentActionApproval,
+	AsyncJobProgress,
+	ConfirmationDialog,
+	CopyButton,
+	GoalToolbar,
+	ModelSelector,
+	PageHeader,
+	PasswordField,
+	PromptComposer,
+	StreamingResponse,
+	WorkflowProgress,
+} from "./blocks";
 import { BlueprintIcon } from "@phosphor-icons/react/dist/csr/Blueprint";
 import { CopyIcon } from "@phosphor-icons/react/dist/csr/Copy";
 import { FolderOpenIcon } from "@phosphor-icons/react/dist/csr/FolderOpen";
@@ -41,6 +53,7 @@ import {
 	IconButton,
 	InfoTip,
 	InputGroup,
+	Item,
 	Link,
 	LinkPreview,
 	Loader,
@@ -394,6 +407,21 @@ function getComponentCells(): GalleryCell[] {
 			),
 		},
 		{
+			title: "Item",
+			content: (
+				<Item
+					description="Organize files and collaborators."
+					endSlot={
+						<Badge hue="accent" size="sm" variant="subtle">
+							Beta
+						</Badge>
+					}
+					label="Projects"
+					startSlot={<FolderOpenIcon aria-hidden size="1.25em" weight="duotone" />}
+				/>
+			),
+		},
+		{
 			title: "Link",
 			content: (
 				<div {...stylex.props(styles.linkStack)}>
@@ -622,10 +650,7 @@ function getComponentCells(): GalleryCell[] {
 			title: "Toggle",
 			content: (
 				<div>
-					<Toggle>
-						<TextBIcon aria-hidden weight="bold" />
-						Bold
-					</Toggle>
+					<Toggle startSlot={<TextBIcon aria-hidden weight="bold" />}>Bold</Toggle>
 				</div>
 			),
 		},
@@ -634,12 +659,12 @@ function getComponentCells(): GalleryCell[] {
 			content: (
 				<div {...stylex.props(styles.toggleRow)}>
 					<ToggleGroup defaultValue={["bold"]}>
-						<Toggle value="thumbs-down" aria-label="Thumbs down">
-							<ThumbsDownIcon aria-hidden weight="regular" />
-						</Toggle>
-						<Toggle value="thumbs-up" aria-label="Thumbs up">
-							<ThumbsUpIcon aria-hidden weight="regular" />
-						</Toggle>
+						<Toggle
+							icon={<ThumbsDownIcon aria-hidden weight="regular" />}
+							label="Thumbs down"
+							value="thumbs-down"
+						/>
+						<Toggle icon={<ThumbsUpIcon aria-hidden weight="regular" />} label="Thumbs up" value="thumbs-up" />
 					</ToggleGroup>
 				</div>
 			),
@@ -681,125 +706,125 @@ function getBlockCells(): GalleryCell[] {
 		{
 			title: "AgentActionApproval",
 			content: (
-				<Blocks.AgentActionApproval.Root>
-					<Blocks.AgentActionApproval.Header>
-						<Blocks.AgentActionApproval.Title>Approve command</Blocks.AgentActionApproval.Title>
+				<AgentActionApproval.Root>
+					<AgentActionApproval.Header>
+						<AgentActionApproval.Title>Approve command</AgentActionApproval.Title>
 						<Badge hue="accent" size="sm">
 							Review
 						</Badge>
-					</Blocks.AgentActionApproval.Header>
-					<Blocks.AgentActionApproval.Content>
-						<Blocks.AgentActionApproval.Summary>
-							<Blocks.AgentActionApproval.Icon>
+					</AgentActionApproval.Header>
+					<AgentActionApproval.Content>
+						<AgentActionApproval.Summary>
+							<AgentActionApproval.Icon>
 								<BlueprintIcon aria-hidden size={14} weight="duotone" />
-							</Blocks.AgentActionApproval.Icon>
-							<Blocks.AgentActionApproval.SummaryContent>
-								<Blocks.AgentActionApproval.Action>Run npm test</Blocks.AgentActionApproval.Action>
-								<Blocks.AgentActionApproval.ActionDescription>
+							</AgentActionApproval.Icon>
+							<AgentActionApproval.SummaryContent>
+								<AgentActionApproval.Action>Run npm test</AgentActionApproval.Action>
+								<AgentActionApproval.ActionDescription>
 									Executes the repository test suite.
-								</Blocks.AgentActionApproval.ActionDescription>
-							</Blocks.AgentActionApproval.SummaryContent>
-						</Blocks.AgentActionApproval.Summary>
-						<Blocks.AgentActionApproval.Details>
-							<Blocks.AgentActionApproval.Detail>
-								<Blocks.AgentActionApproval.DetailLabel>cwd</Blocks.AgentActionApproval.DetailLabel>
-								<Blocks.AgentActionApproval.DetailValue>/Sites/stylex</Blocks.AgentActionApproval.DetailValue>
-							</Blocks.AgentActionApproval.Detail>
-						</Blocks.AgentActionApproval.Details>
-					</Blocks.AgentActionApproval.Content>
-					<Blocks.AgentActionApproval.Footer>
-						<Blocks.AgentActionApproval.Actions>
+								</AgentActionApproval.ActionDescription>
+							</AgentActionApproval.SummaryContent>
+						</AgentActionApproval.Summary>
+						<AgentActionApproval.Details>
+							<AgentActionApproval.Detail>
+								<AgentActionApproval.DetailLabel>cwd</AgentActionApproval.DetailLabel>
+								<AgentActionApproval.DetailValue>/Sites/stylex</AgentActionApproval.DetailValue>
+							</AgentActionApproval.Detail>
+						</AgentActionApproval.Details>
+					</AgentActionApproval.Content>
+					<AgentActionApproval.Footer>
+						<AgentActionApproval.Actions>
 							<Button size="sm" variant="ghost">
 								Deny
 							</Button>
 							<Button size="sm">Allow</Button>
-						</Blocks.AgentActionApproval.Actions>
-					</Blocks.AgentActionApproval.Footer>
-				</Blocks.AgentActionApproval.Root>
+						</AgentActionApproval.Actions>
+					</AgentActionApproval.Footer>
+				</AgentActionApproval.Root>
 			),
 		},
 		{
 			title: "AsyncJobProgress",
 			content: (
-				<Blocks.AsyncJobProgress.Root status="running" value={68}>
-					<Blocks.AsyncJobProgress.Header>
-						<Blocks.AsyncJobProgress.Heading>
-							<Blocks.AsyncJobProgress.Title>Publishing package</Blocks.AsyncJobProgress.Title>
-							<Blocks.AsyncJobProgress.Description>Bundling component artifacts.</Blocks.AsyncJobProgress.Description>
-						</Blocks.AsyncJobProgress.Heading>
-						<Blocks.AsyncJobProgress.Status />
-					</Blocks.AsyncJobProgress.Header>
-					<Blocks.AsyncJobProgress.Progress />
-					<Blocks.AsyncJobProgress.Actions>
+				<AsyncJobProgress.Root status="running" value={68}>
+					<AsyncJobProgress.Header>
+						<AsyncJobProgress.Heading>
+							<AsyncJobProgress.Title>Publishing package</AsyncJobProgress.Title>
+							<AsyncJobProgress.Description>Bundling component artifacts.</AsyncJobProgress.Description>
+						</AsyncJobProgress.Heading>
+						<AsyncJobProgress.Status />
+					</AsyncJobProgress.Header>
+					<AsyncJobProgress.Progress />
+					<AsyncJobProgress.Actions>
 						<Button size="sm" variant="ghost">
 							Cancel
 						</Button>
-					</Blocks.AsyncJobProgress.Actions>
-				</Blocks.AsyncJobProgress.Root>
+					</AsyncJobProgress.Actions>
+				</AsyncJobProgress.Root>
 			),
 		},
 		{
 			title: "ConfirmationDialog",
 			content: (
-				<Blocks.ConfirmationDialog.Root
+				<ConfirmationDialog.Root
 					trigger={
 						<Button size="sm" variant="secondary">
 							Open confirmation
 						</Button>
 					}
 					successToast={false}>
-					<Blocks.ConfirmationDialog.Header>
-						<Blocks.ConfirmationDialog.Visual>
+					<ConfirmationDialog.Header>
+						<ConfirmationDialog.Visual>
 							<BlueprintIcon aria-hidden size={20} weight="duotone" />
-						</Blocks.ConfirmationDialog.Visual>
-						<Blocks.ConfirmationDialog.Title>Confirm release</Blocks.ConfirmationDialog.Title>
-						<Blocks.ConfirmationDialog.Description>
+						</ConfirmationDialog.Visual>
+						<ConfirmationDialog.Title>Confirm release</ConfirmationDialog.Title>
+						<ConfirmationDialog.Description>
 							This will publish the current component build.
-						</Blocks.ConfirmationDialog.Description>
-					</Blocks.ConfirmationDialog.Header>
-					<Blocks.ConfirmationDialog.Body>Version 0.0.0 is ready for review.</Blocks.ConfirmationDialog.Body>
-					<Blocks.ConfirmationDialog.Footer>
-						<Blocks.ConfirmationDialog.Actions>
-							<Blocks.ConfirmationDialog.Cancel size="sm">Cancel</Blocks.ConfirmationDialog.Cancel>
-							<Blocks.ConfirmationDialog.Confirm size="sm">Confirm</Blocks.ConfirmationDialog.Confirm>
-						</Blocks.ConfirmationDialog.Actions>
-					</Blocks.ConfirmationDialog.Footer>
-				</Blocks.ConfirmationDialog.Root>
+						</ConfirmationDialog.Description>
+					</ConfirmationDialog.Header>
+					<ConfirmationDialog.Body>Version 0.0.0 is ready for review.</ConfirmationDialog.Body>
+					<ConfirmationDialog.Footer>
+						<ConfirmationDialog.Actions>
+							<ConfirmationDialog.Cancel size="sm">Cancel</ConfirmationDialog.Cancel>
+							<ConfirmationDialog.Confirm size="sm">Confirm</ConfirmationDialog.Confirm>
+						</ConfirmationDialog.Actions>
+					</ConfirmationDialog.Footer>
+				</ConfirmationDialog.Root>
 			),
 		},
 		{
 			title: "CopyButton",
 			content: (
-				<Blocks.CopyButton value="yo@bob.fyi" variant="ghost">
+				<CopyButton value="yo@bob.fyi" variant="ghost">
 					yo@bob.fyi
-				</Blocks.CopyButton>
+				</CopyButton>
 			),
 		},
 		{
 			title: "GoalToolbar",
 			content: (
 				<div className={stylex.props(styles.blockWide).className}>
-					<Blocks.GoalToolbar active description="Redesign the demo gallery" />
+					<GoalToolbar active description="Redesign the demo gallery" />
 				</div>
 			),
 		},
 		{
 			title: "ModelSelector",
 			content: (
-				<Blocks.ModelSelector.Root
+				<ModelSelector.Root
 					groups={exampleModelGroups}
 					effortOptions={exampleEffortOptions}
 					speedOptions={exampleSpeedOptions}
 					defaultValue={exampleDefaultValue}>
-					<Blocks.ModelSelector.Trigger size="sm" variant="secondary" />
-					<Blocks.ModelSelector.Popup />
-				</Blocks.ModelSelector.Root>
+					<ModelSelector.Trigger size="sm" variant="secondary" />
+					<ModelSelector.Popup />
+				</ModelSelector.Root>
 			),
 		},
 		{
 			title: "PageHeader",
 			content: (
-				<Blocks.PageHeader
+				<PageHeader
 					title="Component library"
 					description="Primitives, blocks, and verification stories."
 					headingLevel={2}
@@ -823,92 +848,92 @@ function getBlockCells(): GalleryCell[] {
 		{
 			title: "PasswordField",
 			content: (
-				<Blocks.PasswordField.Root defaultValue="correct-horse-2" style={styles.blockField}>
-					<Blocks.PasswordField.Label>Password</Blocks.PasswordField.Label>
-					<Blocks.PasswordField.Control>
-						<Blocks.PasswordField.Input />
-						<Blocks.PasswordField.Actions>
-							<Blocks.PasswordField.VisibilityToggle />
-						</Blocks.PasswordField.Actions>
-					</Blocks.PasswordField.Control>
-					<Blocks.PasswordField.Meter requirements={[/[a-z]/, /[A-Z]/, /\d/, /.{12,}/]} />
-				</Blocks.PasswordField.Root>
+				<PasswordField.Root defaultValue="correct-horse-2" style={styles.blockField}>
+					<PasswordField.Label>Password</PasswordField.Label>
+					<PasswordField.Control>
+						<PasswordField.Input />
+						<PasswordField.Actions>
+							<PasswordField.VisibilityToggle />
+						</PasswordField.Actions>
+					</PasswordField.Control>
+					<PasswordField.Meter requirements={[/[a-z]/, /[A-Z]/, /\d/, /.{12,}/]} />
+				</PasswordField.Root>
 			),
 		},
 		{
 			title: "PromptComposer",
 			content: (
-				<Blocks.PromptComposer.Root
+				<PromptComposer.Root
 					defaultValue="Summarize the component API changes"
 					onSubmit={() => {}}
 					clearOnSubmit={false}
 					style={styles.blockWide}>
-					<Blocks.PromptComposer.Surface>
-						<Blocks.PromptComposer.Input rows={2} />
-						<Blocks.PromptComposer.Footer>
-							<Blocks.PromptComposer.Options>
+					<PromptComposer.Surface>
+						<PromptComposer.Input rows={2} />
+						<PromptComposer.Footer>
+							<PromptComposer.Options>
 								<Menu.Root>
-									<Blocks.PromptComposer.AddTrigger />
+									<PromptComposer.AddTrigger />
 								</Menu.Root>
 								<Button size="sm" variant="ghost">
 									Context
 								</Button>
-							</Blocks.PromptComposer.Options>
-							<Blocks.PromptComposer.Actions>
-								<Blocks.PromptComposer.Submit />
-							</Blocks.PromptComposer.Actions>
-						</Blocks.PromptComposer.Footer>
-					</Blocks.PromptComposer.Surface>
-				</Blocks.PromptComposer.Root>
+							</PromptComposer.Options>
+							<PromptComposer.Actions>
+								<PromptComposer.Submit />
+							</PromptComposer.Actions>
+						</PromptComposer.Footer>
+					</PromptComposer.Surface>
+				</PromptComposer.Root>
 			),
 		},
 		{
 			title: "StreamingResponse",
 			content: (
-				<Blocks.StreamingResponse.Root status="streaming">
-					<Blocks.StreamingResponse.Status />
-					<Blocks.StreamingResponse.Content>
+				<StreamingResponse.Root status="streaming">
+					<StreamingResponse.Status />
+					<StreamingResponse.Content>
 						The component grid now separates primitives from blocks and keeps larger compositions in a roomier layout.
-					</Blocks.StreamingResponse.Content>
-					<Blocks.StreamingResponse.Actions>
+					</StreamingResponse.Content>
+					<StreamingResponse.Actions>
 						<Toolbar.Button aria-label="Copy response">
 							<CopyIcon aria-hidden size={15} weight="bold" />
 						</Toolbar.Button>
-					</Blocks.StreamingResponse.Actions>
-				</Blocks.StreamingResponse.Root>
+					</StreamingResponse.Actions>
+				</StreamingResponse.Root>
 			),
 		},
 		{
 			title: "WorkflowProgress",
 			content: (
-				<Blocks.WorkflowProgress.Root>
-					<Blocks.WorkflowProgress.Item status="complete">
-						<Blocks.WorkflowProgress.Marker />
-						<Blocks.WorkflowProgress.Content>
-							<Blocks.WorkflowProgress.Header>
-								<Blocks.WorkflowProgress.Title>Read exports</Blocks.WorkflowProgress.Title>
-								<Blocks.WorkflowProgress.Description>Mapped components and blocks.</Blocks.WorkflowProgress.Description>
-								<Blocks.WorkflowProgress.Metadata>
-									<Blocks.WorkflowProgress.Status />
-								</Blocks.WorkflowProgress.Metadata>
-							</Blocks.WorkflowProgress.Header>
-						</Blocks.WorkflowProgress.Content>
-					</Blocks.WorkflowProgress.Item>
-					<Blocks.WorkflowProgress.Item status="running">
-						<Blocks.WorkflowProgress.Marker />
-						<Blocks.WorkflowProgress.Content>
-							<Blocks.WorkflowProgress.Header>
-								<Blocks.WorkflowProgress.Title>Verify layout</Blocks.WorkflowProgress.Title>
-								<Blocks.WorkflowProgress.Description>
+				<WorkflowProgress.Root>
+					<WorkflowProgress.Item status="complete">
+						<WorkflowProgress.Marker />
+						<WorkflowProgress.Content>
+							<WorkflowProgress.Header>
+								<WorkflowProgress.Title>Read exports</WorkflowProgress.Title>
+								<WorkflowProgress.Description>Mapped components and blocks.</WorkflowProgress.Description>
+								<WorkflowProgress.Metadata>
+									<WorkflowProgress.Status />
+								</WorkflowProgress.Metadata>
+							</WorkflowProgress.Header>
+						</WorkflowProgress.Content>
+					</WorkflowProgress.Item>
+					<WorkflowProgress.Item status="running">
+						<WorkflowProgress.Marker />
+						<WorkflowProgress.Content>
+							<WorkflowProgress.Header>
+								<WorkflowProgress.Title>Verify layout</WorkflowProgress.Title>
+								<WorkflowProgress.Description>
 									Check desktop and mobile grids.
-								</Blocks.WorkflowProgress.Description>
-								<Blocks.WorkflowProgress.Metadata>
-									<Blocks.WorkflowProgress.Status />
-								</Blocks.WorkflowProgress.Metadata>
-							</Blocks.WorkflowProgress.Header>
-						</Blocks.WorkflowProgress.Content>
-					</Blocks.WorkflowProgress.Item>
-				</Blocks.WorkflowProgress.Root>
+								</WorkflowProgress.Description>
+								<WorkflowProgress.Metadata>
+									<WorkflowProgress.Status />
+								</WorkflowProgress.Metadata>
+							</WorkflowProgress.Header>
+						</WorkflowProgress.Content>
+					</WorkflowProgress.Item>
+				</WorkflowProgress.Root>
 			),
 		},
 	];

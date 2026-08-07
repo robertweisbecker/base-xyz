@@ -15,11 +15,11 @@ import { popupVars } from "@/components/popover/popover-vars.stylex";
 import { pressable } from "@/styles/recipes/transitions";
 import { tokens } from "@/theme/tokens.stylex";
 
-import { menuItemSizeStyles, menuItemStyles, menuItemVariantStyles } from "../menu/menu-item.stylex";
-import type { MenuItemVariant } from "../menu/menu.types";
-import { Checkmark } from "../selection-icons";
+import { menuItemSizeStyles, menuItemStyles, menuItemVariantStyles } from "@/components/menu/menu-item.stylex";
+import type { MenuItemVariant } from "@/components/menu/menu.types";
+import { Icon } from "@/components/icons";
 import { comboboxMarker } from "./combobox.stylex";
-import * as Tooltip from "@/components/tooltip/tooltip";
+import { Tooltip } from "@/components/tooltip/tooltip";
 
 const HOVER_WHEN_INACTIVE = ":hover:not([data-disabled]):not([data-popup-open]):not([data-pressed])";
 
@@ -407,7 +407,7 @@ function ComboboxPopup({
 										</span>
 									) : (
 										<Combobox.ItemIndicator keepMounted className={stylex.props(menuItemStyles.indicator).className}>
-											<Checkmark width="1em" height="1em" />
+											<Icon.Checkmark width="1em" height="1em" />
 										</Combobox.ItemIndicator>
 									)}
 									<span {...stylex.props(menuItemStyles.label)}>{isCreatableItem ? `Create “${item}”` : item}</span>

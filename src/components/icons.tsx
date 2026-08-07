@@ -1,11 +1,10 @@
 import type { ComponentProps } from "react";
 
-type SelectionIconProps = ComponentProps<"svg">;
+export type IconProps = ComponentProps<"svg">;
 
-export function Checkmark(props: SelectionIconProps) {
+function Checkmark(props: IconProps) {
 	return (
 		<svg
-			xmlns="http://www.w3.org/2000/svg"
 			fill="none"
 			viewBox="0 0 24 24"
 			strokeWidth={2.5}
@@ -22,10 +21,9 @@ export function Checkmark(props: SelectionIconProps) {
 	);
 }
 
-export function Minus(props: SelectionIconProps) {
+function Minus(props: IconProps) {
 	return (
 		<svg
-			xmlns="http://www.w3.org/2000/svg"
 			viewBox="0 0 24 24"
 			fill="currentColor"
 			strokeWidth={2}
@@ -42,10 +40,9 @@ export function Minus(props: SelectionIconProps) {
 	);
 }
 
-export function Circle(props: SelectionIconProps) {
+function Circle(props: IconProps) {
 	return (
 		<svg
-			xmlns="http://www.w3.org/2000/svg"
 			viewBox="0 0 24 24"
 			fill="currentColor"
 			strokeWidth={2}
@@ -62,10 +59,9 @@ export function Circle(props: SelectionIconProps) {
 	);
 }
 
-export function SquareIcon(props: SelectionIconProps) {
+function Square(props: IconProps) {
 	return (
 		<svg
-			xmlns="http://www.w3.org/2000/svg"
 			viewBox="0 0 24 24"
 			fill="currentColor"
 			strokeWidth={2}
@@ -81,10 +77,9 @@ export function SquareIcon(props: SelectionIconProps) {
 	);
 }
 
-export function TriangleIcon(props: SelectionIconProps) {
+function Triangle(props: IconProps) {
 	return (
 		<svg
-			xmlns="http://www.w3.org/2000/svg"
 			viewBox="0 0 24 24"
 			fill="currentColor"
 			strokeWidth={2}
@@ -101,10 +96,9 @@ export function TriangleIcon(props: SelectionIconProps) {
 	);
 }
 
-export function DiamondIcon(props: SelectionIconProps) {
+function Diamond(props: IconProps) {
 	return (
 		<svg
-			xmlns="http://www.w3.org/2000/svg"
 			viewBox="0 0 24 24"
 			fill="currentColor"
 			strokeWidth={2}
@@ -121,7 +115,7 @@ export function DiamondIcon(props: SelectionIconProps) {
 	);
 }
 
-export function GithubLogo(props: SelectionIconProps) {
+function GithubLogo(props: IconProps) {
 	return (
 		<svg viewBox="0 0 16 16" height="16" width="16" data-slot="icon" data-glyph="circle" {...props}>
 			<g>
@@ -135,7 +129,7 @@ export function GithubLogo(props: SelectionIconProps) {
 	);
 }
 
-export function Slash(props: SelectionIconProps) {
+function Slash(props: IconProps) {
 	return (
 		<svg
 			fill="none"
@@ -151,3 +145,14 @@ export function Slash(props: SelectionIconProps) {
 		</svg>
 	);
 }
+
+export const Icon = {
+	Checkmark,
+	Minus,
+	Circle,
+	Square,
+	Triangle,
+	Diamond,
+	GithubLogo,
+	Slash,
+} as const;

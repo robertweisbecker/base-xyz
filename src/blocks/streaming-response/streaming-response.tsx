@@ -4,10 +4,9 @@ import { ProhibitInsetIcon } from "@phosphor-icons/react/dist/csr/ProhibitInset"
 import * as stylex from "@stylexjs/stylex";
 import type { StyleXStyles } from "@stylexjs/stylex";
 import { createContext, type ComponentProps, useContext, useEffect, useMemo, useRef, useState } from "react";
-import * as ToolbarPrimitive from "@/components/toolbar/toolbar";
-import { Loader } from "@/components/loader/loader";
+import { Toolbar as ToolbarPrimitive, Loader } from "@/components";
 import { textSizeStyles, textStyles } from "@/components/text/text.stylex";
-import { shimmerTextStyles } from "./shimmer-text.stylex";
+import { shimmerTextStyles } from "@/styles/recipes/shimmer-text.stylex";
 import { typingTextStyles } from "./typing-text.stylex";
 import { tokens } from "@/theme/tokens.stylex";
 
@@ -280,3 +279,10 @@ const statusColor = stylex.create({
 	stopped: { color: tokens["--fg-muted"] },
 	error: { color: tokens["--fg-error"] },
 });
+
+export const StreamingResponse = {
+	Root,
+	Status,
+	Content,
+	Actions,
+} as const;

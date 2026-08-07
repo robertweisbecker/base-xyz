@@ -3,22 +3,18 @@ import { PaperclipIcon } from "@phosphor-icons/react/dist/csr/Paperclip";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import * as stylex from "@stylexjs/stylex";
 import { useEffect, useRef, useState, type ComponentProps, type ReactNode, type RefObject } from "react";
-import * as Menu from "@/components/menu/menu";
-import { Loader } from "@/components/loader/loader";
-import * as Toast from "@/components/toast";
-import * as Toolbar from "@/components/toolbar/toolbar";
+import { Menu, Loader, Toast, Toolbar } from "@/components";
 import { tokens } from "@/theme/tokens.stylex";
 
-import * as ModelSelector from "../model-selector/model-selector";
+import { ModelSelector } from "@/blocks/model-selector/model-selector";
 import {
 	exampleDefaultValue,
 	exampleEffortOptions,
 	exampleModelGroups,
 	exampleSpeedOptions,
-} from "../model-selector/model-selector.examples";
+} from "@/blocks/model-selector/model-selector.examples";
 import { GoalToolbar } from "./goal-toolbar";
-import * as PromptComposer from "./prompt-composer";
-
+import { PromptComposer } from "./prompt-composer";
 type StoryArgs = ComponentProps<typeof GoalToolbar>;
 
 const meta = {

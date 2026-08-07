@@ -4,8 +4,8 @@ import type { Meta, StoryObj } from "@storybook/react-vite";
 import * as stylex from "@stylexjs/stylex";
 import { tokens } from "@/theme/tokens.stylex";
 
-import { Button } from "../button/button";
-import { Separator } from "../separator/separator";
+import { Button } from "@/components/button/button";
+import { Separator } from "@/components/separator/separator";
 import { EmptyState, type EmptyStateProps, type EmptyStateSize } from "./empty-state";
 
 type EmptyStateStoryArgs = EmptyStateProps & {

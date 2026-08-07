@@ -6,11 +6,11 @@ import type { Meta, StoryObj } from "@storybook/react-vite";
 import * as stylex from "@stylexjs/stylex";
 import type { ReactNode } from "react";
 import { tokens } from "@/theme/tokens.stylex";
-import { Button } from "../button/button";
-import { CloseButton } from "../button/close-button";
-import { Link } from "../link/link";
-import { ScrollArea } from "../scroll-area/scroll-area";
-import { Text } from "../text/text";
+import { Button } from "@/components/button/button";
+import { CloseButton } from "@/components/button/close-button";
+import { Link } from "@/components/link/link";
+import { ScrollArea } from "@/components/scroll-area/scroll-area";
+import { Text } from "@/components/text/text";
 import { Callout, type CalloutHue, type CalloutVariant } from "./callout";
 
 const iconOptions = {

@@ -1,21 +1,29 @@
+import { Form } from "@base-ui/react/form";
+import { useMergedRefs } from "@base-ui/utils/useMergedRefs";
 import { ArrowUpIcon } from "@phosphor-icons/react/dist/csr/ArrowUp";
 import { PlusIcon } from "@phosphor-icons/react/dist/csr/Plus";
 import { SquareIcon } from "@phosphor-icons/react/dist/csr/Square";
 import * as stylex from "@stylexjs/stylex";
 import type { StyleXStyles } from "@stylexjs/stylex";
-import { createContext, type ComponentProps, type FormEvent, type KeyboardEvent, useContext, useState } from "react";
-import { Button, type ButtonProps, IconButton } from "@/components/button/button";
-import * as InputGroup from "@/components/input-group/input-group";
-import * as Menu from "@/components/menu/menu";
+import {
+	createContext,
+	type ComponentProps,
+	type KeyboardEvent,
+	type RefObject,
+	useContext,
+	useRef,
+	useState,
+} from "react";
+import { Button, IconButton, InputGroup, Menu } from "@/components";
+import type { ButtonProps } from "@/components";
+import { useScrollFade } from "@/hooks/use-scroll-fade";
 import { tokens } from "@/theme/tokens.stylex";
-
-
-const ADD_MENU_SIDE_OFFSET = 106;
 
 type PromptComposerContextValue = {
 	canSubmit: boolean;
 	disabled: boolean;
 	submitting: boolean;
+	surfaceRef: RefObject<HTMLDivElement | null>;
 	value: string;
 	updateValue: (value: string) => void;
 	submit: () => void;
@@ -28,7 +36,9 @@ type StyledProps<T> = Omit<T, "style"> & {
 	style?: StyleXStyles;
 };
 
-type FormProps = StyledProps<Omit<ComponentProps<"form">, "onSubmit">>;
+type FormProps = StyledProps<Omit<ComponentProps<typeof Form>, "className" | "onSubmit" | "onFormSubmit">> & {
+	className?: string;
+};
 export type PromptComposerRootProps = FormProps & {
 	value?: string;
 	defaultValue?: string;
@@ -43,6 +53,7 @@ export type PromptComposerInputProps = Omit<
 	ComponentProps<typeof InputGroup.Textarea>,
 	"value" | "defaultValue" | "disabled"
 >;
+export type PromptComposerHeaderProps = ComponentProps<typeof InputGroup.Header>;
 export type PromptComposerFooterProps = ComponentProps<typeof InputGroup.Footer>;
 export type PromptComposerOptionsProps = StyledProps<ComponentProps<"div">>;
 export type PromptComposerActionsProps = ComponentProps<typeof InputGroup.Actions>;
@@ -66,6 +77,7 @@ export function Root({
 	...props
 }: PromptComposerRootProps) {
 	const [uncontrolledValue, setUncontrolledValue] = useState(defaultValue);
+	const surfaceRef = useRef<HTMLDivElement | null>(null);
 	const isControlled = value !== undefined;
 	const currentValue = isControlled ? value : uncontrolledValue;
 	const canSubmit = currentValue.trim().length > 0 && !disabled && !submitting;
@@ -82,11 +94,6 @@ export function Root({
 		if (clearOnSubmit) updateValue("");
 	}
 
-	function handleSubmit(event: FormEvent<HTMLFormElement>) {
-		event.preventDefault();
-		submit();
-	}
-
 	const sx = stylex.props(parts.root, style);
 
 	return (
@@ -95,28 +102,45 @@ export function Root({
 				canSubmit,
 				disabled,
 				submitting,
+				surfaceRef,
 				value: currentValue,
 				updateValue,
 				submit,
 			}}>
-			<form className={joinClassNames(sx.className, className)} onSubmit={handleSubmit} style={sx.style} {...props} />
+			<Form className={joinClassNames(sx.className, className)} onFormSubmit={submit} style={sx.style} {...props} />
 		</PromptComposerContext.Provider>
 	);
 }
 
-export function Surface({ variant = "elevated", ...props }: PromptComposerSurfaceProps) {
-	return <InputGroup.Root orientation="vertical" variant={variant} {...props} />;
+export function Surface({ ref: forwardedRef, variant = "elevated", style, ...props }: PromptComposerSurfaceProps) {
+	const { surfaceRef } = usePromptComposerContext("Surface");
+
+	function setRefs(node: HTMLDivElement | null) {
+		surfaceRef.current = node;
+		if (typeof forwardedRef === "function") {
+			forwardedRef(node);
+		} else if (forwardedRef) {
+			forwardedRef.current = node;
+		}
+	}
+
+	return <InputGroup.Root ref={setRefs} variant={variant} {...props} style={[parts.inputGroup, style]} />;
 }
 
 export function Input({
 	"aria-label": ariaLabel = "Message",
 	placeholder = "Ask anything…",
 	rows = 3,
+	className,
+	style,
 	onChange,
 	onKeyDown,
+	ref,
 	...props
 }: PromptComposerInputProps) {
 	const context = usePromptComposerContext("Input");
+	const scrollFade = useScrollFade({ axis: "y", contentKey: context.value });
+	const mergedRef = useMergedRefs(ref, scrollFade.ref);
 
 	function handleKeyDown(event: KeyboardEvent<HTMLTextAreaElement>) {
 		onKeyDown?.(event);
@@ -126,9 +150,12 @@ export function Input({
 		}
 	}
 
+	const inputSx = stylex.props(parts.input);
+
 	return (
 		<InputGroup.Textarea
 			aria-label={ariaLabel}
+			className={joinClassNames(scrollFade.className, inputSx.className, className)}
 			disabled={context.disabled}
 			onChange={(event) => {
 				onChange?.(event);
@@ -136,12 +163,16 @@ export function Input({
 			}}
 			onKeyDown={handleKeyDown}
 			placeholder={placeholder}
+			ref={mergedRef}
 			rows={rows}
+			style={style}
 			value={context.value}
 			{...props}
 		/>
 	);
 }
+
+export const Header = InputGroup.Header;
 
 export const Footer = InputGroup.Footer;
 
@@ -156,8 +187,8 @@ export function Submit({
 	children,
 	"aria-label": ariaLabel = "Send message",
 	disabled,
-	shape = "square",
-	size = "md",
+	shape = "circle",
+	size = "lg",
 	type = "submit",
 	variant,
 	...props
@@ -242,12 +273,13 @@ export function AddTrigger({ children, render, ...props }: PromptComposerAddTrig
 }
 
 export function AddPopup({ positionerProps, style, ...props }: PromptComposerAddPopupProps) {
+	const { surfaceRef } = usePromptComposerContext("AddPopup");
 	return (
 		<Menu.Popup
 			positionerProps={{
 				align: "start",
+				anchor: surfaceRef,
 				side: "top",
-				sideOffset: ADD_MENU_SIDE_OFFSET,
 				...positionerProps,
 			}}
 			style={[parts.addMenu, style]}
@@ -287,6 +319,28 @@ const parts = stylex.create({
 		maxWidth: "42rem",
 		width: "100%",
 	},
+	/**
+	 * Denser shell than InputGroup defaults: Root owns even inline inset; Header /
+	 * Footer / Textarea own block edges. Child inline padding clears so Root inset wins.
+	 */
+	inputGroup: {
+		"--_input-group-child-padding-inline": tokens["--space-0"],
+		borderRadius: "2rem",
+		gap: 0,
+		paddingBlock: 0,
+		paddingInline: tokens["--space-4"],
+		alignItems: "stretch",
+		height: "auto",
+		minHeight: 0,
+	},
+	/** Fade size + expand-on-focus; both are composer behavior, not InputGroup. */
+	input: {
+		"--scroll-fade-size": tokens["--space-8"],
+		fieldSizing: {
+			default: "fixed",
+			":focus-within": "content",
+		},
+	},
 	options: {
 		gap: tokens["--space-1"],
 		alignItems: "center",
@@ -311,3 +365,19 @@ const parts = stylex.create({
 		whiteSpace: "nowrap",
 	},
 });
+
+export const PromptComposer = {
+	Root,
+	Surface,
+	Input,
+	Header,
+	Footer,
+	Options,
+	Actions,
+	Submit,
+	Stop,
+	AddTrigger,
+	AddPopup,
+	AddItemContent,
+	AddItemDescription,
+} as const;

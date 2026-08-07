@@ -13,9 +13,8 @@ import { Text } from "@/components/text/text";
 import { textStyles } from "@/components/text/text.stylex";
 import { Toggle } from "@/components/toggle/toggle";
 import { tokens } from "@/theme/tokens.stylex";
-import * as Slider from "./slider";
-
-type PlaygroundArgs = Slider.SliderRootProps<number> & {
+import { Slider, type SliderRootProps } from "./slider";
+type PlaygroundArgs = SliderRootProps<number> & {
 	_label: string;
 	_markers: boolean;
 	_markerIncrement: number;
@@ -348,20 +347,21 @@ function ControlledExamples() {
 					</Slider.Header>
 					<Slider.Row>
 						<Toggle
-							icon={<SpeakerLowIcon aria-hidden size={16} />}
-							pressedIcon={<SpeakerXIcon aria-hidden weight="fill" size={16} />}
+							icon={<SpeakerLowIcon aria-hidden weight="regular" />}
+							label="Muted"
+							pressedIcon={<SpeakerXIcon aria-hidden weight="fill" />}
 							onPressedChange={() => setPresetValue(min)}
 							pressed={presetValue === min}
 							variant="ghost"
-							aria-label="Muted"
 						/>
 
 						<Slider.Control markers={{ every: 2 }}>
 							<Slider.Thumb />
 						</Slider.Control>
 						<Toggle
-							icon={<SpeakerHighIcon aria-hidden size={16} />}
-							pressedIcon={<SpeakerHighIcon aria-hidden weight="fill" size={16} />}
+							icon={<SpeakerHighIcon aria-hidden weight="regular" />}
+							label="Maximum"
+							pressedIcon={<SpeakerHighIcon aria-hidden weight="fill" />}
 							onPressedChange={() => setPresetValue(max)}
 							pressed={presetValue === max}
 							variant="ghost"

@@ -2,10 +2,8 @@ import { XIcon } from "@phosphor-icons/react/dist/csr/X";
 import * as stylex from "@stylexjs/stylex";
 import type { StyleXStyles } from "@stylexjs/stylex";
 import { createContext, type ComponentProps, type ReactElement, type ReactNode, useContext } from "react";
-import { Button, type ButtonProps } from "@/components/button/button";
-import * as Dialog from "@/components/dialog/dialog";
-import { ScrollArea } from "@/components/scroll-area/scroll-area";
-import * as Toast from "@/components/toast";
+import { Button, Dialog, ScrollArea, Toast } from "@/components";
+import type { ButtonProps } from "@/components";
 import { tokens } from "@/theme/tokens.stylex";
 
 export type ConfirmationDialogSize = "sm" | "md" | "lg";
@@ -251,3 +249,16 @@ const dialogSizes = stylex.create({
 	md: { maxWidth: "30rem" },
 	lg: { maxWidth: "40rem" },
 });
+
+export const ConfirmationDialog = {
+	Root,
+	Header,
+	Visual,
+	Title,
+	Description,
+	Body,
+	Footer,
+	Actions,
+	Cancel,
+	Confirm,
+} as const;

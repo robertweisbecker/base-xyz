@@ -1,7 +1,5 @@
 import {
-	ArrowRightIcon,
 	BellIcon,
-	CommandIcon,
 	GearIcon,
 	MagnifyingGlassIcon,
 	PlusCircleIcon,
@@ -12,8 +10,7 @@ import * as stylex from "@stylexjs/stylex";
 import { useState } from "react";
 import { Text } from "@/components/text/text";
 import { tokens } from "@/theme/tokens.stylex";
-import * as CommandPalette from "./command-palette";
-
+import { CommandPalette } from "./command-palette";
 type CommandAction = {
 	id: string;
 	description: string;
@@ -110,13 +107,6 @@ export const Inline: Story = {
 				<CommandPalette.Input placeholder="Search inline commands…" />
 				<CommandResults />
 				<CommandPalette.Empty />
-				<CommandPalette.Footer>
-					<span>Inline palette</span>
-					<span {...stylex.props(storyParts.footerHint)}>
-						<CommandPalette.Shortcut>↑↓</CommandPalette.Shortcut>
-						Move
-					</span>
-				</CommandPalette.Footer>
 			</CommandPalette.Root>
 		</div>
 	),
@@ -133,7 +123,7 @@ function CommandPaletteExample({ shortcut = false }: { shortcut?: boolean }) {
 		<div {...stylex.props(storyParts.example)}>
 			<CommandPalette.Root
 				shortcut={shortcut}
-				trigger={<CommandPalette.Trigger startSlot={<CommandIcon aria-hidden weight="bold" />} />}
+				trigger={<CommandPalette.Trigger startSlot={<MagnifyingGlassIcon aria-hidden />} />}
 				items={commandGroups}
 				itemToStringValue={commandToStringValue}>
 				<CommandPalette.Input placeholder="Search actions, settings, and docs…" />
@@ -171,7 +161,7 @@ function CommandResults({ onSelect }: { onSelect?: (command: CommandAction) => v
 								startSlot={command.icon}
 								description={command.description}
 								shortcut={command.shortcut}
-								endSlot={!command.shortcut ? <ArrowRightIcon aria-hidden /> : undefined}
+								endSlot={!command.shortcut ? "Recently visited" : undefined}
 								onClick={() => onSelect?.(command)}>
 								{command.title}
 							</CommandPalette.Item>

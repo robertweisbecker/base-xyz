@@ -7,7 +7,7 @@ import type { FieldThemeProps } from "@/components/field/field.types";
 import { fieldStyles, fieldThemeProps } from "@/components/field/field.stylex";
 import { focusRing } from "@/styles/recipes/focus";
 import { tokens } from "@/theme/tokens.stylex";
-import { Checkmark } from "@/components/selection-icons";
+import { Icon } from "@/components/icons";
 import { VisuallyHidden } from "@/components/visually-hidden/visually-hidden";
 
 export type SwitchSize = "sm" | "md" | "lg";
@@ -81,7 +81,7 @@ export function Switch({
 					{...stylex.props(switchParts.track, sizeVariants[size], focusRing.offset)}
 					{...restProps}>
 					<BaseSwitch.Thumb {...stylex.props(switchParts.thumb)}>
-						<Checkmark {...stylex.props(switchParts.icon)} strokeWidth={3} />
+						<Icon.Checkmark {...stylex.props(switchParts.icon)} strokeWidth={3} />
 					</BaseSwitch.Thumb>
 				</BaseSwitch.Root>
 			</label>

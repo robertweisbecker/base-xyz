@@ -2,8 +2,9 @@ import * as stylex from "@stylexjs/stylex";
 import type { StyleXStyles } from "@stylexjs/stylex";
 import { type ComponentProps, type ReactNode } from "react";
 import { CopyButton } from "@/blocks/copy-button/copy-button";
-import { Link as LinkPrimitive } from "@/components/link/link";
+import { Link as LinkPrimitive, type LinkColor } from "@/components/link/link";
 import { Loader } from "@/components/loader/loader";
+import { shimmerTextStyles } from "@/styles/recipes/shimmer-text.stylex";
 import { tokens } from "@/theme/tokens.stylex";
 
 type StyledProps<T> = Omit<T, "className" | "style"> & {
@@ -22,7 +23,10 @@ export type BreadcrumbsRootProps = StyledProps<ComponentProps<"nav">> & {
 	size?: BreadcrumbsSize;
 	label?: string;
 };
-export type BreadcrumbsLinkProps = StyledProps<ComponentProps<"a">> & SlotProps;
+export type BreadcrumbsLinkProps = StyledProps<ComponentProps<"a">> &
+	SlotProps & {
+		color?: LinkColor;
+	};
 export type BreadcrumbsCurrentProps = StyledProps<ComponentProps<"span">> &
 	SlotProps & {
 		loading?: boolean;
@@ -57,16 +61,25 @@ export function Root({
 	);
 }
 
-export function Link({ ref, children, className, startSlot, endSlot, style, ...props }: BreadcrumbsLinkProps) {
+export function Link({
+	ref,
+	children,
+	className,
+	startSlot,
+	endSlot,
+	color = "accent",
+	style,
+	...props
+}: BreadcrumbsLinkProps) {
 	const sx = stylex.props(parts.link, style);
 
 	return (
 		<li {...stylex.props(parts.item)}>
 			<LinkPrimitive
 				ref={ref}
-				variant="neutral"
 				className={[sx.className, className].filter(Boolean).join(" ")}
 				style={sx.style}
+				color={color}
 				{...props}>
 				{renderSlot(startSlot)}
 				<span {...stylex.props(parts.label)}>{children}</span>
@@ -101,7 +114,7 @@ export function Current({
 				{loading ? (
 					<>
 						<Loader aria-hidden />
-						<span {...stylex.props(parts.label, parts.loadingLabel)}>Loading…</span>
+						<span {...stylex.props(parts.label, shimmerTextStyles.effect)}>Loading…</span>
 					</>
 				) : (
 					<span {...stylex.props(parts.label)}>{children}</span>
@@ -152,18 +165,6 @@ function renderSlot(slot: ReactNode) {
 	);
 }
 
-const shimmerSweep = stylex.keyframes({
-	"0%": {
-		backgroundPosition: "150% 0",
-	},
-	"50%": {
-		backgroundPosition: "0 0",
-	},
-	"100%": {
-		backgroundPosition: "0 0",
-	},
-});
-
 const parts = stylex.create({
 	root: {
 		color: tokens["--fg-muted"],
@@ -180,9 +181,9 @@ const parts = stylex.create({
 		minWidth: 0,
 	},
 	item: {
+		gap: tokens["--space-1-5"],
 		alignItems: "center",
 		display: "inline-flex",
-		gap: tokens["--space-1-5"],
 		minWidth: 0,
 	},
 	link: {
@@ -207,6 +208,7 @@ const parts = stylex.create({
 		// marginInline: `calc(${tokens["--space-1"]} * -1)`,
 	},
 	slot: {
+		fill: tokens["--fg-subtle"],
 		alignItems: "center",
 		color: "currentColor",
 		display: "inline-flex",
@@ -214,45 +216,12 @@ const parts = stylex.create({
 		justifyContent: "center",
 		height: "1em",
 		width: "1em",
-		fill: tokens["--fg-subtle"],
 	},
 	label: {
 		overflow: "hidden",
 		textOverflow: "ellipsis",
 		whiteSpace: "nowrap",
 		minWidth: 0,
-	},
-	loadingLabel: {
-		WebkitBackgroundClip: {
-			default: "text",
-			"@media (prefers-reduced-motion: reduce)": "initial",
-		},
-		WebkitTextFillColor: {
-			default: "transparent",
-			"@media (prefers-reduced-motion: reduce)": "currentColor",
-		},
-		backgroundPosition: "200% 0",
-		animationDuration: "2000ms",
-		animationIterationCount: "infinite",
-		animationName: {
-			default: shimmerSweep,
-			"@media (prefers-reduced-motion: reduce)": "none",
-		},
-		animationTimingFunction: "linear",
-		backgroundClip: {
-			default: "text",
-			"@media (prefers-reduced-motion: reduce)": "border-box",
-		},
-		backgroundImage: {
-			default:
-				"linear-gradient(100deg, color-mix(in oklch, currentColor 54%, transparent) 0 40%, currentColor 50%, color-mix(in oklch, currentColor 54%, transparent) 60% 100%)",
-			"@media (prefers-reduced-motion: reduce)": "none",
-		},
-		backgroundSize: "300% 100%",
-		willChange: {
-			default: "background-position",
-			"@media (prefers-reduced-motion: reduce)": "auto",
-		},
 	},
 });
 
@@ -268,3 +237,7 @@ const sizeStyles = stylex.create({
 		lineHeight: tokens["--line-height-2"],
 	},
 });
+
+export const Breadcrumbs = {
+	Root, Link, Current, Separator, Copy, Clipboard,
+} as const;

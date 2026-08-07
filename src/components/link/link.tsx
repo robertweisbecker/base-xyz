@@ -30,7 +30,7 @@ export function Link({
 	return (
 		<a
 			ref={ref}
-			className={[sx.className, "ds-link", className].filter(Boolean).join(" ")}
+			className={[sx.className, "xyz-link", className].filter(Boolean).join(" ")}
 			style={sx.style}
 			rel={external ? mergeRel(rel, "noopener noreferrer") : rel}
 			target={external ? "_blank" : target}
@@ -48,7 +48,7 @@ function mergeRel(rel: string | undefined, requiredRel: string) {
 const linkStyles = stylex.create({
 	root: {
 		alignItems: "center",
-		columnGap: "0.125em",
+		columnGap: "0.25em",
 		display: "inline-flex",
 		textDecorationColor: {
 			default: "color-mix(in srgb, currentColor 40%, transparent)",

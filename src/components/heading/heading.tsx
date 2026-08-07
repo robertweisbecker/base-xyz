@@ -11,8 +11,8 @@ import {
 	textWeightStyles,
 	textWrapStyles,
 	textThemeProps,
-} from "../text/text.stylex";
-import type { TypographyStyleProps } from "../text/text.types";
+} from "@/components/text/text.stylex";
+import type { TypographyStyleProps } from "@/components/text/text.types";
 
 export type HeadingProps = Omit<
 	useRender.ComponentProps<"h2">,

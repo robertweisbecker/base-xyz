@@ -3,22 +3,27 @@ import * as stylex from "@stylexjs/stylex";
 import type { ReactNode } from "react";
 import { tokens } from "@/theme/tokens.stylex";
 
-import * as Select from "./select";
-
+import {
+	Select,
+	type SelectItemVariant,
+	type SelectPopupProps,
+	type SelectRootProps,
+	type SelectTriggerVariant,
+} from "./select";
 type Positioning = "item-aligned" | "bottom-start" | "bottom-end" | "top-start";
 
 type PlaygroundArgs = {
 	disabled: boolean;
 	invalid: boolean;
-	_itemVariant: Select.SelectItemVariant;
+	_itemVariant: SelectItemVariant;
 	_label: string;
 	multiple: boolean;
 	_placeholder: string;
 	_positioning: Positioning;
 	readOnly: boolean;
 	required: boolean;
-	_size: Select.SelectRootProps<string>["size"];
-	_variant: Select.SelectTriggerVariant;
+	_size: SelectRootProps<string>["size"];
+	_variant: SelectTriggerVariant;
 };
 
 const meta: Meta<PlaygroundArgs> = {
@@ -483,7 +488,7 @@ function FrameworkPopup({
 	itemVariant = "primary",
 	positioning = "item-aligned",
 }: {
-	itemVariant?: Select.SelectItemVariant;
+	itemVariant?: SelectItemVariant;
 	positioning?: Positioning;
 }) {
 	return (
@@ -499,7 +504,7 @@ function FrameworkPopup({
 	);
 }
 
-function getPositionerProps(positioning: Positioning): NonNullable<Select.SelectPopupProps["positionerProps"]> {
+function getPositionerProps(positioning: Positioning): NonNullable<SelectPopupProps["positionerProps"]> {
 	switch (positioning) {
 		case "bottom-start":
 			return { align: "start", alignItemWithTrigger: false, side: "bottom" };

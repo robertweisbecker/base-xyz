@@ -50,9 +50,9 @@ const menuItemParts = stylex.create({
 		minWidth: 0,
 	},
 	indicatorSizing: {
-		color: menuItemVars.indicatorColor,
 		gridColumn: "1",
 		alignItems: "center",
+		color: menuItemVars.indicatorColor,
 		display: "inline-flex",
 		justifyContent: "center",
 		visibility: {

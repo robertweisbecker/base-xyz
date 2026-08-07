@@ -42,7 +42,7 @@
 - Apply caller `style` last in `stylex.props(...)`. Spread the full result when the recipient accepts `className` and `style`; extract `.className` only for string-only adapters or manual merges.
 - Use StyleX composition for precedence. Do not use class order or `tailwind-merge` to resolve StyleX conflicts.
 - Prefer parent-local custom properties plus direct-child `[data-*]` selectors for interaction state. Otherwise use a component `defineMarker()` with `stylex.when.ancestor()`; never use `defaultMarker()` for form controls.
-- Ordinary popup composites render children directly. Use a component `Viewport` only for intentional current/previous payload swapping; keep that motion scoped to `.ds-popup-viewport`.
+- Ordinary popup composites render children directly. Use a component `Viewport` only for intentional current/previous payload swapping; keep that motion scoped to `.xyz-popup-viewport`.
 
 ## Components and accessibility
 

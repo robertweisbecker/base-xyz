@@ -12,11 +12,10 @@ import type { Meta, StoryObj } from "@storybook/react-vite";
 import { useEffect, useRef, useState } from "react";
 import { tokens } from "@/theme/tokens.stylex";
 
-import { Button, IconButton } from "../button/button";
-import { Loader } from "../loader";
-import * as Tooltip from "../tooltip/tooltip";
-import * as Toast from "./index";
-
+import { Button, IconButton } from "@/components/button/button";
+import { Loader } from "@/components/loader";
+import { Tooltip } from "@/components/tooltip/tooltip";
+import { Toast } from "./index";
 type PopupSide = "top" | "right" | "bottom" | "left";
 type PopupAlign = "start" | "center" | "end";
 type SwipeDirection = "up" | "down" | "left" | "right";

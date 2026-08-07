@@ -5,9 +5,9 @@ import { positioningThemeProps } from "@/theme/theme-props-layout.stylex";
 import { tokens } from "@/theme/tokens.stylex";
 import { resolveThemeProps, type VerifyThemeProps } from "@/theme/theme-props";
 import type { PositioningProps } from "@/theme/theme-props.types";
-import { Heading } from "../heading/heading";
-import { Text } from "../text/text";
-import { VisuallyHidden } from "../visually-hidden/visually-hidden";
+import { Heading } from "@/components/heading/heading";
+import { Text } from "@/components/text/text";
+import { VisuallyHidden } from "@/components/visually-hidden/visually-hidden";
 
 export type CalloutHue = "accent" | "error" | "warning" | "success" | "neutral";
 export type CalloutVariant = "default" | "banner";

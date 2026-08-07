@@ -5,16 +5,9 @@ import { PlayCircleIcon } from "@phosphor-icons/react/dist/csr/PlayCircle";
 import { TrashIcon } from "@phosphor-icons/react/dist/csr/Trash";
 import * as stylex from "@stylexjs/stylex";
 import { useState, type FormEvent } from "react";
-import { Button, IconButton } from "@/components/button/button";
-import * as Collapsible from "@/components/collapsible/collapsible";
-import * as Dialog from "@/components/dialog/dialog";
-import { ScrollArea } from "@/components/scroll-area/scroll-area";
-import { Textarea } from "@/components/textarea/textarea";
-import * as Tooltip from "@/components/tooltip/tooltip";
-import * as Toolbar from "@/components/toolbar/toolbar";
+import { Button, IconButton, Collapsible, Dialog, ScrollArea, Textarea, Tooltip, Toolbar } from "@/components";
 import { iconSwapTransition } from "@/styles/recipes/transitions";
 import { tokens } from "@/theme/tokens.stylex";
-
 
 type GoalToolbarProps = {
 	active: boolean;
@@ -171,6 +164,7 @@ const parts = stylex.create({
 		borderStyle: "solid",
 		borderWidth: "1px",
 		overflow: "hidden",
+		backgroundColor: tokens["--surface"],
 		boxSizing: "border-box",
 		containerType: "inline-size",
 		borderBottomWidth: 0,

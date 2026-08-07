@@ -15,7 +15,7 @@ type StyledProps<T> = Omit<T, "className" | "style"> & {
 	style?: StyleXStyles;
 };
 
-export type ToolbarVariant = "surface" | "unstyled";
+export type ToolbarVariant = "surface" | "elevated" | "unstyled";
 
 export type ToolbarRootProps = StyledProps<BaseToolbar.Root.Props> & {
 	variant?: ToolbarVariant;
@@ -143,7 +143,7 @@ const toolbarParts = stylex.create({
 			[HOVER_WHEN_INACTIVE]: {
 				"@media (hover: hover) and (pointer: fine)": tokens["--bg-highlight"],
 			},
-			[TOGGLED_ON]: tokens["--surface-subtle"],
+			[TOGGLED_ON]: tokens["--surface-subtle-hover"],
 			"[data-disabled]": "transparent",
 			default: "transparent",
 			":active": tokens["--surface-subtle-active"],
@@ -173,6 +173,7 @@ const toolbarParts = stylex.create({
 	},
 	button: {
 		appearance: "none",
+		flexShrink: 0,
 	},
 	link: {
 		borderRadius: tokens["--radius-xs"],
@@ -231,7 +232,6 @@ const toolbarParts = stylex.create({
 			default: 1,
 		},
 		height: tokens["--size-control-md"],
-		minWidth: "10rem",
 		"::placeholder": {
 			color: tokens["--fg-subtle"],
 		},
@@ -254,13 +254,19 @@ const toolbarParts = stylex.create({
 const toolbarVariants = stylex.create({
 	surface: {
 		padding: tokens["--space-1"],
+		borderColor: tokens["--border"],
 		borderRadius: tokens["--radius-md"],
+		borderStyle: "solid",
+		borderWidth: "1px",
 		backgroundColor: {
-			"[data-disabled]": tokens["--surface"],
-			default: tokens["--panel"],
+			"[data-disabled]": tokens["--surface-subtle"],
+			default: tokens["--surface"],
 		},
+	},
+	elevated: {
+		backgroundColor: tokens["--panel"],
 		boxShadow: {
-			"[data-disabled]": "none",
+			"[data-disabled]": tokens["--shadow-ring"],
 			default: tokens["--shadow-sm"],
 		},
 	},
@@ -271,3 +277,12 @@ const toolbarVariants = stylex.create({
 		boxShadow: "none",
 	},
 });
+
+export const Toolbar = {
+	Root,
+	Group,
+	Button,
+	Link,
+	Input,
+	Separator,
+} as const;

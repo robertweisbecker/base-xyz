@@ -6,8 +6,7 @@ import * as stylex from "@stylexjs/stylex";
 import type { ReactNode } from "react";
 import { Text } from "@/components/text/text";
 import { tokens } from "@/theme/tokens.stylex";
-import * as Tabs from "./tabs";
-
+import { Tabs, type TabsSize } from "./tabs";
 const iconOptions = {
 	None: undefined,
 	Folder: <FolderIcon aria-hidden weight="regular" />,
@@ -20,7 +19,7 @@ type TabsPlaygroundArgs = {
 	disabled: boolean;
 	endSlot: ReactNode;
 	orientation: "horizontal" | "vertical";
-	size: Tabs.TabsSize;
+	size: TabsSize;
 	startSlot: ReactNode;
 };
 

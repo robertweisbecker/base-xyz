@@ -38,11 +38,11 @@ const mpTheme = stylex.createTheme(tokens, {
 	"--color-success-p2": "#217d57",
 	"--color-success-t1": "#204e3e",
 	"--color-success-t2": "#004440",
-	"--fg-success-contrast": "var(--fg)",
+	// "--fg-success-contrast": "var(--fg)",
 
 	"--color-error-s1": "#FFE1D6",
 	"--color-error-s2": "#FFE1D6",
-	"--color-error-c1": "color-mix(in srgb, var(--color-error-p1) 5%, transparent)",
+	"--color-error-c1": "color-mix(in srgb, var(--color-error-p1) 10%, transparent)",
 	"--color-error-c2": "#FFB0A3",
 	"--color-error-c3": "#FFB0A3",
 	"--color-error-p1": "#e34f2f",
@@ -50,7 +50,7 @@ const mpTheme = stylex.createTheme(tokens, {
 	"--color-error-t1": "#6d3228",
 	"--color-error-t2": "#5B0237",
 	"--fill-error": "var(--color-error-p1)",
-	"--fg-error-contrast": "var(--fg-inverse)",
+	// "--fg-error-contrast": "var(--fg-inverse)",
 
 	"--color-warning-s1": "#f8f7f5",
 	"--color-warning-s2": "#ffefd8",
@@ -69,6 +69,7 @@ const mpTheme = stylex.createTheme(tokens, {
 	"--color-warning-p2": "#b96607",
 	"--color-warning-t1": "#b96607",
 	"--color-warning-t2": "#6c4316",
+	"--fg-warning-contrast": "var(--color-white)",
 
 	// "--color-accent-s1": "#e8ddff",
 	// "--color-accent-s2": "#e8ddff",
@@ -100,7 +101,7 @@ const mpTheme = stylex.createTheme(tokens, {
 	"--shadow-primary-pressed": "0 0 0 transparent",
 	"--font-weight-regular": "400",
 	"--font-weight-medium": "500",
-	"--font-weight-semibold": "700",
+	"--font-weight-semibold": "600",
 	"--font-weight-bold": "700",
 });
 

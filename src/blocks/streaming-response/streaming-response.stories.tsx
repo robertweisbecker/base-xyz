@@ -4,12 +4,10 @@ import { SquareIcon } from "@phosphor-icons/react/dist/csr/Square";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import * as stylex from "@stylexjs/stylex";
 import { useState } from "react";
-import { Separator } from "@/components/separator/separator";
-import * as Toolbar from "@/components/toolbar/toolbar";
+import { Separator, Toolbar } from "@/components";
 import { tokens } from "@/theme/tokens.stylex";
 
-import * as StreamingResponse from "./streaming-response";
-
+import { StreamingResponse, type StreamingResponseStatus } from "./streaming-response";
 const meta = {
 	title: "Blocks/Streaming response",
 	component: StreamingResponse.Root,
@@ -21,7 +19,7 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-const responseContent: Record<StreamingResponse.StreamingResponseStatus, string> = {
+const responseContent: Record<StreamingResponseStatus, string> = {
 	streaming:
 		"The project uses Base UI for accessible behavior and StyleX for its visual system. I’m checking the remaining stories against those conventions…",
 	complete:
@@ -60,7 +58,7 @@ export const Examples: Story = {
 };
 
 function InteractiveResponseExample() {
-	const [status, setStatus] = useState<StreamingResponse.StreamingResponseStatus>("streaming");
+	const [status, setStatus] = useState<StreamingResponseStatus>("streaming");
 	const [streamKey, setStreamKey] = useState(0);
 
 	function retry() {
@@ -90,7 +88,7 @@ function InteractiveResponseExample() {
 	);
 }
 
-function ResponseExample({ label, status }: { label: string; status: StreamingResponse.StreamingResponseStatus }) {
+function ResponseExample({ label, status }: { label: string; status: StreamingResponseStatus }) {
 	return (
 		<section {...stylex.props(storyParts.example)}>
 			<h2 {...stylex.props(storyParts.label)}>{label}</h2>

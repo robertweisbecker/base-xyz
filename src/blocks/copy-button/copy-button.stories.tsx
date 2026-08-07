@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import * as stylex from "@stylexjs/stylex";
-import { Separator } from "@/components/separator/separator";
+import { Separator } from "@/components";
 import { tokens } from "@/theme/tokens.stylex";
 
 import { CopyButton } from "./copy-button";

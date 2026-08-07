@@ -3,13 +3,10 @@ import { PlusIcon } from "@phosphor-icons/react/dist/csr/Plus";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import * as stylex from "@stylexjs/stylex";
 import type { ReactNode } from "react";
-import { CodeBlock } from "@/components/code-block/code-block";
-import * as Collapsible from "@/components/collapsible/collapsible";
-import { Separator } from "@/components/separator/separator";
+import { CodeBlock, Collapsible, Separator } from "@/components";
 import { tokens } from "@/theme/tokens.stylex";
 
-import * as Timeline from "./workflow-progress";
-
+import { WorkflowProgress as Timeline, type WorkflowProgressStatus } from "./workflow-progress";
 const meta = {
 	title: "Blocks/Workflow progress",
 	component: Timeline.Root,
@@ -47,7 +44,7 @@ function Activity({
 	startSlot,
 	details,
 }: {
-	status: Timeline.WorkflowProgressStatus;
+	status: WorkflowProgressStatus;
 	title: string;
 	description?: string;
 	endSlot?: ReactNode;

@@ -1,8 +1,8 @@
 import { InfoIcon } from "@phosphor-icons/react/dist/csr/Info";
 import { QuestionIcon } from "@phosphor-icons/react/dist/csr/Question";
 import type { ReactNode } from "react";
-import { IconButton, type ButtonSize } from "../button/button";
-import * as Popover from "../popover/popover";
+import { IconButton, type ButtonSize } from "@/components/button/button";
+import { Popover } from "@/components/popover/popover";
 
 export type InfoTipProps = {
 	/** Content shown in the popover. Strings receive description semantics. */

@@ -2,8 +2,8 @@ import { ArrowCounterClockwiseIcon } from "@phosphor-icons/react/dist/csr/ArrowC
 import { LightningIcon } from "@phosphor-icons/react/dist/csr/Lightning";
 import * as stylex from "@stylexjs/stylex";
 import { createContext, Fragment, type ComponentProps, type ReactNode, useContext, useState } from "react";
-import { Button, type ButtonProps } from "@/components/button/button";
-import * as Menu from "@/components/menu/menu";
+import { Button, Menu } from "@/components";
+import type { ButtonProps } from "@/components";
 import { menuItemVars } from "@/components/menu/menu-item.stylex";
 import { tokens } from "@/theme/tokens.stylex";
 import { breakpoints } from "@/styles/constants.stylex";
@@ -213,7 +213,7 @@ export function Popup({ positionerProps, style, ...props }: ModelSelectorPopupPr
 
 function SettingsTrigger({ label, value, valueIcon }: { label: ReactNode; value: ReactNode; valueIcon?: ReactNode }) {
 	return (
-		<Menu.SubmenuTrigger openOnHover style={parts.settingsRow}>
+		<Menu.SubmenuTrigger openOnHover style={parts.settingsRow} delay={0}>
 			<span {...stylex.props(parts.settingsLabel)}>{label}</span>
 			<span {...stylex.props(parts.settingsValue)}>
 				<span aria-hidden {...stylex.props(parts.settingsValueIcon)}>
@@ -447,3 +447,10 @@ const parts = stylex.create({
 		gridColumn: "2 / 4",
 	},
 });
+
+export const ModelSelector = {
+	Root,
+	Trigger,
+	Popup,
+	List,
+} as const;

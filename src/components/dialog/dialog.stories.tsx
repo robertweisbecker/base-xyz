@@ -3,17 +3,16 @@ import * as stylex from "@stylexjs/stylex";
 import { useRef, useState } from "react";
 import { tokens } from "@/theme/tokens.stylex";
 
-import * as AlertDialog from "../alert-dialog/alert-dialog";
-import { Button } from "../button/button";
-import { ScrollArea } from "../scroll-area/scroll-area";
-import { Textarea } from "../textarea/textarea";
-import * as Dialog from "./dialog";
-
+import { AlertDialog } from "@/components/alert-dialog/alert-dialog";
+import { Button } from "@/components/button/button";
+import { ScrollArea } from "@/components/scroll-area/scroll-area";
+import { Textarea } from "@/components/textarea/textarea";
+import { Dialog, type DialogScrollBehavior } from "./dialog";
 type StoryArgs = {
 	defaultOpen: boolean;
 	disablePointerDismissal: boolean;
 	modal: boolean | "trap-focus";
-	_scrollBehavior: Dialog.DialogScrollBehavior;
+	_scrollBehavior: DialogScrollBehavior;
 	_showBackdrop: boolean;
 	_showClose: boolean;
 };
@@ -54,7 +53,7 @@ function DialogFrame({
 	showBackdrop = true,
 	showClose = true,
 }: {
-	scrollBehavior?: Dialog.DialogScrollBehavior;
+	scrollBehavior?: DialogScrollBehavior;
 	showBackdrop?: boolean;
 	showClose?: boolean;
 }) {

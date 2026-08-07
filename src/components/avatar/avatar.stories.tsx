@@ -6,10 +6,10 @@ import { UserIcon } from "@phosphor-icons/react/dist/csr/User";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import * as stylex from "@stylexjs/stylex";
 import { tokens } from "@/theme/tokens.stylex";
-import { Button, IconButton } from "../button/button";
-import { Stack } from "../layout/layout";
-import * as Menu from "../menu/menu";
-import { Text } from "../text/text";
+import { Button, IconButton } from "@/components/button/button";
+import { Stack } from "@/components/layout/layout";
+import { Menu } from "@/components/menu/menu";
+import { Text } from "@/components/text/text";
 import { Avatar, type AvatarProps, type AvatarSize } from "./avatar";
 
 const image = "/avatar-example.svg";

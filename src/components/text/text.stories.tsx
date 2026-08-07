@@ -1,11 +1,11 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import * as stylex from "@stylexjs/stylex";
 import { tokens } from "@/theme/tokens.stylex";
-import { Heading } from "../heading/heading";
+import { Heading } from "@/components/heading/heading";
 import { Text } from "./text";
 import { textStyles } from "./text.stylex";
-import { Separator } from "../separator/separator";
-import { CodeBlock } from "../code-block/code-block";
+import { Separator } from "@/components/separator/separator";
+import { CodeBlock } from "@/components/code-block/code-block";
 
 const sizeOptions = ["1", "2", "3", "4", "5", "6", "7", "8", "9"] as const;
 

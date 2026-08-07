@@ -1,7 +1,7 @@
 import * as stylex from "@stylexjs/stylex";
 import type { StyleXStyles } from "@stylexjs/stylex";
 import { createContext, type ComponentProps, useContext, useId } from "react";
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/card/card";
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components";
 import { tokens } from "@/theme/tokens.stylex";
 
 
@@ -243,3 +243,22 @@ const parts = stylex.create({
 		marginInlineStart: "auto",
 	},
 });
+
+export const AgentActionApproval = {
+	Root,
+	Header,
+	Title,
+	Description,
+	Content,
+	Summary,
+	Icon,
+	SummaryContent,
+	Action,
+	ActionDescription,
+	Details,
+	Detail,
+	DetailLabel,
+	DetailValue,
+	Footer,
+	Actions,
+} as const;

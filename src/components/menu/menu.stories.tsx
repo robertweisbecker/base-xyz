@@ -20,10 +20,11 @@ import type { ReactNode } from "react";
 import * as stylex from "@stylexjs/stylex";
 import { textStyles } from "@/components/text/text.stylex";
 import { tokens } from "@/theme/tokens.stylex";
-import { Button } from "../button/button";
-import * as Menu from "./menu";
+import { Button } from "@/components/button/button";
+import { Menu } from "./menu";
+import type { MenuItemSize, MenuItemVariant } from "./menu.types";
 import { menuItemStyles, menuItemVariantStyles } from "./menu-item.stylex";
-import { Text } from "../text/text";
+import { Text } from "@/components/text/text";
 
 type MenuStoryArgs = {
 	_side: "top" | "right" | "bottom" | "left";
@@ -32,8 +33,8 @@ type MenuStoryArgs = {
 	_showShortcuts: boolean;
 	_showSelectionItems: boolean;
 	_disabledItem: boolean;
-	_itemVariant: Menu.MenuItemVariant;
-	size: Menu.MenuItemSize;
+	_itemVariant: MenuItemVariant;
+	size: MenuItemSize;
 };
 
 const meta = {

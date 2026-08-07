@@ -8,20 +8,22 @@ import type { FieldSize } from "@/components/field/field.types";
 import { focusRing } from "@/styles/recipes/focus";
 import { tokens } from "@/theme/tokens.stylex";
 
-const GROUP_HOVER =
-	':hover:not(:focus-within):not(:has([aria-invalid="true"])):not(:has([data-disabled])):not(:has([data-invalid])):not(:has([readonly]))';
+/** Disabled chrome follows a nested input/textarea, not addon action buttons. */
+const GROUP_HAS_DISABLED = ":has(:is(input, textarea):is([data-disabled], :disabled))";
+
+const GROUP_HOVER = `:hover:not(:focus-within):not(:has([aria-invalid="true"])):not(${GROUP_HAS_DISABLED}):not(:has([data-invalid])):not(:has([readonly]))`;
 
 export type InputGroupRootProps = Omit<ComponentProps<"div">, "className" | "style"> & {
 	className?: string;
 	/** StyleX overrides, applied after the component's own styles. */
 	style?: StyleXStyles;
-	orientation?: InputGroupOrientation;
 	size?: FieldSize;
 	variant?: InputGroupVariant;
 };
 
-export type InputGroupOrientation = "horizontal" | "vertical";
 export type InputGroupVariant = "standard" | "elevated" | "subtle";
+/** Inline Addon placement relative to the control. Default `start`. */
+export type InputGroupAddonPosition = "start" | "end";
 
 export type InputGroupInputProps = Omit<BaseInput.Props, "className" | "style"> & {
 	className?: string;
@@ -39,10 +41,17 @@ export type InputGroupAddonProps = Omit<ComponentProps<"span">, "className" | "s
 	className?: string;
 	/** StyleX overrides, applied after the component's own styles. */
 	style?: StyleXStyles;
-	position?: "start" | "end";
+	/** Inline placement relative to the control. Default `start`. */
+	position?: InputGroupAddonPosition;
 };
 
 export type InputGroupActionsProps = Omit<ComponentProps<"div">, "className" | "style"> & {
+	className?: string;
+	/** StyleX overrides, applied after the component's own styles. */
+	style?: StyleXStyles;
+};
+
+export type InputGroupHeaderProps = Omit<ComponentProps<"div">, "className" | "style"> & {
 	className?: string;
 	/** StyleX overrides, applied after the component's own styles. */
 	style?: StyleXStyles;
@@ -54,15 +63,7 @@ export type InputGroupFooterProps = Omit<ComponentProps<"div">, "className" | "s
 	style?: StyleXStyles;
 };
 
-export function Root({
-	ref,
-	className,
-	style,
-	orientation = "horizontal",
-	size = "md",
-	variant = "standard",
-	...props
-}: InputGroupRootProps) {
+export function Root({ ref, className, style, size = "md", variant = "standard", ...props }: InputGroupRootProps) {
 	const sx = stylex.props(
 		fieldStyles.inputBase,
 		inputGroupParts.root,
@@ -70,7 +71,6 @@ export function Root({
 		fieldControlSizes[size],
 		fieldTextStyles[size],
 		inputGroupSizes[size],
-		inputGroupOrientations[orientation],
 		inputGroupVariants[variant],
 		style,
 	);
@@ -79,7 +79,6 @@ export function Root({
 		<div
 			{...props}
 			ref={ref}
-			data-orientation={orientation}
 			data-size={size}
 			className={[sx.className, className].filter(Boolean).join(" ")}
 			style={sx.style}
@@ -95,29 +94,30 @@ export function Input({ ref, className, style, ...props }: InputGroupInputProps)
 	);
 }
 
-export function Textarea({ ref, className, style, rows = 3, ...props }: InputGroupTextareaProps) {
+export function Textarea({ ref, className, style, rows = 1, disabled, ...props }: InputGroupTextareaProps) {
 	const sx = stylex.props(fieldStyles.inputUnstyled, inputGroupParts.input, inputGroupParts.textarea, style);
 	const control = (
 		<textarea
 			ref={ref}
 			rows={rows}
+			disabled={disabled}
 			className={[sx.className, className].filter(Boolean).join(" ")}
 			style={sx.style}
 			{...props}
 		/>
 	);
 
-	return <Field.Control render={control as ReactElement} />;
+	return <Field.Control render={control as ReactElement} disabled={disabled} />;
 }
 
 export function Addon({ ref, className, style, onClick, position = "start", ...props }: InputGroupAddonProps) {
-	const sx = stylex.props(inputGroupParts.addon, style);
+	const sx = stylex.props(inputGroupParts.addon, inputGroupAddonPositions[position], style);
 
 	return (
 		<span
 			ref={ref}
 			data-position={position}
-			className={[sx.className, "ds-input-group-addon", className].filter(Boolean).join(" ")}
+			className={[sx.className, "xyz-input-group-addon", className].filter(Boolean).join(" ")}
 			style={sx.style}
 			onClick={(event) => {
 				onClick?.(event);
@@ -145,15 +145,38 @@ export function Actions({ ref, className, style, ...props }: InputGroupActionsPr
 	return <div ref={ref} className={[sx.className, className].filter(Boolean).join(" ")} style={sx.style} {...props} />;
 }
 
+export function Header({ ref, className, style, ...props }: InputGroupHeaderProps) {
+	const sx = stylex.props(inputGroupParts.header, style);
+
+	return (
+		<div
+			ref={ref}
+			data-slot="header"
+			className={[sx.className, className].filter(Boolean).join(" ")}
+			style={sx.style}
+			{...props}
+		/>
+	);
+}
+
 export function Footer({ ref, className, style, ...props }: InputGroupFooterProps) {
 	const sx = stylex.props(inputGroupParts.footer, style);
 
-	return <div ref={ref} className={[sx.className, className].filter(Boolean).join(" ")} style={sx.style} {...props} />;
+	return (
+		<div
+			ref={ref}
+			data-slot="footer"
+			className={[sx.className, className].filter(Boolean).join(" ")}
+			style={sx.style}
+			{...props}
+		/>
+	);
 }
 
 const inputGroupParts = stylex.create({
 	root: {
 		borderColor: {
+			[GROUP_HAS_DISABLED]: tokens["--border-disabled"],
 			// eslint-disable-next-line @stylexjs/valid-styles -- the compiler supports chained pseudo-class conditions; the lint rule is stricter than the compiler.
 			[GROUP_HOVER]: {
 				"@media (hover: hover) and (pointer: fine)": tokens["--border-input-hover"],
@@ -166,25 +189,41 @@ const inputGroupParts = stylex.create({
 		overflow: "hidden",
 		alignItems: "center",
 		backgroundColor: {
+			// Match field `inputBase` disabled: transparent surface + root opacity.
+			[GROUP_HAS_DISABLED]: "transparent",
 			default: tokens["--surface"],
-			":has([data-disabled])": tokens["--surface-subtle"],
+		},
+		boxShadow: {
+			[GROUP_HAS_DISABLED]: "none",
+			default: null,
+		},
+		color: {
+			[GROUP_HAS_DISABLED]: tokens["--fg-muted"],
+			default: null,
+		},
+		cursor: {
+			[GROUP_HAS_DISABLED]: "not-allowed",
+			default: null,
 		},
 		display: "flex",
+		flexWrap: "wrap",
+		opacity: {
+			[GROUP_HAS_DISABLED]: 0.5,
+			default: 1,
+		},
 		minWidth: 0,
 	},
 	input: {
 		borderWidth: 0,
 		flex: "1 1 8rem",
 		outline: "0",
+		// Block padding stays on Textarea / Header / Footer; Input stays flush in the row.
 		paddingBlock: 0,
 		paddingInline: "var(--_input-group-child-padding-inline)",
 		appearance: "none",
 		backgroundColor: "transparent",
 		fontFamily: "inherit",
-		height: {
-			default: "100%",
-			[stylex.when.ancestor('[data-orientation="vertical"]')]: "auto",
-		},
+		height: "auto",
 		minWidth: 0,
 		width: "100%",
 		"::placeholder": {
@@ -192,31 +231,23 @@ const inputGroupParts = stylex.create({
 		},
 	},
 	textarea: {
-		flexBasis: {
-			default: "auto",
-			[stylex.when.ancestor('[data-orientation="vertical"]')]: "100%",
-		},
+		paddingBlock: tokens["--space-2"],
+		// Own top/bottom inset so placeholder is not flush; matches Header / Footer outer edge.
+		paddingInline: tokens["--space-2"],
+		// Own a full row inside the wrapping Root (with Header/Footer).
+		flexBasis: "100%",
 		resize: "none",
+		// Hug `rows` / content — callers that need a taller box pass `rows` or `style`.
 		height: "auto",
-		minHeight: "5.5rem",
+		minHeight: "64px",
+		width: "100%",
 	},
 	addon: {
-		paddingInline: "var(--_input-group-child-padding-inline)",
 		alignItems: "center",
 		color: tokens["--fg-muted"],
 		cursor: "text",
 		display: "inline-flex",
 		flexShrink: 0,
-		paddingInlineEnd: {
-			"[data-position=end]:has(button)": "0",
-			"[data-position=start]": "0",
-		},
-		paddingInlineStart: {
-			"[data-position=end]": "0",
-		},
-		// fontSize: fontSize.x1,
-		// letterSpacing: letterSpacing.x1,
-		// lineHeight: lineHeight.x1,
 	},
 	actions: {
 		gap: tokens["--space-1"],
@@ -224,17 +255,47 @@ const inputGroupParts = stylex.create({
 		display: "flex",
 		flexShrink: 0,
 	},
+	header: {
+		gap: tokens["--space-2"],
+		paddingInline: tokens["--space-1"],
+		alignItems: "center",
+		display: "flex",
+		flexBasis: "100%",
+		justifyContent: "flex-start",
+		paddingBlockEnd: 0,
+		paddingBlockStart: tokens["--space-0"],
+		minWidth: 0,
+		width: "100%",
+	},
 	footer: {
 		gap: tokens["--space-2"],
 		paddingInline: "var(--_input-group-child-padding-inline)",
 		alignItems: "center",
 		display: "flex",
-		flexBasis: {
-			default: "auto",
-			[stylex.when.ancestor('[data-orientation="vertical"]')]: "100%",
-		},
+		flexBasis: "100%",
 		justifyContent: "space-between",
+		paddingBlockEnd: tokens["--space-1"],
+		paddingBlockStart: 0,
 		minWidth: 0,
+		width: "100%",
+	},
+});
+
+const inputGroupAddonPositions = stylex.create({
+	start: {
+		paddingBlock: 0,
+		order: -1,
+		paddingInlineEnd: 0,
+		paddingInlineStart: "var(--_input-group-child-padding-inline)",
+	},
+	end: {
+		paddingBlock: 0,
+		order: 1,
+		paddingInlineEnd: {
+			default: "var(--_input-group-child-padding-inline)",
+			":has(button)": 0,
+		},
+		paddingInlineStart: 0,
 	},
 });
 
@@ -242,49 +303,63 @@ const inputGroupVariants = stylex.create({
 	standard: {},
 	elevated: {
 		borderWidth: 0,
-		backgroundColor: tokens["--elevated"],
-		boxShadow: tokens["--shadow-sm"],
+		backgroundColor: {
+			[GROUP_HAS_DISABLED]: "transparent",
+			default: tokens["--elevated"],
+		},
+		boxShadow: {
+			[GROUP_HAS_DISABLED]: "none",
+			default: tokens["--shadow-sm"],
+		},
 	},
 	subtle: {
+		borderWidth: 0,
 		backgroundColor: {
+			[GROUP_HAS_DISABLED]: "transparent",
 			default: tokens["--surface-subtle"],
-			":has([data-disabled])": tokens["--surface-subtle"],
+			":hover": tokens["--surface-subtle-hover"],
 		},
 	},
 });
 
-const inputGroupOrientations = stylex.create({
-	horizontal: {
-		flexDirection: "row",
-	},
-	vertical: {
-		paddingBlock: "var(--_input-group-vertical-padding-block)",
-		alignItems: "stretch",
-		flexDirection: "column",
-		height: "auto",
-	},
-});
-
+/**
+ * Size chrome: Root keeps size padding for every layout (solo, addons, Header /
+ * Footer). Height stays auto with a control minHeight so Textarea rows can grow;
+ * denser product shells override via `style`.
+ */
 const inputGroupSizes = stylex.create({
 	sm: {
 		"--_input-group-child-padding-inline": tokens["--space-1"],
 		"--_input-group-icon-size": "0.875rem",
-		"--_input-group-vertical-padding-block": tokens["--space-2"],
 		paddingBlock: tokens["--space-1"],
 		paddingInline: tokens["--space-1"],
+		height: "auto",
+		minHeight: tokens["--size-control-sm"],
 	},
 	md: {
 		"--_input-group-child-padding-inline": tokens["--space-1"],
 		"--_input-group-icon-size": "1rem",
-		"--_input-group-vertical-padding-block": tokens["--space-3"],
 		paddingBlock: tokens["--space-1"],
 		paddingInline: tokens["--space-1"],
+		height: "auto",
+		minHeight: tokens["--size-control-md"],
 	},
 	lg: {
-		"--_input-group-child-padding-inline": tokens["--space-1"],
+		"--_input-group-child-padding-inline": tokens["--space-4"],
 		"--_input-group-icon-size": "1rem",
-		"--_input-group-vertical-padding-block": tokens["--space-4"],
 		paddingBlock: tokens["--space-2"],
 		paddingInline: tokens["--space-2"],
+		height: "auto",
+		minHeight: tokens["--size-control-lg"],
 	},
 });
+
+export const InputGroup = {
+	Root,
+	Input,
+	Textarea,
+	Addon,
+	Header,
+	Footer,
+	Actions,
+} as const;

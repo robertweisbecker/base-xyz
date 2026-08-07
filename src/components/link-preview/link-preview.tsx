@@ -97,7 +97,7 @@ export function Viewport({ ref, className, style, ...props }: LinkPreviewViewpor
 	return (
 		<BaseLinkPreview.Viewport
 			ref={ref}
-			className={[sxClassName, "ds-popup-viewport", className].filter(Boolean).join(" ")}
+			className={[sxClassName, "xyz-popup-viewport", className].filter(Boolean).join(" ")}
 			style={sxStyle}
 			{...props}
 		/>
@@ -190,3 +190,13 @@ const linkPreviewParts = stylex.create({
 		color: tokens["--fg-muted"],
 	},
 });
+
+export const LinkPreview = {
+	Root,
+	Trigger,
+	Popup,
+	Viewport,
+	Content,
+	Title,
+	Description,
+} as const;

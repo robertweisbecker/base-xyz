@@ -3,10 +3,10 @@ import * as stylex from "@stylexjs/stylex";
 import type { ReactNode } from "react";
 import { textStyles, textWeightStyles } from "@/components/text/text.stylex";
 import { tokens } from "@/theme/tokens.stylex";
-import { ComboboxField } from "../combobox/combobox-field";
-import { NumberField } from "../number-field/number-field";
-import * as Select from "../select/select";
-import { Textarea } from "../textarea/textarea";
+import { ComboboxField } from "@/components/combobox/combobox-field";
+import { NumberField } from "@/components/number-field/number-field";
+import { Select } from "@/components/select/select";
+import { Textarea } from "@/components/textarea/textarea";
 import { TextField } from "./text-field";
 
 const meta = {

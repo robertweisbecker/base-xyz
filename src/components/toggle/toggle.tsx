@@ -4,24 +4,57 @@ import * as stylex from "@stylexjs/stylex";
 import type { StyleXStyles } from "@stylexjs/stylex";
 import type { ReactNode } from "react";
 import { extractThemeProps } from "@/theme/theme-props";
-import { Button, type ButtonProps, type ButtonShape, type ButtonSize, type ButtonVariant } from "../button/button";
-import { buttonThemeProps, type ButtonThemeProps } from "../button/button-theme-props";
+import {
+	Button,
+	IconButton,
+	type ButtonShape,
+	type ButtonSize,
+	type ButtonVariant,
+	type IconButtonProps,
+} from "@/components/button/button";
+import { buttonThemeProps, type ButtonThemeProps } from "@/components/button/button-theme-props";
 import { tokens } from "@/theme/tokens.stylex";
 
-export type ToggleProps = Omit<
+type ToggleBaseProps = Omit<
 	BaseToggle.Props,
-	"className" | "color" | "height" | "nativeButton" | "render" | "style" | "width" | keyof ButtonThemeProps
+	"children" | "className" | "color" | "height" | "nativeButton" | "render" | "style" | "width" | keyof ButtonThemeProps
 > &
-	Pick<ButtonProps, "variant" | "size" | "shape"> &
 	ButtonThemeProps & {
 		className?: string;
-		/** Visual content positioned before the label. */
-		icon?: ReactNode;
-		/** Visual content that replaces `icon` while the toggle is pressed. */
+		/** Visual content that replaces `startSlot` or `icon` while the toggle is pressed. */
 		pressedIcon?: ReactNode;
 		/** StyleX overrides, applied after the component's own styles. */
 		style?: StyleXStyles;
+		variant?: ButtonVariant;
+		size?: ButtonSize;
 	};
+
+/** Text toggle rendered as `Button` — optional `startSlot` before the label children. */
+export type ToggleButtonProps = ToggleBaseProps & {
+	/** Visible label. */
+	children?: ReactNode;
+	/** Visual content positioned before the label. */
+	startSlot?: ReactNode;
+	icon?: never;
+	label?: never;
+	tooltip?: never;
+	shape?: ButtonShape;
+};
+
+/** Icon-only toggle rendered as `IconButton` — square control sizing and required accessible `label`. */
+export type ToggleIconButtonProps = ToggleBaseProps & {
+	children?: never;
+	/** Icon shown in the icon-only configuration. */
+	icon: ReactNode;
+	/** Accessible name for the icon-only configuration. */
+	label: string;
+	startSlot?: never;
+	shape?: Extract<ButtonShape, "circle" | "square">;
+	/** Visible tooltip text. Defaults to `label`; use `false` to disable it. */
+	tooltip?: IconButtonProps["tooltip"];
+};
+
+export type ToggleProps = ToggleButtonProps | ToggleIconButtonProps;
 
 export type ToggleGroupProps = Omit<BaseToggleGroup.Props, "className" | "style"> & {
 	className?: string;
@@ -33,18 +66,36 @@ export type ToggleVariant = ButtonVariant;
 export type ToggleSize = ButtonSize;
 export type ToggleShape = ButtonShape;
 
-export function Toggle({
+function isToggleIconButtonProps(props: ToggleProps): props is ToggleIconButtonProps {
+	return typeof (props as ToggleIconButtonProps).label === "string";
+}
+
+function resolvePressedSlot(pressed: boolean, resting: ReactNode, pressedIcon: ReactNode | undefined) {
+	return pressed && pressedIcon !== undefined ? pressedIcon : resting;
+}
+
+export function Toggle(props: ToggleProps) {
+	if (isToggleIconButtonProps(props)) {
+		return <ToggleAsIconButton {...props} />;
+	}
+
+	return <ToggleAsButton {...props} />;
+}
+
+function ToggleAsButton({
 	ref,
+	children,
 	className,
-	icon,
 	pressedIcon,
 	shape = "default",
 	size = "md",
+	startSlot,
 	style,
 	variant = "ghost",
 	...props
-}: ToggleProps) {
+}: ToggleButtonProps) {
 	const { restProps, themeProps } = extractThemeProps(props, buttonThemeProps);
+
 	return (
 		<BaseToggle
 			ref={ref}
@@ -54,12 +105,55 @@ export function Toggle({
 					className={className}
 					shape={shape}
 					size={size}
-					startSlot={state.pressed && pressedIcon !== undefined ? pressedIcon : icon}
+					startSlot={resolvePressedSlot(state.pressed, startSlot, pressedIcon)}
 					style={style}
 					variant={variant}
-					{...themeProps}
-				/>
+					{...themeProps}>
+					{children}
+				</Button>
 			)}
+			{...restProps}
+		/>
+	);
+}
+
+function ToggleAsIconButton({
+	ref,
+	className,
+	icon,
+	label,
+	pressedIcon,
+	shape = "square",
+	size = "md",
+	style,
+	tooltip,
+	variant = "ghost",
+	...props
+}: ToggleIconButtonProps) {
+	const { restProps, themeProps } = extractThemeProps(props, buttonThemeProps);
+
+	return (
+		<BaseToggle
+			ref={ref}
+			render={(renderProps, state) => {
+				const { children: _children, ...iconButtonProps } = renderProps;
+				void _children;
+
+				return (
+					<IconButton
+						{...iconButtonProps}
+						className={className}
+						icon={resolvePressedSlot(state.pressed, icon, pressedIcon)}
+						label={label}
+						shape={shape}
+						size={size}
+						style={style}
+						tooltip={tooltip}
+						variant={variant}
+						{...themeProps}
+					/>
+				);
+			}}
 			{...restProps}
 		/>
 	);
@@ -87,5 +181,9 @@ const toggleParts = stylex.create({
 			"[data-orientation=vertical]": "column",
 			default: "row",
 		},
+	},
+	toggle: {
+		flex: "1",
+		paddingInline: tokens["--space-2"],
 	},
 });
