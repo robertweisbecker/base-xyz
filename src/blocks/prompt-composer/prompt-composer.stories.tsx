@@ -4,7 +4,7 @@ import { PaperclipIcon } from "@phosphor-icons/react/dist/csr/Paperclip";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import * as stylex from "@stylexjs/stylex";
 import { useState, type ReactNode } from "react";
-import { Menu, Separator, Toolbar } from "@/components";
+import { Button, Menu, Separator, Toolbar } from "@/components";
 import { tokens } from "@/theme/tokens.stylex";
 
 import { ModelSelector } from "@/blocks/model-selector/model-selector";
@@ -43,7 +43,7 @@ export const Examples: Story = {
 			</Example>
 			<Separator />
 			<Example label="Ready, filled">
-				<ComposerDemo clearOnSubmit={false} defaultValue="Summarize the open review comments." disabled={false} />
+				<ComposerDemo clearOnSubmit={false} defaultValue="Summarize the open review comments." />
 			</Example>
 			<Separator />
 			<Example label="Disabled">
@@ -124,18 +124,19 @@ function GeneratingDemo() {
 						setSubmitting(false);
 						setFeedback("Generation stopped.");
 					}}>
-					<Toolbar.Root aria-label="Prompt options" variant="unstyled">
-						<Toolbar.Button
-							aria-label="Search the web"
-							aria-pressed={webSearch}
-							onClick={() => {
-								setWebSearch((enabled) => !enabled);
-								setFeedback(webSearch ? "Web search disabled." : "Web search enabled.");
-							}}>
-							<GlobeIcon aria-hidden size={16} weight="bold" />
-							Search
-						</Toolbar.Button>
-					</Toolbar.Root>
+					<Button
+						variant="neutral"
+						size="sm"
+						shape="pill"
+						startSlot={<GlobeIcon aria-hidden />}
+						aria-label="Search the web"
+						aria-pressed={webSearch}
+						onClick={() => {
+							setWebSearch((enabled) => !enabled);
+							setFeedback(webSearch ? "Web search disabled." : "Web search enabled.");
+						}}>
+						Search
+					</Button>
 				</ComposerSurface>
 			</PromptComposer.Root>
 			<Feedback>{feedback}</Feedback>
@@ -163,31 +164,30 @@ function ComposerDemo({ clearOnSubmit, defaultValue, disabled }: ComposerDemoPro
 				onSubmit={(prompt) => setFeedback(`Submitted: ${prompt}`)}>
 				<ComposerSurface>
 					<AddMenu setFeedback={setFeedback} />
-					<Toolbar.Root aria-label="Prompt options" variant="unstyled">
-						<ModelSelector.Root
-							groups={exampleModelGroups}
-							effortOptions={exampleEffortOptions}
-							speedOptions={exampleSpeedOptions}
-							defaultValue={exampleDefaultValue}
-							onValueChange={(value, { reason }) => {
-								if (reason === "reset") {
-									setFeedback("Model settings reset to defaults.");
-									return;
-								}
-								if (reason === "model") {
-									setFeedback(`Model changed to ${getExampleModelLabel(value.model)}.`);
-									return;
-								}
-								if (reason === "effort") {
-									setFeedback(`Effort changed to ${value.effort}.`);
-									return;
-								}
-								setFeedback(`Speed changed to ${value.speed}.`);
-							}}>
-							<ModelSelector.Trigger render={<Toolbar.Button style={storyParts.modelTrigger} />} />
-							<ModelSelector.Popup />
-						</ModelSelector.Root>
-					</Toolbar.Root>
+
+					<ModelSelector.Root
+						groups={exampleModelGroups}
+						effortOptions={exampleEffortOptions}
+						speedOptions={exampleSpeedOptions}
+						defaultValue={exampleDefaultValue}
+						onValueChange={(value, { reason }) => {
+							if (reason === "reset") {
+								setFeedback("Model settings reset to defaults.");
+								return;
+							}
+							if (reason === "model") {
+								setFeedback(`Model changed to ${getExampleModelLabel(value.model)}.`);
+								return;
+							}
+							if (reason === "effort") {
+								setFeedback(`Effort changed to ${value.effort}.`);
+								return;
+							}
+							setFeedback(`Speed changed to ${value.speed}.`);
+						}}>
+						<ModelSelector.Trigger variant="neutral" size="sm" shape="pill" style={storyParts.modelTrigger} />
+						<ModelSelector.Popup />
+					</ModelSelector.Root>
 				</ComposerSurface>
 			</PromptComposer.Root>
 			<Feedback>{feedback}</Feedback>

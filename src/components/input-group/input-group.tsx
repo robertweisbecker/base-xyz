@@ -10,8 +10,6 @@ import { tokens } from "@/theme/tokens.stylex";
 
 /** Disabled chrome follows a nested input/textarea, not addon action buttons. */
 const GROUP_HAS_DISABLED = ":has(:is(input, textarea):is([data-disabled], :disabled))";
-const ELEVATED_HAS_DISABLED =
-	":has([data-variant='elevated']):has(:is(input, textarea):is([data-disabled], :disabled))";
 
 const GROUP_HOVER = `:hover:not(:focus-within):not(:has([aria-invalid="true"])):not(${GROUP_HAS_DISABLED}):not(:has([data-invalid])):not(:has([readonly]))`;
 
@@ -192,13 +190,11 @@ const inputGroupParts = stylex.create({
 		overflow: "hidden",
 		alignItems: "center",
 		backgroundColor: {
-			[ELEVATED_HAS_DISABLED]: tokens["--elevated"],
 			// Match field `inputBase` disabled: transparent surface + root opacity.
 			[GROUP_HAS_DISABLED]: "transparent",
 			default: tokens["--surface"],
 		},
 		boxShadow: {
-			[ELEVATED_HAS_DISABLED]: tokens["--shadow-xs"],
 			[GROUP_HAS_DISABLED]: "none",
 			default: null,
 		},
@@ -270,7 +266,7 @@ const inputGroupParts = stylex.create({
 	},
 	footer: {
 		gap: tokens["--space-2"],
-		paddingInline: "var(--_input-group-padding)",
+		paddingInline: "var(--_input-padding)",
 		alignItems: "center",
 		display: "flex",
 		flexBasis: "100%",
@@ -304,7 +300,7 @@ const inputGroupVariants = stylex.create({
 	elevated: {
 		borderWidth: 0,
 		backgroundColor: {
-			[GROUP_HAS_DISABLED]: tokens["--surface"],
+			[GROUP_HAS_DISABLED]: tokens["--panel"],
 			default: tokens["--elevated"],
 		},
 		boxShadow: {

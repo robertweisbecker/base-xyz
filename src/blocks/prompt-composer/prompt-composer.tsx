@@ -124,7 +124,7 @@ export function Surface({ ref: forwardedRef, variant = "elevated", style, ...pro
 		}
 	}
 
-	return <InputGroup.Root ref={setRefs} variant={variant} {...props} style={[parts.inputGroup, style]} size="lg" />;
+	return <InputGroup.Root ref={setRefs} size="lg" variant={variant} {...props} style={[parts.inputGroup, style]} />;
 }
 
 export function Input({
@@ -324,7 +324,7 @@ const parts = stylex.create({
 	 * Footer / Textarea own block edges. Child inline padding clears so Root inset wins.
 	 */
 	inputGroup: {
-		borderRadius: "2.75rem",
+		borderRadius: "2.5rem",
 		gap: 0,
 		// alignItems: "stretch",
 		// height: "auto",
@@ -332,7 +332,8 @@ const parts = stylex.create({
 	},
 	/** Fade size + expand-on-focus; both are composer behavior, not InputGroup. */
 	input: {
-		"--_input-group-child-padding-inline": tokens["--space-4"],
+		"--_input-group-padding": tokens["--space-4"],
+		"--_input-padding": tokens["--space-4"],
 		"--scroll-fade-size": tokens["--space-8"],
 		fieldSizing: {
 			default: "fixed",
