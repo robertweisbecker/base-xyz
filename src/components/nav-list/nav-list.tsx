@@ -30,7 +30,7 @@ import {
 	menuItemVariantStyles,
 } from "@/components/menu/menu-item.stylex";
 import { Popover } from "@/components/popover/popover";
-import { textSizeStyles, textStyles, textWeightStyles } from "@/components/text/text.stylex";
+import { typescaleStyles, textStyles, fontWeightStyles } from "@/components/text/text.stylex";
 import { Tooltip } from "@/components/tooltip/tooltip";
 import { VisuallyHidden } from "@/components/visually-hidden/visually-hidden";
 import { focusRing } from "@/styles/recipes/focus";
@@ -180,8 +180,8 @@ export function Section({
 			id={headingId}
 			{...stylex.props(
 				textStyles.body,
-				textSizeStyles["1"],
-				textWeightStyles.medium,
+				typescaleStyles["1"],
+				fontWeightStyles.medium,
 				navListText.sectionLabel,
 				navListParts.sectionLabel,
 			)}>
@@ -191,7 +191,7 @@ export function Section({
 				<span
 					{...stylex.props(
 						textStyles.body,
-						textSizeStyles["1"],
+						typescaleStyles["1"],
 						navListText.description,
 						navListParts.sectionDescription,
 					)}>

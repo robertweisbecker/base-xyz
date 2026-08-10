@@ -1,5 +1,5 @@
 #storybook-docs .sbdocs-preview {
-	background: var(--bg-canvas) !important;
+	background: var(--canvas) !important;
 	border-color: var(--border) !important;
 	color: var(--fg) !important;
 }
@@ -18,6 +18,6 @@
 #storybook-docs .docs-story,
 #storybook-docs .innerZoomElementWrapper,
 #storybook-docs .sb-story {
-	background: var(--bg-canvas) !important;
+	background: var(--canvas) !important;
 	color: var(--fg) !important;
 }

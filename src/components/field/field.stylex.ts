@@ -1,6 +1,6 @@
 import * as stylex from "@stylexjs/stylex";
 import type { FieldSize, FieldThemeProps } from "@/components/field/field.types";
-import { textStyles, textWeightStyles } from "@/components/text/text.stylex";
+import { textStyles, fontWeightStyles } from "@/components/text/text.stylex";
 import { breakpoints } from "@/styles/constants.stylex";
 import { composeThemeProps, type ThemePropDefinition, type VerifyThemeProps } from "@/theme/theme-props";
 import {
@@ -150,8 +150,8 @@ const parts = stylex.create({
 
 export const fieldStyles = {
 	root: parts.root,
-	label: [textStyles.supporting, textWeightStyles.medium, parts.label],
-	groupLabel: [textStyles.body, textWeightStyles.semibold, parts.groupLabel],
+	label: [textStyles.supporting, fontWeightStyles.medium, parts.label],
+	groupLabel: [textStyles.body, fontWeightStyles.semibold, parts.groupLabel],
 	itemLabel: [textStyles.label, parts.itemLabel],
 	description: [textStyles.supporting, parts.description],
 	error: [textStyles.supporting, parts.error],

@@ -5,7 +5,7 @@ import * as stylex from "@stylexjs/stylex";
  * ancestor to tune the sweep.
  */
 export const shimmerTextVars = stylex.defineVars({
-	base: "color-mix(in oklch, currentColor 54%, transparent)",
+	base: "color-mix(in oklch, currentColor 40%, transparent)",
 	duration: "2500ms",
 	highlight: "currentColor",
 });

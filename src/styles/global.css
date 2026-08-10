@@ -12,5 +12,5 @@
 
 ::selection {
 	background-color: var(--focus);
-	color: var(--bg-canvas);
+	color: var(--canvas);
 }

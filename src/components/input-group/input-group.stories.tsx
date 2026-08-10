@@ -2,6 +2,7 @@ import { Field } from "@base-ui/react/field";
 import { MagnifyingGlassIcon } from "@phosphor-icons/react/dist/csr/MagnifyingGlass";
 import { PaperclipIcon } from "@phosphor-icons/react/dist/csr/Paperclip";
 import { PaperPlaneTiltIcon } from "@phosphor-icons/react/dist/csr/PaperPlaneTilt";
+import { ArrowUpIcon } from "@phosphor-icons/react/dist/csr/ArrowUp";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import * as stylex from "@stylexjs/stylex";
 import type { ReactNode } from "react";
@@ -156,25 +157,35 @@ export const Alignments: Story = {
 					<InputGroup.Textarea placeholder="Ask a follow-up…" aria-label="Footer message" />
 					<InputGroup.Footer>
 						<InputGroup.Actions>
-							<IconButton icon={<PaperclipIcon aria-hidden />} label="Attach a file" size="xs" variant="ghost" />
+							<IconButton icon={<PaperclipIcon aria-hidden />} label="Attach a file" variant="ghost" size="sm" />
 						</InputGroup.Actions>
 						<InputGroup.Actions>
-							<IconButton icon={<PaperPlaneTiltIcon aria-hidden weight="fill" />} label="Send message" size="xs" />
+							<IconButton icon={<ArrowUpIcon aria-hidden />} label="Send message" size="sm" />
 						</InputGroup.Actions>
 					</InputGroup.Footer>
 				</InputGroup.Root>
 			</State>
 			<Separator />
-			<State label="Header and footer">
+			<State label="Header label + footer actions">
 				<InputGroup.Root variant="elevated">
-					<InputGroup.Header>Draft reply</InputGroup.Header>
-					<InputGroup.Textarea aria-label="Header and footer message" placeholder="Write a reply…" />
+					<InputGroup.Header>
+						<label htmlFor="header-and-footer-message">Draft a reply</label>
+					</InputGroup.Header>
+					<InputGroup.Textarea
+						id="header-and-footer-message"
+						aria-label="Header and footer message"
+						placeholder="Write a reply…"
+					/>
 					<InputGroup.Footer>
 						<InputGroup.Actions>
-							<IconButton icon={<PaperclipIcon aria-hidden />} label="Attach a file" size="xs" variant="ghost" />
+							<Button startSlot={<PaperclipIcon aria-hidden />} size="sm" variant="neutral">
+								Attach
+							</Button>
 						</InputGroup.Actions>
 						<InputGroup.Actions>
-							<IconButton icon={<PaperPlaneTiltIcon aria-hidden weight="fill" />} label="Send message" size="xs" />
+							<Button startSlot={<PaperPlaneTiltIcon aria-hidden weight="fill" />} size="sm">
+								Send
+							</Button>
 						</InputGroup.Actions>
 					</InputGroup.Footer>
 				</InputGroup.Root>

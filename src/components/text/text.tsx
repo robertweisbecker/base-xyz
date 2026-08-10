@@ -3,12 +3,12 @@ import * as stylex from "@stylexjs/stylex";
 import type { StyleXStyles } from "@stylexjs/stylex";
 import { resolveThemeProps } from "@/theme/theme-props";
 import {
-	textColorPropStyles,
-	textFamilyStyles,
-	textSizeStyles,
+	textColorStyles,
+	fontFamilyStyles,
+	typescaleStyles,
 	textBaseStyles,
 	textTruncationStyles,
-	textWeightStyles,
+	fontWeightStyles,
 	textWrapStyles,
 	textThemeProps,
 } from "./text.stylex";
@@ -41,12 +41,12 @@ export function Text({
 	const { restProps, styles } = resolveThemeProps(props, textThemeProps);
 	const sx = stylex.props(
 		textBaseStyles.root,
-		textFamilyStyles[fontFamily],
-		textSizeStyles[size],
-		textWeightStyles[fontWeight],
-		textColorPropStyles[color],
+		fontFamilyStyles[fontFamily],
+		typescaleStyles[size],
+		fontWeightStyles[fontWeight],
+		textColorStyles[color],
 		textWrapStyles[wrap],
-		truncate && textTruncationStyles.singleLine,
+		truncate && textTruncationStyles.truncate,
 		...styles,
 		style,
 	);

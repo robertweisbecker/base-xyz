@@ -3,7 +3,7 @@ import * as stylex from "@stylexjs/stylex";
 import type { StyleXStyles } from "@stylexjs/stylex";
 import { createContext, type ComponentPropsWithoutRef, useContext, useMemo } from "react";
 import { fieldStyles } from "@/components/field/field.stylex";
-import { textSizeStyles, textWeightStyles } from "@/components/text/text.stylex";
+import { typescaleStyles, fontWeightStyles } from "@/components/text/text.stylex";
 import { focusRing } from "@/styles/recipes/focus";
 import { tokens } from "@/theme/tokens.stylex";
 
@@ -107,7 +107,7 @@ export function Label({ className, style, ...props }: SliderLabelProps) {
 
 export function Value({ children, className, style, ...props }: SliderValueProps) {
 	const { format, locale, max, min } = useSliderContext();
-	const sx = stylex.props(textSizeStyles["2"], textWeightStyles.regular, sliderParts.value, style);
+	const sx = stylex.props(typescaleStyles["2"], fontWeightStyles.regular, sliderParts.value, style);
 
 	return (
 		<BaseSlider.Value {...props} className={mergeClassNames(sx.className, className)} style={sx.style}>
@@ -377,7 +377,7 @@ const sliderParts = stylex.create({
 		boxShadow: {
 			"[data-disabled]": "none",
 			default: null,
-			":has(input:focus-visible)": "0 0 0 8px var(--bg-canvas)",
+			":has(input:focus-visible)": "0 0 0 8px var(--canvas)",
 		},
 		outlineColor: {
 			"[data-disabled]": "transparent",

@@ -1,5 +1,5 @@
 import * as stylex from "@stylexjs/stylex";
-import { textStyles, textWeightStyles } from "@/components/text/text.stylex";
+import { textStyles, fontWeightStyles } from "@/components/text/text.stylex";
 import { tokens } from "@/theme/tokens.stylex";
 
 const toastTextParts = stylex.create({
@@ -13,7 +13,7 @@ const toastTextParts = stylex.create({
 });
 
 export const toastTextStyles = {
-	title: [textStyles.body, textWeightStyles.semibold, toastTextParts.title],
+	title: [textStyles.body, fontWeightStyles.semibold, toastTextParts.title],
 	description: [textStyles.supporting, toastTextParts.description],
 } as const;
 
@@ -60,7 +60,7 @@ const toastControlParts = stylex.create({
 });
 
 export const toastControlStyles = {
-	action: [textStyles.supporting, textWeightStyles.semibold, toastControlParts.action],
+	action: [textStyles.supporting, fontWeightStyles.semibold, toastControlParts.action],
 	close: toastControlParts.close,
 	stackedClose: toastControlParts.stackedClose,
 	anchoredClose: toastControlParts.anchoredClose,

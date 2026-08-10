@@ -48,7 +48,7 @@
 	}
 
 	html {
-		background: var(--bg-canvas);
+		background: var(--canvas);
 		/* font-synthesis: none; */
 		text-rendering: optimizeLegibility;
 		-webkit-font-smoothing: antialiased;
@@ -58,7 +58,7 @@
 		position: relative;
 		min-width: 320px;
 		min-height: 100vh;
-		background: var(--bg-canvas);
+		background: var(--canvas);
 		color: var(--fg);
 		line-height: inherit;
 	}
@@ -263,7 +263,7 @@
 
 	::selection {
 		background: currentColor;
-		color: var(--bg-canvas);
+		color: var(--canvas);
 	}
 
 	[hidden]:where(:not([hidden="until-found"])) {

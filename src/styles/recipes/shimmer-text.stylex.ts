@@ -10,14 +10,14 @@ const shimmerSweep = stylex.keyframes({
 		backgroundPosition: "0 0",
 	},
 	"100%": {
-		backgroundPosition: "0 0",
+		backgroundPosition: "-150% 0",
 	},
 });
 
 export const shimmerTextStyles = stylex.create({
 	effect: {
 		[shimmerTextVars.base]: "color-mix(in oklch, currentColor 54%, transparent)",
-		[shimmerTextVars.duration]: "2500ms",
+		[shimmerTextVars.duration]: "1500ms",
 		[shimmerTextVars.highlight]: `color-mix(in srgb, currentColor, ${tokens["--bg-inverse"]})`,
 		WebkitBackgroundClip: {
 			default: "text",
@@ -40,7 +40,7 @@ export const shimmerTextStyles = stylex.create({
 			"@media (prefers-reduced-motion: reduce)": "border-box",
 		},
 		backgroundImage: {
-			default: `linear-gradient(100deg, ${shimmerTextVars.base} 0 40%, ${shimmerTextVars.highlight} 50%, ${shimmerTextVars.base} 60% 100%)`,
+			default: `linear-gradient(30deg, ${shimmerTextVars.base} 0 40%, ${shimmerTextVars.highlight} 50%, ${shimmerTextVars.base} 60% 100%)`,
 			"@media (prefers-reduced-motion: reduce)": "none",
 		},
 		backgroundSize: "300% 100%",

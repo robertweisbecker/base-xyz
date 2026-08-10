@@ -2,7 +2,7 @@ import { useRender } from "@base-ui/react/use-render";
 import * as stylex from "@stylexjs/stylex";
 import type { StyleXStyles } from "@stylexjs/stylex";
 import type { ReactNode } from "react";
-import { textSizeStyles, textStyles, textWeightStyles } from "@/components/text/text.stylex";
+import { typescaleStyles, textStyles, fontWeightStyles } from "@/components/text/text.stylex";
 import { focusRing } from "@/styles/recipes/focus";
 import { tokens } from "@/theme/tokens.stylex";
 
@@ -15,10 +15,7 @@ import { tokens } from "@/theme/tokens.stylex";
  */
 export type ItemDescriptionLayout = "stack" | "inline" | "inline-wrap";
 
-export type ItemProps = Omit<
-	useRender.ComponentProps<"div">,
-	"children" | "className" | "render" | "style"
-> & {
+export type ItemProps = Omit<useRender.ComponentProps<"div">, "children" | "className" | "render" | "style"> & {
 	className?: string;
 	/** Supporting text beside or beneath the label. */
 	description?: ReactNode;
@@ -47,7 +44,8 @@ export function Item({
 	style,
 	...props
 }: ItemProps) {
-	const hasDescription = description !== undefined && description !== null && description !== false && description !== "";
+	const hasDescription =
+		description !== undefined && description !== null && description !== false && description !== "";
 	const sx = stylex.props(itemParts.root, focusRing.offset, style);
 
 	return useRender<{}, HTMLElement>({
@@ -74,8 +72,8 @@ export function Item({
 						<span
 							{...stylex.props(
 								textStyles.body,
-								textSizeStyles["2"],
-								textWeightStyles.medium,
+								typescaleStyles["2"],
+								fontWeightStyles.medium,
 								itemParts.label,
 								descriptionLayout === "inline-wrap" && itemParts.labelInlineFlow,
 							)}>
@@ -85,7 +83,7 @@ export function Item({
 							<span
 								{...stylex.props(
 									textStyles.body,
-									textSizeStyles["1"],
+									typescaleStyles["1"],
 									itemParts.description,
 									descriptionLayout === "inline" && itemParts.descriptionInline,
 									descriptionLayout === "inline-wrap" && itemParts.descriptionInlineWrap,

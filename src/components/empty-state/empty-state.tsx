@@ -98,7 +98,7 @@ export function EmptyState({
 						textAlign="center"
 						color="muted"
 						render={<p />}
-						size={size === "lg" ? "3" : "2"}
+						size={size === "sm" ? "1" : size === "md" ? "2" : "3"}
 						style={emptyStateStyles.description}
 						mt={size === "sm" ? 1 : size === "md" ? 2 : 3}
 						wrap="pretty">
@@ -133,7 +133,7 @@ const emptyStateStyles = stylex.create({
 		// borderWidth: 1,
 		// borderStyle: "dashed",
 		// borderColor: colors["--border-input"],
-		color: tokens["--fg-muted"],
+		color: tokens["--fg-subtle"],
 		display: "flex",
 		justifyContent: "center",
 		lineHeight: 0,
@@ -148,6 +148,7 @@ const emptyStateStyles = stylex.create({
 		maxWidth: "32rem",
 	},
 	description: {
+		color: tokens["--fg-muted"],
 		maxWidth: "32rem",
 	},
 	actions: {
@@ -161,20 +162,23 @@ const emptyStateStyles = stylex.create({
 const rootSizeStyles = stylex.create({
 	sm: {
 		gap: tokens["--space-3"],
-		paddingBlock: tokens["--space-4"],
 		paddingInline: tokens["--space-4"],
-		minHeight: "10rem",
+		paddingBlockEnd: tokens["--space-6"],
+		paddingBlockStart: tokens["--space-2"],
+		minHeight: "8rem",
 	},
 	md: {
 		gap: tokens["--space-4"],
-		paddingBlock: tokens["--space-8"],
-		paddingInline: tokens["--space-6"],
+		paddingBlock: tokens["--space-6"],
+		paddingInline: tokens["--space-4"],
+		paddingBlockEnd: tokens["--space-8"],
 		minHeight: "14rem",
 	},
 	lg: {
 		gap: tokens["--space-5"],
-		paddingBlock: tokens["--space-16"],
-		paddingInline: tokens["--space-8"],
+		paddingInline: tokens["--space-4"],
+		paddingBlockEnd: tokens["--space-8"],
+		paddingBlockStart: tokens["--space-8"],
 		minHeight: "18rem",
 	},
 });
@@ -200,7 +204,7 @@ const iconSizeStyles = stylex.create({
 const actionSizeStyles = stylex.create({
 	sm: {
 		gap: tokens["--space-2"],
-		marginBlockStart: tokens["--space-1"],
+		marginBlockStart: tokens["--space-2"],
 	},
 	md: {
 		gap: tokens["--space-2"],

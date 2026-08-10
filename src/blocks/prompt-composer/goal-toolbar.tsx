@@ -1,6 +1,6 @@
 import { TargetIcon } from "@phosphor-icons/react/dist/csr/Target";
 import { PauseCircleIcon } from "@phosphor-icons/react/dist/csr/PauseCircle";
-import { PencilIcon } from "@phosphor-icons/react/dist/csr/Pencil";
+import { PencilSimpleIcon } from "@phosphor-icons/react/dist/csr/PencilSimple";
 import { PlayCircleIcon } from "@phosphor-icons/react/dist/csr/PlayCircle";
 import { TrashIcon } from "@phosphor-icons/react/dist/csr/Trash";
 import * as stylex from "@stylexjs/stylex";
@@ -54,7 +54,7 @@ export function GoalToolbar({ active, description, onActiveChange }: GoalToolbar
 						<span {...stylex.props(parts.elapsed)}>12m 24s</span>
 						<Toolbar.Group aria-label="Goal actions" style={parts.actions}>
 							<IconButton
-								icon={<PencilIcon aria-hidden weight="regular" />}
+								icon={<PencilSimpleIcon aria-hidden weight="regular" />}
 								label="Edit goal"
 								render={<Dialog.Trigger render={<Toolbar.Button style={parts.wideAction} />} />}
 								nativeButton
@@ -122,7 +122,7 @@ export function GoalToolbar({ active, description, onActiveChange }: GoalToolbar
 							<Toolbar.Root aria-label="Additional goal actions" variant="unstyled">
 								<Toolbar.Group>
 									<Dialog.Trigger render={<Toolbar.Button style={parts.compactAction} />}>
-										<PencilIcon aria-hidden size={16} weight="regular" /> Edit
+										<PencilSimpleIcon aria-hidden size={16} weight="regular" /> Edit
 									</Dialog.Trigger>
 									<Toolbar.Button style={parts.compactAction}>
 										<TrashIcon aria-hidden size={16} weight="regular" /> Delete
@@ -172,7 +172,7 @@ const parts = stylex.create({
 		borderTopRightRadius: tokens["--radius-lg"],
 	},
 	summary: {
-		padding: tokens["--space-1"],
+		padding: tokens["--space-1-5"],
 		gap: tokens["--space-2"],
 		alignItems: "center",
 		display: "flex",

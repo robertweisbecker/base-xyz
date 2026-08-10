@@ -12,7 +12,7 @@ import {
 	useRef,
 } from "react";
 import type { ButtonSize } from "@/components/button/button";
-import { textSizeStyles, textWeightStyles } from "@/components/text/text.stylex";
+import { typescaleStyles, fontWeightStyles } from "@/components/text/text.stylex";
 import { focusRing } from "@/styles/recipes/focus";
 import { tokens } from "@/theme/tokens.stylex";
 
@@ -125,7 +125,7 @@ export function Tab({ ref, children, className, endSlot, startSlot, style, type 
 	const sx = stylex.props(
 		focusRing.offset,
 		tabsParts.tab,
-		textWeightStyles.medium,
+		fontWeightStyles.medium,
 		tabTextSizeStyles[tabsSize],
 		tabOrientationStyles[orientation],
 		tabSizeStyles[tabsSize],
@@ -346,14 +346,14 @@ const tabOrientationStyles = stylex.create({
 
 const tabsRadiusStyles = stylex.create({
 	sm: { "--_tabs-list-radius": tokens["--radius-sm"] },
-	md: { "--_tabs-list-radius": tokens["--radius-md"] },
-	lg: { "--_tabs-list-radius": tokens["--radius-md"] },
+	md: { "--_tabs-list-radius": tokens["--radius-lg"] },
+	lg: { "--_tabs-list-radius": tokens["--radius-lg"] },
 });
 
 const tabTextSizeStyles = {
-	sm: textSizeStyles["1"],
-	md: textSizeStyles["2"],
-	lg: textSizeStyles["2"],
+	sm: typescaleStyles["1"],
+	md: typescaleStyles["2"],
+	lg: typescaleStyles["2"],
 } as const;
 
 const tabSizeStyles = stylex.create({
@@ -375,9 +375,9 @@ const tabSizeStyles = stylex.create({
 });
 
 const slotSizeStyles = stylex.create({
-	sm: { fontSize: "1em" },
+	sm: { fontSize: ".875rem" },
 	md: { fontSize: "1rem" },
-	lg: { fontSize: "1.125em" },
+	lg: { fontSize: "1.125rem" },
 });
 
 const startSlotOffsetStyles = stylex.create({
@@ -393,5 +393,9 @@ const endSlotOffsetStyles = stylex.create({
 });
 
 export const Tabs = {
-	Root, List, Tab, Content, Panel,
+	Root,
+	List,
+	Tab,
+	Content,
+	Panel,
 } as const;

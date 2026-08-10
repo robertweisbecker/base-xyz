@@ -10,6 +10,8 @@ import { tokens } from "@/theme/tokens.stylex";
 
 /** Disabled chrome follows a nested input/textarea, not addon action buttons. */
 const GROUP_HAS_DISABLED = ":has(:is(input, textarea):is([data-disabled], :disabled))";
+const ELEVATED_HAS_DISABLED =
+	":has([data-variant='elevated']):has(:is(input, textarea):is([data-disabled], :disabled))";
 
 const GROUP_HOVER = `:hover:not(:focus-within):not(:has([aria-invalid="true"])):not(${GROUP_HAS_DISABLED}):not(:has([data-invalid])):not(:has([readonly]))`;
 
@@ -79,6 +81,7 @@ export function Root({ ref, className, style, size = "md", variant = "standard",
 		<div
 			{...props}
 			ref={ref}
+			data-variant={variant}
 			data-size={size}
 			className={[sx.className, className].filter(Boolean).join(" ")}
 			style={sx.style}
@@ -101,6 +104,7 @@ export function Textarea({ ref, className, style, rows = 1, disabled, ...props }
 			ref={ref}
 			rows={rows}
 			disabled={disabled}
+			data-disabled={disabled}
 			className={[sx.className, className].filter(Boolean).join(" ")}
 			style={sx.style}
 			{...props}
@@ -185,20 +189,21 @@ const inputGroupParts = stylex.create({
 			":has([data-invalid])": tokens["--bg-error-primary"],
 			":has([readonly])": tokens["--border"],
 		},
-		gap: tokens["--space-1"],
 		overflow: "hidden",
 		alignItems: "center",
 		backgroundColor: {
+			[ELEVATED_HAS_DISABLED]: tokens["--elevated"],
 			// Match field `inputBase` disabled: transparent surface + root opacity.
 			[GROUP_HAS_DISABLED]: "transparent",
 			default: tokens["--surface"],
 		},
 		boxShadow: {
+			[ELEVATED_HAS_DISABLED]: tokens["--shadow-xs"],
 			[GROUP_HAS_DISABLED]: "none",
 			default: null,
 		},
 		color: {
-			[GROUP_HAS_DISABLED]: tokens["--fg-muted"],
+			[GROUP_HAS_DISABLED]: tokens["--fg-subtle"],
 			default: null,
 		},
 		cursor: {
@@ -207,10 +212,6 @@ const inputGroupParts = stylex.create({
 		},
 		display: "flex",
 		flexWrap: "wrap",
-		opacity: {
-			[GROUP_HAS_DISABLED]: 0.5,
-			default: 1,
-		},
 		minWidth: 0,
 	},
 	input: {
@@ -218,8 +219,8 @@ const inputGroupParts = stylex.create({
 		flex: "1 1 8rem",
 		outline: "0",
 		// Block padding stays on Textarea / Header / Footer; Input stays flush in the row.
-		paddingBlock: 0,
-		paddingInline: "var(--_input-group-child-padding-inline)",
+		paddingBlock: tokens["--space-1"],
+		paddingInline: "var(--_input-padding)",
 		appearance: "none",
 		backgroundColor: "transparent",
 		fontFamily: "inherit",
@@ -227,13 +228,13 @@ const inputGroupParts = stylex.create({
 		minWidth: 0,
 		width: "100%",
 		"::placeholder": {
-			opacity: 0.72,
+			color: tokens["--fg-placeholder"],
 		},
 	},
 	textarea: {
-		paddingBlock: tokens["--space-2"],
+		paddingBlock: "var(--_input-group-padding)",
 		// Own top/bottom inset so placeholder is not flush; matches Header / Footer outer edge.
-		paddingInline: tokens["--space-2"],
+		paddingInline: "var(--_input-padding)",
 		// Own a full row inside the wrapping Root (with Header/Footer).
 		flexBasis: "100%",
 		resize: "none",
@@ -257,25 +258,24 @@ const inputGroupParts = stylex.create({
 	},
 	header: {
 		gap: tokens["--space-2"],
-		paddingInline: tokens["--space-1"],
+		paddingInline: "var(--_input-padding)",
 		alignItems: "center",
 		display: "flex",
 		flexBasis: "100%",
 		justifyContent: "flex-start",
 		paddingBlockEnd: 0,
-		paddingBlockStart: tokens["--space-0"],
+		paddingBlockStart: "var(--_input-padding)",
 		minWidth: 0,
 		width: "100%",
 	},
 	footer: {
 		gap: tokens["--space-2"],
-		paddingInline: "var(--_input-group-child-padding-inline)",
+		paddingInline: "var(--_input-group-padding)",
 		alignItems: "center",
 		display: "flex",
 		flexBasis: "100%",
 		justifyContent: "space-between",
-		paddingBlockEnd: tokens["--space-1"],
-		paddingBlockStart: 0,
+		paddingBlockEnd: "var(--_input-group-padding)",
 		minWidth: 0,
 		width: "100%",
 	},
@@ -286,13 +286,13 @@ const inputGroupAddonPositions = stylex.create({
 		paddingBlock: 0,
 		order: -1,
 		paddingInlineEnd: 0,
-		paddingInlineStart: "var(--_input-group-child-padding-inline)",
+		paddingInlineStart: "var(--_input-group-padding)",
 	},
 	end: {
 		paddingBlock: 0,
 		order: 1,
 		paddingInlineEnd: {
-			default: "var(--_input-group-child-padding-inline)",
+			default: "var(--_input-group-padding)",
 			":has(button)": 0,
 		},
 		paddingInlineStart: 0,
@@ -304,11 +304,11 @@ const inputGroupVariants = stylex.create({
 	elevated: {
 		borderWidth: 0,
 		backgroundColor: {
-			[GROUP_HAS_DISABLED]: "transparent",
+			[GROUP_HAS_DISABLED]: tokens["--surface"],
 			default: tokens["--elevated"],
 		},
 		boxShadow: {
-			[GROUP_HAS_DISABLED]: "none",
+			[GROUP_HAS_DISABLED]: tokens["--shadow-xs"],
 			default: tokens["--shadow-sm"],
 		},
 	},
@@ -317,7 +317,7 @@ const inputGroupVariants = stylex.create({
 		backgroundColor: {
 			[GROUP_HAS_DISABLED]: "transparent",
 			default: tokens["--surface-subtle"],
-			":hover": tokens["--surface-subtle-hover"],
+			":hover:not(:focus-within)": tokens["--surface-subtle-hover"],
 		},
 	},
 });
@@ -329,26 +329,29 @@ const inputGroupVariants = stylex.create({
  */
 const inputGroupSizes = stylex.create({
 	sm: {
-		"--_input-group-child-padding-inline": tokens["--space-1"],
 		"--_input-group-icon-size": "0.875rem",
+		"--_input-group-padding": tokens["--space-1"],
+		"--_input-padding": tokens["--space-1"],
 		paddingBlock: tokens["--space-1"],
 		paddingInline: tokens["--space-1"],
 		height: "auto",
 		minHeight: tokens["--size-control-sm"],
 	},
 	md: {
-		"--_input-group-child-padding-inline": tokens["--space-1"],
 		"--_input-group-icon-size": "1rem",
-		paddingBlock: tokens["--space-1"],
-		paddingInline: tokens["--space-1"],
+		"--_input-group-padding": tokens["--space-2"],
+		"--_input-padding": tokens["--space-2"],
+		// paddingBlock: tokens["--space-1"],
+		// paddingInline: tokens["--space-1"],
 		height: "auto",
 		minHeight: tokens["--size-control-md"],
 	},
 	lg: {
-		"--_input-group-child-padding-inline": tokens["--space-4"],
 		"--_input-group-icon-size": "1rem",
-		paddingBlock: tokens["--space-2"],
-		paddingInline: tokens["--space-2"],
+		"--_input-group-padding": tokens["--space-2"],
+		"--_input-padding": tokens["--space-3"],
+		// paddingBlock: tokens["--space-1"],
+		// paddingInline: tokens["--space-1"],
 		height: "auto",
 		minHeight: tokens["--size-control-lg"],
 	},

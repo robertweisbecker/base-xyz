@@ -2,7 +2,7 @@ import { Popover as BasePopover } from "@base-ui/react/popover";
 import * as stylex from "@stylexjs/stylex";
 import type { StyleXStyles } from "@stylexjs/stylex";
 import { type ComponentProps } from "react";
-import { textStyles, textWeightStyles } from "@/components/text/text.stylex";
+import { textStyles, fontWeightStyles } from "@/components/text/text.stylex";
 import {
 	popupArrowStyles,
 	popupMotionStyles,
@@ -179,8 +179,7 @@ export function CloseButton({
 			aria-label={ariaLabel}
 			className={className}
 			nativeButton
-			render={<CloseButtonControl label={ariaLabel} />}
-			style={[popoverParts.closeButton, style]}
+			render={<CloseButtonControl label={ariaLabel} style={[popoverParts.closeButton, style]} />}
 			{...props}
 		/>
 	);
@@ -239,7 +238,7 @@ const popoverTextParts = stylex.create({
 });
 
 const popoverText = {
-	title: [textStyles.body, textWeightStyles.medium, popoverTextParts.title],
+	title: [textStyles.body, fontWeightStyles.medium, popoverTextParts.title],
 	description: [textStyles.body, popoverTextParts.description],
 } as const;
 

@@ -213,7 +213,7 @@ const toolbarParts = stylex.create({
 		paddingInline: tokens["--space-3"],
 		backgroundColor: {
 			default: tokens["--surface-subtle"],
-			":focus-visible": tokens["--bg-canvas"],
+			":focus-visible": tokens["--canvas"],
 		},
 		boxSizing: "border-box",
 		color: {

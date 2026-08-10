@@ -27,7 +27,7 @@ const scalarStyles = stylex.create({
 });
 
 const colorValues = {
-	canvas: tokens["--bg-canvas"],
+	canvas: tokens["--canvas"],
 	inset: tokens["--bg-inset"],
 	surface: tokens["--surface"],
 	bgPanel: tokens["--panel"],

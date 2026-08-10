@@ -5,7 +5,7 @@ import { CaretRightIcon } from "@phosphor-icons/react/dist/csr/CaretRight";
 import * as stylex from "@stylexjs/stylex";
 import type { StyleXStyles } from "@stylexjs/stylex";
 import { createContext, useContext, type ReactNode } from "react";
-import { textFamilyStyles, textStyles, textWeightStyles } from "@/components/text/text.stylex";
+import { fontFamilyStyles, textStyles, fontWeightStyles } from "@/components/text/text.stylex";
 import { tokens } from "@/theme/tokens.stylex";
 import { popupMotionStyles, popupPositionerStyles, popupViewportStyles } from "@/components/popover/popover.stylex";
 import { popupVars } from "@/components/popover/popover-vars.stylex";
@@ -381,12 +381,13 @@ export const SubmenuRoot = BaseMenu.SubmenuRoot;
 
 const menuParts = stylex.create({
 	panelSurface: {
-		[popupVars.background]: tokens["--panel"],
+		[popupVars.background]: `color-mix(in srgb, ${tokens["--elevated"]} 84%, transparent)`,
 		[popupVars.border]: tokens["--border"],
 		[popupVars.foreground]: tokens["--fg"],
 		borderRadius: tokens["--radius-lg"],
+		backdropFilter: "blur(6px)",
 		backgroundColor: popupVars.background,
-		boxShadow: tokens["--shadow-md"],
+		boxShadow: tokens["--shadow-lg"],
 		color: popupVars.foreground,
 	},
 	popup: {
@@ -544,8 +545,8 @@ const menuParts = stylex.create({
 });
 
 const menuText = {
-	shortcut: [textStyles.supporting, textFamilyStyles.sans],
-	groupLabel: [textStyles.supporting, textWeightStyles.medium],
+	shortcut: [textStyles.supporting, fontFamilyStyles.sans],
+	groupLabel: [textStyles.supporting, fontWeightStyles.medium],
 } as const;
 
 export const Menu = {

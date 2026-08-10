@@ -1,5 +1,5 @@
 import * as stylex from "@stylexjs/stylex";
-import { textSizeStyles, textStyles } from "@/components/text/text.stylex";
+import { typescaleStyles, textStyles } from "@/components/text/text.stylex";
 import { tokens } from "@/theme/tokens.stylex";
 import type { MenuItemSize } from "./menu.types";
 
@@ -64,6 +64,7 @@ const menuItemParts = stylex.create({
 		width: tokens["--space-4"],
 	},
 	itemSm: {
+		borderRadius: tokens["--radius-sm"],
 		minHeight: tokens["--size-control-sm"],
 	},
 	itemMd: {
@@ -82,9 +83,9 @@ export const menuItemStyles = {
 
 /** Selectable-row typography and height aligned with the shared field-control sizes. */
 export const menuItemSizeStyles = {
-	sm: [textSizeStyles["2"], menuItemParts.itemSm],
-	md: [textSizeStyles["2"], menuItemParts.itemMd],
-	lg: [textSizeStyles["3"], menuItemParts.itemLg],
+	sm: [typescaleStyles["2"], menuItemParts.itemSm],
+	md: [typescaleStyles["2"], menuItemParts.itemMd],
+	lg: [typescaleStyles["3"], menuItemParts.itemLg],
 } as const satisfies Record<MenuItemSize, unknown>;
 
 export const menuItemVariantStyles = stylex.create({

@@ -5,7 +5,7 @@ import { createContext, useContext, useMemo, useRef, useState, type ComponentPro
 import { IconButton, type IconButtonProps } from "@/components/button/button";
 import { NavListPresentationProvider } from "@/components/nav-list/nav-list";
 import { ScrollArea } from "@/components/scroll-area/scroll-area";
-import { textSizeStyles, textStyles, textWeightStyles } from "@/components/text/text.stylex";
+import { typescaleStyles, textStyles, fontWeightStyles } from "@/components/text/text.stylex";
 import { tokens } from "@/theme/tokens.stylex";
 
 type StyledProps<T> = Omit<T, "className" | "style"> & {
@@ -184,8 +184,8 @@ export function Footer({ className, style, ...props }: SidebarFooterProps) {
 export function Title({ className, style, ...props }: SidebarTitleProps) {
 	const sx = stylex.props(
 		textStyles.body,
-		textSizeStyles["2"],
-		textWeightStyles.medium,
+		typescaleStyles["2"],
+		fontWeightStyles.medium,
 		sidebarParts.headerTitle,
 		style,
 	);
@@ -194,7 +194,7 @@ export function Title({ className, style, ...props }: SidebarTitleProps) {
 }
 
 export function Description({ className, style, ...props }: SidebarDescriptionProps) {
-	const sx = stylex.props(textStyles.body, textSizeStyles["1"], sidebarParts.headerDescription, style);
+	const sx = stylex.props(textStyles.body, typescaleStyles["1"], sidebarParts.headerDescription, style);
 
 	return <div className={[sx.className, className].filter(Boolean).join(" ")} style={sx.style} {...props} />;
 }

@@ -15,8 +15,8 @@ export const textBaseStyles = stylex.create({
 	},
 });
 
-/** Internal implementation for the Text and Heading `color` prop. Other owners use color tokens directly. */
-export const textColorPropStyles = stylex.create({
+/** Shared internal implementation for the Text and Heading `color` prop. Other owners use color tokens directly. TODO: move this to a higher level as a common text color prop. */
+export const textColorStyles = stylex.create({
 	default: { color: tokens["--fg"] },
 	muted: { color: tokens["--fg-muted"] },
 	subtle: { color: tokens["--fg-subtle"] },
@@ -29,7 +29,7 @@ export const textColorPropStyles = stylex.create({
 	inherit: { color: "inherit" },
 });
 
-export const textWeightStyles = stylex.create({
+export const fontWeightStyles = stylex.create({
 	regular: { fontWeight: tokens["--font-weight-regular"] },
 	medium: { fontWeight: tokens["--font-weight-medium"] },
 	semibold: { fontWeight: tokens["--font-weight-semibold"] },
@@ -37,14 +37,14 @@ export const textWeightStyles = stylex.create({
 	inherit: { fontWeight: "inherit" },
 });
 
-export const textFamilyStyles = stylex.create({
+export const fontFamilyStyles = stylex.create({
 	sans: { fontFamily: tokens["--font-family-sans"] },
 	serif: { fontFamily: tokens["--font-family-serif"] },
 	mono: { fontFamily: tokens["--font-family-mono"] },
 	inherit: { fontFamily: "inherit" },
 });
 
-export const textSizeStyles = stylex.create({
+export const typescaleStyles = stylex.create({
 	"1": {
 		fontSize: tokens["--font-size-1"],
 		letterSpacing: tokens["--letter-spacing-1"],
@@ -188,10 +188,16 @@ export const textWrapStyles = stylex.create({
 	nowrap: { textWrap: "nowrap" },
 	pretty: { textWrap: "pretty" },
 	balance: { textWrap: "balance" },
+	truncate: {
+		textOverflow: "ellipsis",
+		whiteSpace: "nowrap",
+		maxWidth: "100%",
+		overflowX: "clip",
+	},
 });
 
 export const textTruncationStyles = stylex.create({
-	singleLine: {
+	truncate: {
 		textOverflow: "ellipsis",
 		whiteSpace: "nowrap",
 		maxWidth: "100%",

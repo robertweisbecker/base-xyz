@@ -1,7 +1,5 @@
 import { CaretDownIcon } from "@phosphor-icons/react/dist/csr/CaretDown";
 import { CaretRightIcon } from "@phosphor-icons/react/dist/csr/CaretRight";
-import { CaretUpIcon } from "@phosphor-icons/react/dist/csr/CaretUp";
-import { CaretUpDownIcon } from "@phosphor-icons/react/dist/csr/CaretUpDown";
 import { SlidersHorizontalIcon } from "@phosphor-icons/react/dist/csr/SlidersHorizontal";
 import { DotsThreeIcon } from "@phosphor-icons/react/dist/csr/DotsThree";
 import { MagnifyingGlassIcon } from "@phosphor-icons/react/dist/csr/MagnifyingGlass";
@@ -41,6 +39,7 @@ import { InputGroup } from "@/components/input-group/input-group";
 import { Menu } from "@/components/menu/menu";
 import { VisuallyHidden } from "@/components/visually-hidden/visually-hidden";
 import { tokens } from "@/theme/tokens.stylex";
+import { ArrowsDownUpIcon, SortAscendingIcon, SortDescendingIcon } from "@phosphor-icons/react";
 
 const dataTableFeatures = tableFeatures({
 	columnFilteringFeature,
@@ -77,7 +76,6 @@ export type DataTableFilterOption = {
 export type DataTableFilter = {
 	columnId: string;
 	label: ReactNode;
-	maxVisibleChips?: number;
 	options: DataTableFilterOption[];
 };
 
@@ -147,7 +145,7 @@ export function DataTable<TData extends RowData, TValue = unknown>({
 				header: ({ table }) => (
 					<RowSelectionCheckbox
 						checked={table.getIsAllRowsSelected()}
-						indeterminate={table.getIsSomeRowsSelected()}
+						indeterminate={table.getIsSomeRowsSelected() && !table.getIsAllRowsSelected()}
 						label="Select all rows"
 						onCheckedChange={(checked) => table.toggleAllRowsSelected(checked)}
 					/>
@@ -174,17 +172,11 @@ export function DataTable<TData extends RowData, TValue = unknown>({
 						<IconButton
 							type="button"
 							variant="ghost"
-							size="sm"
+							size="xs"
 							aria-expanded={row.getIsExpanded()}
 							label={`${row.getIsExpanded() ? "Collapse" : "Expand"} row ${row.index + 1}`}
 							onClick={row.getToggleExpandedHandler()}
-							icon={
-								row.getIsExpanded() ? (
-									<CaretDownIcon aria-hidden weight="bold" />
-								) : (
-									<CaretRightIcon aria-hidden weight="bold" />
-								)
-							}
+							icon={row.getIsExpanded() ? <CaretDownIcon aria-hidden /> : <CaretRightIcon aria-hidden />}
 						/>
 					) : null,
 			});
@@ -375,12 +367,12 @@ function HeaderContent<TData extends RowData>({
 
 function getSortIcon(sorted: false | "asc" | "desc") {
 	if (sorted === "asc") {
-		return <CaretUpIcon aria-hidden weight="fill" />;
+		return <SortAscendingIcon aria-hidden />;
 	}
 	if (sorted === "desc") {
-		return <CaretDownIcon aria-hidden weight="fill" />;
+		return <SortDescendingIcon aria-hidden />;
 	}
-	return <CaretUpDownIcon aria-hidden weight="fill" />;
+	return <ArrowsDownUpIcon aria-hidden />;
 }
 
 function getSortLabel(content: ReactNode, sorted: false | "asc" | "desc") {
@@ -449,31 +441,14 @@ function FilterTriggerContent({ filter, selectedValues }: { filter: DataTableFil
 		return <span {...stylex.props(tableParts.filterTriggerLabel)}>{filter.label}</span>;
 	}
 
-	const maxVisibleChips = filter.maxVisibleChips ?? 1;
-	const visibleValues = selectedValues.slice(0, maxVisibleChips);
-	const hiddenCount = selectedValues.length - visibleValues.length;
-
 	return (
 		<span {...stylex.props(tableParts.filterTriggerContent)}>
 			<span {...stylex.props(tableParts.filterTriggerLabel)}>{filter.label}</span>
-			<span {...stylex.props(tableParts.filterChips)}>
-				{visibleValues.map((value) => (
-					<Badge key={value} variant="elevated" size="sm">
-						{getFilterOptionLabel(filter, value)}
-					</Badge>
-				))}
-				{hiddenCount > 0 ? (
-					<Badge variant="elevated" size="sm">
-						+{hiddenCount}
-					</Badge>
-				) : null}
-			</span>
+			<Badge variant="elevated" size="sm">
+				{selectedValues.length}
+			</Badge>
 		</span>
 	);
-}
-
-function getFilterOptionLabel(filter: DataTableFilter, value: string) {
-	return filter.options.find((option) => option.value === value)?.label ?? value;
 }
 
 function normalizeSelectedFilterValues(value: unknown) {
@@ -528,7 +503,7 @@ function RowActions<TData extends RowData>({
 					<IconButton
 						icon={<DotsThreeIcon aria-hidden weight="bold" />}
 						label={`Open actions for row ${row.index + 1}`}
-						size="sm"
+						size="xs"
 						variant="ghost"
 						tooltip={false}
 					/>
@@ -664,12 +639,13 @@ const tableParts = stylex.create({
 		alignItems: "center",
 		display: "flex",
 		flexWrap: "wrap",
-		justifyContent: "space-between",
+		justifyContent: "flex-end",
 	},
 	filter: {
-		flex: "1 1 14rem",
-		maxWidth: "22rem",
-		width: "100%",
+		flex: "0 1 10rem",
+		// maxWidth: "22rem",
+		// width: "100%",
+		flexWrap: "nowrap",
 	},
 	toolbarActions: {
 		gap: tokens["--space-2"],
@@ -693,40 +669,31 @@ const tableParts = stylex.create({
 		whiteSpace: "nowrap",
 		minWidth: 0,
 	},
-	filterChips: {
-		gap: tokens["--space-0-5"],
-		alignItems: "center",
-		display: "inline-flex",
-		flexShrink: 0,
-	},
 	surface: {
 		// borderColor: tokens["--border"],
-		borderRadius: tokens["--radius-md"],
 		// borderStyle: "solid",
 		// borderWidth: "1px",
+		borderRadius: tokens["--radius-md"],
 		overflow: "auto",
 		backgroundColor: tokens["--panel"],
 		boxShadow: tokens["--shadow-sm"],
 	},
 	table: {
 		borderCollapse: "collapse",
-		minWidth: "40rem",
+		// minWidth: "40rem",
 		width: "100%",
 	},
 	header: {
-		backgroundColor: tokens["--surface-subtle"],
+		backgroundColor: "transparent",
 	},
 	headerCell: {
-		paddingBlock: tokens["--space-2"],
-		paddingInline: tokens["--space-3"],
-		borderBlockEndColor: tokens["--border"],
-		borderBlockEndStyle: "solid",
-		borderBlockEndWidth: "1px",
+		paddingBlock: tokens["--space-1"],
 		color: tokens["--fg-muted"],
-		fontSize: tokens["--font-size-2"],
+		fontSize: tokens["--font-size-1"],
 		fontWeight: tokens["--font-weight-medium"],
-		letterSpacing: tokens["--letter-spacing-2"],
-		lineHeight: tokens["--line-height-2"],
+		letterSpacing: tokens["--letter-spacing-1"],
+		lineHeight: tokens["--line-height-1"],
+		paddingInlineStart: tokens["--space-2"],
 		textAlign: "start",
 		verticalAlign: "middle",
 		whiteSpace: "nowrap",
@@ -752,53 +719,48 @@ const tableParts = stylex.create({
 		},
 	},
 	expandedRow: {
+		borderRadius: "inherit",
 		backgroundColor: tokens["--inset"],
 	},
 	cell: {
 		paddingBlock: tokens["--space-2"],
-		paddingInline: tokens["--space-3"],
-		borderBlockEndColor: tokens["--border"],
-		borderBlockEndStyle: "solid",
-		borderBlockEndWidth: "1px",
+		borderBlockStartColor: {
+			"[data-selected]": "transparent",
+			default: tokens["--border"],
+		},
+		borderBlockStartStyle: "solid",
+		borderBlockStartWidth: "1px",
+		paddingInlineEnd: {
+			default: tokens["--space-2"],
+			":last-child": tokens["--space-1"],
+		},
+		paddingInlineStart: tokens["--space-2"],
 		textAlign: "start",
 		verticalAlign: "middle",
+		minHeight: tokens["--size-control-sm"],
 	},
 	expandedCell: {
 		paddingBlock: tokens["--space-3"],
-		paddingInline: tokens["--space-10"],
-		borderBlockEndColor: tokens["--border"],
-		borderBlockEndStyle: "solid",
-		borderBlockEndWidth: "1px",
+		backgroundColor: tokens["--surface"],
+		borderBlockStartColor: tokens["--border"],
+		borderBlockStartStyle: "solid",
+		borderBlockStartWidth: "1px",
+		paddingInlineStart: tokens["--space-10"],
 	},
 	emptyCell: {
 		paddingBlock: tokens["--space-10"],
-		paddingInline: tokens["--space-3"],
+		paddingInline: tokens["--space-2"],
 		color: tokens["--fg-muted"],
 		textAlign: "center",
 	},
 	utilityColumn: {
 		paddingInline: tokens["--space-2"],
 		textAlign: "center",
-		minWidth: "1%",
-	},
-	iconButton: {
-		font: "inherit",
-		padding: 0,
-		borderRadius: tokens["--radius-sm"],
-		borderWidth: 0,
-		alignItems: "center",
-		backgroundColor: {
-			default: "transparent",
-			":hover": tokens["--bg-highlight"],
-		},
-		color: tokens["--fg-muted"],
-		cursor: "default",
-		display: "inline-flex",
-		justifyContent: "center",
-		height: tokens["--size-control-xs"],
-		width: tokens["--size-control-xs"],
+		whiteSpace: "nowrap",
+		width: "1%",
 	},
 	selectionCheckbox: {
+		gap: 0,
 		alignItems: "center",
 		display: "flex",
 		flexDirection: "row",
@@ -812,6 +774,7 @@ const tableParts = stylex.create({
 		justifyContent: "center",
 		lineHeight: 0,
 		minHeight: tokens["--size-indicator-sm"],
+		width: "fit-content",
 	},
 	footer: {
 		gap: tokens["--space-2"],

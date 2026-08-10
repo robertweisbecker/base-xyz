@@ -198,9 +198,8 @@ export function Root<ItemValue = unknown>({
 
 export function Trigger({ children = "Search", shortcut = "⌘K", ...props }: CommandPaletteTriggerProps) {
 	return (
-		<Button variant="neutral" {...props}>
+		<Button variant="neutral" endSlot={shortcut ? <Shortcut>{shortcut}</Shortcut> : props.endSlot} {...props}>
 			{children}
-			{shortcut ? <Shortcut>{shortcut}</Shortcut> : undefined}
 		</Button>
 	);
 }
@@ -269,7 +268,7 @@ export function List({
 			disableFade
 			showScrollbar="scroll"
 			style={[commandPaletteParts.listArea, areaStyle]}
-			viewportStyle={viewportStyle}
+			viewportStyle={[commandPaletteParts.listViewport, viewportStyle]}
 			contentStyle={[commandPaletteParts.listContent, contentStyle]}>
 			<Autocomplete.List className={[sx.className, className].filter(Boolean).join(" ")} style={sx.style} {...props}>
 				{children}
@@ -461,7 +460,7 @@ const commandPaletteParts = stylex.create({
 		// borderBlockEndWidth: "1px",
 		display: "flex",
 		paddingBlockEnd: tokens["--space-2"],
-		paddingBlockStart: tokens["--space-4"],
+		paddingBlockStart: tokens["--space-3"],
 	},
 	inputSlot: {
 		alignItems: "center",
@@ -479,6 +478,9 @@ const commandPaletteParts = stylex.create({
 		fontSize: tokens["--font-size-3"],
 		letterSpacing: tokens["--letter-spacing-3"],
 		minWidth: 0,
+		"::placeholder": {
+			color: tokens["--fg-placeholder"],
+		},
 	},
 	inputEndSlot: {
 		alignItems: "center",
@@ -487,6 +489,9 @@ const commandPaletteParts = stylex.create({
 	},
 	listArea: {
 		maxHeight: "min(420px, 52dvh)",
+	},
+	listViewport: {
+		maxHeight: "inherit",
 	},
 	listContent: {
 		padding: tokens["--space-1"],
@@ -533,7 +538,6 @@ const commandPaletteParts = stylex.create({
 		overflow: "hidden",
 		color: tokens["--fg"],
 		fontSize: tokens["--font-size-2"],
-		fontWeight: tokens["--font-weight-medium"],
 		letterSpacing: tokens["--letter-spacing-2"],
 		lineHeight: tokens["--line-height-2"],
 		textOverflow: "ellipsis",

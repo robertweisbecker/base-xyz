@@ -124,7 +124,7 @@ export function Surface({ ref: forwardedRef, variant = "elevated", style, ...pro
 		}
 	}
 
-	return <InputGroup.Root ref={setRefs} variant={variant} {...props} style={[parts.inputGroup, style]} />;
+	return <InputGroup.Root ref={setRefs} variant={variant} {...props} style={[parts.inputGroup, style]} size="lg" />;
 }
 
 export function Input({
@@ -188,7 +188,7 @@ export function Submit({
 	"aria-label": ariaLabel = "Send message",
 	disabled,
 	shape = "circle",
-	size = "lg",
+	size = "md",
 	type = "submit",
 	variant,
 	...props
@@ -223,10 +223,9 @@ export function Submit({
 export function Stop({
 	children,
 	"aria-label": ariaLabel = "Stop generating",
-	shape = "square",
+	shape = "circle",
 	size = "md",
 	type = "button",
-	variant = "secondary",
 	...props
 }: PromptComposerStopProps) {
 	if (children == null) {
@@ -235,16 +234,16 @@ export function Stop({
 				{...props}
 				icon={<SquareIcon aria-hidden weight="fill" />}
 				label={ariaLabel}
-				shape={shape === "circle" ? "circle" : "square"}
+				shape={shape === "square" ? "square" : "circle"}
 				size={size}
 				type={type}
-				variant={variant}
+				variant="primary"
 			/>
 		);
 	}
 
 	return (
-		<Button aria-label={ariaLabel} shape={shape} size={size} type={type} variant={variant} {...props}>
+		<Button aria-label={ariaLabel} shape={shape} size={size} type={type} variant="primary" {...props}>
 			{children}
 		</Button>
 	);
@@ -263,6 +262,7 @@ export function AddTrigger({ children, render, ...props }: PromptComposerAddTrig
 						shape="circle"
 						tooltip={false}
 						variant="neutral"
+						size="sm"
 					/>
 				)
 			}
@@ -324,22 +324,21 @@ const parts = stylex.create({
 	 * Footer / Textarea own block edges. Child inline padding clears so Root inset wins.
 	 */
 	inputGroup: {
-		"--_input-group-child-padding-inline": tokens["--space-0"],
-		borderRadius: "2rem",
+		borderRadius: "2.75rem",
 		gap: 0,
-		paddingBlock: 0,
-		paddingInline: tokens["--space-4"],
-		alignItems: "stretch",
-		height: "auto",
+		// alignItems: "stretch",
+		// height: "auto",
 		minHeight: 0,
 	},
 	/** Fade size + expand-on-focus; both are composer behavior, not InputGroup. */
 	input: {
+		"--_input-group-child-padding-inline": tokens["--space-4"],
 		"--scroll-fade-size": tokens["--space-8"],
 		fieldSizing: {
 			default: "fixed",
 			":focus-within": "content",
 		},
+		minHeight: "0px",
 	},
 	options: {
 		gap: tokens["--space-1"],

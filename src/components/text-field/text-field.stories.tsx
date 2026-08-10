@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import * as stylex from "@stylexjs/stylex";
 import type { ReactNode } from "react";
-import { textStyles, textWeightStyles } from "@/components/text/text.stylex";
+import { textStyles, fontWeightStyles } from "@/components/text/text.stylex";
 import { tokens } from "@/theme/tokens.stylex";
 import { ComboboxField } from "@/components/combobox/combobox-field";
 import { NumberField } from "@/components/number-field/number-field";
@@ -141,7 +141,7 @@ export const FieldFamilyParity: Story = {
 			<div {...stylex.props(styles.familyGrid)}>
 				<span aria-hidden />
 				{FIELD_SIZES.map((size) => (
-					<span key={size} {...stylex.props(textStyles.body, textWeightStyles.semibold, styles.familyColumnLabel)}>
+					<span key={size} {...stylex.props(textStyles.body, fontWeightStyles.semibold, styles.familyColumnLabel)}>
 						{size}
 					</span>
 				))}
@@ -188,7 +188,7 @@ function FamilyRow({
 }) {
 	return (
 		<>
-			<span {...stylex.props(textStyles.body, textWeightStyles.semibold, styles.familyRowLabel)}>{label}</span>
+			<span {...stylex.props(textStyles.body, fontWeightStyles.semibold, styles.familyRowLabel)}>{label}</span>
 			{FIELD_SIZES.map((size) => (
 				<div key={size} data-field-family-control {...stylex.props(styles.familyControl)}>
 					{children(size)}
@@ -202,7 +202,7 @@ function StateSpecimen({ attribute, children, label }: { attribute?: string; chi
 	return (
 		<section {...stylex.props(styles.stateSpecimen)}>
 			<div {...stylex.props(styles.stateHeader)}>
-				<h2 {...stylex.props(textStyles.body, textWeightStyles.semibold, styles.stateTitle)}>{label}</h2>
+				<h2 {...stylex.props(textStyles.body, fontWeightStyles.semibold, styles.stateTitle)}>{label}</h2>
 				{attribute ? <code {...stylex.props(textStyles.supporting, styles.stateAttribute)}>{attribute}</code> : null}
 			</div>
 			{children}

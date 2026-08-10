@@ -5,7 +5,7 @@ import type { ThemeName } from "./theme-context";
 const defaultTheme = stylex.createTheme(tokens, {});
 
 const mpTheme = stylex.createTheme(tokens, {
-	"--bg-canvas": "#FFFFFF",
+	"--canvas": "#FFFFFF",
 	"--color-gray-s1": "#FBF9F9",
 	"--color-gray-s2": "#f6f6f6",
 	"--color-gray-c1": "#EAE7E7",

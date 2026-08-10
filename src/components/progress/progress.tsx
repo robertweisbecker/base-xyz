@@ -144,12 +144,12 @@ const progressParts = stylex.create({
 		animationTimingFunction: "cubic-bezier(0.455, 0.03, 0.515, 0.955)",
 		backgroundColor: tokens["--fill-track"],
 		backgroundImage: {
-			"[data-indeterminate]": `linear-gradient(90deg, transparent 0%, transparent 28%, ${tokens["--fill-track"]} 40%, ${tokens["--border-input"]} 48%, ${tokens["--border-input"]} 52%, ${tokens["--fill-track"]} 60%, transparent 72%, transparent 100%)`,
+			"[data-indeterminate]": `linear-gradient(90deg, transparent 0%, transparent 28%, ${tokens["--bg-primary"]} 40%, ${tokens["--bg-primary"]} 48%, ${tokens["--bg-primary"]} 52%, ${tokens["--bg-primary"]} 60%, transparent 72%, transparent 100%)`,
 			default: `linear-gradient(90deg, transparent 0%, transparent 100%)`,
 		},
 		backgroundRepeat: "no-repeat",
 		backgroundSize: {
-			"[data-indeterminate]": "250% 100%",
+			"[data-indeterminate]": "300% 100%",
 			default: "auto",
 		},
 		outlineColor: tokens["--border"],
@@ -179,5 +179,9 @@ const progressParts = stylex.create({
 });
 
 export const Progress = {
-	Root, Label, Value, Track, Indicator,
+	Root,
+	Label,
+	Value,
+	Track,
+	Indicator,
 } as const;

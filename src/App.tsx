@@ -93,6 +93,7 @@ import { parseModeFromSearchParams, parseThemeFromSearchParams, syncAppThemeUrl 
 import { ThemeProvider, useTheme, type ResolvedThemeMode, type ThemeMode, type ThemeName } from "./theme";
 import {
 	ArrowRightIcon,
+	CircleNotchIcon,
 	FileSearchIcon,
 	TextBIcon,
 	ThumbsDownIcon,
@@ -659,11 +660,7 @@ function getComponentCells(): GalleryCell[] {
 			content: (
 				<div {...stylex.props(styles.toggleRow)}>
 					<ToggleGroup defaultValue={["bold"]}>
-						<Toggle
-							icon={<ThumbsDownIcon aria-hidden weight="regular" />}
-							label="Thumbs down"
-							value="thumbs-down"
-						/>
+						<Toggle icon={<ThumbsDownIcon aria-hidden weight="regular" />} label="Thumbs down" value="thumbs-down" />
 						<Toggle icon={<ThumbsUpIcon aria-hidden weight="regular" />} label="Thumbs up" value="thumbs-up" />
 					</ToggleGroup>
 				</div>
@@ -869,14 +866,14 @@ function getBlockCells(): GalleryCell[] {
 					clearOnSubmit={false}
 					style={styles.blockWide}>
 					<PromptComposer.Surface>
-						<PromptComposer.Input rows={2} />
+						<PromptComposer.Input />
 						<PromptComposer.Footer>
 							<PromptComposer.Options>
 								<Menu.Root>
 									<PromptComposer.AddTrigger />
 								</Menu.Root>
-								<Button size="sm" variant="ghost">
-									Context
+								<Button size="sm" variant="neutral" shape="pill" startSlot={<CircleNotchIcon weight="bold" />}>
+									96%
 								</Button>
 							</PromptComposer.Options>
 							<PromptComposer.Actions>
@@ -924,9 +921,7 @@ function getBlockCells(): GalleryCell[] {
 						<WorkflowProgress.Content>
 							<WorkflowProgress.Header>
 								<WorkflowProgress.Title>Verify layout</WorkflowProgress.Title>
-								<WorkflowProgress.Description>
-									Check desktop and mobile grids.
-								</WorkflowProgress.Description>
+								<WorkflowProgress.Description>Check desktop and mobile grids.</WorkflowProgress.Description>
 								<WorkflowProgress.Metadata>
 									<WorkflowProgress.Status />
 								</WorkflowProgress.Metadata>
@@ -1163,14 +1158,14 @@ function GallerySection({
 
 const styles = stylex.create({
 	app: {
-		backgroundColor: tokens["--bg-canvas"],
+		backgroundColor: tokens["--canvas"],
 		color: tokens["--fg"],
 		minHeight: "100svh",
 	},
 	header: {
 		paddingInline: { default: tokens["--space-4"], [breakpoints.sm]: tokens["--space-4"] },
 		alignItems: "center",
-		backgroundImage: `linear-gradient(to bottom, ${tokens["--bg-canvas"]}, transparent)`,
+		backgroundImage: `linear-gradient(to bottom, ${tokens["--canvas"]}, transparent)`,
 		display: "flex",
 		justifyContent: "space-between",
 		position: "sticky",
@@ -1187,7 +1182,7 @@ const styles = stylex.create({
 	},
 	brandMark: {
 		borderRadius: tokens["--radius-xs"],
-		outline: `1px solid ${tokens["--bg-canvas"]}`,
+		outline: `1px solid ${tokens["--canvas"]}`,
 		alignItems: "center",
 		aspectRatio: 1,
 		backgroundColor: tokens["--border"],
@@ -1379,11 +1374,11 @@ const styles = stylex.create({
 		lineHeight: tokens["--line-height-1"],
 	},
 	scrollAreaSample: {
-		// backgroundColor: colors["--surface-subtle"],
 		borderColor: tokens["--border"],
 		borderRadius: tokens["--radius-md"],
 		borderStyle: "solid",
 		borderWidth: "1px",
+		backgroundColor: tokens["--canvas"],
 		height: "112px",
 		width: "min(100%, 210px)",
 	},
@@ -1419,7 +1414,7 @@ const styles = stylex.create({
 		gap: 1,
 		outline: `1px solid ${tokens["--border"]}`,
 		alignItems: "center",
-		backgroundColor: tokens["--bg-canvas"],
+		backgroundColor: tokens["--canvas"],
 		display: "inline-flex",
 	},
 	blockWide: {

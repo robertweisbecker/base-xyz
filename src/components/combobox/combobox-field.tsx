@@ -332,7 +332,7 @@ export function ComboboxMultiple({
 							)}
 						/>
 					)}
-					<ComboboxActions showClear={false} size={size} />
+					{/* <ComboboxActions showClear={false} size={size} /> */}
 				</Combobox.InputGroup>
 			</div>
 			<ComboboxPopup itemVariant={itemVariant} creatableItem={creatableItem} size={size} />
@@ -648,6 +648,7 @@ const comboboxParts = stylex.create({
 		display: "flex",
 		insetInlineEnd: 2,
 		position: "absolute",
+		height: "100%",
 	},
 	action: {
 		padding: 0,
@@ -767,6 +768,7 @@ const inputGroupVariants = stylex.create({
 	withChips: {
 		gap: tokens["--space-1"],
 		paddingBlock: "3px",
+		alignItems: "start",
 		flexWrap: "wrap",
 		paddingBlockStart: "3px",
 		paddingInlineEnd: tokens["--space-8"],
@@ -779,7 +781,7 @@ const inputVariants = stylex.create({
 	withChips: {
 		paddingBlock: 0,
 		flexBasis: tokens["--space-16"], // acts as a min-width to force newline wrap
-		paddingInlineStart: tokens["--space-1"],
+		paddingInlineStart: tokens["--space-2"],
 		height: "26px",
 	},
 });

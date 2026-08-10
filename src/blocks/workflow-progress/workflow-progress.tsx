@@ -5,7 +5,7 @@ import { ClockIcon } from "@phosphor-icons/react/dist/csr/Clock";
 import { WarningDiamondIcon } from "@phosphor-icons/react/dist/csr/WarningDiamond";
 import * as stylex from "@stylexjs/stylex";
 import type { StyleXStyles } from "@stylexjs/stylex";
-import { textStyles, textWeightStyles } from "@/components/text/text.stylex";
+import { textStyles, fontWeightStyles } from "@/components/text/text.stylex";
 import { createContext, type ComponentProps, type ReactNode, useContext } from "react";
 import { tokens } from "@/theme/tokens.stylex";
 
@@ -84,7 +84,7 @@ export function Header({ className, style, ...props }: WorkflowProgressHeaderPro
 }
 
 export function Title({ className, style, ...props }: WorkflowProgressTitleProps) {
-	const sx = stylex.props(textStyles.body, textWeightStyles.semibold, parts.title, style);
+	const sx = stylex.props(textStyles.body, fontWeightStyles.semibold, parts.title, style);
 	return <div className={joinClassNames(sx.className, className)} style={sx.style} {...props} />;
 }
 

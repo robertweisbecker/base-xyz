@@ -125,8 +125,8 @@ function CopyButtonControl({
 				endSlot={icon}
 				shape={shape ?? "default"}
 				onClick={handleClick}
-				disabled={copied}
-				focusableWhenDisabled
+				// disabled={copied}
+				// focusableWhenDisabled
 				{...props}>
 				{children}
 			</Button>

@@ -232,7 +232,7 @@ const numberFieldParts = stylex.create({
 			[STEPPER_HOVER]: {
 				"@media (hover: hover) and (pointer: fine)": tokens["--surface-subtle-hover"],
 			},
-			"[data-disabled]": tokens["--bg-canvas"],
+			"[data-disabled]": tokens["--canvas"],
 			default: "transparent",
 		},
 		color: {
@@ -306,8 +306,8 @@ const numberFieldDecrementRadii = stylex.create({
 		borderStartStartRadius: tokens["--radius-md"],
 	},
 	lg: {
-		borderEndStartRadius: tokens["--radius-lg"],
-		borderStartStartRadius: tokens["--radius-lg"],
+		borderEndStartRadius: tokens["--radius-md"],
+		borderStartStartRadius: tokens["--radius-md"],
 	},
 });
 
@@ -321,7 +321,7 @@ const numberFieldIncrementRadii = stylex.create({
 		borderStartEndRadius: tokens["--radius-md"],
 	},
 	lg: {
-		borderEndEndRadius: tokens["--radius-lg"],
-		borderStartEndRadius: tokens["--radius-lg"],
+		borderEndEndRadius: tokens["--radius-md"],
+		borderStartEndRadius: tokens["--radius-md"],
 	},
 });

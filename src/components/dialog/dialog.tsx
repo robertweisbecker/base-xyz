@@ -82,7 +82,6 @@ export function Popup({
 	const { className: sxClassName, style: sxStyle } = stylex.props(
 		modalPopupStyles,
 		dialogParts.popup,
-		showClose && dialogParts.popupWithClose,
 		dialogScrollBehavior[scrollBehavior],
 		style,
 	);
@@ -176,8 +175,7 @@ export function CloseButton({
 			aria-label={ariaLabel}
 			className={className}
 			nativeButton
-			render={<CloseButtonControl label={ariaLabel} />}
-			style={[dialogParts.closeButton, style]}
+			render={<CloseButtonControl size="md" label={ariaLabel} style={[dialogParts.closeButton, style]} />}
 			{...props}
 		/>
 	);
@@ -191,15 +189,15 @@ const dialogParts = stylex.create({
 		"--_dialog-header-padding-inline-end": tokens["--space-6"],
 		maxWidth: "440px",
 	},
-	popupWithClose: {
-		"--_dialog-header-padding-inline-end": `calc(${tokens["--space-4"]} + ${tokens["--size-control-xs"]} + ${tokens["--space-2"]})`,
+	closeSpaceHolder: {
+		"--_dialog-header-padding-inline-end": `calc(${tokens["--size-control-md"]} + ${tokens["--space-2"]})`,
 	},
 	closeButton: {
 		flexShrink: 0,
+		insetBlockStart: tokens["--space-4"],
+		insetInlineEnd: tokens["--space-4"],
 		position: "absolute",
 		zIndex: 1,
-		right: tokens["--space-4"],
-		top: tokens["--space-4"],
 	},
 	outsideScrollViewport: {
 		paddingBlock: tokens["--space-8"],
@@ -215,11 +213,13 @@ const dialogParts = stylex.create({
 		paddingInlineEnd: "var(--_dialog-header-padding-inline-end)",
 	},
 	body: {
-		padding: tokens["--space-6"],
+		paddingBlock: tokens["--space-4"],
+		paddingInline: tokens["--space-6"],
 	},
 	footer: {
 		gap: tokens["--space-3"],
-		paddingBlock: tokens["--space-4"],
+		paddingBlockEnd: tokens["--space-4"],
+		paddingBlockStart: tokens["--space-4"],
 		paddingInlineEnd: tokens["--space-4"],
 		paddingInlineStart: tokens["--space-6"],
 		borderTopColor: tokens["--border"],

@@ -24,9 +24,9 @@ appears.
   real consumers. Component geometry and one-off variants remain beside the
   component.
 - Text owns the reusable type styles. Compose `textStyles`,
-  `textSizeStyles`, `textFamilyStyles`, and `textWeightStyles` instead of
+  `typescaleStyles`, `fontFamilyStyles`, and `fontWeightStyles` instead of
   hand-rolling font-size/line-height/letter-spacing triples.
-- `textColorPropStyles` only implements the `Text` and `Heading` color prop.
+- `textColorStyles` only implements the `Text` and `Heading` color prop.
   Other owners set colors with semantic tokens directly.
 
 Import the shared `tokens` binding and StyleX constants directly by their named
@@ -37,7 +37,7 @@ as a namespace; the compiler needs to statically resolve the direct binding.
 
 - Exported component-owned style maps end in `Styles`: use the owner name for
   the primary map (`textStyles`, `tooltipStyles`) and add the narrow concern
-  before the suffix when needed (`textSizeStyles`, `fieldInputStyles`).
+  before the suffix when needed (`typescaleStyles`, `fieldInputStyles`).
 - Reserve `*Vars` for `stylex.defineVars()` contracts and `*Marker` for
   `stylex.defineMarker()` scopes.
 - Private maps that describe JSX anatomy may use `*Parts`. Ownerless interaction
@@ -196,7 +196,7 @@ stylex.props(modalChromeStyles.surface, drawerParts.popup);
   part of the public composition API; Button and Badge size and align their
   `startSlot` and `endSlot` content entirely in StyleX. `popup-motion.css`
   bridges Base UI's generated payload wrappers only inside an explicitly
-  rendered popup `Viewport`.   `scroll-fade.css` provides opt-in `xyz-scroll-fade*`
+  rendered popup `Viewport`. `scroll-fade.css` provides opt-in `xyz-scroll-fade*`
   classes for scroll-edge mask fades (scroll-timeline driven, with a static
   fallback). Size via `--scroll-fade-size` / `--scroll-fade-{t,b,s,e}-size`.
   When overflow can come and go, gate the class with `useScrollFade`.

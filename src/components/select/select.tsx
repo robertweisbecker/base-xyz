@@ -221,7 +221,7 @@ export function List({ ref, className, style, ...props }: SelectListProps) {
 
 	return (
 		<>
-			<BaseSelect.ScrollUpArrow {...stylex.props(selectParts.scrollArrow, selectParts.scrollArrowUp)}>
+			<BaseSelect.ScrollUpArrow {...stylex.props(selectParts.scrollArrow, selectParts.scrollUp)}>
 				<CaretUpIcon aria-hidden size={14} weight="bold" {...stylex.props(selectParts.scrollArrowIcon)} />
 			</BaseSelect.ScrollUpArrow>
 			<BaseSelect.List
@@ -230,7 +230,7 @@ export function List({ ref, className, style, ...props }: SelectListProps) {
 				style={sx.style}
 				{...props}
 			/>
-			<BaseSelect.ScrollDownArrow {...stylex.props(selectParts.scrollArrow, selectParts.scrollArrowDown)}>
+			<BaseSelect.ScrollDownArrow {...stylex.props(selectParts.scrollArrow, selectParts.scrollDown)}>
 				<CaretDownIcon aria-hidden size={14} weight="bold" {...stylex.props(selectParts.scrollArrowIcon)} />
 			</BaseSelect.ScrollDownArrow>
 		</>
@@ -253,6 +253,7 @@ export function Item({ ref, children, className, style, variant = "primary", ...
 		menuItemStyles.item,
 		menuItemSizeStyles[size],
 		menuItemVariantStyles[variant],
+		itemOverrides[size],
 		focusRing.inset,
 		style,
 	);
@@ -437,10 +438,10 @@ const selectParts = stylex.create({
 		display: "flex",
 		justifyContent: "center",
 		zIndex: 2,
-		height: tokens["--space-6"],
+		height: tokens["--size-control-xs"],
 		width: "auto",
 	},
-	scrollArrowUp: {
+	scrollUp: {
 		borderStartEndRadius: `calc(${tokens["--radius-lg"]} - 1px)`,
 		borderStartStartRadius: `calc(${tokens["--radius-lg"]} - 1px)`,
 		top: "1px",
@@ -456,11 +457,11 @@ const selectParts = stylex.create({
 			content: '""',
 			pointerEvents: "none",
 			position: "absolute",
-			height: tokens["--space-12"],
+			height: tokens["--space-10"],
 			top: 0,
 		},
 	},
-	scrollArrowDown: {
+	scrollDown: {
 		borderEndEndRadius: `calc(${tokens["--radius-lg"]} - 1px)`,
 		borderEndStartRadius: `calc(${tokens["--radius-lg"]} - 1px)`,
 		bottom: "1px",
@@ -477,7 +478,7 @@ const selectParts = stylex.create({
 			pointerEvents: "none",
 			position: "absolute",
 			bottom: 0,
-			height: tokens["--space-12"],
+			height: tokens["--space-10"],
 		},
 	},
 	scrollArrowIcon: {
@@ -513,6 +514,21 @@ const selectParts = stylex.create({
 		backdropFilter: "blur(8px)",
 		backgroundColor: "rgb(0 0 0 / 16%)",
 		position: "fixed",
+	},
+});
+
+const itemOverrides = stylex.create({
+	xs: {
+		paddingInlineEnd: tokens["--size-control-xs"],
+	},
+	sm: {
+		paddingInlineEnd: tokens["--size-control-sm"],
+	},
+	md: {
+		paddingInlineEnd: tokens["--size-control-md"],
+	},
+	lg: {
+		paddingInlineEnd: tokens["--size-control-lg"],
 	},
 });
 

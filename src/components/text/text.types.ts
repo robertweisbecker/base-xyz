@@ -13,7 +13,7 @@ export type TypographyColor =
 	| "warning"
 	| "inverse"
 	| "inverse-muted";
-export type TypographyWrap = "wrap" | "nowrap" | "pretty" | "balance";
+export type TypographyWrap = "wrap" | "nowrap" | "pretty" | "balance" | "truncate";
 export type TextType = "body" | "large" | "label" | "code" | "supporting" | "display";
 export type HeadingLevel = "1" | "2" | "3" | "4" | "5" | "6";
 
@@ -26,4 +26,5 @@ export type TypographyStyleProps = TextThemeProps & {
 	size?: TypographySize;
 	truncate?: boolean;
 	wrap?: TypographyWrap;
+	textStyle?: TextType;
 };

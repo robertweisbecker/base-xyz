@@ -17,7 +17,6 @@ type StoryArgs = {
 	_delay: number;
 	disabled: boolean;
 	_showArrow: boolean;
-	_showClose: boolean;
 };
 
 const meta = {
@@ -29,7 +28,6 @@ const meta = {
 		_delay: 150,
 		disabled: false,
 		_showArrow: false,
-		_showClose: false,
 	},
 	argTypes: {
 		_side: {
@@ -44,7 +42,6 @@ const meta = {
 		_delay: { control: { type: "number", min: 0, step: 50 } },
 		disabled: { control: "boolean" },
 		_showArrow: { control: "boolean" },
-		_showClose: { control: "boolean" },
 	},
 } satisfies Meta<StoryArgs>;
 
@@ -52,7 +49,7 @@ export default meta;
 type Story = StoryObj<StoryArgs>;
 
 export const Playground: Story = {
-	render: ({ _side, _align, _closeDelay, _delay, disabled, _showArrow, _showClose }) => (
+	render: ({ _side, _align, _closeDelay, _delay, disabled, _showArrow }) => (
 		<div {...stylex.props(storyParts.stage)}>
 			<Tooltip.Provider>
 				<Tooltip.Root disabled={disabled}>
@@ -69,10 +66,7 @@ export const Playground: Story = {
 							/>
 						}
 					/>
-					<Tooltip.Popup
-						arrowProps={_showArrow ? {} : undefined}
-						positionerProps={{ side: _side, align: _align }}
-						showClose={_showClose}>
+					<Tooltip.Popup arrowProps={_showArrow ? {} : undefined} positionerProps={{ side: _side, align: _align }}>
 						More information about this setting
 					</Tooltip.Popup>
 				</Tooltip.Root>

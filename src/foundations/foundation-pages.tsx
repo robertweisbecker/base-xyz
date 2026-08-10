@@ -10,7 +10,7 @@ import { useState, type ReactNode } from "react";
 import { breakpoints, zIndex } from "@/styles/constants.stylex";
 import { tokens } from "@/theme/tokens.stylex";
 
-import { textFamilyStyles, textSizeStyles } from "@/components/text/text.stylex";
+import { fontFamilyStyles, typescaleStyles } from "@/components/text/text.stylex";
 
 import { ThemeProvider } from "@/theme";
 
@@ -151,26 +151,26 @@ function TypographySection() {
 				<div {...stylex.props(styles.typeRoles)}>
 					<TypeRole
 						name="Sans 3"
-						token="textFamilyStyles.sans · textSizeStyles.3"
+						token="fontFamilyStyles.sans · typescaleStyles.3"
 						description="Default interface and reading typography."
 						sampleFontFamily={tokens["--font-family-sans"]}
-						style={[textFamilyStyles.sans, textSizeStyles["3"]]}>
+						style={[fontFamilyStyles.sans, typescaleStyles["3"]]}>
 						Clear tools make complex work feel lighter.
 					</TypeRole>
 					<TypeRole
 						name="Serif 3"
-						token="textFamilyStyles.serif · textSizeStyles.3"
+						token="fontFamilyStyles.serif · typescaleStyles.3"
 						description="Editorial or expressive supporting content."
 						sampleFontFamily={tokens["--font-family-serif"]}
-						style={[textFamilyStyles.serif, textSizeStyles["3"]]}>
+						style={[fontFamilyStyles.serif, typescaleStyles["3"]]}>
 						Clear tools make complex work feel lighter.
 					</TypeRole>
 					<TypeRole
 						name="Mono 3"
-						token="textFamilyStyles.mono · textSizeStyles.3"
+						token="fontFamilyStyles.mono · typescaleStyles.3"
 						description="Code, identifiers, and tabular technical values."
 						sampleFontFamily={tokens["--font-family-mono"]}
-						style={[textFamilyStyles.mono, textSizeStyles["3"]]}>
+						style={[fontFamilyStyles.mono, typescaleStyles["3"]]}>
 						const clarity = system.compose();
 					</TypeRole>
 				</div>
@@ -245,10 +245,10 @@ function TypographySection() {
 
 			<TokenSource
 				code={`import * as stylex from "@stylexjs/stylex";
-import { textFamilyStyles, textSizeStyles, textWeightStyles } from "@/components/text/text.stylex";
+import { fontFamilyStyles, typescaleStyles, fontWeightStyles } from "@/components/text/text.stylex";
 
-<h2 {...stylex.props(textSizeStyles["4"], textWeightStyles.semibold)}>Workspace activity</h2>
-<code {...stylex.props(textFamilyStyles.mono, textSizeStyles["2"])}>npm run build</code>`}
+<h2 {...stylex.props(typescaleStyles["4"], fontWeightStyles.semibold)}>Workspace activity</h2>
+<code {...stylex.props(fontFamilyStyles.mono, typescaleStyles["2"])}>npm run build</code>`}
 			/>
 		</FoundationCategory>
 	);
@@ -282,8 +282,8 @@ function SpacingAndShapeSection() {
 						</p>
 					</div>
 					<p {...stylex.props(styles.exampleAnnotation)}>
-						This specimen uses <code>tokens["--space-6"]</code> for card padding,{" "}
-						<code>tokens["--space-3"]</code> between related items, and <code>tokens["--space-8"]</code> around the example.
+						This specimen uses <code>tokens["--space-6"]</code> for card padding, <code>tokens["--space-3"]</code>{" "}
+						between related items, and <code>tokens["--space-8"]</code> around the example.
 					</p>
 				</div>
 			</FoundationSection>
@@ -343,9 +343,21 @@ function DepthAndMotionSection() {
 				title="Elevation"
 				description="Apply the lowest shadow that communicates the required separation. Theme-aware rings keep edges legible.">
 				<div {...stylex.props(styles.shadowGrid)}>
-					<ShadowSpecimen name='tokens["--shadow-sm"]' usage="Raised controls and compact cards" style={styles.shadowSmall} />
-					<ShadowSpecimen name='tokens["--shadow-md"]' usage="Menus, popovers, and floating panels" style={styles.shadowMedium} />
-					<ShadowSpecimen name='tokens["--shadow-lg"]' usage="Prominent previews and large overlays" style={styles.shadowLarge} />
+					<ShadowSpecimen
+						name='tokens["--shadow-sm"]'
+						usage="Raised controls and compact cards"
+						style={styles.shadowSmall}
+					/>
+					<ShadowSpecimen
+						name='tokens["--shadow-md"]'
+						usage="Menus, popovers, and floating panels"
+						style={styles.shadowMedium}
+					/>
+					<ShadowSpecimen
+						name='tokens["--shadow-lg"]'
+						usage="Prominent previews and large overlays"
+						style={styles.shadowLarge}
+					/>
 				</div>
 			</FoundationSection>
 
@@ -522,7 +534,7 @@ function ThemePalette({ mode, name }: { mode: "light" | "dark"; name: string }) 
 							title="Surfaces"
 							subtitle="Page and container elevation"
 							colors={{
-								canvas: tokens["--bg-canvas"],
+								canvas: tokens["--canvas"],
 								surface: tokens["--surface"],
 								raised: tokens["--elevated"],
 								subtle: tokens["--surface-subtle"],
@@ -668,7 +680,10 @@ function MotionSpecimens() {
 			</div>
 			<div {...stylex.props(styles.easingNotes)}>
 				<TokenName name='tokens["--motion-ease-out"]' value="General interaction · cubic-bezier(0.16, 1, 0.3, 1)" />
-				<TokenName name='tokens["--motion-ease-smooth-out"]' value="Content movement · cubic-bezier(0.22, 1, 0.36, 1)" />
+				<TokenName
+					name='tokens["--motion-ease-smooth-out"]'
+					value="Content movement · cubic-bezier(0.22, 1, 0.36, 1)"
+				/>
 			</div>
 		</div>
 	);

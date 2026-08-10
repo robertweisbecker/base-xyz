@@ -5,7 +5,7 @@ import * as stylex from "@stylexjs/stylex";
 import type { StyleXStyles } from "@stylexjs/stylex";
 import { createContext, type ComponentProps, useContext, useEffect, useMemo, useRef, useState } from "react";
 import { Toolbar as ToolbarPrimitive, Loader } from "@/components";
-import { textSizeStyles, textStyles } from "@/components/text/text.stylex";
+import { typescaleStyles, textStyles } from "@/components/text/text.stylex";
 import { shimmerTextStyles } from "@/styles/recipes/shimmer-text.stylex";
 import { typingTextStyles } from "./typing-text.stylex";
 import { tokens } from "@/theme/tokens.stylex";
@@ -95,7 +95,7 @@ export function Content({
 }: StreamingResponseContentProps) {
 	const { status } = useStreamingResponseContext("Content");
 	const isStreaming = status === "streaming";
-	const sx = stylex.props(textSizeStyles["3"], parts.content, style);
+	const sx = stylex.props(typescaleStyles["3"], parts.content, style);
 
 	return (
 		<div aria-busy={isStreaming} className={joinClassNames(sx.className, className)} style={sx.style} {...props}>

@@ -10,6 +10,7 @@ import { tokens } from "@/theme/tokens.stylex";
 import { Loader } from "@/components/loader/loader";
 import { Tooltip } from "@/components/tooltip/tooltip";
 import { buttonThemeProps, type ButtonThemeProps } from "./button-theme-props";
+import { buttonMarker } from "./button.stylex";
 
 export type { ButtonThemeProps } from "./button-theme-props";
 
@@ -18,7 +19,7 @@ const PRESSED = ':is([aria-pressed="true"],[data-active],[data-pressed]):not([da
 
 const buttonParts = stylex.create({
 	root: {
-		gap: tokens["--space-2"],
+		gap: tokens["--space-1-5"],
 		overflow: "hidden",
 		textDecoration: "none",
 		alignItems: "center",
@@ -62,8 +63,8 @@ const slotParts = stylex.create({
 		justifyContent: "center",
 		lineHeight: 0,
 		pointerEvents: "none",
-		height: "1em",
-		width: "1em",
+		minHeight: "1em",
+		minWidth: "1em",
 	},
 	muted: {
 		color: tokens["--fg-muted"],
@@ -111,7 +112,7 @@ const slotSizes = stylex.create({
 });
 
 const iconOnlySlotSizes = stylex.create({
-	xs: { fontSize: "1rem" }, // 16px
+	xs: { fontSize: ".875rem" }, // 14px
 	sm: { fontSize: "1rem" }, // 16px
 	md: { fontSize: "1.125rem" }, // 18px
 	lg: { fontSize: "1.25rem" }, // 20px
@@ -194,10 +195,10 @@ const colorVariants = stylex.create({
 	},
 	secondary: {
 		backgroundColor: {
-			[HOVER_NOT_PRESSED_OR_OPEN]: tokens["--elevated-hover"],
+			[HOVER_NOT_PRESSED_OR_OPEN]: `light-dark(${tokens["--elevated-2"]}, ${tokens["--elevated"]})`,
 			[PRESSED]: tokens["--inset"],
-			"[data-popup-open]": tokens["--elevated-hover"],
-			default: tokens["--elevated"],
+			"[data-popup-open]": tokens["--elevated"],
+			default: `light-dark(${tokens["--elevated"]}, ${tokens["--elevated-2"]})`,
 			":active:not([data-disabled])": tokens["--inset"],
 		},
 		boxShadow: {
@@ -237,7 +238,7 @@ const colorVariants = stylex.create({
 			[HOVER_NOT_PRESSED_OR_OPEN]: {
 				"@media (hover: hover) and (pointer: fine)": tokens["--surface-subtle-hover"],
 			},
-			[PRESSED]: tokens["--bg-accent"],
+			[PRESSED]: tokens["--surface-subtle-active"],
 			"[data-popup-open]": tokens["--surface-subtle-hover"],
 			// ":active:not([data-disabled])": tokens["--bg-highlight"],
 			default: "transparent",
@@ -431,6 +432,7 @@ function ButtonRoot({
 }: ButtonRootProps) {
 	const { restProps, styles } = resolveThemeProps(props, buttonThemeProps);
 	const sx = stylex.props(
+		buttonMarker,
 		buttonParts.root,
 		focusRing.offset,
 		pressable.transition,

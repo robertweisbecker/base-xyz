@@ -342,7 +342,7 @@ export const demoStyles = stylex.create({
 		paddingBlock: tokens["--space-2"],
 		paddingInline: tokens["--space-2"],
 		alignItems: "center",
-		backgroundColor: tokens["--bg-canvas"],
+		backgroundColor: tokens["--canvas"],
 		boxShadow: tokens["--shadow-lg"],
 		color: tokens["--fg"],
 		columnGap: tokens["--space-2"],

@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
+import { Icon } from "@/components/icons";
 import * as stylex from "@stylexjs/stylex";
 import type { ReactNode } from "react";
 import { PageHeader } from "@/blocks/page-header/page-header";
@@ -80,7 +81,7 @@ const deployments: Deployment[] = [
 		environment: "Production",
 		owner: "Iris Wu",
 		status: "Ready",
-		updated: "1 hour ago",
+		updated: "1 minute ago",
 		url: "docs.example.com",
 	},
 ];
@@ -152,18 +153,12 @@ const columns: Array<DataTableColumnDef<Deployment>> = [
 					<IconButton
 						type="button"
 						variant="ghost"
-						size="sm"
+						size="xs"
 						aria-expanded={row.getIsExpanded()}
 						label={`${row.getIsExpanded() ? "Collapse" : "Expand"} ${row.original.url}`}
 						tooltip={false}
 						onClick={row.getToggleExpandedHandler()}
-						icon={
-							row.getIsExpanded() ? (
-								<CaretDownIcon aria-hidden weight="bold" />
-							) : (
-								<CaretRightIcon aria-hidden weight="bold" />
-							)
-						}
+						icon={row.getIsExpanded() ? <CaretDownIcon aria-hidden /> : <CaretRightIcon aria-hidden />}
 					/>
 				) : null}
 				<span {...stylex.props(storyParts.url)}>{row.original.url}</span>
@@ -315,7 +310,11 @@ function DeploymentCommandPalette() {
 	return (
 		<CommandPalette.Root
 			shortcut
-			trigger={<CommandPalette.Trigger size="sm">Commands</CommandPalette.Trigger>}
+			trigger={
+				<CommandPalette.Trigger size="sm" pe={2}>
+					Actions
+				</CommandPalette.Trigger>
+			}
 			items={commandGroups}
 			itemToStringValue={commandToStringValue}>
 			<CommandPalette.Input placeholder="Search deployments and actions…" />
@@ -379,7 +378,7 @@ function StatusBadge({ status }: { status: Deployment["status"] }) {
 	}
 
 	return (
-		<Badge hue="success" startSlot={<CheckCircleIcon aria-hidden />}>
+		<Badge hue="success" startSlot={<Icon.Checkmark aria-hidden />}>
 			Ready
 		</Badge>
 	);

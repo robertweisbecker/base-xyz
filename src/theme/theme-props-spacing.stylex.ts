@@ -8,15 +8,10 @@ import {
 	paddingThemePropKeys,
 	textAlignThemePropKeys,
 } from "./theme-props";
-import type {
-	GapProps,
-	MarginProps,
-	PaddingProps,
-	SpaceStep,
-	TextAlignProps,
-} from "./theme-props.types";
+import type { GapProps, MarginProps, PaddingProps, SpaceStep, TextAlignProps } from "./theme-props.types";
 import { tokens } from "@/theme/tokens.stylex";
 
+/** Long-form styles for margin, padding, gap, and text alignment that override common shorthands. */
 const scalarStyles = stylex.create({
 	marginBlockStart: (value) => ({ marginTop: value }),
 	marginBlockEnd: (value) => ({ marginBottom: value }),
@@ -57,10 +52,13 @@ export function resolveSpaceValue(value: unknown): unknown {
 	return spaceValues[value as SpaceStep];
 }
 
-function resolveEdge(broad: unknown, axis: unknown, edge: unknown): unknown {
-	return resolveSpaceValue(edge ?? axis ?? broad);
+function resolveEdge(all: unknown, axis: unknown, side: unknown): unknown {
+	return resolveSpaceValue(side ?? axis ?? all);
 }
 
+/** Allow individual margin props to override less-specific shorthands.
+ * all sides -> axis (x, y) -> side (start = left/top, end = right/bottom)
+ */
 function compileMargins(props: MarginProps): StyleXStyles[] {
 	const styles: StyleXStyles[] = [];
 	const blockStart = resolveEdge(props.m, props.my, props.mt);
@@ -74,6 +72,7 @@ function compileMargins(props: MarginProps): StyleXStyles[] {
 	return styles;
 }
 
+/** Allow individual padding props to override all-sides declarations. */
 function compilePadding(props: PaddingProps): StyleXStyles[] {
 	const styles: StyleXStyles[] = [];
 	const blockStart = resolveEdge(props.p, props.py, props.pt);
@@ -104,7 +103,4 @@ export const marginThemeProps = createThemePropDefinition<MarginProps>(marginThe
 export const paddingThemeProps = createThemePropDefinition<PaddingProps>(paddingThemePropKeys, compilePadding);
 export const spacingThemeProps = composeThemeProps(marginThemeProps, paddingThemeProps);
 export const gapThemeProps = createThemePropDefinition<GapProps>(gapThemePropKeys, compileGap);
-export const textAlignThemeProps = createThemePropDefinition<TextAlignProps>(
-	textAlignThemePropKeys,
-	compileTextAlign,
-);
+export const textAlignThemeProps = createThemePropDefinition<TextAlignProps>(textAlignThemePropKeys, compileTextAlign);
