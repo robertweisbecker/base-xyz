@@ -102,7 +102,7 @@ export function Textarea({ ref, className, style, rows = 1, disabled, ...props }
 			ref={ref}
 			rows={rows}
 			disabled={disabled}
-			data-disabled={disabled}
+			{...(disabled && { "data-disabled": true })}
 			className={[sx.className, className].filter(Boolean).join(" ")}
 			style={sx.style}
 			{...props}
@@ -228,7 +228,7 @@ const inputGroupParts = stylex.create({
 		},
 	},
 	textarea: {
-		paddingBlock: "var(--_input-group-padding)",
+		paddingBlock: "var(--_input-padding)",
 		// Own top/bottom inset so placeholder is not flush; matches Header / Footer outer edge.
 		paddingInline: "var(--_input-padding)",
 		// Own a full row inside the wrapping Root (with Header/Footer).
