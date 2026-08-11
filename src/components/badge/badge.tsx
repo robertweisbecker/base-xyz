@@ -177,7 +177,7 @@ const sizeVariants = stylex.create({
 	xs: {
 		borderRadius: tokens["--radius-xs"],
 		gap: tokens["--space-0-5"],
-		paddingInline: tokens["--space-1"],
+		paddingInline: tokens["--space-0-5"],
 		fontSize: "11px",
 		letterSpacing: tokens["--letter-spacing-1"],
 		lineHeight: tokens["--space-4"],
@@ -186,7 +186,7 @@ const sizeVariants = stylex.create({
 	sm: {
 		borderRadius: tokens["--radius-xs"],
 		gap: tokens["--space-1"],
-		paddingInline: tokens["--space-1"],
+		paddingInline: tokens["--space-0-5"],
 		fontSize: "11px",
 		letterSpacing: tokens["--letter-spacing-1"],
 		lineHeight: tokens["--space-4"],

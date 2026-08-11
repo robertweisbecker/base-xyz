@@ -235,7 +235,7 @@ const fieldFontSizes = stylex.create({
 	},
 	lg: {
 		fontSize: tokens["--font-size-3"],
-		letterSpacing: tokens["--letter-spacing-3"],
+		letterSpacing: "normal",
 		lineHeight: tokens["--line-height-3"],
 	},
 });

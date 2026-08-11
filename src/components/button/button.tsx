@@ -67,7 +67,10 @@ const slotParts = stylex.create({
 		minWidth: "1em",
 	},
 	muted: {
-		color: tokens["--fg-muted"],
+		color: {
+			default: tokens["--fg-subtle"],
+			":is(svg)": tokens["--fill-neutral"],
+		},
 	},
 });
 
@@ -236,9 +239,9 @@ const colorVariants = stylex.create({
 		backgroundColor: {
 			// eslint-disable-next-line @stylexjs/valid-styles -- the compiler supports chained pseudo-class conditions; the lint rule is stricter than the compiler.
 			[HOVER_NOT_PRESSED_OR_OPEN]: {
-				"@media (hover: hover) and (pointer: fine)": tokens["--surface-subtle-hover"],
+				"@media (hover: hover) and (pointer: fine)": tokens["--surface-subtle"],
 			},
-			[PRESSED]: tokens["--surface-subtle-active"],
+			[PRESSED]: tokens["--surface-subtle-hover"],
 			"[data-popup-open]": tokens["--surface-subtle-hover"],
 			// ":active:not([data-disabled])": tokens["--bg-highlight"],
 			default: "transparent",

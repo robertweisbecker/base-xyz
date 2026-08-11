@@ -46,9 +46,9 @@ export const modalChromeStyles = stylex.create({
 		borderRadius: tokens["--radius-xl"],
 		outline: "0",
 		backgroundColor: {
-			"[data-close-confirmation-open]": tokens["--surface"],
+			"[data-close-confirmation-open]": tokens["--panel"],
 			"[data-nested-dialog-open]": tokens["--panel"],
-			default: tokens["--surface"],
+			default: tokens["--panel"],
 		},
 		boxShadow: tokens["--shadow-lg"],
 		color: tokens["--fg"],

@@ -8,6 +8,7 @@ import {
 	typescaleStyles,
 	textBaseStyles,
 	textTruncationStyles,
+	textTabularStyles,
 	fontWeightStyles,
 	textWrapStyles,
 	textThemeProps,
@@ -34,6 +35,7 @@ export function Text({
 	render,
 	size = "2",
 	style,
+	tabular = false,
 	truncate = false,
 	wrap = "wrap",
 	...props
@@ -47,6 +49,7 @@ export function Text({
 		textColorStyles[color],
 		textWrapStyles[wrap],
 		truncate && textTruncationStyles.truncate,
+		tabular && textTabularStyles.tabular,
 		...styles,
 		style,
 	);

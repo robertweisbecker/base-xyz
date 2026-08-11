@@ -407,7 +407,7 @@ function ComboboxPopup({
 										</span>
 									) : (
 										<Combobox.ItemIndicator keepMounted className={stylex.props(menuItemStyles.indicator).className}>
-											<Icon.Checkmark width="1em" height="1em" />
+											<Icon.Checkmark width="1em" height="1em" strokeWidth={2} />
 										</Combobox.ItemIndicator>
 									)}
 									<span {...stylex.props(menuItemStyles.label)}>{isCreatableItem ? `Create “${item}”` : item}</span>
@@ -646,6 +646,7 @@ const comboboxParts = stylex.create({
 	actions: {
 		gap: 0,
 		display: "flex",
+		insetBlockStart: -1,
 		insetInlineEnd: 2,
 		position: "absolute",
 		height: "100%",
@@ -718,7 +719,7 @@ const comboboxParts = stylex.create({
 
 const comboboxGroupSizeVariants = stylex.create({
 	sm: {
-		paddingInlineEnd: tokens["--size-control-md"],
+		paddingInlineEnd: tokens["--size-control-sm"],
 		paddingInlineStart: tokens["--space-1"],
 	},
 	md: {
@@ -733,34 +734,34 @@ const comboboxGroupSizeVariants = stylex.create({
 
 const comboboxInputSizeVariants = stylex.create({
 	sm: {
-		paddingBlock: tokens["--space-2"],
-		paddingInlineStart: tokens["--space-2"],
+		paddingBlock: tokens["--space-1"],
+		paddingInlineStart: tokens["--space-1-5"],
 		height: tokens["--size-control-sm"],
 	},
 	md: {
-		paddingBlock: tokens["--space-3"],
+		paddingBlock: tokens["--space-1"],
 		paddingInlineStart: tokens["--space-2"],
 		height: tokens["--size-control-md"],
 	},
 	lg: {
-		paddingBlock: tokens["--space-4"],
-		paddingInlineStart: tokens["--space-3"],
+		paddingBlock: tokens["--space-1"],
+		paddingInlineStart: tokens["--space-2"],
 		height: tokens["--size-control-lg"],
 	},
 });
 
 const comboboxActionSizeVariants = stylex.create({
 	sm: {
-		height: tokens["--size-control-xs"],
-		width: tokens["--size-control-xs"],
-	},
-	md: {
 		height: tokens["--size-control-sm"],
 		width: tokens["--size-control-sm"],
 	},
-	lg: {
+	md: {
 		height: tokens["--size-control-md"],
 		width: tokens["--size-control-md"],
+	},
+	lg: {
+		height: tokens["--size-control-lg"],
+		width: tokens["--size-control-lg"],
 	},
 });
 

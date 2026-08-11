@@ -4,7 +4,7 @@ import { PaperclipIcon } from "@phosphor-icons/react/dist/csr/Paperclip";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import * as stylex from "@stylexjs/stylex";
 import { useState, type ReactNode } from "react";
-import { Button, Menu, Separator, Toolbar } from "@/components";
+import { Button, Menu, Separator } from "@/components";
 import { tokens } from "@/theme/tokens.stylex";
 
 import { ModelSelector } from "@/blocks/model-selector/model-selector";

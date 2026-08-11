@@ -143,11 +143,7 @@ export function AnchoredToast({ toast, className, positionerClassName, style, po
 					) : (
 						<span {...stylex.props(anchoredParts.text, variant === "pill" && anchoredParts.pillText)}>
 							{toast.title != null ? (
-								<BaseToast.Title
-									className={
-										stylex.props(toastTextStyles.title, variant === "pill" && anchoredParts.pillTitle).className
-									}
-								/>
+								<BaseToast.Title className={stylex.props(variant === "pill" && anchoredParts.pillTitle).className} />
 							) : null}
 							{toast.description != null ? (
 								<BaseToast.Description
@@ -289,7 +285,7 @@ const anchoredMotion = stylex.create({
 
 const anchoredParts = stylex.create({
 	panelSurface: {
-		[popupVars.background]: tokens["--elevated"],
+		[popupVars.background]: tokens["--panel"],
 		[popupVars.border]: tokens["--border"],
 		[popupVars.foreground]: tokens["--fg"],
 		borderRadius: tokens["--radius-lg"],
@@ -314,14 +310,17 @@ const anchoredParts = stylex.create({
 		cursor: "default",
 		display: "flex",
 		flexDirection: "column",
+		fontSize: tokens["--font-size-2"],
+		letterSpacing: tokens["--letter-spacing-2"],
+		lineHeight: tokens["--line-height-2"],
 		pointerEvents: "auto",
 		position: "relative",
 		transformOrigin: "var(--transform-origin)",
-		maxWidth: "calc(100vw - 24px)",
+		maxWidth: "min(calc(100vw - 24px), var(--container-3xs))",
 		width: "max-content",
 	},
 	content: {
-		alignItems: "center",
+		alignItems: "flex-start",
 		boxSizing: "border-box",
 		display: "flex",
 	},
@@ -355,21 +354,28 @@ const anchoredParts = stylex.create({
 	},
 	pillIcon: {
 		backgroundColor: "transparent",
+		marginInlineStart: "-.25em",
 		height: "16px",
 		width: "16px",
 	},
 	pillContent: {
+		alignItems: "center",
+		boxSizing: "border-box",
+		display: "flex",
+		justifyContent: "space-between",
 		height: "100%",
 	},
 	pillText: {
+		margin: 0,
 		gap: tokens["--space-2"],
 		overflow: "hidden",
 		alignItems: "center",
 		flexDirection: "row",
 	},
 	pillTitle: {
+		margin: 0,
 		overflow: "hidden",
-		color: tokens["--fg-inverse-muted"],
+		color: tokens["--fg"],
 		flexShrink: 1,
 		fontSize: tokens["--font-size-2"],
 		fontWeight: tokens["--font-weight-regular"],
@@ -379,7 +385,7 @@ const anchoredParts = stylex.create({
 		whiteSpace: "nowrap",
 	},
 	pillDescription: {
-		color: tokens["--fg-inverse-muted"],
+		color: tokens["--fg-subtle"],
 		display: "inline-flex",
 		flexShrink: 0,
 		fontSize: tokens["--font-size-2"],
@@ -400,7 +406,7 @@ const anchoredParts = stylex.create({
 
 const rootVariants = stylex.create({
 	default: {
-		minWidth: "260px",
+		minWidth: "128px",
 	},
 	tooltip: {
 		minWidth: 0,
@@ -409,10 +415,11 @@ const rootVariants = stylex.create({
 		maxWidth: "min(320px, calc(100vw - 24px))",
 	},
 	pill: {
-		[popupVars.background]: tokens["--bg-inverse"],
+		[popupVars.background]: tokens["--surface-subtle"],
 		[popupVars.border]: "rgb(255 255 255 / 9%)",
-		[popupVars.foreground]: tokens["--fg-inverse"],
+		[popupVars.foreground]: tokens["--fg"],
 		borderRadius: tokens["--radius-md"],
+		alignItems: "center",
 		backgroundColor: popupVars.background,
 		boxShadow: tokens["--shadow-md"],
 		color: popupVars.foreground,
@@ -449,33 +456,33 @@ const contentVariants = stylex.create({
 const iconToneVariants = stylex.create({
 	neutral: {
 		backgroundColor: tokens["--surface-subtle"],
-		color: tokens["--fg-muted"],
+		color: tokens["--fill-neutral"],
 	},
 	accent: {
 		backgroundColor: tokens["--bg-accent"],
-		color: tokens["--bg-primary"],
+		color: tokens["--fill-accent"],
 	},
 	success: {
 		backgroundColor: tokens["--bg-success"],
-		color: tokens["--fg-success"],
+		color: tokens["--fill-success"],
 	},
 	error: {
 		backgroundColor: tokens["--bg-error"],
-		color: tokens["--fg-error"],
+		color: tokens["--fill-error"],
 	},
 });
 
 const pillIconToneVariants = stylex.create({
 	neutral: {
-		color: tokens["--fg-inverse-muted"],
+		color: tokens["--fill-neutral"],
 	},
 	accent: {
-		color: tokens["--bg-primary"],
+		color: tokens["--fill-accent"],
 	},
 	success: {
-		color: tokens["--fg-success"],
+		color: tokens["--fill-success"],
 	},
 	error: {
-		color: tokens["--fg-error"],
+		color: tokens["--fill-error"],
 	},
 });

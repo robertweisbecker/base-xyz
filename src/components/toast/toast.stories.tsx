@@ -16,6 +16,8 @@ import { Button, IconButton } from "@/components/button/button";
 import { Loader } from "@/components/loader";
 import { Tooltip } from "@/components/tooltip/tooltip";
 import { Toast } from "./index";
+import { Text } from "../text";
+import { Stack } from "../layout";
 type PopupSide = "top" | "right" | "bottom" | "left";
 type PopupAlign = "start" | "center" | "end";
 type SwipeDirection = "up" | "down" | "left" | "right";
@@ -300,13 +302,7 @@ function PopoverAnchoredExample({ _side, _align }: Pick<StoryArgs, "_side" | "_a
 				ref={anchorRef}
 				disabled={isSubmitting}
 				onClick={submitForm}
-				startSlot={
-					isSubmitting ? (
-						<Loader aria-hidden />
-					) : (
-						<PaperPlaneTiltIcon aria-hidden />
-					)
-				}>
+				startSlot={isSubmitting ? <Loader aria-hidden /> : <PaperPlaneTiltIcon aria-hidden />}>
 				{isSubmitting ? "Submitting…" : "Submit changes"}
 			</Button>
 		</AnchoredStage>
@@ -345,16 +341,14 @@ function PillAnchoredExample({ _side, _align }: Pick<StoryArgs, "_side" | "_alig
 			id: "agent-editing-progress",
 			title: `Step ${nextStepIndex + 1} / ${editingSteps.length} · ${step.files} files changed`,
 			description: (
-				<span
-					aria-label={`${step.additions} additions and ${step.deletions} deletions`}
-					{...stylex.props(storyStyles.changeCount)}>
-					<span aria-hidden {...stylex.props(storyStyles.additions)}>
+				<Stack orientation="horizontal" gap={1}>
+					<Text size="1" color="success" tabular render={<span />} fontFamily="mono">
 						+{step.additions}
-					</span>
-					<span aria-hidden {...stylex.props(storyStyles.deletions)}>
+					</Text>
+					<Text size="1" color="error" tabular render={<span />} fontFamily="mono">
 						−{step.deletions}
-					</span>
-				</span>
+					</Text>
+				</Stack>
 			),
 			timeout: 0,
 			positionerProps: positionerProps(),
@@ -559,9 +553,9 @@ const storyStyles = stylex.create({
 		display: "inline-flex",
 	},
 	additions: {
-		color: tokens["--bg-success-primary"],
+		color: tokens["--fg-success"],
 	},
 	deletions: {
-		color: tokens["--bg-error-primary"],
+		color: tokens["--fg-error"],
 	},
 });

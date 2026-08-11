@@ -4,6 +4,7 @@ import {
 	AgentActionApproval,
 	AsyncJobProgress,
 	ConfirmationDialog,
+	ContextPopover,
 	CopyButton,
 	GoalToolbar,
 	ModelSelector,
@@ -68,6 +69,7 @@ import {
 	Select,
 	Separator,
 	Slider,
+	Stack,
 	Switch,
 	Tabs,
 	Text,
@@ -93,7 +95,6 @@ import { parseModeFromSearchParams, parseThemeFromSearchParams, syncAppThemeUrl 
 import { ThemeProvider, useTheme, type ResolvedThemeMode, type ThemeMode, type ThemeName } from "./theme";
 import {
 	ArrowRightIcon,
-	CircleNotchIcon,
 	FileSearchIcon,
 	TextBIcon,
 	ThumbsDownIcon,
@@ -190,13 +191,13 @@ function getComponentCells(): GalleryCell[] {
 			content: (
 				<div {...stylex.props(styles.buttonStack)}>
 					<Button size="sm" startSlot={<PlusIcon aria-hidden weight="bold" />} variant="secondary">
-						Create worker
+						Create project
 					</Button>
 					<Button size="sm" startSlot={<PlusIcon aria-hidden weight="bold" />}>
-						Create worker
+						Create project
 					</Button>
 					<Button size="sm" startSlot={<PlusIcon aria-hidden weight="bold" />} variant="ghost">
-						Create worker
+						Create project
 					</Button>
 				</div>
 			),
@@ -392,18 +393,18 @@ function getComponentCells(): GalleryCell[] {
 			content: (
 				<InputGroup.Root style={styles.inputGroupSample}>
 					<InputGroup.Addon>
-						<FileSearchIcon aria-hidden size={13} weight="bold" />
+						<FileSearchIcon aria-hidden size={13} />
 					</InputGroup.Addon>
 					<InputGroup.Input aria-label="Worker URL" defaultValue="stylex-lab" />
-					<InputGroup.Actions>
+					<InputGroup.Addon position="end">
 						<IconButton
-							icon={<ArrowRightIcon aria-hidden weight="bold" />}
+							icon={<ArrowRightIcon aria-hidden />}
 							label="Copy URL"
 							size="xs"
 							tooltip={false}
 							variant="ghost"
 						/>
-					</InputGroup.Actions>
+					</InputGroup.Addon>
 				</InputGroup.Root>
 			),
 		},
@@ -445,11 +446,18 @@ function getComponentCells(): GalleryCell[] {
 			title: "LinkPreview",
 			content: (
 				<LinkPreview.Root>
-					<LinkPreview.Trigger href="#top">Hover preview</LinkPreview.Trigger>
+					<LinkPreview.Trigger href="#top" render={<Link color="accent" />}>
+						Hover preview
+					</LinkPreview.Trigger>
 					<LinkPreview.Popup>
 						<LinkPreview.Content>
-							<LinkPreview.Title>Base + StyleX Lab</LinkPreview.Title>
-							<LinkPreview.Description>Reusable primitives and blocks.</LinkPreview.Description>
+							<Stack orientation="horizontal" gap={2}>
+								<Avatar image="/avatar-example.svg" name="Ada Lovelace" size={10} />
+								<Stack>
+									<LinkPreview.Title>Base + StyleX Lab</LinkPreview.Title>
+									<LinkPreview.Description>Reusable primitives and blocks.</LinkPreview.Description>
+								</Stack>
+							</Stack>
 						</LinkPreview.Content>
 					</LinkPreview.Popup>
 				</LinkPreview.Root>
@@ -660,8 +668,18 @@ function getComponentCells(): GalleryCell[] {
 			content: (
 				<div {...stylex.props(styles.toggleRow)}>
 					<ToggleGroup defaultValue={["bold"]}>
-						<Toggle icon={<ThumbsDownIcon aria-hidden weight="regular" />} label="Thumbs down" value="thumbs-down" />
-						<Toggle icon={<ThumbsUpIcon aria-hidden weight="regular" />} label="Thumbs up" value="thumbs-up" />
+						<Toggle
+							icon={<ThumbsDownIcon aria-hidden weight="regular" />}
+							pressedIcon={<ThumbsDownIcon aria-hidden weight="duotone" color={"var(--fg-error)"} />}
+							label="Bad response"
+							value="thumbs-down"
+						/>
+						<Toggle
+							icon={<ThumbsUpIcon aria-hidden weight="regular" />}
+							pressedIcon={<ThumbsUpIcon aria-hidden weight="duotone" color={"var(--fg-success)"} />}
+							label="Good response"
+							value="thumbs-up"
+						/>
 					</ToggleGroup>
 				</div>
 			),
@@ -672,10 +690,10 @@ function getComponentCells(): GalleryCell[] {
 				<Toolbar.Root aria-label="Search toolbar">
 					<Toolbar.Input aria-label="Search" placeholder="Search..." />
 					<Toolbar.Button aria-label="Search">
-						<MagnifyingGlassIcon aria-hidden size={15} weight="bold" />
+						<MagnifyingGlassIcon aria-hidden size={15} />
 					</Toolbar.Button>
 					<Toolbar.Button aria-label="Add">
-						<PlusIcon aria-hidden size={15} weight="bold" />
+						<PlusIcon aria-hidden size={15} />
 					</Toolbar.Button>
 				</Toolbar.Root>
 			),
@@ -790,6 +808,10 @@ function getBlockCells(): GalleryCell[] {
 			),
 		},
 		{
+			title: "ContextPopover",
+			content: <ContextPopover total={258_000} usage={207_000} />,
+		},
+		{
 			title: "CopyButton",
 			content: (
 				<CopyButton value="yo@bob.fyi" variant="ghost">
@@ -872,9 +894,7 @@ function getBlockCells(): GalleryCell[] {
 								<Menu.Root>
 									<PromptComposer.AddTrigger />
 								</Menu.Root>
-								<Button size="sm" variant="neutral" shape="pill" startSlot={<CircleNotchIcon weight="bold" />}>
-									96%
-								</Button>
+								<ContextPopover total={128_000} usage={40_000} />
 							</PromptComposer.Options>
 							<PromptComposer.Actions>
 								<PromptComposer.Submit />
@@ -894,7 +914,7 @@ function getBlockCells(): GalleryCell[] {
 					</StreamingResponse.Content>
 					<StreamingResponse.Actions>
 						<Toolbar.Button aria-label="Copy response">
-							<CopyIcon aria-hidden size={15} weight="bold" />
+							<CopyIcon aria-hidden />
 						</Toolbar.Button>
 					</StreamingResponse.Actions>
 				</StreamingResponse.Root>
@@ -1268,8 +1288,8 @@ const styles = stylex.create({
 	},
 	componentCell: {
 		padding: tokens["--space-4"],
-		borderRadius: tokens["--radius-sm"],
-		backgroundColor: tokens["--color-gray-s2"],
+		borderRadius: tokens["--radius-md"],
+		backgroundColor: tokens["--color-gray-s1"],
 		boxSizing: "border-box",
 		display: "grid",
 		gridTemplateRows: "minmax(0, 1fr) auto",
@@ -1278,8 +1298,8 @@ const styles = stylex.create({
 	},
 	blockCell: {
 		padding: tokens["--space-4"],
-		borderRadius: tokens["--radius-md"],
-		backgroundColor: tokens["--color-gray-s2"],
+		borderRadius: tokens["--radius-lg"],
+		backgroundColor: tokens["--color-gray-s1"],
 		boxSizing: "border-box",
 		display: "grid",
 		gridTemplateRows: "minmax(0, 1fr) auto",
@@ -1288,7 +1308,7 @@ const styles = stylex.create({
 	},
 	componentFillerCell: {
 		borderRadius: tokens["--radius-md"],
-		backgroundColor: tokens["--color-gray-s2"],
+		backgroundColor: tokens["--color-gray-s1"],
 		boxSizing: "border-box",
 		minHeight: { default: "220px", [breakpoints.sm]: "248px" },
 	},

@@ -61,6 +61,12 @@ export {
 export { Collapsible } from "./collapsible/collapsible";
 export { InputGroup } from "./input-group/input-group";
 export { Meter } from "./meter/meter";
+export {
+	MeterGauge,
+	type MeterGaugeArc,
+	type MeterGaugeProps,
+	type MeterGaugeSize,
+} from "./meter/meter-gauge";
 export { NavList } from "./nav-list/nav-list";
 export { Progress } from "./progress/progress";
 export { Separator, type SeparatorProps, type SeparatorThemeProps } from "./separator/separator";

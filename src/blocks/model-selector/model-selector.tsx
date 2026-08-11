@@ -442,6 +442,7 @@ const parts = stylex.create({
 		fontSize: tokens["--font-size-1"],
 		letterSpacing: tokens["--letter-spacing-1"],
 		lineHeight: tokens["--line-height-1"],
+		maxWidth: "160px",
 	},
 	copyWithoutIcon: {
 		gridColumn: "2 / 4",

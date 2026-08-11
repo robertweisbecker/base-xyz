@@ -1,0 +1,14 @@
+import { DocsPage, Markdown, Meta, Source } from "@storybook/addon-docs/blocks";
+import * as Stories from "./context-popover.stories";
+
+<Meta of={Stories} />
+
+<DocsPage />
+
+<Markdown>{`
+| Part | Description |
+| --- | --- |
+| \`ContextPopover\` | Calculates context usage from \`usage\` and \`total\`, opens on hover or press, and presents the percentage in a Button trigger and the compact token fraction in a Meter popup. The trigger accepts Button \`size\` and \`variant\`. |
+`}</Markdown>
+
+<Source code={'import { ContextPopover } from "@/blocks";'} language="tsx" />

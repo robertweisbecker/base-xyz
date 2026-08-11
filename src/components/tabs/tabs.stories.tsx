@@ -1,5 +1,5 @@
 import { CaretRightIcon } from "@phosphor-icons/react/dist/csr/CaretRight";
-import { FolderIcon } from "@phosphor-icons/react/dist/csr/Folder";
+import { FolderSimpleIcon } from "@phosphor-icons/react/dist/csr/FolderSimple";
 import { GearIcon } from "@phosphor-icons/react/dist/csr/Gear";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import * as stylex from "@stylexjs/stylex";
@@ -9,8 +9,8 @@ import { tokens } from "@/theme/tokens.stylex";
 import { Tabs, type TabsSize } from "./tabs";
 const iconOptions = {
 	None: undefined,
-	Folder: <FolderIcon aria-hidden weight="regular" />,
-	Settings: <GearIcon aria-hidden weight="regular" />,
+	Folder: <FolderSimpleIcon aria-hidden weight="duotone" />,
+	Settings: <GearIcon aria-hidden weight="duotone" />,
 };
 
 type TabsPlaygroundArgs = {
@@ -35,7 +35,7 @@ const meta = {
 		endSlot: undefined,
 		orientation: "horizontal",
 		size: "md",
-		startSlot: <FolderIcon aria-hidden weight="regular" />,
+		startSlot: <FolderSimpleIcon aria-hidden weight="duotone" />,
 	},
 	argTypes: {
 		activateOnFocus: { control: "boolean" },
@@ -131,10 +131,10 @@ export const States: Story = {
 	render: () => (
 		<Tabs.Root defaultValue="selected">
 			<Tabs.List>
-				<Tabs.Tab startSlot={<FolderIcon aria-hidden />} value="selected">
+				<Tabs.Tab startSlot={<FolderSimpleIcon aria-hidden weight="duotone" />} value="selected">
 					Selected
 				</Tabs.Tab>
-				<Tabs.Tab endSlot={<CaretRightIcon aria-hidden />} value="unselected">
+				<Tabs.Tab startSlot={<GearIcon aria-hidden weight="duotone" />} value="unselected">
 					Unselected
 				</Tabs.Tab>
 				<Tabs.Tab disabled value="disabled">
@@ -155,7 +155,11 @@ function ExampleTabs({
 	startSlot,
 }: ExampleTabsProps) {
 	return (
-		<Tabs.Root key={`${defaultValue}-${orientation}-${size}`} defaultValue={defaultValue} orientation={orientation} size={size}>
+		<Tabs.Root
+			key={`${defaultValue}-${orientation}-${size}`}
+			defaultValue={defaultValue}
+			orientation={orientation}
+			size={size}>
 			<Tabs.List activateOnFocus={activateOnFocus}>
 				<Tabs.Tab endSlot={endSlot} startSlot={startSlot} value="overview">
 					Overview

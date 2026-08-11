@@ -261,8 +261,8 @@ export function AddTrigger({ children, render, ...props }: PromptComposerAddTrig
 						label="Add"
 						shape="circle"
 						tooltip={false}
-						variant="neutral"
-						size="sm"
+						variant="ghost"
+						size="md"
 					/>
 				)
 			}
@@ -324,6 +324,8 @@ const parts = stylex.create({
 	 * Footer / Textarea own block edges. Child inline padding clears so Root inset wins.
 	 */
 	inputGroup: {
+		"--_input-group-padding": tokens["--space-4"],
+		"--_input-padding": tokens["--space-4"],
 		borderRadius: "2.5rem",
 		gap: 0,
 		// alignItems: "stretch",
@@ -332,13 +334,11 @@ const parts = stylex.create({
 	},
 	/** Fade size + expand-on-focus; both are composer behavior, not InputGroup. */
 	input: {
-		"--_input-group-padding": tokens["--space-4"],
-		"--_input-padding": tokens["--space-4"],
 		"--scroll-fade-size": tokens["--space-8"],
-		fieldSizing: {
-			default: "fixed",
-			":focus-within": "content",
-		},
+		// fieldSizing: {
+		// 	default: "fixed",
+		// 	":focus-within": "content",
+		// },
 		minHeight: "0px",
 	},
 	options: {

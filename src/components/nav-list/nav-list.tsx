@@ -1057,7 +1057,7 @@ const navListParts = stylex.create({
 		minInlineSize: tokens["--size-control-lg"],
 	},
 	textRow: {
-		[menuItemVars.columns]: "minmax(0, 1fr) auto",
+		[menuItemVars.columns]: `${tokens["--space-4"]} minmax(0, 1fr) auto`,
 	},
 	nestedItemRow: {
 		[menuItemVars.paddingInlineStart]: tokens["--space-2"],
@@ -1087,7 +1087,7 @@ const navListParts = stylex.create({
 		flexDirection: "column",
 	},
 	textRowLabelCell: {
-		gridColumn: "1",
+		gridColumn: "2",
 	},
 	labelText: {
 		overflow: "hidden",
@@ -1174,7 +1174,7 @@ const navListParts = stylex.create({
 		display: "flex",
 		flexDirection: "column",
 		marginInlineStart: tokens["--space-4"],
-		paddingInlineEnd: tokens["--space-1"],
+		paddingInlineEnd: tokens["--space-0"],
 		paddingInlineStart: tokens["--space-3"],
 		transitionDuration: {
 			default: tokens["--motion-duration-short"],
@@ -1234,8 +1234,8 @@ const navListParts = stylex.create({
 		gap: tokens["--space-1"],
 		paddingBlock: tokens["--space-1"],
 		paddingInline: tokens["--space-1"],
-		inlineSize: "min(16rem, calc(100vw - 2rem))",
-		minWidth: "12rem",
+		inlineSize: "min(12rem, calc(100vw - 2rem))",
+		minWidth: "8rem",
 	},
 });
 

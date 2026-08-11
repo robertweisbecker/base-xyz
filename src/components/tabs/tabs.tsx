@@ -214,11 +214,12 @@ const tabsParts = stylex.create({
 		cornerShape: "superellipse(1.3)",
 		flex: "none",
 		gap: tokens["--space-1"],
-		backgroundColor: tokens["--color-gray-s1"],
+		backgroundColor: tokens["--surface-subtle"],
 		boxSizing: "border-box",
 		display: "inline-flex",
 		isolation: "isolate",
-		outlineColor: tokens["--border"],
+		outlineColor: tokens["--border-disabled"],
+		outlineOffset: -1,
 		outlineStyle: "solid",
 		outlineWidth: 1,
 		position: "relative",
@@ -258,6 +259,7 @@ const tabsParts = stylex.create({
 		boxSizing: "border-box",
 		color: {
 			"[data-active]": tokens["--fg"],
+			"[data-disabled]": tokens["--fg-subtle"],
 			default: tokens["--fg-muted"],
 			":hover": tokens["--fg"],
 		},
@@ -290,9 +292,19 @@ const tabsParts = stylex.create({
 		display: "inline-flex",
 		justifyContent: "center",
 		lineHeight: 0,
+		opacity: {
+			default: 1,
+			":has(svg)": 0.72,
+		},
 		pointerEvents: "none",
-		height: "1em",
-		width: "1em",
+		height: {
+			default: null,
+			":is(svg)": "1em",
+		},
+		width: {
+			default: null,
+			":is(svg)": "1em",
+		},
 	},
 	content: {
 		flex: "1 1 auto",
@@ -346,7 +358,7 @@ const tabOrientationStyles = stylex.create({
 
 const tabsRadiusStyles = stylex.create({
 	sm: { "--_tabs-list-radius": tokens["--radius-sm"] },
-	md: { "--_tabs-list-radius": tokens["--radius-lg"] },
+	md: { "--_tabs-list-radius": tokens["--radius-md"] },
 	lg: { "--_tabs-list-radius": tokens["--radius-lg"] },
 });
 

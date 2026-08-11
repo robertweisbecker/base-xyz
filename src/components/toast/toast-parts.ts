@@ -55,6 +55,7 @@ const toastControlParts = stylex.create({
 	},
 	anchoredClose: {
 		borderRadius: tokens["--radius-full"],
+		marginBlockStart: "-6px",
 		marginInlineEnd: "-6px",
 	},
 });

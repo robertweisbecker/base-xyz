@@ -27,4 +27,5 @@ export type TypographyStyleProps = TextThemeProps & {
 	truncate?: boolean;
 	wrap?: TypographyWrap;
 	textStyle?: TextType;
+	tabular?: boolean;
 };

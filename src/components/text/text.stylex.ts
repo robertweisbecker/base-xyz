@@ -204,3 +204,9 @@ export const textTruncationStyles = stylex.create({
 		overflowX: "clip",
 	},
 });
+
+export const textTabularStyles = stylex.create({
+	tabular: {
+		fontVariantNumeric: "tabular-nums",
+	},
+});

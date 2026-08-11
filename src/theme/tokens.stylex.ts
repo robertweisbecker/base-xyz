@@ -48,10 +48,10 @@ export const tokens = stylex.defineVars({
 	"--color-accent-t2": "light-dark(oklch(28.072% 0.09716 262.82), oklch(87.811% 0.0624 249.313))",
 
 	"--color-white-a1": "hsl(0deg 0% 100% / 5%)",
-	"--color-white-a2": "hsl(0deg 0% 100% / 8%)",
-	"--color-white-a3": "hsl(0deg 0% 100% / 10%)",
-	"--color-white-a4": "hsl(0deg 0% 100% / 20%)",
-	"--color-white-a5": "hsl(0deg 0% 100% / 56%)",
+	"--color-white-a2": "hsl(0deg 0% 100% / 10%)",
+	"--color-white-a3": "hsl(0deg 0% 100% / 15%)",
+	"--color-white-a4": "hsl(0deg 0% 100% / 28%)",
+	"--color-white-a5": "hsl(0deg 0% 100% / 64%)",
 	"--color-black-a1": "hsl(0deg 0% 0% / 4%)",
 	"--color-black-a2": "hsl(0deg 0% 0% / 8%)",
 	"--color-black-a3": "hsl(0deg 0% 0% / 12%)",
@@ -106,11 +106,11 @@ export const tokens = stylex.defineVars({
 	"--color-lime-t1": "light-dark(hsl(91deg 64% 38.75%), hsl(91deg 72% 56%))",
 
 	"--canvas": "light-dark(var(--color-white), #050506)",
-	"--bg-inset": "var(--color-gray-s2)",
+	"--bg-inset": "var(--color-gray-a1)",
 	"--surface": "var(--color-gray-s1)",
 	"--page": "light-dark(var(--color-white), var(--color-gray-s1))",
 	"--panel": "light-dark(var(--color-white), var(--color-gray-s2))",
-	"--elevated": "light-dark(var(--color-white), color-mix(in srgb, var(--color-gray-s2), var(--color-gray-c1)))",
+	"--elevated": "light-dark(var(--color-white), var(--color-gray-s3))",
 	"--elevated-2": "color-mix(in srgb, var(--elevated), var(--fg) 5%)",
 	"--inset": "color-mix(in srgb, var(--surface), black 5%)",
 	"--surface-subtle": "var(--color-gray-a1)",
@@ -147,9 +147,9 @@ export const tokens = stylex.defineVars({
 	"--bg-warning-primary": "var(--color-warning-p1)",
 	"--bg-warning-subtle": "var(--color-warning-c1)",
 	"--fg-warning-contrast": "var(--color-black)",
-	"--bg-inverse": "light-dark(#17181b, #f5f5f7)",
+	"--bg-inverse": "light-dark(var(--color-gray-t3), var(--color-gray-t3))",
 	"--fg-inverse": "light-dark(#ffffff, #17181b)",
-	"--fg-inverse-muted": "#b8bbc3",
+	"--fg-inverse-muted": "var(--color-gray-t1)",
 	"--fg-placeholder": "var(--color-gray-a4)",
 	"--fg-disabled": "var(--color-gray-a3)",
 	"--focus": "var(--color-accent-p2)",
@@ -224,7 +224,7 @@ export const tokens = stylex.defineVars({
 
 	"--shadow-color-1": "light-dark(var(--color-black-a1), var(--color-black-a3))",
 	"--shadow-color-2": "light-dark(var(--color-black-a3), var(--color-black-a5))",
-	"--shadow-color-outer-ring": "light-dark(var(--color-black-a1), var(--color-black-a5))",
+	"--shadow-color-outer-ring": "light-dark(var(--color-black-a2), var(--color-black-a5))",
 
 	"--shadow-ring-inset":
 		"inset 0 0 0 1px light-dark(rgb(20 20 24 / 4%), rgb(255 255 255 / 10%)), inset 0 -1px 0 light-dark(transparent, rgb(255 255 255 / 5%))",
@@ -237,9 +237,9 @@ export const tokens = stylex.defineVars({
 	"--shadow-sm":
 		"0px 2px 3px -1px var(--shadow-color-2),0px 1px 0px 0px rgba(25,28,33,0.02), 0px 0px 0px 1px rgba(25,28,33,0.08), var(--shadow-ring)",
 	"--shadow-md":
-		"0px 0px 0px 1px var(--shadow-color-outer-ring), 0px 1px 1px -0.5px var(--shadow-color-1), 0px 3px 3px -1.5px var(--shadow-color-1), 0px 6px 6px -3px var(--shadow-color-1), 0px 12px 12px -6px var(--shadow-color-1), 0px 24px 24px -12px var(--shadow-color-1), var(--shadow-ring)",
+		"0px 0px 0px 1px var(--shadow-color-outer-ring), 0px 1px 1px -0.5px var(--shadow-color-1), 0px 3px 3px -1.5px var(--shadow-color-1), 0px 6px 6px -3px var(--shadow-color-1), 0px 12px 12px -6px var(--shadow-color-1), 0px 24px 24px -12px var(--shadow-color-2), var(--shadow-ring)",
 	"--shadow-lg":
-		"0 2.8px 2.2px rgba(0, 0, 0, 0.034), 0 6.7px 5.3px rgba(0, 0, 0, 0.048), 0 12.5px 10px rgba(0, 0, 0, 0.06), 0 22.3px 17.9px rgba(0, 0, 0, 0.072), 0 41.8px 33.4px rgba(0, 0, 0, 0.086), 0 100px 80px rgba(0, 0, 0, 0.12), var(--shadow-ring)",
+		"0 2.8px 2.2px rgba(0, 0, 0, 0.034), 0 6.7px 5.3px rgba(0, 0, 0, 0.048), 0 12.5px 10px rgba(0, 0, 0, 0.06), 0 22.3px 17.9px rgba(0, 0, 0, 0.072), 0 41.8px 33.4px rgba(0, 0, 0, 0.086), 0 100px 80px rgba(0, 0, 0, 0.12), var(--shadow-ring),0px 0px 0px 1px var(--shadow-color-outer-ring)",
 	"--shadow-primary":
 		"inset 0 0 0.04em 0.08em color-mix(in srgb, var(--bg-primary) 90%, var(--fg)), inset 0 0.04em 0.04em 0.08em color-mix(in oklch, white 40%, var(--bg-primary)), var(--shadow-ring)",
 	"--shadow-primary-pressed":

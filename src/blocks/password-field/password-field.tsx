@@ -138,7 +138,6 @@ export function VisibilityToggle({
 	label,
 	shape = "square",
 	size = "xs",
-	tooltip = false,
 	variant = "plain",
 	...props
 }: PasswordFieldVisibilityToggleProps) {
@@ -179,7 +178,6 @@ export function VisibilityToggle({
 			onPressedChange={setVisible}
 			shape={shape}
 			size={size}
-			tooltip={tooltip}
 			variant={variant}
 		/>
 	);
@@ -251,10 +249,10 @@ function joinClassNames(...classNames: Array<string | undefined>) {
 }
 
 const meterToneColors = {
-	neutral: tokens["--border"],
-	weak: tokens["--bg-error"],
-	medium: tokens["--bg-warning-primary"],
-	strong: tokens["--bg-success-primary"],
+	neutral: tokens["--fill-neutral"],
+	weak: tokens["--fill-error"],
+	medium: tokens["--fill-warning"],
+	strong: tokens["--fill-success"],
 } as const;
 
 const parts = stylex.create({

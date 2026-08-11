@@ -272,7 +272,8 @@ const sidebarParts = stylex.create({
 	panel: {
 		flex: "0 0 auto",
 		overflow: "hidden",
-		backgroundColor: tokens["--surface-subtle"],
+		paddingBlock: tokens["--space-1"],
+		backgroundColor: tokens["--surface"],
 		boxShadow: `inset -1px 0 0 0 ${tokens["--border"]}`,
 		display: "block",
 		inlineSize: tokens["--size-sidebar"],
@@ -365,7 +366,7 @@ const sidebarParts = stylex.create({
 		// minBlockSize: tokens["--size-control-lg"],
 		minInlineSize: 0,
 		paddingBlockEnd: tokens["--space-3"],
-		paddingBlockStart: tokens["--space-4"],
+		paddingBlockStart: tokens["--space-2"],
 	},
 	headerRailCollapsed: {
 		gap: tokens["--space-1"],

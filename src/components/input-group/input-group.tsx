@@ -236,12 +236,12 @@ const inputGroupParts = stylex.create({
 		resize: "none",
 		// Hug `rows` / content — callers that need a taller box pass `rows` or `style`.
 		height: "auto",
-		minHeight: "64px",
+		// minHeight: "64px",
 		width: "100%",
 	},
 	addon: {
 		alignItems: "center",
-		color: tokens["--fg-muted"],
+		color: tokens["--fg-subtle"],
 		cursor: "text",
 		display: "inline-flex",
 		flexShrink: 0,
@@ -249,6 +249,7 @@ const inputGroupParts = stylex.create({
 	actions: {
 		gap: tokens["--space-1"],
 		alignItems: "center",
+		// paddingInline: "var(--_input-padding)",
 		display: "flex",
 		flexShrink: 0,
 	},
@@ -289,7 +290,7 @@ const inputGroupAddonPositions = stylex.create({
 		order: 1,
 		paddingInlineEnd: {
 			default: "var(--_input-group-padding)",
-			":has(button)": 0,
+			":has(button)": "calc(var(--_input-padding) / 2)",
 		},
 		paddingInlineStart: 0,
 	},
@@ -344,7 +345,7 @@ const inputGroupSizes = stylex.create({
 	},
 	lg: {
 		"--_input-group-icon-size": "1rem",
-		"--_input-group-padding": tokens["--space-2"],
+		"--_input-group-padding": tokens["--space-3"],
 		"--_input-padding": tokens["--space-3"],
 		// paddingBlock: tokens["--space-1"],
 		// paddingInline: tokens["--space-1"],

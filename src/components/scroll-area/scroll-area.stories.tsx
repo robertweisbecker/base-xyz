@@ -301,7 +301,7 @@ const styles = stylex.create({
 	},
 	surface: {
 		borderRadius: tokens["--radius-md"],
-		backgroundColor: tokens["--bg-inset"],
+		backgroundColor: tokens["--color-gray-a1"],
 	},
 	padding: {
 		padding: tokens["--space-3"],

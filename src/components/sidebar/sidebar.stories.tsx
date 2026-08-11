@@ -204,7 +204,7 @@ function PrimaryNavigation({ includeChildren = false }: { includeChildren?: bool
 		<NavList.Drilldown defaultValue="account">
 			<NavList.DrilldownPanel value="account" label="Account navigation">
 				<NavList.Section label="Project" visuallyHideLabel>
-					<NavList.Item label="Overview" href="#overview" icon={<HouseIcon weight="duotone" />} current="page" />
+					<NavList.Item label="Overview" href="#overview" icon={<HouseIcon weight="duotone" />} />
 					<NavList.Item label="Members" href="#members" icon={<UsersIcon weight="duotone" />} />
 					{includeChildren ? (
 						<NavList.CollapsibleGroup>

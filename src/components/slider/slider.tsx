@@ -360,9 +360,9 @@ const sliderParts = stylex.create({
 		width: 0,
 		"::before": {
 			borderRadius: tokens["--radius-full"],
-			backgroundColor: tokens["--fill-neutral"],
+			backgroundColor: tokens["--color-gray-a3"],
 			content: '""',
-			opacity: 0.5,
+			opacity: 1,
 			position: "absolute",
 			transform: "translate(-50%, -50%)",
 			height: tokens["--space-1"],

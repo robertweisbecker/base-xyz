@@ -211,7 +211,7 @@ export function Input({
 	label = "Search commands",
 	onKeyDown,
 	placeholder = "Search commands…",
-	startSlot = <MagnifyingGlassIcon aria-hidden weight="bold" />,
+	startSlot = <MagnifyingGlassIcon aria-hidden />,
 	style,
 	...props
 }: CommandPaletteInputProps) {
@@ -464,7 +464,7 @@ const commandPaletteParts = stylex.create({
 	},
 	inputSlot: {
 		alignItems: "center",
-		color: tokens["--fg-subtle"],
+		color: tokens["--fill-neutral"],
 		display: "inline-flex",
 		flexShrink: 0,
 		fontSize: tokens["--font-size-3"],

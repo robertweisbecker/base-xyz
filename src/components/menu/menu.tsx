@@ -387,7 +387,7 @@ const menuParts = stylex.create({
 		borderRadius: tokens["--radius-lg"],
 		backdropFilter: "blur(6px)",
 		backgroundColor: popupVars.background,
-		boxShadow: tokens["--shadow-lg"],
+		boxShadow: tokens["--shadow-md"],
 		color: popupVars.foreground,
 	},
 	popup: {

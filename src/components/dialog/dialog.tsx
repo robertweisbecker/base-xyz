@@ -194,8 +194,8 @@ const dialogParts = stylex.create({
 	},
 	closeButton: {
 		flexShrink: 0,
-		insetBlockStart: tokens["--space-4"],
-		insetInlineEnd: tokens["--space-4"],
+		insetBlockStart: tokens["--space-3"],
+		insetInlineEnd: tokens["--space-3"],
 		position: "absolute",
 		zIndex: 1,
 	},

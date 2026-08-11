@@ -1,6 +1,6 @@
 import { Field } from "@base-ui/react/field";
 import { NumberField as BaseNumberField } from "@base-ui/react/number-field";
-import { ArrowsLeftRightIcon } from "@phosphor-icons/react/dist/csr/ArrowsLeftRight";
+import { ArrowsHorizontalIcon } from "@phosphor-icons/react/dist/csr/ArrowsHorizontal";
 import { MinusIcon } from "@phosphor-icons/react/dist/csr/Minus";
 import { PlusIcon } from "@phosphor-icons/react/dist/csr/Plus";
 import * as stylex from "@stylexjs/stylex";
@@ -88,7 +88,7 @@ export function NumberField({
 					) : null}
 				</Field.Label>
 				<BaseNumberField.ScrubAreaCursor {...stylex.props(numberFieldParts.scrubCursor)}>
-					<ArrowsLeftRightIcon aria-hidden size={14} weight="bold" />
+					<ArrowsHorizontalIcon aria-hidden size={24} weight="fill" strokeWidth={8} fill="black" stroke={"white"} />
 				</BaseNumberField.ScrubAreaCursor>
 			</BaseNumberField.ScrubArea>
 			<BaseNumberField.Group {...stylex.props(numberFieldParts.group, numberFieldGroupSizes[fieldSize])}>
@@ -163,14 +163,10 @@ const numberFieldParts = stylex.create({
 		cursor: "inherit",
 	},
 	scrubCursor: {
-		borderRadius: tokens["--radius-full"],
-		paddingBlock: tokens["--space-1"],
-		paddingInline: tokens["--space-2"],
 		alignItems: "center",
-		backgroundColor: tokens["--bg-inverse"],
-		boxShadow: tokens["--shadow-sm"],
-		color: tokens["--fg-inverse"],
+		color: tokens["--fg"],
 		display: "flex",
+		filter: "drop-shadow(0 1px 1px rgba(0, 0, 0, 0.4))",
 		justifyContent: "center",
 	},
 	group: {
@@ -188,8 +184,8 @@ const numberFieldParts = stylex.create({
 				"@media (hover: hover) and (pointer: fine)": tokens["--border-input-hover"],
 			},
 			'[aria-invalid="true"]': tokens["--bg-error-primary"],
+			"[data-disabled]": `${tokens["--border"]} transparent ${tokens["--border"]}`,
 			"[data-readonly]": `${tokens["--border"]} transparent ${tokens["--border"]}`,
-			"[readonly]": `${tokens["--border"]} transparent ${tokens["--border"]}`,
 			default: tokens["--border-input"],
 			":focus-visible": tokens["--focus"],
 			':focus-visible[aria-invalid="true"]': tokens["--bg-error-primary"],
@@ -202,8 +198,8 @@ const numberFieldParts = stylex.create({
 		paddingBlock: 0,
 		appearance: "textfield",
 		backgroundColor: {
-			"[data-disabled]": tokens["--surface-subtle"],
-			"[data-readonly]": "transparent",
+			"[data-disabled]": "transparent",
+			"[data-readonly]": tokens["--canvas"],
 			default: tokens["--surface"],
 		},
 		fontFamily: "inherit",
@@ -221,7 +217,11 @@ const numberFieldParts = stylex.create({
 	},
 	stepper: {
 		padding: 0,
-		borderColor: tokens["--border-input"],
+		borderColor: {
+			"[data-disabled]": tokens["--border"],
+			"[data-readonly]": tokens["--border"],
+			default: tokens["--border-input"],
+		},
 		borderStyle: "solid",
 		borderWidth: "1px",
 		outline: "0",
