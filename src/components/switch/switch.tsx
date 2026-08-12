@@ -4,7 +4,7 @@ import type { StyleXStyles } from "@stylexjs/stylex";
 import { useId } from "react";
 import { resolveThemeProps } from "@/theme/theme-props";
 import type { FieldThemeProps } from "@/components/field/field.types";
-import { fieldStyles, fieldThemeProps } from "@/components/field/field.stylex";
+import { fieldStyles, fieldThemeProps, labelMarker } from "@/components/field/field.stylex";
 import { focusRing } from "@/styles/recipes/focus";
 import { tokens } from "@/theme/tokens.stylex";
 import { Icon } from "@/components/icons";
@@ -57,7 +57,7 @@ export function Switch({
 
 	return (
 		<div className={[rootSx.className, className].filter(Boolean).join(" ")} style={rootSx.style}>
-			<label htmlFor={id} {...stylex.props(switchParts.labelRoot)}>
+			<label htmlFor={id} {...stylex.props(labelMarker, switchParts.labelRoot)}>
 				{visuallyHideLabel ? (
 					<VisuallyHidden>{labelContent}</VisuallyHidden>
 				) : (

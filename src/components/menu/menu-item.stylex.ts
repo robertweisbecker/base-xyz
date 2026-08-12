@@ -3,6 +3,9 @@ import { typescaleStyles, textStyles } from "@/components/text/text.stylex";
 import { tokens } from "@/theme/tokens.stylex";
 import type { MenuItemSize } from "./menu.types";
 
+/** Marker for selectable item roots shared by Menu, Select, Combobox, Autocomplete, and related components. */
+export const itemMarker = stylex.defineMarker();
+
 /** Inherited layout variables for Menu items and components that intentionally match them. */
 export const menuItemVars = stylex.defineVars({
 	columns: `${tokens["--space-4"]} minmax(0, 1fr) auto`,
@@ -32,7 +35,7 @@ const menuItemParts = stylex.create({
 		columnGap: menuItemVars.columnGap,
 		cursor: {
 			default: "default",
-			":is(a[href])": "pointer",
+			":any-link": "pointer",
 		},
 		display: "grid",
 		gridTemplateColumns: menuItemVars.columns,
@@ -83,7 +86,7 @@ const menuItemParts = stylex.create({
 });
 
 export const menuItemStyles = {
-	item: [textStyles.body, menuItemParts.itemBase],
+	item: [itemMarker, textStyles.body, menuItemParts.itemBase],
 	label: menuItemParts.label,
 	indicator: menuItemParts.indicatorSizing,
 } as const;

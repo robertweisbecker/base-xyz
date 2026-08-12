@@ -24,7 +24,7 @@ const meta = {
 		},
 		variant: {
 			control: "inline-radio",
-			options: ["default", "inverse", "plain"],
+			options: ["default", "inverse", "outline", "plain"],
 		},
 	},
 	parameters: {

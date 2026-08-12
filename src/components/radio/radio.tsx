@@ -7,7 +7,7 @@ import type { StyleXStyles } from "@stylexjs/stylex";
 import { createContext, useContext, useId, type ReactNode } from "react";
 import { resolveThemeProps } from "@/theme/theme-props";
 import type { FieldThemeProps } from "@/components/field/field.types";
-import { fieldChoiceGroupStyles, fieldStyles, fieldThemeProps } from "@/components/field/field.stylex";
+import { fieldChoiceGroupStyles, fieldStyles, fieldThemeProps, labelMarker } from "@/components/field/field.stylex";
 import { textStyles } from "@/components/text/text.stylex";
 import { focusRing } from "@/styles/recipes/focus";
 import { pressable } from "@/styles/recipes/transitions";
@@ -92,7 +92,7 @@ export function Radio({
 			// ^^ seemingly this one is necessary?
 			className={itemClassName}
 			style={itemSx.style}>
-			<Field.Label htmlFor={id} {...stylex.props(radioParts.labelRoot)}>
+			<Field.Label htmlFor={id} {...stylex.props(labelMarker, radioParts.labelRoot)}>
 				<BaseRadio.Root
 					ref={ref}
 					id={id}

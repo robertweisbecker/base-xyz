@@ -20,7 +20,7 @@ export function CodeBlock({ ref, children, className, style, ...props }: CodeBlo
 			size="content"
 			style={[styles.root, style]}
 			contentStyle={styles.content}>
-			<pre ref={ref} {...stylex.props(styles.pre)} {...props}>
+			<pre ref={ref} sx={styles.pre} {...props}>
 				<code>{children}</code>
 			</pre>
 		</ScrollArea>

@@ -246,3 +246,29 @@ const styles = stylex.create({
 
 <Button style={styles.wide}>Save</Button>;
 ```
+
+### Component markers
+
+Named component markers expose intentional `stylex.when` boundaries. Import
+them directly from their owning `.stylex.ts` module; they are not default
+markers and are not re-exported through component barrels.
+
+| Marker         | Owner                                      | Applied to                                                                 |
+| -------------- | ------------------------------------------ | -------------------------------------------------------------------------- |
+| `buttonMarker` | `components/button/button.stylex.ts`       | Button, IconButton, and shared Button-root controls                        |
+| `itemMarker`   | `components/menu/menu-item.stylex.ts`      | Menu rows and components composing the canonical row, including Select, Combobox, and Autocomplete items |
+| `labelMarker`  | `components/field/field.stylex.ts`         | Label elements associated with form controls                              |
+
+```tsx
+import * as stylex from "@stylexjs/stylex";
+import { buttonMarker } from "@/components/button/button.stylex";
+
+const styles = stylex.create({
+	icon: {
+		opacity: 0.6,
+		[stylex.when.ancestor(":hover", buttonMarker)]: {
+			opacity: 1,
+		},
+	},
+});
+```

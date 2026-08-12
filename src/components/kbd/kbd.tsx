@@ -7,7 +7,7 @@ import type { MarginProps } from "@/theme/theme-props.types";
 import { tokens } from "@/theme/tokens.stylex";
 
 type KbdSize = "sm" | "md";
-type KbdVariant = "default" | "inverse" | "plain";
+type KbdVariant = "default" | "inverse" | "outline" | "plain";
 
 type StyledProps<T> = Omit<T, "className" | "style"> & {
 	className?: string;
@@ -52,13 +52,21 @@ const kbdStyles = stylex.create({
 	key: {
 		gap: tokens["--space-1"],
 		alignItems: "center",
-		backgroundColor: tokens["--surface-subtle"],
+		backgroundColor: {
+			default: tokens["--surface-subtle"],
+			":hover": tokens["--surface-subtle-hover"],
+		},
+		boxSizing: "border-box",
 		color: tokens["--fg-muted"],
 		display: "inline-flex",
+		flexShrink: 0,
 		fontFamily: tokens["--font-family-sans"],
 		justifyContent: "center",
 		pointerEvents: "none",
 		userSelect: "none",
+		verticalAlign: "text-top",
+		wordSpacing: "-0.1em",
+		height: "fit-content",
 	},
 	group: {
 		gap: tokens["--space-1"],
@@ -75,17 +83,17 @@ const kbdSizes = stylex.create({
 		fontWeight: tokens["--font-weight-semibold"],
 		letterSpacing: tokens["--letter-spacing-1"],
 		lineHeight: tokens["--line-height-1"],
-		height: tokens["--space-4"],
+		minHeight: tokens["--space-4"],
 		minWidth: tokens["--space-4"],
 	},
 	md: {
-		borderRadius: tokens["--radius-xs"],
-		paddingInline: tokens["--space-1"],
-		fontSize: tokens["--font-size-1"],
-		fontWeight: tokens["--font-weight-semibold"],
+		borderRadius: tokens["--radius-sm"],
+		paddingInline: tokens["--space-1-5"],
+		fontSize: ".75em",
+		fontWeight: tokens["--font-weight-medium"],
 		letterSpacing: tokens["--letter-spacing-1"],
 		lineHeight: tokens["--line-height-1"],
-		height: tokens["--space-5"],
+		minHeight: tokens["--space-5"],
 		minWidth: tokens["--space-5"],
 	},
 });
@@ -104,5 +112,15 @@ const kbdVariants = stylex.create({
 		backgroundColor: "transparent",
 		color: tokens["--fg-subtle"],
 		fontWeight: tokens["--font-weight-regular"],
+	},
+	outline: {
+		backgroundColor: tokens["--surface"],
+		outlineColor: {
+			default: tokens["--border-input"],
+			":hover": tokens["--border-input-hover"],
+		},
+		outlineOffset: "-1px",
+		outlineStyle: "solid",
+		outlineWidth: "1px",
 	},
 });

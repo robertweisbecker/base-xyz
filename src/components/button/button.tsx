@@ -270,6 +270,7 @@ const colorVariants = stylex.create({
 			default: tokens["--fg-subtle"],
 			":active:not([data-disabled])": tokens["--fg"],
 		},
+		paddingInline: 0,
 	},
 	error: {
 		backgroundColor: {

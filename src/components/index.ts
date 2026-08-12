@@ -47,6 +47,7 @@ export { Heading, type HeadingProps } from "./heading/heading";
 export { Icon, type IconProps } from "./icons";
 export { InfoTip, type InfoTipProps } from "./info-tip/info-tip";
 export { Item, type ItemDescriptionLayout, type ItemProps, type ItemVariant } from "./item/item";
+export { Kbd, KbdGroup, type KbdProps } from "./kbd/kbd";
 export {
 	Box,
 	type BoxProps,

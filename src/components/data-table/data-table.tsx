@@ -352,15 +352,14 @@ function HeaderContent<TData extends RowData>({
 
 	return (
 		<span {...stylex.props(tableParts.headerContent)}>
-			<span {...stylex.props(tableParts.headerLabel)}>{content}</span>
-			<IconButton
-				icon={getSortIcon(sorted)}
-				label={getSortLabel(content, sorted)}
+			<Button
+				endSlot={getSortIcon(sorted)}
+				aria-label={getSortLabel(content, sorted)}
+				variant="plain"
 				size="xs"
-				tooltip={false}
-				variant="ghost"
-				onClick={() => column.toggleSorting(sorted === "asc")}
-			/>
+				onClick={() => column.toggleSorting(sorted === "asc")}>
+				<span {...stylex.props(tableParts.headerLabel)}>{content}</span>
+			</Button>
 		</span>
 	);
 }
@@ -710,6 +709,7 @@ const tableParts = stylex.create({
 		textOverflow: "ellipsis",
 		whiteSpace: "nowrap",
 		minWidth: 0,
+		color: tokens["--fg-muted"],
 	},
 	row: {
 		backgroundColor: {

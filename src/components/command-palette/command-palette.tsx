@@ -29,6 +29,7 @@ import { Button, type ButtonProps } from "@/components/button/button";
 import { modalBackdropStyles, modalPopupStyles, modalViewportStyles } from "@/components/dialog/dialog.stylex";
 import { EmptyState } from "@/components/empty-state/empty-state";
 import { fieldStyles, fieldTextStyles } from "@/components/field/field.stylex";
+import { Kbd } from "@/components/kbd/kbd";
 import { Loader } from "@/components/loader/loader";
 import { menuItemSizeStyles, menuItemStyles, menuItemVariantStyles } from "@/components/menu/menu-item.stylex";
 import { ScrollArea } from "@/components/scroll-area/scroll-area";
@@ -92,7 +93,6 @@ export type CommandPaletteItemsProps = AutocompleteCollectionProps;
 export type CommandPaletteEmptyProps = StyledProps<AutocompleteEmptyProps>;
 export type CommandPaletteLoadingProps = StyledProps<AutocompleteStatusProps>;
 export type CommandPaletteFooterProps = StyledProps<ComponentProps<"div">>;
-export type CommandPaletteShortcutProps = StyledProps<ComponentProps<"kbd">>;
 export type CommandPaletteItemProps = Omit<StyledProps<AutocompleteItemProps>, "children"> & {
 	children?: ReactNode;
 	closeOnSelect?: boolean;
@@ -198,7 +198,7 @@ export function Root<ItemValue = unknown>({
 
 export function Trigger({ children = "Search", shortcut = "⌘K", ...props }: CommandPaletteTriggerProps) {
 	return (
-		<Button variant="neutral" endSlot={shortcut ? <Shortcut>{shortcut}</Shortcut> : props.endSlot} {...props}>
+		<Button variant="neutral" endSlot={shortcut ? <Kbd size="sm">{shortcut}</Kbd> : props.endSlot} {...props}>
 			{children}
 		</Button>
 	);
@@ -211,7 +211,7 @@ export function Input({
 	label = "Search commands",
 	onKeyDown,
 	placeholder = "Search commands…",
-	startSlot = <MagnifyingGlassIcon aria-hidden />,
+	startSlot = <MagnifyingGlassIcon weight="bold" aria-hidden />,
 	style,
 	...props
 }: CommandPaletteInputProps) {
@@ -246,7 +246,13 @@ export function Input({
 				{...stylex.props(fieldStyles.inputUnstyled, fieldTextStyles.md, commandPaletteParts.input)}
 				{...props}
 			/>
-			{endSlot ? <span {...stylex.props(commandPaletteParts.inputEndSlot)}>{endSlot}</span> : null}
+			{endSlot ? (
+				<span {...stylex.props(commandPaletteParts.inputEndSlot)}>{endSlot}</span>
+			) : context.inline ? null : (
+				<BaseDialog.Close aria-label="Close dialog">
+					<Kbd variant="outline">esc</Kbd>
+				</BaseDialog.Close>
+			)}
 		</Autocomplete.InputGroup>
 	);
 }
@@ -350,7 +356,7 @@ export function Item({
 				{description ? <span {...stylex.props(commandPaletteParts.itemDescription)}>{description}</span> : null}
 			</span>
 			<span {...stylex.props(commandPaletteParts.itemEndSlot)}>
-				{endSlot ?? (shortcut ? <Shortcut>{shortcut}</Shortcut> : null)}
+				{endSlot ?? (shortcut ? <Kbd size="sm">{shortcut}</Kbd> : null)}
 			</span>
 		</Autocomplete.Item>
 	);
@@ -405,12 +411,6 @@ export function Footer({ className, style, ...props }: CommandPaletteFooterProps
 	return <div className={[sx.className, className].filter(Boolean).join(" ")} style={sx.style} {...props} />;
 }
 
-export function Shortcut({ className, style, ...props }: CommandPaletteShortcutProps) {
-	const sx = stylex.props(commandPaletteParts.shortcut, style);
-
-	return <kbd className={[sx.className, className].filter(Boolean).join(" ")} style={sx.style} {...props} />;
-}
-
 function useCommandPaletteContext() {
 	const context = useContext(CommandPaletteContext);
 	if (!context) {
@@ -431,15 +431,24 @@ const commandPaletteParts = stylex.create({
 		padding: 0,
 		borderRadius: tokens["--radius-xl"],
 		overflow: "hidden",
+		backgroundColor: tokens["--panel"],
 		boxShadow: {
 			default: tokens["--shadow-sm"],
-			":focus-within": `inset 0 0 0 2px ${tokens["--focus"]}, ${tokens["--shadow-md"]}`,
+			":focus-within": tokens["--shadow-md"],
+		},
+		outlineWidth: {
+			default: 0,
+			":focus-visible": 0,
+			":focus-within": 0,
 		},
 		maxWidth: tokens["--size-container-3xl"],
 	},
 	panel: {
+		borderColor: "transparent",
+		borderRadius: `calc(${tokens["--radius-xl"]} - 1px)`,
+		borderStyle: "solid",
+		borderWidth: 1,
 		overflow: "hidden",
-		backgroundColor: tokens["--panel"],
 		color: tokens["--fg"],
 		display: "flex",
 		flexDirection: "column",
@@ -455,9 +464,6 @@ const commandPaletteParts = stylex.create({
 		gap: tokens["--space-2"],
 		paddingInline: tokens["--space-4"],
 		alignItems: "center",
-		// borderBlockEndColor: tokens["--border"],
-		// borderBlockEndStyle: "solid",
-		// borderBlockEndWidth: "1px",
 		display: "flex",
 		paddingBlockEnd: tokens["--space-2"],
 		paddingBlockStart: tokens["--space-3"],
@@ -467,7 +473,7 @@ const commandPaletteParts = stylex.create({
 		color: tokens["--fill-neutral"],
 		display: "inline-flex",
 		flexShrink: 0,
-		fontSize: tokens["--font-size-3"],
+		fontSize: tokens["--font-size-4"],
 		justifyContent: "center",
 		height: tokens["--space-5"],
 		width: tokens["--space-5"],
@@ -475,8 +481,6 @@ const commandPaletteParts = stylex.create({
 	input: {
 		flex: "1 1 auto",
 		color: tokens["--fg"],
-		fontSize: tokens["--font-size-3"],
-		letterSpacing: tokens["--letter-spacing-3"],
 		minWidth: 0,
 		"::placeholder": {
 			color: tokens["--fg-placeholder"],
@@ -521,12 +525,15 @@ const commandPaletteParts = stylex.create({
 		gridColumn: "1",
 		alignItems: "center",
 		alignSelf: "start",
-		color: tokens["--fg-subtle"],
+		color: tokens["--fill-neutral"],
 		display: "inline-flex",
+		flexShrink: 0,
+		fontSize: tokens["--font-size-4"],
 		justifyContent: "center",
-		height: tokens["--space-6"],
+		height: tokens["--space-5"],
 		minHeight: "1lh",
-		width: tokens["--space-6"],
+		minWidth: tokens["--space-5"],
+		width: tokens["--space-5"],
 	},
 	itemText: {
 		gridColumn: "2",
@@ -563,6 +570,7 @@ const commandPaletteParts = stylex.create({
 		flexShrink: 0,
 		fontSize: tokens["--font-size-1"],
 		fontWeight: tokens["--font-weight-medium"],
+		justifyContent: "flex-end",
 		letterSpacing: tokens["--letter-spacing-1"],
 		lineHeight: tokens["--line-height-1"],
 		textOverflow: "ellipsis",
@@ -589,9 +597,9 @@ const commandPaletteParts = stylex.create({
 	},
 	footer: {
 		gap: tokens["--space-3"],
-		paddingBlock: tokens["--space-3"],
-		paddingInline: tokens["--space-5"],
+		paddingInline: tokens["--space-4"],
 		alignItems: "center",
+		backgroundColor: tokens["--elevated"],
 		borderBlockStartColor: tokens["--border"],
 		borderBlockStartStyle: "solid",
 		borderBlockStartWidth: "1px",
@@ -602,19 +610,8 @@ const commandPaletteParts = stylex.create({
 		justifyContent: "space-between",
 		letterSpacing: tokens["--letter-spacing-1"],
 		lineHeight: tokens["--line-height-1"],
-	},
-	shortcut: {
-		borderRadius: tokens["--radius-xs"],
-		paddingBlock: "1px",
-		paddingInline: tokens["--space-1-5"],
-		backgroundColor: tokens["--surface-subtle"],
-		color: tokens["--fg-muted"],
-		fontFamily: "inherit",
-		fontSize: tokens["--font-size-1"],
-		fontWeight: tokens["--font-weight-medium"],
-		letterSpacing: tokens["--letter-spacing-1"],
-		lineHeight: tokens["--line-height-1"],
-		whiteSpace: "nowrap",
+		paddingBlockEnd: tokens["--space-4"],
+		paddingBlockStart: tokens["--space-3"],
 	},
 });
 
@@ -630,5 +627,4 @@ export const CommandPalette = {
 	Empty,
 	Loading,
 	Footer,
-	Shortcut,
 } as const;

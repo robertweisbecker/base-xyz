@@ -14,6 +14,9 @@ import { spacingThemeProps } from "@/theme/theme-props-spacing.stylex";
 import { radiusThemeProps, shadowThemeProps } from "@/theme/theme-props-surface.stylex";
 import { tokens } from "@/theme/tokens.stylex";
 
+/** Marker for label elements associated with form controls. */
+export const labelMarker = stylex.defineMarker();
+
 const INTERACTIVE_CONTROL_HOVER =
 	':hover:not(:focus-within):not([aria-invalid="true"]):not([data-active]):not([data-disabled]):not([data-invalid]):not([data-panel-open]):not([data-popup-open]):not([data-pressed]):not([data-readonly]):not([readonly])';
 
@@ -150,7 +153,7 @@ const parts = stylex.create({
 
 export const fieldStyles = {
 	root: parts.root,
-	label: [textStyles.supporting, fontWeightStyles.medium, parts.label],
+	label: [labelMarker, textStyles.supporting, fontWeightStyles.medium, parts.label],
 	groupLabel: [textStyles.body, fontWeightStyles.semibold, parts.groupLabel],
 	itemLabel: [textStyles.label, parts.itemLabel],
 	description: [textStyles.supporting, parts.description],

@@ -6,6 +6,7 @@ import { PageHeader } from "@/blocks/page-header/page-header";
 import { Badge } from "@/components/badge/badge";
 import { CommandPalette } from "@/components/command-palette/command-palette";
 import { Breadcrumbs } from "@/components/breadcrumbs/breadcrumbs";
+import { Kbd } from "@/components/kbd/kbd";
 import { Stack } from "@/components/layout/layout";
 import { Text } from "@/components/text/text";
 import { tokens } from "@/theme/tokens.stylex";
@@ -341,11 +342,11 @@ function DeploymentCommandPalette() {
 			<CommandPalette.Empty />
 			<CommandPalette.Footer>
 				<span {...stylex.props(storyParts.footerHint)}>
-					<CommandPalette.Shortcut>↑↓</CommandPalette.Shortcut>
+					<Kbd size="sm">↑↓</Kbd>
 					Navigate
 				</span>
 				<span {...stylex.props(storyParts.footerHint)}>
-					<CommandPalette.Shortcut>↵</CommandPalette.Shortcut>
+					<Kbd size="sm">↵</Kbd>
 					Select
 				</span>
 			</CommandPalette.Footer>

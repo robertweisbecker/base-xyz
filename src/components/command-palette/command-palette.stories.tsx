@@ -1,13 +1,15 @@
 import {
-	BellIcon,
-	GearIcon,
+	BookOpenTextIcon,
+	CirclesThreePlusIcon,
 	MagnifyingGlassIcon,
-	PlusCircleIcon,
-	UserCircleIcon,
+	NotificationIcon,
+	ToolboxIcon,
+	UserCircleGearIcon,
 } from "@phosphor-icons/react";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import * as stylex from "@stylexjs/stylex";
 import { useState } from "react";
+import { Kbd } from "@/components/kbd/kbd";
 import { Text } from "@/components/text/text";
 import { tokens } from "@/theme/tokens.stylex";
 import { CommandPalette } from "./command-palette";
@@ -39,7 +41,7 @@ const commandGroups: CommandGroup[] = [
 				group: "Suggestions",
 				keywords: "new add worker application",
 				shortcut: "N",
-				icon: <PlusCircleIcon aria-hidden />,
+				icon: <CirclesThreePlusIcon weight="duotone" aria-hidden />,
 			},
 			{
 				id: "search-docs",
@@ -48,7 +50,7 @@ const commandGroups: CommandGroup[] = [
 				group: "Suggestions",
 				keywords: "docs help reference",
 				shortcut: "/",
-				icon: <MagnifyingGlassIcon aria-hidden />,
+				icon: <BookOpenTextIcon weight="duotone" aria-hidden />,
 			},
 		],
 	},
@@ -58,11 +60,11 @@ const commandGroups: CommandGroup[] = [
 		items: [
 			{
 				id: "profile",
-				title: "Open profile",
-				description: "Manage account details and avatars.",
+				title: "Edit profile",
+				description: "Manage account details and preferences.",
 				group: "Settings",
 				keywords: "user account person",
-				icon: <UserCircleIcon aria-hidden />,
+				icon: <UserCircleGearIcon weight="duotone" aria-hidden />,
 			},
 			{
 				id: "notifications",
@@ -70,7 +72,7 @@ const commandGroups: CommandGroup[] = [
 				description: "Choose which events send alerts.",
 				group: "Settings",
 				keywords: "alerts messages bell",
-				icon: <BellIcon aria-hidden />,
+				icon: <NotificationIcon weight="duotone" aria-hidden />,
 			},
 			{
 				id: "workspace-settings",
@@ -79,7 +81,7 @@ const commandGroups: CommandGroup[] = [
 				group: "Settings",
 				keywords: "preferences configure",
 				shortcut: "⌘,",
-				icon: <GearIcon aria-hidden />,
+				icon: <ToolboxIcon weight="duotone" aria-hidden />,
 			},
 		],
 	},
@@ -123,7 +125,7 @@ function CommandPaletteExample({ shortcut = false }: { shortcut?: boolean }) {
 		<div {...stylex.props(storyParts.example)}>
 			<CommandPalette.Root
 				shortcut={shortcut}
-				trigger={<CommandPalette.Trigger startSlot={<MagnifyingGlassIcon aria-hidden />} />}
+				trigger={<CommandPalette.Trigger startSlot={<MagnifyingGlassIcon weight="bold" aria-hidden />} />}
 				items={commandGroups}
 				itemToStringValue={commandToStringValue}>
 				<CommandPalette.Input placeholder="Search actions, settings, and docs…" />
@@ -131,11 +133,11 @@ function CommandPaletteExample({ shortcut = false }: { shortcut?: boolean }) {
 				<CommandPalette.Empty />
 				<CommandPalette.Footer>
 					<span {...stylex.props(storyParts.footerHint)}>
-						<CommandPalette.Shortcut>↑↓</CommandPalette.Shortcut>
+						<Kbd size="sm">↑↓</Kbd>
 						Navigate
 					</span>
 					<span {...stylex.props(storyParts.footerHint)}>
-						<CommandPalette.Shortcut>↵</CommandPalette.Shortcut>
+						<Kbd size="sm">↵</Kbd>
 						Select
 					</span>
 				</CommandPalette.Footer>
