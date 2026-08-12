@@ -209,12 +209,12 @@ export const fieldPaddingSizes = stylex.create({
 	md: {
 		paddingBlock: tokens["--space-1-5"],
 		paddingInlineEnd: tokens["--space-2"],
-		paddingInlineStart: tokens["--space-3"],
+		paddingInlineStart: tokens["--space-2"],
 	},
 	lg: {
 		paddingBlock: tokens["--space-2"],
 		paddingInlineEnd: tokens["--space-3"],
-		paddingInlineStart: tokens["--space-4"],
+		paddingInlineStart: tokens["--space-3"],
 	},
 });
 

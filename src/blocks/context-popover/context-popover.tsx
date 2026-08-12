@@ -83,6 +83,6 @@ const contextPopoverParts = stylex.create({
 		flexShrink: 0,
 	},
 	popup: {
-		width: "min(18rem, calc(100vw - 2rem))",
+		width: "min(12rem, calc(100vw - 2rem))",
 	},
 });

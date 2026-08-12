@@ -24,6 +24,7 @@ export const menuItemVars = stylex.defineVars({
 const menuItemParts = stylex.create({
 	itemBase: {
 		borderRadius: tokens["--radius-md"],
+		cornerShape: "superellipse(1.3)",
 		outline: "0",
 		paddingBlock: menuItemVars.paddingBlock,
 		textDecoration: "none",
@@ -51,6 +52,7 @@ const menuItemParts = stylex.create({
 	},
 	indicatorSizing: {
 		gridColumn: "1",
+		alignSelf: "start",
 		alignItems: "center",
 		color: menuItemVars.indicatorColor,
 		display: "inline-flex",
@@ -60,18 +62,23 @@ const menuItemParts = stylex.create({
 			"[data-selected]": "visible",
 			default: "hidden",
 		},
-		height: tokens["--space-4"],
+		minHeight: "1lh",
 		width: tokens["--space-4"],
 	},
 	itemSm: {
-		borderRadius: tokens["--radius-sm"],
 		minHeight: tokens["--size-control-sm"],
+		lineHeight: tokens["--line-height-2"],
+		paddingBlock: tokens["--space-1"],
 	},
 	itemMd: {
 		minHeight: tokens["--size-control-md"],
+		lineHeight: tokens["--line-height-2"],
+		paddingBlock: tokens["--space-1-5"],
 	},
 	itemLg: {
 		minHeight: tokens["--size-control-lg"],
+		lineHeight: tokens["--line-height-3"],
+		paddingBlock: tokens["--space-2"],
 	},
 });
 

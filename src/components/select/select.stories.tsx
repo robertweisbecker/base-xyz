@@ -453,17 +453,15 @@ export const UserSelection: Story = {
 			itemToStringValue={(user) => user.id}
 			items={userSelectItems}>
 			<Select.Label>Assignee</Select.Label>
-			<Select.Trigger placeholder="Select a person">
+			<Select.Trigger placeholder="Select a person" style={storyParts.userSelect}>
 				{(user: UserOption | null) =>
 					user ? (
 						<Item
-							label={
-								<Text render={<span />} size="1" truncate style={storyParts.userName}>
-									{user.name}
-								</Text>
-							}
+							align="center"
+							label={user.name}
+							description={user.email}
 							render={<span />}
-							startSlot={<Avatar initials={user.initials} size={6} />}
+							startSlot={<Avatar initials={user.initials} shape="rounded" size={8} />}
 							style={storyParts.userValueItem}
 							variant="embedded"
 						/>
@@ -477,9 +475,10 @@ export const UserSelection: Story = {
 					{userOptions.map((user) => (
 						<Select.Item key={user.id} label={user.name} value={user}>
 							<Item
+								align="center"
 								description={user.email}
 								label={user.name}
-								startSlot={<Avatar initials={user.initials} size={8} />}
+								startSlot={<Avatar initials={user.initials} shape="rounded" size={8} />}
 								style={storyParts.userOptionItem}
 								variant="embedded"
 							/>
@@ -696,15 +695,18 @@ const storyParts = stylex.create({
 		lineHeight: tokens["--line-height-1"],
 		opacity: 0.68,
 	},
+	userSelect: {
+		height: "auto",
+	},
 	userOptionItem: {
 		borderRadius: 0,
-		columnGap: tokens["--space-2"],
+		// columnGap: tokens["--space-2"],
 		minWidth: 0,
 	},
 	userValueItem: {
 		borderRadius: 0,
-		columnGap: tokens["--space-2"],
-		maxWidth: "12rem",
+		// columnGap: tokens["--space-2"],
+		maxWidth: "100%",
 		minWidth: 0,
 	},
 	userName: {

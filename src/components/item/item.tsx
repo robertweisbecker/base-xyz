@@ -14,9 +14,11 @@ import { tokens } from "@/theme/tokens.stylex";
  * - `inline-wrap` — description starts beside the label and can wrap below
  */
 export type ItemDescriptionLayout = "stack" | "inline" | "inline-wrap";
+export type ItemAlign = "start" | "center" | "end" | "baseline";
 export type ItemVariant = "default" | "embedded";
 
 export type ItemProps = Omit<useRender.ComponentProps<"div">, "children" | "className" | "render" | "style"> & {
+	align?: ItemAlign;
 	className?: string;
 	/** Supporting text beside or beneath the label. */
 	description?: ReactNode;
@@ -37,6 +39,7 @@ export type ItemProps = Omit<useRender.ComponentProps<"div">, "children" | "clas
 
 export function Item({
 	ref,
+	align = "start",
 	className,
 	description,
 	descriptionLayout = "stack",
@@ -52,10 +55,11 @@ export function Item({
 		description !== undefined && description !== null && description !== false && description !== "";
 	const sx = stylex.props(itemParts.root, itemVariantStyles[variant], focusRing.offset, style);
 
-	return useRender<{}, HTMLElement>({
+	return useRender<{ align: ItemAlign }, HTMLElement>({
 		defaultTagName: "div",
 		ref,
 		render,
+		state: { align },
 		props: {
 			...props,
 			className: [sx.className, className].filter(Boolean).join(" "),
@@ -77,10 +81,9 @@ export function Item({
 							{...stylex.props(
 								textStyles.body,
 								typescaleStyles["2"],
-								fontWeightStyles.medium,
 								itemParts.label,
 								itemLabelVariantStyles[variant],
-								descriptionLayout === "inline-wrap" && itemParts.labelInlineFlow,
+								descriptionLayout === "inline-wrap" && itemParts.labelInline,
 							)}>
 							{label}
 						</span>
@@ -98,9 +101,7 @@ export function Item({
 							</span>
 						) : null}
 					</span>
-					{endSlot ? (
-						<span {...stylex.props(itemParts.endSlot, itemSlotVariantStyles[variant])}>{endSlot}</span>
-					) : null}
+					{endSlot ? <span {...stylex.props(itemParts.endSlot, itemSlotVariantStyles[variant])}>{endSlot}</span> : null}
 				</>
 			),
 		},
@@ -112,7 +113,12 @@ const itemParts = stylex.create({
 		borderRadius: tokens["--radius-md"],
 		outline: "0",
 		textDecoration: "none",
-		alignItems: "center",
+		alignItems: {
+			"[data-align='center']": "center",
+			"[data-align='start']": "start",
+			"[data-align='end']": "end",
+			"[data-align='baseline']": "baseline",
+		},
 		backgroundColor: {
 			default: "transparent",
 			// eslint-disable-next-line @stylexjs/valid-styles -- the compiler supports chained pseudo-class conditions; the lint rule is stricter than the compiler.
@@ -121,7 +127,7 @@ const itemParts = stylex.create({
 			},
 		},
 		boxSizing: "border-box",
-		columnGap: tokens["--space-3"],
+		columnGap: tokens["--space-2"],
 		cursor: {
 			default: "default",
 			":is(a[href])": "pointer",
@@ -131,7 +137,6 @@ const itemParts = stylex.create({
 	},
 	startSlot: {
 		alignItems: "center",
-		alignSelf: "start",
 		display: "inline-flex",
 		flexShrink: 0,
 		justifyContent: "center",
@@ -144,12 +149,12 @@ const itemParts = stylex.create({
 		minWidth: 0,
 	},
 	contentStackGap: {
-		rowGap: tokens["--space-0-5"],
+		rowGap: tokens["--space-0"],
 	},
 	label: {
 		minWidth: 0,
 	},
-	labelInlineFlow: {
+	labelInline: {
 		display: "inline",
 	},
 	description: {
@@ -164,6 +169,9 @@ const itemParts = stylex.create({
 	descriptionInlineWrap: {
 		display: "inline",
 		marginInlineStart: tokens["--space-2"],
+		fontSize: null,
+		lineHeight: null,
+		letterSpacing: null,
 	},
 	endSlot: {
 		alignItems: "center",
@@ -225,7 +233,7 @@ const descriptionLayoutStyles = stylex.create({
 	},
 	inline: {
 		alignItems: "baseline",
-		columnGap: tokens["--space-2"],
+		columnGap: tokens["--space-1-5"],
 		flexDirection: "row",
 		flexWrap: "nowrap",
 	},

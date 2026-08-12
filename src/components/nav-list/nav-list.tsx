@@ -1,7 +1,7 @@
 import { Collapsible as BaseCollapsible } from "@base-ui/react/collapsible";
 import { useRender } from "@base-ui/react/use-render";
 import { Collapsible } from "@/components/collapsible/collapsible";
-import { ArrowLeftIcon, ArrowRightIcon } from "@phosphor-icons/react";
+import { ArrowLeftIcon, ArrowRightIcon, BrowserIcon } from "@phosphor-icons/react";
 import * as stylex from "@stylexjs/stylex";
 import type { StyleXStyles } from "@stylexjs/stylex";
 import {
@@ -103,7 +103,6 @@ const NavListPresentationContext = createContext<PresentationContextValue>({
 	scrollMode: "internal",
 });
 const ScrollContext = createContext<{ scrollRef: RefObject<HTMLElement | null> } | null>(null);
-const NavListDepthContext = createContext(0);
 
 export function NavListPresentationProvider({
 	children,
@@ -257,15 +256,11 @@ function Row({
 }: RowProps) {
 	const navList = useContext(NavListContext);
 	const { presentation, popoverSide } = useContext(NavListPresentationContext);
-	const depth = useContext(NavListDepthContext);
 	const size = navList?.size ?? "md";
 	const isIconMode = presentation === "icon";
 	const showTooltip = isIconMode && (tooltip ?? label) !== false;
-	const visualIcon = icon ?? startSlot;
+	const visualIcon = icon || startSlot || <BrowserIcon weight="duotone" />;
 	const backIcon = disclosure === "back";
-	const hasLeadingVisual = backIcon || (visualIcon !== null && visualIcon !== undefined && visualIcon !== false);
-	const isTextRow = !isIconMode && !hasLeadingVisual;
-	const isNestedTextRow = isTextRow && depth > 0;
 	const resolvedEndSlot = endSlot ?? badge;
 	const resolvedAriaLabel = isIconMode ? (ariaLabel ?? label) : ariaLabel;
 	const isLink = Boolean(href && !forceButton);
@@ -275,30 +270,25 @@ function Row({
 		<span aria-hidden {...stylex.props(navListParts.icon)}>
 			<ArrowLeftIcon />
 		</span>
-	) : visualIcon ? (
+	) : (
 		<span aria-hidden {...stylex.props(navListParts.icon)}>
 			{visualIcon}
 		</span>
-	) : isTextRow ? null : (
-		<span aria-hidden {...stylex.props(navListParts.iconPlaceholder)} />
 	);
 	const content = isIconMode ? (
 		renderedIcon
 	) : (
 		<>
 			{renderedIcon}
-			<span {...stylex.props(menuItemStyles.label, navListParts.labelCell, isTextRow && navListParts.textRowLabelCell)}>
+			<span {...stylex.props(menuItemStyles.label, navListParts.labelCell)}>
 				<span {...stylex.props(navListParts.labelText)}>{children ?? label}</span>
 			</span>
-			{resolvedEndSlot ? (
-				<span {...stylex.props(navListParts.endSlot, isTextRow && navListParts.textRowEndSlot)}>{resolvedEndSlot}</span>
-			) : null}
+			{resolvedEndSlot ? <span {...stylex.props(navListParts.endSlot)}>{resolvedEndSlot}</span> : null}
 			{disclosure && disclosure !== "back" ? (
 				<span
 					aria-hidden
 					{...stylex.props(
 						navListParts.disclosureIcon,
-						isTextRow && navListParts.textRowDisclosureIcon,
 						disclosure === "collapse" && navListParts.collapseIcon,
 						disclosure === "collapse" && collapseOpen && navListParts.collapseIconOpen,
 					)}>
@@ -361,8 +351,6 @@ function Row({
 		(current || active) && !disabled && navListParts.currentRow,
 		disclosure === "collapse" && collapseOpen && !disabled && navListParts.collapsibleTriggerOpen,
 		disclosure === "back" && navListParts.backRow,
-		isTextRow && navListParts.textRow,
-		isNestedTextRow && navListParts.nestedItemRow,
 		isIconMode && navListParts.iconModeRow,
 		style,
 	]);
@@ -524,7 +512,6 @@ export function CollapsibleGroupPanel({
 		group?.setPopoverContent(children);
 	}, [children, group]);
 	const { presentation } = useContext(NavListPresentationContext);
-	const depth = useContext(NavListDepthContext);
 
 	if (presentation === "icon") {
 		return null;
@@ -545,7 +532,7 @@ export function CollapsibleGroupPanel({
 						inert={state.open ? undefined : true}
 						className={[sx.className, className].filter(Boolean).join(" ")}
 						style={sx.style}>
-						<NavListDepthContext.Provider value={depth + 1}>{children}</NavListDepthContext.Provider>
+						{children}
 					</ul>
 				);
 			}}
@@ -591,6 +578,7 @@ type DrilldownContextValue = {
 };
 
 const DrilldownContext = createContext<DrilldownContextValue | null>(null);
+const DrilldownPanelContext = createContext<string | null>(null);
 
 export function Drilldown({ value, defaultValue, onValueChange, children }: NavListDrilldownProps) {
 	const controlled = value !== undefined;
@@ -689,7 +677,9 @@ export function Drilldown({ value, defaultValue, onValueChange, children }: NavL
 							role="group"
 							tabIndex={active ? -1 : undefined}
 							{...stylex.props(navListParts.drilldownPanel)}>
-							{panel.node}
+							<DrilldownPanelContext.Provider value={panel.label}>
+								{panel.node}
+							</DrilldownPanelContext.Provider>
 						</section>
 					);
 				})}
@@ -759,8 +749,9 @@ export function DrilldownTrigger({
 
 export function DrilldownBack({ to, label, className, style }: NavListDrilldownBackProps) {
 	const drilldown = useContext(DrilldownContext);
+	const panelLabel = useContext(DrilldownPanelContext);
 	const destinationLabel = drilldown?.panels.get(to)?.label;
-	const visibleLabel = label ?? drilldown?.panels.get(drilldown.value)?.label ?? "Back";
+	const visibleLabel = label ?? panelLabel ?? "Back";
 	const accessibleLabelPrefix = label ?? "Back";
 	const accessibleLabel = destinationLabel ? `${accessibleLabelPrefix} to ${destinationLabel}` : accessibleLabelPrefix;
 
@@ -955,7 +946,9 @@ function CollapsedDrilldownPopover({
 						value={{ presentation: "expanded", popoverSide, scrollMode: "internal" }}>
 						<DrilldownContext.Provider value={localContext}>
 							<div aria-label={panel.label} role="group">
-								{panel.node}
+								<DrilldownPanelContext.Provider value={panel.label}>
+									{panel.node}
+								</DrilldownPanelContext.Provider>
 							</div>
 						</DrilldownContext.Provider>
 					</NavListPresentationContext.Provider>
@@ -997,7 +990,7 @@ const navListParts = stylex.create({
 	list: {
 		margin: 0,
 		padding: 0,
-		gap: 0,
+		gap: 1,
 		listStyle: "none",
 		display: "flex",
 		flexDirection: "column",
@@ -1041,7 +1034,10 @@ const navListParts = stylex.create({
 		color: tokens["--fg"],
 	},
 	backRow: {
-		color: tokens["--fg-subtle"],
+		color: {
+			default: tokens["--fg-subtle"],
+			":hover": tokens["--fg"],
+		},
 		marginBlockEnd: tokens["--space-1"],
 		// fontSize: tokens["--font-size-1"],
 		// lineHeight: tokens["--line-height-1"],
@@ -1056,13 +1052,6 @@ const navListParts = stylex.create({
 		justifyContent: "center",
 		minInlineSize: tokens["--size-control-lg"],
 	},
-	textRow: {
-		[menuItemVars.columns]: `${tokens["--space-4"]} minmax(0, 1fr) auto`,
-	},
-	nestedItemRow: {
-		[menuItemVars.paddingInlineStart]: tokens["--space-2"],
-		marginInlineStart: `calc(${tokens["--space-1-5"]} * -1)`,
-	},
 	icon: {
 		gridColumn: "1",
 		alignItems: "center",
@@ -1072,22 +1061,11 @@ const navListParts = stylex.create({
 		justifySelf: "center",
 		height: tokens["--space-4"],
 		width: tokens["--space-4"],
-		// marginInlineStart: `calc(${tokens["--space-1-5"]} * -1)`,
-	},
-	iconPlaceholder: {
-		gridColumn: "1",
-		display: "inline-flex",
-		justifySelf: "center",
-		height: tokens["--space-4"],
-		width: tokens["--space-4"],
 	},
 	labelCell: {
 		overflow: "hidden",
 		display: "flex",
 		flexDirection: "column",
-	},
-	textRowLabelCell: {
-		gridColumn: "2",
 	},
 	labelText: {
 		overflow: "hidden",
@@ -1100,17 +1078,11 @@ const navListParts = stylex.create({
 		display: "inline-flex",
 		justifySelf: "end",
 	},
-	textRowEndSlot: {
-		gridColumn: "2",
-	},
 	disclosureIcon: {
 		gridColumn: "3",
 		color: tokens["--fg-subtle"],
 		display: "inline-flex",
 		justifySelf: "end",
-	},
-	textRowDisclosureIcon: {
-		gridColumn: "2",
 	},
 	collapseIcon: {
 		transform: {

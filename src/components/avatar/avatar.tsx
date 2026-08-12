@@ -141,7 +141,7 @@ const avatarParts = stylex.create({
 	icon: {
 		alignItems: "center",
 		display: "inline-flex",
-		fontSize: "1.5em",
+		fontSize: "1em",
 		justifyContent: "center",
 		lineHeight: 0,
 		// height: "2em",
@@ -157,9 +157,9 @@ const avatarParts = stylex.create({
 	root: {
 		overflow: "hidden",
 		alignItems: "center",
-		backgroundImage: `linear-gradient(to bottom, ${tokens["--color-gray-p1"]}, ${tokens["--color-gray-p2"]})`,
+		backgroundImage: `linear-gradient(to bottom, ${tokens["--color-gray-p1"]}, ${tokens["--color-gray-p3"]})`,
 		boxSizing: "border-box",
-		color: tokens["--color-gray-s1"],
+		color: tokens["--fg-neutral-contrast"],
 		display: "inline-flex",
 		flexShrink: 0,
 		fontWeight: tokens["--font-weight-semibold"],
@@ -168,6 +168,10 @@ const avatarParts = stylex.create({
 		position: "relative",
 		userSelect: "none",
 		verticalAlign: "middle",
+		outlineWidth: 1,
+		outlineStyle: "solid",
+		outlineColor: tokens["--color-gray-p4"],
+		outlineOffset: -1,
 	},
 	tooltipTrigger: {
 		// outlineColor: {
@@ -200,13 +204,13 @@ const shapeVariants = stylex.create({
 const responsiveSizeStyles = stylex.create({
 	size: (base, xs, sm, md, lg, xl, xxl) => ({
 		fontSize: {
-			default: `calc(${base} * 0.4)`,
-			[breakpointRanges.xs]: `calc(${xs} * 0.4)`,
-			[breakpointRanges.sm]: `calc(${sm} * 0.4)`,
-			[breakpointRanges.md]: `calc(${md} * 0.4)`,
-			[breakpointRanges.lg]: `calc(${lg} * 0.4)`,
-			[breakpointRanges.xl]: `calc(${xl} * 0.4)`,
-			[breakpointRanges.xxl]: `calc(${xxl} * 0.4)`,
+			default: `calc(${base} * 0.5)`,
+			[breakpointRanges.xs]: `calc(${xs} * 0.5)`,
+			[breakpointRanges.sm]: `calc(${sm} * 0.5)`,
+			[breakpointRanges.md]: `calc(${md} * 0.5)`,
+			[breakpointRanges.lg]: `calc(${lg} * 0.5)`,
+			[breakpointRanges.xl]: `calc(${xl} * 0.5)`,
+			[breakpointRanges.xxl]: `calc(${xxl} * 0.5)`,
 		},
 		height: {
 			default: base,

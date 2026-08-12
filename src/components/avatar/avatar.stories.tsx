@@ -11,6 +11,7 @@ import { Stack } from "@/components/layout/layout";
 import { Menu } from "@/components/menu/menu";
 import { Text } from "@/components/text/text";
 import { Avatar, type AvatarProps, type AvatarSize } from "./avatar";
+import { IdentificationCardIcon } from "@phosphor-icons/react/dist/csr/IdentificationCard";
 
 const image = "/avatar-example.svg";
 const sizes = [4, 6, 8, 10, 12, 16] as const satisfies readonly AvatarSize[];
@@ -111,15 +112,15 @@ function AccountMenu() {
 				<Menu.Separator />
 				<Menu.Item>
 					<Menu.ItemIcon>
-						<UserIcon size={16} weight="duotone" />
+						<IdentificationCardIcon size={16} weight="duotone" />
 					</Menu.ItemIcon>
-					<Menu.ItemLabel>Profile</Menu.ItemLabel>
+					<Menu.ItemLabel>View profile</Menu.ItemLabel>
 				</Menu.Item>
 				<Menu.Item>
 					<Menu.ItemIcon>
 						<GearIcon size={16} weight="duotone" />
 					</Menu.ItemIcon>
-					<Menu.ItemLabel>Settings</Menu.ItemLabel>
+					<Menu.ItemLabel>Manage account</Menu.ItemLabel>
 				</Menu.Item>
 			</Menu.Group>
 			<Menu.Separator />
@@ -129,9 +130,10 @@ function AccountMenu() {
 				</Menu.ItemIcon>
 				<Menu.ItemLabel>Add account</Menu.ItemLabel>
 			</Menu.Item>
+			<Menu.Separator />
 			<Menu.Item variant="error">
 				<Menu.ItemIcon>
-					<SignOutIcon size={16} weight="duotone" />
+					<SignOutIcon size={16} />
 				</Menu.ItemIcon>
 				<Menu.ItemLabel>Log out</Menu.ItemLabel>
 			</Menu.Item>
