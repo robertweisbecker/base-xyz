@@ -9,7 +9,7 @@ import { Avatar } from "@/components/avatar/avatar";
 import { Badge } from "@/components/badge/badge";
 import { Separator } from "@/components/separator/separator";
 import { Text } from "@/components/text/text";
-import { Item, type ItemDescriptionLayout, type ItemProps } from "./item";
+import { Item, type ItemDescriptionLayout, type ItemProps, type ItemVariant } from "./item";
 
 const startSlotOptions = {
 	None: undefined,
@@ -35,6 +35,7 @@ const endSlotOptions = {
 };
 
 const descriptionLayouts = ["stack", "inline", "inline-wrap"] as const satisfies readonly ItemDescriptionLayout[];
+const itemVariants = ["default", "embedded"] as const satisfies readonly ItemVariant[];
 
 type ItemStoryArgs = ItemProps & {
 	_startSlot: keyof typeof startSlotOptions;
@@ -50,6 +51,7 @@ const meta = {
 		description: "Organize files, tasks, and collaborators in one place.",
 		descriptionLayout: "stack",
 		label: "Projects",
+		variant: "default",
 	},
 	argTypes: {
 		_endSlot: {
@@ -67,6 +69,7 @@ const meta = {
 		},
 		endSlot: { control: false },
 		label: { control: "text" },
+		variant: { control: "inline-radio", options: itemVariants },
 		render: { control: false },
 		startSlot: { control: false },
 	},
@@ -79,7 +82,7 @@ const meta = {
 	],
 	parameters: {
 		controls: {
-			include: ["label", "description", "descriptionLayout", "_startSlot", "_endSlot"],
+			include: ["label", "description", "descriptionLayout", "variant", "_startSlot", "_endSlot"],
 		},
 		docs: {
 			description: {
@@ -94,13 +97,14 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const Playground: Story = {
-	render: ({ _endSlot, _startSlot, description, descriptionLayout, label }) => (
+	render: ({ _endSlot, _startSlot, description, descriptionLayout, label, variant }) => (
 		<Item
 			description={description}
 			descriptionLayout={descriptionLayout}
 			endSlot={endSlotOptions[_endSlot]}
 			label={label}
 			startSlot={startSlotOptions[_startSlot]}
+			variant={variant}
 		/>
 	),
 };

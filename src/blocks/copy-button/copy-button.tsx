@@ -140,8 +140,8 @@ function CopyButtonControl({
 			label={ariaLabel ?? tooltip}
 			onClick={handleClick}
 			shape={shape === "circle" ? "circle" : "square"}
-			disabled={copied}
-			focusableWhenDisabled
+			// disabled={copied}
+			// focusableWhenDisabled
 			{...props}
 		/>
 	);

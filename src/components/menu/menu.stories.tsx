@@ -76,7 +76,7 @@ export const Playground: Story = {
 			key={`${_side}-${_align}-${defaultOpen}-${_showShortcuts}-${_showSelectionItems}-${_disabledItem}-${_itemVariant}-${size}`}
 			defaultOpen={defaultOpen}
 			size={size}>
-			<Menu.Trigger render={<Button variant="neutral" />}>Open menu</Menu.Trigger>
+			<Menu.Trigger render={<Button endSlot={<Menu.Icon />} variant="neutral" />}>Open menu</Menu.Trigger>
 			<Menu.Popup positionerProps={{ side: _side, align: _align }}>
 				<Menu.Item variant={_itemVariant}>
 					<Menu.ItemIcon>
@@ -138,7 +138,7 @@ export const ItemVariants: Story = {
 	},
 	render: () => (
 		<Menu.Root defaultOpen>
-			<Menu.Trigger render={<Button variant="neutral" />}>Item variants</Menu.Trigger>
+			<Menu.Trigger render={<Button endSlot={<Menu.Icon />} variant="neutral" />}>Item variants</Menu.Trigger>
 			<Menu.Popup positionerProps={{ align: "start" }} style={storyStyles.itemVariantsMenu}>
 				<Menu.Group>
 					<Menu.GroupLabel>Actions</Menu.GroupLabel>
@@ -494,7 +494,7 @@ export const CollapsibleGroup: Story = {
 	},
 	render: () => (
 		<Menu.Root>
-			<Menu.Trigger render={<Button variant="neutral" />}>Account</Menu.Trigger>
+			<Menu.Trigger render={<Button endSlot={<Menu.Icon />} variant="neutral" />}>Account</Menu.Trigger>
 			<Menu.Popup positionerProps={{ align: "start" }} style={storyStyles.accountMenu}>
 				<Menu.Item>
 					<Menu.ItemIcon>
@@ -567,7 +567,9 @@ export const CollapsibleGroup: Story = {
 function PositionedMenu({ _side, _align }: Pick<MenuStoryArgs, "_side" | "_align">) {
 	return (
 		<Menu.Root>
-			<Menu.Trigger render={<Button size="sm" variant="neutral" />}>{formatPosition(_side, _align)}</Menu.Trigger>
+			<Menu.Trigger render={<Button endSlot={<Menu.Icon />} size="sm" variant="neutral" />}>
+				{formatPosition(_side, _align)}
+			</Menu.Trigger>
 			<Menu.Popup positionerProps={{ side: _side, align: _align }}>
 				<Menu.Item>
 					<Menu.ItemLabel>Rename</Menu.ItemLabel>
@@ -587,7 +589,7 @@ function PositionedMenu({ _side, _align }: Pick<MenuStoryArgs, "_side" | "_align
 function MenuExample({ children, trigger }: { children: ReactNode; trigger: string }) {
 	return (
 		<Menu.Root>
-			<Menu.Trigger render={<Button variant="neutral" />}>{trigger}</Menu.Trigger>
+			<Menu.Trigger render={<Button endSlot={<Menu.Icon />} variant="neutral" />}>{trigger}</Menu.Trigger>
 			<Menu.Popup positionerProps={{ align: "start" }}>{children}</Menu.Popup>
 		</Menu.Root>
 	);

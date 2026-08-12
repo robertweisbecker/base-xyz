@@ -42,8 +42,7 @@ import {
 	Code,
 	CodeBlock,
 	Collapsible,
-	ComboboxField,
-	ComboboxMultiple,
+	Combobox,
 	CommandPalette,
 	DataTable,
 	type DataTableColumnDef,
@@ -258,7 +257,7 @@ function getComponentCells(): GalleryCell[] {
 			title: "Collapsible",
 			content: (
 				<Collapsible.Root defaultOpen style={styles.compactWide}>
-					<Collapsible.Trigger size="sm">
+					<Collapsible.Trigger>
 						Details
 						<Collapsible.Icon />
 					</Collapsible.Trigger>
@@ -269,19 +268,12 @@ function getComponentCells(): GalleryCell[] {
 			),
 		},
 		{
-			title: "ComboboxField",
-			content: <ComboboxField label="Framework" items={componentNames} placeholder="Select an issue..." />,
+			title: "Combobox",
+			content: <ComboboxGalleryExample />,
 		},
 		{
-			title: "ComboboxMultiple",
-			content: (
-				<ComboboxMultiple
-					label="Libraries"
-					items={componentNames}
-					defaultValue={["React", "Solid"]}
-					placeholder="Choose libraries"
-				/>
-			),
+			title: "Combobox multiple",
+			content: <ComboboxGalleryExample multiple />,
 		},
 		{
 			title: "CommandPalette",
@@ -340,7 +332,7 @@ function getComponentCells(): GalleryCell[] {
 			title: "Drawer",
 			content: (
 				<Drawer.Root>
-					<Drawer.Trigger render={<Button size="sm" variant="secondary" />}>Open drawer</Drawer.Trigger>
+					<Drawer.Trigger render={<Button variant="secondary" />}>Open drawer</Drawer.Trigger>
 					<Drawer.Portal>
 						<Drawer.Backdrop />
 						<Drawer.Viewport>
@@ -352,7 +344,7 @@ function getComponentCells(): GalleryCell[] {
 								</Drawer.Header>
 								<Drawer.Body>All checks passed.</Drawer.Body>
 								<Drawer.Footer>
-									<Drawer.Close render={<Button size="sm" />}>Done</Drawer.Close>
+									<Drawer.Close render={<Button width={"100%"} shape="pill" size="lg" />}>Done</Drawer.Close>
 								</Drawer.Footer>
 							</Drawer.Popup>
 						</Drawer.Viewport>
@@ -716,6 +708,60 @@ function getComponentCells(): GalleryCell[] {
 	];
 }
 
+function ComboboxGalleryExample({ multiple = false }: { multiple?: boolean }) {
+	if (multiple) {
+		return (
+			<Combobox.Root<string, true> items={componentNames} multiple defaultValue={["React", "Solid"]}>
+				<Combobox.Label>Libraries</Combobox.Label>
+				<Combobox.InputGroup variant="chips">
+					<Combobox.Chips>
+						<Combobox.Value>
+							{(value: string[]) => (
+								<>
+									{value.map((item) => (
+										<Combobox.Chip
+											key={item}
+											endSlot={<Combobox.ChipRemove aria-label={`Remove ${item}`} />}>
+											{item}
+										</Combobox.Chip>
+									))}
+									<Combobox.Input placeholder={value.length > 0 ? "" : "Choose libraries"} />
+								</>
+							)}
+						</Combobox.Value>
+					</Combobox.Chips>
+				</Combobox.InputGroup>
+				<ComboboxGalleryPopup />
+			</Combobox.Root>
+		);
+	}
+
+	return (
+		<Combobox.Root items={componentNames}>
+			<Combobox.Label>Framework</Combobox.Label>
+			<Combobox.InputGroup>
+				<Combobox.Input placeholder="Select an issue..." />
+			</Combobox.InputGroup>
+			<ComboboxGalleryPopup />
+		</Combobox.Root>
+	);
+}
+
+function ComboboxGalleryPopup() {
+	return (
+		<Combobox.Popup>
+			<Combobox.Empty>No matching components.</Combobox.Empty>
+			<Combobox.List>
+				{(item: string) => (
+					<Combobox.Item key={item} value={item}>
+						{item}
+					</Combobox.Item>
+				)}
+			</Combobox.List>
+		</Combobox.Popup>
+	);
+}
+
 function getBlockCells(): GalleryCell[] {
 	return [
 		{
@@ -913,9 +959,15 @@ function getBlockCells(): GalleryCell[] {
 						The component grid now separates primitives from blocks and keeps larger compositions in a roomier layout.
 					</StreamingResponse.Content>
 					<StreamingResponse.Actions>
-						<Toolbar.Button aria-label="Copy response">
-							<CopyIcon aria-hidden />
-						</Toolbar.Button>
+						<Toolbar.Button
+							aria-label="Copy response"
+							render={
+								<CopyButton
+									variant="ghost"
+									value="The component grid now separates primitives from blocks and keeps larger compositions in a roomier layout."
+								/>
+							}
+						/>
 					</StreamingResponse.Actions>
 				</StreamingResponse.Root>
 			),

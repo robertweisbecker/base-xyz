@@ -46,7 +46,7 @@ export {
 export { Heading, type HeadingProps } from "./heading/heading";
 export { Icon, type IconProps } from "./icons";
 export { InfoTip, type InfoTipProps } from "./info-tip/info-tip";
-export { Item, type ItemDescriptionLayout, type ItemProps } from "./item/item";
+export { Item, type ItemDescriptionLayout, type ItemProps, type ItemVariant } from "./item/item";
 export {
 	Box,
 	type BoxProps,
@@ -103,10 +103,10 @@ export {
 	type CardVariant,
 } from "./card/card";
 export {
-	ComboboxField,
-	ComboboxMultiple,
-	type ComboboxFieldProps,
-	type ComboboxMultipleProps,
+	Combobox,
+	type ComboboxInputGroupVariant,
+	type ComboboxItemVariant,
+	type ComboboxRootProps,
 } from "./combobox/combobox-field";
 export {
 	Checkbox,

@@ -1,7 +1,7 @@
 import { CaretDownIcon } from "@phosphor-icons/react/dist/csr/CaretDown";
 import { CaretRightIcon } from "@phosphor-icons/react/dist/csr/CaretRight";
 import { SlidersHorizontalIcon } from "@phosphor-icons/react/dist/csr/SlidersHorizontal";
-import { DotsThreeIcon } from "@phosphor-icons/react/dist/csr/DotsThree";
+import { Icon } from "@/components/icons";
 import { MagnifyingGlassIcon } from "@phosphor-icons/react/dist/csr/MagnifyingGlass";
 import * as stylex from "@stylexjs/stylex";
 import type { StyleXStyles } from "@stylexjs/stylex";
@@ -501,7 +501,7 @@ function RowActions<TData extends RowData>({
 			<Menu.Trigger
 				render={
 					<IconButton
-						icon={<DotsThreeIcon aria-hidden weight="bold" />}
+						icon={<Icon.More />}
 						label={`Open actions for row ${row.index + 1}`}
 						size="xs"
 						variant="ghost"

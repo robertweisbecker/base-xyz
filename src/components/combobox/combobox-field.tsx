@@ -1,797 +1,481 @@
-import { Combobox } from "@base-ui/react/combobox";
+import { Combobox as BaseCombobox } from "@base-ui/react/combobox";
+import { Field } from "@base-ui/react/field";
 import { CaretDownIcon } from "@phosphor-icons/react/dist/csr/CaretDown";
 import { XCircleIcon } from "@phosphor-icons/react/dist/csr/XCircle";
-import { PlusIcon } from "@phosphor-icons/react/dist/csr/Plus";
 import { XIcon } from "@phosphor-icons/react/dist/csr/X";
 import * as stylex from "@stylexjs/stylex";
 import type { StyleXStyles } from "@stylexjs/stylex";
-import { useId, useMemo, useRef, useState, type KeyboardEvent, type RefObject } from "react";
-import { resolveThemeProps } from "@/theme/theme-props";
+import { createContext, useContext, type ComponentProps, type ReactNode, type RefObject } from "react";
+import { fieldControlSizes, fieldStyles, fieldTextStyles, fieldThemeProps } from "@/components/field/field.stylex";
 import type { FieldSize, FieldThemeProps } from "@/components/field/field.types";
-import { fieldStyles, fieldControlSizes, fieldTextStyles, fieldThemeProps } from "@/components/field/field.stylex";
-import { focusRing } from "@/styles/recipes/focus";
-import { popupMotionStyles, popupPositionerStyles } from "@/components/popover/popover.stylex";
-import { popupVars } from "@/components/popover/popover-vars.stylex";
-import { pressable } from "@/styles/recipes/transitions";
-import { tokens } from "@/theme/tokens.stylex";
-
+import { Icon } from "@/components/icons";
 import { menuItemSizeStyles, menuItemStyles, menuItemVariantStyles } from "@/components/menu/menu-item.stylex";
 import type { MenuItemVariant } from "@/components/menu/menu.types";
-import { Icon } from "@/components/icons";
-import { comboboxMarker } from "./combobox.stylex";
+import { popupMotionStyles, popupPositionerStyles } from "@/components/popover/popover.stylex";
 import { Tooltip } from "@/components/tooltip/tooltip";
+import { focusRing } from "@/styles/recipes/focus";
+import { pressable } from "@/styles/recipes/transitions";
+import { resolveThemeProps } from "@/theme/theme-props";
+import {
+	comboboxActionSizeVariants,
+	comboboxGroupSizeVariants,
+	comboboxInputSizeVariants,
+	comboboxMarker,
+	comboboxParts,
+	inputGroupVariants,
+	inputVariants,
+} from "./combobox.stylex";
 
-const HOVER_WHEN_INACTIVE = ":hover:not([data-disabled]):not([data-popup-open]):not([data-pressed])";
-
-type ChipOverflowAnchorRefs = {
-	inputGroupRef: RefObject<HTMLDivElement | null>;
-	triggerRef: RefObject<HTMLButtonElement | null>;
-};
-
-export type ComboboxFieldProps = FieldThemeProps & {
-	label: string;
-	items: readonly string[];
-	placeholder?: string;
-	disabled?: boolean;
-	itemVariant?: MenuItemVariant;
-	readOnly?: boolean;
-	size?: FieldSize;
+type StyledProps<T> = Omit<T, "className" | "style"> & {
 	className?: string;
 	/** StyleX overrides, applied after the component's own styles. */
 	style?: StyleXStyles;
 };
 
-export type ComboboxMultipleProps = ComboboxFieldProps & {
-	chipPlacement?: "inside" | "outside";
-	creatable?: boolean;
-	defaultValue?: readonly string[];
-	expandChips?: "input-focus" | "always";
-	maxVisibleChips?: number;
-	onCreate?: (value: string) => void;
-	onValueChange?: (value: string[]) => void;
-	value?: readonly string[];
+type ComboboxMultipleMode = boolean | undefined;
+
+type ComboboxContextValue = {
+	multiple: boolean;
+	readOnly: boolean;
+	size: FieldSize;
 };
 
-export function ComboboxField({
-	label,
-	items,
-	placeholder = "Choose an option",
-	disabled,
-	itemVariant = "default",
-	readOnly,
-	size = "md",
-	className,
-	style,
-	...props
-}: ComboboxFieldProps) {
-	const { styles } = resolveThemeProps(props, fieldThemeProps);
-	const id = useId();
-	const rootSx = stylex.props(fieldStyles.root, ...styles, style);
+const ComboboxContext = createContext<ComboboxContextValue>({ multiple: false, readOnly: false, size: "md" });
+const ComboboxChipsContext = createContext(false);
 
-	return (
-		<Combobox.Root items={[...items]} disabled={disabled} readOnly={readOnly}>
-			<div className={[rootSx.className, className].filter(Boolean).join(" ")} style={rootSx.style}>
-				<label htmlFor={id} {...stylex.props(fieldStyles.label)}>
-					{label}
-				</label>
-				<Combobox.InputGroup
-					{...stylex.props(
-						fieldStyles.inputBase,
-						fieldTextStyles[size],
-						comboboxParts.inputGroup,
-						fieldControlSizes[size],
-						comboboxGroupSizeVariants[size],
-						focusRing.within,
-						comboboxMarker,
-					)}>
-					<Combobox.Input
-						id={id}
-						placeholder={placeholder}
-						{...stylex.props(
-							fieldStyles.inputUnstyled,
-							fieldStyles.inputStandard,
-							fieldTextStyles[size],
-							comboboxParts.input,
-							comboboxInputSizeVariants[size],
-							readOnly && comboboxParts.inputReadOnly,
-						)}
-					/>
-					<ComboboxActions size={size} />
-				</Combobox.InputGroup>
-			</div>
-			<ComboboxPopup itemVariant={itemVariant} size={size} />
-		</Combobox.Root>
-	);
-}
-
-export function ComboboxMultiple({
-	label,
-	items,
-	placeholder = "Choose options",
-	disabled,
-	itemVariant = "default",
-	readOnly,
-	chipPlacement = "inside",
-	creatable = false,
-	defaultValue = [],
-	expandChips,
-	maxVisibleChips,
-	onCreate,
-	onValueChange,
-	size = "md",
-	value,
-	className,
-	style,
-	...props
-}: ComboboxMultipleProps) {
-	const { styles } = resolveThemeProps(props, fieldThemeProps);
-	const id = useId();
-	const rootSx = stylex.props(fieldStyles.root, ...styles, style);
-	const chipsInside = chipPlacement === "inside";
-	const [createdItems, setCreatedItems] = useState<string[]>([]);
-	const [inputFocused, setInputFocused] = useState(false);
-	const [inputValue, setInputValue] = useState("");
-	const [uncontrolledValue, setUncontrolledValue] = useState<string[]>(() => [...defaultValue]);
-	const highlightedItemRef = useRef<string | undefined>(undefined);
-	const inputGroupRef = useRef<HTMLDivElement>(null);
-	const chipOverflowTriggerRef = useRef<HTMLButtonElement>(null);
-	const selectedValues = value === undefined ? uncontrolledValue : [...value];
-	const availableItems = useMemo(() => mergeUniqueItems(items, createdItems), [items, createdItems]);
-	const trimmedInputValue = inputValue.trim();
-	const normalizedInputValue = normalizeItemValue(trimmedInputValue);
-	const matchingItem =
-		normalizedInputValue === ""
-			? undefined
-			: availableItems.find((item) => normalizeItemValue(item) === normalizedInputValue);
-	const creatableItem =
-		creatable && normalizedInputValue !== "" && matchingItem === undefined ? trimmedInputValue : undefined;
-	const itemsForView = useMemo(
-		() => (creatableItem === undefined ? availableItems : [...availableItems, creatableItem]),
-		[availableItems, creatableItem],
-	);
-	const chipLimit =
-		expandChips === "always" || (expandChips === "input-focus" && inputFocused)
-			? undefined
-			: normalizeChipLimit(maxVisibleChips);
-
-	function updateSelectedValues(nextValue: string[]) {
-		if (value === undefined) {
-			setUncontrolledValue(nextValue);
-		}
-		onValueChange?.(nextValue);
-	}
-
-	function selectExistingItem(item: string) {
-		if (!selectedValues.some((selectedItem) => normalizeItemValue(selectedItem) === normalizeItemValue(item))) {
-			updateSelectedValues([...selectedValues, item]);
-		}
-		setInputValue("");
-	}
-
-	function createItem(item: string) {
-		const trimmedItem = item.trim();
-		if (trimmedItem === "") {
-			return;
-		}
-
-		const existingItem = availableItems.find(
-			(availableItem) => normalizeItemValue(availableItem) === normalizeItemValue(trimmedItem),
-		);
-		if (existingItem !== undefined) {
-			selectExistingItem(existingItem);
-			return;
-		}
-
-		if (selectedValues.some((selectedItem) => normalizeItemValue(selectedItem) === normalizeItemValue(trimmedItem))) {
-			setInputValue("");
-			return;
-		}
-
-		setCreatedItems((currentItems) => mergeUniqueItems(currentItems, [trimmedItem]));
-		updateSelectedValues([...selectedValues, trimmedItem]);
-		onCreate?.(trimmedItem);
-		setInputValue("");
-	}
-
-	function commitInputValue() {
-		if (matchingItem !== undefined) {
-			selectExistingItem(matchingItem);
-			return;
-		}
-		if (creatableItem !== undefined) {
-			createItem(creatableItem);
-		}
-	}
-
-	function handleInputKeyDown(event: KeyboardEvent<HTMLInputElement>) {
-		if (event.key === ",") {
-			event.preventDefault();
-			commitInputValue();
-			return;
-		}
-
-		if (event.key === "Enter" && highlightedItemRef.current === undefined && trimmedInputValue !== "") {
-			event.preventDefault();
-			commitInputValue();
-		}
-	}
-
-	function handleRootValueChange(nextValue: string[]) {
-		const selectedCreatableItem =
-			creatableItem !== undefined &&
-			nextValue.some((item) => normalizeItemValue(item) === normalizeItemValue(creatableItem));
-
-		if (selectedCreatableItem) {
-			createItem(creatableItem);
-			return;
-		}
-
-		updateSelectedValues(nextValue);
-		setInputValue("");
-	}
-
-	return (
-		<Combobox.Root
-			items={itemsForView}
-			multiple
-			disabled={disabled}
-			readOnly={readOnly}
-			value={selectedValues}
-			onValueChange={handleRootValueChange}
-			inputValue={inputValue}
-			onInputValueChange={setInputValue}
-			onItemHighlighted={
-				creatable
-					? (item) => {
-							highlightedItemRef.current = item;
-						}
-					: undefined
-			}>
-			<div className={[rootSx.className, className].filter(Boolean).join(" ")} style={rootSx.style}>
-				<label htmlFor={id} {...stylex.props(fieldStyles.label)}>
-					{label}
-				</label>
-
-				{!chipsInside ? (
-					<Combobox.Chips {...stylex.props(comboboxParts.chips, chipPlacementVariants.outside)}>
-						<Combobox.Value>
-							{(value: string[]) =>
-								value.length > 0 ? (
-									renderChips(value, chipLimit)
-								) : (
-									<span {...stylex.props(comboboxParts.noChips)}>No selections</span>
-								)
-							}
-						</Combobox.Value>
-					</Combobox.Chips>
-				) : null}
-
-				<Combobox.InputGroup
-					ref={inputGroupRef}
-					{...stylex.props(
-						fieldStyles.inputBase,
-						fieldTextStyles[size],
-						comboboxParts.inputGroup,
-						fieldControlSizes[size],
-						comboboxGroupSizeVariants[size],
-						focusRing.within,
-						chipsInside && inputGroupVariants.withChips,
-						comboboxMarker,
-					)}>
-					{chipsInside ? (
-						<Combobox.Chips {...stylex.props(comboboxParts.chips, chipPlacementVariants.inside)}>
-							<Combobox.Value>
-								{(value: string[]) => (
-									<>
-										{renderChips(value, chipLimit, {
-											inputGroupRef,
-											triggerRef: chipOverflowTriggerRef,
-										})}
-										<Combobox.Input
-											id={id}
-											placeholder={value.length > 0 ? "" : placeholder}
-											onFocus={() => {
-												setInputFocused(true);
-											}}
-											onBlur={() => {
-												setInputFocused(false);
-											}}
-											onKeyDown={creatable ? handleInputKeyDown : undefined}
-											{...stylex.props(
-												fieldStyles.inputUnstyled,
-												fieldStyles.inputStandard,
-												fieldTextStyles[size],
-												comboboxParts.input,
-												comboboxInputSizeVariants[size],
-												inputVariants.withChips,
-												readOnly && comboboxParts.inputReadOnly,
-											)}
-										/>
-									</>
-								)}
-							</Combobox.Value>
-						</Combobox.Chips>
-					) : (
-						<Combobox.Input
-							id={id}
-							placeholder={placeholder}
-							onFocus={() => {
-								setInputFocused(true);
-							}}
-							onBlur={() => {
-								setInputFocused(false);
-							}}
-							onKeyDown={creatable ? handleInputKeyDown : undefined}
-							{...stylex.props(
-								fieldStyles.inputUnstyled,
-								fieldStyles.inputStandard,
-								fieldTextStyles[size],
-								comboboxParts.input,
-								comboboxInputSizeVariants[size],
-								readOnly && comboboxParts.inputReadOnly,
-							)}
-						/>
-					)}
-					{/* <ComboboxActions showClear={false} size={size} /> */}
-				</Combobox.InputGroup>
-			</div>
-			<ComboboxPopup itemVariant={itemVariant} creatableItem={creatableItem} size={size} />
-		</Combobox.Root>
-	);
-}
-
-function ComboboxActions({ showClear = true, size }: { showClear?: boolean; size: FieldSize }) {
-	return (
-		<div {...stylex.props(comboboxParts.actions)}>
-			{showClear ? (
-				<Combobox.Clear
-					aria-label="Clear selection"
-					{...stylex.props(
-						comboboxParts.action,
-						comboboxActionSizeVariants[size],
-						focusRing.offset,
-						pressable.transition,
-					)}>
-					<XCircleIcon aria-hidden size={"1.25em"} weight="fill" />
-				</Combobox.Clear>
-			) : null}
-			<Combobox.Trigger
-				aria-label="Show options"
-				{...stylex.props(
-					comboboxParts.action,
-					comboboxActionSizeVariants[size],
-					focusRing.offset,
-					pressable.transition,
-				)}>
-				<CaretDownIcon aria-hidden size="1em" weight="bold" />
-			</Combobox.Trigger>
-		</div>
-	);
-}
-
-function ComboboxPopup({
-	itemVariant,
-	creatableItem,
-	size,
-}: {
-	itemVariant: MenuItemVariant;
-	creatableItem?: string;
-	size: FieldSize;
-}) {
-	return (
-		<Combobox.Portal>
-			<Combobox.Positioner sideOffset={6} align="center" {...stylex.props(popupPositionerStyles)}>
-				<Combobox.Popup
-					{...stylex.props(comboboxParts.panelSurface, comboboxParts.popup, popupMotionStyles.anchoredPopup)}>
-					<Combobox.Empty {...stylex.props(comboboxParts.empty)}>No matching options.</Combobox.Empty>
-					<Combobox.List className={stylex.props(comboboxParts.list).className}>
-						{(item: string) => {
-							const isCreatableItem =
-								creatableItem !== undefined && normalizeItemValue(item) === normalizeItemValue(creatableItem);
-
-							return (
-								<Combobox.Item
-									key={isCreatableItem ? `create:${item}` : item}
-									value={item}
-									className={
-										stylex.props(
-											menuItemStyles.item,
-											menuItemSizeStyles[size],
-											menuItemVariantStyles[itemVariant],
-											focusRing.inset,
-										).className
-									}>
-									{isCreatableItem ? (
-										<span {...stylex.props(menuItemStyles.indicator, comboboxParts.creatableIndicator)}>
-											<PlusIcon aria-hidden size="1em" weight="bold" />
-										</span>
-									) : (
-										<Combobox.ItemIndicator keepMounted className={stylex.props(menuItemStyles.indicator).className}>
-											<Icon.Checkmark width="1em" height="1em" strokeWidth={2} />
-										</Combobox.ItemIndicator>
-									)}
-									<span {...stylex.props(menuItemStyles.label)}>{isCreatableItem ? `Create “${item}”` : item}</span>
-								</Combobox.Item>
-							);
-						}}
-					</Combobox.List>
-				</Combobox.Popup>
-			</Combobox.Positioner>
-		</Combobox.Portal>
-	);
-}
-
-function renderChips(values: string[], maxVisibleChips?: number, tooltipAnchorRefs?: ChipOverflowAnchorRefs) {
-	const visibleValues = maxVisibleChips === undefined ? values : values.slice(0, maxVisibleChips);
-	const hiddenCount = values.length - visibleValues.length;
-	const overflowLabel = visibleValues.length === 0 ? `${hiddenCount} selected` : `+${hiddenCount}`;
-
-	return (
-		<>
-			{visibleValues.map((value) => (
-				<Combobox.Chip key={value} aria-label={value} {...stylex.props(comboboxParts.chip, comboboxMarker)}>
-					<span {...stylex.props(comboboxParts.chipLabel)}>{value}</span>
-					<Combobox.ChipRemove
-						aria-label={`Remove ${value}`}
-						{...stylex.props(comboboxParts.action, comboboxParts.chipRemove, focusRing.offset, pressable.transition)}>
-						<XIcon aria-hidden size={12} weight="bold" />
-					</Combobox.ChipRemove>
-				</Combobox.Chip>
-			))}
-			{hiddenCount > 0 ? (
-				<Tooltip.Root>
-					<Tooltip.Trigger
-						ref={tooltipAnchorRefs?.triggerRef}
-						aria-label={overflowLabel}
-						{...stylex.props(comboboxParts.chipOverflow)}>
-						{overflowLabel}
-					</Tooltip.Trigger>
-					<Tooltip.Popup
-						positionerProps={
-							tooltipAnchorRefs
-								? {
-										anchor: () => getChipOverflowAnchor(tooltipAnchorRefs),
-										align: "start",
-										collisionAvoidance: { align: "none", side: "none" },
-										side: "bottom",
-										sideOffset: 0,
-									}
-								: { align: "start", side: "inline-start" }
-						}>
-						<Combobox.Value />
-					</Tooltip.Popup>
-				</Tooltip.Root>
-			) : null}
-		</>
-	);
-}
-
-function getChipOverflowAnchor({ inputGroupRef, triggerRef }: ChipOverflowAnchorRefs) {
-	const inputGroup = inputGroupRef.current;
-	const trigger = triggerRef.current;
-
-	if (!inputGroup || !trigger) {
-		return null;
-	}
-
-	return {
-		contextElement: inputGroup,
-		getBoundingClientRect() {
-			const inputGroupRect = inputGroup.getBoundingClientRect();
-			const triggerRect = trigger.getBoundingClientRect();
-			const inputGroupStyle = getComputedStyle(inputGroup);
-			const inlineStartInset =
-				Number.parseFloat(inputGroupStyle.borderInlineStartWidth) +
-				Number.parseFloat(inputGroupStyle.paddingInlineStart);
-			const x =
-				inputGroupStyle.direction === "rtl"
-					? inputGroupRect.right - inlineStartInset
-					: inputGroupRect.left + inlineStartInset;
-			const y = triggerRect.top;
-
-			return {
-				bottom: y,
-				height: 0,
-				left: x,
-				right: x,
-				top: y,
-				width: 0,
-				x,
-				y,
-			};
-		},
+export type ComboboxRootProps<Value, Multiple extends ComboboxMultipleMode = false> = Omit<
+	BaseCombobox.Root.Props<Value, Multiple>,
+	"className" | "color" | "size" | "style" | keyof FieldThemeProps
+> &
+	FieldThemeProps & {
+		className?: string;
+		invalid?: boolean;
+		size?: FieldSize;
+		/** StyleX overrides, applied after the component's own styles. */
+		style?: StyleXStyles;
 	};
+
+export function Root<Value, Multiple extends ComboboxMultipleMode = false>({
+	children,
+	className,
+	disabled,
+	invalid,
+	multiple,
+	readOnly = false,
+	size = "md",
+	style,
+	...props
+}: ComboboxRootProps<Value, Multiple>) {
+	const { restProps, styles } = resolveThemeProps(props, fieldThemeProps);
+	const sx = stylex.props(fieldStyles.root, ...styles, style);
+
+	return (
+		<Field.Root
+			disabled={disabled}
+			invalid={invalid}
+			className={[sx.className, className].filter(Boolean).join(" ")}
+			style={sx.style}>
+			<ComboboxContext.Provider value={{ multiple: multiple === true, readOnly, size }}>
+				<BaseCombobox.Root disabled={disabled} multiple={multiple} readOnly={readOnly} {...restProps}>
+					{children}
+				</BaseCombobox.Root>
+			</ComboboxContext.Provider>
+		</Field.Root>
+	);
 }
 
-function normalizeItemValue(value: string) {
-	return value.trim().toLocaleLowerCase();
+export type ComboboxLabelProps = StyledProps<Field.Label.Props>;
+
+export function Label({ ref, className, style, ...props }: ComboboxLabelProps) {
+	const sx = stylex.props(fieldStyles.label, style);
+
+	return (
+		<Field.Label
+			ref={ref}
+			className={[sx.className, className].filter(Boolean).join(" ")}
+			style={sx.style}
+			{...props}
+		/>
+	);
 }
 
-function mergeUniqueItems(primaryItems: readonly string[], additionalItems: readonly string[]) {
-	const mergedItems = [...primaryItems];
-	const normalizedItems = new Set(primaryItems.map(normalizeItemValue));
+export type ComboboxInputGroupVariant = "input" | "chips";
 
-	additionalItems.forEach((item) => {
-		const normalizedItem = normalizeItemValue(item);
-		if (!normalizedItems.has(normalizedItem)) {
-			normalizedItems.add(normalizedItem);
-			mergedItems.push(item);
-		}
-	});
+export type ComboboxInputGroupProps = StyledProps<BaseCombobox.InputGroup.Props> & {
+	variant?: ComboboxInputGroupVariant;
+};
 
-	return mergedItems;
+export function InputGroup({
+	ref,
+	children,
+	className,
+	style,
+	variant = "input",
+	...props
+}: ComboboxInputGroupProps) {
+	const { multiple, size } = useContext(ComboboxContext);
+	const withChips = variant === "chips";
+	const sx = stylex.props(
+		fieldStyles.inputBase,
+		fieldTextStyles[size],
+		comboboxParts.inputGroup,
+		fieldControlSizes[size],
+		comboboxGroupSizeVariants[size],
+		focusRing.within,
+		withChips && inputGroupVariants.withChips,
+		multiple && inputGroupVariants.multiple,
+		comboboxMarker,
+		style,
+	);
+
+	return (
+		<ComboboxChipsContext.Provider value={withChips}>
+			<BaseCombobox.InputGroup
+				ref={ref}
+				className={[sx.className, className].filter(Boolean).join(" ")}
+				style={sx.style}
+				{...props}>
+				{children}
+				<Actions />
+			</BaseCombobox.InputGroup>
+		</ComboboxChipsContext.Provider>
+	);
 }
 
-function normalizeChipLimit(limit?: number) {
-	if (limit === undefined || !Number.isFinite(limit)) {
-		return undefined;
-	}
-	return Math.max(0, Math.floor(limit));
+export type ComboboxInputProps = StyledProps<BaseCombobox.Input.Props>;
+
+export function Input({ ref, className, style, ...props }: ComboboxInputProps) {
+	const { readOnly, size } = useContext(ComboboxContext);
+	const withinChips = useContext(ComboboxChipsContext);
+	const sx = stylex.props(
+		fieldStyles.inputUnstyled,
+		fieldStyles.inputStandard,
+		fieldTextStyles[size],
+		comboboxParts.input,
+		comboboxInputSizeVariants[size],
+		withinChips && inputVariants.withChips,
+		readOnly && comboboxParts.inputReadOnly,
+		style,
+	);
+
+	return (
+		<BaseCombobox.Input
+			ref={ref}
+			className={[sx.className, className].filter(Boolean).join(" ")}
+			style={sx.style}
+			{...props}
+		/>
+	);
 }
 
-const comboboxParts = stylex.create({
-	panelSurface: {
-		[popupVars.background]: tokens["--elevated"],
-		[popupVars.border]: tokens["--border"],
-		[popupVars.foreground]: tokens["--fg"],
-		borderRadius: tokens["--radius-lg"],
-		backgroundColor: popupVars.background,
-		boxShadow: tokens["--shadow-md"],
-		color: popupVars.foreground,
-	},
-	inputGroup: {
-		borderColor: {
-			"[data-disabled]": tokens["--border"],
-			"[data-readonly]": tokens["--border"],
-			default: tokens["--border-input"],
-			":focus-within:not([data-disabled]):not([data-readonly])": tokens["--focus"],
-			":hover:not(:focus-within):not([data-disabled]):not([data-readonly])": tokens["--border-input-hover"],
-		},
-		alignItems: "center",
-		display: "flex",
-		position: "relative",
-		transitionDuration: tokens["--motion-duration-long"],
-		transitionProperty: "height",
-		transitionTimingFunction: tokens["--motion-ease-smooth-out"],
-	},
-	input: {
-		borderWidth: 0,
-		outline: "0",
-		backgroundColor: "transparent",
-		flexGrow: 1,
-		minWidth: 0,
-	},
-	inputReadOnly: {
-		"::placeholder": {
-			opacity: 0,
-		},
-	},
-	chips: {
-		alignItems: "center",
-		columnGap: tokens["--space-1"],
-		display: "flex",
-		flexWrap: "wrap",
-		rowGap: 2,
-		minWidth: 0,
-	},
-	chip: {
-		padding: "2px",
-		borderRadius: tokens["--radius-sm"],
-		cornerShape: "superellipse(1.1)",
-		overflow: "hidden",
-		alignItems: "center",
-		backgroundColor: {
-			default: tokens["--surface-subtle"],
-			":focus-within": tokens["--bg-primary"],
-		},
-		color: {
-			default: tokens["--fg"],
-			":focus-within": tokens["--fg-accent-contrast"],
-		},
-		display: "inline-flex",
-		fontSize: tokens["--font-size-1"],
-		letterSpacing: tokens["--letter-spacing-1"],
-		lineHeight: tokens["--line-height-1"],
-		height: "24px",
-	},
-	chipLabel: {
-		gap: tokens["--space-1"],
-		overflow: "hidden",
-		paddingInline: tokens["--space-1"],
-		textOverflow: "ellipsis",
-		whiteSpace: "nowrap",
-	},
-	chipOverflow: {
-		borderRadius: tokens["--radius-sm"],
-		paddingInline: tokens["--space-2"],
-		alignItems: "center",
-		backgroundColor: {
-			default: tokens["--surface-subtle"],
-			":hover": tokens["--bg-highlight"],
-		},
-		color: tokens["--fg"],
-		display: "inline-flex",
-		flexShrink: 0,
-		fontSize: tokens["--font-size-1"],
-		fontVariantNumeric: "tabular-nums",
-		letterSpacing: tokens["--letter-spacing-1"],
-		lineHeight: tokens["--line-height-1"],
-		whiteSpace: "nowrap",
-		height: "24px",
-	},
-	chipRemove: {
-		borderRadius: tokens["--radius-xs"],
-		outline: "0",
-		backgroundColor: {
-			default: "transparent",
-			[stylex.when.ancestor('[aria-readonly="true"]', comboboxMarker)]: "transparent",
-			[stylex.when.ancestor("[data-disabled]", comboboxMarker)]: "transparent",
-			[stylex.when.ancestor("[data-readonly]", comboboxMarker)]: "transparent",
-			":hover": {
-				"@media (hover: hover) and (pointer: fine)": tokens["--surface"],
-			},
-		},
-		height: tokens["--space-5"],
-		width: tokens["--space-5"],
-	},
-	noChips: {
-		color: tokens["--fg-muted"],
-		fontSize: tokens["--font-size-1"],
-		letterSpacing: tokens["--letter-spacing-1"],
-		lineHeight: tokens["--line-height-1"],
-	},
-	creatableIndicator: {
-		visibility: "visible",
-	},
-	actions: {
-		gap: 0,
-		display: "flex",
-		insetBlockStart: -1,
-		insetInlineEnd: 2,
-		position: "absolute",
-		height: "100%",
-	},
-	action: {
-		padding: 0,
-		borderRadius: tokens["--radius-sm"],
-		borderWidth: 0,
-		alignItems: "center",
-		color: {
-			// eslint-disable-next-line @stylexjs/valid-styles -- the compiler supports chained pseudo-class conditions; the lint rule is stricter than the compiler.
-			[HOVER_WHEN_INACTIVE]: {
-				"@media (hover: hover) and (pointer: fine)": tokens["--fg"],
-			},
-			default: tokens["--fg-subtle"],
-			[stylex.when.ancestor('[aria-readonly="true"]', comboboxMarker)]: tokens["--fg-subtle"],
-			[stylex.when.ancestor("[data-disabled]", comboboxMarker)]: tokens["--fg-subtle"],
-			[stylex.when.ancestor("[data-readonly]", comboboxMarker)]: tokens["--fg-subtle"],
-		},
-		cursor: {
-			"[data-disabled]": "not-allowed",
-			default: "default",
-			[stylex.when.ancestor('[aria-readonly="true"]', comboboxMarker)]: "default",
-			[stylex.when.ancestor("[data-readonly]", comboboxMarker)]: "default",
-		},
-		display: "flex",
-		fontSize: "inherit",
-		justifyContent: "center",
-		opacity: {
-			default: 1,
-			[stylex.when.ancestor('[aria-readonly="true"]', comboboxMarker)]: 0.48,
-			[stylex.when.ancestor("[data-disabled]", comboboxMarker)]: 0.48,
-			[stylex.when.ancestor("[data-readonly]", comboboxMarker)]: 0.48,
-		},
-		pointerEvents: {
-			"[data-disabled]": "none",
-			default: "auto",
-			[stylex.when.ancestor('[aria-readonly="true"]', comboboxMarker)]: "none",
-			[stylex.when.ancestor("[data-disabled]", comboboxMarker)]: "none",
-			[stylex.when.ancestor("[data-readonly]", comboboxMarker)]: "none",
-		},
-	},
-	popup: {
-		overflow: "hidden",
-		minWidth: "var(--anchor-width)",
-	},
-	list: {
-		padding: {
-			"[data-empty]": 0,
-			default: tokens["--space-1"],
-		},
-		maxHeight: "260px",
-		overflowY: "auto",
-	},
-	empty: {
-		padding: {
-			default: tokens["--space-3"],
-			":empty": 0,
-		},
-		alignItems: "center",
-		color: tokens["--fg-muted"],
-		display: "flex",
-		fontSize: tokens["--font-size-2"],
-		justifyContent: "center",
-		letterSpacing: tokens["--letter-spacing-2"],
-		lineHeight: tokens["--line-height-2"],
-		textAlign: "center",
-	},
-});
+function Actions() {
+	const { multiple } = useContext(ComboboxContext);
+	const action = multiple ? (
+		<Clear>Clear all</Clear>
+	) : (
+		<BaseCombobox.Value>
+			{(value: unknown) => (value == null ? <Trigger /> : <Clear />)}
+		</BaseCombobox.Value>
+	);
 
-const comboboxGroupSizeVariants = stylex.create({
-	sm: {
-		paddingInlineEnd: tokens["--size-control-sm"],
-		paddingInlineStart: tokens["--space-1"],
-	},
-	md: {
-		paddingInlineEnd: tokens["--space-8"],
-		paddingInlineStart: tokens["--space-1"],
-	},
-	lg: {
-		paddingInlineEnd: tokens["--size-control-lg"],
-		paddingInlineStart: tokens["--space-2"],
-	},
-});
+	return (
+		<div {...stylex.props(comboboxParts.actions)}>{action}</div>
+	);
+}
 
-const comboboxInputSizeVariants = stylex.create({
-	sm: {
-		paddingBlock: tokens["--space-1"],
-		paddingInlineStart: tokens["--space-1-5"],
-		height: tokens["--size-control-sm"],
-	},
-	md: {
-		paddingBlock: tokens["--space-1"],
-		paddingInlineStart: tokens["--space-2"],
-		height: tokens["--size-control-md"],
-	},
-	lg: {
-		paddingBlock: tokens["--space-1"],
-		paddingInlineStart: tokens["--space-2"],
-		height: tokens["--size-control-lg"],
-	},
-});
+type ComboboxClearProps = StyledProps<BaseCombobox.Clear.Props>;
 
-const comboboxActionSizeVariants = stylex.create({
-	sm: {
-		height: tokens["--size-control-sm"],
-		width: tokens["--size-control-sm"],
-	},
-	md: {
-		height: tokens["--size-control-md"],
-		width: tokens["--size-control-md"],
-	},
-	lg: {
-		height: tokens["--size-control-lg"],
-		width: tokens["--size-control-lg"],
-	},
-});
+function Clear({
+	ref,
+	"aria-label": ariaLabel,
+	children,
+	className,
+	style,
+	...props
+}: ComboboxClearProps) {
+	const { size } = useContext(ComboboxContext);
+	const hasVisibleLabel = children != null;
+	const sx = stylex.props(
+		comboboxParts.action,
+		hasVisibleLabel ? comboboxParts.textAction : comboboxActionSizeVariants[size],
+		focusRing.offset,
+		pressable.transition,
+		style,
+	);
 
-const inputGroupVariants = stylex.create({
-	withChips: {
-		gap: tokens["--space-1"],
-		paddingBlock: "3px",
-		alignItems: "start",
-		flexWrap: "wrap",
-		paddingBlockStart: "3px",
-		paddingInlineEnd: tokens["--space-8"],
-		paddingInlineStart: tokens["--space-1"],
-		height: "auto",
-	},
-});
+	return (
+		<BaseCombobox.Clear
+			ref={ref}
+			aria-label={ariaLabel ?? (children == null ? "Clear selection" : undefined)}
+			className={[sx.className, className].filter(Boolean).join(" ")}
+			style={sx.style}
+			{...props}>
+			{children ?? <XCircleIcon aria-hidden size="1.25em" weight="fill" />}
+		</BaseCombobox.Clear>
+	);
+}
 
-const inputVariants = stylex.create({
-	withChips: {
-		paddingBlock: 0,
-		flexBasis: tokens["--space-16"], // acts as a min-width to force newline wrap
-		paddingInlineStart: tokens["--space-2"],
-		height: "26px",
-	},
-});
+type ComboboxTriggerProps = StyledProps<BaseCombobox.Trigger.Props>;
 
-const chipPlacementVariants = stylex.create({
-	inside: {
-		flexGrow: 1,
-	},
-	outside: {
-		minHeight: "30px",
-	},
-});
+function Trigger({
+	ref,
+	"aria-label": ariaLabel,
+	children,
+	className,
+	style,
+	...props
+}: ComboboxTriggerProps) {
+	const { size } = useContext(ComboboxContext);
+	const sx = stylex.props(
+		comboboxParts.action,
+		comboboxActionSizeVariants[size],
+		focusRing.offset,
+		pressable.transition,
+		style,
+	);
+
+	return (
+		<BaseCombobox.Trigger
+			ref={ref}
+			aria-label={ariaLabel ?? (children == null ? "Show options" : undefined)}
+			className={[sx.className, className].filter(Boolean).join(" ")}
+			style={sx.style}
+			{...props}>
+			{children ?? <CaretDownIcon aria-hidden size="1em" weight="bold" />}
+		</BaseCombobox.Trigger>
+	);
+}
+
+export const Value = BaseCombobox.Value;
+
+export type ComboboxChipsProps = StyledProps<BaseCombobox.Chips.Props>;
+
+export function Chips({ ref, children, className, style, ...props }: ComboboxChipsProps) {
+	const sx = stylex.props(comboboxParts.chips, style);
+
+	return (
+		<ComboboxChipsContext.Provider value>
+			<BaseCombobox.Chips
+				ref={ref}
+				className={[sx.className, className].filter(Boolean).join(" ")}
+				style={sx.style}
+				{...props}>
+				{children}
+			</BaseCombobox.Chips>
+		</ComboboxChipsContext.Provider>
+	);
+}
+
+export type ComboboxChipProps = StyledProps<BaseCombobox.Chip.Props> & {
+	/** Visual content positioned before the chip label. */
+	startSlot?: ReactNode;
+	/** Optional removal control positioned after the chip label. */
+	endSlot?: ReactNode;
+};
+
+export function Chip({ children, className, endSlot, ref, startSlot, style, ...props }: ComboboxChipProps) {
+	const sx = stylex.props(comboboxParts.chip, comboboxMarker, style);
+
+	return (
+		<BaseCombobox.Chip
+			ref={ref}
+			className={[sx.className, className].filter(Boolean).join(" ")}
+			style={sx.style}
+			{...props}>
+			{startSlot != null ? (
+				<span aria-hidden {...stylex.props(comboboxParts.chipSlot)}>
+					{startSlot}
+				</span>
+			) : null}
+			<span {...stylex.props(comboboxParts.chipLabel)}>{children}</span>
+			{endSlot != null ? <span {...stylex.props(comboboxParts.chipSlot)}>{endSlot}</span> : null}
+		</BaseCombobox.Chip>
+	);
+}
+
+export type ComboboxChipRemoveProps = StyledProps<BaseCombobox.ChipRemove.Props>;
+
+export function ChipRemove({
+	ref,
+	"aria-label": ariaLabel,
+	"aria-labelledby": ariaLabelledBy,
+	children,
+	className,
+	style,
+	...props
+}: ComboboxChipRemoveProps) {
+	const sx = stylex.props(
+		comboboxParts.action,
+		comboboxParts.chipRemove,
+		focusRing.offset,
+		pressable.transition,
+		style,
+	);
+
+	return (
+		<BaseCombobox.ChipRemove
+			ref={ref}
+			aria-label={ariaLabel ?? (children == null && ariaLabelledBy == null ? "Remove selection" : undefined)}
+			aria-labelledby={ariaLabelledBy}
+			className={[sx.className, className].filter(Boolean).join(" ")}
+			style={sx.style}
+			{...props}>
+			{children ?? <XIcon aria-hidden size={12} weight="bold" />}
+		</BaseCombobox.ChipRemove>
+	);
+}
+
+type TooltipTriggerProps = ComponentProps<typeof Tooltip.Trigger>;
+
+export type ComboboxChipOverflowProps = Omit<TooltipTriggerProps, "children" | "className" | "style"> & {
+	anchor: RefObject<Element | null>;
+	children: ReactNode;
+	className?: string;
+	label: ReactNode;
+	/** StyleX overrides, applied after the component's own styles. */
+	style?: StyleXStyles;
+};
+
+export function ChipOverflow({ anchor, children, className, label, ref, style, ...props }: ComboboxChipOverflowProps) {
+	const sx = stylex.props(comboboxParts.chipOverflow, style);
+
+	return (
+		<Tooltip.Root>
+			<Tooltip.Trigger
+				ref={ref}
+				className={[sx.className, className].filter(Boolean).join(" ")}
+				style={sx.style}
+				{...props}>
+				{label}
+			</Tooltip.Trigger>
+			<Tooltip.Popup positionerProps={{ anchor, align: "start", side: "bottom", sideOffset: 0 }}>
+				{children}
+			</Tooltip.Popup>
+		</Tooltip.Root>
+	);
+}
+
+export type ComboboxPositionerProps = StyledProps<BaseCombobox.Positioner.Props>;
+
+export type ComboboxPopupProps = StyledProps<BaseCombobox.Popup.Props> & {
+	portalProps?: Omit<BaseCombobox.Portal.Props, "children">;
+	positionerProps?: ComboboxPositionerProps;
+};
+
+export function Popup({
+	ref,
+	children,
+	className,
+	portalProps,
+	positionerProps,
+	style,
+	...props
+}: ComboboxPopupProps) {
+	const {
+		align = "center",
+		className: positionerClassName,
+		side = "bottom",
+		sideOffset = 6,
+		style: positionerStyle,
+		...otherPositionerProps
+	} = positionerProps ?? {};
+	const sx = stylex.props(comboboxParts.panelSurface, comboboxParts.popup, popupMotionStyles.anchoredPopup, style);
+	const positionerSx = stylex.props(popupPositionerStyles, positionerStyle);
+
+	return (
+		<BaseCombobox.Portal {...portalProps}>
+			<BaseCombobox.Positioner
+				align={align}
+				side={side}
+				sideOffset={sideOffset}
+				className={[positionerSx.className, positionerClassName].filter(Boolean).join(" ")}
+				style={positionerSx.style}
+				{...otherPositionerProps}>
+				<BaseCombobox.Popup
+					ref={ref}
+					className={[sx.className, className].filter(Boolean).join(" ")}
+					style={sx.style}
+					{...props}>
+					{children}
+				</BaseCombobox.Popup>
+			</BaseCombobox.Positioner>
+		</BaseCombobox.Portal>
+	);
+}
+
+export type ComboboxListProps = StyledProps<BaseCombobox.List.Props>;
+
+export function List({ ref, className, style, ...props }: ComboboxListProps) {
+	const sx = stylex.props(comboboxParts.list, style);
+
+	return (
+		<BaseCombobox.List
+			ref={ref}
+			className={[sx.className, className].filter(Boolean).join(" ")}
+			style={sx.style}
+			{...props}
+		/>
+	);
+}
+
+export type ComboboxItemVariant = MenuItemVariant;
+
+export type ComboboxItemProps = Omit<StyledProps<BaseCombobox.Item.Props>, "children"> & {
+	children?: ReactNode;
+	variant?: ComboboxItemVariant;
+};
+
+export function Item({ ref, children, className, style, variant = "default", ...props }: ComboboxItemProps) {
+	const { size } = useContext(ComboboxContext);
+	const sx = stylex.props(
+		menuItemStyles.item,
+		menuItemSizeStyles[size],
+		menuItemVariantStyles[variant],
+		focusRing.inset,
+		style,
+	);
+
+	return (
+		<BaseCombobox.Item
+			ref={ref}
+			className={[sx.className, className].filter(Boolean).join(" ")}
+			style={sx.style}
+			{...props}>
+			<BaseCombobox.ItemIndicator keepMounted className={stylex.props(menuItemStyles.indicator).className}>
+				<Icon.Checkmark width="1em" height="1em" strokeWidth={2} />
+			</BaseCombobox.ItemIndicator>
+			<div {...stylex.props(menuItemStyles.label)}>{children}</div>
+		</BaseCombobox.Item>
+	);
+}
+
+export type ComboboxEmptyProps = StyledProps<BaseCombobox.Empty.Props>;
+
+export function Empty({ ref, className, style, ...props }: ComboboxEmptyProps) {
+	const sx = stylex.props(comboboxParts.empty, style);
+
+	return (
+		<BaseCombobox.Empty
+			ref={ref}
+			className={[sx.className, className].filter(Boolean).join(" ")}
+			style={sx.style}
+			{...props}
+		/>
+	);
+}
+
+export const Combobox = {
+	Root,
+	Label,
+	InputGroup,
+	Input,
+	Value,
+	Chips,
+	Chip,
+	ChipRemove,
+	ChipOverflow,
+	Popup,
+	List,
+	Item,
+	Empty,
+} as const;

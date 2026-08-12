@@ -1,6 +1,10 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import * as stylex from "@stylexjs/stylex";
 import type { ReactNode } from "react";
+import { Avatar } from "@/components/avatar/avatar";
+import { Item } from "@/components/item/item";
+import { userOptions, userSelectItems, type UserOption } from "@/components/storybook/user-options";
+import { Text } from "@/components/text/text";
 import { tokens } from "@/theme/tokens.stylex";
 
 import {
@@ -436,6 +440,57 @@ export const Options: Story = {
 	),
 };
 
+export const UserSelection: Story = {
+	name: "User selection",
+	parameters: {
+		controls: { disable: true },
+	},
+	render: () => (
+		<Select.Root<UserOption>
+			defaultValue={userOptions[0]}
+			isItemEqualToValue={(item, value) => item.id === value.id}
+			itemToStringLabel={(user) => user.name}
+			itemToStringValue={(user) => user.id}
+			items={userSelectItems}>
+			<Select.Label>Assignee</Select.Label>
+			<Select.Trigger placeholder="Select a person">
+				{(user: UserOption | null) =>
+					user ? (
+						<Item
+							label={
+								<Text render={<span />} size="1" truncate style={storyParts.userName}>
+									{user.name}
+								</Text>
+							}
+							render={<span />}
+							startSlot={<Avatar initials={user.initials} size={6} />}
+							style={storyParts.userValueItem}
+							variant="embedded"
+						/>
+					) : (
+						"Select a person"
+					)
+				}
+			</Select.Trigger>
+			<Select.Popup>
+				<Select.List>
+					{userOptions.map((user) => (
+						<Select.Item key={user.id} label={user.name} value={user}>
+							<Item
+								description={user.email}
+								label={user.name}
+								startSlot={<Avatar initials={user.initials} size={8} />}
+								style={storyParts.userOptionItem}
+								variant="embedded"
+							/>
+						</Select.Item>
+					))}
+				</Select.List>
+			</Select.Popup>
+		</Select.Root>
+	),
+};
+
 export const InlineWithBackdrop: Story = {
 	name: "Inline with backdrop",
 	parameters: {
@@ -640,6 +695,21 @@ const storyParts = stylex.create({
 		letterSpacing: tokens["--letter-spacing-1"],
 		lineHeight: tokens["--line-height-1"],
 		opacity: 0.68,
+	},
+	userOptionItem: {
+		borderRadius: 0,
+		columnGap: tokens["--space-2"],
+		minWidth: 0,
+	},
+	userValueItem: {
+		borderRadius: 0,
+		columnGap: tokens["--space-2"],
+		maxWidth: "12rem",
+		minWidth: 0,
+	},
+	userName: {
+		display: "block",
+		minWidth: 0,
 	},
 	inlineUseCase: {
 		gap: tokens["--space-6"],

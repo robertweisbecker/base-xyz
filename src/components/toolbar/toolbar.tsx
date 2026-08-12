@@ -210,7 +210,6 @@ const toolbarParts = stylex.create({
 	},
 	input: {
 		borderRadius: tokens["--radius-sm"],
-		paddingInline: tokens["--space-3"],
 		backgroundColor: {
 			default: tokens["--surface-subtle"],
 			":focus-visible": tokens["--canvas"],
@@ -220,9 +219,6 @@ const toolbarParts = stylex.create({
 			"[data-disabled]": tokens["--fg-subtle"],
 			default: tokens["--fg"],
 		},
-		flexBasis: 0,
-		flexGrow: 1,
-		flexShrink: 1,
 		fontFamily: "inherit",
 		fontSize: tokens["--font-size-2"],
 		letterSpacing: tokens["--letter-spacing-2"],
@@ -231,6 +227,7 @@ const toolbarParts = stylex.create({
 			"[data-disabled]": 0.48,
 			default: 1,
 		},
+		paddingInlineStart: tokens["--space-3"],
 		height: tokens["--size-control-md"],
 		"::placeholder": {
 			color: tokens["--fg-subtle"],

@@ -3,7 +3,7 @@ import * as stylex from "@stylexjs/stylex";
 import type { ReactNode } from "react";
 import { textStyles, fontWeightStyles } from "@/components/text/text.stylex";
 import { tokens } from "@/theme/tokens.stylex";
-import { ComboboxField } from "@/components/combobox/combobox-field";
+import { Combobox } from "@/components/combobox/combobox-field";
 import { NumberField } from "@/components/number-field/number-field";
 import { Select } from "@/components/select/select";
 import { Textarea } from "@/components/textarea/textarea";
@@ -169,7 +169,17 @@ export const FieldFamilyParity: Story = {
 				</FamilyRow>
 				<FamilyRow label="Combobox">
 					{(size) => (
-						<ComboboxField label="Combobox" items={["React"]} placeholder="Shared control surface" size={size} />
+						<Combobox.Root items={["React"]} size={size}>
+							<Combobox.Label>Combobox</Combobox.Label>
+							<Combobox.InputGroup>
+								<Combobox.Input placeholder="Shared control surface" />
+							</Combobox.InputGroup>
+							<Combobox.Popup>
+								<Combobox.List>
+									<Combobox.Item value="React">React</Combobox.Item>
+								</Combobox.List>
+							</Combobox.Popup>
+						</Combobox.Root>
 					)}
 				</FamilyRow>
 			</div>

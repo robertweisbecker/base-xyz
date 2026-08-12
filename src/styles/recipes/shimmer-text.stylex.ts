@@ -17,7 +17,7 @@ const shimmerSweep = stylex.keyframes({
 export const shimmerTextStyles = stylex.create({
 	effect: {
 		[shimmerTextVars.base]: "color-mix(in oklch, currentColor 54%, transparent)",
-		[shimmerTextVars.duration]: "1500ms",
+		[shimmerTextVars.duration]: "2000ms",
 		[shimmerTextVars.highlight]: `color-mix(in srgb, currentColor, ${tokens["--bg-inverse"]})`,
 		WebkitBackgroundClip: {
 			default: "text",

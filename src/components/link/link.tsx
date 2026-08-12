@@ -55,7 +55,8 @@ const linkStyles = stylex.create({
 			":hover": "currentColor",
 		},
 		textDecorationLine: "underline",
-		textDecorationThickness: "0.075em",
+		// eslint-disable-next-line @stylexjs/valid-styles -- the compiler and target browsers support CSS round().
+		textDecorationThickness: "round(0.075em,.5px)",
 		textUnderlineOffset: "0.25em",
 		transitionDuration: tokens["--motion-duration-quick"],
 		transitionProperty: "color, text-decoration-color",

@@ -161,7 +161,7 @@ const hueColors = stylex.create({
 		color: tokens["--fg-success-contrast"],
 	},
 	neutralSubtle: {
-		backgroundColor: tokens["--surface-subtle-active"],
+		backgroundColor: tokens["--surface-subtle"],
 		color: tokens["--fg-muted"],
 	},
 	neutralElevated: {
@@ -177,7 +177,7 @@ const sizeVariants = stylex.create({
 	xs: {
 		borderRadius: tokens["--radius-xs"],
 		gap: tokens["--space-0-5"],
-		paddingInline: tokens["--space-0-5"],
+		paddingInline: tokens["--space-1"],
 		fontSize: "11px",
 		letterSpacing: tokens["--letter-spacing-1"],
 		lineHeight: tokens["--space-4"],
@@ -186,7 +186,7 @@ const sizeVariants = stylex.create({
 	sm: {
 		borderRadius: tokens["--radius-xs"],
 		gap: tokens["--space-1"],
-		paddingInline: tokens["--space-0-5"],
+		paddingInline: tokens["--space-1"],
 		fontSize: "11px",
 		letterSpacing: tokens["--letter-spacing-1"],
 		lineHeight: tokens["--space-4"],
@@ -195,7 +195,7 @@ const sizeVariants = stylex.create({
 	md: {
 		borderRadius: tokens["--radius-sm"],
 		gap: tokens["--space-1"],
-		paddingInline: tokens["--space-2"],
+		paddingInline: tokens["--space-1-5"],
 		fontSize: tokens["--font-size-1"],
 		letterSpacing: tokens["--letter-spacing-1"],
 		lineHeight: tokens["--space-5"],

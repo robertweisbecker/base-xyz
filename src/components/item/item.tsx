@@ -14,6 +14,7 @@ import { tokens } from "@/theme/tokens.stylex";
  * - `inline-wrap` — description starts beside the label and can wrap below
  */
 export type ItemDescriptionLayout = "stack" | "inline" | "inline-wrap";
+export type ItemVariant = "default" | "embedded";
 
 export type ItemProps = Omit<useRender.ComponentProps<"div">, "children" | "className" | "render" | "style"> & {
 	className?: string;
@@ -30,6 +31,8 @@ export type ItemProps = Omit<useRender.ComponentProps<"div">, "children" | "clas
 	startSlot?: ReactNode;
 	/** StyleX overrides, applied after the component's own styles. */
 	style?: StyleXStyles;
+	/** `embedded` removes padding and inherits colors when another component owns the row chrome and state. */
+	variant?: ItemVariant;
 };
 
 export function Item({
@@ -42,11 +45,12 @@ export function Item({
 	render,
 	startSlot,
 	style,
+	variant = "default",
 	...props
 }: ItemProps) {
 	const hasDescription =
 		description !== undefined && description !== null && description !== false && description !== "";
-	const sx = stylex.props(itemParts.root, focusRing.offset, style);
+	const sx = stylex.props(itemParts.root, itemVariantStyles[variant], focusRing.offset, style);
 
 	return useRender<{}, HTMLElement>({
 		defaultTagName: "div",
@@ -59,7 +63,7 @@ export function Item({
 			children: (
 				<>
 					{startSlot ? (
-						<span aria-hidden {...stylex.props(itemParts.startSlot)}>
+						<span aria-hidden {...stylex.props(itemParts.startSlot, itemSlotVariantStyles[variant])}>
 							{startSlot}
 						</span>
 					) : null}
@@ -75,6 +79,7 @@ export function Item({
 								typescaleStyles["2"],
 								fontWeightStyles.medium,
 								itemParts.label,
+								itemLabelVariantStyles[variant],
 								descriptionLayout === "inline-wrap" && itemParts.labelInlineFlow,
 							)}>
 							{label}
@@ -85,6 +90,7 @@ export function Item({
 									textStyles.body,
 									typescaleStyles["1"],
 									itemParts.description,
+									itemDescriptionVariantStyles[variant],
 									descriptionLayout === "inline" && itemParts.descriptionInline,
 									descriptionLayout === "inline-wrap" && itemParts.descriptionInlineWrap,
 								)}>
@@ -92,7 +98,9 @@ export function Item({
 							</span>
 						) : null}
 					</span>
-					{endSlot ? <span {...stylex.props(itemParts.endSlot)}>{endSlot}</span> : null}
+					{endSlot ? (
+						<span {...stylex.props(itemParts.endSlot, itemSlotVariantStyles[variant])}>{endSlot}</span>
+					) : null}
 				</>
 			),
 		},
@@ -103,8 +111,6 @@ const itemParts = stylex.create({
 	root: {
 		borderRadius: tokens["--radius-md"],
 		outline: "0",
-		paddingBlock: tokens["--space-2"],
-		paddingInline: tokens["--space-3"],
 		textDecoration: "none",
 		alignItems: "center",
 		backgroundColor: {
@@ -115,7 +121,6 @@ const itemParts = stylex.create({
 			},
 		},
 		boxSizing: "border-box",
-		color: tokens["--fg"],
 		columnGap: tokens["--space-3"],
 		cursor: {
 			default: "default",
@@ -127,7 +132,6 @@ const itemParts = stylex.create({
 	startSlot: {
 		alignItems: "center",
 		alignSelf: "start",
-		color: tokens["--fg-muted"],
 		display: "inline-flex",
 		flexShrink: 0,
 		justifyContent: "center",
@@ -143,15 +147,12 @@ const itemParts = stylex.create({
 		rowGap: tokens["--space-0-5"],
 	},
 	label: {
-		color: tokens["--fg"],
-		flexShrink: 0,
 		minWidth: 0,
 	},
 	labelInlineFlow: {
 		display: "inline",
 	},
 	description: {
-		color: tokens["--fg-muted"],
 		minWidth: 0,
 	},
 	descriptionInline: {
@@ -166,11 +167,55 @@ const itemParts = stylex.create({
 	},
 	endSlot: {
 		alignItems: "center",
-		color: tokens["--fg-muted"],
 		columnGap: tokens["--space-2"],
 		display: "inline-flex",
 		flexShrink: 0,
 		justifyContent: "end",
+	},
+});
+
+const itemVariantStyles = stylex.create({
+	default: {
+		paddingBlock: tokens["--space-2"],
+		paddingInline: tokens["--space-3"],
+		color: tokens["--fg"],
+	},
+	embedded: {
+		padding: 0,
+		color: "inherit",
+	},
+});
+
+const itemLabelVariantStyles = stylex.create({
+	default: {
+		color: tokens["--fg"],
+		flexShrink: 0,
+	},
+	embedded: {
+		overflow: "hidden",
+		color: "inherit",
+		flexShrink: 1,
+		textOverflow: "ellipsis",
+		whiteSpace: "nowrap",
+	},
+});
+
+const itemDescriptionVariantStyles = stylex.create({
+	default: {
+		color: tokens["--fg-muted"],
+	},
+	embedded: {
+		color: "inherit",
+		opacity: 0.68,
+	},
+});
+
+const itemSlotVariantStyles = stylex.create({
+	default: {
+		color: tokens["--fg-muted"],
+	},
+	embedded: {
+		color: "inherit",
 	},
 });
 

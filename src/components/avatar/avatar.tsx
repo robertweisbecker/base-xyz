@@ -157,9 +157,9 @@ const avatarParts = stylex.create({
 	root: {
 		overflow: "hidden",
 		alignItems: "center",
-		backgroundColor: tokens["--color-warning-c3"],
+		backgroundImage: `linear-gradient(to bottom, ${tokens["--color-gray-p1"]}, ${tokens["--color-gray-p2"]})`,
 		boxSizing: "border-box",
-		color: tokens["--color-warning-t2"],
+		color: tokens["--color-gray-s1"],
 		display: "inline-flex",
 		flexShrink: 0,
 		fontWeight: tokens["--font-weight-semibold"],
@@ -190,7 +190,7 @@ const shapeVariants = stylex.create({
 		borderRadius: tokens["--radius-full"],
 	},
 	rounded: {
-		borderRadius: tokens["--radius-md"],
+		borderRadius: tokens["--radius-xs"],
 	},
 	square: {
 		borderRadius: 0,

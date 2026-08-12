@@ -1,17 +1,18 @@
 import { Menu as BaseMenu } from "@base-ui/react/menu";
 import { Collapsible as BaseCollapsible } from "@base-ui/react/collapsible";
-import { CaretDownIcon } from "@phosphor-icons/react/dist/csr/CaretDown";
 import { CaretRightIcon } from "@phosphor-icons/react/dist/csr/CaretRight";
 import * as stylex from "@stylexjs/stylex";
 import type { StyleXStyles } from "@stylexjs/stylex";
-import { createContext, useContext, type ReactNode } from "react";
+import { createContext, useContext, type ComponentProps, type ReactNode } from "react";
 import { fontFamilyStyles, textStyles, fontWeightStyles } from "@/components/text/text.stylex";
 import { tokens } from "@/theme/tokens.stylex";
 import { popupMotionStyles, popupPositionerStyles, popupViewportStyles } from "@/components/popover/popover.stylex";
 import { popupVars } from "@/components/popover/popover-vars.stylex";
 
-import { Icon } from "@/components/icons";
+import { Collapsible } from "@/components/collapsible/collapsible";
+import { Icon as Icons } from "@/components/icons";
 import { menuItemSizeStyles, menuItemStyles, menuItemVariantStyles } from "./menu-item.stylex";
+import { menuTriggerMarker } from "./menu.stylex";
 import type { MenuItemSize, MenuItemVariant } from "./menu.types";
 
 const MenuSizeContext = createContext<MenuItemSize>("md");
@@ -25,6 +26,7 @@ export type { MenuItemSize, MenuItemVariant } from "./menu.types";
 export type MenuRootProps<Payload = unknown> = Omit<BaseMenu.Root.Props<Payload>, "size"> & {
 	size?: MenuItemSize;
 };
+export type MenuTriggerProps = StyledProps<BaseMenu.Trigger.Props>;
 export type MenuPositionerProps = StyledProps<BaseMenu.Positioner.Props>;
 export type MenuViewportProps = StyledProps<BaseMenu.Viewport.Props>;
 export type MenuPopupProps = StyledProps<BaseMenu.Popup.Props> & {
@@ -35,6 +37,7 @@ export type MenuPopupProps = StyledProps<BaseMenu.Popup.Props> & {
 export type MenuItemProps = StyledProps<BaseMenu.Item.Props> & {
 	variant?: MenuItemVariant;
 };
+export type MenuIconProps = StyledProps<ComponentProps<"span">>;
 export type CollapsibleGroupProps = StyledProps<BaseCollapsible.Root.Props>;
 export type CollapsibleGroupTriggerProps = Omit<MenuItemProps, "closeOnClick" | "nativeButton" | "render" | "variant">;
 export type CollapsibleGroupPanelProps = StyledProps<BaseCollapsible.Panel.Props>;
@@ -44,6 +47,19 @@ export function Root<Payload = unknown>({ children, size = "md", ...props }: Men
 		<MenuSizeContext.Provider value={size}>
 			<BaseMenu.Root {...props}>{children}</BaseMenu.Root>
 		</MenuSizeContext.Provider>
+	);
+}
+
+export function Trigger({ ref, className, style, ...props }: MenuTriggerProps) {
+	const { className: sxClassName, style: sxStyle } = stylex.props(menuTriggerMarker, style);
+
+	return (
+		<BaseMenu.Trigger
+			ref={ref}
+			className={[sxClassName, className].filter(Boolean).join(" ")}
+			style={sxStyle}
+			{...props}
+		/>
 	);
 }
 
@@ -166,7 +182,7 @@ export function CheckboxItem({ ref, children, className, style, ...props }: Styl
 			style={sxStyle}
 			{...props}>
 			<BaseMenu.CheckboxItemIndicator keepMounted {...stylex.props(menuItemStyles.indicator)}>
-				<Icon.Checkmark width="1em" height="1em" />
+				<Icons.Checkmark width="1em" height="1em" />
 			</BaseMenu.CheckboxItemIndicator>
 			{children}
 		</BaseMenu.CheckboxItem>
@@ -287,12 +303,7 @@ export function CollapsibleGroupTrigger({ ref, children, className, style, ...pr
 			style={sxStyle}
 			{...props}>
 			{children}
-			<CaretDownIcon
-				aria-hidden
-				size="1em"
-				weight="bold"
-				{...stylex.props(menuParts.submenuIcon, menuParts.collapsibleGroupIcon)}
-			/>
+			<Collapsible.Icon style={menuParts.submenuIcon} />
 		</BaseMenu.Item>
 	);
 }
@@ -370,11 +381,25 @@ export function ItemIcon({ children }: { children: ReactNode }) {
 	);
 }
 
+export function Icon({ ref, children, className, style, ...props }: MenuIconProps) {
+	const { className: sxClassName, style: sxStyle } = stylex.props(menuParts.icon, style);
+
+	return (
+		<span
+			ref={ref}
+			aria-hidden
+			className={[sxClassName, className].filter(Boolean).join(" ")}
+			style={sxStyle}
+			{...props}>
+			{children ?? <Icons.ChevronDown width="1em" height="1em" />}
+		</span>
+	);
+}
+
 export function ItemShortcut({ children }: { children: ReactNode }) {
 	return <kbd {...stylex.props(menuText.shortcut, menuParts.itemShortcut)}>{children}</kbd>;
 }
 
-export const Trigger = BaseMenu.Trigger;
 export const Group = BaseMenu.Group;
 export const RadioGroup = BaseMenu.RadioGroup;
 export const SubmenuRoot = BaseMenu.SubmenuRoot;
@@ -411,6 +436,22 @@ const menuParts = stylex.create({
 		justifyContent: "center",
 		height: tokens["--space-4"],
 		width: tokens["--space-4"],
+	},
+	icon: {
+		alignItems: "center",
+		display: "inline-flex",
+		flexShrink: 0,
+		justifyContent: "center",
+		transform: {
+			default: "rotate(0deg)",
+			[stylex.when.ancestor("[data-popup-open]", menuTriggerMarker)]: "rotate(180deg)",
+		},
+		transitionDuration: {
+			default: tokens["--motion-duration-short"],
+			"@media (prefers-reduced-motion: reduce)": "0ms",
+		},
+		transitionProperty: "transform",
+		transitionTimingFunction: tokens["--motion-ease-smooth-out"],
 	},
 	submenuTrigger: {
 		backgroundColor: {
@@ -453,18 +494,6 @@ const menuParts = stylex.create({
 		fontFamily: "inherit",
 		textAlign: "start",
 		width: "100%",
-	},
-	collapsibleGroupIcon: {
-		transform: {
-			default: "rotate(0deg)",
-			[stylex.when.ancestor("[data-panel-open]")]: "rotate(180deg)",
-		},
-		transitionDuration: {
-			default: tokens["--motion-duration-short"],
-			"@media (prefers-reduced-motion: reduce)": "0ms",
-		},
-		transitionProperty: "transform",
-		transitionTimingFunction: tokens["--motion-ease-smooth-out"],
 	},
 	collapsibleGroupPanel: {
 		overflow: "hidden",
@@ -570,5 +599,6 @@ export const Menu = {
 	CollapsibleGroupPanel,
 	ItemLabel,
 	ItemIcon,
+	Icon,
 	ItemShortcut,
 } as const;

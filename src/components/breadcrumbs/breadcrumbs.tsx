@@ -71,20 +71,21 @@ export function Link({
 	style,
 	...props
 }: BreadcrumbsLinkProps) {
-	const sx = stylex.props(parts.link, style);
+	const sx = stylex.props(parts.item, parts.link, style);
 
 	return (
 		<li {...stylex.props(parts.item)}>
-			<LinkPrimitive
+			<a
 				ref={ref}
 				className={[sx.className, className].filter(Boolean).join(" ")}
 				style={sx.style}
-				color={color}
+				data-component="breadcrumb-link"
+				data-color={color}
 				{...props}>
 				{renderSlot(startSlot)}
 				<span {...stylex.props(parts.label)}>{children}</span>
 				{renderSlot(endSlot)}
-			</LinkPrimitive>
+			</a>
 		</li>
 	);
 }
@@ -99,7 +100,7 @@ export function Current({
 	style,
 	...props
 }: BreadcrumbsCurrentProps) {
-	const sx = stylex.props(parts.current, loading && parts.loadingCurrent, style);
+	const sx = stylex.props(parts.item, parts.current, loading && parts.loadingCurrent, style);
 
 	return (
 		<li {...stylex.props(parts.item)}>
@@ -167,13 +168,14 @@ function renderSlot(slot: ReactNode) {
 
 const parts = stylex.create({
 	root: {
+		"--_breadcrumbs-gap": tokens["--space-1-5"],
 		color: tokens["--fg-muted"],
 		minWidth: 0,
 	},
 	list: {
 		margin: 0,
 		padding: 0,
-		gap: tokens["--space-1-5"],
+		gap: tokens["--space-1"],
 		listStyle: "none",
 		alignItems: "center",
 		display: "flex",
@@ -181,23 +183,40 @@ const parts = stylex.create({
 		minWidth: 0,
 	},
 	item: {
-		gap: tokens["--space-1-5"],
+		gap: "var(--_breadcrumbs-gap)",
 		alignItems: "center",
 		display: "inline-flex",
 		minWidth: 0,
 	},
 	link: {
-		textDecorationLine: "none",
+		color: {
+			default: tokens["--fg-muted"],
+			":hover": tokens["--fg"],
+		},
+		isolation: "isolate",
+		position: "relative",
+		"::before": {
+			borderRadius: tokens["--radius-xs"],
+			insetBlock: -2,
+			insetInline: -4,
+			backgroundColor: {
+				default: "transparent",
+				":hover": "color-mix(in srgb, currentColor 10%, transparent)",
+			},
+			content: '" "',
+			position: "absolute",
+			zIndex: 1,
+		},
 	},
 	current: {
-		gap: tokens["--space-1-5"],
+		gap: "var(--_breadcrumbs-gap)",
 		alignItems: "center",
 		color: tokens["--fg"],
 		display: "inline-flex",
 		minWidth: 0,
 	},
 	loadingCurrent: {
-		color: tokens["--fg-muted"],
+		color: tokens["--fg-subtle"],
 	},
 	separator: {
 		alignItems: "center",
@@ -205,7 +224,6 @@ const parts = stylex.create({
 		display: "inline-flex",
 		flexShrink: 0,
 		justifyContent: "center",
-		// marginInline: `calc(${tokens["--space-1"]} * -1)`,
 	},
 	slot: {
 		fill: tokens["--fg-subtle"],
@@ -227,11 +245,13 @@ const parts = stylex.create({
 
 const sizeStyles = stylex.create({
 	sm: {
+		"--_breadcrumbs-gap": tokens["--space-1"],
 		fontSize: tokens["--font-size-1"],
 		letterSpacing: tokens["--letter-spacing-1"],
 		lineHeight: tokens["--line-height-1"],
 	},
 	md: {
+		"--_breadcrumbs-gap": tokens["--space-1-5"],
 		fontSize: tokens["--font-size-2"],
 		letterSpacing: tokens["--letter-spacing-2"],
 		lineHeight: tokens["--line-height-2"],
@@ -239,5 +259,10 @@ const sizeStyles = stylex.create({
 });
 
 export const Breadcrumbs = {
-	Root, Link, Current, Separator, Copy, Clipboard,
+	Root,
+	Link,
+	Current,
+	Separator,
+	Copy,
+	Clipboard,
 } as const;

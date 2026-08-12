@@ -1,42 +1,76 @@
-import { Combobox } from "@base-ui/react/combobox";
-import { CaretUpDownIcon } from "@phosphor-icons/react/dist/csr/CaretUpDown";
-import { MagnifyingGlassIcon } from "@phosphor-icons/react/dist/csr/MagnifyingGlass";
-import { PlusCircleIcon } from "@phosphor-icons/react/dist/csr/PlusCircle";
-import { XIcon } from "@phosphor-icons/react/dist/csr/X";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import * as stylex from "@stylexjs/stylex";
-import { type ReactNode, useState } from "react";
-import { fieldStyles, fieldTextStyles } from "@/components/field/field.stylex";
-import { focusRing } from "@/styles/recipes/focus";
-import { menuItemStyles, menuItemVariantStyles } from "@/components/menu/menu-item.stylex";
-import { popupMotionStyles, popupPositionerStyles } from "@/components/popover/popover.stylex";
-import { popupVars } from "@/components/popover/popover-vars.stylex";
-import { pressable } from "@/styles/recipes/transitions";
-import { tokens } from "@/theme/tokens.stylex";
-
-import { Button } from "@/components/button/button";
-import { ComboboxField, ComboboxMultiple, type ComboboxMultipleProps } from "@/components/combobox/combobox-field";
-import { Icon } from "@/components/icons";
+import {
+	Fragment,
+	useMemo,
+	useRef,
+	useState,
+	type FocusEvent,
+	type KeyboardEvent,
+	type ReactNode,
+} from "react";
+import { Avatar } from "@/components/avatar/avatar";
+import {
+	Combobox,
+	type ComboboxInputProps,
+	type ComboboxItemVariant,
+	type ComboboxRootProps,
+} from "@/components/combobox/combobox-field";
+import { Item } from "@/components/item/item";
+import { userOptions, type UserOption } from "@/components/storybook/user-options";
 import { Text } from "@/components/text/text";
+import { tokens } from "@/theme/tokens.stylex";
 
 const frameworks = ["React", "Vue", "Svelte", "Solid", "Preact", "Qwik", "Angular"];
 const languages = ["JavaScript", "TypeScript", "Python", "Rust", "Go", "Swift", "Kotlin"];
 const apps = ["Codex", "Claude", "Cursor", "Zed"];
-const summaryOptions = ["Option X", "Option Y", "Option Z", "Option W", "Option V"];
+
+type PlaygroundArgs = {
+	disabled: boolean;
+	invalid: boolean;
+	_itemVariant: ComboboxItemVariant;
+	_label: string;
+	_placeholder: string;
+	readOnly: boolean;
+	required: boolean;
+	size: ComboboxRootProps<string>["size"];
+};
 
 const meta = {
 	title: "Components/Combobox",
-	component: ComboboxField,
 	args: {
-		itemVariant: "default",
-		label: "Framework",
-		items: frameworks,
-		placeholder: "Filter frameworks…",
+		disabled: false,
+		invalid: false,
+		_itemVariant: "default",
+		_label: "Framework",
+		_placeholder: "Filter frameworks…",
+		readOnly: false,
+		required: false,
 		size: "md",
 	},
 	argTypes: {
-		itemVariant: { control: "select", options: ["default", "primary", "error"] },
+		disabled: { control: "boolean" },
+		invalid: { control: "boolean" },
+		_itemVariant: { control: "select", options: ["default", "primary", "error"] },
+		_label: { control: "text" },
+		_placeholder: { control: "text" },
+		readOnly: { control: "boolean" },
+		required: { control: "boolean" },
 		size: { control: "inline-radio", options: ["sm", "md", "lg"] },
+	},
+	parameters: {
+		controls: {
+			include: [
+				"_label",
+				"_placeholder",
+				"disabled",
+				"readOnly",
+				"required",
+				"invalid",
+				"size",
+				"_itemVariant",
+			],
+		},
 	},
 	decorators: [
 		(Story) => (
@@ -45,65 +79,161 @@ const meta = {
 			</div>
 		),
 	],
-} satisfies Meta<typeof ComboboxField>;
+} satisfies Meta<PlaygroundArgs>;
 
 export default meta;
 type Story = StoryObj<typeof meta>;
-type MultipleStory = StoryObj<ComboboxMultipleProps>;
 
-export const Default: Story = {};
-export const Disabled: Story = { args: { disabled: true } };
-export const ReadOnly: Story = { args: { readOnly: true } };
-export const EmptyState: Story = { args: { items: [] } };
+export const Playground: Story = {
+	render: ({ _itemVariant, _label, _placeholder, ...props }) => (
+		<SingleCombobox
+			{...props}
+			itemVariant={_itemVariant}
+			items={frameworks}
+			label={_label}
+			placeholder={_placeholder}
+		/>
+	),
+};
 
-export const Sizes: Story = {
-	parameters: {
-		controls: { disable: true },
-	},
+export const States: Story = {
+	parameters: { controls: { disable: true } },
 	render: () => (
-		<div {...stylex.props(styles.sizeStack)}>
-			<ComboboxField label="Small" items={frameworks} placeholder="Choose a framework" size="sm" />
-			<ComboboxField label="Medium" items={frameworks} placeholder="Choose a framework" size="md" />
-			<ComboboxField label="Large" items={frameworks} placeholder="Choose a framework" size="lg" />
+		<div {...stylex.props(styles.variantStack)}>
+			<SingleCombobox disabled items={frameworks} label="Disabled" placeholder="Filter frameworks…" />
+			<SingleCombobox readOnly items={frameworks} label="Read only" placeholder="Filter frameworks…" />
+			<SingleCombobox required items={frameworks} label="Required" placeholder="Filter frameworks…" />
+			<SingleCombobox invalid items={frameworks} label="Invalid" placeholder="Filter frameworks…" />
+			<SingleCombobox items={[]} label="Empty" placeholder="Filter frameworks…" />
 		</div>
 	),
 };
 
-export const MultiplePlayground: MultipleStory = {
+export const Sizes: Story = {
+	parameters: { controls: { disable: true } },
+	render: () => (
+		<div {...stylex.props(styles.sizeStack)}>
+			<SingleCombobox label="Small" items={frameworks} placeholder="Choose a framework" size="sm" />
+			<SingleCombobox label="Medium" items={frameworks} placeholder="Choose a framework" size="md" />
+			<SingleCombobox label="Large" items={frameworks} placeholder="Choose a framework" size="lg" />
+		</div>
+	),
+};
+
+type MultiplePlaygroundArgs = {
+	_chipPlacement: "inside" | "outside";
+	_expandChips: "input-focus" | "always" | undefined;
+	_itemVariant: ComboboxItemVariant;
+	_label: string;
+	_maxVisibleChips: number | undefined;
+	_placeholder: string;
+	disabled: boolean;
+	readOnly: boolean;
+	size: ComboboxRootProps<string, true>["size"];
+};
+
+export const MultiplePlayground: StoryObj<MultiplePlaygroundArgs> = {
 	args: {
-		chipPlacement: "inside",
-		creatable: false,
-		defaultValue: ["TypeScript", "Rust", "Go", "Swift"],
-		expandChips: "input-focus",
-		itemVariant: "default",
-		label: "Programming languages",
-		items: languages,
-		maxVisibleChips: 2,
-		placeholder: "Filter languages…",
+		_chipPlacement: "inside",
+		_expandChips: "input-focus",
+		_itemVariant: "default",
+		_label: "Programming languages",
+		_maxVisibleChips: 2,
+		_placeholder: "Filter languages…",
+		disabled: false,
+		readOnly: false,
 		size: "md",
 	},
 	argTypes: {
-		chipPlacement: { control: "inline-radio", options: ["inside", "outside"] },
-		creatable: { control: "boolean" },
-		expandChips: { control: "select", options: ["input-focus", "always"] },
-		itemVariant: { control: "select", options: ["default", "primary", "error"] },
-		maxVisibleChips: { control: { type: "number", min: 0, step: 1 } },
-		onCreate: { control: false },
-		onValueChange: { control: false },
+		_chipPlacement: { control: "inline-radio", options: ["inside", "outside"] },
+		_expandChips: { control: "select", options: ["input-focus", "always", undefined] },
+		_itemVariant: { control: "select", options: ["default", "primary", "error"] },
+		_label: { control: "text" },
+		_maxVisibleChips: { control: { type: "number", min: 0, step: 1 } },
+		_placeholder: { control: "text" },
+		disabled: { control: "boolean" },
+		readOnly: { control: "boolean" },
 		size: { control: "inline-radio", options: ["sm", "md", "lg"] },
-		value: { control: false },
 	},
-	render: (args) => <ComboboxMultiple {...args} />,
+	parameters: {
+		controls: {
+			include: [
+				"_label",
+				"_placeholder",
+				"_chipPlacement",
+				"_maxVisibleChips",
+				"_expandChips",
+				"disabled",
+				"readOnly",
+				"size",
+				"_itemVariant",
+			],
+		},
+	},
+	render: ({
+		_chipPlacement,
+		_expandChips,
+		_itemVariant,
+		_label,
+		_maxVisibleChips,
+		_placeholder,
+		...props
+	}) => (
+		<MultipleCombobox
+			{...props}
+			chipPlacement={_chipPlacement}
+			defaultValue={["TypeScript", "Rust", "Go", "Swift"]}
+			expandChips={_expandChips}
+			itemVariant={_itemVariant}
+			items={languages}
+			label={_label}
+			maxVisibleChips={_maxVisibleChips}
+			placeholder={_placeholder}
+		/>
+	),
+};
+
+export const UserSelection: Story = {
+	name: "User select (object values)",
+	parameters: { controls: { disable: true } },
+	render: () => (
+		<MultipleCombobox<UserOption>
+			defaultValue={[userOptions[0], userOptions[1]]}
+			isItemEqualToValue={(item, value) => item.id === value.id}
+			itemToStringLabel={(user) => `${user.name} ${user.email}`}
+			itemToStringValue={(user) => user.id}
+			items={userOptions}
+			label="Reviewers"
+			placeholder="Search people…"
+			renderChip={(user) => (
+				<Combobox.Chip
+					aria-label={`${user.name} ${user.email}`}
+					startSlot={<Avatar aria-hidden initials={user.initials} size={5} shape="rounded" />}
+					endSlot={<Combobox.ChipRemove aria-label={`Remove ${user.name}`} />}>
+					<Text render={<span />} size="1" truncate style={[styles.userChipContent, styles.userName]}>
+						{user.name}
+					</Text>
+				</Combobox.Chip>
+			)}
+			renderItem={(user) => (
+				<Item
+					description={user.email}
+					label={user.name}
+					startSlot={<Avatar initials={user.initials} size={8} />}
+					style={styles.userOptionItem}
+					variant="embedded"
+				/>
+			)}
+		/>
+	),
 };
 
 export const ChipPlacementOptions: Story = {
-	parameters: {
-		controls: { disable: true },
-	},
+	parameters: { controls: { disable: true } },
 	render: () => (
 		<div {...stylex.props(styles.variantStack)}>
 			<ExampleSection title="Inside" description="Selected values share the control with the filter input.">
-				<ComboboxMultiple
+				<MultipleCombobox
 					label="Programming languages"
 					items={languages}
 					placeholder="Filter languages…"
@@ -114,7 +244,7 @@ export const ChipPlacementOptions: Story = {
 				/>
 			</ExampleSection>
 			<ExampleSection title="Outside" description="Selected values sit above a dedicated filter input.">
-				<ComboboxMultiple
+				<MultipleCombobox
 					label="Programming languages"
 					items={languages}
 					placeholder="Filter languages…"
@@ -133,15 +263,11 @@ export const CreatableTags: Story = {
 };
 
 export const LimitedChips: Story = {
-	parameters: {
-		controls: { disable: true },
-	},
+	parameters: { controls: { disable: true } },
 	render: () => (
 		<div {...stylex.props(styles.variantStack)}>
-			<ExampleSection
-				title="Fixed limit"
-				description="The configured limit remains applied while the input is focused.">
-				<ComboboxMultiple
+			<ExampleSection title="Fixed limit" description="The configured limit remains applied while the input is focused.">
+				<MultipleCombobox
 					label="Programming languages"
 					items={languages}
 					placeholder="Filter languages…"
@@ -151,8 +277,8 @@ export const LimitedChips: Story = {
 			</ExampleSection>
 			<ExampleSection
 				title="Expand on input focus"
-				description="Focus the filter input to reveal every selected value; blur it to restore the limit.">
-				<ComboboxMultiple
+				description="Focus the chip/input composite to reveal every selected value; leave it to restore the limit.">
+				<MultipleCombobox
 					label="Programming languages"
 					items={languages}
 					placeholder="Filter languages…"
@@ -164,7 +290,7 @@ export const LimitedChips: Story = {
 			<ExampleSection
 				title="Always expanded"
 				description="All selected values remain visible even when a limit is configured.">
-				<ComboboxMultiple
+				<MultipleCombobox
 					label="Programming languages"
 					items={languages}
 					placeholder="Filter languages…"
@@ -178,13 +304,11 @@ export const LimitedChips: Story = {
 };
 
 export const ChipLimitExamples: Story = {
-	parameters: {
-		controls: { disable: true },
-	},
+	parameters: { controls: { disable: true } },
 	render: () => (
 		<div {...stylex.props(styles.variantStack)}>
 			<ExampleSection title="No limit" description="Omitting the limit renders every selected value.">
-				<ComboboxMultiple
+				<MultipleCombobox
 					label="Programming languages"
 					items={languages}
 					placeholder="Filter languages…"
@@ -194,7 +318,7 @@ export const ChipLimitExamples: Story = {
 			<ExampleSection
 				title="Zero visible chips"
 				description="Only the overflow count is shown, and the filter input remains available.">
-				<ComboboxMultiple
+				<MultipleCombobox
 					label="Programming languages"
 					items={languages}
 					placeholder="Filter languages…"
@@ -203,7 +327,7 @@ export const ChipLimitExamples: Story = {
 				/>
 			</ExampleSection>
 			<ExampleSection title="One visible chip" description="The first selection is followed by the remaining count.">
-				<ComboboxMultiple
+				<MultipleCombobox
 					label="Programming languages"
 					items={languages}
 					placeholder="Filter languages…"
@@ -214,7 +338,7 @@ export const ChipLimitExamples: Story = {
 			<ExampleSection
 				title="Exact count"
 				description="No overflow indicator appears when the selection count matches the limit.">
-				<ComboboxMultiple
+				<MultipleCombobox
 					label="Programming languages"
 					items={languages}
 					placeholder="Filter languages…"
@@ -230,34 +354,234 @@ export const ControlledMultiple: Story = {
 	render: () => <ControlledMultipleExample />,
 };
 
-export const PopupInput: Story = {
-	render: () => <SingleSelectPopupExample />,
+type SingleComboboxProps<Value> = Omit<ComboboxRootProps<Value>, "children" | "items"> & {
+	itemVariant?: ComboboxItemVariant;
+	items: readonly Value[];
+	label: ReactNode;
+	placeholder?: string;
+	renderItem?: (item: Value) => ReactNode;
 };
 
-export const PopupInputMultiple: Story = {
-	render: () => <MultipleSummaryPopupExample />,
+function SingleCombobox<Value>({
+	itemVariant = "default",
+	items,
+	label,
+	placeholder = "Choose an option",
+	renderItem,
+	...props
+}: SingleComboboxProps<Value>) {
+	return (
+		<Combobox.Root<Value> items={items} {...props}>
+			<Combobox.Label>{label}</Combobox.Label>
+			<Combobox.InputGroup>
+				<Combobox.Input placeholder={placeholder} />
+			</Combobox.InputGroup>
+			<Combobox.Popup>
+				<Combobox.Empty>No matching options.</Combobox.Empty>
+				<Combobox.List>
+					{(item: Value) => (
+						<Combobox.Item key={getItemKey(item, props)} value={item} variant={itemVariant}>
+							{renderItem?.(item) ?? getItemLabel(item, props)}
+						</Combobox.Item>
+					)}
+				</Combobox.List>
+			</Combobox.Popup>
+		</Combobox.Root>
+	);
+}
+
+type MultipleComboboxProps<Value> = Omit<ComboboxRootProps<Value, true>, "children" | "items" | "multiple"> & {
+	chipPlacement?: "inside" | "outside";
+	expandChips?: "input-focus" | "always";
+	inputProps?: ComboboxInputProps;
+	itemVariant?: ComboboxItemVariant;
+	items: readonly Value[];
+	label: ReactNode;
+	maxVisibleChips?: number;
+	placeholder?: string;
+	renderChip?: (item: Value) => ReactNode;
+	renderItem?: (item: Value) => ReactNode;
 };
 
-export const InlineFilterChips: Story = {
-	render: () => <FilterChipsPopupExample />,
-};
+function MultipleCombobox<Value>({
+	chipPlacement = "inside",
+	expandChips,
+	inputProps,
+	itemVariant = "default",
+	items,
+	label,
+	maxVisibleChips,
+	placeholder = "Choose options",
+	renderChip,
+	renderItem,
+	...props
+}: MultipleComboboxProps<Value>) {
+	const inputGroupRef = useRef<HTMLDivElement>(null);
+	const [focusWithin, setFocusWithin] = useState(false);
+	const visibleChipLimit =
+		expandChips === "always" || (expandChips === "input-focus" && focusWithin)
+			? undefined
+			: normalizeChipLimit(maxVisibleChips);
+	const focusProps = {
+		onFocusCapture: () => {
+			setFocusWithin(true);
+		},
+		onBlurCapture: (event: FocusEvent<HTMLDivElement>) => {
+			if (!event.currentTarget.contains(event.relatedTarget)) {
+				setFocusWithin(false);
+			}
+		},
+	};
+	const renderValues = (value: Value[]) =>
+		renderSelectedValues(value, visibleChipLimit, inputGroupRef, props, renderChip);
+
+	return (
+		<Combobox.Root<Value, true> items={items} multiple {...props}>
+			<Combobox.Label>{label}</Combobox.Label>
+			{chipPlacement === "inside" ? (
+				<Combobox.InputGroup ref={inputGroupRef} variant="chips" {...focusProps}>
+					<Combobox.Chips>
+						<Combobox.Value>
+							{(value: Value[]) => (
+								<>
+									{renderValues(value)}
+									<Combobox.Input {...inputProps} placeholder={value.length > 0 ? "" : placeholder} />
+								</>
+							)}
+						</Combobox.Value>
+					</Combobox.Chips>
+				</Combobox.InputGroup>
+			) : (
+				<Combobox.Chips style={styles.outsideComposition} {...focusProps}>
+					<Combobox.Value>
+						{(value: Value[]) => (
+							<>
+								<div {...stylex.props(styles.outsideChipList)}>
+									{value.length > 0 ? renderValues(value) : <span {...stylex.props(styles.noChips)}>No selections</span>}
+								</div>
+								<Combobox.InputGroup ref={inputGroupRef}>
+									<Combobox.Input {...inputProps} placeholder={placeholder} />
+								</Combobox.InputGroup>
+							</>
+						)}
+					</Combobox.Value>
+				</Combobox.Chips>
+			)}
+			<Combobox.Popup>
+				<Combobox.Empty>No matching options.</Combobox.Empty>
+				<Combobox.List>
+					{(item: Value) => (
+						<Combobox.Item key={getItemKey(item, props)} value={item} variant={itemVariant}>
+							{renderItem?.(item) ?? getItemLabel(item, props)}
+						</Combobox.Item>
+					)}
+				</Combobox.List>
+			</Combobox.Popup>
+		</Combobox.Root>
+	);
+}
+
+function renderSelectedValues<Value>(
+	values: Value[],
+	maxVisibleChips: number | undefined,
+	inputGroupRef: React.RefObject<HTMLDivElement | null>,
+	itemProps: Pick<ComboboxRootProps<Value, true>, "itemToStringLabel" | "itemToStringValue">,
+	renderChip?: (item: Value) => ReactNode,
+) {
+	const visibleValues = maxVisibleChips === undefined ? values : values.slice(0, maxVisibleChips);
+	const hiddenCount = values.length - visibleValues.length;
+	const overflowLabel = visibleValues.length === 0 ? `${hiddenCount} selected` : `+${hiddenCount}`;
+
+	return (
+		<>
+			{visibleValues.map((value) => {
+				const label = getItemLabel(value, itemProps);
+				return (
+					<Fragment key={getItemKey(value, itemProps)}>
+						{renderChip?.(value) ?? (
+							<Combobox.Chip
+								aria-label={label}
+								endSlot={<Combobox.ChipRemove aria-label={`Remove ${label}`} />}>
+								{label}
+							</Combobox.Chip>
+						)}
+					</Fragment>
+				);
+			})}
+			{hiddenCount > 0 ? (
+				<Combobox.ChipOverflow anchor={inputGroupRef} label={overflowLabel}>
+					{values.map((value) => getItemLabel(value, itemProps)).join(", ")}
+				</Combobox.ChipOverflow>
+			) : null}
+		</>
+	);
+}
 
 function CreatableTagsExample() {
 	const [createdItems, setCreatedItems] = useState<string[]>([]);
+	const [inputValue, setInputValue] = useState("");
+	const [selectedValues, setSelectedValues] = useState<string[]>([]);
+	const highlightedItemRef = useRef<string | undefined>(undefined);
+	const collator = useMemo(
+		() => new Intl.Collator(undefined, { sensitivity: "base", usage: "search", ignorePunctuation: true }),
+		[],
+	);
+	const availableItems = useMemo(() => [...new Set([...apps, ...createdItems])], [createdItems]);
+	const trimmedInputValue = inputValue.trim();
+	const matchingItem = availableItems.find((item) => collator.compare(item, trimmedInputValue) === 0);
+	const creatableItem = trimmedInputValue !== "" && matchingItem === undefined ? trimmedInputValue : undefined;
+	const itemsForView = creatableItem === undefined ? availableItems : [...availableItems, creatableItem];
+
+	function commitInputValue() {
+		const item = matchingItem ?? creatableItem;
+		if (item === undefined) {
+			return;
+		}
+		if (creatableItem !== undefined) {
+			setCreatedItems((currentItems) => [...currentItems, creatableItem]);
+		}
+		if (!selectedValues.includes(item)) {
+			setSelectedValues((currentItems) => [...currentItems, item]);
+		}
+		setInputValue("");
+	}
+
+	function handleInputKeyDown(event: KeyboardEvent<HTMLInputElement>) {
+		if (event.nativeEvent.isComposing || event.nativeEvent.keyCode === 229) {
+			return;
+		}
+		if (event.key === "," || (event.key === "Enter" && highlightedItemRef.current === undefined)) {
+			event.preventDefault();
+			commitInputValue();
+		}
+	}
 
 	return (
 		<div {...stylex.props(styles.exampleStack)}>
-			<ComboboxMultiple
+			<MultipleCombobox
+				inputValue={inputValue}
+				items={itemsForView}
 				label="Harness"
-				items={apps}
 				placeholder="Type to choose…"
-				creatable
-				onCreate={(item) => {
-					setCreatedItems((currentItems) => [...currentItems, item]);
+				value={selectedValues}
+				inputProps={{ onKeyDown: handleInputKeyDown }}
+				onInputValueChange={setInputValue}
+				onItemHighlighted={(item) => {
+					highlightedItemRef.current = item;
 				}}
+				onValueChange={(nextValue) => {
+					const selectedCreatableItem =
+						creatableItem !== undefined && nextValue.includes(creatableItem) && !selectedValues.includes(creatableItem);
+					if (selectedCreatableItem) {
+						setCreatedItems((currentItems) => [...currentItems, creatableItem]);
+					}
+					setSelectedValues(nextValue);
+					setInputValue("");
+				}}
+				renderItem={(item) => (item === creatableItem ? `Create “${item}”` : item)}
 			/>
 			<p aria-live="polite" {...stylex.props(styles.status)}>
-				{createdItems.length > 0 ? `Created: ${createdItems.join(", ")}` : "Type a new color and press Enter or comma."}
+				{createdItems.length > 0 ? `Created: ${createdItems.join(", ")}` : "Type a new value and press Enter or comma."}
 			</p>
 		</div>
 	);
@@ -267,7 +591,7 @@ function ControlledMultipleExample() {
 	const [value, setValue] = useState(["TypeScript", "Rust", "Go", "Swift"]);
 
 	return (
-		<ComboboxMultiple
+		<MultipleCombobox
 			label="Controlled languages"
 			items={languages}
 			placeholder="Filter languages…"
@@ -291,155 +615,28 @@ function ExampleSection({ children, description, title }: { children: ReactNode;
 	);
 }
 
-function SingleSelectPopupExample() {
-	return (
-		<Combobox.Root items={[...frameworks]}>
-			<div {...stylex.props(fieldStyles.root, styles.fieldLayout)}>
-				<Combobox.Label {...stylex.props(fieldStyles.label)}>Framework</Combobox.Label>
-				<Combobox.Trigger
-					render={
-						<Button
-							variant="secondary"
-							style={styles.trigger}
-							endSlot={<CaretUpDownIcon aria-hidden weight="bold" />}
-						/>
-					}>
-					<Combobox.Value>
-						{(selectedValue: string | null) =>
-							selectedValue ?? <span {...stylex.props(styles.triggerPlaceholder)}>Select framework</span>
-						}
-					</Combobox.Value>
-				</Combobox.Trigger>
-			</div>
-			<PopupContent label="frameworks" />
-		</Combobox.Root>
-	);
+function getItemLabel<Value>(
+	item: Value,
+	{ itemToStringLabel }: Pick<ComboboxRootProps<Value, boolean>, "itemToStringLabel">,
+) {
+	return itemToStringLabel?.(item) ?? String(item);
 }
 
-function MultipleSummaryPopupExample() {
-	return (
-		<Combobox.Root items={[...summaryOptions]} multiple defaultValue={["Option X", "Option Y", "Option Z", "Option W"]}>
-			<div {...stylex.props(fieldStyles.root, styles.fieldLayout)}>
-				<Combobox.Label {...stylex.props(fieldStyles.label)}>Options</Combobox.Label>
-				<Combobox.Trigger
-					render={
-						<Button
-							variant="secondary"
-							style={styles.trigger}
-							endSlot={<CaretUpDownIcon aria-hidden weight="bold" />}
-						/>
-					}>
-					<Combobox.Value placeholder="Select">
-						{(selectedValue: string[]) => {
-							const hiddenCount = Math.max(0, selectedValue.length - 1);
-							return selectedValue.length > 0 ? (
-								`${selectedValue[0]}${hiddenCount > 0 ? `, +${hiddenCount} more` : ""}`
-							) : (
-								<span {...stylex.props(styles.triggerPlaceholder)}>Select options</span>
-							);
-						}}
-					</Combobox.Value>
-				</Combobox.Trigger>
-			</div>
-			<PopupContent label="options" />
-		</Combobox.Root>
-	);
+function getItemKey<Value>(
+	item: Value,
+	{
+		itemToStringLabel,
+		itemToStringValue,
+	}: Pick<ComboboxRootProps<Value, boolean>, "itemToStringLabel" | "itemToStringValue">,
+) {
+	return itemToStringValue?.(item) ?? itemToStringLabel?.(item) ?? String(item);
 }
 
-function FilterChipsPopupExample() {
-	return (
-		<Combobox.Root items={[...frameworks]} multiple defaultValue={["React", "Vue"]}>
-			<div {...stylex.props(fieldStyles.root, styles.fieldLayout)}>
-				<Combobox.Label {...stylex.props(fieldStyles.label)}>Frameworks</Combobox.Label>
-				<Combobox.Chips {...stylex.props(styles.filterChips)}>
-					<Combobox.Value>
-						{(selectedValue: string[]) =>
-							selectedValue.map((item) => (
-								<Combobox.Chip key={item} aria-label={item} {...stylex.props(styles.chip)}>
-									<span {...stylex.props(styles.chipLabel)}>{item}</span>
-									<Combobox.ChipRemove
-										aria-label={`Remove ${item}`}
-										{...stylex.props(styles.chipRemove, focusRing.offset, pressable.transition)}>
-										<XIcon aria-hidden size={12} weight="bold" />
-									</Combobox.ChipRemove>
-								</Combobox.Chip>
-							))
-						}
-					</Combobox.Value>
-					<Combobox.Trigger
-						nativeButton
-						render={
-							<Button
-								size="sm"
-								shape="pill"
-								variant="plain"
-								style={styles.addTrigger}
-								startSlot={<PlusCircleIcon aria-hidden weight="bold" />}>
-								Add
-							</Button>
-						}
-					/>
-				</Combobox.Chips>
-			</div>
-			<PopupContent label="frameworks" />
-		</Combobox.Root>
-	);
-}
-
-function PopupContent({ label }: { label: string }) {
-	return (
-		<Combobox.Portal>
-			<Combobox.Positioner align="start" sideOffset={6} {...stylex.props(popupPositionerStyles)}>
-				<Combobox.Popup
-					aria-label={`Select ${label}`}
-					{...stylex.props(styles.panelSurface, styles.popup, popupMotionStyles.anchoredPopup)}>
-					<div {...stylex.props(styles.popupInputRegion)}>
-						<Combobox.InputGroup
-							{...stylex.props(fieldStyles.inputUnstyled, styles.popupInputControl)}
-							style={{ outline: "none", boxShadow: "none", border: "none" }}>
-							<MagnifyingGlassIcon aria-hidden size={16} weight="bold" {...stylex.props(styles.searchIcon)} />
-							<Combobox.Input
-								aria-label={`Filter ${label}`}
-								placeholder={`Filter ${label}…`}
-								{...stylex.props(
-									fieldStyles.inputUnstyled,
-									fieldStyles.inputStandard,
-									fieldTextStyles.md,
-									styles.popupInput,
-								)}
-							/>
-						</Combobox.InputGroup>
-					</div>
-					<Combobox.Empty {...stylex.props(styles.empty)}>No matching options.</Combobox.Empty>
-					<Combobox.List className={stylex.props(styles.list).className}>
-						{(item: string) => (
-							<Combobox.Item
-								key={item}
-								value={item}
-								className={stylex.props(menuItemStyles.item, menuItemVariantStyles.default).className}>
-								<Combobox.ItemIndicator keepMounted className={stylex.props(menuItemStyles.indicator).className}>
-									<Icon.Checkmark width="1em" height="1em" strokeWidth={2} />
-								</Combobox.ItemIndicator>
-								<span {...stylex.props(menuItemStyles.label)}>{item}</span>
-							</Combobox.Item>
-						)}
-					</Combobox.List>
-
-					<Combobox.Clear
-						style={{
-							position: "absolute",
-							right: 12,
-							top: 6,
-							zIndex: 1,
-						}}>
-						<Text render={<span />} size={"1"}>
-							Clear
-						</Text>
-					</Combobox.Clear>
-				</Combobox.Popup>
-			</Combobox.Positioner>
-		</Combobox.Portal>
-	);
+function normalizeChipLimit(limit?: number) {
+	if (limit === undefined || !Number.isFinite(limit)) {
+		return undefined;
+	}
+	return Math.max(0, Math.floor(limit));
 }
 
 const styles = stylex.create({
@@ -493,133 +690,36 @@ const styles = stylex.create({
 		letterSpacing: tokens["--letter-spacing-1"],
 		lineHeight: tokens["--line-height-1"],
 	},
-	fieldLayout: {
-		alignItems: "flex-start",
+	userOptionItem: {
+		borderRadius: 0,
+		columnGap: tokens["--space-2"],
+		minWidth: 0,
 	},
-	trigger: {
-		justifyContent: "space-between",
-		minWidth: "240px",
+	userChipContent: {
+		maxWidth: "9rem",
+		minWidth: 0,
 	},
-	triggerPlaceholder: {
-		color: tokens["--fg-subtle"],
+	userName: {
+		display: "block",
+		minWidth: 0,
 	},
-	filterChips: {
+	outsideComposition: {
+		gap: tokens["--space-2"],
+		alignItems: "stretch",
+		flexDirection: "column",
+	},
+	outsideChipList: {
 		alignItems: "center",
 		columnGap: tokens["--space-1"],
 		display: "flex",
 		flexWrap: "wrap",
 		rowGap: 2,
-		minWidth: 0,
+		minHeight: "30px",
 	},
-	addTrigger: {
-		flexShrink: 0,
-	},
-	chip: {
-		padding: tokens["--space-1"],
-		borderRadius: tokens["--radius-sm"],
-		overflow: "hidden",
-		alignItems: "center",
-		backgroundColor: {
-			default: tokens["--surface-subtle"],
-			":focus-within": tokens["--bg-primary"],
-		},
-		color: {
-			default: tokens["--fg"],
-			":focus-within": tokens["--fg-accent-contrast"],
-		},
-		display: "inline-flex",
+	noChips: {
+		color: tokens["--fg-muted"],
 		fontSize: tokens["--font-size-1"],
 		letterSpacing: tokens["--letter-spacing-1"],
 		lineHeight: tokens["--line-height-1"],
-		height: "28px",
-	},
-	chipLabel: {
-		overflow: "hidden",
-		paddingInline: tokens["--space-1"],
-		textOverflow: "ellipsis",
-		whiteSpace: "nowrap",
-	},
-	chipRemove: {
-		padding: 0,
-		borderRadius: tokens["--radius-xs"],
-		borderWidth: 0,
-		outline: "0",
-		alignItems: "center",
-		backgroundColor: {
-			default: "transparent",
-			":hover": {
-				"@media (hover: hover) and (pointer: fine)": tokens["--surface"],
-			},
-		},
-		color: {
-			default: tokens["--fg-muted"],
-			":hover": tokens["--fg"],
-		},
-		display: "flex",
-		justifyContent: "center",
-		height: tokens["--space-5"],
-		width: tokens["--space-5"],
-	},
-	panelSurface: {
-		[popupVars.background]: tokens["--elevated"],
-		[popupVars.border]: tokens["--border"],
-		[popupVars.foreground]: tokens["--fg"],
-		borderRadius: tokens["--radius-lg"],
-		backgroundColor: popupVars.background,
-		boxShadow: tokens["--shadow-md"],
-		color: popupVars.foreground,
-	},
-	popup: {
-		overflow: "hidden",
-		maxWidth: "var(--available-width)",
-		minWidth: "240px",
-		width: "var(--anchor-width)",
-	},
-	popupInputRegion: {
-		padding: tokens["--space-1"],
-	},
-	popupInputControl: {
-		gap: tokens["--space-2"],
-		paddingInline: tokens["--space-3"],
-		alignItems: "center",
-		display: "flex",
-	},
-	popupInput: {
-		padding: 0,
-		borderWidth: 0,
-		flex: "1",
-		outline: "0",
-		appearance: "none",
-		backgroundColor: "transparent",
-		boxSizing: "border-box",
-		height: tokens["--size-control-md"],
-		minWidth: 0,
-		width: "100%",
-	},
-	searchIcon: {
-		color: tokens["--fg-subtle"],
-		flexShrink: 0,
-	},
-	list: {
-		padding: {
-			"[data-empty]": 0,
-			default: tokens["--space-1"],
-		},
-		maxHeight: "240px",
-		overflowY: "auto",
-	},
-	empty: {
-		padding: {
-			default: tokens["--space-3"],
-			":empty": 0,
-		},
-		alignItems: "center",
-		color: tokens["--fg-muted"],
-		display: "flex",
-		fontSize: tokens["--font-size-2"],
-		justifyContent: "center",
-		letterSpacing: tokens["--letter-spacing-2"],
-		lineHeight: tokens["--line-height-2"],
-		textAlign: "center",
 	},
 });

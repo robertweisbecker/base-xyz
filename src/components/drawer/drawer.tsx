@@ -5,7 +5,6 @@ import { type ComponentProps } from "react";
 import { tokens } from "@/theme/tokens.stylex";
 import { modalChromeStyles, modalTextStyles } from "@/components/dialog/dialog.stylex";
 
-
 type StyledProps<T> = Omit<T, "className" | "style"> & {
 	className?: string;
 	style?: StyleXStyles;
@@ -276,7 +275,8 @@ const drawerParts = stylex.create({
 		borderRadius: tokens["--radius-full"],
 		marginBlock: tokens["--space-1"],
 		marginInline: "auto",
-		backgroundColor: tokens["--border"],
+		backgroundColor: tokens["--border-input"],
+		flexShrink: 0,
 		opacity: {
 			default: "1",
 			[stylex.when.ancestor("[data-nested-drawer-open]")]: "0",
@@ -292,7 +292,7 @@ const drawerParts = stylex.create({
 		width: "58px",
 	},
 	header: {
-		gap: tokens["--space-2"],
+		gap: tokens["--space-1"],
 		paddingInline: tokens["--space-5"],
 		display: "flex",
 		flexDirection: "column",

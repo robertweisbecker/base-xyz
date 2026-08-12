@@ -10,9 +10,8 @@ import {
 	CheckboxGroup,
 	type CheckboxGroupProps,
 	type CheckboxProps,
-	ComboboxField,
-	type ComboboxFieldProps,
-	type ComboboxMultipleProps,
+	Combobox,
+	type ComboboxRootProps,
 	type ContainerSize,
 	type EmptyStateProps,
 	type GridLayoutProps,
@@ -83,10 +82,10 @@ export const themePropExclusions = {
 	checkboxColor: false as HasKey<CheckboxProps, "color">,
 	checkboxGroupBg: false as HasKey<CheckboxGroupProps, "bg">,
 	checkboxGroupColor: false as HasKey<CheckboxGroupProps, "color">,
-	comboboxBg: false as HasKey<ComboboxFieldProps, "bg">,
-	comboboxColor: false as HasKey<ComboboxFieldProps, "color">,
-	comboboxMultipleBg: false as HasKey<ComboboxMultipleProps, "bg">,
-	comboboxMultipleColor: false as HasKey<ComboboxMultipleProps, "color">,
+	comboboxBg: false as HasKey<ComboboxRootProps<string>, "bg">,
+	comboboxColor: false as HasKey<ComboboxRootProps<string>, "color">,
+	comboboxMultipleBg: false as HasKey<ComboboxRootProps<string, true>, "bg">,
+	comboboxMultipleColor: false as HasKey<ComboboxRootProps<string, true>, "color">,
 	emptyStateBg: false as HasKey<EmptyStateProps, "bg">,
 	emptyStateColor: false as HasKey<EmptyStateProps, "color">,
 	iconButtonBg: false as HasKey<IconButtonProps, "bg">,
@@ -144,7 +143,12 @@ export const validThemePropExamples = (
 		<Checkbox label="Updates" />
 		<Radio label="Daily" value="daily" />
 		<Switch label="Notifications" />
-		<ComboboxField items={["One"]} label="Choice" />
+		<Combobox.Root items={["One"]}>
+			<Combobox.Label>Choice</Combobox.Label>
+			<Combobox.InputGroup>
+				<Combobox.Input />
+			</Combobox.InputGroup>
+		</Combobox.Root>
 		<Select.Root defaultValue="one" />
 	</>
 );

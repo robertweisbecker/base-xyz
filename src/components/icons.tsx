@@ -21,6 +21,40 @@ function Checkmark(props: IconProps) {
 	);
 }
 
+function ChevronDown(props: IconProps) {
+	return (
+		<svg viewBox="0 0 16 16" fill="currentColor" width={16} height={16} {...props}>
+			<path
+				fillRule="evenodd"
+				d="M4.22 6.22a.75.75 0 0 1 1.06 0L8 8.94l2.72-2.72a.75.75 0 1 1 1.06 1.06l-3.25 3.25a.75.75 0 0 1-1.06 0L4.22 7.28a.75.75 0 0 1 0-1.06Z"
+				clipRule="evenodd"
+			/>
+		</svg>
+	);
+}
+function More(props: IconProps) {
+	return (
+		<svg
+			fill="none"
+			viewBox="0 0 24 24"
+			strokeWidth={1.5}
+			stroke="currentColor"
+			aria-hidden
+			focusable="false"
+			width={16}
+			height={16}
+			data-slot="icon"
+			data-glyph="more"
+			{...props}>
+			<path
+				strokeLinecap="round"
+				strokeLinejoin="round"
+				d="M6.75 12a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0ZM12.75 12a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0ZM18.75 12a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Z"
+			/>
+		</svg>
+	);
+}
+
 function Minus(props: IconProps) {
 	return (
 		<svg
@@ -148,7 +182,9 @@ function Slash(props: IconProps) {
 
 export const Icon = {
 	Checkmark,
+	ChevronDown,
 	Minus,
+	More,
 	Circle,
 	Square,
 	Triangle,
