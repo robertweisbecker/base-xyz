@@ -1,6 +1,7 @@
 import { Toolbar as BaseToolbar } from "@base-ui/react/toolbar";
 import * as stylex from "@stylexjs/stylex";
 import type { StyleXStyles } from "@stylexjs/stylex";
+import { media } from "@/styles/constants.stylex";
 import { focusRing } from "@/styles/recipes/focus";
 import { tokens } from "@/theme/tokens.stylex";
 
@@ -141,7 +142,7 @@ const toolbarParts = stylex.create({
 		backgroundColor: {
 			// eslint-disable-next-line @stylexjs/valid-styles -- the compiler supports chained pseudo-class conditions; the lint rule is stricter than the compiler.
 			[HOVER_WHEN_INACTIVE]: {
-				"@media (hover: hover) and (pointer: fine)": tokens["--bg-highlight"],
+				[media.canHover]: tokens["--bg-highlight"],
 			},
 			[TOGGLED_ON]: tokens["--surface-subtle-hover"],
 			"[data-disabled]": "transparent",
@@ -186,7 +187,7 @@ const toolbarParts = stylex.create({
 			"[data-disabled]": tokens["--fg-subtle"],
 			default: tokens["--fg"],
 			":hover": {
-				"@media (hover: hover) and (pointer: fine)": tokens["--fg-accent"],
+				[media.canHover]: tokens["--fg-accent"],
 			},
 		},
 		display: "inline-flex",
@@ -198,7 +199,7 @@ const toolbarParts = stylex.create({
 		textDecorationStyle: {
 			default: "dotted",
 			":hover": {
-				"@media (hover: hover) and (pointer: fine)": "solid",
+				[media.canHover]: "solid",
 			},
 		},
 		textDecorationThickness: 1,

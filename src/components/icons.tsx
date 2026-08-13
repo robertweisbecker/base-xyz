@@ -32,6 +32,15 @@ function ChevronDown(props: IconProps) {
 		</svg>
 	);
 }
+
+function Caret(props: IconProps) {
+	return (
+		<svg width="16" height="16" viewBox="0 0 16 16" fill="none" {...props}>
+			<path d="M8 11L4 7H12L8 11Z" fill="currentColor" />
+		</svg>
+	);
+}
+
 function More(props: IconProps) {
 	return (
 		<svg
@@ -93,6 +102,24 @@ function Circle(props: IconProps) {
 	);
 }
 
+function Dot(props: IconProps) {
+	return (
+		<svg
+			viewBox="0 0 24 24"
+			fill="currentColor"
+			strokeWidth={2}
+			aria-hidden
+			focusable="false"
+			width={16}
+			height={16}
+			data-slot="icon"
+			data-glyph="circular"
+			{...props}>
+			<circle cx="12" cy="12" r="6" />
+		</svg>
+	);
+}
+
 function Square(props: IconProps) {
 	return (
 		<svg
@@ -106,7 +133,7 @@ function Square(props: IconProps) {
 			height={16}
 			data-slot="icon"
 			{...props}>
-			<rect width="20" height="20" x="2" y="2" rx="2" />
+			<rect width="16" height="16" x="4" y="4" rx="2" />
 		</svg>
 	);
 }
@@ -181,8 +208,10 @@ function Slash(props: IconProps) {
 }
 
 export const Icon = {
+	Caret,
 	Checkmark,
 	ChevronDown,
+	Dot,
 	Minus,
 	More,
 	Circle,

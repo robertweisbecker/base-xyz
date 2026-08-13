@@ -5,6 +5,7 @@ import * as stylex from "@stylexjs/stylex";
 import { tokens } from "@/theme/tokens.stylex";
 
 import { Badge } from "./badge";
+import { Icon } from "../icons";
 
 const iconOptions = {
 	None: undefined,
@@ -150,10 +151,7 @@ export const Options: Story = {
 					<Badge hue="success" startSlot={<CheckCircleIcon aria-hidden weight="fill" />}>
 						Approved
 					</Badge>
-					<Badge
-						endSlot={<WarningIcon aria-hidden weight="fill" />}
-						hue="warning"
-						startSlot={<CheckCircleIcon aria-hidden weight="fill" />}>
+					<Badge endSlot={<WarningIcon aria-hidden weight="fill" />} hue="warning" startSlot={<Icon.Dot />}>
 						Review requested
 					</Badge>
 				</div>

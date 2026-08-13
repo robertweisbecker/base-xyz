@@ -6,6 +6,7 @@ import { CaretUpDownIcon } from "@phosphor-icons/react/dist/csr/CaretUpDown";
 import * as stylex from "@stylexjs/stylex";
 import type { StyleXStyles } from "@stylexjs/stylex";
 import { createContext, useContext, type ReactNode } from "react";
+import { media } from "@/styles/constants.stylex";
 import { resolveThemeProps } from "@/theme/theme-props";
 import type { FieldSize, FieldThemeProps } from "@/components/field/field.types";
 import { fieldStyles, fieldControlStyles, fieldThemeProps } from "@/components/field/field.stylex";
@@ -360,7 +361,7 @@ const selectParts = stylex.create({
 			default: "transparent",
 			// eslint-disable-next-line @stylexjs/valid-styles -- the compiler supports chained pseudo-class conditions; the lint rule is stricter than the compiler.
 			":hover:not([data-invalid])": {
-				"@media (hover: hover) and (pointer: fine)": "transparent",
+				[media.canHover]: "transparent",
 			},
 		},
 		borderRadius: tokens["--radius-xs"],
@@ -369,7 +370,7 @@ const selectParts = stylex.create({
 		backgroundColor: {
 			// eslint-disable-next-line @stylexjs/valid-styles -- the compiler supports chained pseudo-class conditions; the lint rule is stricter than the compiler.
 			[HOVER_WHEN_INACTIVE]: {
-				"@media (hover: hover) and (pointer: fine)": tokens["--surface-subtle"],
+				[media.canHover]: tokens["--surface-subtle"],
 			},
 			"[data-popup-open]": tokens["--bg-accent"],
 			default: "transparent",

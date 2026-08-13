@@ -1,5 +1,5 @@
 import * as stylex from "@stylexjs/stylex";
-import { breakpoints } from "@/styles/constants.stylex";
+import { breakpoints, media } from "@/styles/constants.stylex";
 import { tokens } from "@/theme/tokens.stylex";
 
 const activeDropTarget = ":is([data-drop-target], [data-drop-target='true'], [data-drop-target=''])";
@@ -100,7 +100,7 @@ export const demoStyles = stylex.create({
 		touchAction: "none",
 		transitionDuration: {
 			default: "160ms",
-			"@media (prefers-reduced-motion: reduce)": "0ms",
+			[media.reducedMotion]: "0ms",
 		},
 		// transform: {
 		// 	default: "none",

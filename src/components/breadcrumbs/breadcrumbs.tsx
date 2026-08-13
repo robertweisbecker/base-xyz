@@ -2,7 +2,7 @@ import * as stylex from "@stylexjs/stylex";
 import type { StyleXStyles } from "@stylexjs/stylex";
 import { type ComponentProps, type ReactNode } from "react";
 import { CopyButton } from "@/blocks/copy-button/copy-button";
-import { Link as LinkPrimitive, type LinkColor } from "@/components/link/link";
+import type { LinkColor } from "@/components/link/link";
 import { Loader } from "@/components/loader/loader";
 import { shimmerTextStyles } from "@/styles/recipes/shimmer-text.stylex";
 import { tokens } from "@/theme/tokens.stylex";

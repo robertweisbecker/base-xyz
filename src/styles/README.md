@@ -15,7 +15,8 @@ appears.
   `src/theme/theme-props-surface.stylex.ts` bind those contracts to explicit StyleX
   functions. Import the narrow binding directly so unused compiler families can
   be removed from a consumer bundle.
-- `constants.stylex.ts` contains only fixed global selectors and layer order.
+- `constants.stylex.ts` contains only fixed global selectors, environmental
+  media-query conditions, and layer order.
   These compile inline rather than creating themeable CSS variables.
 - Component-owned `*.stylex.ts` files are canonical style APIs. Borrowers
   import from the component they intentionally resemble: Select and Combobox
@@ -176,6 +177,10 @@ stylex.props(modalChromeStyles.surface, drawerParts.popup);
 
 - Interaction concerns stay in narrow recipes: `focus.ts` for focus rings,
   and `transitions.ts` for shared pressable and icon-swap transitions.
+- Import environmental conditions from `constants.stylex.ts`: use
+  `media.canHover` for fine-pointer hover feedback and `media.reducedMotion`
+  for reduced-motion overrides. Active light/dark mode remains owned by
+  `ThemeProvider` and semantic tokens; do not infer it from system preference.
 - When parent interaction only changes child values, define local custom
   properties on the parent and consume them from the child's direct
   `[data-*]` state selectors. Checkbox, Radio, and Switch use this pattern so

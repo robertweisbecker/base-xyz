@@ -14,6 +14,7 @@ import {
 	flexRender,
 	filterFn_includesString,
 	globalFilteringFeature,
+	metaHelper,
 	rowExpandingFeature,
 	rowSelectionFeature,
 	rowSortingFeature,
@@ -34,15 +35,23 @@ import {
 import { Fragment, useMemo, useState, type ComponentProps, type ReactNode } from "react";
 import { Badge } from "@/components/badge/badge";
 import { Button, IconButton } from "@/components/button/button";
-import { Checkbox } from "@/components/checkbox/checkbox";
 import { InputGroup } from "@/components/input-group/input-group";
 import { Menu } from "@/components/menu/menu";
+import { Table } from "@/components/table/table";
+import { typescaleStyles } from "@/components/text/text.stylex";
 import { VisuallyHidden } from "@/components/visually-hidden/visually-hidden";
 import { tokens } from "@/theme/tokens.stylex";
 import { ArrowsDownUpIcon, SortAscendingIcon, SortDescendingIcon } from "@phosphor-icons/react";
 
+const dataTableColumnRole = Symbol("data-table-column-role");
+type DataTableColumnRole = "selection" | "action";
+type DataTableColumnMeta = Record<string, unknown> & {
+	[dataTableColumnRole]?: DataTableColumnRole;
+};
+
 const dataTableFeatures = tableFeatures({
 	columnFilteringFeature,
+	columnMeta: metaHelper<DataTableColumnMeta>(),
 	columnVisibilityFeature,
 	globalFilteringFeature,
 	rowExpandingFeature,
@@ -142,22 +151,7 @@ export function DataTable<TData extends RowData, TValue = unknown>({
 				id: "__select",
 				enableHiding: false,
 				enableSorting: false,
-				header: ({ table }) => (
-					<RowSelectionCheckbox
-						checked={table.getIsAllRowsSelected()}
-						indeterminate={table.getIsSomeRowsSelected() && !table.getIsAllRowsSelected()}
-						label="Select all rows"
-						onCheckedChange={(checked) => table.toggleAllRowsSelected(checked)}
-					/>
-				),
-				cell: ({ row }) => (
-					<RowSelectionCheckbox
-						checked={row.getIsSelected()}
-						disabled={!row.getCanSelect()}
-						label={`Select row ${row.index + 1}`}
-						onCheckedChange={(checked) => row.toggleSelected(checked)}
-					/>
-				),
+				meta: { [dataTableColumnRole]: "selection" },
 			});
 		}
 
@@ -166,6 +160,7 @@ export function DataTable<TData extends RowData, TValue = unknown>({
 				id: "__expand",
 				enableHiding: false,
 				enableSorting: false,
+				meta: { [dataTableColumnRole]: "action" },
 				header: () => <VisuallyHidden>Expand row</VisuallyHidden>,
 				cell: ({ row }) =>
 					row.getCanExpand() ? (
@@ -198,6 +193,7 @@ export function DataTable<TData extends RowData, TValue = unknown>({
 					id: "__actions",
 					enableHiding: false,
 					enableSorting: false,
+					meta: { [dataTableColumnRole]: "action" },
 					header: () => <VisuallyHidden>Row actions</VisuallyHidden>,
 					cell: ({ row }) => <RowActions row={row} getRowActions={getRowActions} />,
 				},
@@ -240,14 +236,13 @@ export function DataTable<TData extends RowData, TValue = unknown>({
 
 	const filterColumn = filterColumnId ? table.getColumn(filterColumnId) : undefined;
 	const visibleRows = table.getRowModel().rows;
-	const rootSx = stylex.props(tableParts.root, style);
 	const selectedCount = table.getFilteredSelectedRowModel().rows.length;
 	const filteredCount = table.getFilteredRowModel().rows.length;
 
 	return (
-		<div className={[rootSx.className, className].filter(Boolean).join(" ")} style={rootSx.style} {...props}>
-			<div {...stylex.props(tableParts.toolbar)}>
-				<InputGroup.Root style={tableParts.filter}>
+		<Table.Root className={className} style={style} {...props}>
+			<div {...stylex.props(dataTableParts.toolbar)}>
+				<InputGroup.Root style={dataTableParts.filter}>
 					<InputGroup.Addon>
 						<MagnifyingGlassIcon aria-hidden size="1em" weight="bold" />
 					</InputGroup.Addon>
@@ -265,7 +260,7 @@ export function DataTable<TData extends RowData, TValue = unknown>({
 						}}
 					/>
 				</InputGroup.Root>
-				<div {...stylex.props(tableParts.toolbarActions)}>
+				<div {...stylex.props(dataTableParts.toolbarActions)}>
 					{filters?.map((filter) => {
 						const column = table.getColumn(filter.columnId);
 						return column ? <ColumnFilterMenu key={filter.columnId} column={column} filter={filter} /> : null;
@@ -275,64 +270,112 @@ export function DataTable<TData extends RowData, TValue = unknown>({
 				</div>
 			</div>
 
-			<div {...stylex.props(tableParts.surface)}>
-				<table {...stylex.props(tableParts.table)}>
-					<thead {...stylex.props(tableParts.header)}>
+			<Table.Container>
+				<Table.Content>
+					<Table.Header>
 						{table.getHeaderGroups().map((headerGroup) => (
-							<tr key={headerGroup.id}>
-								{headerGroup.headers.map((header) => (
-									<th
-										key={header.id}
-										colSpan={header.colSpan}
-										aria-sort={getAriaSort(header.column)}
-										{...stylex.props(tableParts.headerCell, getColumnTone(header.column.id))}>
-										{header.isPlaceholder ? null : <HeaderContent column={header.column} header={header} />}
-									</th>
-								))}
-							</tr>
+							<Table.Row key={headerGroup.id}>
+								{headerGroup.headers.map((header) => {
+									const columnRole = getDataTableColumnRole(header.column);
+
+									if (columnRole === "selection") {
+										return (
+											<Table.HeaderCheckbox
+												key={header.id}
+												colSpan={header.colSpan}
+												scope={header.colSpan > 1 ? "colgroup" : "col"}
+												checked={table.getIsAllRowsSelected()}
+												indeterminate={table.getIsSomeRowsSelected() && !table.getIsAllRowsSelected()}
+												label="Select all rows"
+												onCheckedChange={(checked) => table.toggleAllRowsSelected(checked)}
+											/>
+										);
+									}
+
+									const content = header.isPlaceholder ? null : (
+										<HeaderContent column={header.column} header={header} />
+									);
+
+									if (columnRole === "action") {
+										return (
+											<Table.HeaderAction
+												key={header.id}
+												colSpan={header.colSpan}
+												scope={header.colSpan > 1 ? "colgroup" : "col"}>
+												{content}
+											</Table.HeaderAction>
+										);
+									}
+
+									return (
+										<Table.HeaderCell
+											key={header.id}
+											colSpan={header.colSpan}
+											scope={header.colSpan > 1 ? "colgroup" : "col"}
+											aria-sort={getAriaSort(header.column)}>
+											{content}
+										</Table.HeaderCell>
+									);
+								})}
+							</Table.Row>
 						))}
-					</thead>
-					<tbody>
+					</Table.Header>
+					<Table.Body>
 						{visibleRows.length > 0 ? (
 							visibleRows.map((row) => (
 								<Fragment key={row.id}>
-									<tr
+									<Table.Row
 										data-expanded={row.getIsExpanded() ? "" : undefined}
-										data-selected={row.getIsSelected() ? "" : undefined}
-										{...stylex.props(tableParts.row)}>
-										{row.getVisibleCells().map((cell) => (
-											<td key={cell.id} {...stylex.props(tableParts.cell, getColumnTone(cell.column.id))}>
-												{flexRender(cell.column.columnDef.cell, cell.getContext())}
-											</td>
-										))}
-									</tr>
+										checked={row.getIsSelected()}>
+										{row.getVisibleCells().map((cell) => {
+											const columnRole = getDataTableColumnRole(cell.column);
+
+											if (columnRole === "selection") {
+												return (
+													<Table.CellCheckbox
+														key={cell.id}
+														checked={row.getIsSelected()}
+														disabled={!row.getCanSelect()}
+														label={`Select row ${row.index + 1}`}
+														onCheckedChange={(checked) => row.toggleSelected(checked)}
+													/>
+												);
+											}
+
+											const content = flexRender(cell.column.columnDef.cell, cell.getContext());
+
+											if (columnRole === "action") {
+												return <Table.CellAction key={cell.id}>{content}</Table.CellAction>;
+											}
+
+											return <Table.Cell key={cell.id}>{content}</Table.Cell>;
+										})}
+									</Table.Row>
 									{renderExpandedRow && row.getIsExpanded() ? (
-										<tr key={`${row.id}-expanded`} {...stylex.props(tableParts.expandedRow)}>
-											<td colSpan={row.getVisibleCells().length} {...stylex.props(tableParts.expandedCell)}>
+										<Table.Row key={`${row.id}-expanded`} style={dataTableParts.expandedRow}>
+											<Table.Cell
+												colSpan={Math.max(1, row.getVisibleCells().length)}
+												style={dataTableParts.expandedCell}>
 												{renderExpandedRow(row)}
-											</td>
-										</tr>
+											</Table.Cell>
+										</Table.Row>
 									) : null}
 								</Fragment>
 							))
 						) : (
-							<tr>
-								<td colSpan={table.getVisibleLeafColumns().length} {...stylex.props(tableParts.emptyCell)}>
-									{emptyLabel}
-								</td>
-							</tr>
+							<Table.Empty colSpan={Math.max(1, table.getVisibleLeafColumns().length)}>{emptyLabel}</Table.Empty>
 						)}
-					</tbody>
-				</table>
-			</div>
+					</Table.Body>
+				</Table.Content>
+			</Table.Container>
 
-			<div {...stylex.props(tableParts.footer)}>
+			<div {...stylex.props(dataTableParts.metadata, typescaleStyles["1"])}>
 				<span>
 					{selectedCount} of {filteredCount} row(s) selected.
 				</span>
 				<span>{table.getVisibleLeafColumns().length} column(s) visible.</span>
 			</div>
-		</div>
+		</Table.Root>
 	);
 }
 
@@ -347,18 +390,18 @@ function HeaderContent<TData extends RowData>({
 	const sorted = column.getIsSorted();
 
 	if (!column.getCanSort()) {
-		return <span {...stylex.props(tableParts.headerLabel)}>{content}</span>;
+		return <span {...stylex.props(dataTableParts.headerLabel)}>{content}</span>;
 	}
 
 	return (
-		<span {...stylex.props(tableParts.headerContent)}>
+		<span {...stylex.props(dataTableParts.headerContent)}>
 			<Button
 				endSlot={getSortIcon(sorted)}
 				aria-label={getSortLabel(content, sorted)}
 				variant="plain"
 				size="xs"
 				onClick={() => column.toggleSorting(sorted === "asc")}>
-				<span {...stylex.props(tableParts.headerLabel)}>{content}</span>
+				<span {...stylex.props(dataTableParts.headerLabel)}>{content}</span>
 			</Button>
 		</span>
 	);
@@ -413,7 +456,7 @@ function ColumnFilterMenu<TData extends RowData>({
 					<Button
 						variant={selectedValues.length > 0 ? "neutral" : "ghost"}
 						endSlot={<CaretDownIcon aria-hidden weight="bold" />}
-						style={tableParts.filterTrigger}>
+						style={dataTableParts.filterTrigger}>
 						<FilterTriggerContent filter={filter} selectedValues={selectedValues} />
 					</Button>
 				}
@@ -437,12 +480,12 @@ function ColumnFilterMenu<TData extends RowData>({
 
 function FilterTriggerContent({ filter, selectedValues }: { filter: DataTableFilter; selectedValues: string[] }) {
 	if (selectedValues.length === 0) {
-		return <span {...stylex.props(tableParts.filterTriggerLabel)}>{filter.label}</span>;
+		return <span {...stylex.props(dataTableParts.filterTriggerLabel)}>{filter.label}</span>;
 	}
 
 	return (
-		<span {...stylex.props(tableParts.filterTriggerContent)}>
-			<span {...stylex.props(tableParts.filterTriggerLabel)}>{filter.label}</span>
+		<span {...stylex.props(dataTableParts.filterTriggerContent)}>
+			<span {...stylex.props(dataTableParts.filterTriggerLabel)}>{filter.label}</span>
 			<Badge variant="elevated" size="sm">
 				{selectedValues.length}
 			</Badge>
@@ -452,34 +495,6 @@ function FilterTriggerContent({ filter, selectedValues }: { filter: DataTableFil
 
 function normalizeSelectedFilterValues(value: unknown) {
 	return Array.isArray(value) ? value.filter((item): item is string => typeof item === "string") : [];
-}
-
-function RowSelectionCheckbox({
-	checked,
-	disabled,
-	indeterminate,
-	label,
-	onCheckedChange,
-}: {
-	checked: boolean;
-	disabled?: boolean;
-	indeterminate?: boolean;
-	label: string;
-	onCheckedChange: (checked: boolean) => void;
-}) {
-	return (
-		<span {...stylex.props(tableParts.selectionCheckboxFrame)}>
-			<Checkbox
-				checked={checked}
-				disabled={disabled}
-				indeterminate={indeterminate}
-				label={<VisuallyHidden>{label}</VisuallyHidden>}
-				onCheckedChange={onCheckedChange}
-				aria-label={label}
-				style={tableParts.selectionCheckbox}
-			/>
-		</span>
-	);
 }
 
 function RowActions<TData extends RowData>({
@@ -582,11 +597,8 @@ function getAriaSort<TData extends RowData>(column: DataTableColumn<TData>) {
 	return undefined;
 }
 
-function getColumnTone(columnId: string) {
-	if (columnId === "__select" || columnId === "__expand" || columnId === "__actions") {
-		return tableParts.utilityColumn;
-	}
-	return null;
+function getDataTableColumnRole<TData extends RowData>(column: DataTableColumn<TData>) {
+	return column.columnDef.meta?.[dataTableColumnRole];
 }
 
 function getColumnDefId<TData extends RowData>(column: DataTableColumnDef<TData, unknown>) {
@@ -621,18 +633,7 @@ function dataTableFilter<TData extends RowData>(row: DataTableRow<TData>, column
 	return true;
 }
 
-const tableParts = stylex.create({
-	root: {
-		gap: tokens["--space-3"],
-		color: tokens["--fg"],
-		display: "flex",
-		flexDirection: "column",
-		fontSize: tokens["--font-size-2"],
-		letterSpacing: tokens["--letter-spacing-2"],
-		lineHeight: tokens["--line-height-2"],
-		minWidth: 0,
-		width: "100%",
-	},
+const dataTableParts = stylex.create({
 	toolbar: {
 		gap: tokens["--space-2"],
 		alignItems: "center",
@@ -668,35 +669,6 @@ const tableParts = stylex.create({
 		whiteSpace: "nowrap",
 		minWidth: 0,
 	},
-	surface: {
-		// borderColor: tokens["--border"],
-		// borderStyle: "solid",
-		// borderWidth: "1px",
-		borderRadius: tokens["--radius-md"],
-		overflow: "auto",
-		backgroundColor: tokens["--panel"],
-		boxShadow: tokens["--shadow-sm"],
-	},
-	table: {
-		borderCollapse: "collapse",
-		// minWidth: "40rem",
-		width: "100%",
-	},
-	header: {
-		backgroundColor: "transparent",
-	},
-	headerCell: {
-		paddingBlock: tokens["--space-1"],
-		color: tokens["--fg-muted"],
-		fontSize: tokens["--font-size-1"],
-		fontWeight: tokens["--font-weight-medium"],
-		letterSpacing: tokens["--letter-spacing-1"],
-		lineHeight: tokens["--line-height-1"],
-		paddingInlineStart: tokens["--space-2"],
-		textAlign: "start",
-		verticalAlign: "middle",
-		whiteSpace: "nowrap",
-	},
 	headerContent: {
 		gap: tokens["--space-1"],
 		alignItems: "center",
@@ -705,39 +677,18 @@ const tableParts = stylex.create({
 		minWidth: 0,
 	},
 	headerLabel: {
+		color: tokens["--fg-muted"],
 		overflow: "hidden",
 		textOverflow: "ellipsis",
 		whiteSpace: "nowrap",
 		minWidth: 0,
-		color: tokens["--fg-muted"],
-	},
-	row: {
-		backgroundColor: {
-			"[data-selected]": tokens["--bg-accent"],
-			default: "transparent",
-			":hover": tokens["--bg-highlight"],
-		},
 	},
 	expandedRow: {
 		borderRadius: "inherit",
-		backgroundColor: tokens["--inset"],
-	},
-	cell: {
-		paddingBlock: tokens["--space-2"],
-		borderBlockStartColor: {
-			"[data-selected]": "transparent",
-			default: tokens["--border"],
+		backgroundColor: {
+			default: tokens["--inset"],
+			":hover": tokens["--inset"],
 		},
-		borderBlockStartStyle: "solid",
-		borderBlockStartWidth: "1px",
-		paddingInlineEnd: {
-			default: tokens["--space-2"],
-			":last-child": tokens["--space-1"],
-		},
-		paddingInlineStart: tokens["--space-2"],
-		textAlign: "start",
-		verticalAlign: "middle",
-		minHeight: tokens["--size-control-sm"],
 	},
 	expandedCell: {
 		paddingBlock: tokens["--space-3"],
@@ -747,43 +698,11 @@ const tableParts = stylex.create({
 		borderBlockStartWidth: "1px",
 		paddingInlineStart: tokens["--space-10"],
 	},
-	emptyCell: {
-		paddingBlock: tokens["--space-10"],
-		paddingInline: tokens["--space-2"],
-		color: tokens["--fg-muted"],
-		textAlign: "center",
-	},
-	utilityColumn: {
-		paddingInline: tokens["--space-2"],
-		textAlign: "center",
-		whiteSpace: "nowrap",
-		width: "1%",
-	},
-	selectionCheckbox: {
-		gap: 0,
-		alignItems: "center",
-		display: "flex",
-		flexDirection: "row",
-		justifyContent: "center",
-		lineHeight: 0,
-		width: "auto",
-	},
-	selectionCheckboxFrame: {
-		alignItems: "center",
-		display: "flex",
-		justifyContent: "center",
-		lineHeight: 0,
-		minHeight: tokens["--size-indicator-sm"],
-		width: "fit-content",
-	},
-	footer: {
+	metadata: {
 		gap: tokens["--space-2"],
 		color: tokens["--fg-muted"],
 		display: "flex",
 		flexWrap: "wrap",
-		fontSize: tokens["--font-size-1"],
 		justifyContent: "space-between",
-		letterSpacing: tokens["--letter-spacing-1"],
-		lineHeight: tokens["--line-height-1"],
 	},
 });

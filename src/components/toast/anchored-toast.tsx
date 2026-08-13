@@ -6,7 +6,7 @@ import { Toast as BaseToast } from "@base-ui/react/toast";
 import type { ToastManager } from "@base-ui/react/toast";
 import * as stylex from "@stylexjs/stylex";
 import type { StyleXStyles } from "@stylexjs/stylex";
-import { zIndex } from "@/styles/constants.stylex";
+import { zIndex, media } from "@/styles/constants.stylex";
 import { tokens } from "@/theme/tokens.stylex";
 import { focusRing } from "@/styles/recipes/focus";
 import { Loader } from "@/components/loader/loader";
@@ -268,7 +268,7 @@ const anchoredMotion = stylex.create({
 	renotifyEven: {
 		animationDuration: {
 			default: toastMotion.renotifyDuration,
-			"@media (prefers-reduced-motion: reduce)": "0ms",
+			[media.reducedMotion]: "0ms",
 		},
 		animationName: renotifyEven,
 		animationTimingFunction: "ease",
@@ -276,7 +276,7 @@ const anchoredMotion = stylex.create({
 	renotifyOdd: {
 		animationDuration: {
 			default: toastMotion.renotifyDuration,
-			"@media (prefers-reduced-motion: reduce)": "0ms",
+			[media.reducedMotion]: "0ms",
 		},
 		animationName: renotifyOdd,
 		animationTimingFunction: "ease",

@@ -5,6 +5,7 @@ import { Fieldset } from "@base-ui/react/fieldset";
 import * as stylex from "@stylexjs/stylex";
 import type { StyleXStyles } from "@stylexjs/stylex";
 import { createContext, useContext, useId, type ReactNode } from "react";
+import { media } from "@/styles/constants.stylex";
 import { resolveThemeProps } from "@/theme/theme-props";
 import type { FieldThemeProps } from "@/components/field/field.types";
 import { fieldChoiceGroupStyles, fieldStyles, fieldThemeProps, labelMarker } from "@/components/field/field.stylex";
@@ -15,6 +16,9 @@ import { tokens } from "@/theme/tokens.stylex";
 import { VisuallyHidden } from "@/components/visually-hidden/visually-hidden";
 
 export type RadioSize = "sm" | "md";
+
+const ENABLED_HOVER = ":hover:not([data-disabled],[data-readonly])";
+const ENABLED_ACTIVE = ":active:not([data-disabled],[data-readonly])";
 
 export type RadioProps = Omit<
 	BaseRadio.Root.Props,
@@ -66,7 +70,7 @@ export function Radio({
 	const { restProps, styles } = resolveThemeProps(props, fieldThemeProps);
 	const groupState = useContext(RadioGroupStateContext);
 	const selfOrGroupDisabled = Boolean(disabled || groupState.disabled);
-	// const selfOrGroupReadOnly = Boolean(readOnly || groupState.readOnly);
+	const selfOrGroupReadOnly = Boolean(props.readOnly || groupState.readOnly);
 	const resolvedSize = size ?? groupState.size ?? "md";
 	const generatedId = useId();
 	const id = providedId ?? `${generatedId}-control`;
@@ -86,13 +90,15 @@ export function Radio({
 
 	return (
 		<Field.Item
-			// SLOP: don't think this is necessary because the parent sets it -
-			// data-readonly={selfOrGroupReadOnly ? "" : undefined}
+			data-readonly={selfOrGroupReadOnly ? "" : undefined}
 			disabled={selfOrGroupDisabled}
-			// ^^ seemingly this one is necessary?
 			className={itemClassName}
 			style={itemSx.style}>
-			<Field.Label htmlFor={id} {...stylex.props(labelMarker, radioParts.labelRoot)}>
+			<Field.Label
+				htmlFor={id}
+				data-disabled={selfOrGroupDisabled ? "" : undefined}
+				data-readonly={selfOrGroupReadOnly ? "" : undefined}
+				{...stylex.props(labelMarker, radioParts.labelRoot)}>
 				<BaseRadio.Root
 					ref={ref}
 					id={id}
@@ -276,29 +282,32 @@ const radioParts = stylex.create({
 	},
 	labelRoot: {
 		"--_radio-bg": {
-			default: tokens["--surface"],
-			":hover": {
-				"@media (hover: hover) and (pointer: fine)": tokens["--surface-subtle"],
+			[ENABLED_ACTIVE]: tokens["--surface-subtle-active"],
+			// eslint-disable-next-line @stylexjs/valid-styles -- the compiler supports chained pseudo-class conditions; the lint rule is stricter than the compiler.
+			[ENABLED_HOVER]: {
+				[media.canHover]: tokens["--surface-subtle"],
 			},
-			":active": tokens["--surface-subtle-active"],
+			default: tokens["--surface"],
 		},
 		"--_radio-bg-checked": {
-			default: tokens["--bg-primary"],
-			":hover": {
-				"@media (hover: hover) and (pointer: fine)": tokens["--bg-primary-highlight"],
+			[ENABLED_ACTIVE]: tokens["--bg-primary-highlight"],
+			// eslint-disable-next-line @stylexjs/valid-styles -- the compiler supports chained pseudo-class conditions; the lint rule is stricter than the compiler.
+			[ENABLED_HOVER]: {
+				[media.canHover]: tokens["--bg-primary-highlight"],
 			},
-			":active": tokens["--bg-primary-highlight"],
+			default: tokens["--bg-primary"],
 		},
 		"--_radio-border": {
-			default: tokens["--border-input"],
-			":hover": {
-				"@media (hover: hover) and (pointer: fine)": tokens["--border-input-hover"],
+			[ENABLED_ACTIVE]: tokens["--bg-primary-highlight"],
+			// eslint-disable-next-line @stylexjs/valid-styles -- the compiler supports chained pseudo-class conditions; the lint rule is stricter than the compiler.
+			[ENABLED_HOVER]: {
+				[media.canHover]: tokens["--border-input-hover"],
 			},
-			":active": tokens["--bg-primary-highlight"],
+			default: tokens["--border-input"],
 		},
 		"--_radio-press-scale": {
+			[ENABLED_ACTIVE]: "0.94",
 			default: "1",
-			":active": "0.94",
 		},
 		gap: tokens["--space-2"],
 		alignItems: "flex-start",
@@ -362,7 +371,7 @@ const radioParts = stylex.create({
 		},
 		transitionDuration: {
 			default: tokens["--motion-duration-quick"],
-			"@media (prefers-reduced-motion: reduce)": "0ms",
+			[media.reducedMotion]: "0ms",
 		},
 		transitionProperty: "transform, opacity",
 		transitionTimingFunction: tokens["--motion-ease-out"],

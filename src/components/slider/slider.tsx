@@ -2,6 +2,7 @@ import { Slider as BaseSlider } from "@base-ui/react/slider";
 import * as stylex from "@stylexjs/stylex";
 import type { StyleXStyles } from "@stylexjs/stylex";
 import { createContext, type ComponentPropsWithoutRef, useContext, useMemo } from "react";
+import { media } from "@/styles/constants.stylex";
 import { fieldStyles } from "@/components/field/field.stylex";
 import { typescaleStyles, fontWeightStyles } from "@/components/text/text.stylex";
 import { focusRing } from "@/styles/recipes/focus";
@@ -290,7 +291,7 @@ const sliderParts = stylex.create({
 			"[data-disabled]": tokens["--bg-neutral"],
 			default: tokens["--bg-primary"],
 			":hover": {
-				"@media (hover: hover) and (pointer: fine)": tokens["--bg-primary-highlight"],
+				[media.canHover]: tokens["--bg-primary-highlight"],
 			},
 		},
 		flex: {

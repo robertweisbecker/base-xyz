@@ -3,6 +3,7 @@ import { Input as BaseInput } from "@base-ui/react/input";
 import * as stylex from "@stylexjs/stylex";
 import type { StyleXStyles } from "@stylexjs/stylex";
 import { type ComponentProps, type ReactElement } from "react";
+import { media } from "@/styles/constants.stylex";
 import { fieldStyles, fieldControlSizes, fieldTextStyles } from "@/components/field/field.stylex";
 import type { FieldSize } from "@/components/field/field.types";
 import { focusRing } from "@/styles/recipes/focus";
@@ -181,7 +182,7 @@ const inputGroupParts = stylex.create({
 			[GROUP_HAS_DISABLED]: tokens["--border-disabled"],
 			// eslint-disable-next-line @stylexjs/valid-styles -- the compiler supports chained pseudo-class conditions; the lint rule is stricter than the compiler.
 			[GROUP_HOVER]: {
-				"@media (hover: hover) and (pointer: fine)": tokens["--border-input-hover"],
+				[media.canHover]: tokens["--border-input-hover"],
 			},
 			default: tokens["--border-input"],
 			":has([data-invalid])": tokens["--bg-error-primary"],

@@ -1,4 +1,5 @@
 import * as stylex from "@stylexjs/stylex";
+import { media } from "@/styles/constants.stylex";
 import { textStyles, fontWeightStyles } from "@/components/text/text.stylex";
 import { tokens } from "@/theme/tokens.stylex";
 
@@ -33,13 +34,13 @@ const toastControlParts = stylex.create({
 		backgroundColor: {
 			default: "transparent",
 			":hover": {
-				"@media (hover: hover) and (pointer: fine)": tokens["--surface-subtle"],
+				[media.canHover]: tokens["--surface-subtle"],
 			},
 		},
 		color: {
 			default: tokens["--fg-subtle"],
 			":hover": {
-				"@media (hover: hover) and (pointer: fine)": tokens["--fg-muted"],
+				[media.canHover]: tokens["--fg-muted"],
 			},
 		},
 		display: "inline-flex",

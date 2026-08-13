@@ -2,6 +2,7 @@ import { useRender } from "@base-ui/react/use-render";
 import * as stylex from "@stylexjs/stylex";
 import type { StyleXStyles } from "@stylexjs/stylex";
 import { createContext, useContext, useMemo, useRef, useState, type ComponentProps, type ReactNode } from "react";
+import { media } from "@/styles/constants.stylex";
 import { IconButton, type IconButtonProps } from "@/components/button/button";
 import { NavListPresentationProvider } from "@/components/nav-list/nav-list";
 import { ScrollArea } from "@/components/scroll-area/scroll-area";
@@ -280,7 +281,7 @@ const sidebarParts = stylex.create({
 		minBlockSize: 0,
 		transitionDuration: {
 			default: tokens["--motion-duration-medium"],
-			"@media (prefers-reduced-motion: reduce)": "0ms",
+			[media.reducedMotion]: "0ms",
 		},
 		transitionProperty: "inline-size",
 		transitionTimingFunction: tokens["--motion-ease-smooth-out"],
@@ -315,7 +316,7 @@ const sidebarParts = stylex.create({
 		transform: "translateX(0)",
 		transitionDuration: {
 			default: tokens["--motion-duration-medium"],
-			"@media (prefers-reduced-motion: reduce)": "0ms",
+			[media.reducedMotion]: "0ms",
 		},
 		transitionProperty: "inline-size, padding, transform",
 		transitionTimingFunction: tokens["--motion-ease-smooth-out"],
@@ -434,7 +435,7 @@ const sidebarParts = stylex.create({
 		transformBox: "fill-box",
 		transitionDuration: {
 			default: tokens["--motion-duration-medium"],
-			"@media (prefers-reduced-motion: reduce)": "0ms",
+			[media.reducedMotion]: "0ms",
 		},
 		transitionProperty: "transform",
 		transitionTimingFunction: tokens["--motion-ease-smooth-out"],

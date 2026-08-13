@@ -1,4 +1,5 @@
 import * as stylex from "@stylexjs/stylex";
+import { media } from "@/styles/constants.stylex";
 import { tokens } from "@/theme/tokens.stylex";
 
 /**
@@ -29,7 +30,7 @@ export const iconSwapTransition = stylex.create({
 		justifyContent: "center",
 		transitionDuration: {
 			default: tokens["--motion-duration-quick"],
-			"@media (prefers-reduced-motion: reduce)": "0ms",
+			[media.reducedMotion]: "0ms",
 		},
 		transitionProperty: "filter, opacity, scale",
 		transitionTimingFunction: tokens["--motion-ease-smooth-out"],

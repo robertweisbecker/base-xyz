@@ -6,6 +6,7 @@ import { PlusIcon } from "@phosphor-icons/react/dist/csr/Plus";
 import * as stylex from "@stylexjs/stylex";
 import type { StyleXStyles } from "@stylexjs/stylex";
 import { useId, type CSSProperties } from "react";
+import { media } from "@/styles/constants.stylex";
 import { resolveThemeProps } from "@/theme/theme-props";
 import type { FieldSize, FieldThemeProps } from "@/components/field/field.types";
 import { fieldStyles, fieldTextStyles, fieldThemeProps } from "@/components/field/field.stylex";
@@ -181,7 +182,7 @@ const numberFieldParts = stylex.create({
 		borderColor: {
 			// eslint-disable-next-line @stylexjs/valid-styles -- the compiler supports chained pseudo-class conditions; the lint rule is stricter than the compiler.
 			[INPUT_HOVER]: {
-				"@media (hover: hover) and (pointer: fine)": tokens["--border-input-hover"],
+				[media.canHover]: tokens["--border-input-hover"],
 			},
 			'[aria-invalid="true"]': tokens["--bg-error-primary"],
 			"[data-disabled]": `${tokens["--border"]} transparent ${tokens["--border"]}`,
@@ -230,7 +231,7 @@ const numberFieldParts = stylex.create({
 			[STEPPER_ACTIVE]: tokens["--surface-subtle-active"],
 			// eslint-disable-next-line @stylexjs/valid-styles -- the compiler supports chained pseudo-class conditions; the lint rule is stricter than the compiler.
 			[STEPPER_HOVER]: {
-				"@media (hover: hover) and (pointer: fine)": tokens["--surface-subtle-hover"],
+				[media.canHover]: tokens["--surface-subtle-hover"],
 			},
 			"[data-disabled]": tokens["--canvas"],
 			default: "transparent",
@@ -240,7 +241,7 @@ const numberFieldParts = stylex.create({
 			"[data-readonly]": `color-mix(in srgb, ${tokens["--fg-subtle"]} 48%, transparent)`,
 			default: tokens["--fg-muted"],
 			":hover": {
-				"@media (hover: hover) and (pointer: fine)": tokens["--fg"],
+				[media.canHover]: tokens["--fg"],
 			},
 		},
 		cursor: {

@@ -2,7 +2,8 @@ import { useRender } from "@base-ui/react/use-render";
 import * as stylex from "@stylexjs/stylex";
 import type { StyleXStyles } from "@stylexjs/stylex";
 import type { ReactNode } from "react";
-import { typescaleStyles, textStyles, fontWeightStyles } from "@/components/text/text.stylex";
+import { media } from "@/styles/constants.stylex";
+import { typescaleStyles, textStyles } from "@/components/text/text.stylex";
 import { focusRing } from "@/styles/recipes/focus";
 import { tokens } from "@/theme/tokens.stylex";
 
@@ -123,7 +124,7 @@ const itemParts = stylex.create({
 			default: "transparent",
 			// eslint-disable-next-line @stylexjs/valid-styles -- the compiler supports chained pseudo-class conditions; the lint rule is stricter than the compiler.
 			":is(a[href]):hover": {
-				"@media (hover: hover) and (pointer: fine)": tokens["--bg-highlight"],
+				[media.canHover]: tokens["--bg-highlight"],
 			},
 		},
 		boxSizing: "border-box",

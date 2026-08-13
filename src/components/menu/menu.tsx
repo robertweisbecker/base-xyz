@@ -4,6 +4,7 @@ import { CaretRightIcon } from "@phosphor-icons/react/dist/csr/CaretRight";
 import * as stylex from "@stylexjs/stylex";
 import type { StyleXStyles } from "@stylexjs/stylex";
 import { createContext, useContext, type ComponentProps, type ReactNode } from "react";
+import { media } from "@/styles/constants.stylex";
 import { fontFamilyStyles, textStyles, fontWeightStyles } from "@/components/text/text.stylex";
 import { tokens } from "@/theme/tokens.stylex";
 import { popupMotionStyles, popupPositionerStyles, popupViewportStyles } from "@/components/popover/popover.stylex";
@@ -448,7 +449,7 @@ const menuParts = stylex.create({
 		},
 		transitionDuration: {
 			default: tokens["--motion-duration-short"],
-			"@media (prefers-reduced-motion: reduce)": "0ms",
+			[media.reducedMotion]: "0ms",
 		},
 		transitionProperty: "transform",
 		transitionTimingFunction: tokens["--motion-ease-smooth-out"],
@@ -500,7 +501,7 @@ const menuParts = stylex.create({
 		display: "block",
 		transitionDuration: {
 			default: tokens["--motion-duration-short"],
-			"@media (prefers-reduced-motion: reduce)": "0ms",
+			[media.reducedMotion]: "0ms",
 		},
 		transitionProperty: "height",
 		transitionTimingFunction: tokens["--motion-ease-out"],
@@ -535,7 +536,7 @@ const menuParts = stylex.create({
 		marginInlineStart: "-0.33rem",
 		transitionDuration: {
 			default: tokens["--motion-duration-quick"],
-			"@media (prefers-reduced-motion: reduce)": "0ms",
+			[media.reducedMotion]: "0ms",
 		},
 		transitionProperty: "background-color",
 		transitionTimingFunction: tokens["--motion-ease-smooth-out"],
@@ -553,7 +554,7 @@ const menuParts = stylex.create({
 		},
 		transitionDuration: {
 			default: tokens["--motion-duration-quick"],
-			"@media (prefers-reduced-motion: reduce)": "0ms",
+			[media.reducedMotion]: "0ms",
 		},
 		transitionProperty: "transform",
 		transitionTimingFunction: tokens["--motion-ease-out"],

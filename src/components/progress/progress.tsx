@@ -1,6 +1,7 @@
 import { Progress as BaseProgress } from "@base-ui/react/progress";
 import * as stylex from "@stylexjs/stylex";
 import type { StyleXStyles } from "@stylexjs/stylex";
+import { media } from "@/styles/constants.stylex";
 import { textStyles } from "@/components/text/text.stylex";
 import { tokens } from "@/theme/tokens.stylex";
 
@@ -137,7 +138,7 @@ const progressParts = stylex.create({
 		animationName: {
 			"[data-indeterminate]": {
 				default: indeterminatePingPong,
-				"@media (prefers-reduced-motion: reduce)": "none",
+				[media.reducedMotion]: "none",
 			},
 			default: "none",
 		},
@@ -167,7 +168,7 @@ const progressParts = stylex.create({
 		},
 		transitionDuration: {
 			default: tokens["--motion-duration-short"],
-			"@media (prefers-reduced-motion: reduce)": "0ms",
+			[media.reducedMotion]: "0ms",
 		},
 		transitionProperty: "width, background-color",
 		transitionTimingFunction: tokens["--motion-ease-smooth-out"],

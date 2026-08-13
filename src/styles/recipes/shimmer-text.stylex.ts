@@ -1,4 +1,5 @@
 import * as stylex from "@stylexjs/stylex";
+import { media } from "@/styles/constants.stylex";
 import { shimmerTextVars } from "@/styles/recipes/shimmer-text-vars.stylex";
 import { tokens } from "@/theme/tokens.stylex";
 
@@ -21,32 +22,32 @@ export const shimmerTextStyles = stylex.create({
 		[shimmerTextVars.highlight]: `color-mix(in srgb, currentColor, ${tokens["--bg-inverse"]})`,
 		WebkitBackgroundClip: {
 			default: "text",
-			"@media (prefers-reduced-motion: reduce)": "initial",
+			[media.reducedMotion]: "initial",
 		},
 		WebkitTextFillColor: {
 			default: "transparent",
-			"@media (prefers-reduced-motion: reduce)": "currentColor",
+			[media.reducedMotion]: "currentColor",
 		},
 		backgroundPosition: "150% 0",
 		animationDuration: shimmerTextVars.duration,
 		animationIterationCount: "infinite",
 		animationName: {
 			default: shimmerSweep,
-			"@media (prefers-reduced-motion: reduce)": "none",
+			[media.reducedMotion]: "none",
 		},
 		animationTimingFunction: "linear",
 		backgroundClip: {
 			default: "text",
-			"@media (prefers-reduced-motion: reduce)": "border-box",
+			[media.reducedMotion]: "border-box",
 		},
 		backgroundImage: {
 			default: `linear-gradient(30deg, ${shimmerTextVars.base} 0 40%, ${shimmerTextVars.highlight} 50%, ${shimmerTextVars.base} 60% 100%)`,
-			"@media (prefers-reduced-motion: reduce)": "none",
+			[media.reducedMotion]: "none",
 		},
 		backgroundSize: "300% 100%",
 		willChange: {
 			default: "background-position",
-			"@media (prefers-reduced-motion: reduce)": "auto",
+			[media.reducedMotion]: "auto",
 		},
 	},
 	once: {

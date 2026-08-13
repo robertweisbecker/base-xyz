@@ -456,6 +456,7 @@ const commandPaletteParts = stylex.create({
 	},
 	inlinePanel: {
 		borderColor: tokens["--border"],
+		backgroundColor: tokens["--panel"],
 		borderRadius: tokens["--radius-lg"],
 		borderStyle: "solid",
 		borderWidth: "1px",

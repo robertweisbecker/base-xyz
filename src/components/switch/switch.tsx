@@ -2,6 +2,7 @@ import { Switch as BaseSwitch } from "@base-ui/react/switch";
 import * as stylex from "@stylexjs/stylex";
 import type { StyleXStyles } from "@stylexjs/stylex";
 import { useId } from "react";
+import { media } from "@/styles/constants.stylex";
 import { resolveThemeProps } from "@/theme/theme-props";
 import type { FieldThemeProps } from "@/components/field/field.types";
 import { fieldStyles, fieldThemeProps, labelMarker } from "@/components/field/field.stylex";
@@ -11,6 +12,9 @@ import { Icon } from "@/components/icons";
 import { VisuallyHidden } from "@/components/visually-hidden/visually-hidden";
 
 export type SwitchSize = "sm" | "md" | "lg";
+
+const ENABLED_HOVER = ":hover:not([data-disabled],[data-readonly])";
+const ENABLED_ACTIVE = ":active:not([data-disabled],[data-readonly])";
 
 export type SwitchProps = Omit<BaseSwitch.Root.Props, "className" | "color" | "style" | keyof FieldThemeProps> &
 	FieldThemeProps & {
@@ -57,7 +61,11 @@ export function Switch({
 
 	return (
 		<div className={[rootSx.className, className].filter(Boolean).join(" ")} style={rootSx.style}>
-			<label htmlFor={id} {...stylex.props(labelMarker, switchParts.labelRoot)}>
+			<label
+				htmlFor={id}
+				data-disabled={disabled ? "" : undefined}
+				data-readonly={readOnly ? "" : undefined}
+				{...stylex.props(labelMarker, switchParts.labelRoot)}>
 				{visuallyHideLabel ? (
 					<VisuallyHidden>{labelContent}</VisuallyHidden>
 				) : (
@@ -107,22 +115,24 @@ const switchParts = stylex.create({
 	},
 	labelRoot: {
 		"--_switch-border-color": {
-			default: tokens["--border-input"],
-			":hover": {
-				"@media (hover: hover) and (pointer: fine)": tokens["--border-input-hover"],
+			[ENABLED_ACTIVE]: tokens["--bg-primary-highlight"],
+			// eslint-disable-next-line @stylexjs/valid-styles -- the compiler supports chained pseudo-class conditions; the lint rule is stricter than the compiler.
+			[ENABLED_HOVER]: {
+				[media.canHover]: tokens["--border-input-hover"],
 			},
-			":active": tokens["--bg-primary-highlight"],
+			default: tokens["--border-input"],
 		},
 		"--_switch-press-scale": {
+			[ENABLED_ACTIVE]: "0.94",
 			default: "1",
-			":active": "0.94",
 		},
 		"--_switch-selected-color": {
-			default: tokens["--bg-primary"],
-			":hover": {
-				"@media (hover: hover) and (pointer: fine)": tokens["--bg-primary-highlight"],
+			[ENABLED_ACTIVE]: tokens["--bg-primary-highlight"],
+			// eslint-disable-next-line @stylexjs/valid-styles -- the compiler supports chained pseudo-class conditions; the lint rule is stricter than the compiler.
+			[ENABLED_HOVER]: {
+				[media.canHover]: tokens["--bg-primary-highlight"],
 			},
-			":active": tokens["--bg-primary-highlight"],
+			default: tokens["--bg-primary"],
 		},
 		gap: tokens["--space-2"],
 		alignItems: "center",

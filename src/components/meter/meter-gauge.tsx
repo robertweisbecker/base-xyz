@@ -2,6 +2,7 @@ import { Meter as BaseMeter } from "@base-ui/react/meter";
 import * as stylex from "@stylexjs/stylex";
 import type { StyleXStyles } from "@stylexjs/stylex";
 import type { ReactNode, SVGProps } from "react";
+import { media } from "@/styles/constants.stylex";
 import { textStyles } from "@/components/text/text.stylex";
 import { tokens } from "@/theme/tokens.stylex";
 
@@ -177,7 +178,7 @@ const meterGaugeParts = stylex.create({
 		transformOrigin: "50% 50%",
 		transitionDuration: {
 			default: tokens["--motion-duration-long"],
-			"@media (prefers-reduced-motion: reduce)": "0ms",
+			[media.reducedMotion]: "0ms",
 		},
 		transitionProperty: "stroke-dasharray, transform, stroke, opacity",
 		transitionTimingFunction: tokens["--motion-ease-smooth-out"],

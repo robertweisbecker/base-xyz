@@ -13,11 +13,14 @@ import { tokens } from "@/theme/tokens.stylex";
 
 import { Toggle, ToggleGroup, type ToggleShape, type ToggleSize, type ToggleVariant } from "./toggle";
 import { firstToggleMarker, secondToggleMarker, thirdToggleMarker } from "./toggle-radius-testing.stylex";
+import { PushPinSimpleIcon } from "@phosphor-icons/react/dist/csr/PushPinSimple";
 
 const iconOptions = {
 	None: undefined,
-	Bell: <BellIcon aria-hidden weight="regular" />,
-	"Bell slash": <BellSlashIcon aria-hidden weight="regular" />,
+	Pin: <PushPinSimpleIcon aria-hidden />,
+	"Pin Fill": <PushPinSimpleIcon aria-hidden weight="duotone" />,
+	Bell: <BellIcon aria-hidden />,
+	"Bell slash": <BellSlashIcon aria-hidden weight="duotone" />,
 };
 
 type TogglePlaygroundArgs = {
@@ -43,10 +46,10 @@ const meta = {
 		children: "Pin message",
 		defaultPressed: false,
 		disabled: false,
-		icon: iconOptions.Bell,
+		icon: iconOptions.Pin,
 		label: "Notifications",
-		pressedIcon: undefined,
-		startSlot: undefined,
+		pressedIcon: iconOptions["Pin Fill"],
+		startSlot: iconOptions.Pin,
 		tooltip: "Notifications",
 		variant: "ghost",
 		size: "md",
@@ -115,7 +118,7 @@ export const Playground: Story = {
 				<Toggle
 					key={`${args.defaultPressed}-${args.disabled}-icon`}
 					{...args}
-					icon={icon ?? <BellIcon aria-hidden weight="regular" />}
+					icon={icon ?? <BellIcon aria-hidden weight="fill" />}
 					label={label || "Notifications"}
 					pressedIcon={pressedIcon}
 					shape={shape === "circle" || shape === "square" ? shape : "square"}
@@ -174,29 +177,29 @@ export const SizesAndIcons: Story = {
 					</span>
 					<div {...stylex.props(styles.row)}>
 						<Toggle
-							pressedIcon={<BellSlashIcon aria-hidden weight="regular" />}
-							size={size}
-							startSlot={<BellIcon aria-hidden weight="regular" />}>
+							startSlot={<BellSlashIcon aria-hidden />}
+							pressedIcon={<BellIcon aria-hidden weight="duotone" />}
+							size={size}>
 							Notifications
 						</Toggle>
 						<Toggle
 							defaultPressed
-							pressedIcon={<BellSlashIcon aria-hidden weight="regular" />}
-							size={size}
-							startSlot={<BellIcon aria-hidden weight="regular" />}>
+							startSlot={<BellSlashIcon aria-hidden />}
+							pressedIcon={<BellIcon aria-hidden weight="duotone" />}
+							size={size}>
 							Notifications
 						</Toggle>
 						<Toggle
-							icon={<BellIcon aria-hidden weight="regular" />}
+							icon={<BellSlashIcon aria-hidden weight="regular" />}
 							label="Notifications"
-							pressedIcon={<BellSlashIcon aria-hidden weight="regular" />}
+							pressedIcon={<BellIcon aria-hidden weight="duotone" />}
 							size={size}
 						/>
 						<Toggle
 							defaultPressed
-							icon={<BellIcon aria-hidden weight="regular" />}
+							icon={<BellSlashIcon aria-hidden />}
 							label="Notifications"
-							pressedIcon={<BellSlashIcon aria-hidden weight="regular" />}
+							pressedIcon={<BellIcon aria-hidden weight="duotone" />}
 							size={size}
 						/>
 					</div>
@@ -241,21 +244,17 @@ export const Groups: Story = {
 			<section {...stylex.props(styles.section)}>
 				<h2 {...stylex.props(styles.heading)}>Single selection</h2>
 				<ToggleGroup aria-label="Text alignment" defaultValue={["left"]}>
-					<Toggle icon={<TextAlignLeftIcon aria-hidden weight="regular" />} label="Align left" value="left" />
-					<Toggle
-						icon={<TextAlignCenterIcon aria-hidden weight="regular" />}
-						label="Align center"
-						value="center"
-					/>
-					<Toggle icon={<TextAlignRightIcon aria-hidden weight="regular" />} label="Align right" value="right" />
+					<Toggle icon={<TextAlignLeftIcon aria-hidden weight="bold" />} label="Align left" value="left" />
+					<Toggle icon={<TextAlignCenterIcon aria-hidden weight="bold" />} label="Align center" value="center" />
+					<Toggle icon={<TextAlignRightIcon aria-hidden weight="bold" />} label="Align right" value="right" />
 				</ToggleGroup>
 			</section>
 			<section {...stylex.props(styles.section)}>
 				<h2 {...stylex.props(styles.heading)}>Multiple selection</h2>
 				<ToggleGroup multiple aria-label="Text formatting" defaultValue={["bold", "italic"]}>
-					<Toggle icon={<TextBIcon aria-hidden weight="regular" />} label="Bold" value="bold" />
-					<Toggle icon={<TextItalicIcon aria-hidden weight="regular" />} label="Italic" value="italic" />
-					<Toggle icon={<TextUnderlineIcon aria-hidden weight="regular" />} label="Underline" value="underline" />
+					<Toggle icon={<TextBIcon aria-hidden weight="bold" />} label="Bold" value="bold" />
+					<Toggle icon={<TextItalicIcon aria-hidden weight="bold" />} label="Italic" value="italic" />
+					<Toggle icon={<TextUnderlineIcon aria-hidden weight="bold" />} label="Underline" value="underline" />
 				</ToggleGroup>
 			</section>
 		</div>

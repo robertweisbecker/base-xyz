@@ -1,6 +1,17 @@
 import * as stylex from "@stylexjs/stylex";
 
 /**
+ * Environmental media-query conditions shared by interactive styles.
+ *
+ * These describe device and user preferences, not application theme state.
+ * Active light/dark mode is owned by ThemeProvider and semantic tokens.
+ */
+export const media = stylex.defineConsts({
+	canHover: "@media (hover: hover) and (pointer: fine)",
+	reducedMotion: "@media (prefers-reduced-motion: reduce)",
+});
+
+/**
  * Mobile-first viewport selectors.
  *
  * Breakpoints are selectors rather than CSS values, so they must remain static

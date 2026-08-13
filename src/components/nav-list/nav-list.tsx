@@ -1,5 +1,6 @@
 import { Collapsible as BaseCollapsible } from "@base-ui/react/collapsible";
 import { useRender } from "@base-ui/react/use-render";
+import { media } from "@/styles/constants.stylex";
 import { Collapsible } from "@/components/collapsible/collapsible";
 import { ArrowLeftIcon, ArrowRightIcon, BrowserIcon } from "@phosphor-icons/react";
 import * as stylex from "@stylexjs/stylex";
@@ -1011,7 +1012,7 @@ const navListParts = stylex.create({
 			"[data-current]": tokens["--surface-subtle"],
 			default: "transparent",
 			":hover": {
-				"@media (hover: hover) and (pointer: fine)": tokens["--bg-highlight"],
+				[media.canHover]: tokens["--bg-highlight"],
 			},
 		},
 		color: {
@@ -1019,7 +1020,7 @@ const navListParts = stylex.create({
 			"[data-disabled]": tokens["--fg-subtle"],
 			default: tokens["--fg"],
 			":hover": {
-				"@media (hover: hover) and (pointer: fine)": tokens["--fg"],
+				[media.canHover]: tokens["--fg"],
 			},
 		},
 		fontFamily: "inherit",
@@ -1090,7 +1091,7 @@ const navListParts = stylex.create({
 		},
 		transitionDuration: {
 			default: tokens["--motion-duration-short"],
-			"@media (prefers-reduced-motion: reduce)": "0ms",
+			[media.reducedMotion]: "0ms",
 		},
 		transitionProperty: "transform",
 		transitionTimingFunction: tokens["--motion-ease-smooth-out"],
@@ -1150,7 +1151,7 @@ const navListParts = stylex.create({
 		paddingInlineStart: tokens["--space-3"],
 		transitionDuration: {
 			default: tokens["--motion-duration-short"],
-			"@media (prefers-reduced-motion: reduce)": "0ms",
+			[media.reducedMotion]: "0ms",
 		},
 		transitionProperty: "height, padding",
 		transitionTimingFunction: tokens["--motion-ease-out"],
@@ -1193,7 +1194,7 @@ const navListParts = stylex.create({
 		},
 		transitionDuration: {
 			default: tokens["--motion-duration-medium"],
-			"@media (prefers-reduced-motion: reduce)": "0ms",
+			[media.reducedMotion]: "0ms",
 		},
 		transitionProperty: "opacity, transform",
 		transitionTimingFunction: tokens["--motion-ease-smooth-out"],

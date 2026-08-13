@@ -1,6 +1,7 @@
 import { Meter as BaseMeter } from "@base-ui/react/meter";
 import * as stylex from "@stylexjs/stylex";
 import type { StyleXStyles } from "@stylexjs/stylex";
+import { media } from "@/styles/constants.stylex";
 import { textStyles } from "@/components/text/text.stylex";
 import { createContext, useContext, type CSSProperties } from "react";
 import { tokens } from "@/theme/tokens.stylex";
@@ -299,7 +300,7 @@ const meterParts = stylex.create({
 		boxShadow: tokens["--shadow-sm"],
 		transitionDuration: {
 			default: tokens["--motion-duration-medium"],
-			"@media (prefers-reduced-motion: reduce)": "0ms",
+			[media.reducedMotion]: "0ms",
 		},
 		transitionProperty: "width, background-color",
 		transitionTimingFunction: tokens["--motion-ease-smooth-out"],

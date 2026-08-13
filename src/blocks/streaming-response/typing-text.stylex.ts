@@ -1,4 +1,5 @@
 import * as stylex from "@stylexjs/stylex";
+import { media } from "@/styles/constants.stylex";
 import { typingTextVars } from "./typing-text-vars.stylex";
 
 const chunkReveal = stylex.keyframes({
@@ -37,27 +38,27 @@ export const typingTextStyles = stylex.create({
 		animationFillMode: "both",
 		animationName: {
 			default: chunkReveal,
-			"@media (prefers-reduced-motion: reduce)": "none",
+			[media.reducedMotion]: "none",
 		},
 		animationTimingFunction: typingTextVars.chunkEasing,
 		display: "inline-block",
 		filter: {
 			default: "blur(1px)",
-			"@media (prefers-reduced-motion: reduce)": "none",
+			[media.reducedMotion]: "none",
 		},
 		opacity: {
 			default: 0,
-			"@media (prefers-reduced-motion: reduce)": 1,
+			[media.reducedMotion]: 1,
 		},
 		transform: {
 			default: "translateX(-0.5em)",
-			"@media (prefers-reduced-motion: reduce)": "translateX(0)",
+			[media.reducedMotion]: "translateX(0)",
 		},
 		verticalAlign: "baseline",
 		whiteSpace: "inherit",
 		willChange: {
 			default: "filter, opacity, transform",
-			"@media (prefers-reduced-motion: reduce)": "auto",
+			[media.reducedMotion]: "auto",
 		},
 	},
 	chunks: {
@@ -77,7 +78,7 @@ export const typingTextStyles = stylex.create({
 			animationIterationCount: "infinite",
 			animationName: {
 				default: caretPulse,
-				"@media (prefers-reduced-motion: reduce)": "none",
+				[media.reducedMotion]: "none",
 			},
 			animationTimingFunction: "steps(1, end)",
 			backgroundColor: typingTextVars.caretColor,
@@ -85,7 +86,7 @@ export const typingTextStyles = stylex.create({
 			display: "inline-block",
 			opacity: {
 				default: typingTextVars.caretOpacity,
-				"@media (prefers-reduced-motion: reduce)": typingTextVars.caretOpacity,
+				[media.reducedMotion]: typingTextVars.caretOpacity,
 			},
 			transform: "translateY(0.12em)",
 			height: "1em",

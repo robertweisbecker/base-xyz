@@ -3,6 +3,7 @@ import { CaretDownIcon } from "@phosphor-icons/react/dist/csr/CaretDown";
 import * as stylex from "@stylexjs/stylex";
 import type { StyleXStyles } from "@stylexjs/stylex";
 import type { ComponentProps } from "react";
+import { media } from "@/styles/constants.stylex";
 import { tokens } from "@/theme/tokens.stylex";
 import { focusRing } from "@/styles/recipes/focus";
 
@@ -132,7 +133,7 @@ const collapsibleParts = stylex.create({
 		backgroundColor: {
 			// eslint-disable-next-line @stylexjs/valid-styles -- the compiler supports chained pseudo-class conditions; the lint rule is stricter than the compiler.
 			[HOVER_WHEN_INACTIVE]: {
-				"@media (hover: hover) and (pointer: fine)": tokens["--surface-subtle"],
+				[media.canHover]: tokens["--surface-subtle"],
 			},
 			"[data-panel-open]": tokens["--surface-subtle"],
 			default: "transparent",
@@ -151,7 +152,7 @@ const collapsibleParts = stylex.create({
 		textAlign: "start",
 		transitionDuration: {
 			default: tokens["--motion-duration-short"],
-			"@media (prefers-reduced-motion: reduce)": "0ms",
+			[media.reducedMotion]: "0ms",
 		},
 		transitionProperty: "background-color, color",
 		transitionTimingFunction: tokens["--motion-ease-out"],
@@ -164,7 +165,7 @@ const collapsibleParts = stylex.create({
 		},
 		transitionDuration: {
 			default: tokens["--motion-duration-short"],
-			"@media (prefers-reduced-motion: reduce)": "0ms",
+			[media.reducedMotion]: "0ms",
 		},
 		transitionProperty: "height",
 		transitionTimingFunction: tokens["--motion-ease-out"],
@@ -196,7 +197,7 @@ const collapsibleParts = stylex.create({
 		},
 		transitionDuration: {
 			default: tokens["--motion-duration-short"],
-			"@media (prefers-reduced-motion: reduce)": "0ms",
+			[media.reducedMotion]: "0ms",
 		},
 		transitionProperty: "transform",
 		transitionTimingFunction: tokens["--motion-ease-smooth-out"],
@@ -285,7 +286,7 @@ const triggerVariants = stylex.create({
 		color: {
 			// eslint-disable-next-line @stylexjs/valid-styles -- the compiler supports chained pseudo-class conditions; the lint rule is stricter than the compiler.
 			[HOVER_WHEN_INACTIVE]: {
-				"@media (hover: hover) and (pointer: fine)": tokens["--fg"],
+				[media.canHover]: tokens["--fg"],
 			},
 			"[data-panel-open]": tokens["--fg"],
 			default: tokens["--fg-muted"],

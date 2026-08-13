@@ -1,6 +1,7 @@
 import * as stylex from "@stylexjs/stylex";
 import type { StyleXStyles } from "@stylexjs/stylex";
 import type { ComponentProps } from "react";
+import { media } from "@/styles/constants.stylex";
 import { tokens } from "@/theme/tokens.stylex";
 
 export type LoaderProps = Omit<ComponentProps<"svg">, "children" | "height" | "style" | "width"> & {
@@ -63,7 +64,7 @@ const loaderParts = stylex.create({
 		animationIterationCount: "infinite",
 		animationName: {
 			default: rotate,
-			"@media (prefers-reduced-motion: reduce)": "none",
+			[media.reducedMotion]: "none",
 		},
 		animationTimingFunction: "linear",
 		display: "inline-flex",
@@ -92,7 +93,7 @@ const loaderParts = stylex.create({
 		animationIterationCount: "infinite",
 		animationName: {
 			default: changeArcLength,
-			"@media (prefers-reduced-motion: reduce)": "none",
+			[media.reducedMotion]: "none",
 		},
 		animationTimingFunction: "ease-in-out",
 	},

@@ -7,7 +7,7 @@ import { WarningIcon } from "@phosphor-icons/react/dist/csr/Warning";
 import { ColorItem, ColorPalette, IconGallery, IconItem, Source, Typeset } from "@storybook/addon-docs/blocks";
 import * as stylex from "@stylexjs/stylex";
 import { useState, type ReactNode } from "react";
-import { breakpoints, zIndex } from "@/styles/constants.stylex";
+import { breakpoints, zIndex, media } from "@/styles/constants.stylex";
 import { tokens } from "@/theme/tokens.stylex";
 
 import { fontFamilyStyles, typescaleStyles } from "@/components/text/text.stylex";
@@ -1198,25 +1198,25 @@ const styles = stylex.create({
 	motionQuick: {
 		transitionDuration: {
 			default: tokens["--motion-duration-quick"],
-			"@media (prefers-reduced-motion: reduce)": "0.01ms",
+			[media.reducedMotion]: "0.01ms",
 		},
 	},
 	motionShort: {
 		transitionDuration: {
 			default: tokens["--motion-duration-short"],
-			"@media (prefers-reduced-motion: reduce)": "0.01ms",
+			[media.reducedMotion]: "0.01ms",
 		},
 	},
 	motionMedium: {
 		transitionDuration: {
 			default: tokens["--motion-duration-medium"],
-			"@media (prefers-reduced-motion: reduce)": "0.01ms",
+			[media.reducedMotion]: "0.01ms",
 		},
 	},
 	motionContent: {
 		transitionDuration: {
 			default: tokens["--motion-duration-content"],
-			"@media (prefers-reduced-motion: reduce)": "0.01ms",
+			[media.reducedMotion]: "0.01ms",
 		},
 	},
 	easingNotes: {

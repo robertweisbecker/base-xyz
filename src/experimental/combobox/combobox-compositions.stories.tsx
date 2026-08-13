@@ -5,6 +5,7 @@ import { PlusCircleIcon } from "@phosphor-icons/react/dist/csr/PlusCircle";
 import { XIcon } from "@phosphor-icons/react/dist/csr/X";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import * as stylex from "@stylexjs/stylex";
+import { media } from "@/styles/constants.stylex";
 import { Button } from "@/components/button/button";
 import { fieldStyles, fieldTextStyles } from "@/components/field/field.stylex";
 import { Icon } from "@/components/icons";
@@ -264,7 +265,7 @@ const styles = stylex.create({
 		backgroundColor: {
 			default: "transparent",
 			":hover": {
-				"@media (hover: hover) and (pointer: fine)": tokens["--surface"],
+				[media.canHover]: tokens["--surface"],
 			},
 		},
 		color: {

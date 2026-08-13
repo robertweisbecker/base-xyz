@@ -1,7 +1,7 @@
 import * as stylex from "@stylexjs/stylex";
 import type { FieldSize, FieldThemeProps } from "@/components/field/field.types";
 import { textStyles, fontWeightStyles } from "@/components/text/text.stylex";
-import { breakpoints } from "@/styles/constants.stylex";
+import { breakpoints, media } from "@/styles/constants.stylex";
 import { composeThemeProps, type ThemePropDefinition, type VerifyThemeProps } from "@/theme/theme-props";
 import {
 	childLayoutThemeProps,
@@ -89,7 +89,7 @@ const parts = stylex.create({
 		borderColor: {
 			// eslint-disable-next-line @stylexjs/valid-styles -- the compiler supports chained pseudo-class conditions; the lint rule is stricter than the compiler.
 			[INTERACTIVE_CONTROL_HOVER]: {
-				"@media (hover: hover) and (pointer: fine)": tokens["--border-input-hover"],
+				[media.canHover]: tokens["--border-input-hover"],
 			},
 			"[data-disabled]": tokens["--border-disabled"],
 			"[data-invalid]": tokens["--bg-error-primary"],

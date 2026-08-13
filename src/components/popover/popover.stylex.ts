@@ -1,5 +1,5 @@
 import * as stylex from "@stylexjs/stylex";
-import { zIndex } from "@/styles/constants.stylex";
+import { zIndex, media } from "@/styles/constants.stylex";
 import { tokens } from "@/theme/tokens.stylex";
 import { popupVars } from "./popover-vars.stylex";
 
@@ -51,7 +51,7 @@ export const popupMotionStyles = stylex.create({
 		transformOrigin: "var(--transform-origin)",
 		transitionDuration: {
 			default: popupVars.duration,
-			"@media (prefers-reduced-motion: reduce)": "0ms",
+			[media.reducedMotion]: "0ms",
 		},
 		transitionProperty: {
 			"[data-instant]": "none",
@@ -72,7 +72,7 @@ export const popupMotionStyles = stylex.create({
 		transitionDuration: {
 			default: tokens["--motion-duration-content"],
 			":has(> [data-starting-style])": "0ms",
-			"@media (prefers-reduced-motion: reduce)": "0ms",
+			[media.reducedMotion]: "0ms",
 		},
 		transitionProperty: "top, right, bottom, left, transform",
 		transitionTimingFunction: tokens["--motion-ease-smooth-out"],
@@ -81,7 +81,7 @@ export const popupMotionStyles = stylex.create({
 		transitionDuration: {
 			"[data-instant]": "0ms",
 			default: tokens["--motion-duration-content"],
-			"@media (prefers-reduced-motion: reduce)": "0ms",
+			[media.reducedMotion]: "0ms",
 		},
 		transitionProperty: "width, height, transform, opacity",
 		transitionTimingFunction: tokens["--motion-ease-smooth-out"],

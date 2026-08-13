@@ -2,6 +2,7 @@ import { Button as BaseButton } from "@base-ui/react/button";
 import * as stylex from "@stylexjs/stylex";
 import type { StyleXStyles } from "@stylexjs/stylex";
 import type { ReactNode } from "react";
+import { media } from "@/styles/constants.stylex";
 import { resolveThemeProps } from "@/theme/theme-props";
 import { focusRing } from "@/styles/recipes/focus";
 import { pressable } from "@/styles/recipes/transitions";
@@ -70,11 +71,12 @@ const slotParts = stylex.create({
 		color: {
 			default: tokens["--fg-subtle"],
 			":is(svg)": tokens["--fill-neutral"],
+			[stylex.when.ancestor("[data-pressed]", buttonMarker)]: tokens["--fg"],
 		},
 	},
 });
 
-const contentParts = stylex.create({
+const loadingStyles = stylex.create({
 	resting: {
 		gap: "inherit",
 		// Real box required so loading `opacity: 0` hides slotted icons that set
@@ -84,7 +86,7 @@ const contentParts = stylex.create({
 		justifyContent: "center",
 		minWidth: 0,
 	},
-	transparent: {
+	hidden: {
 		color: "transparent",
 		opacity: 0,
 		textShadow: "none",
@@ -108,17 +110,17 @@ const contentParts = stylex.create({
 });
 
 const slotSizes = stylex.create({
-	xs: { fontSize: "0.75rem" },
-	sm: { fontSize: "0.875rem" },
+	xs: { fontSize: "0.875rem" },
+	sm: { fontSize: "1rem" },
 	md: { fontSize: "1rem" },
-	lg: { fontSize: "1rem" },
+	lg: { fontSize: "1.125rem" },
 });
 
 const iconOnlySlotSizes = stylex.create({
-	xs: { fontSize: ".875rem" }, // 14px
+	xs: { fontSize: "1rem" }, // 14px
 	sm: { fontSize: "1rem" }, // 16px
-	md: { fontSize: "1.125rem" }, // 18px
-	lg: { fontSize: "1.25rem" }, // 20px
+	md: { fontSize: "1.125rem" }, // 20px
+	lg: { fontSize: "1.25rem" }, // 24px
 });
 
 const iconOnlyControlSizes = stylex.create({
@@ -163,7 +165,7 @@ const colorVariants = stylex.create({
 		backgroundColor: {
 			// eslint-disable-next-line @stylexjs/valid-styles -- the compiler supports chained pseudo-class conditions; the lint rule is stricter than the compiler.
 			[HOVER_NOT_PRESSED_OR_OPEN]: {
-				"@media (hover: hover) and (pointer: fine)": tokens["--bg-primary-highlight"],
+				[media.canHover]: tokens["--bg-primary-highlight"],
 			},
 			[PRESSED]: tokens["--bg-primary-highlight"],
 			"[data-popup-open]": tokens["--bg-primary-highlight"],
@@ -183,7 +185,7 @@ const colorVariants = stylex.create({
 		backgroundColor: {
 			// eslint-disable-next-line @stylexjs/valid-styles -- the compiler supports chained pseudo-class conditions; the lint rule is stricter than the compiler.
 			[HOVER_NOT_PRESSED_OR_OPEN]: {
-				"@media (hover: hover) and (pointer: fine)": tokens["--bg-accent-hover"],
+				[media.canHover]: tokens["--bg-accent-hover"],
 			},
 			[PRESSED]: tokens["--bg-accent-active"],
 			"[data-popup-open]": tokens["--bg-accent-hover"],
@@ -191,8 +193,8 @@ const colorVariants = stylex.create({
 			":active:not([data-disabled])": tokens["--bg-accent-active"],
 		},
 		color: {
+			[HOVER_NOT_PRESSED_OR_OPEN]: tokens["--fg-accent-strong"],
 			[PRESSED]: tokens["--fg-accent-strong"],
-			"[HOVER_NOT_PRESSED_OR_OPEN]": tokens["--fg-accent-strong"],
 			default: tokens["--fg-accent"],
 		},
 	},
@@ -216,7 +218,7 @@ const colorVariants = stylex.create({
 		backgroundColor: {
 			// eslint-disable-next-line @stylexjs/valid-styles -- the compiler supports chained pseudo-class conditions; the lint rule is stricter than the compiler.
 			[HOVER_NOT_PRESSED_OR_OPEN]: {
-				"@media (hover: hover) and (pointer: fine)": tokens["--surface-subtle-hover"],
+				[media.canHover]: tokens["--surface-subtle-hover"],
 			},
 			[PRESSED]: tokens["--surface-subtle-hover"],
 			"[data-popup-open]": tokens["--surface-subtle-hover"],
@@ -226,7 +228,7 @@ const colorVariants = stylex.create({
 		color: {
 			// eslint-disable-next-line @stylexjs/valid-styles -- the compiler supports chained pseudo-class conditions; the lint rule is stricter than the compiler.
 			[HOVER_NOT_PRESSED_OR_OPEN]: {
-				"@media (hover: hover) and (pointer: fine)": tokens["--fg"],
+				[media.canHover]: tokens["--fg"],
 			},
 			[PRESSED]: tokens["--fg"],
 			"[data-popup-open]": tokens["--fg"],
@@ -239,17 +241,18 @@ const colorVariants = stylex.create({
 		backgroundColor: {
 			// eslint-disable-next-line @stylexjs/valid-styles -- the compiler supports chained pseudo-class conditions; the lint rule is stricter than the compiler.
 			[HOVER_NOT_PRESSED_OR_OPEN]: {
-				"@media (hover: hover) and (pointer: fine)": tokens["--surface-subtle"],
+				[media.canHover]: tokens["--surface-subtle"],
 			},
-			[PRESSED]: tokens["--surface-subtle-hover"],
+			[PRESSED]: tokens["--surface-subtle-active"],
 			"[data-popup-open]": tokens["--surface-subtle-hover"],
 			// ":active:not([data-disabled])": tokens["--bg-highlight"],
 			default: "transparent",
+			":active:not([data-disabled])": tokens["--surface-subtle-active"],
 		},
 		color: {
 			// eslint-disable-next-line @stylexjs/valid-styles -- the compiler supports chained pseudo-class conditions; the lint rule is stricter than the compiler.
 			[HOVER_NOT_PRESSED_OR_OPEN]: {
-				"@media (hover: hover) and (pointer: fine)": tokens["--fg"],
+				[media.canHover]: tokens["--fg"],
 			},
 			[PRESSED]: tokens["--fg"],
 			default: tokens["--fg-muted"],
@@ -264,7 +267,7 @@ const colorVariants = stylex.create({
 		color: {
 			// eslint-disable-next-line @stylexjs/valid-styles -- the compiler supports chained pseudo-class conditions; the lint rule is stricter than the compiler.
 			[HOVER_NOT_PRESSED_OR_OPEN]: {
-				"@media (hover: hover) and (pointer: fine)": tokens["--fg-muted"],
+				[media.canHover]: tokens["--fg-muted"],
 			},
 			[PRESSED]: tokens["--fg"],
 			default: tokens["--fg-subtle"],
@@ -276,7 +279,7 @@ const colorVariants = stylex.create({
 		backgroundColor: {
 			// eslint-disable-next-line @stylexjs/valid-styles -- the compiler supports chained pseudo-class conditions; the lint rule is stricter than the compiler.
 			[HOVER_NOT_PRESSED_OR_OPEN]: {
-				"@media (hover: hover) and (pointer: fine)": tokens["--color-error-c2"],
+				[media.canHover]: tokens["--color-error-c2"],
 			},
 			[PRESSED]: tokens["--color-error-c3"],
 			default: tokens["--color-error-c1"],
@@ -285,7 +288,7 @@ const colorVariants = stylex.create({
 		color: {
 			// // eslint-disable-next-line @stylexjs/valid-styles -- the compiler supports chained pseudo-class conditions; the lint rule is stricter than the compiler.
 			// [HOVER_NOT_PRESSED_OR_OPEN]: {
-			// 	"@media (hover: hover) and (pointer: fine)": tokens["--color-error-t2"],
+			// 	[media.canHover]: tokens["--color-error-t2"],
 			// },
 			[PRESSED]: tokens["--color-error-t2"],
 			default: tokens["--color-error-t1"],
@@ -466,16 +469,16 @@ function ButtonRoot({
 			className={[sx.className, className].filter(Boolean).join(" ")}
 			style={sx.style}
 			{...restProps}>
-			<span {...stylex.props(contentParts.resting, loading && contentParts.transparent)}>
+			<span {...stylex.props(loadingStyles.resting, loading && loadingStyles.hidden)}>
 				{renderSlot(startSlot, "start", size, variant, iconOnly)}
 				{children}
 				{renderSlot(endSlot, "end", size, variant, iconOnly)}
 			</span>
 			{loading && (
-				<span aria-hidden {...stylex.props(contentParts.loading)}>
+				<span aria-hidden {...stylex.props(loadingStyles.loading)}>
 					{renderSlot(<Loader aria-hidden />, "loading", size, variant, iconOnly || resolvedLoadingText.length === 0)}
 					{resolvedLoadingText.length > 0 && (
-						<span {...stylex.props(contentParts.loadingText)}>{resolvedLoadingText}</span>
+						<span {...stylex.props(loadingStyles.loadingText)}>{resolvedLoadingText}</span>
 					)}
 				</span>
 			)}

@@ -2,7 +2,7 @@ import { Toast as BaseToast } from "@base-ui/react/toast";
 import * as stylex from "@stylexjs/stylex";
 import type { StyleXStyles } from "@stylexjs/stylex";
 import { type ComponentProps } from "react";
-import { zIndex } from "@/styles/constants.stylex";
+import { zIndex, media } from "@/styles/constants.stylex";
 import { tokens } from "@/theme/tokens.stylex";
 import { pressable } from "@/styles/recipes/transitions";
 
@@ -179,7 +179,7 @@ const toastParts = stylex.create({
 		transformOrigin: "bottom center",
 		transitionDuration: {
 			default: `${toastMotion.stackDuration}, ${toastMotion.stackDuration}, ${toastMotion.heightDuration}`,
-			"@media (prefers-reduced-motion: reduce)": "0ms",
+			[media.reducedMotion]: "0ms",
 		},
 		transitionProperty: "transform, opacity, height",
 		transitionTimingFunction: `${tokens["--motion-ease-smooth-out"]}, ease, ease`,
@@ -218,7 +218,7 @@ const toastParts = stylex.create({
 		},
 		transitionDuration: {
 			default: tokens["--motion-duration-medium"],
-			"@media (prefers-reduced-motion: reduce)": "0ms",
+			[media.reducedMotion]: "0ms",
 		},
 		transitionProperty: "opacity",
 		transitionTimingFunction: tokens["--motion-ease-smooth-out"],

@@ -73,6 +73,7 @@ export { Progress } from "./progress/progress";
 export { Separator, type SeparatorProps, type SeparatorThemeProps } from "./separator/separator";
 export { Sidebar } from "./sidebar/sidebar";
 export { Slider } from "./slider/slider";
+export { Table } from "./table/table";
 export { Tabs } from "./tabs/tabs";
 export { Toolbar } from "./toolbar/toolbar";
 export {

@@ -1,4 +1,5 @@
 import * as stylex from "@stylexjs/stylex";
+import { media } from "@/styles/constants.stylex";
 import { popupVars } from "@/components/popover/popover-vars.stylex";
 import { tokens } from "@/theme/tokens.stylex";
 
@@ -119,7 +120,7 @@ export const comboboxParts = stylex.create({
 			[stylex.when.ancestor("[data-disabled]", comboboxMarker)]: "transparent",
 			[stylex.when.ancestor("[data-readonly]", comboboxMarker)]: "transparent",
 			":hover": {
-				"@media (hover: hover) and (pointer: fine)": tokens["--bg-highlight"],
+				[media.canHover]: tokens["--bg-highlight"],
 			},
 		},
 		height: tokens["--space-5"],
@@ -141,7 +142,7 @@ export const comboboxParts = stylex.create({
 		color: {
 			// eslint-disable-next-line @stylexjs/valid-styles -- the compiler supports chained pseudo-class conditions; the lint rule is stricter than the compiler.
 			[HOVER_WHEN_INACTIVE]: {
-				"@media (hover: hover) and (pointer: fine)": tokens["--fg"],
+				[media.canHover]: tokens["--fg"],
 			},
 			default: tokens["--fg-muted"],
 			[stylex.when.ancestor('[aria-readonly="true"]', comboboxMarker)]: tokens["--fg-subtle"],

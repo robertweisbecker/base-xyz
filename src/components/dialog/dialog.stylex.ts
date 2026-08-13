@@ -1,6 +1,6 @@
 import * as stylex from "@stylexjs/stylex";
 import { headingStyles, textStyles } from "@/components/text/text.stylex";
-import { zIndex } from "@/styles/constants.stylex";
+import { zIndex, media } from "@/styles/constants.stylex";
 import { tokens } from "@/theme/tokens.stylex";
 
 /**
@@ -73,7 +73,7 @@ export const modalChromeStyles = stylex.create({
 			position: "absolute",
 			transitionDuration: {
 				default: tokens["--motion-duration-medium"],
-				"@media (prefers-reduced-motion: reduce)": "0ms",
+				[media.reducedMotion]: "0ms",
 			},
 			transitionProperty: "background-color, opacity",
 			transitionTimingFunction: tokens["--motion-ease-out"],
@@ -103,7 +103,7 @@ export const modalMotionStyles = stylex.create({
 		},
 		transitionDuration: {
 			default: tokens["--motion-duration-medium"],
-			"@media (prefers-reduced-motion: reduce)": "0ms",
+			[media.reducedMotion]: "0ms",
 		},
 		transitionProperty: "opacity",
 		transitionTimingFunction: tokens["--motion-ease-out"],
@@ -124,7 +124,7 @@ export const modalMotionStyles = stylex.create({
 		transformOrigin: "center center",
 		transitionDuration: {
 			default: tokens["--motion-duration-medium"],
-			"@media (prefers-reduced-motion: reduce)": "0ms",
+			[media.reducedMotion]: "0ms",
 		},
 		transitionProperty: "opacity, transform",
 		transitionTimingFunction: tokens["--motion-ease-out"],

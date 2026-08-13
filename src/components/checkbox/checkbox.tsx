@@ -5,6 +5,7 @@ import { Fieldset } from "@base-ui/react/fieldset";
 import * as stylex from "@stylexjs/stylex";
 import type { StyleXStyles } from "@stylexjs/stylex";
 import { createContext, useContext, useId, type ReactNode } from "react";
+import { media } from "@/styles/constants.stylex";
 import { resolveThemeProps } from "@/theme/theme-props";
 import type { FieldThemeProps } from "@/components/field/field.types";
 import { fieldChoiceGroupStyles, fieldStyles, fieldThemeProps, labelMarker } from "@/components/field/field.stylex";
@@ -16,6 +17,9 @@ import { VisuallyHidden } from "@/components/visually-hidden/visually-hidden";
 import { Icon } from "@/components/icons";
 
 export type CheckboxSize = "sm" | "md";
+
+const ENABLED_HOVER = ":hover:not([data-disabled],[data-readonly])";
+const ENABLED_ACTIVE = ":active:not([data-disabled],[data-readonly])";
 
 export type CheckboxProps = Omit<
 	BaseCheckbox.Root.Props,
@@ -90,7 +94,10 @@ export function Checkbox({
 	);
 	const content = (
 		<>
-			<Field.Label {...stylex.props(labelMarker, checkboxParts.labelRoot)}>
+			<Field.Label
+				data-disabled={isDisabled ? "" : undefined}
+				data-readonly={readOnly ? "" : undefined}
+				{...stylex.props(labelMarker, checkboxParts.labelRoot)}>
 				<BaseCheckbox.Root
 					ref={ref}
 					id={id}
@@ -280,31 +287,32 @@ const checkboxParts = stylex.create({
 	},
 	labelRoot: {
 		"--_checkbox-bg": {
-			default: tokens["--surface"],
+			[ENABLED_ACTIVE]: tokens["--surface-subtle-active"],
 			// eslint-disable-next-line @stylexjs/valid-styles -- the compiler supports chained pseudo-class conditions; the lint rule is stricter than the compiler.
-			":hover:not([data-disabled])": {
-				"@media (hover: hover) and (pointer: fine)": tokens["--surface-subtle"],
+			[ENABLED_HOVER]: {
+				[media.canHover]: tokens["--surface-subtle"],
 			},
-			":active": tokens["--surface-subtle-active"],
+			default: tokens["--surface"],
 		},
 		"--_checkbox-bg-checked": {
-			default: tokens["--bg-primary"],
+			[ENABLED_ACTIVE]: tokens["--bg-primary"],
 			// eslint-disable-next-line @stylexjs/valid-styles -- the compiler supports chained pseudo-class conditions; the lint rule is stricter than the compiler.
-			":hover:not([data-disabled])": {
-				"@media (hover: hover) and (pointer: fine)": tokens["--bg-primary-highlight"],
+			[ENABLED_HOVER]: {
+				[media.canHover]: tokens["--bg-primary-highlight"],
 			},
-			":active": tokens["--bg-primary"],
+			default: tokens["--bg-primary"],
 		},
 		"--_checkbox-border": {
-			default: tokens["--border-input"],
-			":active:hover": tokens["--bg-primary-highlight"],
-			":hover": {
-				"@media (hover: hover) and (pointer: fine)": tokens["--border-input-hover"],
+			[ENABLED_ACTIVE]: tokens["--bg-primary-highlight"],
+			// eslint-disable-next-line @stylexjs/valid-styles -- the compiler supports chained pseudo-class conditions; the lint rule is stricter than the compiler.
+			[ENABLED_HOVER]: {
+				[media.canHover]: tokens["--border-input-hover"],
 			},
+			default: tokens["--border-input"],
 		},
 		"--_checkbox-press-scale": {
+			[ENABLED_ACTIVE]: "0.94",
 			default: "1",
-			":active": "0.94",
 		},
 		"--_checkbox-radius": {
 			default: tokens["--radius-xs"],
@@ -340,6 +348,7 @@ const checkboxParts = stylex.create({
 			"[data-checked]": "var(--_checkbox-bg-checked)",
 			"[data-checked][data-disabled]": tokens["--surface-subtle"],
 			"[data-checked][data-invalid]": tokens["--bg-error-primary"],
+			"[data-checked][data-readonly]": tokens["--surface"],
 			"[data-readonly]": tokens["--surface"],
 			default: "var(--_checkbox-bg)",
 		},
@@ -366,10 +375,9 @@ const checkboxParts = stylex.create({
 		alignItems: "center",
 		color: {
 			"[data-disabled]": tokens["--fg-subtle"],
+			"[data-readonly]": tokens["--fg"],
 			"[data-indeterminate]": "var(--_checkbox-bg-checked)",
-			"[data-indeterminate][data-disabled]": tokens["--fg-subtle"],
 			"[data-invalid]": tokens["--fg-accent-contrast"],
-			"[data-readonly]": tokens["--fg-accent"],
 			default: tokens["--fg-accent-contrast"],
 		},
 		display: "flex",
@@ -394,7 +402,7 @@ const checkboxParts = stylex.create({
 		},
 		transitionDuration: {
 			default: tokens["--motion-duration-medium"],
-			"@media (prefers-reduced-motion: reduce)": "0ms",
+			[media.reducedMotion]: "0ms",
 		},
 		transitionProperty: "transform, opacity",
 		transitionTimingFunction: tokens["--motion-ease-out"],

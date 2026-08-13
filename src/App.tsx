@@ -70,6 +70,7 @@ import {
 	Slider,
 	Stack,
 	Switch,
+	Table,
 	Tabs,
 	Text,
 	Textarea,
@@ -79,6 +80,7 @@ import {
 	ToggleGroup,
 	Toolbar,
 	Tooltip,
+	VisuallyHidden,
 } from "./components";
 import {
 	exampleDefaultValue,
@@ -597,6 +599,33 @@ function getComponentCells(): GalleryCell[] {
 		{
 			title: "Switch",
 			content: <Switch label="Realtime sync" defaultChecked size="sm" />,
+		},
+		{
+			title: "Table",
+			content: (
+				<Table.Root>
+					<Table.Container>
+						<Table.Content caption={<VisuallyHidden>Recent deployments</VisuallyHidden>}>
+							<Table.Header>
+								<Table.Row>
+									<Table.HeaderCell>URL</Table.HeaderCell>
+									<Table.HeaderCell>Status</Table.HeaderCell>
+								</Table.Row>
+							</Table.Header>
+							<Table.Body>
+								<Table.Row>
+									<Table.Cell>app.example.com</Table.Cell>
+									<Table.Cell>Ready</Table.Cell>
+								</Table.Row>
+								<Table.Row>
+									<Table.Cell>preview.example.com</Table.Cell>
+									<Table.Cell>Building</Table.Cell>
+								</Table.Row>
+							</Table.Body>
+						</Table.Content>
+					</Table.Container>
+				</Table.Root>
+			),
 		},
 		{
 			title: "Tabs",

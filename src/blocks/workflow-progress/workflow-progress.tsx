@@ -132,7 +132,7 @@ function useWorkflowProgressStatus(part: string) {
 function renderStatusIcon(status: WorkflowProgressStatus) {
 	switch (status) {
 		case "queued":
-			return <Icon.Circle aria-hidden />;
+			return <Icon.Dot aria-hidden />;
 		case "running":
 			return <Loader aria-hidden />;
 		case "complete":

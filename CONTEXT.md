@@ -5,6 +5,10 @@
 - **Layout primitive** — `Box`, `Stack`, or `Grid`; a product-agnostic composition root with the broadest theme-prop contract. Only these primitives expose shared `color` and `bg` props.
 - **Responsive style set** — A predeclared StyleX style that keeps every breakpoint value for a CSS property together. Pass it through `style`; theme props themselves remain scalar.
 - **Field wrapper** — The public root around a label, control, description, and error. Layout theme props style this wrapper only; they never alter the inner control chrome.
+- **Table** — A manually composed, presentation-only compound component for semantic tabular structure and its canonical visual treatment. It owns no dataset-derived behavior such as filtering, sorting, visibility, or expansion.
+- **Data table** — A stateful, data-driven component that derives rows and columns from data and composes `Table` for presentation. It owns filtering, sorting, visibility, selection, expansion, and row actions.
+- **Action cell** — A compact table header or data cell reserved for a direct interactive control, such as a disclosure button or row-action menu trigger. Checkbox cells are specialized action cells that own the design-system Checkbox composition.
+- **Checked row** — A body row whose selection checkbox is checked and which receives the corresponding visual treatment. Use `checked`, not `selected`, in the presentation-only `Table` API.
 
 ## Tokens and themes
 

@@ -4,7 +4,6 @@ import type { ReactNode } from "react";
 import { Avatar } from "@/components/avatar/avatar";
 import { Item } from "@/components/item/item";
 import { userOptions, userSelectItems, type UserOption } from "@/components/storybook/user-options";
-import { Text } from "@/components/text/text";
 import { tokens } from "@/theme/tokens.stylex";
 
 import {

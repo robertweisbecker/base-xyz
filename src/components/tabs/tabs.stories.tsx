@@ -1,4 +1,3 @@
-import { CaretRightIcon } from "@phosphor-icons/react/dist/csr/CaretRight";
 import { FolderSimpleIcon } from "@phosphor-icons/react/dist/csr/FolderSimple";
 import { GearIcon } from "@phosphor-icons/react/dist/csr/Gear";
 import type { Meta, StoryObj } from "@storybook/react-vite";

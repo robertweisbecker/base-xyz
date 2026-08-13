@@ -11,6 +11,7 @@ import {
 	useMemo,
 	useRef,
 } from "react";
+import { media } from "@/styles/constants.stylex";
 import type { ButtonSize } from "@/components/button/button";
 import { typescaleStyles, fontWeightStyles } from "@/components/text/text.stylex";
 import { focusRing } from "@/styles/recipes/focus";
@@ -236,7 +237,7 @@ const tabsParts = stylex.create({
 		transitionDuration: {
 			"[data-snap]": "0ms",
 			default: tokens["--motion-duration-medium"],
-			"@media (prefers-reduced-motion: reduce)": "0ms",
+			[media.reducedMotion]: "0ms",
 		},
 		transitionProperty: "translate, width, height",
 		transitionTimingFunction: tokens["--motion-ease-smooth-out"],
@@ -277,7 +278,7 @@ const tabsParts = stylex.create({
 		position: "relative",
 		transitionDuration: {
 			default: tokens["--motion-duration-medium"],
-			"@media (prefers-reduced-motion: reduce)": "0ms",
+			[media.reducedMotion]: "0ms",
 		},
 		transitionProperty: "color",
 		transitionTimingFunction: tokens["--motion-ease-smooth-out"],

@@ -2,6 +2,7 @@ import { Drawer as BaseDrawer } from "@base-ui/react/drawer";
 import * as stylex from "@stylexjs/stylex";
 import type { StyleXStyles } from "@stylexjs/stylex";
 import { type ComponentProps } from "react";
+import { media } from "@/styles/constants.stylex";
 import { tokens } from "@/theme/tokens.stylex";
 import { modalChromeStyles, modalTextStyles } from "@/components/dialog/dialog.stylex";
 
@@ -163,7 +164,7 @@ const drawerParts = stylex.create({
 			"[data-ending-style]": `calc(var(--drawer-swipe-strength) * ${DRAWER_RELEASE_DURATION})`,
 			"[data-swiping]": "0ms",
 			default: tokens["--motion-duration-long"],
-			"@media (prefers-reduced-motion: reduce)": "0ms",
+			[media.reducedMotion]: "0ms",
 		},
 		transitionProperty: "opacity",
 		transitionTimingFunction: DRAWER_EASING,
@@ -205,7 +206,7 @@ const drawerParts = stylex.create({
 			"[data-nested-drawer-swiping]": "0ms",
 			"[data-swiping]": "0ms",
 			default: tokens["--motion-duration-long"],
-			"@media (prefers-reduced-motion: reduce)": "0ms",
+			[media.reducedMotion]: "0ms",
 		},
 		transitionProperty: "transform, height, opacity",
 		transitionTimingFunction: DRAWER_EASING,
@@ -234,7 +235,7 @@ const drawerParts = stylex.create({
 			},
 			transitionDuration: {
 				default: tokens["--motion-duration-long"],
-				"@media (prefers-reduced-motion: reduce)": "0ms",
+				[media.reducedMotion]: "0ms",
 			},
 			transitionProperty: "background-color, opacity",
 			transitionTimingFunction: DRAWER_EASING,
@@ -259,7 +260,7 @@ const drawerParts = stylex.create({
 		},
 		transitionDuration: {
 			default: tokens["--motion-duration-medium"],
-			"@media (prefers-reduced-motion: reduce)": "0ms",
+			[media.reducedMotion]: "0ms",
 		},
 		transitionProperty: "opacity",
 		transitionTimingFunction: tokens["--motion-ease-out"],
@@ -284,7 +285,7 @@ const drawerParts = stylex.create({
 		},
 		transitionDuration: {
 			default: tokens["--motion-duration-short"],
-			"@media (prefers-reduced-motion: reduce)": "0ms",
+			[media.reducedMotion]: "0ms",
 		},
 		transitionProperty: "opacity",
 		transitionTimingFunction: tokens["--motion-ease-out"],

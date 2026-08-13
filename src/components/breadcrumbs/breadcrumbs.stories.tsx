@@ -38,13 +38,14 @@ export const Playground: Story = {
 				Home
 			</Breadcrumbs.Link>
 			<Breadcrumbs.Separator />
-			<Breadcrumbs.Link href="#" color={args.color as LinkColor}>
+			<Breadcrumbs.Link
+				href="#"
+				color={args.color as LinkColor}
+				startSlot={<BookOpenIcon aria-hidden weight="duotone" />}>
 				Docs
 			</Breadcrumbs.Link>
 			<Breadcrumbs.Separator />
-			<Breadcrumbs.Current startSlot={<BookOpenIcon aria-hidden weight="duotone" />}>
-				Getting started
-			</Breadcrumbs.Current>
+			<Breadcrumbs.Current>Getting started</Breadcrumbs.Current>
 			<Breadcrumbs.Copy text="/docs/getting-started" />
 		</Breadcrumbs.Root>
 	),
