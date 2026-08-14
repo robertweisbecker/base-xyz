@@ -55,6 +55,8 @@ type SliderContextValue = {
 	step: number;
 };
 
+const MAX_SLIDER_MARKERS = 200;
+
 const SliderContext = createContext<SliderContextValue | null>(null);
 
 export function Root<Value extends SliderValue = number>({
@@ -169,7 +171,7 @@ function Markers({ every = 1 }: SliderMarkersOptions) {
 						? { insetBlockStart: "50%", insetInlineStart: markerPosition }
 						: { insetBlockEnd: markerPosition, insetInlineStart: "50%" };
 
-				return <span key={markerValue} {...stylex.props(sliderParts.marker)} style={markerStyle} />;
+				return <span key={markerValue} data-slider-marker="" {...stylex.props(sliderParts.marker)} style={markerStyle} />;
 			})}
 		</div>
 	);
@@ -189,12 +191,25 @@ function useSliderContext() {
 }
 
 function getMarkerValues(min: number, max: number, step: number, every: number) {
-	if (!(step > 0) || !(every > 0) || !Number.isFinite(step) || !Number.isFinite(every)) {
+	if (
+		!Number.isFinite(min) ||
+		!Number.isFinite(max) ||
+		!Number.isFinite(step) ||
+		!Number.isFinite(every) ||
+		max < min ||
+		!(step > 0) ||
+		!(every > 0)
+	) {
 		return [];
 	}
 
-	const stepCount = Math.floor((max - min) / step + Number.EPSILON);
-	const markerInterval = Math.max(1, Math.round(every));
+	const rawStepCount = (max - min) / step;
+	if (!Number.isFinite(rawStepCount)) return [];
+
+	const stepCount = Math.floor(rawStepCount + Number.EPSILON);
+	const requestedInterval = Math.max(1, Math.round(every));
+	const minimumSafeInterval = Math.max(1, Math.ceil(stepCount / (MAX_SLIDER_MARKERS - 1)));
+	const markerInterval = requestedInterval * Math.max(1, Math.ceil(minimumSafeInterval / requestedInterval));
 	const markerValues: number[] = [];
 
 	for (let stepIndex = 0; stepIndex <= stepCount; stepIndex += markerInterval) {
