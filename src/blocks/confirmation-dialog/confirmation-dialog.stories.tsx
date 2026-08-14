@@ -1,10 +1,11 @@
 import { PaperPlaneTiltIcon } from "@phosphor-icons/react/dist/csr/PaperPlaneTilt";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import * as stylex from "@stylexjs/stylex";
+import { useState, type ComponentProps, type ReactElement } from "react";
 import { Button, Checkbox, Separator } from "@/components";
 import { tokens } from "@/theme/tokens.stylex";
 
-import { ConfirmationDialog } from "./confirmation-dialog";
+import { ConfirmationDialog, type ConfirmationDialogSuccessToast } from "./confirmation-dialog";
 const meta = {
 	title: "Blocks/Confirmation dialog",
 	component: ConfirmationDialog.Root,
@@ -146,6 +147,97 @@ export const Examples: Story = {
 		</div>
 	),
 };
+
+export const AsyncSettlement: Story = {
+	render: () => <AsyncSettlementFixture />,
+};
+
+function AsyncSettlementFixture() {
+	const [operationCount, setOperationCount] = useState(0);
+	const [errorCount, setErrorCount] = useState(0);
+
+	async function resolveAsyncAction() {
+		setOperationCount((count) => count + 1);
+		await settleAfterDelay();
+	}
+
+	async function rejectAsyncAction() {
+		await settleAfterDelay();
+		throw new Error("Async action failed");
+	}
+
+	return (
+		<div>
+			<p data-testid="confirmation-operation-count">{operationCount}</p>
+			<p data-testid="confirmation-error-count">{errorCount}</p>
+			<AsyncSettlementDialog
+				trigger={<Button>Resolve async action</Button>}
+				confirmLabel="Confirm resolve async action"
+				onConfirm={resolveAsyncAction}
+				successToast={{ title: "Async action completed" }}
+			/>
+			<AsyncSettlementDialog
+				trigger={<Button>Reject async action</Button>}
+				confirmLabel="Confirm reject async action"
+				onConfirm={rejectAsyncAction}
+				onConfirmError={() => setErrorCount((count) => count + 1)}
+				successToast={{ title: "Unexpected success" }}
+				failureToast={{ title: "Async action failed" }}
+			/>
+			<AsyncSettlementDialog
+				trigger={<Button>Prevent confirmation</Button>}
+				confirmLabel="Prevent confirmation"
+				onConfirmClick={(event) => event.preventDefault()}
+				successToast={{ title: "Prevented action completed" }}
+			/>
+		</div>
+	);
+}
+
+function AsyncSettlementDialog({
+	confirmLabel,
+	failureToast,
+	onConfirm,
+	onConfirmClick,
+	onConfirmError,
+	successToast,
+	trigger,
+}: {
+	confirmLabel: string;
+	failureToast?: ConfirmationDialogSuccessToast | false;
+	onConfirm?: () => void | Promise<void>;
+	onConfirmClick?: ComponentProps<typeof ConfirmationDialog.Confirm>["onClick"];
+	onConfirmError?: (error: unknown) => void;
+	successToast?: ConfirmationDialogSuccessToast | false;
+	trigger: ReactElement;
+}) {
+	return (
+		<ConfirmationDialog.Root
+			trigger={trigger}
+			onConfirm={onConfirm}
+			onConfirmError={onConfirmError}
+			successToast={successToast}
+			failureToast={failureToast}>
+			<ConfirmationDialog.Header>
+				<ConfirmationDialog.Title>Confirm async action?</ConfirmationDialog.Title>
+				<ConfirmationDialog.Description>The operation will settle before this dialog closes.</ConfirmationDialog.Description>
+			</ConfirmationDialog.Header>
+			<ConfirmationDialog.Body>Review the operation before confirming it.</ConfirmationDialog.Body>
+			<ConfirmationDialog.Footer>
+				<ConfirmationDialog.Actions>
+					<ConfirmationDialog.Cancel>Cancel</ConfirmationDialog.Cancel>
+					<ConfirmationDialog.Confirm onClick={onConfirmClick}>{confirmLabel}</ConfirmationDialog.Confirm>
+				</ConfirmationDialog.Actions>
+			</ConfirmationDialog.Footer>
+		</ConfirmationDialog.Root>
+	);
+}
+
+function settleAfterDelay() {
+	return new Promise<void>((resolve) => {
+		setTimeout(resolve, 500);
+	});
+}
 
 function Example({ children, title }: { children: React.ReactNode; title: string }) {
 	return (
