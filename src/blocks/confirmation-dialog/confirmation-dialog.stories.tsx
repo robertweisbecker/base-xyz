@@ -1,7 +1,7 @@
 import { PaperPlaneTiltIcon } from "@phosphor-icons/react/dist/csr/PaperPlaneTilt";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import * as stylex from "@stylexjs/stylex";
-import { useState, type ComponentProps, type ReactElement } from "react";
+import { StrictMode, useState, type ComponentProps, type ReactElement } from "react";
 import { Button, Checkbox, Separator } from "@/components";
 import { tokens } from "@/theme/tokens.stylex";
 
@@ -149,7 +149,11 @@ export const Examples: Story = {
 };
 
 export const AsyncSettlement: Story = {
-	render: () => <AsyncSettlementFixture />,
+	render: () => (
+		<StrictMode>
+			<AsyncSettlementFixture />
+		</StrictMode>
+	),
 };
 
 function AsyncSettlementFixture() {

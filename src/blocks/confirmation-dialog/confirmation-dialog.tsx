@@ -151,6 +151,7 @@ function ConfirmationDialogRoot({
 	const [pending, setPending] = useState(false);
 
 	useEffect(() => {
+		mountedRef.current = true;
 		return () => {
 			mountedRef.current = false;
 		};
