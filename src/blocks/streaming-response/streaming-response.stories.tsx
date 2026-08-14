@@ -57,6 +57,45 @@ export const Examples: Story = {
 	),
 };
 
+export const ReplacementReset: Story = {
+	parameters: {
+		controls: { disable: true },
+	},
+	render: () => <ReplacementResetExample />,
+};
+
+function ReplacementResetExample() {
+	const [response, setResponse] = useState("The initial response contains enough words to expose stale reveal state");
+	const [streamKey, setStreamKey] = useState(0);
+	const [completionCount, setCompletionCount] = useState(0);
+
+	return (
+		<div {...stylex.props(storyParts.example)}>
+			<p data-testid="streaming-replacement-phase" {...stylex.props(storyParts.label)}>
+				Streaming response replacement test
+			</p>
+			<StreamingResponse.Root aria-label="Streaming replacement response" status="streaming">
+				<StreamingResponse.Status />
+				<StreamingResponse.Content
+					data-testid="streaming-replacement-content"
+					onStreamingComplete={() => setCompletionCount((count) => count + 1)}
+					streamKey={streamKey}>
+					{response}
+				</StreamingResponse.Content>
+				<p data-testid="streaming-completion-count">{completionCount}</p>
+				<div>
+					<button type="button" onClick={() => setResponse("The replacement response is ready")}>
+						Replace response
+					</button>
+					<button type="button" onClick={() => setStreamKey((key) => key + 1)}>
+						Retry same response
+					</button>
+				</div>
+			</StreamingResponse.Root>
+		</div>
+	);
+}
+
 function InteractiveResponseExample() {
 	const [status, setStatus] = useState<StreamingResponseStatus>("streaming");
 	const [streamKey, setStreamKey] = useState(0);

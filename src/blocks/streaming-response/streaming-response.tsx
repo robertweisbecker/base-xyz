@@ -151,16 +151,15 @@ function StreamingText({
 		return children;
 	}
 
-	return <ChunkedStreamingText onStreamingComplete={onStreamingComplete} streamKey={streamKey} text={text} />;
+	const streamIdentity = JSON.stringify([streamKey ?? null, text]);
+	return <ChunkedStreamingText key={streamIdentity} onStreamingComplete={onStreamingComplete} text={text} />;
 }
 
 function ChunkedStreamingText({
 	onStreamingComplete,
-	streamKey,
 	text,
 }: {
 	onStreamingComplete?: () => void;
-	streamKey?: number | string;
 	text: string;
 }) {
 	const chunks = useMemo(() => chunkStreamingText(text), [text]);
@@ -170,11 +169,6 @@ function ChunkedStreamingText({
 	const caretSx = stylex.props(typingTextStyles.caret);
 
 	onCompleteRef.current = onStreamingComplete;
-
-	useEffect(() => {
-		setVisibleCount(1);
-		completionNotifiedRef.current = false;
-	}, [streamKey, text]);
 
 	useEffect(() => {
 		if (visibleCount >= chunks.length) {
