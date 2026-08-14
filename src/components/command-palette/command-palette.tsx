@@ -19,6 +19,7 @@ import {
 	useCallback,
 	useContext,
 	useEffect,
+	useRef,
 	useState,
 	type ComponentProps,
 	type KeyboardEvent,
@@ -50,6 +51,74 @@ type CommandPaletteContextValue = {
 };
 
 const CommandPaletteContext = createContext<CommandPaletteContextValue | null>(null);
+
+type ShortcutRegistration = {
+	enabled: boolean;
+	invoke: () => void;
+};
+
+const shortcutRegistrations = new Set<ShortcutRegistration>();
+
+function handleShortcutKeyDown(event: globalThis.KeyboardEvent) {
+	if (event.defaultPrevented || event.repeat) {
+		return;
+	}
+	if (event.key.toLocaleLowerCase() !== "k" || (!event.metaKey && !event.ctrlKey)) {
+		return;
+	}
+
+	let owner: ShortcutRegistration | undefined;
+	for (const registration of shortcutRegistrations) {
+		if (registration.enabled) {
+			owner = registration;
+		}
+	}
+	if (!owner) {
+		return;
+	}
+
+	event.preventDefault();
+	owner.invoke();
+}
+
+function registerShortcut(registration: ShortcutRegistration) {
+	if (shortcutRegistrations.size === 0) {
+		document.addEventListener("keydown", handleShortcutKeyDown);
+	}
+	shortcutRegistrations.add(registration);
+}
+
+function unregisterShortcut(registration: ShortcutRegistration) {
+	shortcutRegistrations.delete(registration);
+	if (shortcutRegistrations.size === 0) {
+		document.removeEventListener("keydown", handleShortcutKeyDown);
+	}
+}
+
+function useCommandPaletteShortcut(shortcut: boolean, inline: boolean, toggle: () => void) {
+	const registrationRef = useRef<ShortcutRegistration | null>(null);
+	const toggleRef = useRef(toggle);
+
+	toggleRef.current = toggle;
+	if (registrationRef.current === null) {
+		registrationRef.current = {
+			enabled: shortcut && !inline,
+			invoke: () => toggleRef.current(),
+		};
+	} else {
+		registrationRef.current.enabled = shortcut && !inline;
+	}
+
+	useEffect(() => {
+		const registration = registrationRef.current;
+		if (!registration) {
+			return;
+		}
+
+		registerShortcut(registration);
+		return () => unregisterShortcut(registration);
+	}, []);
+}
 
 export type CommandPaletteRootProps<ItemValue> = Omit<
 	AutocompleteRootProps<ItemValue>,
@@ -131,23 +200,7 @@ export function Root<ItemValue = unknown>({
 		[controlled, onOpenChange],
 	);
 
-	useEffect(() => {
-		if (!shortcut || inline) {
-			return;
-		}
-
-		function handleKeyDown(event: globalThis.KeyboardEvent) {
-			if (event.key.toLocaleLowerCase() !== "k" || (!event.metaKey && !event.ctrlKey)) {
-				return;
-			}
-
-			event.preventDefault();
-			setOpen(!actualOpen);
-		}
-
-		document.addEventListener("keydown", handleKeyDown);
-		return () => document.removeEventListener("keydown", handleKeyDown);
-	}, [actualOpen, inline, setOpen, shortcut]);
+	useCommandPaletteShortcut(shortcut, inline, () => setOpen(!actualOpen));
 
 	const contextValue: CommandPaletteContextValue = {
 		closeOnSelect,
