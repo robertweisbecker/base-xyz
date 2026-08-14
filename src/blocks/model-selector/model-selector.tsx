@@ -83,27 +83,25 @@ export function Root({
 }: ModelSelectorRootProps) {
 	const [uncontrolledValue, setUncontrolledValue] = useState(defaultValue);
 	const currentValue = value ?? uncontrolledValue;
-	const selectedModel = findModel(groups, currentValue.model) ?? groups[0]?.options[0];
-
-	if (!selectedModel) {
-		throw new Error("ModelSelector.Root requires at least one model option.");
-	}
+	const normalizedValue = normalizeModelValue(groups, currentValue);
+	const normalizedDefaultValue = normalizeModelValue(groups, defaultValue).value;
 
 	function updateValue(nextValue: ModelSelectorValue, reason: ModelSelectorChangeReason) {
-		if (value === undefined) setUncontrolledValue(nextValue);
-		onValueChange?.(nextValue, { reason });
+		const normalizedNextValue = normalizeModelValue(groups, nextValue).value;
+		if (value === undefined) setUncontrolledValue(normalizedNextValue);
+		onValueChange?.(normalizedNextValue, { reason });
 	}
 
 	return (
 		<ModelSelectorContext.Provider
 			value={{
-				defaultValue,
+				defaultValue: normalizedDefaultValue,
 				effortOptions,
 				groups,
-				selectedModel,
+				selectedModel: normalizedValue.model,
 				speedOptions,
 				updateValue,
-				value: currentValue,
+				value: normalizedValue.value,
 			}}>
 			<Menu.Root {...props}>{children}</Menu.Root>
 		</ModelSelectorContext.Provider>
@@ -315,6 +313,22 @@ function useModelSelectorContext(part: string) {
 
 function findModel(groups: readonly ModelSelectorGroup[], value: string) {
 	return groups.flatMap((group) => group.options).find((option) => option.value === value);
+}
+
+function getFirstModel(groups: readonly ModelSelectorGroup[]) {
+	return groups.flatMap((group) => group.options)[0];
+}
+
+function normalizeModelValue(groups: readonly ModelSelectorGroup[], value: ModelSelectorValue) {
+	const model = findModel(groups, value.model) ?? getFirstModel(groups);
+	if (!model) {
+		throw new Error("ModelSelector.Root requires at least one model option.");
+	}
+
+	return {
+		model,
+		value: model.value === value.model ? value : { ...value, model: model.value },
+	};
 }
 
 function getTextLabel(label: ReactNode) {
