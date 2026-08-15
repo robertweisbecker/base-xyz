@@ -114,6 +114,82 @@ export const Inline: Story = {
 	),
 };
 
+export const ShortcutArbitration: Story = {
+	render: () => <ShortcutArbitrationFixture />,
+};
+
+function ShortcutArbitrationFixture() {
+	const [firstOpen, setFirstOpen] = useState(false);
+	const [secondOpen, setSecondOpen] = useState(false);
+	const [firstOpens, setFirstOpens] = useState(0);
+	const [secondOpens, setSecondOpens] = useState(0);
+	const [rerenderCount, setRerenderCount] = useState(0);
+	const [secondMounted, setSecondMounted] = useState(true);
+
+	function handleFirstOpenChange(open: boolean) {
+		setFirstOpen(open);
+		if (open) {
+			setFirstOpens((count) => count + 1);
+		}
+	}
+
+	function handleSecondOpenChange(open: boolean) {
+		setSecondOpen(open);
+		if (open) {
+			setSecondOpens((count) => count + 1);
+		}
+	}
+
+	function handleReservedShortcut(event: React.KeyboardEvent<HTMLInputElement>) {
+		if (event.key.toLocaleLowerCase() === "k" && (event.metaKey || event.ctrlKey)) {
+			event.preventDefault();
+		}
+	}
+
+	return (
+		<div {...stylex.props(storyParts.example)}>
+			<div>
+				<button type="button" onClick={() => setRerenderCount((count) => count + 1)}>
+					Rerender callbacks
+				</button>
+				<span data-testid="rerender-count"> Rerenders: {rerenderCount}</span>
+			</div>
+			<button type="button" onClick={() => setSecondMounted(false)} disabled={!secondMounted}>
+				Unmount second palette
+			</button>
+			<input aria-label="Reserved shortcut input" onKeyDown={handleReservedShortcut} />
+			<div>
+				<span data-testid="first-open-count">First opens: {firstOpens}</span>
+				<span data-testid="second-open-count"> Second opens: {secondOpens}</span>
+			</div>
+			<CommandPalette.Root
+				label="First command palette"
+				open={firstOpen}
+				onOpenChange={handleFirstOpenChange}
+				shortcut
+				items={commandGroups}
+				itemToStringValue={commandToStringValue}>
+				<CommandPalette.Input />
+				<CommandResults />
+				<CommandPalette.Empty />
+			</CommandPalette.Root>
+			{secondMounted ? (
+				<CommandPalette.Root
+					label="Second command palette"
+					open={secondOpen}
+					onOpenChange={handleSecondOpenChange}
+					shortcut
+					items={commandGroups}
+					itemToStringValue={commandToStringValue}>
+					<CommandPalette.Input />
+					<CommandResults />
+					<CommandPalette.Empty />
+				</CommandPalette.Root>
+			) : null}
+		</div>
+	);
+}
+
 function CommandPaletteExample({ shortcut = false }: { shortcut?: boolean }) {
 	const [selectedCommand, setSelectedCommand] = useState<string | null>(null);
 
