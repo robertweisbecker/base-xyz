@@ -109,6 +109,38 @@ export const Playground: Story = {
 	),
 };
 
+export const MarkerDensity: Story = {
+	parameters: { controls: { disable: true } },
+	render: () => (
+		<div {...stylex.props(styles.story)}>
+			<div data-testid="dense-slider">
+				<Slider.Root max={1} min={0} step={0.000001}>
+					<Slider.Header>
+						<Slider.Label>Dense range</Slider.Label>
+					</Slider.Header>
+					<Slider.Row>
+						<Slider.Control markers>
+							<Slider.Thumb />
+						</Slider.Control>
+					</Slider.Row>
+				</Slider.Root>
+			</div>
+			<div data-testid="normal-slider">
+				<Slider.Root max={100} min={0} step={10}>
+					<Slider.Header>
+						<Slider.Label>Normal range</Slider.Label>
+					</Slider.Header>
+					<Slider.Row>
+						<Slider.Control markers>
+							<Slider.Thumb />
+						</Slider.Control>
+					</Slider.Row>
+				</Slider.Root>
+			</div>
+		</div>
+	),
+};
+
 export const Sizes: Story = {
 	parameters: { controls: { disable: true } },
 	render: () => (
