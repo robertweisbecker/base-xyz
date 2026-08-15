@@ -1,7 +1,16 @@
 import { XIcon } from "@phosphor-icons/react/dist/csr/X";
 import * as stylex from "@stylexjs/stylex";
 import type { StyleXStyles } from "@stylexjs/stylex";
-import { createContext, type ComponentProps, type ReactElement, type ReactNode, useContext } from "react";
+import {
+	createContext,
+	type ComponentProps,
+	type ReactElement,
+	type ReactNode,
+	useContext,
+	useEffect,
+	useRef,
+	useState,
+} from "react";
 import { Button, Dialog, ScrollArea, Toast } from "@/components";
 import type { ButtonProps } from "@/components";
 import { tokens } from "@/theme/tokens.stylex";
@@ -23,10 +32,16 @@ export type ConfirmationDialogProps = DialogRootProps & {
 	trigger?: ReactElement;
 	children: ReactNode;
 	size?: ConfirmationDialogSize;
+	/** The operation to settle before the dialog closes and success is announced. */
+	onConfirm?: () => void | Promise<void>;
+	/** Observes a rejected confirmation operation after failure feedback is shown. */
+	onConfirmError?: (error: unknown) => void;
 	/**
 	 * Content announced after confirmation. Pass `false` to suppress feedback.
 	 */
 	successToast?: ConfirmationDialogSuccessToast | false;
+	/** Content announced when confirmation fails. Pass `false` to suppress feedback. */
+	failureToast?: ConfirmationDialogSuccessToast | false;
 };
 
 type StyledProps<T> = Omit<T, "style"> & {
@@ -59,26 +74,53 @@ type ConfirmationDialogRootProps = DialogRootProps & {
 	trigger?: ReactElement;
 	children: ReactNode;
 	size: ConfirmationDialogSize;
+	onConfirm?: () => void | Promise<void>;
+	onConfirmError?: (error: unknown) => void;
 	successToast: ConfirmationDialogSuccessToast | false;
+	failureToast: ConfirmationDialogSuccessToast | false;
 };
 
-const ConfirmationDialogContext = createContext<(() => void) | null>(null);
+type ConfirmationDialogActions = Exclude<NonNullable<DialogRootProps["actionsRef"]>["current"], null>;
+
+type ConfirmationDialogContextValue = {
+	confirm: () => Promise<void>;
+	pending: boolean;
+};
+
+const ConfirmationDialogContext = createContext<ConfirmationDialogContextValue | null>(null);
 
 const defaultSuccessToast: ConfirmationDialogSuccessToast = {
 	title: "Changes confirmed",
 	description: "Your changes were saved successfully.",
 };
 
+const defaultFailureToast: ConfirmationDialogSuccessToast = {
+	title: "Couldn’t complete action",
+	description: "Try again.",
+};
+
 export function Root({
 	trigger,
 	children,
 	size = "md",
+	onConfirm,
+	onConfirmError,
 	successToast = defaultSuccessToast,
+	failureToast = defaultFailureToast,
+	actionsRef,
 	...rootProps
 }: ConfirmationDialogProps) {
 	return (
 		<Toast.Provider timeout={5000}>
-			<ConfirmationDialogRoot {...rootProps} trigger={trigger} size={size} successToast={successToast}>
+			<ConfirmationDialogRoot
+				{...rootProps}
+				actionsRef={actionsRef}
+				trigger={trigger}
+				size={size}
+				onConfirm={onConfirm}
+				onConfirmError={onConfirmError}
+				successToast={successToast}
+				failureToast={failureToast}>
 				{children}
 			</ConfirmationDialogRoot>
 			<Toast.Portal>
@@ -90,8 +132,30 @@ export function Root({
 	);
 }
 
-function ConfirmationDialogRoot({ trigger, children, size, successToast, ...rootProps }: ConfirmationDialogRootProps) {
+function ConfirmationDialogRoot({
+	actionsRef,
+	trigger,
+	children,
+	size,
+	onConfirm,
+	onConfirmError,
+	successToast,
+	failureToast,
+	...rootProps
+}: ConfirmationDialogRootProps) {
 	const toastManager = Toast.useToastManager();
+	const internalActionsRef = useRef<ConfirmationDialogActions | null>(null);
+	const resolvedActionsRef = actionsRef ?? internalActionsRef;
+	const pendingRef = useRef(false);
+	const mountedRef = useRef(true);
+	const [pending, setPending] = useState(false);
+
+	useEffect(() => {
+		mountedRef.current = true;
+		return () => {
+			mountedRef.current = false;
+		};
+	}, []);
 
 	function notifySuccess() {
 		if (successToast) {
@@ -99,9 +163,38 @@ function ConfirmationDialogRoot({ trigger, children, size, successToast, ...root
 		}
 	}
 
+	function notifyFailure() {
+		if (failureToast) {
+			toastManager.add(failureToast);
+		}
+	}
+
+	async function confirm() {
+		if (pendingRef.current) return;
+
+		pendingRef.current = true;
+		setPending(true);
+
+		try {
+			await onConfirm?.();
+			if (!mountedRef.current) return;
+			notifySuccess();
+			resolvedActionsRef.current?.close();
+		} catch (error) {
+			if (!mountedRef.current) return;
+			notifyFailure();
+			onConfirmError?.(error);
+		} finally {
+			pendingRef.current = false;
+			if (mountedRef.current) {
+				setPending(false);
+			}
+		}
+	}
+
 	return (
-		<ConfirmationDialogContext.Provider value={notifySuccess}>
-			<Dialog.Root {...rootProps} modal disablePointerDismissal>
+		<ConfirmationDialogContext.Provider value={{ confirm, pending }}>
+			<Dialog.Root {...rootProps} actionsRef={resolvedActionsRef} modal disablePointerDismissal>
 				{trigger ? <Dialog.Trigger render={trigger} /> : null}
 				<Dialog.Popup scrollBehavior="inside" style={[confirmationDialogParts.popup, dialogSizes[size]]}>
 					{children}
@@ -160,24 +253,21 @@ export function Cancel({ children, variant = "neutral", ...props }: Confirmation
 }
 
 export function Confirm({ children, onClick, variant = "primary", ...props }: ConfirmationDialogConfirmProps) {
-	const notifySuccess = useContext(ConfirmationDialogContext);
+	const context = useContext(ConfirmationDialogContext);
 
 	return (
-		<Dialog.Close
-			render={
-				<Button
-					variant={variant}
-					{...props}
-					onClick={(event) => {
-						onClick?.(event);
-						if (!event.defaultPrevented) {
-							notifySuccess?.();
-						}
-					}}
-				/>
-			}>
+		<Button
+			variant={variant}
+			{...props}
+			loading={context?.pending || props.loading}
+			onClick={(event) => {
+				onClick?.(event);
+				if (!event.defaultPrevented) {
+					void context?.confirm();
+				}
+			}}>
 			{children}
-		</Dialog.Close>
+		</Button>
 	);
 }
 
