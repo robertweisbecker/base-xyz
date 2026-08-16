@@ -112,7 +112,7 @@ function CopyButtonControl({
 					iconSwapTransition.to,
 					copied ? iconSwapTransition.visible : iconSwapTransition.hidden,
 				)}>
-				<Icon.Checkmark strokeWidth={props.size === "md" || props.size === "lg" ? 2 : 1.5} />
+				<Icon.Checkmark strokeWidth={props.size === "md" || props.size === "lg" ? 3 : 2} />
 			</span>
 		</span>
 	);

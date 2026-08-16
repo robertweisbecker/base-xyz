@@ -266,7 +266,7 @@ export function Item({ ref, children, className, style, variant = "primary", ...
 			style={sx.style}
 			{...props}>
 			<BaseSelect.ItemIndicator keepMounted className={stylex.props(menuItemStyles.indicator).className}>
-				<Icon.Checkmark width="1em" height="1em" />
+				<Icon.Checkmark width="1em" height="1em" strokeWidth={3} />
 			</BaseSelect.ItemIndicator>
 			<BaseSelect.ItemText {...stylex.props(menuItemStyles.label, selectParts.itemText)}>
 				{children}

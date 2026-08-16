@@ -153,6 +153,7 @@ const cardParts = stylex.create({
 		paddingBlock: cardVars.footerPaddingBlock,
 		paddingInline: cardVars.footerPaddingInline,
 		alignItems: "center",
+		justifyContent: "flex-end",
 		borderEndEndRadius: "inherit",
 		borderEndStartRadius: "inherit",
 		display: "flex",

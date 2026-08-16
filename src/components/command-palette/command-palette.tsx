@@ -494,7 +494,7 @@ const commandPaletteParts = stylex.create({
 			":focus-visible": 0,
 			":focus-within": 0,
 		},
-		maxWidth: tokens["--size-container-3xl"],
+		maxWidth: tokens["--size-container-2xl"],
 	},
 	panel: {
 		borderColor: "transparent",

@@ -105,14 +105,7 @@ export type ComboboxInputGroupProps = StyledProps<BaseCombobox.InputGroup.Props>
 	variant?: ComboboxInputGroupVariant;
 };
 
-export function InputGroup({
-	ref,
-	children,
-	className,
-	style,
-	variant = "input",
-	...props
-}: ComboboxInputGroupProps) {
+export function InputGroup({ ref, children, className, style, variant = "input", ...props }: ComboboxInputGroupProps) {
 	const { multiple, size } = useContext(ComboboxContext);
 	const withChips = variant === "chips";
 	const sx = stylex.props(
@@ -173,26 +166,15 @@ function Actions() {
 	const action = multiple ? (
 		<Clear>Clear all</Clear>
 	) : (
-		<BaseCombobox.Value>
-			{(value: unknown) => (value == null ? <Trigger /> : <Clear />)}
-		</BaseCombobox.Value>
+		<BaseCombobox.Value>{(value: unknown) => (value == null ? <Trigger /> : <Clear />)}</BaseCombobox.Value>
 	);
 
-	return (
-		<div {...stylex.props(comboboxParts.actions)}>{action}</div>
-	);
+	return <div {...stylex.props(comboboxParts.actions)}>{action}</div>;
 }
 
 type ComboboxClearProps = StyledProps<BaseCombobox.Clear.Props>;
 
-function Clear({
-	ref,
-	"aria-label": ariaLabel,
-	children,
-	className,
-	style,
-	...props
-}: ComboboxClearProps) {
+function Clear({ ref, "aria-label": ariaLabel, children, className, style, ...props }: ComboboxClearProps) {
 	const { size } = useContext(ComboboxContext);
 	const hasVisibleLabel = children != null;
 	const sx = stylex.props(
@@ -217,14 +199,7 @@ function Clear({
 
 type ComboboxTriggerProps = StyledProps<BaseCombobox.Trigger.Props>;
 
-function Trigger({
-	ref,
-	"aria-label": ariaLabel,
-	children,
-	className,
-	style,
-	...props
-}: ComboboxTriggerProps) {
+function Trigger({ ref, "aria-label": ariaLabel, children, className, style, ...props }: ComboboxTriggerProps) {
 	const { size } = useContext(ComboboxContext);
 	const sx = stylex.props(
 		comboboxParts.action,
@@ -362,15 +337,7 @@ export type ComboboxPopupProps = StyledProps<BaseCombobox.Popup.Props> & {
 	positionerProps?: ComboboxPositionerProps;
 };
 
-export function Popup({
-	ref,
-	children,
-	className,
-	portalProps,
-	positionerProps,
-	style,
-	...props
-}: ComboboxPopupProps) {
+export function Popup({ ref, children, className, portalProps, positionerProps, style, ...props }: ComboboxPopupProps) {
 	const {
 		align = "center",
 		className: positionerClassName,
@@ -442,7 +409,7 @@ export function Item({ ref, children, className, style, variant = "default", ...
 			style={sx.style}
 			{...props}>
 			<BaseCombobox.ItemIndicator keepMounted className={stylex.props(menuItemStyles.indicator).className}>
-				<Icon.Checkmark width="1em" height="1em" strokeWidth={2} />
+				<Icon.Checkmark width="1em" height="1em" strokeWidth={3} />
 			</BaseCombobox.ItemIndicator>
 			<div {...stylex.props(menuItemStyles.label)}>{children}</div>
 		</BaseCombobox.Item>

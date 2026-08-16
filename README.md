@@ -8,7 +8,7 @@ An experimental React design-system workbench built with:
 - [Phosphor Icons](https://phosphoricons.com/) for iconography
 - Vite and TypeScript for the gallery app and build pipeline
 
-The project intentionally has no Tailwind, imported web fonts, or pre-styled component layer.
+The project intentionally has no Tailwind or pre-styled component layer. The demo registers its bundled font assets separately from component styling.
 
 ## Run it
 
@@ -27,6 +27,7 @@ npm run dev
 
 ```text
 .storybook/                 Storybook config and global theme toolbar
+docs/adr/                   Accepted architecture decisions and their consequences
 src/
   components/               Base UI-backed components and colocated stories
   blocks/                   Opinionated compositions for recurring use cases
@@ -45,59 +46,56 @@ src/
 
 ## Theming model
 
-Components use the `@/` alias for imports from `src`. All themeable values come
-through the direct `tokens` binding in `src/theme/tokens.stylex.ts`; fixed
-constants and recipes retain their own direct named imports. Named themes
-provide partial overrides of that unified StyleX variable group.
-`ThemeProvider` applies the requested theme and mode to a real host and mirrors
-the outermost provider onto the document root so body-level portals inherit it.
+Components use the `@/` alias for imports from `src`. Themeable values come
+through the unified token contract, while named themes provide partial
+overrides and inherit everything else. `ThemeProvider` applies the selected
+theme and mode to a real host and mirrors the outermost provider onto the
+document root so body-level portals inherit it.
 
-See [`src/styles/README.md`](src/styles/README.md) for the style ownership rules.
+See [ADR 0001](docs/adr/0001-token-backed-theme-props.md) for the token-backed
+theme-prop contract, [ADR 0003](docs/adr/0003-stylex-ownership-and-application.md)
+for StyleX ownership and application boundaries, and
+[`src/styles/README.md`](src/styles/README.md) for the current implementation map.
 
 Storybook includes a light/dark toolbar control, and the gallery persists its theme choice in local storage while defaulting to the operating-system preference.
 
 ## Components and blocks
 
-Components are the general-purpose building blocks of the system. They wrap
-Base UI primitives with the shared StyleX tokens, interaction states, and
-accessibility conventions while remaining reusable across product contexts.
+Components are product-agnostic primitives; blocks are repeatable, opinionated
+workflows composed from those primitives. Both favor compact compound APIs with
+a state-owning root and semantic parts. [ADR 0004](docs/adr/0004-component-block-and-compound-ownership.md)
+records that ownership boundary and its consequences.
 
-Blocks compose multiple components into more-specific solutions for recurring
-workflows. They intentionally bake in structure and behavior that should remain
-consistent for that use case. When callers need to control the content or
-actions within a structured region, blocks expose composable named parts
-instead of adding a prop for every variation. Block stories appear in their
-own `Blocks` section in Storybook.
+Storybook is the browsable inventory and behavior reference. The public
+component export surface is `src/components/index.ts`; avoid duplicating a
+manually maintained component catalog here.
 
-The block collection includes:
+## Architecture decisions
 
-- `ConfirmationDialog` for non-alert confirmation flows
-- `AgentActionApproval` for reviewing and approving an agent's external action
-- `WorkflowProgress` for queued, running, completed, and failed workflow steps
-- `PromptComposer` for keyboard-aware AI prompt submission and cancellation
-- `StreamingResponse` for generating, completed, stopped, and failed responses
-- `AsyncJobProgress` for determinate or indeterminate background work
-- `PasswordField` for password entry with coordinated visibility controls
-- `CopyButton` for clipboard actions with anchored confirmation feedback
-- `ModelSelector` for grouped AI model selection with provider context
+- [ADR 0001: Token-backed theme props and layout primitives](docs/adr/0001-token-backed-theme-props.md)
+- [ADR 0002: Explicit semantic table primitives](docs/adr/0002-semantic-table-primitives.md)
+- [ADR 0003: StyleX ownership and application boundaries](docs/adr/0003-stylex-ownership-and-application.md)
+- [ADR 0004: Component, block, and compound ownership](docs/adr/0004-component-block-and-compound-ownership.md)
+- [ADR 0005: Root-owned asynchronous confirmation settlement](docs/adr/0005-root-owned-async-confirmation-settlement.md)
+- [ADR 0006: Global keyboard shortcut arbitration](docs/adr/0006-global-keyboard-shortcut-arbitration.md)
+- [ADR 0007: Bound derived presentation without changing semantics](docs/adr/0007-bound-derived-presentation-without-changing-semantics.md)
+- [ADR 0008: Reset identity-bound state before first render](docs/adr/0008-reset-identity-bound-state-before-first-render.md)
+- [ADR 0009: Normalize effective values without unsolicited callbacks](docs/adr/0009-normalize-effective-values-without-unsolicited-callbacks.md)
 
-### Starter components
-
-- Button based on `@base-ui/react/button`
-- Text field composed from Base UI Field and Input
-- Input group for compound input, textarea, add-on, and action layouts
-- Filterable combobox based on Base UI Combobox
-- Collapsible, Toolbar, Progress, Meter, and Separator based on their Base UI primitives
-- Switch based on Base UI Switch
-- Scroll area based on Base UI Scroll Area
-- Composable Card layout primitives
-
-Each interactive component keeps Base UI's behavior and accessibility model while applying variants, spacing, color, radius, typography, and motion through StyleX.
+Repository terminology lives in [`CONTEXT.md`](CONTEXT.md). Agent-facing
+working rules live in [`AGENTS.md`](AGENTS.md); durable architectural rationale
+belongs in an ADR instead of either onboarding document.
 
 ## Validation
 
 ```sh
+npx tsc -b --pretty false
 npm run lint
 npm run build
 npm run build-storybook
 ```
+
+Run these independently so one successful surface does not hide a failure in
+another. The repository has no `typecheck` script. Playwright discovers focused
+browser regressions throughout `tests/`; run the relevant spec for interaction
+changes after building Storybook.

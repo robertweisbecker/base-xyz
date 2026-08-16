@@ -1,7 +1,7 @@
 import { ArrowCounterClockwiseIcon } from "@phosphor-icons/react/dist/csr/ArrowCounterClockwise";
 import { LightningIcon } from "@phosphor-icons/react/dist/csr/Lightning";
 import * as stylex from "@stylexjs/stylex";
-import { createContext, Fragment, type ComponentProps, type ReactNode, useContext, useState } from "react";
+import { createContext, Fragment, type ComponentProps, type ReactNode, useContext, useRef, useState } from "react";
 import { Button, Menu } from "@/components";
 import type { ButtonProps } from "@/components";
 import { menuItemVars } from "@/components/menu/menu-item.stylex";
@@ -63,6 +63,7 @@ type ModelSelectorContextValue = {
 	defaultValue: ModelSelectorValue;
 	effortOptions: readonly string[];
 	groups: readonly ModelSelectorGroup[];
+	latchSubmenu: () => void;
 	selectedModel: ModelSelectorOption;
 	speedOptions: readonly string[];
 	updateValue: (value: ModelSelectorValue, reason: ModelSelectorChangeReason) => void;
@@ -79,12 +80,19 @@ export function Root({
 	defaultValue,
 	value,
 	onValueChange,
+	onOpenChange,
 	...props
 }: ModelSelectorRootProps) {
 	const [uncontrolledValue, setUncontrolledValue] = useState(defaultValue);
+	const submenuOpen = useRef(false);
+	const clearSubmenuLatch = useRef(0);
 	const currentValue = value ?? uncontrolledValue;
 	const normalizedValue = normalizeModelValue(groups, currentValue);
 	const normalizedDefaultValue = normalizeModelValue(groups, defaultValue).value;
+
+	function latchSubmenu() {
+		submenuOpen.current = true;
+	}
 
 	function updateValue(nextValue: ModelSelectorValue, reason: ModelSelectorChangeReason) {
 		const normalizedNextValue = normalizeModelValue(groups, nextValue).value;
@@ -98,12 +106,30 @@ export function Root({
 				defaultValue: normalizedDefaultValue,
 				effortOptions,
 				groups,
+				latchSubmenu,
 				selectedModel: normalizedValue.model,
 				speedOptions,
 				updateValue,
 				value: normalizedValue.value,
 			}}>
-			<Menu.Root {...props}>{children}</Menu.Root>
+			<Menu.Root
+				{...props}
+				onOpenChange={(open, details) => {
+					if (!open && submenuOpen.current && isImplicitMenuDismiss(details.reason)) {
+						details.cancel();
+						cancelAnimationFrame(clearSubmenuLatch.current);
+						clearSubmenuLatch.current = requestAnimationFrame(() => {
+							submenuOpen.current = false;
+						});
+						return;
+					}
+					if (!open) {
+						submenuOpen.current = false;
+					}
+					onOpenChange?.(open, details);
+				}}>
+				{children}
+			</Menu.Root>
 		</ModelSelectorContext.Provider>
 	);
 }
@@ -166,7 +192,7 @@ export function Popup({ positionerProps, style, ...props }: ModelSelectorPopupPr
 			positionerProps={{ align: "start", side: "top", ...positionerProps }}
 			style={[parts.settingsPopup, style]}
 			{...props}>
-			<Menu.SubmenuRoot>
+			<Menu.SubmenuRoot onOpenChange={(open) => open && context.latchSubmenu()}>
 				<SettingsTrigger label="Model" value={context.selectedModel.label} />
 				<Menu.Popup
 					positionerProps={{
@@ -211,7 +237,7 @@ export function Popup({ positionerProps, style, ...props }: ModelSelectorPopupPr
 
 function SettingsTrigger({ label, value, valueIcon }: { label: ReactNode; value: ReactNode; valueIcon?: ReactNode }) {
 	return (
-		<Menu.SubmenuTrigger openOnHover style={parts.settingsRow} delay={0}>
+		<Menu.SubmenuTrigger openOnHover delay={0} style={parts.settingsRow}>
 			<span {...stylex.props(parts.settingsLabel)}>{label}</span>
 			<span {...stylex.props(parts.settingsValue)}>
 				<span aria-hidden {...stylex.props(parts.settingsValueIcon)}>
@@ -236,8 +262,10 @@ function ChoiceSubmenu({
 	valueIcon?: ReactNode;
 	onValueChange: (value: string) => void;
 }) {
+	const { latchSubmenu } = useModelSelectorContext("Popup");
+
 	return (
-		<Menu.SubmenuRoot>
+		<Menu.SubmenuRoot onOpenChange={(open) => open && latchSubmenu()}>
 			<SettingsTrigger
 				label={label}
 				value={value}
@@ -333,6 +361,10 @@ function normalizeModelValue(groups: readonly ModelSelectorGroup[], value: Model
 
 function getTextLabel(label: ReactNode) {
 	return typeof label === "string" || typeof label === "number" ? String(label) : "selected model";
+}
+
+function isImplicitMenuDismiss(reason: string) {
+	return reason === "outside-press" || reason === "focus-out" || reason === "none";
 }
 
 const parts = stylex.create({

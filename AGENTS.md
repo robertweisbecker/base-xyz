@@ -2,9 +2,7 @@
 
 ## Architecture
 
-- `src/components/` holds reusable primitives; keep APIs product-agnostic.
-- `src/blocks/` holds repeatable, opinionated workflows composed from components. Add missing reusable behavior to components first.
-- Prefer a state-owning `Root` with semantic parts (`Header`, `Content`, `Footer`, `Actions`). Put behavior on its owner and pass caller content through children or existing component props.
+- Before changing component/block responsibility or compound ownership, read [ADR 0004](docs/adr/0004-component-block-and-compound-ownership.md).
 - Give each block a native Storybook Docs page with its standard metadata, previews, controls, a concise parts table, and an adjacent import `Source`. Place stories under `Blocks/`.
 - Treat `src/components/index.ts` as the public component source of truth. Gallery specimens must use public exports; keep imports and specimen titles alphabetical.
 
@@ -34,26 +32,34 @@
 
 ## Styles
 
-- Read `src/styles/README.md` before changing cross-component styles.
+- Before changing cross-component styles, read [ADR 0003](docs/adr/0003-stylex-ownership-and-application.md) and `src/styles/README.md`.
 - Tokens are stable API: never remove them or replace usages with literals unless explicitly asked. Themeable values live in `tokens.stylex.ts`; fixed globals in `constants.stylex.ts`.
-- Canonical component styles live with their owner; multi-consumer ownerless behavior may live in `src/styles/recipes/`. Keep one-consumer styles local.
-- Menu owns selectable rows used by Menu, Select, and Combobox. Field owns text-input and trigger sizing. Popover owns anchored behavior; Dialog owns modal behavior; Text owns typography. Popup chrome stays component-local.
-- Import `.stylex.ts` bindings directly; do not barrel-re-export or namespace-import them.
-- Apply caller `style` last in `stylex.props(...)`. Spread the full result when the recipient accepts `className` and `style`; extract `.className` only for string-only adapters or manual merges.
-- Use StyleX composition for precedence. Do not use class order or `tailwind-merge` to resolve StyleX conflicts.
-- Prefer parent-local custom properties plus direct-child `[data-*]` selectors for interaction state. Otherwise use a component `defineMarker()` with `stylex.when.ancestor()`; never use `defaultMarker()` for form controls.
-- Ordinary popup composites render children directly. Use a component `Viewport` only for intentional current/previous payload swapping; keep that motion scoped to `.xyz-popup-viewport`.
+- Use the ADR's explicit `stylex.props(...)` boundary for native JSX; do not add global JSX augmentation, transform shims, or line suppressions for lowercase intrinsic `sx`.
 
 ## Components and accessibility
 
+- Before changing asynchronous compound-action ownership or settlement behavior, read [ADR 0005](docs/adr/0005-root-owned-async-confirmation-settlement.md).
+- Before adding or changing a document-level component shortcut, read [ADR 0006](docs/adr/0006-global-keyboard-shortcut-arbitration.md). Use one private dispatcher per component family; ignore repeated and already-prevented events, and preserve each root's existing state path.
+- Before deriving an unbounded decorative collection from a public numeric domain, read [ADR 0007](docs/adr/0007-bound-derived-presentation-without-changing-semantics.md). Bound work before iteration without changing the underlying control's values or keyboard semantics.
+- Before resetting identity-bound transient state in an effect, read [ADR 0008](docs/adr/0008-reset-identity-bound-state-before-first-render.md). If the first committed render must be clean, key the private state owner by every semantic identity input; exclude callback identity and preserve cleanup.
+- Before reconciling a controlled value with a changing option domain, read [ADR 0009](docs/adr/0009-normalize-effective-values-without-unsolicited-callbacks.md). Derive one pure effective value for every display, selection, reset, storage, and user-callback path; do not emit changes solely because props became invalid.
 - Menu checkbox/radio items own their indicators; consumers provide only row content. `Menu.SwitchItem` remains a `menuitemcheckbox`.
 - Preserve full state when limiting visible UI (for example, Combobox chips). Use `N selected` when none are visible and `+N more` when some are visible.
 - Verify semantics, accessible names, keyboard/disclosure behavior, overlays, hit testing, and responsive dimensions—not only source intent.
+
+## Documentation ownership
+
+- Keep `README.md` as project orientation and an index into authoritative references; do not maintain a duplicate component inventory there.
+- Keep `CONTEXT.md` as the concise repository glossary.
+- Keep this file limited to executable agent rules. Record durable architectural choices and rationale in the next numbered file under `docs/adr/`, then link it from the README and the relevant rule here.
+- Update an existing ADR when clarifying the same decision. Add a new ADR only for a distinct decision or when superseding an earlier one; never silently rewrite historical status or rationale.
+- Keep `plans/` as an active backlog only. After a plan is DONE or REJECTED, distill any durable outcome into an ADR, glossary, or implementation guide, then remove the inactive plan and its status history. Git history is the archive; do not keep execution transcripts in the public tree.
 
 ## Validation
 
 - Inspect the intended checkout before editing; files may be untracked and local copies may diverge.
 - Run TypeScript, lint, the app build, and Storybook build independently. This repo has no `typecheck` script.
+- Playwright discovers the full `tests/` tree. For interaction changes, run the focused browser spec with console-error capture after building Storybook.
 - For StyleX selector, popup, responsive, or interaction changes, also verify live Storybook after optimization finishes. A production build does not prove dev-transform behavior.
 - If Storybook reports a transient missing story or `Invalid empty selector`, reload/restart and reacquire browser references before changing valid code.
 - Report unrelated failures instead of modifying concurrent work.

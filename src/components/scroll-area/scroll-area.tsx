@@ -151,8 +151,8 @@ const parts = stylex.create({
 	thumb: {
 		borderRadius: tokens["--radius-full"],
 		backgroundColor: {
-			default: tokens["--border-input"],
-			":active": tokens["--border-input-hover"],
+			default: tokens["--fill-neutral"],
+			":active": tokens["--fg-subtle"],
 		},
 		transitionDuration: tokens["--motion-duration-short"],
 		transitionProperty: "background-color, width",
