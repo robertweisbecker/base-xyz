@@ -1,6 +1,7 @@
 import { CopyIcon } from "@phosphor-icons/react/dist/csr/Copy";
+import { useMergedRefs } from "@base-ui/utils/useMergedRefs";
 import * as stylex from "@stylexjs/stylex";
-import { useCallback, type ReactNode, useId, useRef, useState } from "react";
+import { type ReactNode, useId, useRef, useState } from "react";
 import { flushSync } from "react-dom";
 import { Button, IconButton, Icon, Toast } from "@/components";
 import type { ButtonProps } from "@/components";
@@ -37,14 +38,7 @@ function CopyButtonControl({
 	const anchorRef = useRef<HTMLButtonElement | null>(null);
 	const [copied, setCopied] = useState(false);
 	const iconOnly = children == null;
-
-	const setRefs = useCallback(
-		(node: HTMLButtonElement | null) => {
-			anchorRef.current = node;
-			setRef(forwardedRef, node);
-		},
-		[forwardedRef],
-	);
+	const mergedRef = useMergedRefs(forwardedRef, anchorRef);
 
 	async function handleClick(event: Parameters<NonNullable<ButtonProps["onClick"]>>[0]) {
 		onClick?.(event);
@@ -101,7 +95,6 @@ function CopyButtonControl({
 			<span
 				{...stylex.props(
 					iconSwapTransition.icon,
-					iconSwapTransition.from,
 					copied ? iconSwapTransition.hidden : iconSwapTransition.visible,
 				)}>
 				<CopyIcon aria-hidden weight="regular" />
@@ -120,13 +113,11 @@ function CopyButtonControl({
 	if (!iconOnly) {
 		return (
 			<Button
-				ref={setRefs}
+				ref={mergedRef}
 				aria-label={ariaLabel}
 				endSlot={icon}
 				shape={shape ?? "default"}
 				onClick={handleClick}
-				// disabled={copied}
-				// focusableWhenDisabled
 				{...props}>
 				{children}
 			</Button>
@@ -135,22 +126,12 @@ function CopyButtonControl({
 
 	return (
 		<IconButton
-			ref={setRefs}
+			ref={mergedRef}
 			icon={icon}
 			label={ariaLabel ?? tooltip}
 			onClick={handleClick}
 			shape={shape === "circle" ? "circle" : "square"}
-			// disabled={copied}
-			// focusableWhenDisabled
 			{...props}
 		/>
 	);
-}
-
-function setRef(ref: CopyButtonProps["ref"], node: HTMLButtonElement | null) {
-	if (typeof ref === "function") {
-		ref(node);
-	} else if (ref) {
-		ref.current = node;
-	}
 }

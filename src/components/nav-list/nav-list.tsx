@@ -6,7 +6,6 @@ import { ArrowLeftIcon, ArrowRightIcon, BrowserIcon } from "@phosphor-icons/reac
 import * as stylex from "@stylexjs/stylex";
 import type { StyleXStyles } from "@stylexjs/stylex";
 import {
-	cloneElement,
 	createContext,
 	isValidElement,
 	useCallback,
@@ -17,9 +16,7 @@ import {
 	useRef,
 	useState,
 	type ComponentProps,
-	type CSSProperties,
 	type MouseEvent,
-	type ReactElement,
 	type ReactNode,
 	type Ref,
 	type RefObject,
@@ -36,6 +33,7 @@ import { Tooltip } from "@/components/tooltip/tooltip";
 import { VisuallyHidden } from "@/components/visually-hidden/visually-hidden";
 import { focusRing } from "@/styles/recipes/focus";
 import { tokens } from "@/theme/tokens.stylex";
+import { attrJoin } from "@/utils/attr-join";
 
 type StyledProps<T> = Omit<T, "className" | "style"> & {
 	className?: string;
@@ -298,6 +296,18 @@ function Row({
 			) : null}
 		</>
 	);
+	const rowSx = stylex.props(
+		menuItemStyles.item,
+		menuItemSizeStyles[size],
+		menuItemVariantStyles.default,
+		focusRing.inset,
+		navListParts.row,
+		(current || active) && !disabled && navListParts.currentRow,
+		disclosure === "collapse" && collapseOpen && !disabled && navListParts.collapsibleTriggerOpen,
+		disclosure === "back" && navListParts.backRow,
+		isIconMode && navListParts.iconModeRow,
+		style,
+	);
 	const row = useRender<{}, HTMLElement>({
 		defaultTagName: isLink ? "a" : isAction ? "button" : "div",
 		ref,
@@ -313,8 +323,8 @@ function Row({
 			"data-disabled": disabled ? "" : undefined,
 			"data-icon-mode": isIconMode ? "" : undefined,
 			"data-nav-list-back": dataNavListBack ? "" : undefined,
-			className,
-			style,
+			className: attrJoin(rowSx.className, className),
+			style: rowSx.style,
 			onClick: isStatic
 				? undefined
 				: (event: MouseEvent<HTMLElement>) => {
@@ -343,25 +353,13 @@ function Row({
 			children: content,
 		},
 	});
-	const rowElement = cloneRowWithStyles(row as ReactElement<Record<string, unknown>>, [
-		menuItemStyles.item,
-		menuItemSizeStyles[size],
-		menuItemVariantStyles.default,
-		focusRing.inset,
-		navListParts.row,
-		(current || active) && !disabled && navListParts.currentRow,
-		disclosure === "collapse" && collapseOpen && !disabled && navListParts.collapsibleTriggerOpen,
-		disclosure === "back" && navListParts.backRow,
-		isIconMode && navListParts.iconModeRow,
-		style,
-	]);
 	const rowWithTooltip = showTooltip ? (
 		<Tooltip.Root>
-			<Tooltip.Trigger render={rowElement} />
+			<Tooltip.Trigger render={row} />
 			<Tooltip.Popup positionerProps={{ side: popoverSide }}>{tooltip ?? label}</Tooltip.Popup>
 		</Tooltip.Root>
 	) : (
-		rowElement
+		row
 	);
 
 	if (!asListItem) {
@@ -369,14 +367,6 @@ function Row({
 	}
 
 	return <li {...stylex.props(navListParts.listItem)}>{rowWithTooltip}</li>;
-}
-
-function cloneRowWithStyles(element: ReactElement<Record<string, unknown>>, styles: Array<unknown>) {
-	const sx = (stylex.props as (...args: Array<unknown>) => { className?: string; style?: CSSProperties })(...styles);
-	return cloneElement(element, {
-		className: [sx.className, element.props.className].filter(Boolean).join(" "),
-		style: sx.style,
-	});
 }
 
 export type CollapsibleGroupProps = {
@@ -779,7 +769,7 @@ export function DrilldownBack({ to, label, className, style }: NavListDrilldownB
 function collectPanels(children: ReactNode) {
 	const panels = new Map<string, DrilldownPanelRecord>();
 
-	for (const child of ChildrenToArray(children)) {
+	for (const child of Array.isArray(children) ? children : [children]) {
 		if (!isValidElement<NavListDrilldownPanelProps>(child)) {
 			continue;
 		}
@@ -796,10 +786,6 @@ function collectPanels(children: ReactNode) {
 	}
 
 	return panels;
-}
-
-function ChildrenToArray(children: ReactNode) {
-	return Array.isArray(children) ? children : [children];
 }
 
 function CollapsedChildrenPopover({
@@ -1040,9 +1026,6 @@ const navListParts = stylex.create({
 			":hover": tokens["--fg"],
 		},
 		marginBlockEnd: tokens["--space-1"],
-		// fontSize: tokens["--font-size-1"],
-		// lineHeight: tokens["--line-height-1"],
-		// letterSpacing: tokens["--letter-spacing-1"],
 	},
 	iconModeRow: {
 		[menuItemVars.columns]: "1fr",
@@ -1089,10 +1072,7 @@ const navListParts = stylex.create({
 		transform: {
 			default: "rotate(0deg)",
 		},
-		transitionDuration: {
-			default: tokens["--motion-duration-short"],
-			[media.reducedMotion]: "0ms",
-		},
+		transitionDuration: tokens["--motion-duration-short"],
 		transitionProperty: "transform",
 		transitionTimingFunction: tokens["--motion-ease-smooth-out"],
 	},
@@ -1149,10 +1129,7 @@ const navListParts = stylex.create({
 		marginInlineStart: tokens["--space-4"],
 		paddingInlineEnd: tokens["--space-0"],
 		paddingInlineStart: tokens["--space-3"],
-		transitionDuration: {
-			default: tokens["--motion-duration-short"],
-			[media.reducedMotion]: "0ms",
-		},
+		transitionDuration: tokens["--motion-duration-short"],
 		transitionProperty: "height, padding",
 		transitionTimingFunction: tokens["--motion-ease-out"],
 		visibility: {
@@ -1192,10 +1169,7 @@ const navListParts = stylex.create({
 				default: "translateX(-16px)",
 			},
 		},
-		transitionDuration: {
-			default: tokens["--motion-duration-medium"],
-			[media.reducedMotion]: "0ms",
-		},
+		transitionDuration: tokens["--motion-duration-medium"],
 		transitionProperty: "opacity, transform",
 		transitionTimingFunction: tokens["--motion-ease-smooth-out"],
 		minWidth: 0,

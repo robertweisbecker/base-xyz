@@ -3,23 +3,20 @@ import type { StyleXStyles } from "@stylexjs/stylex";
 import type { ComponentProps, ReactNode } from "react";
 import { positioningThemeProps } from "@/theme/theme-props-layout.stylex";
 import { tokens } from "@/theme/tokens.stylex";
-import { resolveThemeProps, type VerifyThemeProps } from "@/theme/theme-props";
-import type { PositioningProps } from "@/theme/theme-props.types";
+import { resolveThemeProps, type ThemePropsOf } from "@/theme/theme-props";
 import { Heading } from "@/components/heading/heading";
 import { Text } from "@/components/text/text";
 import { VisuallyHidden } from "@/components/visually-hidden/visually-hidden";
 
 export type CalloutHue = "accent" | "error" | "warning" | "success" | "neutral";
 export type CalloutVariant = "default" | "banner";
-export interface CalloutThemeProps extends PositioningProps {}
-
-type VerifiedCalloutThemeProps = VerifyThemeProps<CalloutThemeProps, typeof positioningThemeProps>;
+export type CalloutThemeProps = ThemePropsOf<typeof positioningThemeProps>;
 
 export type CalloutProps = Omit<
 	ComponentProps<"div">,
-	"children" | "color" | "role" | "style" | "title" | keyof VerifiedCalloutThemeProps
+	"children" | "color" | "role" | "style" | "title" | keyof CalloutThemeProps
 > &
-	VerifiedCalloutThemeProps & {
+	CalloutThemeProps & {
 		/** Renders the callout as an assertive ARIA alert. */
 		alert?: boolean;
 		/** Optional trailing action, such as a button or link. */
@@ -202,27 +199,22 @@ const calloutActionVariantStyles = stylex.create({
 const calloutHueStyles = stylex.create({
 	accent: {
 		backgroundColor: tokens["--color-accent-c1"],
-		// borderColor: colors["--color-accent-b1"],
 		color: tokens["--color-accent-t2"],
 	},
 	error: {
 		backgroundColor: tokens["--color-error-c1"],
-		// borderColor: colors["--color-error-b1"],
 		color: tokens["--color-error-t2"],
 	},
 	warning: {
 		backgroundColor: tokens["--color-warning-c1"],
-		// borderColor: colors["--color-warning-b1"],
 		color: tokens["--color-warning-t2"],
 	},
 	success: {
 		backgroundColor: tokens["--color-success-c1"],
-		// borderColor: colors["--color-success-b1"],
 		color: tokens["--color-success-t2"],
 	},
 	neutral: {
 		backgroundColor: tokens["--color-gray-c1"],
-		// borderColor: colors["--color-gray-b2"],
 		color: tokens["--color-gray-t3"],
 	},
 });

@@ -10,6 +10,7 @@ import { focusRing } from "@/styles/recipes/focus";
 import { tokens } from "@/theme/tokens.stylex";
 import { Icon } from "@/components/icons";
 import { VisuallyHidden } from "@/components/visually-hidden/visually-hidden";
+import { attrJoin } from "@/utils/attr-join";
 
 export type SwitchSize = "sm" | "md" | "lg";
 
@@ -83,7 +84,7 @@ export function Switch({
 					disabled={disabled}
 					readOnly={readOnly}
 					required={required}
-					aria-describedby={mergeIds(ariaDescribedBy, descriptionId)}
+					aria-describedby={attrJoin(ariaDescribedBy, descriptionId) || undefined}
 					nativeButton
 					render={<button type="button" />}
 					{...stylex.props(switchParts.track, sizeVariants[size], focusRing.offset)}
@@ -94,16 +95,12 @@ export function Switch({
 				</BaseSwitch.Root>
 			</label>
 			{description ? (
-				<p id={descriptionId} {...stylex.props(fieldStyles.description, switchParts.description)}>
+				<p id={descriptionId} {...stylex.props(fieldStyles.description)}>
 					{description}
 				</p>
 			) : null}
 		</div>
 	);
-}
-
-function mergeIds(...ids: Array<string | undefined>) {
-	return ids.filter(Boolean).join(" ") || undefined;
 }
 
 const switchParts = stylex.create({
@@ -147,9 +144,6 @@ const switchParts = stylex.create({
 	labelReadOnly: {
 		color: tokens["--fg-muted"],
 	},
-	description: {
-		// margin: 0,
-	},
 	track: {
 		padding: "calc(var(--_switch-track-height) / 14)",
 		borderColor: {
@@ -170,8 +164,6 @@ const switchParts = stylex.create({
 			"[data-disabled]": tokens["--fill-disabled"],
 			default: tokens["--fill-track"],
 		},
-		// borderStyle: "solid",
-		// borderWidth: "1px",
 		boxShadow: {
 			"[data-disabled]": "none",
 			"[data-readonly]": null,

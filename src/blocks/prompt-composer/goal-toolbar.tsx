@@ -21,7 +21,6 @@ export function GoalToolbar({ active, description, onActiveChange }: GoalToolbar
 	const [draftDescription, setDraftDescription] = useState(description);
 	const [editOpen, setEditOpen] = useState(false);
 	const [detailsOpen, setDetailsOpen] = useState(false);
-	const detailsLabel = detailsOpen ? "Collapse goal details" : "Expand goal details";
 
 	function handleEditOpenChange(nextOpen: boolean) {
 		if (nextOpen) {
@@ -66,7 +65,6 @@ export function GoalToolbar({ active, description, onActiveChange }: GoalToolbar
 										<span
 											{...stylex.props(
 												iconSwapTransition.icon,
-												iconSwapTransition.from,
 												currentActive ? iconSwapTransition.visible : iconSwapTransition.hidden,
 											)}>
 											<PauseCircleIcon aria-hidden weight="duotone" />
@@ -102,7 +100,7 @@ export function GoalToolbar({ active, description, onActiveChange }: GoalToolbar
 							/>
 							<IconButton
 								icon={<Collapsible.Icon />}
-								label={detailsLabel}
+								label={detailsOpen ? "Collapse goal details" : "Expand goal details"}
 								nativeButton
 								render={<Collapsible.Trigger render={<Toolbar.Button />} shape="square" size="md" />}
 								variant="ghost"

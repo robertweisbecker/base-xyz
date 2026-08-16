@@ -6,6 +6,7 @@ import { resolveThemeProps } from "@/theme/theme-props";
 import type { FieldSize, FieldThemeProps } from "@/components/field/field.types";
 import { fieldStyles, fieldInputStyles, fieldThemeProps } from "@/components/field/field.stylex";
 import { focusRing } from "@/styles/recipes/focus";
+import { attrJoin } from "@/utils/attr-join";
 
 export type TextareaProps = Omit<
 	ComponentProps<"textarea">,
@@ -57,7 +58,7 @@ export function Textarea({
 			<textarea
 				ref={ref}
 				id={id}
-				aria-describedby={mergeIds(ariaDescribedBy, descriptionId, errorId)}
+				aria-describedby={attrJoin(ariaDescribedBy, descriptionId, errorId) || undefined}
 				aria-invalid={error ? true : ariaInvalid}
 				data-disabled={disabled ? "" : undefined}
 				data-invalid={error ? "" : undefined}
@@ -80,10 +81,6 @@ export function Textarea({
 			) : null}
 		</Field.Root>
 	);
-}
-
-function mergeIds(...ids: Array<string | undefined>) {
-	return ids.filter(Boolean).join(" ") || undefined;
 }
 
 const textareaParts = stylex.create({

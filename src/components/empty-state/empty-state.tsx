@@ -1,7 +1,7 @@
 import * as stylex from "@stylexjs/stylex";
 import type { StyleXStyles } from "@stylexjs/stylex";
-import type { ComponentProps, ElementType, ReactNode } from "react";
-import { composeThemeProps, resolveThemeProps, type VerifyThemeProps } from "@/theme/theme-props";
+import type { ComponentProps, ReactNode } from "react";
+import { composeThemeProps, resolveThemeProps, type ThemePropsOf } from "@/theme/theme-props";
 import {
 	childLayoutThemeProps,
 	displayThemeProps,
@@ -11,33 +11,12 @@ import {
 } from "@/theme/theme-props-layout.stylex";
 import { spacingThemeProps } from "@/theme/theme-props-spacing.stylex";
 import { radiusThemeProps, shadowThemeProps } from "@/theme/theme-props-surface.stylex";
-import type {
-	ChildLayoutProps,
-	DisplayProps,
-	FlexProps,
-	PositioningProps,
-	RadiusThemeProps,
-	ShadowThemeProps,
-	SizingProps,
-	SpacingProps,
-} from "@/theme/theme-props.types";
 import { tokens } from "@/theme/tokens.stylex";
 import { Heading } from "@/components/heading/heading";
 import { Text } from "@/components/text/text";
 
 export type EmptyStateSize = "sm" | "md" | "lg";
 export type EmptyStateHeadingLevel = "h1" | "h2" | "h3" | "h4" | "h5" | "h6";
-export interface EmptyStateThemeProps
-	extends
-		SpacingProps,
-		SizingProps,
-		PositioningProps,
-		ChildLayoutProps,
-		RadiusThemeProps,
-		ShadowThemeProps,
-		FlexProps,
-		DisplayProps {}
-
 const emptyStateThemeProps = composeThemeProps(
 	spacingThemeProps,
 	sizingThemeProps,
@@ -48,13 +27,13 @@ const emptyStateThemeProps = composeThemeProps(
 	verticalFlexThemeProps,
 	displayThemeProps,
 );
-type VerifiedEmptyStateThemeProps = VerifyThemeProps<EmptyStateThemeProps, typeof emptyStateThemeProps>;
+export type EmptyStateThemeProps = ThemePropsOf<typeof emptyStateThemeProps>;
 
 export type EmptyStateProps = Omit<
 	ComponentProps<"div">,
-	"children" | "color" | "height" | "style" | "title" | "width" | keyof VerifiedEmptyStateThemeProps
+	"children" | "color" | "height" | "style" | "title" | "width" | keyof EmptyStateThemeProps
 > &
-	VerifiedEmptyStateThemeProps & {
+	EmptyStateThemeProps & {
 		/** Actions or other supporting content rendered below the description. */
 		children?: ReactNode;
 		description?: ReactNode;
@@ -80,7 +59,7 @@ export function EmptyState({
 }: EmptyStateProps) {
 	const { restProps, styles } = resolveThemeProps(props, emptyStateThemeProps);
 	const rootSx = stylex.props(emptyStateStyles.root, rootSizeStyles[size], ...styles, style);
-	const Title = headingLevel as ElementType;
+	const Title = headingLevel;
 
 	return (
 		<div className={[rootSx.className, className].filter(Boolean).join(" ")} style={rootSx.style} {...restProps}>
@@ -130,9 +109,6 @@ const emptyStateStyles = stylex.create({
 		flex: "none",
 		alignItems: "center",
 		backgroundColor: tokens["--bg-highlight"],
-		// borderWidth: 1,
-		// borderStyle: "dashed",
-		// borderColor: colors["--border-input"],
 		color: tokens["--fg-subtle"],
 		display: "flex",
 		justifyContent: "center",

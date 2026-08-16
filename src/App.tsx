@@ -283,7 +283,7 @@ function getComponentCells(): GalleryCell[] {
 				<CommandPalette.Root
 					inline
 					items={["Create project", "Search docs", "Open settings"]}
-					style={styles.commandPaletteSample}>
+					style={styles.galleryWide}>
 					<CommandPalette.Input placeholder="Search commands..." />
 					<CommandPalette.List>
 						{(item: string) => (
@@ -305,7 +305,7 @@ function getComponentCells(): GalleryCell[] {
 					filterColumnId="url"
 					filterPlaceholder="Filter"
 					rowSelection={false}
-					style={styles.dataTableSample}
+					style={styles.galleryWide}
 				/>
 			),
 		},
@@ -942,7 +942,7 @@ function getBlockCells(): GalleryCell[] {
 		{
 			title: "PasswordField",
 			content: (
-				<PasswordField.Root defaultValue="correct-horse-2" style={styles.blockField}>
+				<PasswordField.Root defaultValue="correct-horse-2" style={styles.galleryWide}>
 					<PasswordField.Label>Password</PasswordField.Label>
 					<PasswordField.Control>
 						<PasswordField.Input />
@@ -1248,8 +1248,8 @@ function GallerySection({
 				{variant === "components" ? (
 					<>
 						<div aria-hidden {...stylex.props(styles.componentFillerCell, styles.componentFillerOne)} />
-						<div aria-hidden {...stylex.props(styles.componentFillerCell, styles.componentFillerTwo)} />
-						<div aria-hidden {...stylex.props(styles.componentFillerCell, styles.componentFillerThree)} />
+						<div aria-hidden {...stylex.props(styles.componentFillerCell, styles.componentFillerLarge)} />
+						<div aria-hidden {...stylex.props(styles.componentFillerCell, styles.componentFillerLarge)} />
 					</>
 				) : null}
 			</div>
@@ -1264,7 +1264,7 @@ const styles = stylex.create({
 		minHeight: "100svh",
 	},
 	header: {
-		paddingInline: { default: tokens["--space-4"], [breakpoints.sm]: tokens["--space-4"] },
+		paddingInline: tokens["--space-4"],
 		alignItems: "center",
 		backgroundImage: `linear-gradient(to bottom, ${tokens["--canvas"]}, transparent)`,
 		display: "flex",
@@ -1316,10 +1316,6 @@ const styles = stylex.create({
 		paddingBlock: tokens["--space-4"],
 		paddingInline: tokens["--space-4"],
 		alignItems: "center",
-		// backgroundColor: colors["--surface"],
-		// borderBottomColor: colors["--border"],
-		// borderBottomStyle: "solid",
-		// borderBottomWidth: "1px",
 		display: "flex",
 	},
 	sectionTitle: {
@@ -1333,15 +1329,6 @@ const styles = stylex.create({
 	componentGrid: {
 		gap: "1px",
 		paddingInline: 1,
-		// borderBottomColor: colors["--border"],
-		// borderBottomStyle: "solid",
-		// borderBottomWidth: "1px",
-		// borderLeftColor: colors["--border"],
-		// borderLeftStyle: "solid",
-		// borderLeftWidth: "1px",
-		// borderRightColor: colors["--border"],
-		// borderRightStyle: "solid",
-		// borderRightWidth: "1px",
 		display: "grid",
 		gridTemplateColumns: {
 			default: "1fr",
@@ -1351,16 +1338,6 @@ const styles = stylex.create({
 	},
 	blockGrid: {
 		gap: "1px",
-		// backgroundColor: colors["--border"],
-		// borderBottomColor: colors["--border"],
-		// borderBottomStyle: "solid",
-		// borderBottomWidth: "1px",
-		// borderLeftColor: colors["--border"],
-		// borderLeftStyle: "solid",
-		// borderLeftWidth: "1px",
-		// borderRightColor: colors["--border"],
-		// borderRightStyle: "solid",
-		// borderRightWidth: "1px",
 		display: "grid",
 		gridTemplateColumns: {
 			default: "1fr",
@@ -1399,13 +1376,7 @@ const styles = stylex.create({
 			[breakpoints.sm]: "block",
 		},
 	},
-	componentFillerTwo: {
-		display: {
-			default: "none",
-			[breakpoints.lg]: "block",
-		},
-	},
-	componentFillerThree: {
+	componentFillerLarge: {
 		display: {
 			default: "none",
 			[breakpoints.lg]: "block",
@@ -1457,10 +1428,7 @@ const styles = stylex.create({
 	codeSample: {
 		width: "min(100%, 210px)",
 	},
-	commandPaletteSample: {
-		width: "min(100%, 24rem)",
-	},
-	dataTableSample: {
+	galleryWide: {
 		width: "min(100%, 24rem)",
 	},
 	inputGroupSample: {
@@ -1520,9 +1488,6 @@ const styles = stylex.create({
 	},
 	blockWide: {
 		width: "min(100%, 36rem)",
-	},
-	blockField: {
-		width: "min(100%, 24rem)",
 	},
 });
 

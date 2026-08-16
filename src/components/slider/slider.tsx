@@ -7,6 +7,7 @@ import { fieldStyles } from "@/components/field/field.stylex";
 import { typescaleStyles, fontWeightStyles } from "@/components/text/text.stylex";
 import { focusRing } from "@/styles/recipes/focus";
 import { tokens } from "@/theme/tokens.stylex";
+import { attrJoin } from "@/utils/attr-join";
 
 type SliderValue = number | readonly number[];
 
@@ -89,7 +90,7 @@ export function Root<Value extends SliderValue = number>({
 				locale={locale}
 				thumbAlignment="edge"
 				data-size={sliderSize}
-				className={mergeClassNames(sx.className, className)}
+				className={attrJoin(sx.className, className)}
 				style={sx.style}
 				{...props}>
 				{children}
@@ -100,20 +101,21 @@ export function Root<Value extends SliderValue = number>({
 
 export function Header({ className, style, ...props }: SliderHeaderProps) {
 	const sx = stylex.props(sliderParts.header, style);
-	return <div {...props} className={mergeClassNames(sx.className, className)} style={sx.style} />;
+	return <div {...props} className={attrJoin(sx.className, className)} style={sx.style} />;
 }
 
 export function Label({ className, style, ...props }: SliderLabelProps) {
 	const sx = stylex.props(fieldStyles.itemLabel, sliderParts.label, style);
-	return <BaseSlider.Label {...props} className={mergeClassNames(sx.className, className)} style={sx.style} />;
+	return <BaseSlider.Label {...props} className={attrJoin(sx.className, className)} style={sx.style} />;
 }
 
 export function Value({ children, className, style, ...props }: SliderValueProps) {
 	const { format, locale, max, min } = useSliderContext();
+	const formatter = new Intl.NumberFormat(locale, format);
 	const sx = stylex.props(typescaleStyles["2"], fontWeightStyles.regular, sliderParts.value, style);
 
 	return (
-		<BaseSlider.Value {...props} className={mergeClassNames(sx.className, className)} style={sx.style}>
+		<BaseSlider.Value {...props} className={attrJoin(sx.className, className)} style={sx.style}>
 			{(formattedValues, values) => {
 				const minValues = values.map(() => min);
 				const maxValues = values.map(() => max);
@@ -121,10 +123,10 @@ export function Value({ children, className, style, ...props }: SliderValueProps
 				return (
 					<>
 						<span aria-hidden {...stylex.props(sliderParts.valueReserve)}>
-							{renderValueContent(children, formatValues(minValues, locale, format), minValues)}
+							{renderValueContent(children, minValues.map(formatter.format), minValues)}
 						</span>
 						<span aria-hidden {...stylex.props(sliderParts.valueReserve)}>
-							{renderValueContent(children, formatValues(maxValues, locale, format), maxValues)}
+							{renderValueContent(children, maxValues.map(formatter.format), maxValues)}
 						</span>
 						<span {...stylex.props(sliderParts.valueContent)}>
 							{renderValueContent(children, formattedValues, values)}
@@ -138,7 +140,7 @@ export function Value({ children, className, style, ...props }: SliderValueProps
 
 export function Row({ className, style, ...props }: SliderRowProps) {
 	const sx = stylex.props(sliderParts.row, style);
-	return <div {...props} className={mergeClassNames(sx.className, className)} style={sx.style} />;
+	return <div {...props} className={attrJoin(sx.className, className)} style={sx.style} />;
 }
 
 export function Control({ children, className, markers = false, style, ...props }: SliderControlProps) {
@@ -147,10 +149,10 @@ export function Control({ children, className, markers = false, style, ...props 
 	const indicatorSx = stylex.props(sliderParts.indicator);
 
 	return (
-		<BaseSlider.Control {...props} className={mergeClassNames(sx.className, className)} style={sx.style}>
+		<BaseSlider.Control {...props} className={attrJoin(sx.className, className)} style={sx.style}>
 			<BaseSlider.Track className={trackSx.className} style={trackSx.style}>
 				<BaseSlider.Indicator className={indicatorSx.className} style={indicatorSx.style} />
-				{markers ? <Markers every={typeof markers === "boolean" ? 1 : markers.every} /> : null}
+				{markers ? <Markers every={markers === true ? 1 : markers.every} /> : null}
 			</BaseSlider.Track>
 			{children}
 		</BaseSlider.Control>
@@ -179,7 +181,7 @@ function Markers({ every = 1 }: SliderMarkersOptions) {
 
 export function Thumb({ className, style, ...props }: SliderThumbProps) {
 	const sx = stylex.props(focusRing.offset, sliderParts.thumb, style);
-	return <BaseSlider.Thumb {...props} className={mergeClassNames(sx.className, className)} style={sx.style} />;
+	return <BaseSlider.Thumb {...props} className={attrJoin(sx.className, className)} style={sx.style} />;
 }
 
 function useSliderContext() {
@@ -225,29 +227,16 @@ function getMarkerPosition(value: number, min: number, max: number) {
 	return Math.min(100, Math.max(0, ((value - min) / range) * 100));
 }
 
-function formatValues(
-	values: readonly number[],
-	locale: Intl.LocalesArgument | undefined,
-	format: Intl.NumberFormatOptions | undefined,
-) {
-	const formatter = new Intl.NumberFormat(locale, format);
-	return values.map((value) => formatter.format(value));
-}
-
 function renderValueContent(
 	children: BaseSlider.Value.Props["children"],
 	formattedValues: readonly string[],
 	values: readonly number[],
 ) {
-	if (typeof children === "function") {
+	if (children) {
 		return children(formattedValues, values);
 	}
 
 	return values.map((value, index) => formattedValues[index] || value).join(" – ");
-}
-
-function mergeClassNames(...classNames: Array<string | undefined>) {
-	return classNames.filter(Boolean).join(" ");
 }
 
 const sliderParts = stylex.create({

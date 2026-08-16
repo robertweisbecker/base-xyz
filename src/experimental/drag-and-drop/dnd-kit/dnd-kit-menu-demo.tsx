@@ -1,3 +1,4 @@
+import { useMergedRefs } from "@base-ui/utils/useMergedRefs";
 import { move } from "@dnd-kit/helpers";
 import {
 	DragDropProvider,
@@ -24,8 +25,14 @@ type MenuAction = Readonly<{
 }>;
 
 type MenuGroupId = "record" | "followUp";
-type MenuGroupState = Record<MenuGroupId, MenuAction[]>;
-type MenuOpenState = Record<MenuGroupId, boolean>;
+type MenuGroupState = {
+	record: MenuAction[];
+	followUp: MenuAction[];
+};
+type MenuOpenState = {
+	record: boolean;
+	followUp: boolean;
+};
 
 const MENU_ITEM_TYPE = "application/x-stylex-experimental-menu-item";
 
@@ -44,13 +51,6 @@ const INITIAL_MENU_GROUPS: MenuGroupState = {
 		{ id: "archive-record", label: "Archive record", shortcut: "⌘⌫", icon: <ArchiveIcon size={16} weight="regular" /> },
 	],
 };
-
-const MENU_GROUP_LABELS: Record<MenuGroupId, string> = {
-	record: "Record actions",
-	followUp: "Follow-up actions",
-};
-
-const MENU_GROUP_ORDER: MenuGroupId[] = ["record", "followUp"];
 
 const INITIAL_MENU_OPEN_STATE: MenuOpenState = {
 	record: true,
@@ -104,7 +104,7 @@ export function DndKitMenuDemo() {
 	}
 
 	function handleDragOver(event: DragOverEvent) {
-		setItems((current) => move(current, event) as MenuGroupState);
+		setItems((current) => move(current, event));
 	}
 
 	function handleDragEnd(event: DragEndEvent) {
@@ -184,7 +184,7 @@ function SortableMenu({
 				style={demoStyles.sortableMenuPopup}>
 				<Menu.Group>
 					<Menu.GroupLabel>{label}</Menu.GroupLabel>
-					{items.length === 0 ? <EmptyMenuGroup groupId={groupId} /> : null}
+					{items.length === 0 ? <EmptyMenuGroup label={label} /> : null}
 					{items.map((item, index) => (
 						<SortableMenuItem key={item.id} item={item} index={index} groupId={groupId} />
 					))}
@@ -194,10 +194,10 @@ function SortableMenu({
 	);
 }
 
-function EmptyMenuGroup({ groupId }: { groupId: MenuGroupId }) {
+function EmptyMenuGroup({ label }: { label: string }) {
 	return (
 		<Menu.Item disabled closeOnClick={false} style={demoStyles.emptyMenuItem}>
-			Add {MENU_GROUP_LABELS[groupId].toLowerCase()}
+			Add {label.toLowerCase()}
 		</Menu.Item>
 	);
 }
@@ -215,14 +215,11 @@ function SortableMenuItem({ item, index, groupId }: { item: MenuAction; index: n
 		},
 	});
 
-	function setRefs(element: HTMLElement | null) {
-		ref(element);
-		handleRef(element);
-	}
+	const mergedRef = useMergedRefs(ref, handleRef);
 
 	return (
 		<Menu.Item
-			ref={setRefs}
+			ref={mergedRef}
 			closeOnClick={false}
 			data-dragging={isDragging || undefined}
 			data-drop-target={isDropTarget || undefined}
@@ -246,8 +243,8 @@ function MenuOverlay({ label }: { label: string }) {
 }
 
 function cloneMenuGroups(groups: MenuGroupState = INITIAL_MENU_GROUPS): MenuGroupState {
-	return MENU_GROUP_ORDER.reduce((next, groupId) => {
-		next[groupId] = groups[groupId].map((item) => ({ ...item }));
-		return next;
-	}, {} as MenuGroupState);
+	return {
+		record: [...groups.record],
+		followUp: [...groups.followUp],
+	};
 }

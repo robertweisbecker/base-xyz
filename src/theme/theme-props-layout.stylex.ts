@@ -1,14 +1,9 @@
 import * as stylex from "@stylexjs/stylex";
 import type { StyleXStyles } from "@stylexjs/stylex";
 import {
-	childLayoutThemePropKeys,
 	composeThemeProps,
 	createThemePropDefinition,
-	displayThemePropKeys,
-	flexLayoutThemePropKeys,
-	gridCompositionThemePropKeys,
-	positioningThemePropKeys,
-	sizingThemePropKeys,
+	themePropKeys,
 } from "./theme-props";
 import { gapThemeProps, resolveSpaceValue } from "./theme-props-spacing.stylex";
 import type {
@@ -17,11 +12,14 @@ import type {
 	DisplayProps,
 	FlexProps,
 	GapProps,
+	GridSpan,
 	GridLayoutProps,
+	MaxDimensionValue,
 	Orientation,
 	PositioningProps,
 	SizingProps,
 	WidthFraction,
+	WidthValue,
 } from "./theme-props.types";
 import { tokens } from "@/theme/tokens.stylex";
 
@@ -59,13 +57,13 @@ const scalarStyles = stylex.create({
 	justifyItems: (value) => ({ justifyItems: value }),
 });
 
-const widthFractions: Record<WidthFraction, string> = {
+const widthFractions = {
 	"1/2": "50%",
 	"1/3": "33.333333%",
 	"2/3": "66.666667%",
 	"1/4": "25%",
 	"3/4": "75%",
-};
+} satisfies Record<WidthFraction, string>;
 
 const containerValues = {
 	"container.xs": tokens["--size-container-xs"],
@@ -81,32 +79,35 @@ const containerValues = {
 	"container.7xl": tokens["--size-container-7xl"],
 } satisfies Record<ContainerSize, string>;
 
-function resolveDimension(value: unknown): unknown {
+function resolveDimension(value: MaxDimensionValue | undefined) {
 	if (typeof value === "number") return resolveSpaceValue(value);
 	if (value === "full") return tokens["--size-full"];
 	if (typeof value === "string" && value.startsWith("container.")) {
+		// SAFETY: Container-prefixed members of MaxDimensionValue are exactly ContainerSize.
 		return containerValues[value as ContainerSize];
 	}
 	return value;
 }
 
-function resolveWidth(value: unknown): unknown {
+function resolveWidth(value: WidthValue | undefined) {
 	if (typeof value === "string" && Object.hasOwn(widthFractions, value)) {
+		// SAFETY: Object.hasOwn verifies that value is a key of the complete widthFractions map.
 		return widthFractions[value as WidthFraction];
 	}
-	return resolveDimension(value);
+	// SAFETY: The fraction members return above; the remaining WidthValue members are dimensions.
+	return resolveDimension(value as MaxDimensionValue | undefined);
 }
 
-function resolveSpan(value: unknown): unknown {
+function resolveSpan(value: GridSpan | undefined) {
 	if (value === "full") return "1 / -1";
-	return value === undefined ? undefined : `span ${value as number} / span ${value as number}`;
+	return value === undefined ? undefined : `span ${value} / span ${value}`;
 }
 
-function appendStyle(
+function appendStyle<Value>(
 	styles: StyleXStyles[],
-	value: unknown,
-	compile: (value: unknown) => StyleXStyles,
-) {
+	value: Value | undefined,
+	compile: (value: Value) => StyleXStyles,
+): void {
 	if (value !== undefined) styles.push(compile(value));
 }
 
@@ -174,27 +175,27 @@ function compileGridComposition(props: GridCompositionProps): StyleXStyles[] {
 	return styles;
 }
 
-export const displayThemeProps = createThemePropDefinition<DisplayProps>(displayThemePropKeys, compileDisplay);
-export const sizingThemeProps = createThemePropDefinition<SizingProps>(sizingThemePropKeys, compileSizing);
+export const displayThemeProps = createThemePropDefinition<DisplayProps>(themePropKeys.display, compileDisplay);
+export const sizingThemeProps = createThemePropDefinition<SizingProps>(themePropKeys.sizing, compileSizing);
 export const positioningThemeProps = createThemePropDefinition<PositioningProps>(
-	positioningThemePropKeys,
+	themePropKeys.positioning,
 	compilePositioning,
 );
 export const childLayoutThemeProps = createThemePropDefinition<ChildLayoutProps>(
-	childLayoutThemePropKeys,
+	themePropKeys.childLayout,
 	compileChildLayout,
 );
 
 const verticalFlexLayoutThemeProps = createThemePropDefinition<FlexLayoutProps>(
-	flexLayoutThemePropKeys,
+	themePropKeys.flexLayout,
 	(props) => compileFlexLayout(props, "vertical"),
 );
 const horizontalFlexLayoutThemeProps = createThemePropDefinition<FlexLayoutProps>(
-	flexLayoutThemePropKeys,
+	themePropKeys.flexLayout,
 	(props) => compileFlexLayout(props, "horizontal"),
 );
 const gridCompositionThemeProps = createThemePropDefinition<GridCompositionProps>(
-	gridCompositionThemePropKeys,
+	themePropKeys.gridComposition,
 	compileGridComposition,
 );
 

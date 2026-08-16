@@ -8,7 +8,10 @@ export type DemoItem = Readonly<{
 }>;
 
 export type DemoBoardItem = DemoItem & Readonly<{ columnId: DemoColumnId }>;
-export type DemoBoardState = Record<DemoColumnId, DemoItem[]>;
+export type DemoBoardState = {
+	backlog: DemoItem[];
+	done: DemoItem[];
+};
 
 export const TASK_TYPE = "application/x-stylex-experimental-task";
 export const ASSET_TYPE = "application/x-stylex-experimental-asset";
@@ -49,19 +52,19 @@ const INITIAL_BOARD: DemoBoardState = {
 
 export function createInitialBoardState(): DemoBoardState {
 	return {
-		backlog: INITIAL_BOARD.backlog.map((item) => ({ ...item })),
-		done: INITIAL_BOARD.done.map((item) => ({ ...item })),
+		backlog: [...INITIAL_BOARD.backlog],
+		done: [...INITIAL_BOARD.done],
 	};
 }
 
 export function createInitialBoardItems(): DemoBoardItem[] {
-	return BOARD_COLUMNS.flatMap(({ id }) => createInitialBoardState()[id].map((item) => ({ ...item, columnId: id })));
+	return BOARD_COLUMNS.flatMap(({ id }) => INITIAL_BOARD[id].map((item) => ({ ...item, columnId: id })));
 }
 
 export function cloneBoardState(state: DemoBoardState): DemoBoardState {
 	return {
-		backlog: state.backlog.map((item) => ({ ...item })),
-		done: state.done.map((item) => ({ ...item })),
+		backlog: [...state.backlog],
+		done: [...state.done],
 	};
 }
 
@@ -69,3 +72,9 @@ export function getItemType(item: DemoItem) {
 	return item.kind === "task" ? TASK_TYPE : ASSET_TYPE;
 }
 
+export function parseDemoItemString(serializedItem: string, key: "id" | "label") {
+	const item: unknown = JSON.parse(serializedItem);
+	if (typeof item !== "object" || item === null) return null;
+	const value = key === "id" && "id" in item ? item.id : key === "label" && "label" in item ? item.label : null;
+	return typeof value === "string" ? value : null;
+}

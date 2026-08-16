@@ -33,12 +33,10 @@ const mpTheme = stylex.createTheme(tokens, {
 	"--color-success-b1": "#7bdcd4",
 	"--color-success-b2": "#4fcbc3",
 	"--color-success-b3": "#00b7ae",
-	// #07b096
 	"--color-success-p1": "#219464",
 	"--color-success-p2": "#217d57",
 	"--color-success-t1": "#204e3e",
 	"--color-success-t2": "#004440",
-	// "--fg-success-contrast": "var(--fg)",
 
 	"--color-error-s1": "#FFE1D6",
 	"--color-error-s2": "#FFE1D6",
@@ -50,7 +48,6 @@ const mpTheme = stylex.createTheme(tokens, {
 	"--color-error-t1": "#6d3228",
 	"--color-error-t2": "#5B0237",
 	"--fill-error": "var(--color-error-p1)",
-	// "--fg-error-contrast": "var(--fg-inverse)",
 
 	"--color-warning-s1": "#f8f7f5",
 	"--color-warning-s2": "#ffefd8",
@@ -60,26 +57,11 @@ const mpTheme = stylex.createTheme(tokens, {
 	"--color-warning-b1": "#f5c976",
 	"--color-warning-b2": "#e2b869",
 	"--color-warning-b3": "#d0a03f",
-	// "--color-warning-p1": "#ffbf2c",
-	// "--color-warning-p2": "#f1b632",
-	// "--color-warning-t1": "#DA6B16",
-	// "--color-warning-t2": "#A33B16",
-
 	"--color-warning-p1": "#df7800",
 	"--color-warning-p2": "#b96607",
 	"--color-warning-t1": "#b96607",
 	"--color-warning-t2": "#6c4316",
 	"--fg-warning-contrast": "var(--color-white)",
-
-	// "--color-accent-s1": "#e8ddff",
-	// "--color-accent-s2": "#e8ddff",
-	// "--color-accent-c1": "#e8ddff",
-	// "--color-accent-c2": "#e8ddff",
-	// "--color-accent-c3": "#1b0b3b",
-	// "--color-accent-p1": "#5028c0",
-	// "--color-accent-p2": "#7856ff",
-	// "--color-accent-t1": "#1b0b3b",
-	// "--color-accent-t2": "#1b0b3b",
 
 	"--color-accent-s1": "oklch(97.5% 0.0035 285.7)",
 	"--color-accent-s2": "oklch(96.3% 0.0119 285.7)",
@@ -105,11 +87,7 @@ const mpTheme = stylex.createTheme(tokens, {
 	"--font-weight-bold": "700",
 });
 
-const themes = {
+export const themeStyles = {
 	default: defaultTheme,
 	mp: mpTheme,
 } satisfies Record<ThemeName, ReturnType<typeof stylex.createTheme>>;
-
-export function getThemeStyle(theme: ThemeName) {
-	return themes[theme];
-}

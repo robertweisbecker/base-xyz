@@ -7,7 +7,7 @@ import { WarningIcon } from "@phosphor-icons/react/dist/csr/Warning";
 import { ColorItem, ColorPalette, IconGallery, IconItem, Source, Typeset } from "@storybook/addon-docs/blocks";
 import * as stylex from "@stylexjs/stylex";
 import { useState, type ReactNode } from "react";
-import { breakpoints, zIndex, media } from "@/styles/constants.stylex";
+import { breakpoints, zIndex } from "@/styles/constants.stylex";
 import { tokens } from "@/theme/tokens.stylex";
 
 import { fontFamilyStyles, typescaleStyles } from "@/components/text/text.stylex";
@@ -343,21 +343,13 @@ function DepthAndMotionSection() {
 				title="Elevation"
 				description="Apply the lowest shadow that communicates the required separation. Theme-aware rings keep edges legible.">
 				<div {...stylex.props(styles.shadowGrid)}>
-					<ShadowSpecimen
-						name='tokens["--shadow-sm"]'
-						usage="Raised controls and compact cards"
-						style={styles.shadowSmall}
-					/>
-					<ShadowSpecimen
-						name='tokens["--shadow-md"]'
-						usage="Menus, popovers, and floating panels"
-						style={styles.shadowMedium}
-					/>
-					<ShadowSpecimen
-						name='tokens["--shadow-lg"]'
-						usage="Prominent previews and large overlays"
-						style={styles.shadowLarge}
-					/>
+					{[
+						{ name: 'tokens["--shadow-sm"]', usage: "Raised controls and compact cards", style: styles.shadowSmall },
+						{ name: 'tokens["--shadow-md"]', usage: "Menus, popovers, and floating panels", style: styles.shadowMedium },
+						{ name: 'tokens["--shadow-lg"]', usage: "Prominent previews and large overlays", style: styles.shadowLarge },
+					].map((specimen) => (
+						<ShadowSpecimen key={specimen.name} {...specimen} />
+					))}
 				</div>
 			</FoundationSection>
 
@@ -649,34 +641,14 @@ function MotionSpecimens() {
 				</button>
 			</div>
 			<div {...stylex.props(styles.motionRows)}>
-				<MotionRow
-					active={isPlaying}
-					name='tokens["--motion-duration-quick"]'
-					value="120ms"
-					usage="Pressed and hover feedback"
-					style={styles.motionQuick}
-				/>
-				<MotionRow
-					active={isPlaying}
-					name='tokens["--motion-duration-short"]'
-					value="180ms"
-					usage="Menus and compact popups"
-					style={styles.motionShort}
-				/>
-				<MotionRow
-					active={isPlaying}
-					name='tokens["--motion-duration-medium"]'
-					value="250ms"
-					usage="Standard state transitions"
-					style={styles.motionMedium}
-				/>
-				<MotionRow
-					active={isPlaying}
-					name='tokens["--motion-duration-content"]'
-					value="350ms"
-					usage="Content entering or changing"
-					style={styles.motionContent}
-				/>
+				{[
+					{ name: 'tokens["--motion-duration-quick"]', value: "120ms", usage: "Pressed and hover feedback", style: styles.motionQuick },
+					{ name: 'tokens["--motion-duration-short"]', value: "180ms", usage: "Menus and compact popups", style: styles.motionShort },
+					{ name: 'tokens["--motion-duration-medium"]', value: "250ms", usage: "Standard state transitions", style: styles.motionMedium },
+					{ name: 'tokens["--motion-duration-content"]', value: "350ms", usage: "Content entering or changing", style: styles.motionContent },
+				].map((specimen) => (
+					<MotionRow key={specimen.name} active={isPlaying} {...specimen} />
+				))}
 			</div>
 			<div {...stylex.props(styles.easingNotes)}>
 				<TokenName name='tokens["--motion-ease-out"]' value="General interaction · cubic-bezier(0.16, 1, 0.3, 1)" />
@@ -1196,28 +1168,16 @@ const styles = stylex.create({
 		insetInlineStart: "calc(100% - 14px)",
 	},
 	motionQuick: {
-		transitionDuration: {
-			default: tokens["--motion-duration-quick"],
-			[media.reducedMotion]: "0.01ms",
-		},
+		transitionDuration: tokens["--motion-duration-quick"],
 	},
 	motionShort: {
-		transitionDuration: {
-			default: tokens["--motion-duration-short"],
-			[media.reducedMotion]: "0.01ms",
-		},
+		transitionDuration: tokens["--motion-duration-short"],
 	},
 	motionMedium: {
-		transitionDuration: {
-			default: tokens["--motion-duration-medium"],
-			[media.reducedMotion]: "0.01ms",
-		},
+		transitionDuration: tokens["--motion-duration-medium"],
 	},
 	motionContent: {
-		transitionDuration: {
-			default: tokens["--motion-duration-content"],
-			[media.reducedMotion]: "0.01ms",
-		},
+		transitionDuration: tokens["--motion-duration-content"],
 	},
 	easingNotes: {
 		padding: tokens["--space-4"],

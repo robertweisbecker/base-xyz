@@ -49,10 +49,7 @@ export const popupMotionStyles = stylex.create({
 			default: "scale(1)",
 		},
 		transformOrigin: "var(--transform-origin)",
-		transitionDuration: {
-			default: popupVars.duration,
-			[media.reducedMotion]: "0ms",
-		},
+		transitionDuration: `${popupVars.duration}`,
 		transitionProperty: {
 			"[data-instant]": "none",
 			default: "transform, opacity",
@@ -70,9 +67,8 @@ export const popupMotionStyles = stylex.create({
 	},
 	movingPositioner: {
 		transitionDuration: {
-			default: tokens["--motion-duration-content"],
+			default: `${tokens["--motion-duration-content"]}`,
 			":has(> [data-starting-style])": "0ms",
-			[media.reducedMotion]: "0ms",
 		},
 		transitionProperty: "top, right, bottom, left, transform",
 		transitionTimingFunction: tokens["--motion-ease-smooth-out"],
@@ -80,7 +76,7 @@ export const popupMotionStyles = stylex.create({
 	movingPopup: {
 		transitionDuration: {
 			"[data-instant]": "0ms",
-			default: tokens["--motion-duration-content"],
+			default: `${tokens["--motion-duration-content"]}`,
 			[media.reducedMotion]: "0ms",
 		},
 		transitionProperty: "width, height, transform, opacity",
@@ -147,9 +143,6 @@ const arrowStyles = stylex.create({
 
 /** Apply to a normal anchored Base UI `Positioner`. */
 export const popupPositionerStyles = [popupMotionStyles.positioner] as const;
-
-/** @deprecated Normal and static anchored positioners now share the same styles. */
-export const popupStaticPositionerStyles = [popupMotionStyles.positioner] as const;
 
 /** Apply to an optional Base UI `Viewport` child. */
 export const popupViewportStyles = [popupMotionStyles.viewport] as const;

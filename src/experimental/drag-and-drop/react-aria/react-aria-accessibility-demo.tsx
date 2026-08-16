@@ -5,7 +5,7 @@ import { useDrag } from "react-aria/useDrag";
 import { isTextDropItem, type TextDropItem, useDrop } from "react-aria/useDrop";
 import { Button } from "@/components";
 import { focusRing } from "@/styles/recipes/focus";
-import { TASK_TYPE, TRANSFER_ITEM } from "../demo-data";
+import { parseDemoItemString, TASK_TYPE, TRANSFER_ITEM } from "../demo-data";
 import { DemoCard, DemoDropZone, DemoHandle, DemoInstructions, DemoPanel } from "../demo-parts";
 import { demoStyles } from "../drag-and-drop-demo.stylex";
 import { EmptyState } from "@/components/empty-state/empty-state";
@@ -159,8 +159,8 @@ function ReactAriaAccessibleTarget({
 		onDrop: async (event) => {
 			const item = event.items.find((dropItem): dropItem is TextDropItem => isTextDropItem(dropItem));
 			if (!item || !item.types.has(TASK_TYPE)) return;
-			const data = JSON.parse(await item.getText(TASK_TYPE)) as { label: string };
-			onDrop(data.label);
+			const label = parseDemoItemString(await item.getText(TASK_TYPE), "label");
+			if (label) onDrop(label);
 		},
 	});
 

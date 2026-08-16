@@ -73,7 +73,6 @@ Popup **behavior** that must stay identical is imported from Popover:
 import {
 	popupMotionStyles,
 	popupPositionerStyles,
-	popupStaticPositionerStyles,
 	popupViewportStyles,
 	popupArrowStyles,
 } from "@/components/popover/popover.stylex";
@@ -81,9 +80,6 @@ import { tooltipStyles } from "@/components/tooltip/tooltip.stylex";
 
 // Normal Menu / Popover / LinkPreview / Tooltip Positioner
 stylex.props(popupPositionerStyles, style);
-
-// Select Positioner (does not track anchor while open)
-stylex.props(popupStaticPositionerStyles, style);
 
 // Panel-style Popup (menu, select, combobox, popover, link-preview)
 stylex.props(menuParts.panelSurface, menuParts.popup, popupMotionStyles.anchoredPopup, style);

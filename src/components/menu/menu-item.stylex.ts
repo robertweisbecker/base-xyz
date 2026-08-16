@@ -55,8 +55,8 @@ const menuItemParts = stylex.create({
 	},
 	indicatorSizing: {
 		gridColumn: "1",
-		alignSelf: "start",
 		alignItems: "center",
+		alignSelf: "start",
 		color: menuItemVars.indicatorColor,
 		display: "inline-flex",
 		justifyContent: "center",
@@ -69,19 +69,19 @@ const menuItemParts = stylex.create({
 		width: tokens["--space-4"],
 	},
 	itemSm: {
-		minHeight: tokens["--size-control-sm"],
-		lineHeight: tokens["--line-height-2"],
 		paddingBlock: tokens["--space-1"],
+		lineHeight: tokens["--line-height-2"],
+		minHeight: tokens["--size-control-sm"],
 	},
 	itemMd: {
-		minHeight: tokens["--size-control-md"],
-		lineHeight: tokens["--line-height-2"],
 		paddingBlock: tokens["--space-1-5"],
+		lineHeight: tokens["--line-height-2"],
+		minHeight: tokens["--size-control-md"],
 	},
 	itemLg: {
-		minHeight: tokens["--size-control-lg"],
-		lineHeight: tokens["--line-height-3"],
 		paddingBlock: tokens["--space-2"],
+		lineHeight: tokens["--line-height-3"],
+		minHeight: tokens["--size-control-lg"],
 	},
 });
 

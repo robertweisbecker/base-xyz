@@ -190,20 +190,12 @@ const filters: DataTableFilter[] = [
 	{
 		columnId: "status",
 		label: "Status",
-		options: [
-			{ label: "Ready", value: "Ready" },
-			{ label: "Building", value: "Building" },
-			{ label: "Failed", value: "Failed" },
-		],
+		options: ["Ready", "Building", "Failed"].map((value) => ({ label: value, value })),
 	},
 	{
 		columnId: "environment",
 		label: "Environment",
-		options: [
-			{ label: "Production", value: "Production" },
-			{ label: "Preview", value: "Preview" },
-			{ label: "Staging", value: "Staging" },
-		],
+		options: ["Production", "Preview", "Staging"].map((value) => ({ label: value, value })),
 	},
 ];
 

@@ -19,11 +19,11 @@ import {
 	type ThemeMode,
 	type ThemeName,
 } from "./theme-context";
-import { getThemeStyle } from "./themes.stylex";
+import { themeStyles } from "./themes.stylex";
 
 type ThemeProviderState = {
-	theme: ThemeName;
 	mode: ThemeMode;
+	theme: ThemeName;
 };
 
 export type ThemeProviderProps = Omit<
@@ -54,20 +54,19 @@ export function ThemeProvider({
 	const resolvedMode = mode === "system" ? systemMode : mode;
 	const isRootProvider = parentTheme === null;
 	const documentThemeOwner = useRef(Symbol("ThemeProvider"));
-	const themeStyle = getThemeStyle(theme);
-	const ownedStyleProps = stylex.props(themeStyle, providerStyles.root, modeStyles[resolvedMode]);
-	const hostStyleProps = stylex.props(themeStyle, providerStyles.root, modeStyles[resolvedMode], style);
+	const themeStyle = themeStyles[theme];
+	const ownedStyleProps = stylex.props(themeStyle, providerStyles.root, providerStyles[resolvedMode]);
+	const hostStyleProps = stylex.props(themeStyle, providerStyles.root, providerStyles[resolvedMode], style);
 
 	useLayoutEffect(() => {
 		if (!isRootProvider) return;
-		return synchronizeDocumentTheme(
-			documentThemeOwner.current,
+		return synchronizeDocumentTheme(documentThemeOwner.current, {
+			className: ownedStyleProps.className,
 			theme,
 			mode,
 			resolvedMode,
-			ownedStyleProps.className,
-			ownedStyleProps.style,
-		);
+			style: ownedStyleProps.style,
+		});
 	}, [isRootProvider, mode, ownedStyleProps.className, ownedStyleProps.style, resolvedMode, theme]);
 
 	const value = useMemo<ThemeContextValue>(() => ({ mode, resolvedMode, theme }), [mode, resolvedMode, theme]);
@@ -104,12 +103,9 @@ function getServerMode(): ResolvedThemeMode {
 	return "light";
 }
 
-type DocumentThemeRegistration = {
+type DocumentThemeRegistration = ThemeContextValue & {
 	className: string | undefined;
-	mode: ThemeMode;
-	resolvedMode: ResolvedThemeMode;
 	style: CSSProperties | undefined;
-	theme: ThemeName;
 };
 
 type OriginalDocumentTheme = {
@@ -126,14 +122,9 @@ let appliedDocumentStyleProperties = new Set<string>();
 
 function synchronizeDocumentTheme(
 	owner: symbol,
-	theme: ThemeName,
-	mode: ThemeMode,
-	resolvedMode: ResolvedThemeMode,
-	className: string | undefined,
-	style: CSSProperties | undefined,
+	registration: DocumentThemeRegistration,
 ) {
 	if (documentThemeRegistrations.size === 0) captureOriginalDocumentTheme();
-	const registration = { className, mode, resolvedMode, style, theme };
 	documentThemeRegistrations.set(owner, registration);
 	applyActiveDocumentTheme();
 
@@ -231,9 +222,6 @@ const providerStyles = stylex.create({
 		color: tokens["--fg"],
 		fontFamily: tokens["--font-family-sans"],
 	},
-});
-
-const modeStyles = stylex.create({
 	dark: { colorScheme: "dark" },
 	light: { colorScheme: "light" },
 });

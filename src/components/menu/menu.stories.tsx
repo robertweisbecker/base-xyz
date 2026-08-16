@@ -568,7 +568,7 @@ function PositionedMenu({ _side, _align }: Pick<MenuStoryArgs, "_side" | "_align
 	return (
 		<Menu.Root>
 			<Menu.Trigger render={<Button endSlot={<Menu.Icon />} size="sm" variant="neutral" />}>
-				{formatPosition(_side, _align)}
+				{`${_side[0].toUpperCase()}${_side.slice(1)} · ${_align}`}
 			</Menu.Trigger>
 			<Menu.Popup positionerProps={{ side: _side, align: _align }}>
 				<Menu.Item>
@@ -593,10 +593,6 @@ function MenuExample({ children, trigger }: { children: ReactNode; trigger: stri
 			<Menu.Popup positionerProps={{ align: "start" }}>{children}</Menu.Popup>
 		</Menu.Root>
 	);
-}
-
-function formatPosition(side: MenuStoryArgs["_side"], align: MenuStoryArgs["_align"]) {
-	return `${side[0].toUpperCase()}${side.slice(1)} · ${align}`;
 }
 
 const storyStyles = stylex.create({

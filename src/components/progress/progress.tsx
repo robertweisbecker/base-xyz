@@ -166,10 +166,7 @@ const progressParts = stylex.create({
 			"[data-indeterminate]": "transparent",
 			default: tokens["--bg-primary"],
 		},
-		transitionDuration: {
-			default: tokens["--motion-duration-short"],
-			[media.reducedMotion]: "0ms",
-		},
+		transitionDuration: tokens["--motion-duration-short"],
 		transitionProperty: "width, background-color",
 		transitionTimingFunction: tokens["--motion-ease-smooth-out"],
 		width: {

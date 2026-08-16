@@ -40,14 +40,6 @@
 
 @font-face {
 	font-display: swap;
-	font-family: "Apercu Alt";
-	font-style: normal;
-	font-weight: 500;
-	src: url("../assets/fonts/apercu-pro-medium-alt.woff2") format("woff2");
-}
-
-@font-face {
-	font-display: swap;
 	font-family: "Apercu Mono";
 	font-style: normal;
 	font-weight: 300;

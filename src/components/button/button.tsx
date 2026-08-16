@@ -126,23 +126,23 @@ const iconOnlySlotSizes = stylex.create({
 const iconOnlyControlSizes = stylex.create({
 	xs: {
 		height: tokens["--size-control-xs"],
-		maxWidth: tokens["--size-control-xs"],
 		minWidth: tokens["--size-control-xs"],
+		width: tokens["--size-control-xs"],
 	},
 	sm: {
 		height: tokens["--size-control-sm"],
-		maxWidth: tokens["--size-control-sm"],
 		minWidth: tokens["--size-control-sm"],
+		width: tokens["--size-control-sm"],
 	},
 	md: {
 		height: tokens["--size-control-md"],
-		maxWidth: tokens["--size-control-md"],
 		minWidth: tokens["--size-control-md"],
+		width: tokens["--size-control-md"],
 	},
 	lg: {
 		height: tokens["--size-control-lg"],
-		maxWidth: tokens["--size-control-lg"],
 		minWidth: tokens["--size-control-lg"],
+		width: tokens["--size-control-lg"],
 	},
 });
 
@@ -260,6 +260,7 @@ const colorVariants = stylex.create({
 		},
 	},
 	plain: {
+		paddingInline: 0,
 		backgroundColor: {
 			"[data-disabled]": "none",
 			default: "transparent",
@@ -273,7 +274,6 @@ const colorVariants = stylex.create({
 			default: tokens["--fg-subtle"],
 			":active:not([data-disabled])": tokens["--fg"],
 		},
-		paddingInline: 0,
 	},
 	error: {
 		backgroundColor: {

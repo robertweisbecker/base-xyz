@@ -2,7 +2,6 @@ import { Drawer as BaseDrawer } from "@base-ui/react/drawer";
 import * as stylex from "@stylexjs/stylex";
 import type { StyleXStyles } from "@stylexjs/stylex";
 import { type ComponentProps } from "react";
-import { media } from "@/styles/constants.stylex";
 import { tokens } from "@/theme/tokens.stylex";
 import { modalChromeStyles, modalTextStyles } from "@/components/dialog/dialog.stylex";
 
@@ -148,6 +147,7 @@ export const Close = BaseDrawer.Close;
 
 const DRAWER_RELEASE_DURATION = "400ms";
 const DRAWER_EASING = "cubic-bezier(0.32, 0.72, 0, 1)";
+const DRAWER_BLEED = "3rem";
 
 const drawerParts = stylex.create({
 	backdrop: {
@@ -164,7 +164,6 @@ const drawerParts = stylex.create({
 			"[data-ending-style]": `calc(var(--drawer-swipe-strength) * ${DRAWER_RELEASE_DURATION})`,
 			"[data-swiping]": "0ms",
 			default: tokens["--motion-duration-long"],
-			[media.reducedMotion]: "0ms",
 		},
 		transitionProperty: "opacity",
 		transitionTimingFunction: DRAWER_EASING,
@@ -175,7 +174,7 @@ const drawerParts = stylex.create({
 		alignItems: "flex-end",
 	},
 	popup: {
-		"--_drawer-bleed": "3rem",
+		"--_drawer-bleed": DRAWER_BLEED,
 		"--_drawer-peek": ".5rem",
 		"--_drawer-stack-height":
 			"max(0px, calc(var(--drawer-frontmost-height, var(--drawer-height)) - var(--_drawer-bleed)))",
@@ -206,7 +205,6 @@ const drawerParts = stylex.create({
 			"[data-nested-drawer-swiping]": "0ms",
 			"[data-swiping]": "0ms",
 			default: tokens["--motion-duration-long"],
-			[media.reducedMotion]: "0ms",
 		},
 		transitionProperty: "transform, height, opacity",
 		transitionTimingFunction: DRAWER_EASING,
@@ -233,10 +231,7 @@ const drawerParts = stylex.create({
 				"[data-nested-drawer-open]": "rgb(0 0 0 / 5%)",
 				default: "rgb(0 0 0 / 0%)",
 			},
-			transitionDuration: {
-				default: tokens["--motion-duration-long"],
-				[media.reducedMotion]: "0ms",
-			},
+			transitionDuration: tokens["--motion-duration-long"],
 			transitionProperty: "background-color, opacity",
 			transitionTimingFunction: DRAWER_EASING,
 		},
@@ -246,8 +241,17 @@ const drawerParts = stylex.create({
 		height: `calc(100dvh - ${tokens["--space-4"]})`,
 		marginBottom: 0,
 		maxHeight: `calc(100dvh - ${tokens["--space-4"]})`,
-		overflowY: "hidden",
+		overflowY: "visible",
 		paddingBottom: 0,
+		"::before": {
+			insetInline: 0,
+			backgroundColor: "inherit",
+			content: '""',
+			pointerEvents: "none",
+			position: "absolute",
+			height: DRAWER_BLEED,
+			top: "100%",
+		},
 	},
 	content: {
 		marginInline: "auto",
@@ -258,10 +262,7 @@ const drawerParts = stylex.create({
 			[stylex.when.ancestor("[data-nested-drawer-open]")]: "0",
 			[stylex.when.ancestor("[data-nested-drawer-open][data-nested-drawer-swiping]")]: "1",
 		},
-		transitionDuration: {
-			default: tokens["--motion-duration-medium"],
-			[media.reducedMotion]: "0ms",
-		},
+		transitionDuration: tokens["--motion-duration-medium"],
 		transitionProperty: "opacity",
 		transitionTimingFunction: tokens["--motion-ease-out"],
 		width: "100%",
@@ -283,10 +284,7 @@ const drawerParts = stylex.create({
 			[stylex.when.ancestor("[data-nested-drawer-open]")]: "0",
 			[stylex.when.ancestor("[data-nested-drawer-open][data-nested-drawer-swiping]")]: "1",
 		},
-		transitionDuration: {
-			default: tokens["--motion-duration-short"],
-			[media.reducedMotion]: "0ms",
-		},
+		transitionDuration: tokens["--motion-duration-short"],
 		transitionProperty: "opacity",
 		transitionTimingFunction: tokens["--motion-ease-out"],
 		height: "4px",

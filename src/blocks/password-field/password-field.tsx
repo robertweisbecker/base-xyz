@@ -9,6 +9,7 @@ import { InputGroup, Meter as MeterPrimitive, Toggle } from "@/components";
 import type { ToggleIconButtonProps } from "@/components";
 import { iconSwapTransition } from "@/styles/recipes/transitions";
 import { tokens } from "@/theme/tokens.stylex";
+import { attrJoin } from "@/utils/attr-join";
 
 type StyledProps<T> = Omit<T, "className" | "style"> & {
 	className?: string;
@@ -97,14 +98,14 @@ export function Root({
 				setValue,
 				setVisible,
 			}}>
-			<Field.Root className={joinClassNames(rootSx.className, className)} style={rootSx.style} {...props} />
+			<Field.Root className={attrJoin(rootSx.className, className)} style={rootSx.style} {...props} />
 		</PasswordFieldContext.Provider>
 	);
 }
 
 export function Label({ className, style, ...props }: PasswordFieldLabelProps) {
 	const sx = stylex.props(fieldStyles.label, style);
-	return <Field.Label className={joinClassNames(sx.className, className)} style={sx.style} {...props} />;
+	return <Field.Label className={attrJoin(sx.className, className)} style={sx.style} {...props} />;
 }
 
 export function Control({ className, ...props }: PasswordFieldControlProps) {
@@ -155,7 +156,6 @@ export function VisibilityToggle({
 							weight="bold"
 							{...stylex.props(
 								iconSwapTransition.icon,
-								iconSwapTransition.from,
 								visible ? iconSwapTransition.hidden : iconSwapTransition.visible,
 							)}
 						/>
@@ -185,12 +185,12 @@ export function VisibilityToggle({
 
 export function Description({ className, style, ...props }: PasswordFieldDescriptionProps) {
 	const sx = stylex.props(fieldStyles.description, style);
-	return <Field.Description className={joinClassNames(sx.className, className)} style={sx.style} {...props} />;
+	return <Field.Description className={attrJoin(sx.className, className)} style={sx.style} {...props} />;
 }
 
 export function Error({ className, match = true, style, ...props }: PasswordFieldErrorProps) {
 	const sx = stylex.props(fieldStyles.error, style);
-	return <Field.Error className={joinClassNames(sx.className, className)} match={match} style={sx.style} {...props} />;
+	return <Field.Error className={attrJoin(sx.className, className)} match={match} style={sx.style} {...props} />;
 }
 
 export function Meter({
@@ -242,10 +242,6 @@ function usePasswordFieldContext(part: string) {
 		throw new globalThis.Error(`PasswordField.${part} must be used inside PasswordField.Root.`);
 	}
 	return context;
-}
-
-function joinClassNames(...classNames: Array<string | undefined>) {
-	return classNames.filter(Boolean).join(" ");
 }
 
 const meterToneColors = {

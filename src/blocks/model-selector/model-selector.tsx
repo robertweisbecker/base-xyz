@@ -172,7 +172,7 @@ export function Trigger({
 			{children ?? (
 				<>
 					{render && triggerIcon ? (
-						<span aria-hidden {...stylex.props(parts.triggerIcon)}>
+						<span aria-hidden {...stylex.props(parts.icon)}>
 							{triggerIcon}
 						</span>
 					) : null}
@@ -190,7 +190,7 @@ export function Popup({ positionerProps, style, ...props }: ModelSelectorPopupPr
 	return (
 		<Menu.Popup
 			positionerProps={{ align: "start", side: "top", ...positionerProps }}
-			style={[parts.settingsPopup, style]}
+			style={[parts.popup, style]}
 			{...props}>
 			<Menu.SubmenuRoot onOpenChange={(open) => open && context.latchSubmenu()}>
 				<SettingsTrigger label="Model" value={context.selectedModel.label} />
@@ -206,7 +206,7 @@ export function Popup({ positionerProps, style, ...props }: ModelSelectorPopupPr
 							fallbackAxisSide: "none",
 						},
 					}}
-					style={parts.modelPopup}>
+					style={parts.popup}>
 					<List
 						groups={context.groups}
 						value={context.value.model}
@@ -240,7 +240,7 @@ function SettingsTrigger({ label, value, valueIcon }: { label: ReactNode; value:
 		<Menu.SubmenuTrigger openOnHover delay={0} style={parts.settingsRow}>
 			<span {...stylex.props(parts.settingsLabel)}>{label}</span>
 			<span {...stylex.props(parts.settingsValue)}>
-				<span aria-hidden {...stylex.props(parts.settingsValueIcon)}>
+				<span aria-hidden {...stylex.props(parts.icon)}>
 					{valueIcon}
 				</span>
 				{value}
@@ -282,8 +282,7 @@ function ChoiceSubmenu({
 						align: "shift",
 						fallbackAxisSide: "none",
 					},
-				}}
-				style={parts.choicePopup}>
+					}}>
 				<Menu.RadioGroup value={value} onValueChange={onValueChange}>
 					<Menu.GroupLabel>{label}</Menu.GroupLabel>
 					{options.map((option) => (
@@ -368,22 +367,13 @@ function isImplicitMenuDismiss(reason: string) {
 }
 
 const parts = stylex.create({
-	settingsPopup: {
+	popup: {
 		minWidth: {
 			default: null,
 			[breakpoints.sm]: "16rem",
 		},
 	},
-	modelPopup: {
-		minWidth: {
-			default: null,
-			[breakpoints.sm]: "16rem",
-		},
-	},
-	choicePopup: {
-		// minWidth: "12rem",
-	},
-	triggerIcon: {
+	icon: {
 		alignItems: "center",
 		display: "inline-flex",
 		flexShrink: 0,
@@ -424,17 +414,8 @@ const parts = stylex.create({
 		textOverflow: "ellipsis",
 		whiteSpace: "nowrap",
 	},
-	settingsValueIcon: {
-		alignItems: "center",
-		display: "inline-flex",
-		flexShrink: 0,
-		justifyContent: "center",
-		height: "1em",
-		width: "1em",
-	},
 	resetItem: {
 		[menuItemVars.columns]: "minmax(0, 1fr) auto",
-		// [menuItemVars.paddingInlineStart]: space[3],
 		color: tokens["--fg-muted"],
 	},
 	resetLabel: {
@@ -452,7 +433,6 @@ const parts = stylex.create({
 		[menuItemVars.columnGap]: tokens["--space-2"],
 		[menuItemVars.minHeight]: "3.375rem",
 		[menuItemVars.paddingBlock]: tokens["--space-2"],
-		// [menuItemVars.rowGap]: "0.0625rem",
 	},
 	modelIcon: {
 		gridColumn: "2",
@@ -479,8 +459,6 @@ const parts = stylex.create({
 		gridRow: "2",
 		overflow: "hidden",
 		color: tokens["--fg-muted"],
-		// textOverflow: "ellipsis",
-		// whiteSpace: "nowrap",
 		display: {
 			default: "none",
 			[breakpoints.md]: "block",

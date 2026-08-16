@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import * as stylex from "@stylexjs/stylex";
-import { useEffect, useState, type ReactNode } from "react";
+import { useState, type ReactNode } from "react";
 import { Badge } from "@/components/badge/badge";
 import { Icon, IconButton } from "@/components";
 import { Text } from "@/components/text/text";
@@ -42,6 +42,7 @@ type Story = StoryObj<PlaygroundArgs>;
 export const Playground: Story = {
 	render: ({ _caption, _checked, _empty, _showFooter }) => (
 		<ControlledTable
+			key={_checked ? "checked" : "unchecked"}
 			caption={<VisuallyHidden>{_caption}</VisuallyHidden>}
 			checked={_checked}
 			empty={_empty}
@@ -168,10 +169,6 @@ function ControlledTable({
 	showFooter?: boolean;
 }) {
 	const [checkedRows, setCheckedRows] = useState<string[]>(initialChecked ? ["app"] : []);
-
-	useEffect(() => {
-		setCheckedRows(initialChecked ? ["app"] : []);
-	}, [initialChecked]);
 
 	return (
 		<ManualTable

@@ -699,12 +699,10 @@ const storyParts = stylex.create({
 	},
 	userOptionItem: {
 		borderRadius: 0,
-		// columnGap: tokens["--space-2"],
 		minWidth: 0,
 	},
 	userValueItem: {
 		borderRadius: 0,
-		// columnGap: tokens["--space-2"],
 		maxWidth: "100%",
 		minWidth: 0,
 	},

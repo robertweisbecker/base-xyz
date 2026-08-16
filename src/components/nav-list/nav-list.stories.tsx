@@ -275,7 +275,6 @@ const storyParts = stylex.create({
 		borderRadius: tokens["--radius-lg"],
 		borderStyle: "solid",
 		borderWidth: tokens["--border-width"],
-		// blockSize: "18rem",
 		inlineSize: "18rem",
 	},
 	rail: {

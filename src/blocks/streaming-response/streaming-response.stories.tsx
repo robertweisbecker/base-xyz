@@ -19,14 +19,14 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-const responseContent: Record<StreamingResponseStatus, string> = {
+const responseContent = {
 	streaming:
 		"The project uses Base UI for accessible behavior and StyleX for its visual system. I’m checking the remaining stories against those conventions…",
 	complete:
 		"The Storybook review is complete. The updated stories now follow the shared structure and control conventions.",
 	stopped: "Generation stopped after reviewing the current Storybook inventory.",
 	error: "The response could not be completed. Try again when the connection is restored.",
-};
+} satisfies Record<StreamingResponseStatus, string>;
 
 function ResponseActions({ onRetry, retry = true }: { onRetry?: () => void; retry?: boolean }) {
 	return (

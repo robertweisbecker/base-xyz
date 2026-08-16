@@ -6,7 +6,7 @@ import { Toast as BaseToast } from "@base-ui/react/toast";
 import type { ToastManager } from "@base-ui/react/toast";
 import * as stylex from "@stylexjs/stylex";
 import type { StyleXStyles } from "@stylexjs/stylex";
-import { zIndex, media } from "@/styles/constants.stylex";
+import { zIndex } from "@/styles/constants.stylex";
 import { tokens } from "@/theme/tokens.stylex";
 import { focusRing } from "@/styles/recipes/focus";
 import { Loader } from "@/components/loader/loader";
@@ -117,7 +117,7 @@ export function AnchoredToast({ toast, className, positionerClassName, style, po
 					className={
 						stylex.props(
 							anchoredParts.content,
-							contentVariants[variant],
+							contentVariants[variant === "popover" ? "default" : variant],
 							variant === "pill" && anchoredParts.pillContent,
 						).className
 					}>
@@ -266,18 +266,12 @@ const anchoredMotion = stylex.create({
 		[popupVars.easing]: tokens["--motion-ease-out"],
 	},
 	renotifyEven: {
-		animationDuration: {
-			default: toastMotion.renotifyDuration,
-			[media.reducedMotion]: "0ms",
-		},
+		animationDuration: toastMotion.renotifyDuration,
 		animationName: renotifyEven,
 		animationTimingFunction: "ease",
 	},
 	renotifyOdd: {
-		animationDuration: {
-			default: toastMotion.renotifyDuration,
-			[media.reducedMotion]: "0ms",
-		},
+		animationDuration: toastMotion.renotifyDuration,
 		animationName: renotifyOdd,
 		animationTimingFunction: "ease",
 	},
@@ -441,10 +435,6 @@ const contentVariants = stylex.create({
 	tooltip: {
 		padding: 0,
 		gap: tokens["--space-1"],
-	},
-	popover: {
-		padding: tokens["--space-3"],
-		gap: tokens["--space-3"],
 	},
 	pill: {
 		gap: tokens["--space-2"],

@@ -93,9 +93,8 @@ function MultipleSummaryPopupExample() {
 					}>
 					<BaseCombobox.Value placeholder="Select">
 						{(selectedValue: string[]) => {
-							const hiddenCount = Math.max(0, selectedValue.length - 1);
 							return selectedValue.length > 0 ? (
-								`${selectedValue[0]}${hiddenCount > 0 ? `, +${hiddenCount} more` : ""}`
+								`${selectedValue[0]}${selectedValue.length > 1 ? `, +${selectedValue.length - 1} more` : ""}`
 							) : (
 								<span {...stylex.props(styles.triggerPlaceholder)}>Select options</span>
 							);

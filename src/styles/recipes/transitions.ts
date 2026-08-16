@@ -1,5 +1,4 @@
 import * as stylex from "@stylexjs/stylex";
-import { media } from "@/styles/constants.stylex";
 import { tokens } from "@/theme/tokens.stylex";
 
 /**
@@ -28,18 +27,12 @@ export const iconSwapTransition = stylex.create({
 		alignItems: "center",
 		display: "flex",
 		justifyContent: "center",
-		transitionDuration: {
-			default: tokens["--motion-duration-quick"],
-			[media.reducedMotion]: "0ms",
-		},
+		transitionDuration: tokens["--motion-duration-quick"],
 		transitionProperty: "filter, opacity, scale",
 		transitionTimingFunction: tokens["--motion-ease-smooth-out"],
 		willChange: "filter, opacity, scale",
 		height: "1em",
 		width: "1em",
-	},
-	from: {
-		position: "relative",
 	},
 	to: {
 		inset: 0,

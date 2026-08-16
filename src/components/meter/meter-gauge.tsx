@@ -1,8 +1,7 @@
 import { Meter as BaseMeter } from "@base-ui/react/meter";
 import * as stylex from "@stylexjs/stylex";
 import type { StyleXStyles } from "@stylexjs/stylex";
-import type { ReactNode, SVGProps } from "react";
-import { media } from "@/styles/constants.stylex";
+import type { ReactNode } from "react";
 import { textStyles } from "@/components/text/text.stylex";
 import { tokens } from "@/theme/tokens.stylex";
 
@@ -106,9 +105,8 @@ export function MeterGauge({
 					/>
 
 					<BaseMeter.Indicator
-						render={(indicatorProps) => (
+						render={
 							<circle
-								{...(indicatorProps as unknown as SVGProps<SVGCircleElement>)}
 								{...stylex.props(
 									meterGaugeParts.arc,
 									meterGaugeParts.arcColor(fillColor),
@@ -120,7 +118,7 @@ export function MeterGauge({
 								r={radius}
 								strokeWidth={config.strokeWidth}
 							/>
-						)}
+						}
 					/>
 				</BaseMeter.Track>
 
@@ -176,10 +174,7 @@ const meterGaugeParts = stylex.create({
 		strokeLinecap: "round",
 		strokeLinejoin: "round",
 		transformOrigin: "50% 50%",
-		transitionDuration: {
-			default: tokens["--motion-duration-long"],
-			[media.reducedMotion]: "0ms",
-		},
+		transitionDuration: tokens["--motion-duration-long"],
 		transitionProperty: "stroke-dasharray, transform, stroke, opacity",
 		transitionTimingFunction: tokens["--motion-ease-smooth-out"],
 	},

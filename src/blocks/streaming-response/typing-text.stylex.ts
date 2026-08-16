@@ -84,10 +84,7 @@ export const typingTextStyles = stylex.create({
 			backgroundColor: typingTextVars.caretColor,
 			content: '""',
 			display: "inline-block",
-			opacity: {
-				default: typingTextVars.caretOpacity,
-				[media.reducedMotion]: typingTextVars.caretOpacity,
-			},
+			opacity: typingTextVars.caretOpacity,
 			transform: "translateY(0.12em)",
 			height: "1em",
 			marginLeft: typingTextVars.caretGap,

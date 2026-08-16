@@ -43,7 +43,6 @@ export const tokens = stylex.defineVars({
 	"--color-accent-b2": "light-dark(oklch(85.134% 0.07 243.106), oklch(36.33% 0.13 260))",
 	"--color-accent-b3": "light-dark(oklch(80% 0.09 242.684), oklch(41% 0.15 258))",
 	"--color-accent-p1": "light-dark(hsl(214deg 98% 50%), #0169CC)",
-	// "--color-accent-p2": "light-dark(hsl(207deg 96% 48%), oklch(72.163% 0.14676 246.443))",
 	"--color-accent-p2": "light-dark(hsl(207deg 96% 48%), oklch(64.544% 0.18129 256.706))",
 	"--color-accent-t1": "light-dark(oklch(53.072% 0.20334 262.925), oklch(69.483% 0.15223 255.815))",
 	"--color-accent-t2": "light-dark(oklch(28.072% 0.09716 262.82), oklch(87.811% 0.0624 249.313))",

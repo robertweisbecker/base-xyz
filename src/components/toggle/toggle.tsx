@@ -66,16 +66,12 @@ export type ToggleVariant = ButtonVariant;
 export type ToggleSize = ButtonSize;
 export type ToggleShape = ButtonShape;
 
-function isToggleIconButtonProps(props: ToggleProps): props is ToggleIconButtonProps {
-	return typeof (props as ToggleIconButtonProps).label === "string";
-}
-
 function resolvePressedSlot(pressed: boolean, resting: ReactNode, pressedIcon: ReactNode | undefined) {
 	return pressed && pressedIcon !== undefined ? pressedIcon : resting;
 }
 
 export function Toggle(props: ToggleProps) {
-	if (isToggleIconButtonProps(props)) {
+	if (typeof props.label === "string") {
 		return <ToggleAsIconButton {...props} />;
 	}
 
@@ -181,9 +177,5 @@ const toggleParts = stylex.create({
 			"[data-orientation=vertical]": "column",
 			default: "row",
 		},
-	},
-	toggle: {
-		flex: "1",
-		paddingInline: tokens["--space-2"],
 	},
 });

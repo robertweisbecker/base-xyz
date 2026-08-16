@@ -8,10 +8,9 @@ import { TextItalicIcon } from "@phosphor-icons/react/dist/csr/TextItalic";
 import { TextUnderlineIcon } from "@phosphor-icons/react/dist/csr/TextUnderline";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import * as stylex from "@stylexjs/stylex";
-import type { ComponentType, ReactNode } from "react";
 import { tokens } from "@/theme/tokens.stylex";
 
-import { Toggle, ToggleGroup, type ToggleShape, type ToggleSize, type ToggleVariant } from "./toggle";
+import { Toggle, ToggleGroup, type ToggleProps, type ToggleVariant } from "./toggle";
 import { firstToggleMarker, secondToggleMarker, thirdToggleMarker } from "./toggle-radius-testing.stylex";
 import { PushPinSimpleIcon } from "@phosphor-icons/react/dist/csr/PushPinSimple";
 
@@ -23,34 +22,58 @@ const iconOptions = {
 	"Bell slash": <BellSlashIcon aria-hidden weight="duotone" />,
 };
 
-type TogglePlaygroundArgs = {
+type TogglePlaygroundArgs = ToggleProps & {
 	_appearance: "button" | "iconButton";
-	children: string;
-	defaultPressed: boolean;
-	disabled: boolean;
-	icon: ReactNode;
-	label: string;
-	pressedIcon: ReactNode;
-	shape: ToggleShape;
-	size: ToggleSize;
-	startSlot: ReactNode;
-	tooltip: string;
-	variant: ToggleVariant;
 };
+
+function TogglePlaygroundPreview({
+	_appearance = "button",
+	children,
+	icon,
+	label,
+	pressedIcon,
+	shape,
+	startSlot,
+	tooltip,
+	...args
+}: TogglePlaygroundArgs) {
+	if (_appearance === "iconButton") {
+		return (
+			<Toggle
+				key={`${args.defaultPressed}-${args.disabled}-icon`}
+				{...args}
+				icon={icon ?? iconOptions.Pin}
+				label={label || "Notifications"}
+				pressedIcon={pressedIcon}
+				shape={shape === "circle" || shape === "square" ? shape : "square"}
+				tooltip={tooltip}
+			/>
+		);
+	}
+
+	return (
+		<Toggle
+			key={`${args.defaultPressed}-${args.disabled}-button`}
+			{...args}
+			pressedIcon={pressedIcon}
+			shape={shape}
+			startSlot={startSlot}>
+			{children}
+		</Toggle>
+	);
+}
 
 const meta = {
 	title: "Components/Toggle",
-	component: Toggle as unknown as ComponentType<TogglePlaygroundArgs>,
+	component: Toggle,
+	render: TogglePlaygroundPreview,
 	args: {
 		_appearance: "button",
 		children: "Pin message",
 		defaultPressed: false,
 		disabled: false,
-		icon: iconOptions.Pin,
-		label: "Notifications",
 		pressedIcon: iconOptions["Pin Fill"],
 		startSlot: iconOptions.Pin,
-		tooltip: "Notifications",
 		variant: "ghost",
 		size: "md",
 		shape: "default",
@@ -111,34 +134,7 @@ const meta = {
 export default meta;
 type Story = StoryObj<TogglePlaygroundArgs>;
 
-export const Playground: Story = {
-	render: ({ _appearance = "button", children, icon, label, pressedIcon, shape, startSlot, tooltip, ...args }) => {
-		if (_appearance === "iconButton") {
-			return (
-				<Toggle
-					key={`${args.defaultPressed}-${args.disabled}-icon`}
-					{...args}
-					icon={icon ?? <BellIcon aria-hidden weight="fill" />}
-					label={label || "Notifications"}
-					pressedIcon={pressedIcon}
-					shape={shape === "circle" || shape === "square" ? shape : "square"}
-					tooltip={tooltip}
-				/>
-			);
-		}
-
-		return (
-			<Toggle
-				key={`${args.defaultPressed}-${args.disabled}-button`}
-				{...args}
-				pressedIcon={pressedIcon}
-				shape={shape}
-				startSlot={startSlot}>
-				{children}
-			</Toggle>
-		);
-	},
-};
+export const Playground: Story = {};
 
 const variants: ToggleVariant[] = ["primary", "subtle", "secondary", "neutral", "ghost", "error"];
 

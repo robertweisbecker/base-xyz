@@ -1,10 +1,11 @@
 import * as stylex from "@stylexjs/stylex";
 import type { StyleXStyles } from "@stylexjs/stylex";
-import { createContext, useContext, useMemo, type ComponentProps, type ReactNode } from "react";
+import { createContext, useContext, type ComponentProps, type ReactNode } from "react";
 import { Checkbox, type CheckboxProps } from "@/components/checkbox/checkbox";
 import { ScrollArea } from "@/components/scroll-area/scroll-area";
 import { fontWeightStyles, typescaleStyles } from "@/components/text/text.stylex";
 import { tokens } from "@/theme/tokens.stylex";
+import { attrJoin } from "@/utils/attr-join";
 
 type StyledProps<T> = Omit<T, "className" | "style"> & {
 	className?: string;
@@ -60,23 +61,14 @@ export type TableEmptyProps = Omit<TableRowProps, "checked"> & {
 type TableLevel = "root" | "container" | "content";
 type TableSection = "header" | "body" | "footer";
 
-type TableRowContextValue = {
-	section: TableSection;
-	checked: boolean;
-};
-
 const TableLevelContext = createContext<TableLevel | null>(null);
 const TableSectionContext = createContext<TableSection | null>(null);
-const TableRowContext = createContext<TableRowContextValue | null>(null);
+const TableRowContext = createContext<TableSection | null>(null);
 
 function invariantDev(condition: boolean, message: string) {
 	if (import.meta.env.DEV && !condition) {
 		throw new Error(message);
 	}
-}
-
-function joinClassNames(...values: Array<string | undefined>) {
-	return values.filter(Boolean).join(" ");
 }
 
 export function Root({ ref, className, style, children, ...props }: TableRootProps) {
@@ -86,7 +78,7 @@ export function Root({ ref, className, style, children, ...props }: TableRootPro
 		<TableLevelContext.Provider value="root">
 			<TableSectionContext.Provider value={null}>
 				<TableRowContext.Provider value={null}>
-					<div ref={ref} className={joinClassNames(sx.className, className)} style={sx.style} {...props}>
+					<div ref={ref} className={attrJoin(sx.className, className)} style={sx.style} {...props}>
 						{children}
 					</div>
 				</TableRowContext.Provider>
@@ -128,7 +120,7 @@ export function Content({ ref, caption, className, style, children, ...props }: 
 
 	return (
 		<TableLevelContext.Provider value="content">
-			<table ref={ref} className={joinClassNames(sx.className, className)} style={sx.style} {...props}>
+			<table ref={ref} className={attrJoin(sx.className, className)} style={sx.style} {...props}>
 				{caption != null ? <caption {...stylex.props(tableParts.caption)}>{caption}</caption> : null}
 				{children}
 			</table>
@@ -144,11 +136,11 @@ export function Header({ ref, className, style, children, ...props }: TableHeade
 		level === "content" && activeSection == null && row == null,
 		"Table.Header must be rendered inside Table.Content.",
 	);
-	const sx = stylex.props(tableParts.header, style);
+	const sx = stylex.props(style);
 
 	return (
 		<TableSectionContext.Provider value="header">
-			<thead ref={ref} className={joinClassNames(sx.className, className)} style={sx.style} {...props}>
+			<thead ref={ref} className={attrJoin(sx.className, className)} style={sx.style} {...props}>
 				{children}
 			</thead>
 		</TableSectionContext.Provider>
@@ -167,7 +159,7 @@ export function Body({ ref, className, style, children, ...props }: TableBodyPro
 
 	return (
 		<TableSectionContext.Provider value="body">
-			<tbody ref={ref} className={joinClassNames(sx.className, className)} style={sx.style} {...props}>
+			<tbody ref={ref} className={attrJoin(sx.className, className)} style={sx.style} {...props}>
 				{children}
 			</tbody>
 		</TableSectionContext.Provider>
@@ -186,7 +178,7 @@ export function Footer({ ref, className, style, children, ...props }: TableFoote
 
 	return (
 		<TableSectionContext.Provider value="footer">
-			<tfoot ref={ref} className={joinClassNames(sx.className, className)} style={sx.style} {...props}>
+			<tfoot ref={ref} className={attrJoin(sx.className, className)} style={sx.style} {...props}>
 				{children}
 			</tfoot>
 		</TableSectionContext.Provider>
@@ -202,10 +194,6 @@ export function Row({ ref, checked = false, className, style, children, ...props
 	);
 	invariantDev(!checked || section === "body", "Table.Row checked is only valid inside Table.Body.");
 
-	const rowContext = useMemo(
-		() => ({ section: section ?? "body", checked: section === "body" && checked }),
-		[checked, section],
-	);
 	const sx = stylex.props(
 		section === "body" && tableParts.bodyRow,
 		section === "body" && checked && tableParts.checkedRow,
@@ -213,12 +201,12 @@ export function Row({ ref, checked = false, className, style, children, ...props
 	);
 
 	return (
-		<TableRowContext.Provider value={rowContext}>
+		<TableRowContext.Provider value={section ?? "body"}>
 			<tr
 				{...props}
 				ref={ref}
 				data-checked={section === "body" && checked ? "" : undefined}
-				className={joinClassNames(sx.className, className)}
+				className={attrJoin(sx.className, className)}
 				style={sx.style}>
 				{children}
 			</tr>
@@ -228,14 +216,12 @@ export function Row({ ref, checked = false, className, style, children, ...props
 
 function useHeaderRow(message: string) {
 	const row = useContext(TableRowContext);
-	invariantDev(row?.section === "header", message);
-	return row;
+	invariantDev(row === "header", message);
 }
 
 function useDataRow(message: string) {
 	const row = useContext(TableRowContext);
-	invariantDev(row?.section === "body" || row?.section === "footer", message);
-	return row;
+	invariantDev(row === "body" || row === "footer", message);
 }
 
 export function HeaderCell({ ref, className, scope, style, children, ...props }: TableHeaderCellProps) {
@@ -247,7 +233,7 @@ export function HeaderCell({ ref, className, scope, style, children, ...props }:
 			{...props}
 			ref={ref}
 			scope={scope ?? "col"}
-			className={joinClassNames(sx.className, className)}
+			className={attrJoin(sx.className, className)}
 			style={sx.style}>
 			{children}
 		</th>
@@ -255,11 +241,11 @@ export function HeaderCell({ ref, className, scope, style, children, ...props }:
 }
 
 export function Cell({ ref, className, style, children, ...props }: TableCellProps) {
-	const row = useDataRow("Table.Cell must be rendered inside a body or footer Table.Row.");
-	const sx = stylex.props(tableParts.cell, row?.checked && tableParts.checkedCell, style);
+	useDataRow("Table.Cell must be rendered inside a body or footer Table.Row.");
+	const sx = stylex.props(tableParts.cell, style);
 
 	return (
-		<td {...props} ref={ref} className={joinClassNames(sx.className, className)} style={sx.style}>
+		<td {...props} ref={ref} className={attrJoin(sx.className, className)} style={sx.style}>
 			{children}
 		</td>
 	);
@@ -280,7 +266,7 @@ export function HeaderAction({ ref, className, scope, style, children, ...props 
 			{...props}
 			ref={ref}
 			scope={scope ?? "col"}
-			className={joinClassNames(sx.className, className)}
+			className={attrJoin(sx.className, className)}
 			style={sx.style}>
 			{children}
 		</th>
@@ -288,11 +274,11 @@ export function HeaderAction({ ref, className, scope, style, children, ...props 
 }
 
 export function CellAction({ ref, className, style, children, ...props }: TableCellActionProps) {
-	const row = useDataRow("Table.CellAction must be rendered inside a body or footer Table.Row.");
-	const sx = stylex.props(tableParts.cell, row?.checked && tableParts.checkedCell, tableParts.actionCell, style);
+	useDataRow("Table.CellAction must be rendered inside a body or footer Table.Row.");
+	const sx = stylex.props(tableParts.cell, tableParts.actionCell, style);
 
 	return (
-		<td {...props} ref={ref} className={joinClassNames(sx.className, className)} style={sx.style}>
+		<td {...props} ref={ref} className={attrJoin(sx.className, className)} style={sx.style}>
 			{children}
 		</td>
 	);
@@ -362,7 +348,7 @@ export function HeaderCheckbox({
 			{...props}
 			ref={ref}
 			scope={scope ?? "col"}
-			className={joinClassNames(sx.className, className)}
+			className={attrJoin(sx.className, className)}
 			style={sx.style}>
 			<CheckboxContent
 				checked={checked}
@@ -396,11 +382,11 @@ export function CellCheckbox({
 	value,
 	...props
 }: TableCellCheckboxProps) {
-	const row = useDataRow("Table.CellCheckbox must be rendered inside a body or footer Table.Row.");
-	const sx = stylex.props(tableParts.cell, row?.checked && tableParts.checkedCell, tableParts.actionCell, style);
+	useDataRow("Table.CellCheckbox must be rendered inside a body or footer Table.Row.");
+	const sx = stylex.props(tableParts.cell, tableParts.actionCell, style);
 
 	return (
-		<td {...props} ref={ref} className={joinClassNames(sx.className, className)} style={sx.style}>
+		<td {...props} ref={ref} className={attrJoin(sx.className, className)} style={sx.style}>
 			<CheckboxContent
 				checked={checked}
 				defaultChecked={defaultChecked}
@@ -425,7 +411,7 @@ export function Empty({ ref, className, colSpan, style, children, ...props }: Ta
 	const sx = stylex.props(style);
 
 	return (
-		<tr ref={ref} className={joinClassNames(sx.className, className)} style={sx.style} {...props}>
+		<tr ref={ref} className={attrJoin(sx.className, className)} style={sx.style} {...props}>
 			<td colSpan={colSpan} {...stylex.props(tableParts.cell, tableParts.emptyCell)}>
 				{children}
 			</td>
@@ -443,52 +429,48 @@ const tableParts = stylex.create({
 		width: "100%",
 	},
 	container: {
-		backgroundColor: tokens["--surface"],
 		borderRadius: tokens["--radius-md"],
-		outlineWidth: "1px",
-		outlineStyle: "solid",
+		backgroundColor: tokens["--surface"],
 		outlineColor: tokens["--border-opaque"],
-		// boxShadow: tokens["--shadow-sm"],
-		// backgroundClip: "padding-box",
+		outlineStyle: "solid",
+		outlineWidth: "1px",
 	},
 	content: {
 		borderCollapse: "collapse",
 		width: "100%",
 	},
 	caption: {
+		backgroundColor: tokens["--canvas"],
 		captionSide: "top",
+		color: tokens["--fg"],
+		fontSize: typescaleStyles["1"].fontSize,
+		fontWeight: fontWeightStyles.medium,
+		lineHeight: typescaleStyles["1"].lineHeight,
 		textAlign: "start",
 		textIndent: tokens["--space-3"],
-		fontWeight: fontWeightStyles.medium,
-		fontSize: typescaleStyles["1"].fontSize,
-		lineHeight: typescaleStyles["1"].lineHeight,
-		color: tokens["--fg"],
-		backgroundColor: tokens["--canvas"],
 	},
-	header: {},
 	headerCell: {
-		backgroundColor: tokens["--canvas"],
-		// backgroundClip: "padding-box",
-		color: tokens["--fg-subtle"],
 		paddingBlock: tokens["--space-2"],
+		backgroundColor: tokens["--canvas"],
+		borderBlockEndColor: tokens["--border-opaque"],
+		borderBlockEndStyle: "solid",
+		borderBlockEndWidth: "1px",
+		color: tokens["--fg-subtle"],
 		paddingInlineStart: tokens["--space-3"],
 		textAlign: "start",
 		verticalAlign: "middle",
 		whiteSpace: "nowrap",
-		borderBlockEndColor: tokens["--border-opaque"],
-		borderBlockEndStyle: "solid",
-		borderBlockEndWidth: "1px",
 	},
 	bodyRow: {
 		backgroundColor: {
-			default: "transparent",
 			"[data-interactive]:hover": tokens["--bg-highlight"],
+			default: "transparent",
 		},
 	},
 	checkedRow: {
 		backgroundColor: {
-			default: tokens["--bg-accent"],
 			"[data-interactive]:hover": tokens["--bg-highlight"],
+			default: tokens["--bg-accent"],
 		},
 	},
 	cell: {
@@ -502,9 +484,6 @@ const tableParts = stylex.create({
 		verticalAlign: "middle",
 		minHeight: tokens["--size-control-md"],
 	},
-	checkedCell: {
-		// borderBlockStartColor: "transparent",
-	},
 	emptyCell: {
 		paddingBlock: tokens["--space-10"],
 		paddingInline: tokens["--space-2"],
@@ -512,8 +491,8 @@ const tableParts = stylex.create({
 		textAlign: "center",
 	},
 	actionCell: {
-		paddingInline: tokens["--space-1"],
 		paddingBlock: tokens["--space-0-5"],
+		paddingInline: tokens["--space-1"],
 		textAlign: "center",
 		whiteSpace: "nowrap",
 		width: "1%",
@@ -532,9 +511,9 @@ const tableParts = stylex.create({
 		display: "flex",
 		justifyContent: "center",
 		lineHeight: 0,
+		verticalAlign: "bottom",
 		minHeight: tokens["--size-indicator-sm"],
 		width: "fit-content",
-		verticalAlign: "bottom",
 	},
 });
 

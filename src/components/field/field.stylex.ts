@@ -1,8 +1,8 @@
 import * as stylex from "@stylexjs/stylex";
-import type { FieldSize, FieldThemeProps } from "@/components/field/field.types";
+import type { FieldSize } from "@/components/field/field.types";
 import { textStyles, fontWeightStyles } from "@/components/text/text.stylex";
 import { breakpoints, media } from "@/styles/constants.stylex";
-import { composeThemeProps, type ThemePropDefinition, type VerifyThemeProps } from "@/theme/theme-props";
+import { composeThemeProps } from "@/theme/theme-props";
 import {
 	childLayoutThemeProps,
 	displayThemeProps,
@@ -20,7 +20,7 @@ export const labelMarker = stylex.defineMarker();
 const INTERACTIVE_CONTROL_HOVER =
 	':hover:not(:focus-within):not([aria-invalid="true"]):not([data-active]):not([data-disabled]):not([data-invalid]):not([data-panel-open]):not([data-popup-open]):not([data-pressed]):not([data-readonly]):not([readonly])';
 
-const fieldThemePropsDefinition = composeThemeProps(
+export const fieldThemeProps = composeThemeProps(
 	spacingThemeProps,
 	sizingThemeProps,
 	positioningThemeProps,
@@ -30,9 +30,6 @@ const fieldThemePropsDefinition = composeThemeProps(
 	verticalFlexThemeProps,
 	displayThemeProps,
 );
-
-export const fieldThemeProps: ThemePropDefinition<VerifyThemeProps<FieldThemeProps, typeof fieldThemePropsDefinition>> =
-	fieldThemePropsDefinition;
 
 /**
  * Canonical styles for the Field component family.
@@ -73,7 +70,6 @@ const parts = stylex.create({
 			[stylex.when.ancestor('[aria-disabled="true"]')]: 0.5,
 		},
 	},
-	itemLabel: {},
 	description: { color: tokens["--fg-muted"] },
 	error: {
 		gap: tokens["--space-1"],
@@ -155,7 +151,7 @@ export const fieldStyles = {
 	root: parts.root,
 	label: [labelMarker, textStyles.supporting, fontWeightStyles.medium, parts.label],
 	groupLabel: [textStyles.body, fontWeightStyles.semibold, parts.groupLabel],
-	itemLabel: [textStyles.label, parts.itemLabel],
+	itemLabel: textStyles.label,
 	description: [textStyles.supporting, parts.description],
 	error: [textStyles.supporting, parts.error],
 	requiredIndicator: parts.requiredIndicator,

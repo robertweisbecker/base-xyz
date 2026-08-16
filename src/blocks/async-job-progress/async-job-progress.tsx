@@ -7,7 +7,7 @@ import { createContext, type ComponentProps, createElement, useContext, useId } 
 import { Badge, Loader, Progress as ProgressPrimitive } from "@/components";
 import type { BadgeHue } from "@/components";
 import { tokens } from "@/theme/tokens.stylex";
-
+import { attrJoin } from "@/utils/attr-join";
 
 export type AsyncJobStatus = "queued" | "running" | "complete" | "error";
 export type AsyncJobHeadingLevel = 2 | 3 | 4 | 5 | 6;
@@ -44,12 +44,12 @@ export type AsyncJobProgressProgressProps = Omit<
 >;
 export type AsyncJobProgressActionsProps = StyledProps<ComponentProps<"div">>;
 
-const statusPresentation: Record<AsyncJobStatus, { badgeLabel: string; hue: BadgeHue }> = {
+const statusPresentation = {
 	queued: { badgeLabel: "Queued", hue: "neutral" },
 	running: { badgeLabel: "Running", hue: "accent" },
 	complete: { badgeLabel: "Complete", hue: "neutral" },
 	error: { badgeLabel: "Failed", hue: "error" },
-};
+} satisfies Record<AsyncJobStatus, { badgeLabel: string; hue: BadgeHue }>;
 
 export function Root({ status, value, valueText, className, style, ...props }: AsyncJobProgressRootProps) {
 	const titleId = useId();
@@ -58,19 +58,19 @@ export function Root({ status, value, valueText, className, style, ...props }: A
 
 	return (
 		<AsyncJobProgressContext.Provider value={{ status, titleId, value: progressValue, valueText }}>
-			<section className={joinClassNames(sx.className, className)} style={sx.style} {...props} />
+			<section className={attrJoin(sx.className, className)} style={sx.style} {...props} />
 		</AsyncJobProgressContext.Provider>
 	);
 }
 
 export function Header({ className, style, ...props }: AsyncJobProgressHeaderProps) {
 	const sx = stylex.props(parts.header, style);
-	return <div className={joinClassNames(sx.className, className)} style={sx.style} {...props} />;
+	return <div className={attrJoin(sx.className, className)} style={sx.style} {...props} />;
 }
 
 export function Heading({ className, style, ...props }: AsyncJobProgressHeadingProps) {
 	const sx = stylex.props(parts.heading, style);
-	return <div className={joinClassNames(sx.className, className)} style={sx.style} {...props} />;
+	return <div className={attrJoin(sx.className, className)} style={sx.style} {...props} />;
 }
 
 export function Title({ level = 3, id, className, style, ...props }: AsyncJobProgressTitleProps) {
@@ -80,14 +80,14 @@ export function Title({ level = 3, id, className, style, ...props }: AsyncJobPro
 	return createElement(`h${level}`, {
 		...props,
 		id: id ?? context.titleId,
-		className: joinClassNames(sx.className, className),
+		className: attrJoin(sx.className, className),
 		style: sx.style,
 	});
 }
 
 export function Description({ className, style, ...props }: AsyncJobProgressDescriptionProps) {
 	const sx = stylex.props(parts.description, style);
-	return <p className={joinClassNames(sx.className, className)} style={sx.style} {...props} />;
+	return <p className={attrJoin(sx.className, className)} style={sx.style} {...props} />;
 }
 
 export function Status({ className, style, ...props }: AsyncJobProgressStatusProps) {
@@ -100,7 +100,7 @@ export function Status({ className, style, ...props }: AsyncJobProgressStatusPro
 		<span
 			role="status"
 			aria-atomic="true"
-			className={joinClassNames(sx.className, className)}
+			className={attrJoin(sx.className, className)}
 			style={sx.style}
 			{...props}>
 			<Badge hue={presentation.hue} size="sm" startSlot={statusIcon}>
@@ -137,7 +137,7 @@ export function Progress(props: AsyncJobProgressProgressProps) {
 
 export function Actions({ className, style, ...props }: AsyncJobProgressActionsProps) {
 	const sx = stylex.props(parts.actions, style);
-	return <div className={joinClassNames(sx.className, className)} style={sx.style} {...props} />;
+	return <div className={attrJoin(sx.className, className)} style={sx.style} {...props} />;
 }
 
 function useAsyncJobProgressContext(part: string) {
@@ -157,7 +157,7 @@ function getProgressValue(status: AsyncJobStatus, value: number | null | undefin
 		case "complete":
 			return 100;
 		case "error":
-			return typeof value === "number" ? normalizeProgressValue(value) : 0;
+			return value == null ? 0 : normalizeProgressValue(value);
 	}
 }
 
@@ -190,10 +190,6 @@ function renderStatusIcon(status: AsyncJobStatus) {
 		case "error":
 			return <WarningIcon aria-hidden weight="fill" />;
 	}
-}
-
-function joinClassNames(...classNames: Array<string | undefined>) {
-	return classNames.filter(Boolean).join(" ");
 }
 
 const parts = stylex.create({

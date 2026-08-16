@@ -8,6 +8,7 @@ import type { StyleXStyles } from "@stylexjs/stylex";
 import { textStyles, fontWeightStyles } from "@/components/text/text.stylex";
 import { createContext, type ComponentProps, type ReactNode, useContext } from "react";
 import { tokens } from "@/theme/tokens.stylex";
+import { attrJoin } from "@/utils/attr-join";
 
 type StyledProps<T> = Omit<T, "style"> & {
 	/** StyleX overrides, applied after the component's own styles. */
@@ -36,13 +37,13 @@ export type WorkflowProgressStatusProps = Omit<BadgeProps, "children" | "endSlot
 	startSlot?: ReactNode;
 };
 
-const statusPresentation: Record<WorkflowProgressStatus, { label: string; hue: BadgeHue }> = {
+const statusPresentation = {
 	queued: { label: "Queued", hue: "neutral" },
 	running: { label: "Running", hue: "accent" },
 	complete: { label: "Complete", hue: "success" },
 	approval: { label: "Needs approval", hue: "warning" },
 	error: { label: "Failed", hue: "error" },
-};
+} satisfies Record<WorkflowProgressStatus, { label: string; hue: BadgeHue }>;
 
 export function Root({
 	"aria-label": ariaLabel = "Workflow progress",
@@ -51,14 +52,14 @@ export function Root({
 	...props
 }: WorkflowProgressRootProps) {
 	const sx = stylex.props(parts.timeline, style);
-	return <ol aria-label={ariaLabel} className={joinClassNames(sx.className, className)} style={sx.style} {...props} />;
+	return <ol aria-label={ariaLabel} className={attrJoin(sx.className, className)} style={sx.style} {...props} />;
 }
 
 export function Item({ status, className, style, ...props }: WorkflowProgressItemProps) {
 	const sx = stylex.props(parts.item, style);
 	return (
 		<WorkflowProgressItemContext.Provider value={status}>
-			<li className={joinClassNames(sx.className, className)} style={sx.style} {...props} />
+			<li className={attrJoin(sx.className, className)} style={sx.style} {...props} />
 		</WorkflowProgressItemContext.Provider>
 	);
 }
@@ -67,7 +68,7 @@ export function Marker({ className, style, ...props }: WorkflowProgressMarkerPro
 	const status = useWorkflowProgressStatus("Marker");
 	const sx = stylex.props(parts.marker, markerStatus[status], style);
 	return (
-		<div aria-hidden className={joinClassNames(sx.className, className)} style={sx.style} {...props}>
+		<div aria-hidden className={attrJoin(sx.className, className)} style={sx.style} {...props}>
 			{renderStatusIcon(status)}
 		</div>
 	);
@@ -75,32 +76,32 @@ export function Marker({ className, style, ...props }: WorkflowProgressMarkerPro
 
 export function Content({ className, style, ...props }: WorkflowProgressContentProps) {
 	const sx = stylex.props(parts.content, style);
-	return <div className={joinClassNames(sx.className, className)} style={sx.style} {...props} />;
+	return <div className={attrJoin(sx.className, className)} style={sx.style} {...props} />;
 }
 
 export function Header({ className, style, ...props }: WorkflowProgressHeaderProps) {
 	const sx = stylex.props(parts.header, style);
-	return <div className={joinClassNames(sx.className, className)} style={sx.style} {...props} />;
+	return <div className={attrJoin(sx.className, className)} style={sx.style} {...props} />;
 }
 
 export function Title({ className, style, ...props }: WorkflowProgressTitleProps) {
 	const sx = stylex.props(textStyles.body, fontWeightStyles.semibold, parts.title, style);
-	return <div className={joinClassNames(sx.className, className)} style={sx.style} {...props} />;
+	return <div className={attrJoin(sx.className, className)} style={sx.style} {...props} />;
 }
 
 export function Description({ className, style, ...props }: WorkflowProgressDescriptionProps) {
 	const sx = stylex.props(textStyles.body, parts.description, style);
-	return <div className={joinClassNames(sx.className, className)} style={sx.style} {...props} />;
+	return <div className={attrJoin(sx.className, className)} style={sx.style} {...props} />;
 }
 
 export function Metadata({ className, style, ...props }: WorkflowProgressMetadataProps) {
 	const sx = stylex.props(parts.metadata, style);
-	return <div className={joinClassNames(sx.className, className)} style={sx.style} {...props} />;
+	return <div className={attrJoin(sx.className, className)} style={sx.style} {...props} />;
 }
 
 export function Meta({ className, style, ...props }: WorkflowProgressMetaProps) {
 	const sx = stylex.props(textStyles.supporting, parts.meta, style);
-	return <span className={joinClassNames(sx.className, className)} style={sx.style} {...props} />;
+	return <span className={attrJoin(sx.className, className)} style={sx.style} {...props} />;
 }
 
 export function Status({
@@ -142,10 +143,6 @@ function renderStatusIcon(status: WorkflowProgressStatus) {
 		case "error":
 			return <WarningDiamondIcon aria-hidden weight="duotone" />;
 	}
-}
-
-function joinClassNames(...classNames: Array<string | undefined>) {
-	return classNames.filter(Boolean).join(" ");
 }
 
 const parts = stylex.create({
