@@ -33,6 +33,7 @@ import { Tooltip } from "@/components/tooltip/tooltip";
 import { VisuallyHidden } from "@/components/visually-hidden/visually-hidden";
 import { focusRing } from "@/styles/recipes/focus";
 import { tokens } from "@/theme/tokens.stylex";
+import { attrJoin } from "@/utils/attr-join";
 
 type StyledProps<T> = Omit<T, "className" | "style"> & {
 	className?: string;
@@ -322,7 +323,7 @@ function Row({
 			"data-disabled": disabled ? "" : undefined,
 			"data-icon-mode": isIconMode ? "" : undefined,
 			"data-nav-list-back": dataNavListBack ? "" : undefined,
-			className: [rowSx.className, className].filter(Boolean).join(" "),
+			className: attrJoin(rowSx.className, className),
 			style: rowSx.style,
 			onClick: isStatic
 				? undefined
