@@ -208,13 +208,15 @@ export function Root<ItemValue = unknown>({
 		setOpen,
 	};
 	const panelSx = stylex.props(commandPaletteParts.panel, inline && commandPaletteParts.inlinePanel, style);
+	// SAFETY: Base UI's grouped-items overload loses ItemValue through the rest spread; the root only forwards these props.
+	const rootProps = props as AutocompleteRootProps<unknown>;
 	const panel = (
 		<Autocomplete.Root
-			{...(props as AutocompleteRootProps<unknown>)}
+			{...rootProps}
 			inline
 			open
 			autoHighlight={inline ? false : autoHighlight}
-			keepHighlight={inline ? false : true}>
+			keepHighlight={!inline}>
 			<CommandPaletteContext.Provider value={contextValue}>
 				<div
 					aria-label={label}
@@ -509,10 +511,10 @@ const commandPaletteParts = stylex.create({
 	},
 	inlinePanel: {
 		borderColor: tokens["--border"],
-		backgroundColor: tokens["--panel"],
 		borderRadius: tokens["--radius-lg"],
 		borderStyle: "solid",
 		borderWidth: "1px",
+		backgroundColor: tokens["--panel"],
 	},
 	inputGroup: {
 		gap: tokens["--space-2"],

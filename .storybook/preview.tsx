@@ -6,22 +6,18 @@ import "./reduced-motion.css";
 import { ReducedMotionFrame } from "./reduced-motion-frame";
 import { ThemeProvider, type ThemeMode, type ThemeName } from "../src/theme";
 
-type StorybookAppearance = "system" | "light" | "dark" | "mp-light";
+type StorybookTheme = { mode: ThemeMode; theme: ThemeName };
 
-function resolveAppearance(appearance: StorybookAppearance): { mode: ThemeMode; theme: ThemeName } {
+function resolveAppearance(appearance: string | undefined): StorybookTheme {
 	switch (appearance) {
-		case "system":
-			return { mode: "system", theme: "default" };
 		case "light":
 			return { mode: "light", theme: "default" };
 		case "dark":
 			return { mode: "dark", theme: "default" };
 		case "mp-light":
 			return { mode: "light", theme: "mp" };
-		default: {
-			const _exhaustive: never = appearance;
-			return _exhaustive;
-		}
+		default:
+			return { mode: "system", theme: "default" };
 	}
 }
 
@@ -57,8 +53,7 @@ const withStorybookFocusCompatibility: Decorator = (Story) => {
 };
 
 const withTheme: Decorator = (Story, context) => {
-	const appearance = (context.globals.appearance ?? "system") as StorybookAppearance;
-	const { mode, theme } = resolveAppearance(appearance);
+	const { mode, theme } = resolveAppearance(context.globals.appearance);
 	return (
 		<ThemeProvider mode={mode} theme={theme}>
 			<Story />

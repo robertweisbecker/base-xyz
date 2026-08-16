@@ -4,7 +4,7 @@ import type { StyleXStyles } from "@stylexjs/stylex";
 import {
 	composeThemeProps,
 	resolveThemeProps,
-	type VerifyThemeProps,
+	type ThemePropsOf,
 } from "@/theme/theme-props";
 import {
 	childLayoutThemeProps,
@@ -12,23 +12,21 @@ import {
 	sizingThemeProps,
 } from "@/theme/theme-props-layout.stylex";
 import { marginThemeProps } from "@/theme/theme-props-spacing.stylex";
-import type { ChildLayoutProps, MarginProps, PositioningProps, SizingProps } from "@/theme/theme-props.types";
 import { tokens } from "@/theme/tokens.stylex";
 
-export interface SeparatorThemeProps extends MarginProps, SizingProps, PositioningProps, ChildLayoutProps {}
 const separatorThemeProps = composeThemeProps(
 	marginThemeProps,
 	sizingThemeProps,
 	positioningThemeProps,
 	childLayoutThemeProps,
 );
-type VerifiedSeparatorThemeProps = VerifyThemeProps<SeparatorThemeProps, typeof separatorThemeProps>;
+export type SeparatorThemeProps = ThemePropsOf<typeof separatorThemeProps>;
 
 export type SeparatorProps = Omit<
 	BaseSeparator.Props,
-	"className" | "color" | "height" | "style" | "width" | keyof VerifiedSeparatorThemeProps
+	"className" | "color" | "height" | "style" | "width" | keyof SeparatorThemeProps
 > &
-	VerifiedSeparatorThemeProps & {
+	SeparatorThemeProps & {
 	className?: string;
 	/** StyleX overrides, applied after the component's own styles. */
 	style?: StyleXStyles;

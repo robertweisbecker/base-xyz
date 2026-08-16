@@ -26,10 +26,8 @@ export function ContextPopover({ size = "md", total, usage, variant = "ghost" }:
 	const normalizedTotal = normalizeTokenCount(total);
 	const boundedUsage = Math.min(normalizedUsage, normalizedTotal);
 	const ratio = normalizedTotal > 0 ? boundedUsage / normalizedTotal : 0;
-	const percentage = ratio * 100;
 	const percentageText = percentageFormatter.format(ratio);
 	const tokenFraction = `${tokenFormatter.format(normalizedUsage).toLowerCase()} / ${tokenFormatter.format(normalizedTotal).toLowerCase()} tokens`;
-	const meterMaximum = normalizedTotal > 0 ? normalizedTotal : 1;
 
 	return (
 		<Popover.Root>
@@ -47,7 +45,7 @@ export function ContextPopover({ size = "md", total, usage, variant = "ghost" }:
 					showValue={false}
 					size={size === "lg" ? 20 : 16}
 					style={contextPopoverParts.gauge}
-					value={percentage}
+					value={ratio * 100}
 				/>
 			</Popover.Trigger>
 
@@ -59,7 +57,7 @@ export function ContextPopover({ size = "md", total, usage, variant = "ghost" }:
 				<Meter.Root
 					aria-valuetext={`${tokenFraction}, ${percentageText}`}
 					color={tokens["--fill-neutral"]}
-					max={meterMaximum}
+					max={normalizedTotal > 0 ? normalizedTotal : 1}
 					value={boundedUsage}>
 					<Meter.Label>{tokenFraction}</Meter.Label>
 					<Meter.Value>{() => percentageText}</Meter.Value>

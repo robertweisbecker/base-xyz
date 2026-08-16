@@ -20,10 +20,10 @@ export type UseScrollFadeReturn<ElementType extends HTMLElement> = {
 	ref: RefCallback<ElementType>;
 };
 
-const SCROLL_FADE_CLASS: Record<ScrollFadeAxis, string> = {
+const SCROLL_FADE_CLASS = {
 	x: "xyz-scroll-fade-x",
 	y: "xyz-scroll-fade-y",
-};
+} satisfies Record<ScrollFadeAxis, string>;
 
 /** Subpixel layouts can report 1px of false overflow. */
 const OVERFLOW_EPSILON_PX = 1;
@@ -60,7 +60,7 @@ export function useScrollFade<ElementType extends HTMLElement = HTMLElement>({
 				return;
 			}
 			const next = hasOverflow(element, axisRef.current);
-			setOverflowing((current) => (current === next ? current : next));
+			setOverflowing(next);
 		});
 	}, []);
 

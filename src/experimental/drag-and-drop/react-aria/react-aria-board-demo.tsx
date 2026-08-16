@@ -47,9 +47,7 @@ function ReactAriaBoardDemoInner({ onReset }: { onReset: () => void }) {
 				</DemoInstructions>
 			}
 			status={status}
-			onReset={() => {
-				onReset();
-			}}>
+			onReset={onReset}>
 			<div {...stylex.props(demoStyles.board)}>
 				{BOARD_COLUMNS.map((column) => (
 					<ReactAriaBoardColumn
@@ -57,12 +55,12 @@ function ReactAriaBoardDemoInner({ onReset }: { onReset: () => void }) {
 						columnId={column.id}
 						label={column.label}
 						items={list.items.filter((item) => item.columnId === column.id)}
-						remove={(key) => list.remove(key)}
-						insertBefore={(key, item) => list.insertBefore(key, item)}
-						insertAfter={(key, item) => list.insertAfter(key, item)}
-						append={(item) => list.append(item)}
-						moveBefore={(key, keys) => list.moveBefore(key, keys)}
-						moveAfter={(key, keys) => list.moveAfter(key, keys)}
+						remove={list.remove}
+						insertBefore={list.insertBefore}
+						insertAfter={list.insertAfter}
+						append={list.append}
+						moveBefore={list.moveBefore}
+						moveAfter={list.moveAfter}
 						onStatus={setStatus}
 					/>
 				))}
@@ -182,5 +180,24 @@ async function readReactAriaBoardItem(
 ): Promise<DemoBoardItem | null> {
 	const item = event.items.find((dropItem) => isTextDropItem(dropItem) && dropItem.types.has(TASK_TYPE));
 	if (!item || !isTextDropItem(item)) return null;
-	return JSON.parse(await item.getText(TASK_TYPE)) as DemoBoardItem;
+	return parseBoardItem(await item.getText(TASK_TYPE));
+}
+
+function parseBoardItem(serializedItem: string): DemoBoardItem | null {
+	const item: unknown = JSON.parse(serializedItem);
+	if (
+		typeof item !== "object" ||
+		item === null ||
+		!("id" in item) ||
+		!("label" in item) ||
+		!("kind" in item) ||
+		!("columnId" in item) ||
+		typeof item.id !== "string" ||
+		typeof item.label !== "string" ||
+		(item.kind !== "task" && item.kind !== "asset") ||
+		(item.columnId !== "backlog" && item.columnId !== "done")
+	) {
+		return null;
+	}
+	return { id: item.id, label: item.label, kind: item.kind, columnId: item.columnId };
 }

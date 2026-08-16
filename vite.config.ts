@@ -1,13 +1,8 @@
 import { defineConfig } from 'vite'
 import type { PluginOption } from 'vite'
 import react from '@vitejs/plugin-react'
-import type { UserOptions as StyleXOptions } from '@stylexjs/unplugin'
-import * as stylex from '@stylexjs/unplugin/vite'
+import { unplugin as stylex } from '@stylexjs/unplugin'
 import { fileURLToPath, URL } from 'node:url'
-
-const stylexPlugin = stylex.default as unknown as (
-  options: Partial<StyleXOptions>,
-) => PluginOption
 
 const stylexConstantsPath = fileURLToPath(
   new URL('./src/styles/constants.stylex.ts', import.meta.url),
@@ -45,7 +40,7 @@ export default defineConfig({
   },
   plugins: [
     preloadStylexConstants(),
-    stylexPlugin({
+    stylex.vite({
       aliases: {
         '@/*': '/ROOT/src/*',
       },

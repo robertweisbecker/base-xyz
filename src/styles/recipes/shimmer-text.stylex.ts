@@ -1,6 +1,5 @@
 import * as stylex from "@stylexjs/stylex";
 import { media } from "@/styles/constants.stylex";
-import { shimmerTextVars } from "@/styles/recipes/shimmer-text-vars.stylex";
 import { tokens } from "@/theme/tokens.stylex";
 
 const shimmerSweep = stylex.keyframes({
@@ -17,9 +16,6 @@ const shimmerSweep = stylex.keyframes({
 
 export const shimmerTextStyles = stylex.create({
 	effect: {
-		[shimmerTextVars.base]: "color-mix(in oklch, currentColor 54%, transparent)",
-		[shimmerTextVars.duration]: "2000ms",
-		[shimmerTextVars.highlight]: `color-mix(in srgb, currentColor, ${tokens["--bg-inverse"]})`,
 		WebkitBackgroundClip: {
 			default: "text",
 			[media.reducedMotion]: "initial",
@@ -29,7 +25,7 @@ export const shimmerTextStyles = stylex.create({
 			[media.reducedMotion]: "currentColor",
 		},
 		backgroundPosition: "150% 0",
-		animationDuration: shimmerTextVars.duration,
+		animationDuration: "2000ms",
 		animationIterationCount: "infinite",
 		animationName: {
 			default: shimmerSweep,
@@ -41,7 +37,7 @@ export const shimmerTextStyles = stylex.create({
 			[media.reducedMotion]: "border-box",
 		},
 		backgroundImage: {
-			default: `linear-gradient(30deg, ${shimmerTextVars.base} 0 40%, ${shimmerTextVars.highlight} 50%, ${shimmerTextVars.base} 60% 100%)`,
+			default: `linear-gradient(30deg, color-mix(in oklch, currentColor 54%, transparent) 0 40%, color-mix(in srgb, currentColor, ${tokens["--bg-inverse"]}) 50%, color-mix(in oklch, currentColor 54%, transparent) 60% 100%)`,
 			[media.reducedMotion]: "none",
 		},
 		backgroundSize: "300% 100%",
@@ -49,19 +45,5 @@ export const shimmerTextStyles = stylex.create({
 			default: "background-position",
 			[media.reducedMotion]: "auto",
 		},
-	},
-	once: {
-		animationIterationCount: 1,
-	},
-	reverse: {
-		animationDirection: "reverse",
-	},
-	none: {
-		WebkitBackgroundClip: "initial",
-		WebkitTextFillColor: "currentColor",
-		animationName: "none",
-		backgroundClip: "border-box",
-		backgroundImage: "none",
-		willChange: "auto",
 	},
 });

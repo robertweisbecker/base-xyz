@@ -30,7 +30,7 @@ const overlayRootStyle = {
 } as const;
 
 export function DndKitFeedbackDemo() {
-	const [items, setItems] = useState(() => INITIAL_ITEMS.map((item) => ({ ...item })));
+	const [items, setItems] = useState(INITIAL_ITEMS);
 	const [snapshot, setSnapshot] = useState<DemoItem[] | null>(null);
 	const [activeLabel, setActiveLabel] = useState<string | null>(null);
 	const [status, setStatus] = useState(
@@ -38,14 +38,14 @@ export function DndKitFeedbackDemo() {
 	);
 
 	function reset() {
-		setItems(INITIAL_ITEMS.map((item) => ({ ...item })));
+		setItems(INITIAL_ITEMS);
 		setSnapshot(null);
 		setActiveLabel(null);
 		setStatus("Ready. Pointer activation requires 5px movement, or 250ms touch hold within 5px.");
 	}
 
 	function handleDragStart(event: DragStartEvent) {
-		setSnapshot(items.map((item) => ({ ...item })));
+		setSnapshot(items);
 		setActiveLabel(String(event.operation.source?.data?.label ?? "Dragged task"));
 		setStatus("Drag started. Overlay and live reflow are active.");
 	}

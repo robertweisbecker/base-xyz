@@ -4,7 +4,6 @@ import {
 	useDroppable,
 	type DragEndEvent,
 	type DragOverEvent,
-	type DragStartEvent,
 } from "@dnd-kit/react";
 import { useSortable } from "@dnd-kit/react/sortable";
 import * as stylex from "@stylexjs/stylex";
@@ -35,13 +34,13 @@ export function DndKitBoardDemo() {
 		setStatus("Ready. Use the drag handles to reorder tasks or move them between columns.");
 	}
 
-	function handleDragStart(_event: DragStartEvent) {
+	function handleDragStart() {
 		setSnapshot(cloneBoardState(board));
 		setStatus("dnd-kit drag started. Items reflow optimistically while dragging.");
 	}
 
 	function handleDragOver(event: DragOverEvent) {
-		setBoard((current) => move(current, event) as DemoBoardState);
+		setBoard((current) => move(current, event));
 	}
 
 	function handleDragEnd(event: DragEndEvent) {

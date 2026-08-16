@@ -18,6 +18,7 @@ import { Button, IconButton, InputGroup, Menu } from "@/components";
 import type { ButtonProps } from "@/components";
 import { useScrollFade } from "@/hooks/use-scroll-fade";
 import { tokens } from "@/theme/tokens.stylex";
+import { attrJoin } from "@/utils/attr-join";
 
 type PromptComposerContextValue = {
 	canSubmit: boolean;
@@ -107,24 +108,16 @@ export function Root({
 				updateValue,
 				submit,
 			}}>
-			<Form className={joinClassNames(sx.className, className)} onFormSubmit={submit} style={sx.style} {...props} />
+			<Form className={attrJoin(sx.className, className)} onFormSubmit={submit} style={sx.style} {...props} />
 		</PromptComposerContext.Provider>
 	);
 }
 
 export function Surface({ ref: forwardedRef, variant = "elevated", style, ...props }: PromptComposerSurfaceProps) {
 	const { surfaceRef } = usePromptComposerContext("Surface");
+	const mergedRef = useMergedRefs(forwardedRef, surfaceRef);
 
-	function setRefs(node: HTMLDivElement | null) {
-		surfaceRef.current = node;
-		if (typeof forwardedRef === "function") {
-			forwardedRef(node);
-		} else if (forwardedRef) {
-			forwardedRef.current = node;
-		}
-	}
-
-	return <InputGroup.Root ref={setRefs} size="lg" variant={variant} {...props} style={[parts.inputGroup, style]} />;
+	return <InputGroup.Root ref={mergedRef} size="lg" variant={variant} {...props} style={[parts.inputGroup, style]} />;
 }
 
 export function Input({
@@ -155,7 +148,7 @@ export function Input({
 	return (
 		<InputGroup.Textarea
 			aria-label={ariaLabel}
-			className={joinClassNames(scrollFade.className, inputSx.className, className)}
+			className={attrJoin(scrollFade.className, inputSx.className, className)}
 			disabled={context.disabled}
 			onChange={(event) => {
 				onChange?.(event);
@@ -178,7 +171,7 @@ export const Footer = InputGroup.Footer;
 
 export function Options({ className, style, ...props }: PromptComposerOptionsProps) {
 	const sx = stylex.props(parts.options, style);
-	return <div className={joinClassNames(sx.className, className)} style={sx.style} {...props} />;
+	return <div className={attrJoin(sx.className, className)} style={sx.style} {...props} />;
 }
 
 export const Actions = InputGroup.Actions;
@@ -290,12 +283,12 @@ export function AddPopup({ positionerProps, style, ...props }: PromptComposerAdd
 
 export function AddItemContent({ className, style, ...props }: PromptComposerAddItemContentProps) {
 	const sx = stylex.props(parts.addMenuCopy, style);
-	return <span className={joinClassNames(sx.className, className)} style={sx.style} {...props} />;
+	return <span className={attrJoin(sx.className, className)} style={sx.style} {...props} />;
 }
 
 export function AddItemDescription({ className, style, ...props }: PromptComposerAddItemDescriptionProps) {
 	const sx = stylex.props(parts.addMenuDescription, style);
-	return <span className={joinClassNames(sx.className, className)} style={sx.style} {...props} />;
+	return <span className={attrJoin(sx.className, className)} style={sx.style} {...props} />;
 }
 
 function usePromptComposerContext(part: string) {
@@ -304,10 +297,6 @@ function usePromptComposerContext(part: string) {
 		throw new Error(`PromptComposer.${part} must be used inside PromptComposer.Root.`);
 	}
 	return context;
-}
-
-function joinClassNames(...classNames: Array<string | undefined>) {
-	return classNames.filter(Boolean).join(" ");
 }
 
 const parts = stylex.create({
@@ -328,17 +317,11 @@ const parts = stylex.create({
 		"--_input-padding": tokens["--space-4"],
 		borderRadius: "2.5rem",
 		gap: 0,
-		// alignItems: "stretch",
-		// height: "auto",
 		minHeight: 0,
 	},
 	/** Fade size + expand-on-focus; both are composer behavior, not InputGroup. */
 	input: {
 		"--scroll-fade-size": tokens["--space-8"],
-		// fieldSizing: {
-		// 	default: "fixed",
-		// 	":focus-within": "content",
-		// },
 		minHeight: "0px",
 	},
 	options: {

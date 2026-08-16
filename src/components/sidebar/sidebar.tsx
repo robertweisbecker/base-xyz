@@ -2,7 +2,6 @@ import { useRender } from "@base-ui/react/use-render";
 import * as stylex from "@stylexjs/stylex";
 import type { StyleXStyles } from "@stylexjs/stylex";
 import { createContext, useContext, useMemo, useRef, useState, type ComponentProps, type ReactNode } from "react";
-import { media } from "@/styles/constants.stylex";
 import { IconButton, type IconButtonProps } from "@/components/button/button";
 import { NavListPresentationProvider } from "@/components/nav-list/nav-list";
 import { ScrollArea } from "@/components/scroll-area/scroll-area";
@@ -279,10 +278,7 @@ const sidebarParts = stylex.create({
 		display: "block",
 		inlineSize: tokens["--size-sidebar"],
 		minBlockSize: 0,
-		transitionDuration: {
-			default: tokens["--motion-duration-medium"],
-			[media.reducedMotion]: "0ms",
-		},
+		transitionDuration: tokens["--motion-duration-medium"],
 		transitionProperty: "inline-size",
 		transitionTimingFunction: tokens["--motion-ease-smooth-out"],
 	},
@@ -308,16 +304,12 @@ const sidebarParts = stylex.create({
 		paddingInline: tokens["--space-3"],
 		blockSize: "100%",
 		boxSizing: "border-box",
-		// paddingBlock: tokens["--space-2"],
 		display: "flex",
 		flexDirection: "column",
 		inlineSize: tokens["--size-sidebar"],
 		minBlockSize: 0,
 		transform: "translateX(0)",
-		transitionDuration: {
-			default: tokens["--motion-duration-medium"],
-			[media.reducedMotion]: "0ms",
-		},
+		transitionDuration: tokens["--motion-duration-medium"],
 		transitionProperty: "inline-size, padding, transform",
 		transitionTimingFunction: tokens["--motion-ease-smooth-out"],
 	},
@@ -327,7 +319,6 @@ const sidebarParts = stylex.create({
 		minInlineSize: 0,
 	},
 	contentIconCollapsed: {
-		// paddingBlock: tokens["--space-3"],
 		paddingInline: tokens["--space-2"],
 		inlineSize: tokens["--size-sidebar-rail"],
 	},
@@ -363,8 +354,6 @@ const sidebarParts = stylex.create({
 		borderBlockEndWidth: tokens["--border-width"],
 		color: tokens["--fg"],
 		display: "flex",
-		// marginBlockEnd: tokens["--space-2"],
-		// minBlockSize: tokens["--size-control-lg"],
 		minInlineSize: 0,
 		paddingBlockEnd: tokens["--space-3"],
 		paddingBlockStart: tokens["--space-2"],
@@ -433,10 +422,7 @@ const sidebarParts = stylex.create({
 	},
 	triggerIconDivider: {
 		transformBox: "fill-box",
-		transitionDuration: {
-			default: tokens["--motion-duration-medium"],
-			[media.reducedMotion]: "0ms",
-		},
+		transitionDuration: tokens["--motion-duration-medium"],
 		transitionProperty: "transform",
 		transitionTimingFunction: tokens["--motion-ease-smooth-out"],
 	},

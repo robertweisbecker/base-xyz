@@ -31,88 +31,42 @@ type FlexLayoutProps = Omit<FlexProps, keyof GapProps>;
 type GridCompositionProps = Omit<GridLayoutProps, keyof GapProps>;
 type SurfaceColorProps = Pick<SurfaceThemeProps, "color" | "bg">;
 
-export const displayThemePropKeys = defineThemePropKeys<DisplayProps>()(["display"] as const);
-export const marginThemePropKeys = defineThemePropKeys<MarginProps>()([
-	"m",
-	"mx",
-	"my",
-	"mt",
-	"mb",
-	"ms",
-	"me",
-] as const);
-export const paddingThemePropKeys = defineThemePropKeys<PaddingProps>()([
-	"p",
-	"px",
-	"py",
-	"pt",
-	"pb",
-	"ps",
-	"pe",
-] as const);
-export const sizingThemePropKeys = defineThemePropKeys<SizingProps>()([
-	"width",
-	"height",
-	"minWidth",
-	"maxWidth",
-	"minHeight",
-	"maxHeight",
-] as const);
-export const positioningThemePropKeys = defineThemePropKeys<PositioningProps>()([
-	"position",
-	"inset",
-	"insetX",
-	"insetY",
-	"insetTop",
-	"insetBottom",
-	"insetStart",
-	"insetEnd",
-	"zIndex",
-] as const);
-export const childLayoutThemePropKeys = defineThemePropKeys<ChildLayoutProps>()([
-	"alignSelf",
-	"justifySelf",
-	"flexBasis",
-	"flexGrow",
-	"flexShrink",
-	"order",
-	"columnSpan",
-	"rowSpan",
-] as const);
-export const surfaceColorThemePropKeys = defineThemePropKeys<SurfaceColorProps>()(["color", "bg"] as const);
-export const radiusThemePropKeys = defineThemePropKeys<RadiusThemeProps>()(["radius"] as const);
-export const shadowThemePropKeys = defineThemePropKeys<ShadowThemeProps>()(["shadow"] as const);
-export const gapThemePropKeys = defineThemePropKeys<GapProps>()(["gap", "gapX", "gapY"] as const);
-export const flexLayoutThemePropKeys = defineThemePropKeys<FlexLayoutProps>()([
-	"orientation",
-	"reverse",
-	"align",
-	"justify",
-	"wrap",
-] as const);
-export const gridCompositionThemePropKeys = defineThemePropKeys<GridCompositionProps>()([
-	"columns",
-	"flow",
-	"align",
-	"justify",
-] as const);
-export const textAlignThemePropKeys = defineThemePropKeys<TextAlignProps>()(["textAlign"] as const);
+export const themePropKeys = {
+	display: defineThemePropKeys<DisplayProps>()(["display"]),
+	margin: defineThemePropKeys<MarginProps>()(["m", "mx", "my", "mt", "mb", "ms", "me"]),
+	padding: defineThemePropKeys<PaddingProps>()(["p", "px", "py", "pt", "pb", "ps", "pe"]),
+	sizing: defineThemePropKeys<SizingProps>()(["width", "height", "minWidth", "maxWidth", "minHeight", "maxHeight"]),
+	positioning: defineThemePropKeys<PositioningProps>()([
+		"position",
+		"inset",
+		"insetX",
+		"insetY",
+		"insetTop",
+		"insetBottom",
+		"insetStart",
+		"insetEnd",
+		"zIndex",
+	]),
+	childLayout: defineThemePropKeys<ChildLayoutProps>()([
+		"alignSelf",
+		"justifySelf",
+		"flexBasis",
+		"flexGrow",
+		"flexShrink",
+		"order",
+		"columnSpan",
+		"rowSpan",
+	]),
+	surfaceColor: defineThemePropKeys<SurfaceColorProps>()(["color", "bg"]),
+	radius: defineThemePropKeys<RadiusThemeProps>()(["radius"]),
+	shadow: defineThemePropKeys<ShadowThemeProps>()(["shadow"]),
+	gap: defineThemePropKeys<GapProps>()(["gap", "gapX", "gapY"]),
+	flexLayout: defineThemePropKeys<FlexLayoutProps>()(["orientation", "reverse", "align", "justify", "wrap"]),
+	gridComposition: defineThemePropKeys<GridCompositionProps>()(["columns", "flow", "align", "justify"]),
+	textAlign: defineThemePropKeys<TextAlignProps>()(["textAlign"]),
+};
 
-const knownThemePropKeys = new Set<string>([
-	...displayThemePropKeys,
-	...marginThemePropKeys,
-	...paddingThemePropKeys,
-	...sizingThemePropKeys,
-	...positioningThemePropKeys,
-	...childLayoutThemePropKeys,
-	...surfaceColorThemePropKeys,
-	...radiusThemePropKeys,
-	...shadowThemePropKeys,
-	...gapThemePropKeys,
-	...flexLayoutThemePropKeys,
-	...gridCompositionThemePropKeys,
-	...textAlignThemePropKeys,
-]);
+const knownThemePropKeys = new Set<string>(Object.values(themePropKeys).flat());
 
 type ThemePropLeaf = {
 	readonly keys: readonly string[];
@@ -139,22 +93,7 @@ type UnionToIntersection<Union> = (Union extends unknown ? (value: Union) => voi
 	? Intersection
 	: never;
 type Simplify<Type> = { [Key in keyof Type]: Type[Key] };
-type ExactThemeProps<Actual extends object, Expected extends object> = Exclude<keyof Actual, keyof Expected> extends never
-	? Exclude<keyof Expected, keyof Actual> extends never
-		? Actual extends Expected
-			? Expected extends Actual
-				? true
-				: false
-			: false
-		: false
-	: false;
-
-export type VerifyThemeProps<Expected extends object, Definition> = ExactThemeProps<
-	DefinitionProps<Definition>,
-	Expected
-> extends true
-	? Expected
-	: never;
+export type ThemePropsOf<Definition> = Simplify<DefinitionProps<Definition>>;
 
 export function createThemePropDefinition<Props extends object>(
 	keys: readonly Extract<keyof Props, string>[],
@@ -162,6 +101,7 @@ export function createThemePropDefinition<Props extends object>(
 ): ThemePropDefinition<Props> {
 	const leaf: ThemePropLeaf = Object.freeze({
 		keys,
+		// SAFETY: Each definition compiles only the keys declared for its Props contract.
 		compile: (props: object) => compile(props as Props),
 	});
 	return Object.freeze({
@@ -180,10 +120,12 @@ export function composeThemeProps<const Definitions extends readonly AnyThemePro
 	for (const definition of definitions) {
 		for (const leaf of definition.leaves) {
 			for (const key of leaf.keys) {
-				if (keys.has(key as Extract<keyof Props, string>)) {
+				// SAFETY: Each leaf key originates from a definition included in the Props intersection.
+				const typedKey = key as Extract<keyof Props, string>;
+				if (keys.has(typedKey)) {
 					throw new Error(`Theme prop "${key}" was composed more than once.`);
 				}
-				keys.add(key as Extract<keyof Props, string>);
+				keys.add(typedKey);
 			}
 			leaves.push(leaf);
 		}
@@ -192,47 +134,47 @@ export function composeThemeProps<const Definitions extends readonly AnyThemePro
 	return Object.freeze({ keys, leaves });
 }
 
-export function extractThemeProps<Props extends object, T extends object & Partial<Props>>(
+type ExtractedThemeProps<Props, RestProps> = {
+	themeProps: Partial<Props>;
+	restProps: RestProps;
+};
+
+type ResolvedThemeProps<Props, RestProps> = ExtractedThemeProps<Props, RestProps> & {
+	styles: StyleXStyles[];
+};
+
+export function extractThemeProps<
+	Props extends object,
+	T extends object & Partial<Props>,
+>(
 	props: T,
 	definition: ThemePropDefinition<Props>,
-): {
-	themeProps: Props;
-	restProps: Omit<T, keyof Props>;
-	activeThemePropKeys: ReadonlySet<string>;
-} {
-	const pickedProps: Record<string, unknown> = {};
-	const restProps: Record<string, unknown> = {};
-	const activeThemePropKeys = new Set<string>();
+): ExtractedThemeProps<Props, Omit<T, keyof Props>> {
+	const themeProps: Partial<Props> = {};
+	const restProps = { ...props };
 
 	for (const [key, value] of Object.entries(props)) {
-		if (definition.keys.has(key as Extract<keyof Props, string>)) {
-			pickedProps[key] = value;
-			if (value !== undefined) activeThemePropKeys.add(key);
-		} else if (!knownThemePropKeys.has(key)) {
-			restProps[key] = value;
+		// SAFETY: The definition owns the complete runtime key set for Props.
+		if (value !== undefined && definition.keys.has(key as Extract<keyof Props, string>)) {
+			Object.assign(themeProps, { [key]: value });
 		}
+		if (knownThemePropKeys.has(key)) Reflect.deleteProperty(restProps, key);
 	}
 
-	return {
-		themeProps: pickedProps as Props,
-		restProps: restProps as Omit<T, keyof Props>,
-		activeThemePropKeys,
-	};
+	return { themeProps, restProps };
 }
 
-export function resolveThemeProps<Props extends object, T extends object & Partial<Props>>(
+export function resolveThemeProps<
+	Props extends object,
+	T extends object & Partial<Props>,
+>(
 	props: T,
 	definition: ThemePropDefinition<Props>,
-): {
-	themeProps: Props;
-	restProps: Omit<T, keyof Props>;
-	styles: StyleXStyles[];
-} {
-	const { activeThemePropKeys, restProps, themeProps } = extractThemeProps(props, definition);
-	if (activeThemePropKeys.size === 0) return { themeProps, restProps, styles: [] };
+): ResolvedThemeProps<Props, Omit<T, keyof Props>> {
+	const { restProps, themeProps } = extractThemeProps(props, definition);
 
 	const styles = definition.leaves.flatMap((leaf) =>
-		leaf.keys.some((key) => activeThemePropKeys.has(key)) ? leaf.compile(themeProps) : [],
+		leaf.keys.some((key) => key in themeProps) ? leaf.compile(themeProps) : [],
 	);
 	return { themeProps, restProps, styles };
 }

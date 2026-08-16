@@ -9,6 +9,7 @@ import { typescaleStyles, textStyles } from "@/components/text/text.stylex";
 import { shimmerTextStyles } from "@/styles/recipes/shimmer-text.stylex";
 import { typingTextStyles } from "./typing-text.stylex";
 import { tokens } from "@/theme/tokens.stylex";
+import { attrJoin } from "@/utils/attr-join";
 
 export type StreamingResponseStatus = "streaming" | "complete" | "stopped" | "error";
 
@@ -38,12 +39,12 @@ export type StreamingResponseContentProps = StyledProps<ComponentProps<"div">> &
 };
 export type StreamingResponseActionsProps = ComponentProps<typeof ToolbarPrimitive.Root>;
 
-const statusLabels: Record<StreamingResponseStatus, string> = {
+const statusLabels = {
 	streaming: "Generating",
 	complete: "Complete",
 	stopped: "Stopped",
 	error: "Response failed",
-};
+} satisfies Record<StreamingResponseStatus, string>;
 const streamingChunkSize = 3;
 const streamingChunkIntervalMs = 92;
 
@@ -58,7 +59,7 @@ export function Root({
 	const sx = stylex.props(parts.root, style);
 	return (
 		<StreamingResponseContext.Provider value={{ elapsedSeconds, status }}>
-			<article aria-label={ariaLabel} className={joinClassNames(sx.className, className)} style={sx.style} {...props} />
+			<article aria-label={ariaLabel} className={attrJoin(sx.className, className)} style={sx.style} {...props} />
 		</StreamingResponseContext.Provider>
 	);
 }
@@ -76,7 +77,7 @@ export function Status({ className, style, ...props }: StreamingResponseStatusPr
 		<div
 			role="status"
 			aria-live={isStreaming ? "polite" : "off"}
-			className={joinClassNames(sx.className, className)}
+			className={attrJoin(sx.className, className)}
 			style={sx.style}
 			{...props}>
 			{renderStatusIcon(status)}
@@ -98,7 +99,7 @@ export function Content({
 	const sx = stylex.props(typescaleStyles["3"], parts.content, style);
 
 	return (
-		<div aria-busy={isStreaming} className={joinClassNames(sx.className, className)} style={sx.style} {...props}>
+		<div aria-busy={isStreaming} className={attrJoin(sx.className, className)} style={sx.style} {...props}>
 			{isStreaming ? (
 				<StreamingText onStreamingComplete={onStreamingComplete} streamKey={streamKey}>
 					{children}
@@ -225,10 +226,6 @@ function chunkStreamingText(text: string) {
 		chunks.push(words.slice(index, index + streamingChunkSize).join(""));
 	}
 	return chunks;
-}
-
-function joinClassNames(...classNames: Array<string | undefined>) {
-	return classNames.filter(Boolean).join(" ");
 }
 
 function formatElapsedTime(totalSeconds: number) {

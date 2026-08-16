@@ -60,26 +60,25 @@ const claudeModels: readonly ModelOption[] = [
 
 const modelOptions = [...openAIModels, ...claudeModels];
 
+function toModelSelectorOption(model: ModelOption) {
+	return {
+		value: model.id,
+		label: model.label,
+		description: model.description,
+		icon: providerLogo(model.provider),
+	};
+}
+
 export const exampleModelGroups = [
 	{
 		id: "openai",
 		label: "ChatGPT",
-		options: openAIModels.map((model) => ({
-			value: model.id,
-			label: model.label,
-			description: model.description,
-			icon: providerLogo(model.provider),
-		})),
+		options: openAIModels.map(toModelSelectorOption),
 	},
 	{
 		id: "claude",
 		label: "Claude",
-		options: claudeModels.map((model) => ({
-			value: model.id,
-			label: model.label,
-			description: model.description,
-			icon: providerLogo(model.provider),
-		})),
+		options: claudeModels.map(toModelSelectorOption),
 	},
 ] satisfies readonly ModelSelectorGroup[];
 

@@ -60,7 +60,7 @@ export function Trigger({
 		collapsibleParts.trigger,
 		triggerSizes[size],
 		triggerShapes[shape],
-		triggerVariants[variant],
+		variant === "link" && triggerVariants.link,
 		focusRing.offset,
 		stylex.defaultMarker(),
 		style,
@@ -150,10 +150,7 @@ const collapsibleParts = stylex.create({
 			default: 1,
 		},
 		textAlign: "start",
-		transitionDuration: {
-			default: tokens["--motion-duration-short"],
-			[media.reducedMotion]: "0ms",
-		},
+		transitionDuration: tokens["--motion-duration-short"],
 		transitionProperty: "background-color, color",
 		transitionTimingFunction: tokens["--motion-ease-out"],
 	},
@@ -163,10 +160,7 @@ const collapsibleParts = stylex.create({
 			default: "block",
 			':is([hidden]:not([hidden="until-found"]))': "none",
 		},
-		transitionDuration: {
-			default: tokens["--motion-duration-short"],
-			[media.reducedMotion]: "0ms",
-		},
+		transitionDuration: tokens["--motion-duration-short"],
 		transitionProperty: "height",
 		transitionTimingFunction: tokens["--motion-ease-out"],
 		height: {
@@ -176,7 +170,6 @@ const collapsibleParts = stylex.create({
 		},
 	},
 	content: {
-		// paddingInlineStart: space[3],
 		gap: tokens["--space-2"],
 		color: tokens["--fg-muted"],
 		display: "flex",
@@ -195,10 +188,7 @@ const collapsibleParts = stylex.create({
 			default: "rotate(0deg)",
 			[stylex.when.ancestor("[data-panel-open]")]: "rotate(180deg)",
 		},
-		transitionDuration: {
-			default: tokens["--motion-duration-short"],
-			[media.reducedMotion]: "0ms",
-		},
+		transitionDuration: tokens["--motion-duration-short"],
 		transitionProperty: "transform",
 		transitionTimingFunction: tokens["--motion-ease-smooth-out"],
 	},
@@ -273,9 +263,6 @@ const triggerShapes = stylex.create({
 });
 
 const triggerVariants = stylex.create({
-	default: {
-		// marginInline: `calc(${space[3]} * -1)`,
-	},
 	link: {
 		paddingInline: 0,
 		backgroundColor: {

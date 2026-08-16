@@ -3,16 +3,9 @@ import * as stylex from "@stylexjs/stylex";
 import type { StyleXStyles } from "@stylexjs/stylex";
 import type { ReactNode } from "react";
 import { useTextTruncation } from "@/hooks/use-text-truncation";
-import { composeThemeProps, resolveThemeProps, type VerifyThemeProps } from "@/theme/theme-props";
+import { composeThemeProps, resolveThemeProps, type ThemePropsOf } from "@/theme/theme-props";
 import { childLayoutThemeProps, positioningThemeProps, sizingThemeProps } from "@/theme/theme-props-layout.stylex";
 import { gapThemeProps, spacingThemeProps } from "@/theme/theme-props-spacing.stylex";
-import type {
-	ChildLayoutProps,
-	GapProps,
-	PositioningProps,
-	SizingProps,
-	SpacingProps,
-} from "@/theme/theme-props.types";
 import { focusRing } from "@/styles/recipes/focus";
 import { tokens } from "@/theme/tokens.stylex";
 
@@ -107,12 +100,10 @@ const endSlotOffsets = stylex.create({
 });
 
 const variantAppearance = stylex.create({
-	subtle: {},
 	elevated: {
 		backgroundColor: tokens["--elevated"],
 		boxShadow: tokens["--shadow-xs"],
 	},
-	solid: {},
 });
 
 const hueColors = stylex.create({
@@ -254,7 +245,6 @@ export type BadgeVariant = keyof (typeof stylesByHue)["neutral"];
 export type BadgeHue = keyof typeof stylesByHue;
 export type BadgeSize = keyof typeof sizeVariants;
 export type BadgeShape = keyof typeof shapeVariants;
-export interface BadgeThemeProps extends SpacingProps, SizingProps, PositioningProps, ChildLayoutProps, GapProps {}
 const badgeThemeProps = composeThemeProps(
 	spacingThemeProps,
 	sizingThemeProps,
@@ -262,13 +252,13 @@ const badgeThemeProps = composeThemeProps(
 	childLayoutThemeProps,
 	gapThemeProps,
 );
-type VerifiedBadgeThemeProps = VerifyThemeProps<BadgeThemeProps, typeof badgeThemeProps>;
+export type BadgeThemeProps = ThemePropsOf<typeof badgeThemeProps>;
 
 type BadgeSharedProps = Omit<
 	useRender.ComponentProps<"span">,
-	"className" | "children" | "color" | "height" | "render" | "style" | "width" | keyof VerifiedBadgeThemeProps
+	"className" | "children" | "color" | "height" | "render" | "style" | "width" | keyof BadgeThemeProps
 > &
-	VerifiedBadgeThemeProps & {
+	BadgeThemeProps & {
 		className?: string;
 		hue?: BadgeHue;
 		render?: useRender.RenderProp;
@@ -321,7 +311,7 @@ export function Badge({
 	const sx = stylex.props(
 		badgeParts.root,
 		focusRing.offset,
-		variantAppearance[variant],
+		variant === "elevated" && variantAppearance.elevated,
 		stylesByHue[hue][variant],
 		sizeVariants[size],
 		shapeVariants[shape],

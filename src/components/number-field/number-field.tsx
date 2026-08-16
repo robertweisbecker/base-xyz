@@ -98,7 +98,8 @@ export function NumberField({
 					{...stylex.props(
 						numberFieldParts.stepper,
 						numberFieldStepperSizes[fieldSize],
-						numberFieldDecrementRadii[fieldSize],
+						numberFieldDecrementRadii.default,
+						fieldSize === "sm" && numberFieldDecrementRadii.sm,
 						numberFieldParts.decrement,
 						pressable.transition,
 					)}>
@@ -112,7 +113,8 @@ export function NumberField({
 						fieldStyles.inputStandard,
 						fieldTextStyles[fieldSize],
 						numberFieldParts.input,
-						numberFieldInputPaddingSizes[fieldSize],
+						numberFieldInputPaddingSizes.default,
+						fieldSize === "lg" && numberFieldInputPaddingSizes.lg,
 						focusRing.inset,
 					)}
 					style={{ width: inputWidth === "fill" ? "100%" : inputWidth }}
@@ -122,7 +124,8 @@ export function NumberField({
 					{...stylex.props(
 						numberFieldParts.stepper,
 						numberFieldStepperSizes[fieldSize],
-						numberFieldIncrementRadii[fieldSize],
+						numberFieldIncrementRadii.default,
+						fieldSize === "sm" && numberFieldIncrementRadii.sm,
 						numberFieldParts.increment,
 						pressable.transition,
 					)}>
@@ -286,10 +289,7 @@ const numberFieldStepperSizes = stylex.create({
 });
 
 const numberFieldInputPaddingSizes = stylex.create({
-	sm: {
-		paddingInline: tokens["--space-3"],
-	},
-	md: {
+	default: {
 		paddingInline: tokens["--space-3"],
 	},
 	lg: {
@@ -298,31 +298,23 @@ const numberFieldInputPaddingSizes = stylex.create({
 });
 
 const numberFieldDecrementRadii = stylex.create({
+	default: {
+		borderEndStartRadius: tokens["--radius-md"],
+		borderStartStartRadius: tokens["--radius-md"],
+	},
 	sm: {
 		borderEndStartRadius: tokens["--radius-sm"],
 		borderStartStartRadius: tokens["--radius-sm"],
 	},
-	md: {
-		borderEndStartRadius: tokens["--radius-md"],
-		borderStartStartRadius: tokens["--radius-md"],
-	},
-	lg: {
-		borderEndStartRadius: tokens["--radius-md"],
-		borderStartStartRadius: tokens["--radius-md"],
-	},
 });
 
 const numberFieldIncrementRadii = stylex.create({
+	default: {
+		borderEndEndRadius: tokens["--radius-md"],
+		borderStartEndRadius: tokens["--radius-md"],
+	},
 	sm: {
 		borderEndEndRadius: tokens["--radius-sm"],
 		borderStartEndRadius: tokens["--radius-sm"],
-	},
-	md: {
-		borderEndEndRadius: tokens["--radius-md"],
-		borderStartEndRadius: tokens["--radius-md"],
-	},
-	lg: {
-		borderEndEndRadius: tokens["--radius-md"],
-		borderStartEndRadius: tokens["--radius-md"],
 	},
 });

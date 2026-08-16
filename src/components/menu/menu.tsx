@@ -4,7 +4,6 @@ import { CaretRightIcon } from "@phosphor-icons/react/dist/csr/CaretRight";
 import * as stylex from "@stylexjs/stylex";
 import type { StyleXStyles } from "@stylexjs/stylex";
 import { createContext, useContext, type ComponentProps, type ReactNode } from "react";
-import { media } from "@/styles/constants.stylex";
 import { fontFamilyStyles, textStyles, fontWeightStyles } from "@/components/text/text.stylex";
 import { tokens } from "@/theme/tokens.stylex";
 import { popupMotionStyles, popupPositionerStyles, popupViewportStyles } from "@/components/popover/popover.stylex";
@@ -447,10 +446,7 @@ const menuParts = stylex.create({
 			default: "rotate(0deg)",
 			[stylex.when.ancestor("[data-popup-open]", menuTriggerMarker)]: "rotate(180deg)",
 		},
-		transitionDuration: {
-			default: tokens["--motion-duration-short"],
-			[media.reducedMotion]: "0ms",
-		},
+		transitionDuration: tokens["--motion-duration-short"],
 		transitionProperty: "transform",
 		transitionTimingFunction: tokens["--motion-ease-smooth-out"],
 	},
@@ -499,10 +495,7 @@ const menuParts = stylex.create({
 	collapsibleGroupPanel: {
 		overflow: "hidden",
 		display: "block",
-		transitionDuration: {
-			default: tokens["--motion-duration-short"],
-			[media.reducedMotion]: "0ms",
-		},
+		transitionDuration: tokens["--motion-duration-short"],
 		transitionProperty: "height",
 		transitionTimingFunction: tokens["--motion-ease-out"],
 		visibility: {
@@ -534,10 +527,7 @@ const menuParts = stylex.create({
 		display: "inline-flex",
 		justifySelf: "start",
 		marginInlineStart: "-0.33rem",
-		transitionDuration: {
-			default: tokens["--motion-duration-quick"],
-			[media.reducedMotion]: "0ms",
-		},
+		transitionDuration: tokens["--motion-duration-quick"],
 		transitionProperty: "background-color",
 		transitionTimingFunction: tokens["--motion-ease-smooth-out"],
 		height: tokens["--space-4"],
@@ -552,10 +542,7 @@ const menuParts = stylex.create({
 			"[data-checked]": `translateX(${tokens["--space-2"]})`,
 			default: "translateX(0)",
 		},
-		transitionDuration: {
-			default: tokens["--motion-duration-quick"],
-			[media.reducedMotion]: "0ms",
-		},
+		transitionDuration: tokens["--motion-duration-quick"],
 		transitionProperty: "transform",
 		transitionTimingFunction: tokens["--motion-ease-out"],
 		height: "calc(100% - 0.25rem)",

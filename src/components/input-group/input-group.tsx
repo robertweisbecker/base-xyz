@@ -2,7 +2,7 @@ import { Field } from "@base-ui/react/field";
 import { Input as BaseInput } from "@base-ui/react/input";
 import * as stylex from "@stylexjs/stylex";
 import type { StyleXStyles } from "@stylexjs/stylex";
-import { type ComponentProps, type ReactElement } from "react";
+import { type ComponentProps } from "react";
 import { media } from "@/styles/constants.stylex";
 import { fieldStyles, fieldControlSizes, fieldTextStyles } from "@/components/field/field.stylex";
 import type { FieldSize } from "@/components/field/field.types";
@@ -72,7 +72,7 @@ export function Root({ ref, className, style, size = "md", variant = "standard",
 		fieldControlSizes[size],
 		fieldTextStyles[size],
 		inputGroupSizes[size],
-		inputGroupVariants[variant],
+		variant !== "standard" && inputGroupVariants[variant],
 		style,
 	);
 
@@ -110,7 +110,7 @@ export function Textarea({ ref, className, style, rows = 1, disabled, ...props }
 		/>
 	);
 
-	return <Field.Control render={control as ReactElement} disabled={disabled} />;
+	return <Field.Control render={control} disabled={disabled} />;
 }
 
 export function Addon({ ref, className, style, onClick, position = "start", ...props }: InputGroupAddonProps) {
@@ -237,7 +237,6 @@ const inputGroupParts = stylex.create({
 		resize: "none",
 		// Hug `rows` / content — callers that need a taller box pass `rows` or `style`.
 		height: "auto",
-		// minHeight: "64px",
 		width: "100%",
 	},
 	addon: {
@@ -250,7 +249,6 @@ const inputGroupParts = stylex.create({
 	actions: {
 		gap: tokens["--space-1"],
 		alignItems: "center",
-		// paddingInline: "var(--_input-padding)",
 		display: "flex",
 		flexShrink: 0,
 	},
@@ -298,7 +296,6 @@ const inputGroupAddonPositions = stylex.create({
 });
 
 const inputGroupVariants = stylex.create({
-	standard: {},
 	elevated: {
 		borderWidth: 0,
 		backgroundColor: {
@@ -339,8 +336,6 @@ const inputGroupSizes = stylex.create({
 		"--_input-group-icon-size": "1rem",
 		"--_input-group-padding": tokens["--space-2"],
 		"--_input-padding": tokens["--space-2"],
-		// paddingBlock: tokens["--space-1"],
-		// paddingInline: tokens["--space-1"],
 		height: "auto",
 		minHeight: tokens["--size-control-md"],
 	},
@@ -348,8 +343,6 @@ const inputGroupSizes = stylex.create({
 		"--_input-group-icon-size": "1rem",
 		"--_input-group-padding": tokens["--space-3"],
 		"--_input-padding": tokens["--space-3"],
-		// paddingBlock: tokens["--space-1"],
-		// paddingInline: tokens["--space-1"],
 		height: "auto",
 		minHeight: tokens["--size-control-lg"],
 	},

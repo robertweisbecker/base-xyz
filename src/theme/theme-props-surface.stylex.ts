@@ -3,9 +3,7 @@ import type { StyleXStyles } from "@stylexjs/stylex";
 import {
 	composeThemeProps,
 	createThemePropDefinition,
-	radiusThemePropKeys,
-	shadowThemePropKeys,
-	surfaceColorThemePropKeys,
+	themePropKeys,
 } from "./theme-props";
 import type {
 	RadiusThemeProps,
@@ -94,37 +92,27 @@ const shadowValues = {
 	lg: tokens["--shadow-lg"],
 } satisfies Record<Exclude<ShadowValue, "none">, string>;
 
-function resolveColor(value: SemanticColor): unknown {
-	return colorValues[value];
-}
-
-function resolveRadius(value: RadiusValue): unknown {
-	return radiusValues[value];
-}
-
-function resolveShadow(value: ShadowValue): unknown {
-	return value === "none" ? "none" : shadowValues[value];
-}
-
 function compileSurfaceColor(props: SurfaceColorProps): StyleXStyles[] {
 	const styles: StyleXStyles[] = [];
-	if (props.color !== undefined) styles.push(scalarStyles.color(resolveColor(props.color)));
-	if (props.bg !== undefined) styles.push(scalarStyles.backgroundColor(resolveColor(props.bg)));
+	if (props.color !== undefined) styles.push(scalarStyles.color(colorValues[props.color]));
+	if (props.bg !== undefined) styles.push(scalarStyles.backgroundColor(colorValues[props.bg]));
 	return styles;
 }
 
 function compileRadius(props: RadiusThemeProps): StyleXStyles[] {
-	return props.radius === undefined ? [] : [scalarStyles.borderRadius(resolveRadius(props.radius))];
+	return props.radius === undefined ? [] : [scalarStyles.borderRadius(radiusValues[props.radius])];
 }
 
 function compileShadow(props: ShadowThemeProps): StyleXStyles[] {
-	return props.shadow === undefined ? [] : [scalarStyles.boxShadow(resolveShadow(props.shadow))];
+	return props.shadow === undefined
+		? []
+		: [scalarStyles.boxShadow(props.shadow === "none" ? "none" : shadowValues[props.shadow])];
 }
 
 const surfaceColorThemeProps = createThemePropDefinition<SurfaceColorProps>(
-	surfaceColorThemePropKeys,
+	themePropKeys.surfaceColor,
 	compileSurfaceColor,
 );
-export const radiusThemeProps = createThemePropDefinition<RadiusThemeProps>(radiusThemePropKeys, compileRadius);
-export const shadowThemeProps = createThemePropDefinition<ShadowThemeProps>(shadowThemePropKeys, compileShadow);
+export const radiusThemeProps = createThemePropDefinition<RadiusThemeProps>(themePropKeys.radius, compileRadius);
+export const shadowThemeProps = createThemePropDefinition<ShadowThemeProps>(themePropKeys.shadow, compileShadow);
 export const surfaceThemeProps = composeThemeProps(surfaceColorThemeProps, radiusThemeProps, shadowThemeProps);

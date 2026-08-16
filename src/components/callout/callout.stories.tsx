@@ -125,7 +125,7 @@ export const Playground: Story = {};
 const hues: readonly CalloutHue[] = ["accent", "error", "warning", "success", "neutral"];
 const variants: readonly CalloutVariant[] = ["default", "banner"];
 
-const examplesByHue: Record<CalloutHue, { description: string; icon: ReactNode; title: string }> = {
+const examplesByHue = {
 	accent: {
 		description: "A new version is ready to install.",
 		icon: <InfoIcon aria-hidden weight="duotone" />,
@@ -151,7 +151,7 @@ const examplesByHue: Record<CalloutHue, { description: string; icon: ReactNode; 
 		icon: <InfoIcon aria-hidden weight="duotone" />,
 		title: "Maintenance scheduled",
 	},
-};
+} satisfies Record<CalloutHue, { description: string; icon: ReactNode; title: string }>;
 
 export const Variants: Story = {
 	parameters: {

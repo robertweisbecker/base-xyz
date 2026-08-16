@@ -11,11 +11,11 @@ import {
 	useMemo,
 	useRef,
 } from "react";
-import { media } from "@/styles/constants.stylex";
 import type { ButtonSize } from "@/components/button/button";
 import { typescaleStyles, fontWeightStyles } from "@/components/text/text.stylex";
 import { focusRing } from "@/styles/recipes/focus";
 import { tokens } from "@/theme/tokens.stylex";
+import { attrJoin } from "@/utils/attr-join";
 
 export type TabsSize = Extract<ButtonSize, "sm" | "md" | "lg">;
 
@@ -51,7 +51,7 @@ export function Root({
 				ref={ref}
 				orientation={orientation}
 				data-size={tabsSize}
-				className={mergeClassNames(sx.className, className)}
+				className={attrJoin(sx.className, className)}
 				style={sx.style}
 				{...props}>
 				{children}
@@ -103,7 +103,7 @@ export function List({ ref, children, className, style, ...props }: TabsListProp
 	}, []);
 
 	return (
-		<BaseTabs.List ref={mergedRef} className={mergeClassNames(sx.className, className)} style={sx.style} {...props}>
+		<BaseTabs.List ref={mergedRef} className={attrJoin(sx.className, className)} style={sx.style} {...props}>
 			{children}
 			<BaseTabs.Indicator ref={indicatorRef} className={indicatorSx.className} style={indicatorSx.style} />
 		</BaseTabs.List>
@@ -137,7 +137,7 @@ export function Tab({ ref, children, className, endSlot, startSlot, style, type 
 		<BaseTabs.Tab
 			ref={ref}
 			type={type}
-			className={mergeClassNames(sx.className, className)}
+			className={attrJoin(sx.className, className)}
 			style={sx.style}
 			{...props}>
 			{renderSlot(startSlot, "start", tabsSize)}
@@ -157,7 +157,7 @@ export type TabsContentProps = TabsContentElementProps;
 
 export function Content({ ref, className, style, ...props }: TabsContentProps) {
 	const sx = stylex.props(tabsParts.content, style);
-	return <div ref={ref} {...props} className={mergeClassNames(sx.className, className)} style={sx.style} />;
+	return <div ref={ref} {...props} className={attrJoin(sx.className, className)} style={sx.style} />;
 }
 
 export type TabsPanelProps = Omit<BaseTabs.Panel.Props, "className" | "style"> & {
@@ -168,7 +168,7 @@ export type TabsPanelProps = Omit<BaseTabs.Panel.Props, "className" | "style"> &
 
 export function Panel({ ref, className, style, ...props }: TabsPanelProps) {
 	const sx = stylex.props(tabsParts.panel, focusRing.inset, style);
-	return <BaseTabs.Panel ref={ref} className={mergeClassNames(sx.className, className)} style={sx.style} {...props} />;
+	return <BaseTabs.Panel ref={ref} className={attrJoin(sx.className, className)} style={sx.style} {...props} />;
 }
 
 function useTabsContext() {
@@ -195,10 +195,6 @@ function renderSlot(slot: ReactNode, role: "start" | "end", tabsSize: TabsSize) 
 			{slot}
 		</span>
 	);
-}
-
-function mergeClassNames(...classNames: Array<string | undefined>) {
-	return classNames.filter(Boolean).join(" ");
 }
 
 const tabsParts = stylex.create({
@@ -237,7 +233,6 @@ const tabsParts = stylex.create({
 		transitionDuration: {
 			"[data-snap]": "0ms",
 			default: tokens["--motion-duration-medium"],
-			[media.reducedMotion]: "0ms",
 		},
 		transitionProperty: "translate, width, height",
 		transitionTimingFunction: tokens["--motion-ease-smooth-out"],
@@ -276,10 +271,7 @@ const tabsParts = stylex.create({
 			default: "auto",
 		},
 		position: "relative",
-		transitionDuration: {
-			default: tokens["--motion-duration-medium"],
-			[media.reducedMotion]: "0ms",
-		},
+		transitionDuration: tokens["--motion-duration-medium"],
 		transitionProperty: "color",
 		transitionTimingFunction: tokens["--motion-ease-smooth-out"],
 		userSelect: "none",

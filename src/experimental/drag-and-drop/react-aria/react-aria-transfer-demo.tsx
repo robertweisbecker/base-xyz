@@ -4,27 +4,26 @@ import { useButton } from "react-aria/useButton";
 import { useDrag } from "react-aria/useDrag";
 import { isTextDropItem, type TextDropItem, useDrop } from "react-aria/useDrop";
 import { focusRing } from "@/styles/recipes/focus";
-import { ASSET_TYPE, TASK_TYPE, TRANSFER_DESTINATIONS, TRANSFER_ITEM } from "../demo-data";
+import { ASSET_TYPE, parseDemoItemString, TASK_TYPE, TRANSFER_DESTINATIONS, TRANSFER_ITEM } from "../demo-data";
 import { DemoCard, DemoDropZone, DemoHandle, DemoInstructions, DemoPanel } from "../demo-parts";
 import { demoStyles } from "../drag-and-drop-demo.stylex";
 import { EmptyState } from "@/components/empty-state/empty-state";
 import { TrayIcon } from "@phosphor-icons/react";
 
 type Location = "source" | "planning";
-type RejectedTarget = "asset-library" | null;
 
 export function ReactAriaTransferDemo() {
 	const [location, setLocation] = useState<Location>("source");
-	const [invalidHoverTarget, setInvalidHoverTarget] = useState<RejectedTarget>(null);
-	const [rejectedTarget, setRejectedTarget] = useState<RejectedTarget>(null);
+	const [isInvalidHover, setIsInvalidHover] = useState(false);
+	const [isRejected, setIsRejected] = useState(false);
 	const [status, setStatus] = useState("Ready. Quarterly roadmap starts in the source tray.");
-	const lastInvalidTargetRef = useRef<RejectedTarget>(null);
+	const lastTargetWasInvalidRef = useRef(false);
 
 	function reset() {
 		setLocation("source");
-		setInvalidHoverTarget(null);
-		setRejectedTarget(null);
-		lastInvalidTargetRef.current = null;
+		setIsInvalidHover(false);
+		setIsRejected(false);
+		lastTargetWasInvalidRef.current = false;
 		setStatus("Ready. Quarterly roadmap starts in the source tray.");
 	}
 
@@ -48,22 +47,22 @@ export function ReactAriaTransferDemo() {
 					{location === "source" ? (
 						<ReactAriaTransferCard
 							onDragStart={() => {
-								lastInvalidTargetRef.current = null;
-								setInvalidHoverTarget(null);
-								setRejectedTarget(null);
+								lastTargetWasInvalidRef.current = false;
+								setIsInvalidHover(false);
+								setIsRejected(false);
 								setStatus("React Aria drag started.");
 							}}
 							onDragEnd={(operation) => {
-								if (operation === "cancel" && lastInvalidTargetRef.current === "asset-library") {
-									setRejectedTarget("asset-library");
-									setInvalidHoverTarget(null);
-									lastInvalidTargetRef.current = null;
+								if (operation === "cancel" && lastTargetWasInvalidRef.current) {
+									setIsRejected(true);
+									setIsInvalidHover(false);
+									lastTargetWasInvalidRef.current = false;
 									setStatus("Asset library rejected the task. The item stayed put.");
 									return;
 								}
 
-								setInvalidHoverTarget(null);
-								lastInvalidTargetRef.current = null;
+								setIsInvalidHover(false);
+								lastTargetWasInvalidRef.current = false;
 								setStatus(operation === "cancel" ? "Drag cancelled. The item stayed put." : "Drag finished.");
 							}}
 						/>
@@ -84,7 +83,7 @@ export function ReactAriaTransferDemo() {
 					onDrop={(item) => {
 						if (item.id !== TRANSFER_ITEM.id) return;
 						setLocation("planning");
-						setRejectedTarget(null);
+						setIsRejected(false);
 						setStatus("Dropped Quarterly roadmap into Planning queue.");
 					}}>
 					{location === "planning" ? (
@@ -95,10 +94,10 @@ export function ReactAriaTransferDemo() {
 					label={TRANSFER_DESTINATIONS.assets.label}
 					description="Accepts assets. This task should be rejected."
 					accepts={ASSET_TYPE}
-					isInvalid={invalidHoverTarget === "asset-library" || rejectedTarget === "asset-library"}
+					isInvalid={isInvalidHover || isRejected}
 					onInvalidHoverChange={(isHovering) => {
-						if (isHovering) lastInvalidTargetRef.current = "asset-library";
-						setInvalidHoverTarget(isHovering ? "asset-library" : null);
+						if (isHovering) lastTargetWasInvalidRef.current = true;
+						setIsInvalidHover(isHovering);
 					}}
 				/>
 			</div>
@@ -168,8 +167,8 @@ function ReactAriaTransferDropZone({
 			const item = event.items.find((dropItem): dropItem is TextDropItem => isTextDropItem(dropItem));
 			if (!item || !item.types.has(TASK_TYPE)) return;
 
-			const data = JSON.parse(await item.getText(TASK_TYPE)) as { id: string };
-			onDrop?.(data);
+			const id = parseDemoItemString(await item.getText(TASK_TYPE), "id");
+			if (id) onDrop?.({ id });
 		},
 	});
 

@@ -1,6 +1,6 @@
 import * as stylex from "@stylexjs/stylex";
 import { headingStyles, textStyles } from "@/components/text/text.stylex";
-import { zIndex, media } from "@/styles/constants.stylex";
+import { zIndex } from "@/styles/constants.stylex";
 import { tokens } from "@/theme/tokens.stylex";
 
 /**
@@ -71,10 +71,7 @@ export const modalChromeStyles = stylex.create({
 			content: '""',
 			pointerEvents: "none",
 			position: "absolute",
-			transitionDuration: {
-				default: tokens["--motion-duration-medium"],
-				[media.reducedMotion]: "0ms",
-			},
+			transitionDuration: tokens["--motion-duration-medium"],
 			transitionProperty: "background-color, opacity",
 			transitionTimingFunction: tokens["--motion-ease-out"],
 		},
@@ -101,10 +98,7 @@ export const modalMotionStyles = stylex.create({
 			"[data-starting-style]": 0,
 			default: 1,
 		},
-		transitionDuration: {
-			default: tokens["--motion-duration-medium"],
-			[media.reducedMotion]: "0ms",
-		},
+		transitionDuration: tokens["--motion-duration-medium"],
 		transitionProperty: "opacity",
 		transitionTimingFunction: tokens["--motion-ease-out"],
 	},
@@ -122,10 +116,7 @@ export const modalMotionStyles = stylex.create({
 			default: "scale(calc(1 - (0.04 * var(--nested-dialogs, 0)))) translateY(calc(8px * var(--nested-dialogs, 0)))",
 		},
 		transformOrigin: "center center",
-		transitionDuration: {
-			default: tokens["--motion-duration-medium"],
-			[media.reducedMotion]: "0ms",
-		},
+		transitionDuration: tokens["--motion-duration-medium"],
 		transitionProperty: "opacity, transform",
 		transitionTimingFunction: tokens["--motion-ease-out"],
 		willChange: "transform, opacity",

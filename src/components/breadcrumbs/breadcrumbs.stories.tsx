@@ -4,10 +4,10 @@ import type { Meta, StoryObj } from "@storybook/react-vite";
 import * as stylex from "@stylexjs/stylex";
 import { Separator } from "@/components/separator/separator";
 import { tokens } from "@/theme/tokens.stylex";
-import { Breadcrumbs } from "./breadcrumbs";
+import { Breadcrumbs, type BreadcrumbsRootProps } from "./breadcrumbs";
 import type { LinkColor } from "@/components/link/link";
 
-const meta = {
+const meta: Meta<BreadcrumbsRootProps & { color: LinkColor }> = {
 	title: "Components/Breadcrumbs",
 	component: Breadcrumbs.Root,
 	args: {
@@ -26,7 +26,7 @@ const meta = {
 		},
 		style: { table: { disable: true } },
 	},
-} satisfies Meta<typeof Breadcrumbs.Root>;
+};
 
 export default meta;
 type Story = StoryObj<typeof meta>;
@@ -34,13 +34,13 @@ type Story = StoryObj<typeof meta>;
 export const Playground: Story = {
 	render: (args) => (
 		<Breadcrumbs.Root {...args}>
-			<Breadcrumbs.Link href="#" startSlot={<HouseIcon aria-hidden weight="duotone" />} color={args.color as LinkColor}>
+			<Breadcrumbs.Link href="#" startSlot={<HouseIcon aria-hidden weight="duotone" />} color={args.color}>
 				Home
 			</Breadcrumbs.Link>
 			<Breadcrumbs.Separator />
 			<Breadcrumbs.Link
 				href="#"
-				color={args.color as LinkColor}
+				color={args.color}
 				startSlot={<BookOpenIcon aria-hidden weight="duotone" />}>
 				Docs
 			</Breadcrumbs.Link>

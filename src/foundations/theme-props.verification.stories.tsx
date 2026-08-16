@@ -4,7 +4,6 @@ import {
 	Badge,
 	Box,
 	Button,
-	type ButtonProps,
 	Card,
 	CardFooter,
 	Checkbox,
@@ -31,7 +30,7 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-const unsupportedButtonProps = { bg: "surface" } as unknown as ButtonProps;
+const unsupportedButtonProps = { bg: "surface" };
 
 export const AllCapabilities: Story = {
 	render: () => (

@@ -12,7 +12,7 @@ import type { FieldSize, FieldThemeProps } from "@/components/field/field.types"
 import { fieldStyles, fieldControlStyles, fieldThemeProps } from "@/components/field/field.stylex";
 import { focusRing } from "@/styles/recipes/focus";
 import { modalMotionStyles } from "@/components/dialog/dialog.stylex";
-import { popupMotionStyles, popupStaticPositionerStyles } from "@/components/popover/popover.stylex";
+import { popupMotionStyles, popupPositionerStyles } from "@/components/popover/popover.stylex";
 import { popupVars } from "@/components/popover/popover-vars.stylex";
 import { tokens } from "@/theme/tokens.stylex";
 
@@ -177,7 +177,7 @@ export function Popup({
 	} = positionerProps ?? {};
 
 	const sx = stylex.props(selectParts.panelSurface, selectParts.popup, popupMotionStyles.anchoredPopup, style);
-	const positionerSx = stylex.props(popupStaticPositionerStyles, selectParts.positioner, positionerStyle);
+	const positionerSx = stylex.props(popupPositionerStyles, selectParts.positioner, positionerStyle);
 	const { className: backdropClassName, style: backdropStyle, ...otherBackdropProps } = backdropProps ?? {};
 	const backdropSx = stylex.props(selectParts.backdrop, modalMotionStyles.backdrop, backdropStyle);
 
@@ -410,7 +410,6 @@ const selectParts = stylex.create({
 	},
 	triggerIcon: {
 		alignItems: "center",
-		// color: colors["--fg-subtle"],
 		display: "inline-flex",
 		flexShrink: 0,
 		justifyContent: "center",

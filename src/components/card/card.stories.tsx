@@ -19,7 +19,7 @@ import {
 const sizes = ["sm", "md", "lg"] as const;
 const radii = ["xxs", "xs", "sm", "md", "lg", "xl", "full"] as const;
 
-const meta = {
+const meta: Meta<typeof Card> = {
 	title: "Components/Card",
 	component: Card,
 	args: {
@@ -55,19 +55,14 @@ const meta = {
 			</div>
 		),
 	],
-} satisfies Meta<typeof Card>;
+};
 
 export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const Playground: Story = {
 	render: ({ radius, shadow, size, variant }) => (
-		<CardExample
-			radius={typeof radius === "string" ? radius : "lg"}
-			shadow={shadow}
-			size={size ?? "md"}
-			variant={variant ?? "elevated"}
-		/>
+		<CardExample radius={radius ?? "lg"} shadow={shadow} size={size ?? "md"} variant={variant ?? "elevated"} />
 	),
 };
 

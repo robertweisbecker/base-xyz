@@ -28,7 +28,6 @@ function getContentHeight(element: HTMLElement): number {
 		const range = document.createRange();
 		range.selectNodeContents(element);
 		contentHeight = range.getBoundingClientRect().height;
-		range.detach();
 	} catch {
 		// `scrollHeight` remains the fallback in limited DOM environments.
 	}
@@ -80,8 +79,7 @@ export function useTextTruncation<ElementType extends HTMLElement = HTMLElement>
 				return;
 			}
 
-			const measureElement = () => measure(element);
-			return observeTextMeasurement(element, measureElement);
+			return observeTextMeasurement(element, () => measure(element));
 		},
 		[measure],
 	);

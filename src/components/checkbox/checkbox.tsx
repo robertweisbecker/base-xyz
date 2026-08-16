@@ -14,6 +14,7 @@ import { focusRing } from "@/styles/recipes/focus";
 import { pressable } from "@/styles/recipes/transitions";
 import { tokens } from "@/theme/tokens.stylex";
 import { VisuallyHidden } from "@/components/visually-hidden/visually-hidden";
+import { attrJoin } from "@/utils/attr-join";
 import { Icon } from "@/components/icons";
 
 export type CheckboxSize = "sm" | "md";
@@ -104,7 +105,7 @@ export function Checkbox({
 					disabled={isDisabled}
 					readOnly={readOnly}
 					required={required}
-					aria-describedby={mergeIds(ariaDescribedBy, descriptionId)}
+					aria-describedby={attrJoin(ariaDescribedBy, descriptionId) || undefined}
 					aria-invalid={invalid || undefined}
 					data-invalid={invalid ? "" : undefined}
 					{...stylex.props(
@@ -203,7 +204,7 @@ export function CheckboxGroup({
 						<BaseCheckboxGroup
 							ref={ref}
 							disabled={isDisabled}
-							aria-describedby={mergeIds(ariaDescribedBy, descriptionId)}
+							aria-describedby={attrJoin(ariaDescribedBy, descriptionId) || undefined}
 							{...restProps}
 						/>
 					}
@@ -226,10 +227,6 @@ export function CheckboxGroup({
 	);
 }
 
-function mergeIds(...ids: Array<string | undefined>) {
-	return ids.filter(Boolean).join(" ") || undefined;
-}
-
 const checkboxControlSizeStyles = stylex.create({
 	sm: {
 		height: tokens["--size-indicator-sm"],
@@ -244,7 +241,7 @@ const checkboxControlSizeStyles = stylex.create({
 const checkboxLabelStyles = {
 	sm: textStyles.supporting,
 	md: textStyles.label,
-} as const satisfies Record<CheckboxSize, unknown>;
+} as const satisfies Record<CheckboxSize, StyleXStyles>;
 
 const checkboxDescriptionStyles = stylex.create({
 	sm: {
@@ -375,9 +372,9 @@ const checkboxParts = stylex.create({
 		alignItems: "center",
 		color: {
 			"[data-disabled]": tokens["--fg-subtle"],
-			"[data-readonly]": tokens["--fg"],
 			"[data-indeterminate]": "var(--_checkbox-bg-checked)",
 			"[data-invalid]": tokens["--fg-accent-contrast"],
+			"[data-readonly]": tokens["--fg"],
 			default: tokens["--fg-accent-contrast"],
 		},
 		display: "flex",
@@ -400,10 +397,7 @@ const checkboxParts = stylex.create({
 			"[data-starting-style]": "scale(0.5)",
 			default: "scale(1)",
 		},
-		transitionDuration: {
-			default: tokens["--motion-duration-medium"],
-			[media.reducedMotion]: "0ms",
-		},
+		transitionDuration: tokens["--motion-duration-medium"],
 		transitionProperty: "transform, opacity",
 		transitionTimingFunction: tokens["--motion-ease-out"],
 	},

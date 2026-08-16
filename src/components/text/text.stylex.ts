@@ -1,12 +1,9 @@
 import * as stylex from "@stylexjs/stylex";
-import { composeThemeProps, type ThemePropDefinition, type VerifyThemeProps } from "@/theme/theme-props";
+import { composeThemeProps } from "@/theme/theme-props";
 import { marginThemeProps, textAlignThemeProps } from "@/theme/theme-props-spacing.stylex";
 import { tokens } from "@/theme/tokens.stylex";
-import type { TextThemeProps } from "./text.types";
 
-const textThemePropsDefinition = composeThemeProps(marginThemeProps, textAlignThemeProps);
-export const textThemeProps: ThemePropDefinition<VerifyThemeProps<TextThemeProps, typeof textThemePropsDefinition>> =
-	textThemePropsDefinition;
+export const textThemeProps = composeThemeProps(marginThemeProps, textAlignThemeProps);
 
 export const textBaseStyles = stylex.create({
 	root: {
@@ -15,7 +12,7 @@ export const textBaseStyles = stylex.create({
 	},
 });
 
-/** Shared internal implementation for the Text and Heading `color` prop. Other owners use color tokens directly. TODO: move this to a higher level as a common text color prop. */
+/** Shared by Text and Heading; other owners use color tokens directly. */
 export const textColorStyles = stylex.create({
 	default: { color: tokens["--fg"] },
 	muted: { color: tokens["--fg-muted"] },

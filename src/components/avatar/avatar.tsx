@@ -64,8 +64,8 @@ export function Avatar({
 	tabIndex,
 	...props
 }: AvatarProps) {
-	const normalizedName = normalizeName(name);
-	const resolvedInitials = normalizeInitials(initials) || deriveInitials(normalizedName);
+	const normalizedName = name?.trim().replace(/\s+/gu, " ") ?? "";
+	const resolvedInitials = initials?.trim() || deriveInitials(normalizedName);
 	const fallback =
 		icon ??
 		(resolvedInitials || (
@@ -107,18 +107,10 @@ export function Avatar({
 
 	return (
 		<Tooltip.Root disabled={!hasName}>
-			<Tooltip.Trigger render={element} style={hasName && render == null ? avatarParts.tooltipTrigger : undefined} />
+			<Tooltip.Trigger render={element} />
 			<Tooltip.Popup>{normalizedName}</Tooltip.Popup>
 		</Tooltip.Root>
 	);
-}
-
-function normalizeName(name: string | undefined): string {
-	return name?.trim().replace(/\s+/gu, " ") ?? "";
-}
-
-function normalizeInitials(initials: string | undefined): string {
-	return initials?.trim() ?? "";
 }
 
 function deriveInitials(name: string): string {
@@ -144,8 +136,6 @@ const avatarParts = stylex.create({
 		fontSize: "1em",
 		justifyContent: "center",
 		lineHeight: 0,
-		// height: "2em",
-		// width: "2em",
 	},
 	image: {
 		inset: 0,
@@ -165,27 +155,13 @@ const avatarParts = stylex.create({
 		fontWeight: tokens["--font-weight-semibold"],
 		isolation: "isolate",
 		justifyContent: "center",
+		outlineColor: tokens["--color-gray-p4"],
+		outlineOffset: -1,
+		outlineStyle: "solid",
+		outlineWidth: 1,
 		position: "relative",
 		userSelect: "none",
 		verticalAlign: "middle",
-		outlineWidth: 1,
-		outlineStyle: "solid",
-		outlineColor: tokens["--color-gray-p4"],
-		outlineOffset: -1,
-	},
-	tooltipTrigger: {
-		// outlineColor: {
-		// 	":hover": colors["--border-input"],
-		// 	default: null,
-		// },
-		// outlineWidth: {
-		// 	":hover": "1px",
-		// 	default: null,
-		// },
-		// outlineStyle: {
-		// 	":hover": "solid",
-		// 	default: null,
-		// },
 	},
 });
 

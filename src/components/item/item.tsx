@@ -115,10 +115,10 @@ const itemParts = stylex.create({
 		outline: "0",
 		textDecoration: "none",
 		alignItems: {
-			"[data-align='center']": "center",
-			"[data-align='start']": "start",
-			"[data-align='end']": "end",
 			"[data-align='baseline']": "baseline",
+			"[data-align='center']": "center",
+			"[data-align='end']": "end",
+			"[data-align='start']": "start",
 		},
 		backgroundColor: {
 			default: "transparent",
@@ -169,10 +169,10 @@ const itemParts = stylex.create({
 	},
 	descriptionInlineWrap: {
 		display: "inline",
-		marginInlineStart: tokens["--space-2"],
 		fontSize: null,
-		lineHeight: null,
 		letterSpacing: null,
+		lineHeight: null,
+		marginInlineStart: tokens["--space-2"],
 	},
 	endSlot: {
 		alignItems: "center",

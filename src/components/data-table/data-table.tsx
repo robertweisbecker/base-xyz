@@ -177,6 +177,7 @@ export function DataTable<TData extends RowData, TValue = unknown>({
 			});
 		}
 
+		// SAFETY: TanStack's column definition is invariant in TValue, while this table preserves each definition unchanged.
 		const typedColumns = (columns as Array<DataTableColumnDef<TData, unknown>>).map((column) => {
 			const columnId = getColumnDefId(column);
 			if (columnId && defaultFilterColumnIds.has(columnId) && column.filterFn == null) {
@@ -601,13 +602,12 @@ function getDataTableColumnRole<TData extends RowData>(column: DataTableColumn<T
 	return column.columnDef.meta?.[dataTableColumnRole];
 }
 
-function getColumnDefId<TData extends RowData>(column: DataTableColumnDef<TData, unknown>) {
-	const columnWithIds = column as { accessorKey?: unknown; id?: unknown };
-	if (typeof columnWithIds.id === "string") {
-		return columnWithIds.id;
+function getColumnDefId<TData extends RowData, TValue>(column: DataTableColumnDef<TData, TValue>) {
+	if (column.id) {
+		return column.id;
 	}
-	if (typeof columnWithIds.accessorKey === "string") {
-		return columnWithIds.accessorKey;
+	if ("accessorKey" in column && typeof column.accessorKey === "string") {
+		return column.accessorKey;
 	}
 	return undefined;
 }
@@ -643,8 +643,6 @@ const dataTableParts = stylex.create({
 	},
 	filter: {
 		flex: "0 1 10rem",
-		// maxWidth: "22rem",
-		// width: "100%",
 		flexWrap: "nowrap",
 	},
 	toolbarActions: {
@@ -677,8 +675,8 @@ const dataTableParts = stylex.create({
 		minWidth: 0,
 	},
 	headerLabel: {
-		color: tokens["--fg-muted"],
 		overflow: "hidden",
+		color: tokens["--fg-muted"],
 		textOverflow: "ellipsis",
 		whiteSpace: "nowrap",
 		minWidth: 0,

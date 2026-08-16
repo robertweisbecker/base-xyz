@@ -91,7 +91,7 @@ export const Positioning: Story = {
 				<div key={`${side}-${align}`} {...stylex.props(storyParts.positioningCell)}>
 					<Popover.Root>
 						<Popover.Trigger render={<Button size="sm" variant="secondary" />}>
-							{formatPosition(side, align)}
+							{`${side[0].toUpperCase()}${side.slice(1)} · ${align}`}
 						</Popover.Trigger>
 						<Popover.Popup positionerProps={{ side, align }} style={storyParts.narrowPopup}>
 							<PopoverViewportDemo />
@@ -207,7 +207,3 @@ const storyParts = stylex.create({
 		flexWrap: "wrap",
 	},
 });
-
-function formatPosition(side: PopupSide, align: PopupAlign) {
-	return `${side[0].toUpperCase()}${side.slice(1)} · ${align}`;
-}

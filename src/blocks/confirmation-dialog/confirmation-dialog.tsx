@@ -157,18 +157,6 @@ function ConfirmationDialogRoot({
 		};
 	}, []);
 
-	function notifySuccess() {
-		if (successToast) {
-			toastManager.add(successToast);
-		}
-	}
-
-	function notifyFailure() {
-		if (failureToast) {
-			toastManager.add(failureToast);
-		}
-	}
-
 	async function confirm() {
 		if (pendingRef.current) return;
 
@@ -178,11 +166,11 @@ function ConfirmationDialogRoot({
 		try {
 			await onConfirm?.();
 			if (!mountedRef.current) return;
-			notifySuccess();
+			if (successToast) toastManager.add(successToast);
 			resolvedActionsRef.current?.close();
 		} catch (error) {
 			if (!mountedRef.current) return;
-			notifyFailure();
+			if (failureToast) toastManager.add(failureToast);
 			onConfirmError?.(error);
 		} finally {
 			pendingRef.current = false;

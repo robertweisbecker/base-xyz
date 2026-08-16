@@ -167,20 +167,19 @@ export const comboboxParts = stylex.create({
 	},
 	textAction: {
 		padding: tokens["--space-2"],
-		fontSize: tokens["--font-size-1"],
-		letterSpacing: tokens["--letter-spacing-1"],
-		lineHeight: tokens["--line-height-1"],
-		whiteSpace: "nowrap",
-		alignSelf: "start",
 		textDecoration: {
 			default: "none",
 			":hover": "underline",
 		},
+		alignSelf: "start",
 		color: {
 			default: tokens["--fg-muted"],
 			":hover": tokens["--fg"],
 		},
-
+		fontSize: tokens["--font-size-1"],
+		letterSpacing: tokens["--letter-spacing-1"],
+		lineHeight: tokens["--line-height-1"],
+		whiteSpace: "nowrap",
 		width: "auto",
 	},
 	popup: {

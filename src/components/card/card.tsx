@@ -1,7 +1,7 @@
 import * as stylex from "@stylexjs/stylex";
 import type { StyleXStyles } from "@stylexjs/stylex";
 import type { ComponentProps } from "react";
-import { composeThemeProps, resolveThemeProps, type VerifyThemeProps } from "@/theme/theme-props";
+import { composeThemeProps, resolveThemeProps, type ThemePropsOf } from "@/theme/theme-props";
 import {
 	childLayoutThemeProps,
 	displayThemeProps,
@@ -13,15 +13,7 @@ import {
 import { spacingThemeProps } from "@/theme/theme-props-spacing.stylex";
 import { radiusThemeProps, shadowThemeProps } from "@/theme/theme-props-surface.stylex";
 import type {
-	ChildLayoutProps,
-	DisplayProps,
-	FlexProps,
-	PositioningProps,
 	RadiusValue,
-	RadiusThemeProps,
-	ShadowThemeProps,
-	SizingProps,
-	SpacingProps,
 } from "@/theme/theme-props.types";
 import { tokens } from "@/theme/tokens.stylex";
 
@@ -42,18 +34,6 @@ type StyledProps<T, ThemeProps = {}> = Omit<
 export type CardVariant = "elevated" | "outline";
 export type CardSize = keyof typeof cardSizeVariants;
 export type CardRadius = RadiusValue;
-export interface CardThemeProps
-	extends
-		SpacingProps,
-		SizingProps,
-		PositioningProps,
-		ChildLayoutProps,
-		RadiusThemeProps,
-		ShadowThemeProps,
-		FlexProps,
-		DisplayProps {}
-interface CardSectionThemeProps extends SpacingProps, FlexProps {}
-interface CardContentThemeProps extends SpacingProps, SizingProps, PositioningProps, ChildLayoutProps {}
 
 const cardThemeProps = composeThemeProps(
 	spacingThemeProps,
@@ -73,18 +53,18 @@ const cardContentThemeProps = composeThemeProps(
 	positioningThemeProps,
 	childLayoutThemeProps,
 );
-type VerifiedCardThemeProps = VerifyThemeProps<CardThemeProps, typeof cardThemeProps>;
-type VerifiedCardSectionThemeProps = VerifyThemeProps<CardSectionThemeProps, typeof cardHeaderThemeProps>;
-type VerifiedCardFooterThemeProps = VerifyThemeProps<CardSectionThemeProps, typeof cardFooterThemeProps>;
-type VerifiedCardContentThemeProps = VerifyThemeProps<CardContentThemeProps, typeof cardContentThemeProps>;
+export type CardThemeProps = ThemePropsOf<typeof cardThemeProps>;
+type CardHeaderThemeProps = ThemePropsOf<typeof cardHeaderThemeProps>;
+type CardFooterThemeProps = ThemePropsOf<typeof cardFooterThemeProps>;
+type CardContentThemeProps = ThemePropsOf<typeof cardContentThemeProps>;
 
-export type CardProps = StyledProps<ComponentProps<"div">, VerifiedCardThemeProps> & {
+export type CardProps = StyledProps<ComponentProps<"div">, CardThemeProps> & {
 	size?: CardSize;
 	variant?: CardVariant;
 };
-export type CardHeaderProps = StyledProps<ComponentProps<"div">, VerifiedCardSectionThemeProps>;
-export type CardFooterProps = StyledProps<ComponentProps<"div">, VerifiedCardFooterThemeProps>;
-export type CardContentProps = StyledProps<ComponentProps<"div">, VerifiedCardContentThemeProps>;
+export type CardHeaderProps = StyledProps<ComponentProps<"div">, CardHeaderThemeProps>;
+export type CardFooterProps = StyledProps<ComponentProps<"div">, CardFooterThemeProps>;
+export type CardContentProps = StyledProps<ComponentProps<"div">, CardContentThemeProps>;
 export type CardTitleProps = HeadingProps;
 export type CardDescriptionProps = TextProps;
 
@@ -153,10 +133,10 @@ const cardParts = stylex.create({
 		paddingBlock: cardVars.footerPaddingBlock,
 		paddingInline: cardVars.footerPaddingInline,
 		alignItems: "center",
-		justifyContent: "flex-end",
 		borderEndEndRadius: "inherit",
 		borderEndStartRadius: "inherit",
 		display: "flex",
+		justifyContent: "flex-end",
 	},
 });
 

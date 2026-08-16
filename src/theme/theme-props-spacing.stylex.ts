@@ -3,12 +3,9 @@ import type { StyleXStyles } from "@stylexjs/stylex";
 import {
 	composeThemeProps,
 	createThemePropDefinition,
-	gapThemePropKeys,
-	marginThemePropKeys,
-	paddingThemePropKeys,
-	textAlignThemePropKeys,
+	themePropKeys,
 } from "./theme-props";
-import type { GapProps, MarginProps, PaddingProps, SpaceStep, TextAlignProps } from "./theme-props.types";
+import type { GapProps, MarginProps, MarginValue, PaddingProps, SpaceStep, TextAlignProps } from "./theme-props.types";
 import { tokens } from "@/theme/tokens.stylex";
 
 /** Long-form styles for margin, padding, gap, and text alignment that override common shorthands. */
@@ -45,14 +42,20 @@ const spaceValues = {
 	16: tokens["--space-16"],
 } satisfies Record<SpaceStep, string>;
 
+type OptionalSpaceValue = MarginValue | undefined;
+
 /** Shared by positioning compilers; numeric values always resolve through spacing tokens. */
-export function resolveSpaceValue(value: unknown): unknown {
+export function resolveSpaceValue(value: OptionalSpaceValue) {
 	if (typeof value !== "number") return value;
-	if (value < 0) return `calc(${spaceValues[Math.abs(value) as SpaceStep]} * -1)`;
+	if (value < 0) {
+		// SAFETY: Negative spacing values are derived exclusively from non-zero SpaceStep members.
+		return `calc(${spaceValues[Math.abs(value) as SpaceStep]} * -1)`;
+	}
+	// SAFETY: The remaining numeric MarginValue members are SpaceStep members.
 	return spaceValues[value as SpaceStep];
 }
 
-function resolveEdge(all: unknown, axis: unknown, side: unknown): unknown {
+function resolveEdge(all: OptionalSpaceValue, axis: OptionalSpaceValue, side: OptionalSpaceValue) {
 	return resolveSpaceValue(side ?? axis ?? all);
 }
 
@@ -99,8 +102,8 @@ function compileTextAlign(props: TextAlignProps): StyleXStyles[] {
 	return props.textAlign === undefined ? [] : [scalarStyles.textAlign(props.textAlign)];
 }
 
-export const marginThemeProps = createThemePropDefinition<MarginProps>(marginThemePropKeys, compileMargins);
-export const paddingThemeProps = createThemePropDefinition<PaddingProps>(paddingThemePropKeys, compilePadding);
+export const marginThemeProps = createThemePropDefinition<MarginProps>(themePropKeys.margin, compileMargins);
+export const paddingThemeProps = createThemePropDefinition<PaddingProps>(themePropKeys.padding, compilePadding);
 export const spacingThemeProps = composeThemeProps(marginThemeProps, paddingThemeProps);
-export const gapThemeProps = createThemePropDefinition<GapProps>(gapThemePropKeys, compileGap);
-export const textAlignThemeProps = createThemePropDefinition<TextAlignProps>(textAlignThemePropKeys, compileTextAlign);
+export const gapThemeProps = createThemePropDefinition<GapProps>(themePropKeys.gap, compileGap);
+export const textAlignThemeProps = createThemePropDefinition<TextAlignProps>(themePropKeys.textAlign, compileTextAlign);

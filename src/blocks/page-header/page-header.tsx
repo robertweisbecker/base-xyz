@@ -59,7 +59,9 @@ export function PageHeader({
 								</Text>
 							) : null}
 						</Stack>
-						{renderEndSlot(endSlot)}
+						{endSlot == null || typeof endSlot === "boolean" ? null : (
+							<span {...stylex.props(parts.endSlot)}>{endSlot}</span>
+						)}
 					</Box>
 					{actions ? <Box style={parts.actions}>{actions}</Box> : null}
 				</Box>
@@ -67,14 +69,6 @@ export function PageHeader({
 			</Stack>
 		</section>
 	);
-}
-
-function renderEndSlot(slot: ReactNode) {
-	if (slot == null || typeof slot === "boolean") {
-		return null;
-	}
-
-	return <span {...stylex.props(parts.endSlot)}>{slot}</span>;
 }
 
 const parts = stylex.create({
@@ -146,6 +140,5 @@ const parts = stylex.create({
 	},
 	navigation: {
 		minWidth: 0,
-		// overflowX: "auto",
 	},
 });

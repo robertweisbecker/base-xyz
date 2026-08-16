@@ -2,7 +2,6 @@ import { Tooltip as BaseTooltip } from "@base-ui/react/tooltip";
 
 import * as stylex from "@stylexjs/stylex";
 import type { StyleXStyles } from "@stylexjs/stylex";
-import { createContext, useRef, type RefObject } from "react";
 import { zIndex } from "@/styles/constants.stylex";
 import { popupArrowStyles, popupPositionerStyles, popupViewportStyles } from "@/components/popover/popover.stylex";
 import { tooltipStyles } from "./tooltip.stylex";
@@ -20,8 +19,6 @@ export type TooltipPopupProps = StyledProps<BaseTooltip.Popup.Props> & {
 	portalProps?: Omit<BaseTooltip.Portal.Props, "children">;
 	positionerProps?: TooltipPositionerProps;
 };
-
-const TooltipActionsContext = createContext<RefObject<BaseTooltip.Root.Actions | null> | null>(null);
 
 function Positioner({ ref, className, style, sideOffset = 4, ...props }: TooltipPositionerProps) {
 	const { className: sxClassName, style: sxStyle } = stylex.props(
@@ -106,17 +103,8 @@ export function Trigger({
 
 export const Provider = BaseTooltip.Provider;
 
-export function Root<Payload>({ actionsRef, children, ...props }: BaseTooltip.Root.Props<Payload>) {
-	const internalActionsRef = useRef<BaseTooltip.Root.Actions>(null);
-	const resolvedActionsRef = actionsRef ?? internalActionsRef;
-
-	return (
-		<TooltipActionsContext.Provider value={resolvedActionsRef}>
-			<BaseTooltip.Root actionsRef={resolvedActionsRef} {...props}>
-				{children}
-			</BaseTooltip.Root>
-		</TooltipActionsContext.Provider>
-	);
+export function Root<Payload>(props: BaseTooltip.Root.Props<Payload>) {
+	return <BaseTooltip.Root {...props} />;
 }
 
 function Arrow({ ref, className, style, ...props }: TooltipArrowProps) {

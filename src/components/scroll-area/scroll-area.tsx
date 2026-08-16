@@ -2,7 +2,6 @@ import { ScrollArea as BaseScrollArea } from "@base-ui/react/scroll-area";
 import * as stylex from "@stylexjs/stylex";
 import type { StyleXStyles } from "@stylexjs/stylex";
 import type { ReactNode, Ref } from "react";
-import { media } from "@/styles/constants.stylex";
 import { tokens } from "@/theme/tokens.stylex";
 
 export type ScrollAreaProps = Omit<BaseScrollArea.Root.Props, "children" | "className" | "style"> & {
@@ -116,11 +115,11 @@ const parts = stylex.create({
 		width: "100%",
 	},
 	content: {
-		overscrollBehavior: "contain",
 		"--scroll-area-overflow-x-end": "inherit",
 		"--scroll-area-overflow-x-start": "inherit",
 		"--scroll-area-overflow-y-end": "inherit",
 		"--scroll-area-overflow-y-start": "inherit",
+		overscrollBehavior: "contain",
 	},
 	fade: {
 		// "--scroll-area-mask-x-end": {
@@ -136,9 +135,9 @@ const parts = stylex.create({
 		// 	"[data-overflow-y-start]": tokens["--space-10"],
 		// },
 		maskComposite: "intersect",
-		maskRepeat: "no-repeat",
 		maskImage:
 			"linear-gradient(to right, transparent 0, black min(40px, var(--scroll-area-overflow-x-start)), black calc(100% - min(40px, var(--scroll-area-overflow-x-end, 40px))), transparent 100%), linear-gradient(to bottom, transparent 0, black min(40px, var(--scroll-area-overflow-y-start)), black calc(100% - min(40px, var(--scroll-area-overflow-y-end, 40px))), transparent 100%)",
+		maskRepeat: "no-repeat",
 	},
 	scrollbar: {
 		borderRadius: tokens["--radius-full"],
@@ -184,7 +183,6 @@ const scrollbarVisibilities = stylex.create({
 		transitionDuration: {
 			"[data-scrolling]": "0ms",
 			default: tokens["--motion-duration-short"],
-			[media.reducedMotion]: "0ms",
 		},
 		transitionProperty: "opacity",
 		transitionTimingFunction: tokens["--motion-ease-out"],
@@ -203,7 +201,6 @@ const scrollbarVisibilities = stylex.create({
 		transitionDuration: {
 			"[data-scrolling]": "0ms",
 			default: tokens["--motion-duration-short"],
-			[media.reducedMotion]: "0ms",
 		},
 		transitionProperty: "opacity",
 		transitionTimingFunction: tokens["--motion-ease-out"],

@@ -9,22 +9,21 @@ import { EmptyState } from "@/components/empty-state/empty-state";
 import { TrayIcon } from "@phosphor-icons/react";
 
 type Location = "source" | "planning";
-type RejectedTarget = "asset-library" | null;
 
 export function DndKitTransferDemo() {
 	const [location, setLocation] = useState<Location>("source");
 	const [isDragging, setIsDragging] = useState(false);
-	const [invalidHoverTarget, setInvalidHoverTarget] = useState<RejectedTarget>(null);
-	const [rejectedTarget, setRejectedTarget] = useState<RejectedTarget>(null);
+	const [isInvalidHover, setIsInvalidHover] = useState(false);
+	const [isRejected, setIsRejected] = useState(false);
 	const [status, setStatus] = useState("Ready. Quarterly roadmap starts in the source tray.");
-	const lastInvalidTargetRef = useRef<RejectedTarget>(null);
+	const lastTargetWasInvalidRef = useRef(false);
 
 	function reset() {
 		setLocation("source");
 		setIsDragging(false);
-		setInvalidHoverTarget(null);
-		setRejectedTarget(null);
-		lastInvalidTargetRef.current = null;
+		setIsInvalidHover(false);
+		setIsRejected(false);
+		lastTargetWasInvalidRef.current = false;
 		setStatus("Ready. Quarterly roadmap starts in the source tray.");
 	}
 
@@ -37,24 +36,24 @@ export function DndKitTransferDemo() {
 
 		if (event.operation.target?.id === TRANSFER_DESTINATIONS.planning.id) {
 			setLocation("planning");
-			setRejectedTarget(null);
+			setIsRejected(false);
 			setStatus("Dropped Quarterly roadmap into Planning queue.");
 			return;
 		}
 
 		if (
-			lastInvalidTargetRef.current === "asset-library" ||
+			lastTargetWasInvalidRef.current ||
 			event.operation.target?.id === TRANSFER_DESTINATIONS.assets.id
 		) {
-			setRejectedTarget("asset-library");
-			setInvalidHoverTarget(null);
-			lastInvalidTargetRef.current = null;
+			setIsRejected(true);
+			setIsInvalidHover(false);
+			lastTargetWasInvalidRef.current = false;
 			setStatus("Asset library rejected the task. The item stayed put.");
 			return;
 		}
 
-		setInvalidHoverTarget(null);
-		lastInvalidTargetRef.current = null;
+		setIsInvalidHover(false);
+		lastTargetWasInvalidRef.current = false;
 		setStatus("Drop target was missing. The item stayed put.");
 	}
 
@@ -62,9 +61,9 @@ export function DndKitTransferDemo() {
 		<DragDropProvider
 			onDragStart={() => {
 				setIsDragging(true);
-				lastInvalidTargetRef.current = null;
-				setInvalidHoverTarget(null);
-				setRejectedTarget(null);
+				lastTargetWasInvalidRef.current = false;
+				setIsInvalidHover(false);
+				setIsRejected(false);
 				setStatus("dnd-kit drag started.");
 			}}
 			onDragEnd={handleDragEnd}>
@@ -113,10 +112,10 @@ export function DndKitTransferDemo() {
 						description="Accepts assets. This task should be rejected."
 						accept={ASSET_TYPE}
 						isDragging={isDragging}
-						isInvalid={invalidHoverTarget === "asset-library" || rejectedTarget === "asset-library"}
+						isInvalid={isInvalidHover || isRejected}
 						onInvalidHoverChange={(isHovering) => {
-							if (isHovering) lastInvalidTargetRef.current = "asset-library";
-							setInvalidHoverTarget(isHovering ? "asset-library" : null);
+							if (isHovering) lastTargetWasInvalidRef.current = true;
+							setIsInvalidHover(isHovering);
 						}}
 					/>
 				</div>

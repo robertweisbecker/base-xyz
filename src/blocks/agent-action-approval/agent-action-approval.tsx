@@ -3,7 +3,7 @@ import type { StyleXStyles } from "@stylexjs/stylex";
 import { createContext, type ComponentProps, useContext, useId } from "react";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components";
 import { tokens } from "@/theme/tokens.stylex";
-
+import { attrJoin } from "@/utils/attr-join";
 
 type StyledProps<T> = Omit<T, "style"> & {
 	/** StyleX overrides, applied after the component's own styles. */
@@ -77,47 +77,47 @@ export function Content({ style, ...props }: AgentActionApprovalContentProps) {
 
 export function Summary({ className, style, ...props }: AgentActionApprovalSummaryProps) {
 	const sx = stylex.props(parts.summary, style);
-	return <div className={joinClassNames(sx.className, className)} style={sx.style} {...props} />;
+	return <div className={attrJoin(sx.className, className)} style={sx.style} {...props} />;
 }
 
 export function Icon({ className, style, ...props }: AgentActionApprovalIconProps) {
 	const sx = stylex.props(parts.icon, style);
-	return <div className={joinClassNames(sx.className, className)} style={sx.style} {...props} />;
+	return <div className={attrJoin(sx.className, className)} style={sx.style} {...props} />;
 }
 
 export function SummaryContent({ className, style, ...props }: AgentActionApprovalSummaryContentProps) {
 	const sx = stylex.props(parts.summaryContent, style);
-	return <div className={joinClassNames(sx.className, className)} style={sx.style} {...props} />;
+	return <div className={attrJoin(sx.className, className)} style={sx.style} {...props} />;
 }
 
 export function Action({ className, style, ...props }: AgentActionApprovalActionProps) {
 	const sx = stylex.props(parts.action, style);
-	return <div className={joinClassNames(sx.className, className)} style={sx.style} {...props} />;
+	return <div className={attrJoin(sx.className, className)} style={sx.style} {...props} />;
 }
 
 export function ActionDescription({ className, style, ...props }: AgentActionApprovalActionDescriptionProps) {
 	const sx = stylex.props(parts.actionDescription, style);
-	return <div className={joinClassNames(sx.className, className)} style={sx.style} {...props} />;
+	return <div className={attrJoin(sx.className, className)} style={sx.style} {...props} />;
 }
 
 export function Details({ className, style, ...props }: AgentActionApprovalDetailsProps) {
 	const sx = stylex.props(parts.details, style);
-	return <dl className={joinClassNames(sx.className, className)} style={sx.style} {...props} />;
+	return <dl className={attrJoin(sx.className, className)} style={sx.style} {...props} />;
 }
 
 export function Detail({ className, style, ...props }: AgentActionApprovalDetailProps) {
 	const sx = stylex.props(parts.detail, style);
-	return <div className={joinClassNames(sx.className, className)} style={sx.style} {...props} />;
+	return <div className={attrJoin(sx.className, className)} style={sx.style} {...props} />;
 }
 
 export function DetailLabel({ className, style, ...props }: AgentActionApprovalDetailLabelProps) {
 	const sx = stylex.props(parts.detailLabel, style);
-	return <dt className={joinClassNames(sx.className, className)} style={sx.style} {...props} />;
+	return <dt className={attrJoin(sx.className, className)} style={sx.style} {...props} />;
 }
 
 export function DetailValue({ className, style, ...props }: AgentActionApprovalDetailValueProps) {
 	const sx = stylex.props(parts.detailValue, style);
-	return <dd className={joinClassNames(sx.className, className)} style={sx.style} {...props} />;
+	return <dd className={attrJoin(sx.className, className)} style={sx.style} {...props} />;
 }
 
 export function Footer({ style, ...props }: AgentActionApprovalFooterProps) {
@@ -126,11 +126,7 @@ export function Footer({ style, ...props }: AgentActionApprovalFooterProps) {
 
 export function Actions({ className, style, ...props }: AgentActionApprovalActionsProps) {
 	const sx = stylex.props(parts.actions, style);
-	return <div className={joinClassNames(sx.className, className)} style={sx.style} {...props} />;
-}
-
-function joinClassNames(...classNames: Array<string | undefined>) {
-	return classNames.filter(Boolean).join(" ");
+	return <div className={attrJoin(sx.className, className)} style={sx.style} {...props} />;
 }
 
 const parts = stylex.create({

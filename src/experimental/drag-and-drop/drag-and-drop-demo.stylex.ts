@@ -1,5 +1,5 @@
 import * as stylex from "@stylexjs/stylex";
-import { breakpoints, media } from "@/styles/constants.stylex";
+import { breakpoints } from "@/styles/constants.stylex";
 import { tokens } from "@/theme/tokens.stylex";
 
 const activeDropTarget = ":is([data-drop-target], [data-drop-target='true'], [data-drop-target=''])";
@@ -98,14 +98,7 @@ export const demoStyles = stylex.create({
 			":is([data-dragging], [data-dragging='true'], [data-dragging=''])": 0.6,
 		},
 		touchAction: "none",
-		transitionDuration: {
-			default: "160ms",
-			[media.reducedMotion]: "0ms",
-		},
-		// transform: {
-		// 	default: "none",
-		// 	":is([data-dragging], [data-dragging='true'], [data-dragging=''])": "rotate(2deg)",
-		// },
+		transitionDuration: "160ms",
 		transitionProperty: "background-color, border-color, box-shadow, opacity",
 		transitionTimingFunction: "ease",
 		minHeight: "3.25rem",
@@ -197,10 +190,7 @@ export const demoStyles = stylex.create({
 		borderRadius: tokens["--radius-md"],
 		gap: tokens["--space-3"],
 		alignContent: "start",
-		backgroundColor: {
-			default: tokens["--bg-inset"],
-			// ":where([data-drop-target], [data-drop-target='true'], [data-drop-target=''])": colors["--bg-highlight"],
-		},
+		backgroundColor: tokens["--bg-inset"],
 		display: "grid",
 		outlineColor: {
 			default: tokens["--border"],
@@ -237,29 +227,9 @@ export const demoStyles = stylex.create({
 		minHeight: "12rem",
 	},
 	empty: {
-		// padding: space[3],
-		// borderColor: colors["--fg"],
-		// backgroundColor: colors["--bg-highlight"],
-		// borderRadius: radius.sm,
-		// borderStyle: "dashed",
-		// borderWidth: border.width,
 		height: "100%",
-		// alignItems: "center",
-		// color: colors["--fg-muted"],
-		// display: "flex",
-		// fontSize: fontSize.x1,
-		// justifyContent: "center",
-		// lineHeight: lineHeight.x1,
-		// textAlign: "center",
-		// minHeight: "4rem",
 	},
 	dropIndicator: {
-		// borderRadius: radius.full,
-		// marginInline: `-${space[2]}`,
-		// width: `calc(100% + ${space[2]})`,
-		// outline: `1px solid ${colors["--bg-primary"]}`,
-		// outlineColor: colors["--bg-primary"],
-		// outlineColor: "CanvasText",
 		outlineStyle: {
 			default: "none",
 			"@media (forced-colors: active)": "solid",
@@ -278,7 +248,6 @@ export const demoStyles = stylex.create({
 			backgroundColor: tokens["--bg-primary"],
 			content: "",
 			outlineColor: tokens["--fg-accent-contrast"],
-			// outlineOffset: 2,
 			outlineStyle: "solid",
 			outlineWidth: 2,
 			position: "absolute",
@@ -354,12 +323,9 @@ export const demoStyles = stylex.create({
 		outlineOffset: "-2px",
 		outlineStyle: "solid",
 		outlineWidth: "2px",
-		// gridTemplateColumns: "auto minmax(0, 1fr)",
 		pointerEvents: "none",
 		textOverflow: "ellipsis",
 		whiteSpace: "nowrap",
-
-		// minWidth: "12rem",
 	},
 	nestedAction: {
 		justifySelf: "end",

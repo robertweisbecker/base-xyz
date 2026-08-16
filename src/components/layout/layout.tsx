@@ -6,7 +6,7 @@ import {
 	composeThemeProps,
 	resolveThemeProps,
 	type ThemePropDefinition,
-	type VerifyThemeProps,
+	type ThemePropsOf,
 } from "@/theme/theme-props";
 import {
 	childLayoutThemeProps,
@@ -18,16 +18,6 @@ import {
 } from "@/theme/theme-props-layout.stylex";
 import { spacingThemeProps } from "@/theme/theme-props-spacing.stylex";
 import { surfaceThemeProps } from "@/theme/theme-props-surface.stylex";
-import type {
-	ChildLayoutProps,
-	DisplayProps,
-	FlexProps,
-	GridLayoutProps,
-	PositioningProps,
-	SizingProps,
-	SpacingProps,
-	SurfaceThemeProps,
-} from "@/theme/theme-props.types";
 import { layoutBaseStyles } from "./layout.stylex";
 
 type LayoutElementProps<ThemeProps> = Omit<
@@ -52,18 +42,13 @@ const boxThemeProps = composeThemeProps(
 const stackThemeProps = composeThemeProps(boxThemeProps, verticalFlexThemeProps);
 const gridThemeProps = composeThemeProps(boxThemeProps, gridLayoutThemeProps);
 
-export interface BoxThemeProps
-	extends SpacingProps, SizingProps, PositioningProps, ChildLayoutProps, SurfaceThemeProps, DisplayProps {}
-export interface StackThemeProps extends BoxThemeProps, FlexProps {}
-export interface GridThemeProps extends BoxThemeProps, GridLayoutProps {}
+export type BoxThemeProps = ThemePropsOf<typeof boxThemeProps>;
+export type StackThemeProps = ThemePropsOf<typeof stackThemeProps>;
+export type GridThemeProps = ThemePropsOf<typeof gridThemeProps>;
 
-type VerifiedBoxThemeProps = VerifyThemeProps<BoxThemeProps, typeof boxThemeProps>;
-type VerifiedStackThemeProps = VerifyThemeProps<StackThemeProps, typeof stackThemeProps>;
-type VerifiedGridThemeProps = VerifyThemeProps<GridThemeProps, typeof gridThemeProps>;
-
-export type BoxProps = LayoutElementProps<VerifiedBoxThemeProps> & VerifiedBoxThemeProps;
-export type StackProps = LayoutElementProps<VerifiedStackThemeProps> & VerifiedStackThemeProps;
-export type GridProps = LayoutElementProps<VerifiedGridThemeProps> & VerifiedGridThemeProps;
+export type BoxProps = LayoutElementProps<BoxThemeProps> & BoxThemeProps;
+export type StackProps = LayoutElementProps<StackThemeProps> & StackThemeProps;
+export type GridProps = LayoutElementProps<GridThemeProps> & GridThemeProps;
 
 function useLayoutRender<ThemeProps extends object>(
 	kind: "box" | "stack" | "grid",
@@ -76,7 +61,7 @@ function useLayoutRender<ThemeProps extends object>(
 		...props
 	}: LayoutElementProps<ThemeProps> & ThemeProps,
 ) {
-	// TypeScript cannot retain ThemeProps through a rest operation over a generic intersection.
+	// SAFETY: TypeScript cannot retain ThemeProps through a rest operation over a generic intersection.
 	const { restProps, styles } = resolveThemeProps(props as typeof props & Partial<ThemeProps>, definition);
 	const sx = stylex.props(layoutBaseStyles[kind], ...styles, style);
 

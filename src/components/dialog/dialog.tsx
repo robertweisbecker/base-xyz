@@ -189,9 +189,6 @@ const dialogParts = stylex.create({
 		"--_dialog-header-padding-inline-end": tokens["--space-6"],
 		maxWidth: "440px",
 	},
-	closeSpaceHolder: {
-		"--_dialog-header-padding-inline-end": `calc(${tokens["--size-control-md"]} + ${tokens["--space-2"]})`,
-	},
 	closeButton: {
 		flexShrink: 0,
 		insetBlockStart: tokens["--space-3"],

@@ -13,6 +13,7 @@ import { textStyles } from "@/components/text/text.stylex";
 import { focusRing } from "@/styles/recipes/focus";
 import { pressable } from "@/styles/recipes/transitions";
 import { tokens } from "@/theme/tokens.stylex";
+import { attrJoin } from "@/utils/attr-join";
 import { VisuallyHidden } from "@/components/visually-hidden/visually-hidden";
 
 export type RadioSize = "sm" | "md";
@@ -102,11 +103,8 @@ export function Radio({
 				<BaseRadio.Root
 					ref={ref}
 					id={id}
-					// SLOP: don't think this is necessary because the parent sets it -
-					// disabled={selfOrGroupDisabled}
-					// readOnly={selfOrGroupReadOnly}
 					required={required}
-					aria-describedby={mergeIds(ariaDescribedBy, descriptionId)}
+					aria-describedby={attrJoin(ariaDescribedBy, descriptionId) || undefined}
 					{...stylex.props(
 						radioParts.control,
 						radioControlSizeStyles[resolvedSize],
@@ -164,17 +162,13 @@ export function RadioGroup({
 	return (
 		<Field.Root
 			name={name}
-			// disabled={disabled}
 			render={
 				<Fieldset.Root
 					render={
 						<BaseRadioGroup
 							ref={ref}
 							name={name}
-							// disabled={disabled}
-							// readOnly={readOnly}
-							// required={required}
-							aria-describedby={mergeIds(ariaDescribedBy, descriptionId)}
+							aria-describedby={attrJoin(ariaDescribedBy, descriptionId) || undefined}
 							{...restProps}
 						/>
 					}
@@ -192,7 +186,7 @@ export function RadioGroup({
 					) : null}
 				</Fieldset.Legend>
 				{description ? (
-					<p id={descriptionId} {...stylex.props(fieldStyles.description, radioParts.fieldsetDescription)}>
+					<p id={descriptionId} {...stylex.props(fieldStyles.description)}>
 						{description}
 					</p>
 				) : null}
@@ -202,10 +196,6 @@ export function RadioGroup({
 			</RadioGroupStateContext.Provider>
 		</Field.Root>
 	);
-}
-
-function mergeIds(...ids: Array<string | undefined>) {
-	return ids.filter(Boolean).join(" ") || undefined;
 }
 
 const radioControlSizeStyles = stylex.create({
@@ -222,7 +212,7 @@ const radioControlSizeStyles = stylex.create({
 const radioLabelStyles = {
 	sm: textStyles.supporting,
 	md: textStyles.label,
-} as const satisfies Record<RadioSize, unknown>;
+} as const satisfies Record<RadioSize, StyleXStyles>;
 
 const radioDescriptionStyles = stylex.create({
 	sm: {
@@ -258,12 +248,6 @@ const radioParts = stylex.create({
 		gap: tokens["--space-1"],
 		display: "flex",
 		flexDirection: "column",
-	},
-	fieldsetLegend: {
-		// fontWeight: fontWeight.regular,
-	},
-	fieldsetDescription: {
-		// margin: 0,
 	},
 	item: {
 		gap: tokens["--space-1"],
@@ -369,10 +353,7 @@ const radioParts = stylex.create({
 			"[data-starting-style]": "scale(0.5)",
 			default: "scale(1)",
 		},
-		transitionDuration: {
-			default: tokens["--motion-duration-quick"],
-			[media.reducedMotion]: "0ms",
-		},
+		transitionDuration: tokens["--motion-duration-quick"],
 		transitionProperty: "transform, opacity",
 		transitionTimingFunction: tokens["--motion-ease-out"],
 	},

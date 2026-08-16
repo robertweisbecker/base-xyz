@@ -2,7 +2,6 @@ import { Drawer as BaseDrawer } from "@base-ui/react/drawer";
 import * as stylex from "@stylexjs/stylex";
 import type { StyleXStyles } from "@stylexjs/stylex";
 import { type ComponentProps } from "react";
-import { media } from "@/styles/constants.stylex";
 import { tokens } from "@/theme/tokens.stylex";
 import { modalChromeStyles, modalTextStyles } from "@/components/dialog/dialog.stylex";
 
@@ -164,7 +163,6 @@ const drawerParts = stylex.create({
 			"[data-ending-style]": `calc(var(--drawer-swipe-strength) * ${DRAWER_RELEASE_DURATION})`,
 			"[data-swiping]": "0ms",
 			default: tokens["--motion-duration-long"],
-			[media.reducedMotion]: "0ms",
 		},
 		transitionProperty: "opacity",
 		transitionTimingFunction: DRAWER_EASING,
@@ -206,7 +204,6 @@ const drawerParts = stylex.create({
 			"[data-nested-drawer-swiping]": "0ms",
 			"[data-swiping]": "0ms",
 			default: tokens["--motion-duration-long"],
-			[media.reducedMotion]: "0ms",
 		},
 		transitionProperty: "transform, height, opacity",
 		transitionTimingFunction: DRAWER_EASING,
@@ -233,10 +230,7 @@ const drawerParts = stylex.create({
 				"[data-nested-drawer-open]": "rgb(0 0 0 / 5%)",
 				default: "rgb(0 0 0 / 0%)",
 			},
-			transitionDuration: {
-				default: tokens["--motion-duration-long"],
-				[media.reducedMotion]: "0ms",
-			},
+			transitionDuration: tokens["--motion-duration-long"],
 			transitionProperty: "background-color, opacity",
 			transitionTimingFunction: DRAWER_EASING,
 		},
@@ -258,10 +252,7 @@ const drawerParts = stylex.create({
 			[stylex.when.ancestor("[data-nested-drawer-open]")]: "0",
 			[stylex.when.ancestor("[data-nested-drawer-open][data-nested-drawer-swiping]")]: "1",
 		},
-		transitionDuration: {
-			default: tokens["--motion-duration-medium"],
-			[media.reducedMotion]: "0ms",
-		},
+		transitionDuration: tokens["--motion-duration-medium"],
 		transitionProperty: "opacity",
 		transitionTimingFunction: tokens["--motion-ease-out"],
 		width: "100%",
@@ -283,10 +274,7 @@ const drawerParts = stylex.create({
 			[stylex.when.ancestor("[data-nested-drawer-open]")]: "0",
 			[stylex.when.ancestor("[data-nested-drawer-open][data-nested-drawer-swiping]")]: "1",
 		},
-		transitionDuration: {
-			default: tokens["--motion-duration-short"],
-			[media.reducedMotion]: "0ms",
-		},
+		transitionDuration: tokens["--motion-duration-short"],
 		transitionProperty: "opacity",
 		transitionTimingFunction: tokens["--motion-ease-out"],
 		height: "4px",
