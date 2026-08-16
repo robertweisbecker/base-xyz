@@ -147,6 +147,7 @@ export const Close = BaseDrawer.Close;
 
 const DRAWER_RELEASE_DURATION = "400ms";
 const DRAWER_EASING = "cubic-bezier(0.32, 0.72, 0, 1)";
+const DRAWER_BLEED = "3rem";
 
 const drawerParts = stylex.create({
 	backdrop: {
@@ -173,7 +174,7 @@ const drawerParts = stylex.create({
 		alignItems: "flex-end",
 	},
 	popup: {
-		"--_drawer-bleed": "3rem",
+		"--_drawer-bleed": DRAWER_BLEED,
 		"--_drawer-peek": ".5rem",
 		"--_drawer-stack-height":
 			"max(0px, calc(var(--drawer-frontmost-height, var(--drawer-height)) - var(--_drawer-bleed)))",
@@ -240,8 +241,17 @@ const drawerParts = stylex.create({
 		height: `calc(100dvh - ${tokens["--space-4"]})`,
 		marginBottom: 0,
 		maxHeight: `calc(100dvh - ${tokens["--space-4"]})`,
-		overflowY: "hidden",
+		overflowY: "visible",
 		paddingBottom: 0,
+		"::before": {
+			insetInline: 0,
+			backgroundColor: "inherit",
+			content: '""',
+			pointerEvents: "none",
+			position: "absolute",
+			height: DRAWER_BLEED,
+			top: "100%",
+		},
 	},
 	content: {
 		marginInline: "auto",
