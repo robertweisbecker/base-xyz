@@ -300,7 +300,9 @@ const confirmationDialogParts = stylex.create({
 		width: tokens["--space-10"],
 	},
 	body: {
-		flex: "1 1 auto",
+		flexBasis: "auto",
+		flexGrow: "1",
+		flexShrink: "1",
 		minHeight: 0,
 	},
 	bodyViewport: {
@@ -314,10 +316,12 @@ const confirmationDialogParts = stylex.create({
 		justifyContent: "space-between",
 	},
 	footerActions: {
-		flex: "0 0 auto",
 		gap: tokens["--space-2"],
 		alignItems: "center",
 		display: "flex",
+		flexBasis: "auto",
+		flexGrow: "0",
+		flexShrink: "0",
 		marginInlineStart: "auto",
 	},
 });

@@ -268,8 +268,10 @@ const drawerParts = stylex.create({
 		width: "100%",
 	},
 	scrollableContent: {
-		flex: "1 1 auto",
 		overscrollBehavior: "contain",
+		flexBasis: "auto",
+		flexGrow: "1",
+		flexShrink: "1",
 		minHeight: 0,
 		overflowY: "auto",
 	},

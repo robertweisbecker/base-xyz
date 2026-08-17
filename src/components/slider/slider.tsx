@@ -168,12 +168,18 @@ function Markers({ every = 1 }: SliderMarkersOptions) {
 		<div aria-hidden data-orientation={orientation} className={sx.className} style={sx.style}>
 			{markerValues.map((markerValue) => {
 				const markerPosition = `${getMarkerPosition(markerValue, min, max)}%`;
-				const markerStyle =
+				const markerPositionStyle =
 					orientation === "horizontal"
-						? { insetBlockStart: "50%", insetInlineStart: markerPosition }
-						: { insetBlockEnd: markerPosition, insetInlineStart: "50%" };
+						? sliderParts.horizontalMarkerPosition(markerPosition)
+						: sliderParts.verticalMarkerPosition(markerPosition);
 
-				return <span key={markerValue} data-slider-marker="" {...stylex.props(sliderParts.marker)} style={markerStyle} />;
+				return (
+					<span
+						key={markerValue}
+						data-slider-marker=""
+						{...stylex.props(sliderParts.marker, markerPositionStyle)}
+					/>
+				);
 			})}
 		</div>
 	);
@@ -276,11 +282,13 @@ const sliderParts = stylex.create({
 		minWidth: 0,
 	},
 	valueContent: {
-		gridArea: "1 / 1",
+		gridColumnStart: "1",
+		gridRowStart: "1",
 		justifySelf: "end",
 	},
 	valueReserve: {
-		gridArea: "1 / 1",
+		gridColumnStart: "1",
+		gridRowStart: "1",
 		justifySelf: "end",
 		visibility: "hidden",
 	},
@@ -376,13 +384,21 @@ const sliderParts = stylex.create({
 			width: tokens["--space-1"],
 		},
 	},
+	horizontalMarkerPosition: (position: string) => ({
+		insetBlockStart: "50%",
+		insetInlineStart: position,
+	}),
+	verticalMarkerPosition: (position: string) => ({
+		insetBlockEnd: position,
+		insetInlineStart: "50%",
+	}),
 	thumb: {
 		borderRadius: tokens["--radius-full"],
 		backgroundColor: tokens["--fg-accent-contrast"],
 		boxShadow: {
 			"[data-disabled]": "none",
 			default: null,
-			":has(input:focus-visible)": "0 0 0 8px var(--canvas)",
+			":has(input:focus-visible)": `0 0 0 8px ${tokens["--canvas"]}`,
 		},
 		outlineColor: {
 			"[data-disabled]": "transparent",

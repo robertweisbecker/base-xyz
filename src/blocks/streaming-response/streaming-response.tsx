@@ -167,7 +167,6 @@ function ChunkedStreamingText({
 	const [visibleCount, setVisibleCount] = useState(1);
 	const completionNotifiedRef = useRef(false);
 	const onCompleteRef = useRef(onStreamingComplete);
-	const caretSx = stylex.props(typingTextStyles.caret);
 
 	onCompleteRef.current = onStreamingComplete;
 
@@ -192,16 +191,13 @@ function ChunkedStreamingText({
 
 	return (
 		<span {...stylex.props(typingTextStyles.chunks)}>
-			{visibleChunks.map((chunk, index) => {
-				const sx = stylex.props(typingTextStyles.chunk);
-				return (
-					<span key={`${chunk}-${index}`} className={sx.className} data-streaming-text-chunk="">
-						{chunk}
-					</span>
-				);
-			})}
+			{visibleChunks.map((chunk, index) => (
+				<span key={`${chunk}-${index}`} data-streaming-text-chunk="" {...stylex.props(typingTextStyles.chunk)}>
+					{chunk}
+				</span>
+			))}
 			{isStreaming ? (
-				<span aria-hidden className={caretSx.className} data-streaming-text-caret="" style={caretSx.style} />
+				<span aria-hidden data-streaming-text-caret="" {...stylex.props(typingTextStyles.caret)} />
 			) : null}
 		</span>
 	);

@@ -155,9 +155,7 @@ function PopupContent({ label }: { label: string }) {
 					aria-label={`Select ${label}`}
 					{...stylex.props(styles.panelSurface, styles.popup, popupMotionStyles.anchoredPopup)}>
 					<div {...stylex.props(styles.popupInputRegion)}>
-						<BaseCombobox.InputGroup
-							{...stylex.props(fieldStyles.inputUnstyled, styles.popupInputControl)}
-							style={{ outline: "none", boxShadow: "none", border: "none" }}>
+						<BaseCombobox.InputGroup {...stylex.props(fieldStyles.inputUnstyled, styles.popupInputControl)}>
 							<MagnifyingGlassIcon aria-hidden size={16} weight="bold" {...stylex.props(styles.searchIcon)} />
 							<BaseCombobox.Input
 								aria-label={`Filter ${label}`}
@@ -172,13 +170,13 @@ function PopupContent({ label }: { label: string }) {
 						</BaseCombobox.InputGroup>
 					</div>
 					<BaseCombobox.Empty {...stylex.props(styles.empty)}>No matching options.</BaseCombobox.Empty>
-					<BaseCombobox.List className={stylex.props(styles.list).className}>
+					<BaseCombobox.List {...stylex.props(styles.list)}>
 						{(item: string) => (
 							<BaseCombobox.Item
 								key={item}
 								value={item}
-								className={stylex.props(menuItemStyles.item, menuItemVariantStyles.default).className}>
-								<BaseCombobox.ItemIndicator keepMounted className={stylex.props(menuItemStyles.indicator).className}>
+								{...stylex.props(menuItemStyles.item, menuItemVariantStyles.default)}>
+								<BaseCombobox.ItemIndicator keepMounted {...stylex.props(menuItemStyles.indicator)}>
 									<Icon.Checkmark width="1em" height="1em" strokeWidth={3} />
 								</BaseCombobox.ItemIndicator>
 								<span {...stylex.props(menuItemStyles.label)}>{item}</span>
@@ -293,9 +291,12 @@ const styles = stylex.create({
 		padding: tokens["--space-1"],
 	},
 	popupInputControl: {
+		borderWidth: 0,
 		gap: tokens["--space-2"],
+		outline: "none",
 		paddingInline: tokens["--space-3"],
 		alignItems: "center",
+		boxShadow: "none",
 		display: "flex",
 	},
 	popupInput: {

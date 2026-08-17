@@ -270,12 +270,14 @@ function useSidebarContext(componentName: string) {
 
 const sidebarParts = stylex.create({
 	panel: {
-		flex: "0 0 auto",
 		overflow: "hidden",
 		paddingBlock: tokens["--space-1"],
 		backgroundColor: tokens["--surface"],
 		boxShadow: `inset -1px 0 0 0 ${tokens["--border"]}`,
 		display: "block",
+		flexBasis: "auto",
+		flexGrow: "0",
+		flexShrink: "0",
 		inlineSize: tokens["--size-sidebar"],
 		minBlockSize: 0,
 		transitionDuration: tokens["--motion-duration-medium"],
@@ -314,18 +316,15 @@ const sidebarParts = stylex.create({
 		transitionTimingFunction: tokens["--motion-ease-smooth-out"],
 	},
 	contentArea: {
-		flex: "1 1 auto",
+		flexBasis: "auto",
+		flexGrow: "1",
+		flexShrink: "1",
 		minBlockSize: 0,
 		minInlineSize: 0,
 	},
 	contentIconCollapsed: {
 		paddingInline: tokens["--space-2"],
 		inlineSize: tokens["--size-sidebar-rail"],
-	},
-	scrollArea: {
-		flex: "1 1 auto",
-		minBlockSize: 0,
-		minInlineSize: 0,
 	},
 	scrollViewport: {
 		minBlockSize: 0,
@@ -374,10 +373,12 @@ const sidebarParts = stylex.create({
 		minInlineSize: 0,
 	},
 	headerContent: {
-		flex: "1 1 auto",
 		overflow: "hidden",
 		display: "flex",
+		flexBasis: "auto",
 		flexDirection: "column",
+		flexGrow: "1",
+		flexShrink: "1",
 		minInlineSize: 0,
 	},
 	headerContentIconCollapsed: {

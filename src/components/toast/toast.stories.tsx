@@ -548,14 +548,4 @@ const storyStyles = stylex.create({
 		flexWrap: "wrap",
 		justifyContent: "center",
 	},
-	changeCount: {
-		gap: tokens["--space-1"],
-		display: "inline-flex",
-	},
-	additions: {
-		color: tokens["--fg-success"],
-	},
-	deletions: {
-		color: tokens["--fg-error"],
-	},
 });

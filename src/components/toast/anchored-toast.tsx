@@ -114,13 +114,11 @@ export function AnchoredToast({ toast, className, positionerClassName, style, po
 				className={[rootSx.className, className].filter(Boolean).join(" ")}
 				style={rootSx.style}>
 				<BaseToast.Content
-					className={
-						stylex.props(
-							anchoredParts.content,
-							contentVariants[variant === "popover" ? "default" : variant],
-							variant === "pill" && anchoredParts.pillContent,
-						).className
-					}>
+					{...stylex.props(
+						anchoredParts.content,
+						contentVariants[variant === "popover" ? "default" : variant],
+						variant === "pill" && anchoredParts.pillContent,
+					)}>
 					{showIcon ? (
 						<span
 							aria-hidden
@@ -143,34 +141,30 @@ export function AnchoredToast({ toast, className, positionerClassName, style, po
 					) : (
 						<span {...stylex.props(anchoredParts.text, variant === "pill" && anchoredParts.pillText)}>
 							{toast.title != null ? (
-								<BaseToast.Title className={stylex.props(variant === "pill" && anchoredParts.pillTitle).className} />
+								<BaseToast.Title {...stylex.props(variant === "pill" && anchoredParts.pillTitle)} />
 							) : null}
 							{toast.description != null ? (
 								<BaseToast.Description
-									className={
-										stylex.props(toastTextStyles.description, variant === "pill" && anchoredParts.pillDescription)
-											.className
-									}
+									{...stylex.props(
+										toastTextStyles.description,
+										variant === "pill" && anchoredParts.pillDescription,
+									)}
 								/>
 							) : null}
 						</span>
 					)}
 					{variant !== "tooltip" && toast.actionProps != null ? (
-						<BaseToast.Action
-							className={stylex.props(toastControlStyles.action, focusRing.offset, pressable.transition).className}
-						/>
+						<BaseToast.Action {...stylex.props(toastControlStyles.action, focusRing.offset, pressable.transition)} />
 					) : null}
 					{variant !== "tooltip" && dismissible ? (
 						<BaseToast.Close
 							aria-label="Dismiss notification"
-							className={
-								stylex.props(
-									toastControlStyles.close,
-									toastControlStyles.anchoredClose,
-									focusRing.offset,
-									pressable.transition,
-								).className
-							}>
+							{...stylex.props(
+								toastControlStyles.close,
+								toastControlStyles.anchoredClose,
+								focusRing.offset,
+								pressable.transition,
+							)}>
 							<XIcon aria-hidden size={14} weight="bold" />
 						</BaseToast.Close>
 					) : null}
@@ -310,7 +304,7 @@ const anchoredParts = stylex.create({
 		pointerEvents: "auto",
 		position: "relative",
 		transformOrigin: "var(--transform-origin)",
-		maxWidth: "min(calc(100vw - 24px), var(--container-3xs))",
+		maxWidth: `min(calc(100vw - 24px), ${tokens["--size-container-xs"]})`,
 		width: "max-content",
 	},
 	content: {

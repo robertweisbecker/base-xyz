@@ -4,7 +4,7 @@ import * as stylex from "@stylexjs/stylex";
 import { createContext, Fragment, type ComponentProps, type ReactNode, useContext, useRef, useState } from "react";
 import { Button, Menu } from "@/components";
 import type { ButtonProps } from "@/components";
-import { menuItemVars } from "@/components/menu/menu-item.stylex";
+import { menuItemVars } from "@/components/menu/menu-item-vars.stylex";
 import { tokens } from "@/theme/tokens.stylex";
 import { breakpoints } from "@/styles/constants.stylex";
 
@@ -469,7 +469,8 @@ const parts = stylex.create({
 		maxWidth: "160px",
 	},
 	copyWithoutIcon: {
-		gridColumn: "2 / 4",
+		gridColumnEnd: "4",
+		gridColumnStart: "2",
 	},
 });
 

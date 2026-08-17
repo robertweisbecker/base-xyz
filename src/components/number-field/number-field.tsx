@@ -116,8 +116,8 @@ export function NumberField({
 						numberFieldInputPaddingSizes.default,
 						fieldSize === "lg" && numberFieldInputPaddingSizes.lg,
 						focusRing.inset,
+						numberFieldParts.inputWidth(inputWidth),
 					)}
-					style={{ width: inputWidth === "fill" ? "100%" : inputWidth }}
 				/>
 				<BaseNumberField.Increment
 					aria-label={incrementLabel}
@@ -219,6 +219,9 @@ const numberFieldParts = stylex.create({
 			appearance: "none",
 		},
 	},
+	inputWidth: (width: NumberFieldInputWidth) => ({
+		width: width === "fill" ? "100%" : width,
+	}),
 	stepper: {
 		padding: 0,
 		borderColor: {

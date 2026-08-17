@@ -196,12 +196,6 @@ export const TruncationTooltip: Story = {
 };
 
 const storyStyles = stylex.create({
-	story: {
-		padding: tokens["--space-4"],
-		gap: tokens["--space-8"],
-		display: "flex",
-		flexDirection: "column",
-	},
 	section: {
 		gap: tokens["--space-4"],
 		display: "flex",

@@ -535,8 +535,10 @@ const commandPaletteParts = stylex.create({
 		width: tokens["--space-5"],
 	},
 	input: {
-		flex: "1 1 auto",
 		color: tokens["--fg"],
+		flexBasis: "auto",
+		flexGrow: "1",
+		flexShrink: "1",
 		minWidth: 0,
 		"::placeholder": {
 			color: tokens["--fg-placeholder"],

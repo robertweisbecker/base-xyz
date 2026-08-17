@@ -706,10 +706,6 @@ const storyParts = stylex.create({
 		maxWidth: "100%",
 		minWidth: 0,
 	},
-	userName: {
-		display: "block",
-		minWidth: 0,
-	},
 	inlineUseCase: {
 		gap: tokens["--space-6"],
 		display: "flex",

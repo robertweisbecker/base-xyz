@@ -267,7 +267,7 @@ function SpacingAndShapeSection() {
 						<div key={token.name} {...stylex.props(styles.tokenRow)}>
 							<TokenName name={token.name} value={token.value} />
 							<div {...stylex.props(styles.measureTrack)}>
-								<span {...stylex.props(styles.measureBar)} style={{ width: token.value }} />
+								<span {...stylex.props(styles.measureBar, styles.measureBarWidth(token.value))} />
 							</div>
 							<span {...stylex.props(styles.usage)}>{token.usage}</span>
 						</div>
@@ -307,7 +307,7 @@ function SpacingAndShapeSection() {
 				<div {...stylex.props(styles.radiusGrid)}>
 					{radiusTokens.map((token) => (
 						<div key={token.name} {...stylex.props(styles.radiusToken)}>
-							<div {...stylex.props(styles.radiusSpecimen)} style={{ borderRadius: token.value }} />
+							<div {...stylex.props(styles.radiusSpecimen, styles.radiusSpecimenValue(token.value))} />
 							<TokenName name={token.name} value={token.value} />
 							<span {...stylex.props(styles.usage)}>{token.usage}</span>
 						</div>
@@ -601,8 +601,11 @@ function TypeRole({
 				<span {...stylex.props(styles.usage)}>{description}</span>
 			</div>
 			<div
-				{...stylex.props(styles.typeSample, style)}
-				style={sampleFontFamily ? { fontFamily: sampleFontFamily } : undefined}>
+				{...stylex.props(
+					styles.typeSample,
+					sampleFontFamily ? styles.typeSampleFontFamily(sampleFontFamily) : null,
+					style,
+				)}>
 				{children}
 			</div>
 		</div>
@@ -885,6 +888,9 @@ const styles = stylex.create({
 		margin: 0,
 		color: tokens["--fg"],
 	},
+	typeSampleFontFamily: (fontFamily: string) => ({
+		fontFamily,
+	}),
 	typeDisplay: {
 		fontSize: tokens["--font-size-5"],
 		fontWeight: tokens["--font-weight-semibold"],
@@ -991,6 +997,9 @@ const styles = stylex.create({
 		height: "12px",
 		minWidth: "4px",
 	},
+	measureBarWidth: (width: string) => ({
+		width,
+	}),
 	spacingExample: {
 		padding: tokens["--space-8"],
 		borderRadius: tokens["--radius-lg"],
@@ -1068,6 +1077,9 @@ const styles = stylex.create({
 		height: "72px",
 		width: "100%",
 	},
+	radiusSpecimenValue: (borderRadius: string) => ({
+		borderRadius,
+	}),
 	shadowGrid: {
 		gap: tokens["--space-8"],
 		paddingBlock: tokens["--space-6"],

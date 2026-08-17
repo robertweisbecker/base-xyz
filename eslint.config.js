@@ -14,7 +14,9 @@ export default [
 			"@stylexjs": stylexjs,
 		},
 		rules: {
+			"@stylexjs/no-unused": "error",
 			"@stylexjs/valid-styles": "error",
+			"@stylexjs/valid-shorthands": "error",
 			"@stylexjs/sort-keys": "warn",
 		},
 	},

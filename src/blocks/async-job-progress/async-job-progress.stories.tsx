@@ -173,7 +173,9 @@ const storyParts = stylex.create({
 		minWidth: 0,
 	},
 	disclosure: {
-		flex: "1 1 auto",
+		flexBasis: "auto",
+		flexGrow: "1",
+		flexShrink: "1",
 		minWidth: 0,
 	},
 });

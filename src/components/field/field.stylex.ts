@@ -17,6 +17,9 @@ import { tokens } from "@/theme/tokens.stylex";
 /** Marker for label elements associated with form controls. */
 export const labelMarker = stylex.defineMarker();
 
+/** Marker for Field roots observed by descendant form-control styles. */
+export const fieldMarker = stylex.defineMarker();
+
 const INTERACTIVE_CONTROL_HOVER =
 	':hover:not(:focus-within):not([aria-invalid="true"]):not([data-active]):not([data-disabled]):not([data-invalid]):not([data-panel-open]):not([data-popup-open]):not([data-pressed]):not([data-readonly]):not([readonly])';
 
@@ -60,14 +63,12 @@ const parts = stylex.create({
 		opacity: {
 			"[data-disabled]": 0.5,
 			default: 1,
-			[stylex.when.ancestor('[aria-disabled="true"]')]: 0.5,
 		},
 	},
 	groupLabel: {
 		opacity: {
 			"[data-disabled]": 0.5,
 			default: 1,
-			[stylex.when.ancestor('[aria-disabled="true"]')]: 0.5,
 		},
 	},
 	description: { color: tokens["--fg-muted"] },
@@ -111,24 +112,17 @@ const parts = stylex.create({
 		opacity: {
 			"[data-disabled]": 0.5,
 			default: 1,
-			[stylex.when.ancestor('[data-disabled="true"]')]: 0.5,
+			[stylex.when.ancestor("[data-disabled]", fieldMarker)]: 0.5,
 		},
 		width: "100%",
 	},
 	inputUnstyled: {
-		outline: {
-			default: "none",
-			[stylex.when.ancestor(":focus-visible")]: "none",
-			[stylex.when.anySibling(":focus-visible")]: "none",
-			":focus-visible": "none",
-		},
+		outline: "none",
 		color: {
 			"[data-disabled]": tokens["--fg-subtle"],
 			"[data-readonly]": tokens["--fg"],
 			"[readonly]": tokens["--fg"],
 			default: tokens["--fg"],
-			[stylex.when.ancestor('[aria-readonly="true"]')]: tokens["--fg"],
-			[stylex.when.ancestor("[data-readonly]")]: tokens["--fg"],
 		},
 		"::placeholder": {
 			color: tokens["--fg-muted"],
@@ -148,7 +142,7 @@ const parts = stylex.create({
 });
 
 export const fieldStyles = {
-	root: parts.root,
+	root: [fieldMarker, parts.root],
 	label: [labelMarker, textStyles.supporting, fontWeightStyles.medium, parts.label],
 	groupLabel: [textStyles.body, fontWeightStyles.semibold, parts.groupLabel],
 	itemLabel: textStyles.label,

@@ -121,7 +121,6 @@ const progressParts = stylex.create({
 			default: "0% 0",
 		},
 		borderRadius: tokens["--radius-full"],
-		gridColumn: "1 / -1",
 		overflow: "hidden",
 		animationDirection: {
 			"[data-indeterminate]": "alternate",
@@ -153,6 +152,8 @@ const progressParts = stylex.create({
 			"[data-indeterminate]": "300% 100%",
 			default: "auto",
 		},
+		gridColumnEnd: "-1",
+		gridColumnStart: "1",
 		outlineColor: tokens["--border"],
 		outlineOffset: -1,
 		outlineStyle: "solid",

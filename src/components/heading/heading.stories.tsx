@@ -148,11 +148,6 @@ const storyStyles = stylex.create({
 		display: "flex",
 		flexDirection: "column",
 	},
-	sections: {
-		gap: tokens["--space-8"],
-		display: "flex",
-		flexDirection: "column",
-	},
 	styleGrid: {
 		gap: tokens["--space-4"],
 		display: "grid",

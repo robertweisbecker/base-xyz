@@ -32,7 +32,7 @@
 
 ## Styles
 
-- Before changing cross-component styles, read [ADR 0003](docs/adr/0003-stylex-ownership-and-application.md) and `src/styles/README.md`.
+- Before authoring or reviewing StyleX, read the vendored official [StyleX authoring guide](.agents/resources/stylex-authoring.md), [ADR 0003](docs/adr/0003-stylex-ownership-and-application.md), and `src/styles/README.md`; repository-specific ownership and interop decisions remain authoritative.
 - Tokens are stable API: never remove them or replace usages with literals unless explicitly asked. Themeable values live in `tokens.stylex.ts`; fixed globals in `constants.stylex.ts`.
 - Use the ADR's explicit `stylex.props(...)` boundary for native JSX; do not add global JSX augmentation, transform shims, or line suppressions for lowercase intrinsic `sx`.
 

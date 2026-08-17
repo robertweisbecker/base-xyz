@@ -24,9 +24,9 @@ import {
 import {
 	menuItemSizeStyles,
 	menuItemStyles,
-	menuItemVars,
 	menuItemVariantStyles,
 } from "@/components/menu/menu-item.stylex";
+import { menuItemVars } from "@/components/menu/menu-item-vars.stylex";
 import { Popover } from "@/components/popover/popover";
 import { typescaleStyles, textStyles, fontWeightStyles } from "@/components/text/text.stylex";
 import { Tooltip } from "@/components/tooltip/tooltip";
@@ -961,17 +961,21 @@ const navListParts = stylex.create({
 		minBlockSize: "100%",
 	},
 	scroller: {
-		flex: "1 1 auto",
 		gap: tokens["--space-2"],
 		overscrollBehavior: "contain",
 		paddingBlock: tokens["--space-1"],
 		display: "flex",
+		flexBasis: "auto",
 		flexDirection: "column",
+		flexGrow: "1",
+		flexShrink: "1",
 		minHeight: 0,
 		overflowY: "auto",
 	},
 	scrollerExternal: {
-		flex: "1 0 auto",
+		flexBasis: "auto",
+		flexGrow: "1",
+		flexShrink: "0",
 		overflowY: "visible",
 	},
 	list: {
@@ -1099,7 +1103,8 @@ const navListParts = stylex.create({
 		gridColumn: "1",
 	},
 	sectionDescription: {
-		gridColumn: "1 / -1",
+		gridColumnEnd: "-1",
+		gridColumnStart: "1",
 	},
 	sectionEndSlot: {
 		gridColumn: "2",
@@ -1149,7 +1154,8 @@ const navListParts = stylex.create({
 		position: "relative",
 	},
 	drilldownPanel: {
-		gridArea: "1 / 1",
+		gridColumnStart: "1",
+		gridRowStart: "1",
 		opacity: {
 			'[aria-hidden="true"]': 0,
 			default: 1,

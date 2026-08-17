@@ -333,9 +333,10 @@ const parts = stylex.create({
 	addMenu: { minWidth: "15rem" },
 	addMenuCopy: {
 		gap: tokens["--space-2"],
-		gridColumn: "2 / 4",
 		alignItems: "baseline",
 		display: "flex",
+		gridColumnEnd: "4",
+		gridColumnStart: "2",
 		minWidth: 0,
 	},
 	addMenuDescription: {

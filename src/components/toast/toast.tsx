@@ -121,7 +121,8 @@ export const Portal = BaseToast.Portal;
 
 const toastParts = stylex.create({
 	viewport: {
-		margin: "0 auto",
+		marginBlock: "0",
+		marginInline: "auto",
 		outline: "0",
 		pointerEvents: "none",
 		position: "fixed",
@@ -149,8 +150,9 @@ const toastParts = stylex.create({
 		"--toast-scale": "calc(max(0, 1 - (var(--toast-index) * 0.1)))",
 		"--toast-shrink": "calc(1 - var(--toast-scale))",
 		"--toast-stack-height": "var(--toast-frontmost-height, var(--toast-height))",
-		margin: "0 auto",
 		borderRadius: tokens["--radius-md"],
+		marginBlock: "0",
+		marginInline: "auto",
 		backgroundColor: tokens["--elevated"],
 		boxShadow: tokens["--shadow-md"],
 		boxSizing: "border-box",

@@ -272,17 +272,19 @@ const meterParts = stylex.create({
 	},
 	track: {
 		borderRadius: "2px",
-		gridColumn: "1 / -1",
 		overflow: "hidden",
 		backgroundColor: tokens["--fill-track"],
+		gridColumnEnd: "-1",
+		gridColumnStart: "1",
 		height: tokens["--space-2"],
 	},
 	segmentedTrack: {
 		borderRadius: 0,
-		gridColumn: "1",
 		gridRow: "1",
 		backgroundColor: tokens["--fill-track"],
 		boxShadow: "none",
+		gridColumnEnd: "auto",
+		gridColumnStart: "1",
 		maskImage:
 			"url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 10 16'%3E%3Crect width='6' height='16' rx='1' fill='black'/%3E%3C/svg%3E\")",
 		maskPosition: "left center",

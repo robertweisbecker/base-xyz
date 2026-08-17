@@ -408,7 +408,7 @@ export function Item({ ref, children, className, style, variant = "default", ...
 			className={[sx.className, className].filter(Boolean).join(" ")}
 			style={sx.style}
 			{...props}>
-			<BaseCombobox.ItemIndicator keepMounted className={stylex.props(menuItemStyles.indicator).className}>
+			<BaseCombobox.ItemIndicator keepMounted {...stylex.props(menuItemStyles.indicator)}>
 				<Icon.Checkmark width="1em" height="1em" strokeWidth={3} />
 			</BaseCombobox.ItemIndicator>
 			<div {...stylex.props(menuItemStyles.label)}>{children}</div>

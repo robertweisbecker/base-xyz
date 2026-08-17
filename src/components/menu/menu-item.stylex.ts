@@ -1,22 +1,11 @@
 import * as stylex from "@stylexjs/stylex";
 import { typescaleStyles, textStyles } from "@/components/text/text.stylex";
 import { tokens } from "@/theme/tokens.stylex";
+import { menuItemVars } from "./menu-item-vars.stylex";
 import type { MenuItemSize } from "./menu.types";
 
 /** Marker for selectable item roots shared by Menu, Select, Combobox, Autocomplete, and related components. */
 export const itemMarker = stylex.defineMarker();
-
-/** Inherited layout variables for Menu items and components that intentionally match them. */
-export const menuItemVars = stylex.defineVars({
-	columns: `${tokens["--space-4"]} minmax(0, 1fr) auto`,
-	columnGap: tokens["--space-2"],
-	indicatorColor: "inherit",
-	minHeight: tokens["--size-control-md"],
-	paddingBlock: tokens["--space-1"],
-	paddingInlineEnd: tokens["--space-2"],
-	paddingInlineStart: tokens["--space-3"],
-	rowGap: "0px",
-});
 
 /**
  * Canonical selectable-row styles owned by Menu.

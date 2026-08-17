@@ -114,13 +114,14 @@ other components that intentionally look like Menu items compose it directly:
 
 ```tsx
 import { menuItemStyles, menuItemVariantStyles } from "@/components/menu/menu-item.stylex";
+import { menuItemVars } from "@/components/menu/menu-item-vars.stylex";
 
 stylex.props(menuItemStyles.item, menuItemVariantStyles.default, style); // item row
 stylex.props(menuItemStyles.label); // primary label cell
 stylex.props(menuItemStyles.indicator); // check/radio slot
 ```
 
-Override column layout with `menuItemVars` from the same module when a
+Override column layout with `menuItemVars` from its dedicated variables module when a
 Menu composition needs a custom grid. Menu remains the source of truth:
 borrowers may import its styles, but Menu must not import a borrower.
 
@@ -257,6 +258,7 @@ markers and are not re-exported through component barrels.
 | Marker         | Owner                                      | Applied to                                                                 |
 | -------------- | ------------------------------------------ | -------------------------------------------------------------------------- |
 | `buttonMarker` | `components/button/button.stylex.ts`       | Button, IconButton, and shared Button-root controls                        |
+| `fieldMarker`  | `components/field/field.stylex.ts`         | Field roots observed by descendant form-control styles                     |
 | `itemMarker`   | `components/menu/menu-item.stylex.ts`      | Menu rows and components composing the canonical row, including Select, Combobox, and Autocomplete items |
 | `labelMarker`  | `components/field/field.stylex.ts`         | Label elements associated with form controls                              |
 

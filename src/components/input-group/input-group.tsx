@@ -213,13 +213,15 @@ const inputGroupParts = stylex.create({
 	},
 	input: {
 		borderWidth: 0,
-		flex: "1 1 8rem",
 		outline: "0",
 		// Block padding stays on Textarea / Header / Footer; Input stays flush in the row.
 		paddingBlock: tokens["--space-1"],
 		paddingInline: "var(--_input-padding)",
 		appearance: "none",
 		backgroundColor: "transparent",
+		flexBasis: "8rem",
+		flexGrow: "1",
+		flexShrink: "1",
 		fontFamily: "inherit",
 		height: "auto",
 		minWidth: 0,

@@ -212,10 +212,11 @@ const parts = stylex.create({
 	metadata: {
 		gap: tokens["--space-2"],
 		gridColumn: "2",
-		gridRow: "1 / span 2",
 		alignItems: "center",
 		alignSelf: "start",
 		display: "flex",
+		gridRowEnd: "span 2",
+		gridRowStart: "1",
 	},
 	meta: {
 		color: tokens["--fg-muted"],

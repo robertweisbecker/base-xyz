@@ -374,7 +374,9 @@ const storyParts = stylex.create({
 		height: `min(620px, calc(100dvh - ${tokens["--space-8"]}))`,
 	},
 	insideScrollArea: {
-		flex: "1 1 auto",
+		flexBasis: "auto",
+		flexGrow: "1",
+		flexShrink: "1",
 		minHeight: 0,
 	},
 	insideScrollContent: {

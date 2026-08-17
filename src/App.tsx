@@ -691,13 +691,13 @@ function getComponentCells(): GalleryCell[] {
 					<ToggleGroup defaultValue={["bold"]}>
 						<Toggle
 							icon={<ThumbsDownIcon aria-hidden weight="regular" />}
-							pressedIcon={<ThumbsDownIcon aria-hidden weight="duotone" color={"var(--fg-error)"} />}
+							pressedIcon={<ThumbsDownIcon aria-hidden weight="duotone" color={tokens["--fg-error"]} />}
 							label="Bad response"
 							value="thumbs-down"
 						/>
 						<Toggle
 							icon={<ThumbsUpIcon aria-hidden weight="regular" />}
-							pressedIcon={<ThumbsUpIcon aria-hidden weight="duotone" color={"var(--fg-success)"} />}
+							pressedIcon={<ThumbsUpIcon aria-hidden weight="duotone" color={tokens["--fg-success"]} />}
 							label="Good response"
 							value="thumbs-up"
 						/>
@@ -897,7 +897,7 @@ function getBlockCells(): GalleryCell[] {
 		{
 			title: "GoalToolbar",
 			content: (
-				<div className={stylex.props(styles.blockWide).className}>
+				<div {...stylex.props(styles.blockWide)}>
 					<GoalToolbar active description="Redesign the demo gallery" />
 				</div>
 			),

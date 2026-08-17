@@ -642,7 +642,9 @@ const dataTableParts = stylex.create({
 		justifyContent: "flex-end",
 	},
 	filter: {
-		flex: "0 1 10rem",
+		flexBasis: "10rem",
+		flexGrow: "0",
+		flexShrink: "1",
 		flexWrap: "nowrap",
 	},
 	toolbarActions: {

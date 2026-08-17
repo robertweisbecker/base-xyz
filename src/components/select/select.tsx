@@ -118,7 +118,7 @@ export function Trigger({
 			className={[sx.className, className].filter(Boolean).join(" ")}
 			style={sx.style}
 			{...props}>
-			<BaseSelect.Value className={stylex.props(selectParts.value).className} placeholder={placeholder}>
+			<BaseSelect.Value placeholder={placeholder} {...stylex.props(selectParts.value)}>
 				{children}
 			</BaseSelect.Value>
 			<BaseSelect.Icon {...stylex.props(selectParts.triggerIcon)}>
@@ -265,7 +265,7 @@ export function Item({ ref, children, className, style, variant = "primary", ...
 			className={[sx.className, className].filter(Boolean).join(" ")}
 			style={sx.style}
 			{...props}>
-			<BaseSelect.ItemIndicator keepMounted className={stylex.props(menuItemStyles.indicator).className}>
+			<BaseSelect.ItemIndicator keepMounted {...stylex.props(menuItemStyles.indicator)}>
 				<Icon.Checkmark width="1em" height="1em" strokeWidth={3} />
 			</BaseSelect.ItemIndicator>
 			<BaseSelect.ItemText {...stylex.props(menuItemStyles.label, selectParts.itemText)}>

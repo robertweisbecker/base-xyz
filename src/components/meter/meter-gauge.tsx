@@ -165,9 +165,10 @@ const meterGaugeParts = stylex.create({
 		width: size,
 	}),
 	track: {
-		gridArea: "1 / 1",
 		overflow: "visible",
 		display: "block",
+		gridColumnStart: "1",
+		gridRowStart: "1",
 	},
 	arc: {
 		fill: "none",
@@ -189,9 +190,10 @@ const meterGaugeParts = stylex.create({
 		opacity: 0,
 	},
 	content: {
-		gridArea: "1 / 1",
 		placeItems: "center",
 		display: "grid",
+		gridColumnStart: "1",
+		gridRowStart: "1",
 		pointerEvents: "none",
 	},
 	compactValue: {

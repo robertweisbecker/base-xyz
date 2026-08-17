@@ -8,7 +8,6 @@ import type { FieldThemeProps } from "@/components/field/field.types";
 import { fieldStyles, fieldThemeProps, labelMarker } from "@/components/field/field.stylex";
 import { focusRing } from "@/styles/recipes/focus";
 import { tokens } from "@/theme/tokens.stylex";
-import { Icon } from "@/components/icons";
 import { VisuallyHidden } from "@/components/visually-hidden/visually-hidden";
 import { attrJoin } from "@/utils/attr-join";
 
@@ -89,9 +88,7 @@ export function Switch({
 					render={<button type="button" />}
 					{...stylex.props(switchParts.track, sizeVariants[size], focusRing.offset)}
 					{...restProps}>
-					<BaseSwitch.Thumb {...stylex.props(switchParts.thumb)}>
-						<Icon.Checkmark {...stylex.props(switchParts.icon)} strokeWidth={3} />
-					</BaseSwitch.Thumb>
+					<BaseSwitch.Thumb {...stylex.props(switchParts.thumb)} />
 				</BaseSwitch.Root>
 			</label>
 			{description ? (
@@ -209,19 +206,6 @@ const switchParts = stylex.create({
 		transitionProperty: "transform",
 		transitionTimingFunction: tokens["--motion-ease-out"],
 		height: "100%",
-	},
-	icon: {
-		stroke: "currentColor",
-		color: {
-			"[data-checked]": tokens["--fg-accent"],
-			default: tokens["--fg"],
-		},
-		display: {
-			default: "none",
-			[stylex.when.ancestor("[data-checked]")]: "block",
-		},
-		height: ".75em",
-		width: ".75em",
 	},
 });
 
