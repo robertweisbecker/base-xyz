@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
+import { Text } from "@/components/text/text";
 import { Code } from "./code";
 
 const meta = {
@@ -16,9 +17,9 @@ const meta = {
 		},
 	},
 	render: (args) => (
-		<p>
+		<Text>
 			Run <Code {...args} /> before opening a pull request.
-		</p>
+		</Text>
 	),
 } satisfies Meta<typeof Code>;
 

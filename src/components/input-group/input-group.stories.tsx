@@ -9,8 +9,9 @@ import type { ReactNode } from "react";
 import { Button, IconButton } from "@/components/button/button";
 import { breakpoints } from "@/styles/constants.stylex";
 import { fieldStyles } from "@/components/field/field.stylex";
+import { Box, Grid, Stack } from "@/components/layout/layout";
 import { Separator } from "@/components/separator/separator";
-import { tokens } from "@/theme/tokens.stylex";
+import { Text } from "@/components/text/text";
 
 import { InputGroup } from "./input-group";
 const meta = {
@@ -36,7 +37,7 @@ type Story = StoryObj<typeof meta>;
 
 export const Playground: Story = {
 	render: (args) => (
-		<div {...stylex.props(styles.frame)}>
+		<Box style={styles.frame}>
 			<Field.Root {...stylex.props(fieldStyles.root)}>
 				<Field.Label {...stylex.props(fieldStyles.label)}>Search projects</Field.Label>
 				<InputGroup.Root {...args}>
@@ -50,7 +51,7 @@ export const Playground: Story = {
 					Search across projects in the current workspace.
 				</Field.Description>
 			</Field.Root>
-		</div>
+		</Box>
 	),
 };
 
@@ -59,10 +60,10 @@ export const Sizes: Story = {
 		controls: { disable: true },
 	},
 	render: () => (
-		<div {...stylex.props(styles.variants)}>
+		<Stack gap={8} style={styles.variants}>
 			{(["sm", "md", "lg"] as const).map((size) => (
 				<State key={size} label={size}>
-					<div {...stylex.props(styles.sizeRow)}>
+					<Grid align="center" columns={2} gap={3} style={styles.sizeRow}>
 						<InputGroup.Root size={size}>
 							<InputGroup.Input aria-label={`${size} input group`} defaultValue="Search projects" />
 							<InputGroup.Addon position="start">
@@ -75,10 +76,10 @@ export const Sizes: Story = {
 							</InputGroup.Addon>
 						</InputGroup.Root>
 						<Button size={size}>Button compare</Button>
-					</div>
+					</Grid>
 				</State>
 			))}
-		</div>
+		</Stack>
 	),
 };
 
@@ -87,7 +88,7 @@ export const Variants: Story = {
 		controls: { disable: true },
 	},
 	render: () => (
-		<div {...stylex.props(styles.variants)}>
+		<Stack gap={8} style={styles.variants}>
 			<State label="Standard">
 				<InputGroup.Root>
 					<InputGroup.Input aria-label="Standard input group" placeholder="Enter a value…" />
@@ -103,7 +104,7 @@ export const Variants: Story = {
 					<InputGroup.Input aria-label="Subtle input group" placeholder="Enter a value…" />
 				</InputGroup.Root>
 			</State>
-		</div>
+		</Stack>
 	),
 };
 
@@ -112,7 +113,7 @@ export const Alignments: Story = {
 		controls: { disable: true },
 	},
 	render: () => (
-		<div {...stylex.props(styles.variants)}>
+		<Stack gap={8} style={styles.variants}>
 			<State label="Solo input">
 				<InputGroup.Root>
 					<InputGroup.Input aria-label="Solo input" placeholder="Enter a value…" />
@@ -190,7 +191,7 @@ export const Alignments: Story = {
 					</InputGroup.Footer>
 				</InputGroup.Root>
 			</State>
-		</div>
+		</Stack>
 	),
 };
 
@@ -199,7 +200,7 @@ export const States: Story = {
 		controls: { disable: true },
 	},
 	render: () => (
-		<div {...stylex.props(styles.states)}>
+		<Grid gap={8} style={styles.states}>
 			<State label="Default">
 				<InputGroup.Root>
 					<InputGroup.Input aria-label="Default input" placeholder="Enter a value…" />
@@ -247,16 +248,18 @@ export const States: Story = {
 					<InputGroup.Textarea aria-label="Disabled textarea" defaultValue="Unavailable" disabled rows={3} />
 				</InputGroup.Root>
 			</State>
-		</div>
+		</Grid>
 	),
 };
 
 function State({ children, label }: { children: ReactNode; label: string }) {
 	return (
-		<section {...stylex.props(styles.state)}>
-			<h2 {...stylex.props(styles.stateTitle)}>{label}</h2>
+		<Stack gap={3}>
+			<Text color="muted" size="1">
+				{label}
+			</Text>
 			{children}
-		</section>
+		</Stack>
 	);
 }
 
@@ -265,8 +268,6 @@ const styles = stylex.create({
 		maxWidth: "32rem",
 	},
 	states: {
-		gap: tokens["--space-8"],
-		display: "grid",
 		gridTemplateColumns: {
 			default: "1fr",
 			[breakpoints.md]: "repeat(2, minmax(0, 1fr))",
@@ -274,28 +275,9 @@ const styles = stylex.create({
 		maxWidth: "56rem",
 	},
 	variants: {
-		gap: tokens["--space-8"],
-		display: "flex",
-		flexDirection: "column",
 		maxWidth: "32rem",
 	},
-	state: {
-		gap: tokens["--space-3"],
-		display: "flex",
-		flexDirection: "column",
-	},
-	stateTitle: {
-		margin: 0,
-		color: tokens["--fg-muted"],
-		fontSize: tokens["--font-size-1"],
-		fontWeight: tokens["--font-weight-regular"],
-		letterSpacing: tokens["--letter-spacing-1"],
-		lineHeight: tokens["--line-height-1"],
-	},
 	sizeRow: {
-		gap: tokens["--space-3"],
-		alignItems: "center",
-		display: "grid",
 		gridTemplateColumns: "minmax(0, 1fr) auto",
 	},
 });

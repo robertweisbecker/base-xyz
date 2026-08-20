@@ -4,6 +4,7 @@ import type { StyleXStyles } from "@stylexjs/stylex";
 import { media } from "@/styles/constants.stylex";
 import { textStyles } from "@/components/text/text.stylex";
 import { tokens } from "@/theme/tokens.stylex";
+import { attrJoin } from "@/utils/attr-join";
 
 type StyledProps<T> = Omit<T, "className" | "style"> & {
 	className?: string;
@@ -23,7 +24,7 @@ export function Root({ ref, className, style, ...props }: RootProps) {
 	return (
 		<BaseProgress.Root
 			ref={ref}
-			className={[sx.className, className].filter(Boolean).join(" ")}
+			className={attrJoin(sx.className, className)}
 			style={sx.style}
 			{...props}
 		/>
@@ -36,7 +37,7 @@ export function Label({ ref, className, style, ...props }: LabelProps) {
 	return (
 		<BaseProgress.Label
 			ref={ref}
-			className={[sx.className, className].filter(Boolean).join(" ")}
+			className={attrJoin(sx.className, className)}
 			style={sx.style}
 			{...props}
 		/>
@@ -49,7 +50,7 @@ export function Value({ ref, className, style, ...props }: ValueProps) {
 	return (
 		<BaseProgress.Value
 			ref={ref}
-			className={[sx.className, className].filter(Boolean).join(" ")}
+			className={attrJoin(sx.className, className)}
 			style={sx.style}
 			{...props}
 		/>
@@ -62,7 +63,7 @@ export function Track({ ref, className, style, ...props }: TrackProps) {
 	return (
 		<BaseProgress.Track
 			ref={ref}
-			className={[sx.className, className].filter(Boolean).join(" ")}
+			className={attrJoin(sx.className, className)}
 			style={sx.style}
 			{...props}
 		/>
@@ -75,7 +76,7 @@ export function Indicator({ ref, className, style, ...props }: IndicatorProps) {
 	return (
 		<BaseProgress.Indicator
 			ref={ref}
-			className={[sx.className, className].filter(Boolean).join(" ")}
+			className={attrJoin(sx.className, className)}
 			style={sx.style}
 			{...props}
 		/>

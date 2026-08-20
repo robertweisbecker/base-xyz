@@ -13,6 +13,7 @@ import {
 	textThemeProps,
 } from "@/components/text/text.stylex";
 import type { TypographyStyleProps } from "@/components/text/text.types";
+import { attrJoin } from "@/utils/attr-join";
 
 export type HeadingProps = Omit<
 	useRender.ComponentProps<"h2">,
@@ -57,7 +58,7 @@ export function Heading({
 		ref,
 		props: {
 			...restProps,
-			className: [sx.className, className].filter(Boolean).join(" "),
+			className: attrJoin(sx.className, className),
 			style: sx.style,
 		},
 	});

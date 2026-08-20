@@ -8,6 +8,7 @@ import { pressable } from "@/styles/recipes/transitions";
 
 import { toastMotion } from "./toast-motion.stylex";
 import { toastControlStyles, toastTextStyles } from "./toast-parts";
+import { attrJoin } from "@/utils/attr-join";
 
 type StyledProps<T> = Omit<T, "className" | "style"> & {
 	className?: string;
@@ -20,7 +21,7 @@ export function Viewport({ ref, className, style, ...props }: StyledProps<BaseTo
 	return (
 		<BaseToast.Viewport
 			ref={ref}
-			className={[sxClassName, className].filter(Boolean).join(" ")}
+			className={attrJoin(sxClassName, className)}
 			style={sxStyle}
 			{...props}
 		/>
@@ -33,7 +34,7 @@ export function Root({ ref, className, style, ...props }: StyledProps<BaseToast.
 	return (
 		<BaseToast.Root
 			ref={ref}
-			className={[sxClassName, className].filter(Boolean).join(" ")}
+			className={attrJoin(sxClassName, className)}
 			style={sxStyle}
 			{...props}
 		/>
@@ -46,7 +47,7 @@ export function Content({ ref, className, style, ...props }: StyledProps<BaseToa
 	return (
 		<BaseToast.Content
 			ref={ref}
-			className={[sxClassName, className].filter(Boolean).join(" ")}
+			className={attrJoin(sxClassName, className)}
 			style={sxStyle}
 			{...props}
 		/>
@@ -59,7 +60,7 @@ export function Title({ ref, className, style, ...props }: StyledProps<BaseToast
 	return (
 		<BaseToast.Title
 			ref={ref}
-			className={[sxClassName, className].filter(Boolean).join(" ")}
+			className={attrJoin(sxClassName, className)}
 			style={sxStyle}
 			{...props}
 		/>
@@ -72,7 +73,7 @@ export function Description({ ref, className, style, ...props }: StyledProps<Bas
 	return (
 		<BaseToast.Description
 			ref={ref}
-			className={[sxClassName, className].filter(Boolean).join(" ")}
+			className={attrJoin(sxClassName, className)}
 			style={sxStyle}
 			{...props}
 		/>
@@ -85,7 +86,7 @@ export function Action({ ref, className, style, ...props }: StyledProps<BaseToas
 	return (
 		<BaseToast.Action
 			ref={ref}
-			className={[sxClassName, className].filter(Boolean).join(" ")}
+			className={attrJoin(sxClassName, className)}
 			style={sxStyle}
 			{...props}
 		/>
@@ -103,7 +104,7 @@ export function Close({ ref, className, style, ...props }: StyledProps<BaseToast
 	return (
 		<BaseToast.Close
 			ref={ref}
-			className={[sxClassName, className].filter(Boolean).join(" ")}
+			className={attrJoin(sxClassName, className)}
 			style={sxStyle}
 			{...props}
 		/>
@@ -113,7 +114,7 @@ export function Close({ ref, className, style, ...props }: StyledProps<BaseToast
 export function Text({ className, style, ...props }: StyledProps<ComponentProps<"div">>) {
 	const { className: sxClassName, style: sxStyle } = stylex.props(toastParts.text, style);
 
-	return <div className={[sxClassName, className].filter(Boolean).join(" ")} style={sxStyle} {...props} />;
+	return <div className={attrJoin(sxClassName, className)} style={sxStyle} {...props} />;
 }
 
 export const Provider = BaseToast.Provider;

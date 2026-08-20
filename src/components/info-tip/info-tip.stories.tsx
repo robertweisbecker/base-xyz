@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import * as stylex from "@stylexjs/stylex";
 import { tokens } from "@/theme/tokens.stylex";
+import { Stack } from "@/components/layout/layout";
 import { Text } from "@/components/text/text";
 import { InfoTip } from "./info-tip";
 
@@ -26,9 +27,9 @@ const meta = {
 	},
 	decorators: [
 		(Story) => (
-			<div {...stylex.props(styles.stage)}>
+			<Stack align="center" justify="center" p={8}>
 				<Story />
-			</div>
+			</Stack>
 		),
 	],
 } satisfies Meta<typeof InfoTip>;
@@ -41,16 +42,16 @@ export const Playground: Story = {};
 export const Examples: Story = {
 	parameters: { controls: { disable: true } },
 	render: () => (
-		<div {...stylex.props(styles.examples)}>
+		<Stack gap={5}>
 			{[
 				{ help: false, label: "Information" },
 				{ help: true, label: "Help" },
 			].map((option) => (
-				<div key={option.label} {...stylex.props(styles.option)}>
+				<Stack key={option.label} align="center" gap={4} orientation="horizontal">
 					<Text color="muted" size="1" style={styles.label}>
 						{option.label}
 					</Text>
-					<div {...stylex.props(styles.sizes)}>
+					<Stack align="center" gap={3} wrap="wrap">
 						{sizes.map((size) => (
 							<InfoTip
 								key={size}
@@ -59,56 +60,29 @@ export const Examples: Story = {
 								size={size}
 							/>
 						))}
-					</div>
-				</div>
+					</Stack>
+				</Stack>
 			))}
-			<div {...stylex.props(styles.option)}>
+			<Stack align="center" gap={4} orientation="horizontal">
 				<Text color="muted" size="1" style={styles.label}>
 					Rich content
 				</Text>
 				<InfoTip
 					help
 					content={
-						<div {...stylex.props(styles.content)}>
+						<Stack gap={1}>
 							<Text fontWeight="medium">Workspace visibility</Text>
 							<Text color="muted">Only members of this workspace can view the project.</Text>
-						</div>
+						</Stack>
 					}
 				/>
-			</div>
-		</div>
+			</Stack>
+		</Stack>
 	),
 };
 
 const styles = stylex.create({
-	stage: {
-		padding: tokens["--space-8"],
-		display: "flex",
-		justifyContent: "center",
-	},
-	examples: {
-		gap: tokens["--space-5"],
-		alignItems: "start",
-		display: "flex",
-		flexDirection: "column",
-	},
-	option: {
-		gap: tokens["--space-4"],
-		alignItems: "center",
-		display: "flex",
-	},
 	label: {
 		minWidth: "5rem",
-	},
-	sizes: {
-		gap: tokens["--space-3"],
-		alignItems: "center",
-		display: "flex",
-		flexWrap: "wrap",
-	},
-	content: {
-		gap: tokens["--space-1"],
-		display: "flex",
-		flexDirection: "column",
 	},
 });

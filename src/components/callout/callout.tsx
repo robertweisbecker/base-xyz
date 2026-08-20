@@ -7,6 +7,7 @@ import { resolveThemeProps, type ThemePropsOf } from "@/theme/theme-props";
 import { Heading } from "@/components/heading/heading";
 import { Text } from "@/components/text/text";
 import { VisuallyHidden } from "@/components/visually-hidden/visually-hidden";
+import { attrJoin } from "@/utils/attr-join";
 
 export type CalloutHue = "accent" | "error" | "warning" | "success" | "neutral";
 export type CalloutVariant = "default" | "banner";
@@ -53,7 +54,7 @@ export function Callout({
 		<div
 			ref={ref}
 			{...restProps}
-			className={[sx.className, className].filter(Boolean).join(" ")}
+			className={attrJoin(sx.className, className)}
 			role={alert ? "alert" : undefined}
 			style={sx.style}>
 			<div {...stylex.props(calloutParts.body, calloutBodyVariantStyles[variant])}>

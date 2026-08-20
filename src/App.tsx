@@ -33,10 +33,6 @@ import {
 	Button,
 	Callout,
 	Card,
-	CardDescription,
-	CardFooter,
-	CardHeader,
-	CardTitle,
 	Checkbox,
 	CheckboxGroup,
 	Code,
@@ -217,17 +213,17 @@ function getComponentCells(): GalleryCell[] {
 		{
 			title: "Card",
 			content: (
-				<Card size="sm" style={styles.cardSample}>
-					<CardHeader>
-						<CardTitle>Next steps</CardTitle>
-						<CardDescription>Review changes</CardDescription>
-					</CardHeader>
-					<CardFooter>
+				<Card.Root size="sm" style={styles.cardSample}>
+					<Card.Header>
+						<Card.Title>Next steps</Card.Title>
+						<Card.Description>Review changes</Card.Description>
+					</Card.Header>
+					<Card.Footer>
 						<Button size="xs" variant="ghost">
 							View details
 						</Button>
-					</CardFooter>
-				</Card>
+					</Card.Footer>
+				</Card.Root>
 			),
 		},
 		{

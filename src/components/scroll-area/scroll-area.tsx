@@ -3,6 +3,7 @@ import * as stylex from "@stylexjs/stylex";
 import type { StyleXStyles } from "@stylexjs/stylex";
 import type { ReactNode, Ref } from "react";
 import { tokens } from "@/theme/tokens.stylex";
+import { attrJoin } from "@/utils/attr-join";
 
 export type ScrollAreaProps = Omit<BaseScrollArea.Root.Props, "children" | "className" | "style"> & {
 	children: ReactNode;
@@ -64,7 +65,7 @@ export function ScrollArea({
 
 	return (
 		<BaseScrollArea.Root
-			className={[rootSx.className, className].filter(Boolean).join(" ")}
+			className={attrJoin(rootSx.className, className)}
 			style={rootSx.style}
 			{...props}>
 			<BaseScrollArea.Viewport
@@ -75,9 +76,9 @@ export function ScrollArea({
 					overflowX: orientation !== "vertical" && state.hasOverflowX ? "scroll" : "hidden",
 					overflowY: orientation !== "horizontal" && state.hasOverflowY ? "scroll" : "hidden",
 				})}
-				className={[viewportSx.className, viewportClassName].filter(Boolean).join(" ")}>
+				className={attrJoin(viewportSx.className, viewportClassName)}>
 				<BaseScrollArea.Content
-					className={[contentSx.className, contentClassName].filter(Boolean).join(" ") || undefined}
+					className={attrJoin(contentSx.className, contentClassName) || undefined}
 					style={contentSx.style}>
 					{children}
 				</BaseScrollArea.Content>
@@ -85,7 +86,7 @@ export function ScrollArea({
 			{orientation !== "horizontal" ? (
 				<BaseScrollArea.Scrollbar
 					orientation="vertical"
-					className={[verticalScrollbarSx.className, scrollbarClassName].filter(Boolean).join(" ")}
+					className={attrJoin(verticalScrollbarSx.className, scrollbarClassName)}
 					style={verticalScrollbarSx.style}>
 					<BaseScrollArea.Thumb {...stylex.props(parts.thumb, thumbOrientationVariants.vertical)} />
 				</BaseScrollArea.Scrollbar>
@@ -93,7 +94,7 @@ export function ScrollArea({
 			{orientation !== "vertical" ? (
 				<BaseScrollArea.Scrollbar
 					orientation="horizontal"
-					className={[horizontalScrollbarSx.className, scrollbarClassName].filter(Boolean).join(" ")}
+					className={attrJoin(horizontalScrollbarSx.className, scrollbarClassName)}
 					style={horizontalScrollbarSx.style}>
 					<BaseScrollArea.Thumb {...stylex.props(parts.thumb, thumbOrientationVariants.horizontal)} />
 				</BaseScrollArea.Scrollbar>

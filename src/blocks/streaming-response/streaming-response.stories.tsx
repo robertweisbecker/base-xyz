@@ -2,12 +2,13 @@ import { ArrowClockwiseIcon } from "@phosphor-icons/react/dist/csr/ArrowClockwis
 import { CopyIcon } from "@phosphor-icons/react/dist/csr/Copy";
 import { SquareIcon } from "@phosphor-icons/react/dist/csr/Square";
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import * as stylex from "@stylexjs/stylex";
 import { useState } from "react";
-import { Separator, Toolbar } from "@/components";
-import { tokens } from "@/theme/tokens.stylex";
+import { Button, Separator, Toolbar } from "@/components";
+import { Stack } from "@/components/layout/layout";
+import { Text } from "@/components/text/text";
 
 import { StreamingResponse, type StreamingResponseStatus } from "./streaming-response";
+
 const meta = {
 	title: "Blocks/Streaming response",
 	component: StreamingResponse.Root,
@@ -45,7 +46,7 @@ function ResponseActions({ onRetry, retry = true }: { onRetry?: () => void; retr
 
 export const Examples: Story = {
 	render: () => (
-		<div {...stylex.props(storyParts.list)}>
+		<Stack gap={6} maxWidth="46rem">
 			<InteractiveResponseExample />
 			<Separator />
 			<ResponseExample label="Complete" status="complete" />
@@ -53,7 +54,7 @@ export const Examples: Story = {
 			<ResponseExample label="Stopped" status="stopped" />
 			<Separator />
 			<ResponseExample label="Error" status="error" />
-		</div>
+		</Stack>
 	),
 };
 
@@ -70,10 +71,10 @@ function ReplacementResetExample() {
 	const [completionCount, setCompletionCount] = useState(0);
 
 	return (
-		<div {...stylex.props(storyParts.example)}>
-			<p data-testid="streaming-replacement-phase" {...stylex.props(storyParts.label)}>
+		<Stack gap={3}>
+			<Text data-testid="streaming-replacement-phase" size="1" color="muted">
 				Streaming response replacement test
-			</p>
+			</Text>
 			<StreamingResponse.Root aria-label="Streaming replacement response" status="streaming">
 				<StreamingResponse.Status />
 				<StreamingResponse.Content
@@ -82,17 +83,17 @@ function ReplacementResetExample() {
 					streamKey={streamKey}>
 					{response}
 				</StreamingResponse.Content>
-				<p data-testid="streaming-completion-count">{completionCount}</p>
-				<div>
-					<button type="button" onClick={() => setResponse("The replacement response is ready")}>
+				<Text data-testid="streaming-completion-count">{completionCount}</Text>
+				<Stack gap={2} orientation="horizontal">
+					<Button type="button" onClick={() => setResponse("The replacement response is ready")}>
 						Replace response
-					</button>
-					<button type="button" onClick={() => setStreamKey((key) => key + 1)}>
+					</Button>
+					<Button type="button" onClick={() => setStreamKey((key) => key + 1)}>
 						Retry same response
-					</button>
-				</div>
+					</Button>
+				</Stack>
 			</StreamingResponse.Root>
-		</div>
+		</Stack>
 	);
 }
 
@@ -106,8 +107,10 @@ function InteractiveResponseExample() {
 	}
 
 	return (
-		<section {...stylex.props(storyParts.example)}>
-			<h2 {...stylex.props(storyParts.label)}>Streaming</h2>
+		<Stack gap={3}>
+			<Text size="1" color="muted">
+				Streaming
+			</Text>
 			<StreamingResponse.Root aria-label="Streaming response" elapsedSeconds={131} status={status}>
 				<StreamingResponse.Status />
 				<StreamingResponse.Content streamKey={streamKey} onStreamingComplete={() => setStatus("complete")}>
@@ -123,14 +126,16 @@ function InteractiveResponseExample() {
 					<ResponseActions onRetry={retry} />
 				)}
 			</StreamingResponse.Root>
-		</section>
+		</Stack>
 	);
 }
 
 function ResponseExample({ label, status }: { label: string; status: StreamingResponseStatus }) {
 	return (
-		<section {...stylex.props(storyParts.example)}>
-			<h2 {...stylex.props(storyParts.label)}>{label}</h2>
+		<Stack gap={3}>
+			<Text size="1" color="muted">
+				{label}
+			</Text>
 			<StreamingResponse.Root aria-label={`${label} response`} elapsedSeconds={131} status={status}>
 				<StreamingResponse.Status />
 				<StreamingResponse.Content>{responseContent[status]}</StreamingResponse.Content>
@@ -150,27 +155,6 @@ function ResponseExample({ label, status }: { label: string; status: StreamingRe
 					<ResponseActions />
 				)}
 			</StreamingResponse.Root>
-		</section>
+		</Stack>
 	);
 }
-
-const storyParts = stylex.create({
-	list: {
-		gap: tokens["--space-6"],
-		display: "flex",
-		flexDirection: "column",
-		maxWidth: "46rem",
-	},
-	example: {
-		gap: tokens["--space-3"],
-		display: "flex",
-		flexDirection: "column",
-	},
-	label: {
-		margin: 0,
-		color: tokens["--fg-muted"],
-		fontSize: tokens["--font-size-1"],
-		letterSpacing: tokens["--letter-spacing-1"],
-		lineHeight: tokens["--line-height-1"],
-	},
-});

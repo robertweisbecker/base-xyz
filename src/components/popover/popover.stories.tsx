@@ -1,9 +1,9 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import * as stylex from "@stylexjs/stylex";
-import { tokens } from "@/theme/tokens.stylex";
-
 import { Button } from "@/components/button/button";
+import { Box, Grid, Stack } from "@/components/layout/layout";
 import { createPopoverHandle } from "@/components/popup-handles";
+import { Text } from "@/components/text/text";
 import { Popover } from "./popover";
 import { popupMotionStyles } from "./popover.stylex";
 
@@ -52,7 +52,7 @@ function PopoverViewportDemo() {
 
 export const Playground: Story = {
 	render: ({ _side, _align, _showArrow, _showClose }) => (
-		<div {...stylex.props(storyParts.stage)}>
+		<Box display="grid" style={storyParts.stage}>
 			<Popover.Root>
 				<Popover.Trigger render={<Button variant="secondary" />}>Open {_side}</Popover.Trigger>
 				<Popover.Popup
@@ -62,7 +62,7 @@ export const Playground: Story = {
 					<PopoverViewportDemo />
 				</Popover.Popup>
 			</Popover.Root>
-		</div>
+		</Box>
 	),
 };
 
@@ -86,9 +86,9 @@ export const Positioning: Story = {
 		controls: { disable: true },
 	},
 	render: () => (
-		<div {...stylex.props(storyParts.positioningGrid)}>
+		<Grid gap={4} style={storyParts.positioningGrid}>
 			{positioningPlacements.map(({ side, align }) => (
-				<div key={`${side}-${align}`} {...stylex.props(storyParts.positioningCell)}>
+				<Box display="flex" key={`${side}-${align}`} style={storyParts.positioningCell}>
 					<Popover.Root>
 						<Popover.Trigger render={<Button size="sm" variant="secondary" />}>
 							{`${side[0].toUpperCase()}${side.slice(1)} · ${align}`}
@@ -97,9 +97,9 @@ export const Positioning: Story = {
 							<PopoverViewportDemo />
 						</Popover.Popup>
 					</Popover.Root>
-				</div>
+				</Box>
 			))}
-		</div>
+		</Grid>
 	),
 };
 
@@ -129,9 +129,11 @@ const sharedPanels: Array<SharedPopoverPayload & { label: string }> = [
 
 export const SharedTriggers: Story = {
 	render: ({ _side, _align, _showArrow, _showClose }) => (
-		<div {...stylex.props(storyParts.stack)}>
-			<p {...stylex.props(storyParts.hint)}>Open one popover, then move between the shared triggers.</p>
-			<div {...stylex.props(storyParts.triggerGroup)}>
+		<Stack align="center" gap={3}>
+			<Text color="muted" size="1">
+				Open one popover, then move between the shared triggers.
+			</Text>
+			<Stack gap={2} orientation="horizontal" wrap="wrap">
 				{sharedPanels.map(({ label, title, description }) => (
 					<Popover.Trigger
 						key={label}
@@ -141,7 +143,7 @@ export const SharedTriggers: Story = {
 						{label}
 					</Popover.Trigger>
 				))}
-			</div>
+			</Stack>
 			<Popover.Root handle={sharedPopover}>
 				{({ payload }) => (
 					<Popover.Popup
@@ -156,22 +158,19 @@ export const SharedTriggers: Story = {
 					</Popover.Popup>
 				)}
 			</Popover.Root>
-		</div>
+		</Stack>
 	),
 };
 
 const storyParts = stylex.create({
 	stage: {
 		alignItems: "center",
-		display: "grid",
-		justifyItems: "center",
 		height: "360px",
+		justifyItems: "center",
 		width: "min(720px, calc(100vw - 48px))",
 	},
 	positioningGrid: {
-		gap: tokens["--space-4"],
 		paddingBlock: "10rem",
-		display: "grid",
 		gridTemplateColumns: {
 			default: "repeat(2, minmax(0, 1fr))",
 			"@media (max-width: 900px)": "1fr",
@@ -180,30 +179,11 @@ const storyParts = stylex.create({
 	},
 	positioningCell: {
 		alignItems: "center",
-		display: "flex",
 		justifyContent: "center",
 		minHeight: "15rem",
 		minWidth: 0,
 	},
 	narrowPopup: {
 		maxWidth: "17rem",
-	},
-	stack: {
-		gap: tokens["--space-3"],
-		alignItems: "center",
-		display: "flex",
-		flexDirection: "column",
-	},
-	hint: {
-		margin: 0,
-		color: tokens["--fg-muted"],
-		fontSize: tokens["--font-size-1"],
-		letterSpacing: tokens["--letter-spacing-1"],
-		lineHeight: tokens["--line-height-1"],
-	},
-	triggerGroup: {
-		gap: tokens["--space-2"],
-		display: "flex",
-		flexWrap: "wrap",
 	},
 });

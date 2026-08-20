@@ -1,7 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import * as stylex from "@stylexjs/stylex";
-import { tokens } from "@/theme/tokens.stylex";
-
+import { Stack } from "@/components/layout/layout";
+import { Text } from "@/components/text/text";
 import { Radio, RadioGroup, type RadioSize } from "./radio";
 
 type RadioStoryArgs = {
@@ -97,9 +96,11 @@ export const Groups: Story = {
 		controls: { disable: true },
 	},
 	render: () => (
-		<div {...stylex.props(storyStyles.story)}>
-			<section {...stylex.props(storyStyles.section)}>
-				<h2 {...stylex.props(storyStyles.heading)}>With descriptions</h2>
+		<Stack gap={8} p={4}>
+			<Stack gap={4}>
+				<Text color="muted" size="1">
+					With descriptions
+				</Text>
 				<RadioGroup
 					label="Project visibility"
 					description="Choose who can access this project."
@@ -108,16 +109,18 @@ export const Groups: Story = {
 					<Radio value="private" label="Private" description="Only you can access this project." />
 					<Radio value="team" label="Team" description="Everyone in your workspace can access it." />
 				</RadioGroup>
-			</section>
-			<section {...stylex.props(storyStyles.section)}>
-				<h2 {...stylex.props(storyStyles.heading)}>Inline group</h2>
+			</Stack>
+			<Stack gap={4}>
+				<Text color="muted" size="1">
+					Inline group
+				</Text>
 				<RadioGroup label="Billing cycle" name="billing-cycle" defaultValue="monthly" inline>
 					<Radio value="monthly" label="Monthly" />
 					<Radio value="quarterly" label="Quarterly" />
 					<Radio value="yearly" label="Yearly" />
 				</RadioGroup>
-			</section>
-		</div>
+			</Stack>
+		</Stack>
 	),
 };
 
@@ -126,59 +129,45 @@ export const States: Story = {
 		controls: { disable: true },
 	},
 	render: () => (
-		<div {...stylex.props(storyStyles.story)}>
-			<section {...stylex.props(storyStyles.section)}>
-				<h2 {...stylex.props(storyStyles.heading)}>Selected and unselected</h2>
+		<Stack gap={8} p={4}>
+			<Stack gap={4}>
+				<Text color="muted" size="1">
+					Selected and unselected
+				</Text>
 				<RadioGroup label="Plan" name="states-plan" defaultValue="free">
 					<Radio value="free" label="Free" />
 					<Radio value="pro" label="Pro" />
 					<Radio value="pro-plus" label="Pro+" description="Read-only" readOnly />
 					<Radio value="ultra" label="Ultra" description="Disabled" disabled />
 				</RadioGroup>
-			</section>
-			<section {...stylex.props(storyStyles.section)}>
-				<h2 {...stylex.props(storyStyles.heading)}>Disabled group</h2>
+			</Stack>
+			<Stack gap={4}>
+				<Text color="muted" size="1">
+					Disabled group
+				</Text>
 				<RadioGroup label="Region" name="states-region" disabled defaultValue="americas">
 					<Radio value="americas" label="Americas" />
 					<Radio value="europe" label="Europe" />
 				</RadioGroup>
-			</section>
-			<section {...stylex.props(storyStyles.section)}>
-				<h2 {...stylex.props(storyStyles.heading)}>Read-only</h2>
+			</Stack>
+			<Stack gap={4}>
+				<Text color="muted" size="1">
+					Read-only
+				</Text>
 				<RadioGroup label="Access level" name="states-access" defaultValue="editor" readOnly>
 					<Radio value="viewer" label="Viewer" />
 					<Radio value="editor" label="Editor" />
 				</RadioGroup>
-			</section>
-			<section {...stylex.props(storyStyles.section)}>
-				<h2 {...stylex.props(storyStyles.heading)}>Required</h2>
+			</Stack>
+			<Stack gap={4}>
+				<Text color="muted" size="1">
+					Required
+				</Text>
 				<RadioGroup label="Deployment region" name="states-required" required>
 					<Radio value="us" label="United States" />
 					<Radio value="eu" label="Europe" />
 				</RadioGroup>
-			</section>
-		</div>
+			</Stack>
+		</Stack>
 	),
 };
-
-const storyStyles = stylex.create({
-	story: {
-		padding: tokens["--space-4"],
-		gap: tokens["--space-8"],
-		display: "flex",
-		flexDirection: "column",
-	},
-	section: {
-		gap: tokens["--space-4"],
-		display: "flex",
-		flexDirection: "column",
-	},
-	heading: {
-		margin: 0,
-		color: tokens["--fg-muted"],
-		fontSize: tokens["--font-size-1"],
-		fontWeight: tokens["--font-weight-regular"],
-		letterSpacing: tokens["--letter-spacing-1"],
-		lineHeight: tokens["--line-height-1"],
-	},
-});

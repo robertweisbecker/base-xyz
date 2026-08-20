@@ -1,9 +1,10 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import * as stylex from "@stylexjs/stylex";
+import type { ReactNode } from "react";
+import { Separator } from "@/components/separator/separator";
+import { Stack } from "@/components/layout/layout";
 import { Icon } from "@/components/icons";
 import { Text } from "@/components/text/text";
 import { Rating, type RatingProps } from "./rating";
-import { tokens } from "@/theme/tokens.stylex";
 
 const iconOptions = {
 	None: null,
@@ -73,23 +74,16 @@ export const Examples: Story = {
 		controls: { disable: true },
 	},
 	render: () => (
-		<div {...stylex.props(storyStyles.examples)}>
-			<div {...stylex.props(storyStyles.example)}>
-				<Text size="1" color="subtle">
-					No initial value
-				</Text>
+		<Stack gap={6}>
+			<Example label="No initial value">
 				<Rating label="Unrated product" />
-			</div>
-			<div {...stylex.props(storyStyles.example)}>
-				<Text size="1" color="subtle">
-					Selected value
-				</Text>
+			</Example>
+			<Separator />
+			<Example label="Selected value">
 				<Rating label="Product rating" defaultValue={4} />
-			</div>
-			<div {...stylex.props(storyStyles.example)}>
-				<Text size="1" color="subtle">
-					Custom count and icons
-				</Text>
+			</Example>
+			<Separator />
+			<Example label="Custom count and icons">
 				<Rating
 					label="Custom rating"
 					count={7}
@@ -97,26 +91,20 @@ export const Examples: Story = {
 					icon={<Icon.Dot width={24} height={24} />}
 					pressedIcon={<Icon.Circle width={24} height={24} />}
 				/>
-			</div>
-			<div {...stylex.props(storyStyles.example)}>
-				<Text size="1" color="subtle">
-					Read-only
-				</Text>
+			</Example>
+			<Separator />
+			<Example label="Read-only">
 				<Rating label="Read-only product rating" defaultValue={3} readOnly />
-			</div>
-			<div {...stylex.props(storyStyles.example)}>
-				<Text size="1" color="subtle">
-					Disabled
-				</Text>
+			</Example>
+			<Separator />
+			<Example label="Disabled">
 				<Rating label="Disabled product rating" defaultValue={3} disabled />
-			</div>
-			<div {...stylex.props(storyStyles.example)}>
-				<Text size="1" color="subtle">
-					Bounded count
-				</Text>
+			</Example>
+			<Separator />
+			<Example label="Bounded count">
 				<Rating label="Bounded rating" count={50} defaultValue={5} />
-			</div>
-		</div>
+			</Example>
+		</Stack>
 	),
 };
 
@@ -133,16 +121,13 @@ export const Cancellation: Story = {
 	),
 };
 
-const storyStyles = stylex.create({
-	examples: {
-		display: "flex",
-		flexDirection: "column",
-		rowGap: tokens["--space-6"],
-	},
-	example: {
-		alignItems: "flex-start",
-		display: "flex",
-		flexDirection: "column",
-		rowGap: tokens["--space-2"],
-	},
-});
+function Example({ children, label }: { children: ReactNode; label: string }) {
+	return (
+		<Stack align="start" gap={2}>
+			<Text size="1" color="muted">
+				{label}
+			</Text>
+			{children}
+		</Stack>
+	);
+}

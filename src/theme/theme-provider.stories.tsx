@@ -4,6 +4,7 @@ import { useLayoutEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { createRoot, type Root } from "react-dom/client";
 import { Text } from "@/components/text";
+import { Stack } from "@/components/layout/layout";
 import { tokens } from "@/theme/tokens.stylex";
 import { ThemeProvider, useTheme } from "./index";
 
@@ -54,20 +55,18 @@ export const Contract: Story = {
 export const StatusRamps: Story = {
 	parameters: { controls: { disable: true } },
 	render: () => (
-		<div {...stylex.props(verificationStyles.contract)}>
-			<ThemeProvider
-				aria-label="MP light status ramps"
-				data-testid="mp-light-ramps"
-				mode="light"
-				render={<section />}
-				style={statusRampStyles.collection}
-				theme="mp">
-				<Text color="muted" render={<h2 />} size="1">
-					Light
-				</Text>
-				<StatusRampSwatches />
-			</ThemeProvider>
-		</div>
+		<ThemeProvider
+			aria-label="MP light status ramps"
+			data-testid="mp-light-ramps"
+			mode="light"
+			render={<section />}
+			style={statusRampStyles.collection}
+			theme="mp">
+			<Text color="muted" render={<h2 />} size="1">
+				Light
+			</Text>
+			<StatusRampSwatches />
+		</ThemeProvider>
 	),
 };
 
@@ -234,7 +233,7 @@ function MultipleRootsFixture() {
 	}, []);
 
 	return (
-		<div {...stylex.props(verificationStyles.contract)}>
+		<Stack gap={4}>
 			<div ref={firstContainerRef} />
 			<div ref={secondContainerRef} />
 			<button
@@ -253,7 +252,7 @@ function MultipleRootsFixture() {
 				}}>
 				Unmount second root
 			</button>
-		</div>
+		</Stack>
 	);
 }
 
@@ -269,7 +268,7 @@ function ContractFixture() {
 	}, []);
 
 	return (
-		<div {...stylex.props(verificationStyles.contract)}>
+		<Stack gap={4}>
 			<OuterThemeSnapshot />
 			<ThemeProvider
 				ref={providerRef}
@@ -281,7 +280,7 @@ function ContractFixture() {
 				}
 				style={verificationStyles.callerOverride}
 				theme="mp">
-				<div data-testid="custom-theme-content" {...stylex.props(verificationStyles.content)}>
+				<Stack align="center" data-testid="custom-theme-content" gap={2} orientation="horizontal">
 					<span data-testid="custom-accent" {...stylex.props(verificationStyles.swatch)} />
 					<span data-testid="custom-error-s1" {...stylex.props(statusRampStyles.errorS1)} />
 					<span data-testid="warning-reference" {...stylex.props(verificationStyles.warningReference)} />
@@ -298,21 +297,21 @@ function ContractFixture() {
 						<span data-testid="nested-default-error-s1" {...stylex.props(statusRampStyles.errorS1)} />
 						<ThemeSnapshot />
 					</ThemeProvider>
-				</div>
+				</Stack>
 			</ThemeProvider>
 
 			<ThemeProvider data-testid="fallback-theme-host">
-				<div data-testid="fallback-theme-content" {...stylex.props(verificationStyles.content)}>
+				<Stack align="center" data-testid="fallback-theme-content" gap={2} orientation="horizontal">
 					<span data-testid="fallback-accent" {...stylex.props(verificationStyles.swatch)} />
 					<ThemeSnapshot />
-				</div>
+				</Stack>
 			</ThemeProvider>
 
 			<ThemeProvider data-testid="default-light-theme-host" mode="light" theme="default">
 				<span data-testid="default-light-accent" {...stylex.props(verificationStyles.swatch)} />
 				<span data-testid="default-light-error-s1" {...stylex.props(statusRampStyles.errorS1)} />
 			</ThemeProvider>
-		</div>
+		</Stack>
 	);
 }
 
@@ -381,15 +380,6 @@ function ThemeSnapshot() {
 const verificationStyles = stylex.create({
 	callerOverride: {
 		color: tokens["--bg-warning-primary"],
-	},
-	content: {
-		gap: tokens["--space-2"],
-		alignItems: "center",
-		display: "flex",
-	},
-	contract: {
-		gap: tokens["--space-4"],
-		display: "grid",
 	},
 	preview: {
 		padding: tokens["--space-4"],

@@ -7,8 +7,23 @@ import * as stylex from "@stylexjs/stylex";
  * Named themes only override the subset that differs from these defaults.
  */
 export const tokens = stylex.defineVars({
+	// Color primitives
 	"--color-white": "#ffffff",
 	"--color-black": "#000000",
+
+	"--color-white-a1": "oklch(100% 0 0deg / 0.08)",
+	"--color-white-a2": "oklch(100% 0 0deg / 0.11)",
+	"--color-white-a3": "oklch(100% 0 0deg / 0.19)",
+	"--color-white-a4": "oklch(100% 0 0deg / 0.30)",
+	"--color-white-a5": "oklch(100% 0 0deg / 0.64)",
+	"--color-white-a6": "oklch(100% 0 0deg / 0.72)",
+
+	"--color-black-a1": "oklch(0 0 0 / 0.04)",
+	"--color-black-a2": "oklch(0 0 0 / 0.08)",
+	"--color-black-a3": "oklch(0 0 0 / 0.12)",
+	"--color-black-a4": "oklch(0 0 0 / 0.24)",
+	"--color-black-a5": "oklch(0 0 0 / 0.60)",
+	"--color-black-a6": "oklch(0 0 0 / 0.80)",
 
 	"--color-gray-s1": "light-dark(oklch(99% 0 0deg), oklch(20% 0 0deg))",
 	"--color-gray-s2": "light-dark(oklch(97.5% 0 0deg), oklch(21% 0 0deg))",
@@ -22,7 +37,7 @@ export const tokens = stylex.defineVars({
 	"--color-gray-b2": "light-dark(hsl(0 0% 81%), oklch(41.33% 0 0))",
 	"--color-gray-b3": "light-dark(hsl(0 0% 73%), oklch(48% 0 0))",
 
-	"--color-gray-p1": "light-dark(oklch(73% 0 0deg), oklch(73% 0 0deg))",
+	"--color-gray-p1": "light-dark(oklch(73% 0 0deg), oklch(57% 0 0deg))",
 	"--color-gray-p2": "light-dark(oklch(67% 0 0deg), oklch(67% 0 0deg))",
 	"--color-gray-p3": "light-dark(oklch(64% 0 0deg), oklch(64% 0 0deg))",
 	"--color-gray-p4": "light-dark(oklch(62.5% 0 0deg), oklch(62.5% 0 0deg))",
@@ -36,37 +51,23 @@ export const tokens = stylex.defineVars({
 	"--color-gray-a3": "light-dark(var(--color-black-a3), var(--color-white-a3))",
 	"--color-gray-a4": "light-dark(var(--color-black-a4), var(--color-white-a4))",
 	"--color-gray-a5": "light-dark(var(--color-black-a5), var(--color-white-a5))",
-	"--color-gray-contrast": "var(--color-gray-t1)",
-	"--fg-success-contrast": "var(--color-white)",
-	"--fg-error-contrast": "var(--color-white)",
+	"--color-gray-contrast": "contrast-color(var(--bg-neutral))",
 
 	"--color-accent-s1": "light-dark(oklch(98.965% 0.005 248.371), oklch(19.812% 0.02939 268.624))",
 	"--color-accent-s2": "light-dark(oklch(98.25% 0.012 226.394), oklch(21.637% 0.03717 267.141))",
 	"--color-accent-c1": "light-dark(oklch(96.125% 0.022 235.163), oklch(25.216% 0.05627 264.018))",
 	"--color-accent-c2": "light-dark(oklch(95% 0.028 239.777), oklch(28.823% 0.07564 262.986))",
-	"--color-accent-c3": "light-dark(hsl(206deg 100% 92.5%), oklch(32.322% 0.09422 261.937))",
+	"--color-accent-c3": "light-dark(oklch(91% 0.035 242), oklch(32.322% 0.09422 261.937))",
 	"--color-accent-b1": "light-dark(oklch(90.163% 0.049 243.67), oklch(34.75% 0.13 262))",
 	"--color-accent-b2": "light-dark(oklch(85.134% 0.07 243.106), oklch(36.33% 0.13 260))",
 	"--color-accent-b3": "light-dark(oklch(80% 0.09 242.684), oklch(41% 0.15 258))",
 	// Linear blue: oklch(0.74 0.15 249.88)
 
 	// "--color-accent-p1": "light-dark(hsl(214deg 98% 50%), #0169CC)",
-	"--color-accent-p1": "light-dark(#1470f4, oklch(54.544% 0.18129 256.706))",
-	"--color-accent-p2": "light-dark(hsl(207deg 96% 48%), oklch(47% 0.19 252))",
+	"--color-accent-p1": "light-dark(#1470f4, oklch(74.544% 0.17 254))",
+	"--color-accent-p2": "light-dark(hsl(220deg 93% 47%), oklch(71.544% 0.21 256))",
 	"--color-accent-t1": "light-dark(oklch(53.072% 0.20334 262.925), oklch(69.483% 0.15223 255.815))",
 	"--color-accent-t2": "light-dark(oklch(28.072% 0.09716 262.82), oklch(87.811% 0.0624 249.313))",
-
-	"--color-white-a1": "oklch(100% 0 0deg / 0.077)",
-	"--color-white-a2": "oklch(100% 0 0deg / 0.11)",
-	"--color-white-a3": "oklch(100% 0 0deg / 0.19)",
-	"--color-white-a4": "oklch(100% 0 0deg / 0.32)",
-	"--color-white-a5": "oklch(100% 0 0deg / 0.64)",
-
-	"--color-black-a1": "hsl(0deg 0% 0% / 4%)",
-	"--color-black-a2": "hsl(0deg 0% 0% / 8%)",
-	"--color-black-a3": "hsl(0deg 0% 0% / 12%)",
-	"--color-black-a4": "hsl(0deg 0% 0% / 24%)",
-	"--color-black-a5": "hsl(0deg 0% 0% / 60%)",
 
 	"--color-success-s1": "light-dark(hsl(137 85% 98.5%), oklch(19.814% 0.07179 148.353))",
 	"--color-success-s2": "light-dark(oklch(98.491% 0.018 156.15), oklch(21% 0.08 148))",
@@ -115,8 +116,9 @@ export const tokens = stylex.defineVars({
 	"--color-grape-t1": "light-dark(hsl(276deg 66% 54%), hsl(276deg 86% 70%))",
 	"--color-lime-t1": "light-dark(hsl(91deg 64% 38.75%), hsl(91deg 72% 56%))",
 
+	// Surface
 	"--canvas": "light-dark(var(--color-gray-s2), #050506)",
-	"--bg-inset": "var(--color-gray-a1)",
+	"--bg-inset": "var(--color-gray-s3)",
 	"--surface": "var(--color-gray-s1)",
 	"--page": "light-dark(var(--color-white), var(--color-gray-s1))",
 	"--panel": "light-dark(var(--color-white), var(--color-gray-s2))",
@@ -131,36 +133,12 @@ export const tokens = stylex.defineVars({
 	"--fg": "var(--color-gray-t3)",
 	"--fg-muted": "var(--color-gray-t2)",
 	"--fg-subtle": "var(--color-gray-t1)",
-	"--fg-accent": "var(--color-accent-t1)",
-	"--fg-accent-strong": "var(--color-accent-t2)",
-	"--fg-accent-hover": "var(--color-accent-t1)",
 	"--border": "var(--color-gray-a2)",
 	"--border-strong": "var(--color-gray-a3)",
 	"--border-opaque": "var(--color-gray-b1)",
 	"--border-input": "var(--color-gray-b2)",
 	"--border-input-hover": "var(--color-gray-b3)",
 	"--border-disabled": "var(--color-gray-a1)",
-	"--bg-primary": "var(--color-accent-p1)",
-	"--bg-primary-highlight": "var(--color-accent-p2)",
-	"--bg-accent": "var(--color-accent-c1)",
-	"--bg-accent-hover": "var(--color-accent-c2)",
-	"--bg-accent-active": "var(--color-accent-c3)",
-	"--fg-accent-contrast": "var(--color-white)",
-	"--bg-neutral": "var(--color-gray-p3)",
-	"--bg-neutral-hover": "var(--color-gray-p4)",
-	"--bg-neutral-strong": "var(--color-gray-t2)",
-	"--fg-neutral-contrast": "var(--color-white)",
-	"--bg-error-primary": "var(--color-error-p1)",
-	"--fg-error": "var(--color-error-t1)",
-	"--bg-error": "var(--color-error-c2)",
-	"--fg-success": "var(--color-success-t1)",
-	"--bg-success-primary": "var(--color-success-p1)",
-	"--bg-success": "var(--color-success-c1)",
-	"--fg-warning": "var(--color-warning-t1)",
-
-	"--bg-warning-primary": "var(--color-warning-p1)",
-	"--bg-warning-subtle": "var(--color-warning-c1)",
-	"--fg-warning-contrast": "var(--color-black)",
 	"--bg-inverse": "light-dark(var(--color-gray-t3), var(--color-gray-t3))",
 	"--fg-inverse": "light-dark(#ffffff, #17181b)",
 	"--fg-inverse-muted": "var(--color-gray-t1)",
@@ -171,12 +149,49 @@ export const tokens = stylex.defineVars({
 	"--tooltip": "light-dark(var(--color-white), var(--color-gray-c2))",
 	"--fill-track": "var(--color-gray-a2)",
 	"--fill-disabled": "var(--color-gray-a1)",
-	"--fill-neutral": "var(--color-gray-p1)",
-	"--fill-warning": "var(--color-warning-p1)",
+
+	// Accent
+	"--fg-accent": "var(--color-accent-t1)",
+	"--fg-accent-strong": "var(--color-accent-t2)",
+	"--fg-accent-hover": "var(--color-accent-t1)",
+	"--bg-primary": "var(--color-accent-p1)",
+	"--bg-primary-highlight": "var(--color-accent-p2)",
+	"--bg-accent": "var(--color-accent-c1)",
+	"--bg-accent-hover": "var(--color-accent-c2)",
+	"--bg-accent-active": "var(--color-accent-c3)",
+	"--fg-accent-contrast": "var(--color-accent-s1)",
+	"--fill-accent": "var(--color-accent-p1)",
+
+	// Success
+	"--fg-success": "var(--color-success-t1)",
+	"--fg-success-contrast": "var(--color-success-s1)",
+	"--bg-success-primary": "var(--color-success-p1)",
+	"--bg-success-primary-hover": "var(--color-success-p2)",
+	"--bg-success": "var(--color-success-c1)",
 	"--fill-success": "var(--color-success-p1)",
 
-	"--fill-accent": "var(--color-accent-p1)",
+	// Warning
+	"--fg-warning": "var(--color-warning-t1)",
+	"--bg-warning-primary": "var(--color-warning-p1)",
+	"--bg-warning-primary-hover": "var(--color-warning-p2)",
+	"--bg-warning-subtle": "var(--color-warning-c1)",
+	"--fg-warning-contrast": "var(--color-warning-s1)",
+	"--fill-warning": "var(--color-warning-p1)",
+
+	// Error
+	"--bg-error-primary": "var(--color-error-p1)",
+	"--bg-error-primary-hover": "var(--color-error-p2)",
+	"--fg-error": "var(--color-error-t1)",
+	"--fg-error-contrast": "var(--color-error-s1)",
+	"--bg-error": "var(--color-error-c2)",
 	"--fill-error": "var(--color-error-p1)",
+
+	// Neutral
+	"--bg-neutral": "var(--color-gray-p3)",
+	"--bg-neutral-hover": "var(--color-gray-p4)",
+	"--bg-neutral-strong": "var(--color-gray-t1)",
+	"--fg-neutral-contrast": "var(--color-gray-s1)",
+	"--fill-neutral": "var(--color-gray-p1)",
 
 	"--radius-xxs": "0.1875rem",
 	"--radius-xs": "0.3125rem",
@@ -241,13 +256,15 @@ export const tokens = stylex.defineVars({
 	"--shadow-color-outer-ring": "light-dark(var(--color-black-a2), var(--color-black-a5))",
 
 	"--shadow-ring-inset":
-		"inset 0 0 0 1px light-dark(rgb(20 20 24 / 4%), rgb(255 255 255 / 10%)), inset 0 -1px 0 light-dark(transparent, rgb(255 255 255 / 5%))",
+		"inset 0 0 0 .5px light-dark(rgb(20 20 24 / 9%), rgb(255 255 255 / 10%)), inset 0 -.5px 0 light-dark(transparent, rgb(255 255 255 / 5%))",
 	"--shadow-ring":
 		"inset 0 1px light-dark(transparent, rgb(255 255 255 / 5%)), inset 0 0 0 1px light-dark(transparent, var(--color-gray-a1)), 0 0 0 1px light-dark(var(--color-gray-a1), transparent), 0 0 0 0.5px light-dark(transparent, rgb(0 0 0 / 40%))",
 	"--shadow-inset":
-		"var(--shadow-ring-inset), inset 0 0 0 1px light-dark(var(--color-black-a1), var(--color-white-a1)), inset 0 1.5px 2px 0 rgba(0,0,0,0.12), inset 0 1.5px 2px 0 rgba(0,0,0,0.02)",
+		"var(--shadow-ring-inset),  0 0px 0 .5px light-dark(var(--color-black-a1), var(--color-white-a1)), inset 0 3px 2px -1.5px var(--shadow-color-2), inset 0 1px 3px 1px var(--shadow-color-outer-ring)",
 	"--shadow-xs":
 		"0 2px 2px -1px light-dark(var(--color-black-a1), var(--color-black-a4)), 0 1px var(--color-black-a1), 0 -1px var(--color-white-a3), 0 0 0 1px var(--color-gray-a1)",
+	"--shadow-xs-2":
+		"inset 0 1px var(--color-white-a1), inset 0 0 1px 0.5px var(--color-white-a3), 0 1px 0.5px var(--color-black-a1), 0 0 3px -1px var(--shadow-color-2)",
 	"--shadow-sm":
 		"0px 2px 3px -1px var(--shadow-color-2),0px 1px 0px 0px rgba(25,28,33,0.02), 0px 0px 0px 1px rgba(25,28,33,0.08), var(--shadow-ring)",
 	"--shadow-md":
@@ -257,7 +274,7 @@ export const tokens = stylex.defineVars({
 	"--shadow-primary":
 		"inset 0 0 0.03125em 0.0675em color-mix(in srgb, var(--bg-primary) 94%, var(--fg)), inset 0 0.03125em 0.03125em 0.0675em color-mix(in oklch, white 30%, var(--bg-primary)), var(--shadow-ring)",
 	"--shadow-primary-pressed":
-		"inset 0 0 0.08em color-mix(in oklch, black 20%, var(--bg-primary)), inset 0 0.08em 0.16em 0.08em color-mix(in oklch, black 20%, var(--bg-primary))",
+		"inset 0 0.08em 0.16em -0.04em color-mix(in oklch, black 20%, var(--bg-primary-highlight)), inset 0 0.08em 0.24em 0.04em var(--shadow-color-2)",
 
 	"--font-family-sans":
 		'-apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji"',

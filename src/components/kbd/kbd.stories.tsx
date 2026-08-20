@@ -2,6 +2,7 @@ import type { Meta, StoryObj } from "@storybook/react-vite";
 import * as stylex from "@stylexjs/stylex";
 import { Badge } from "@/components/badge/badge";
 import { Button } from "@/components/button/button";
+import { Box, Stack } from "@/components/layout";
 import { Tabs } from "@/components/tabs/tabs";
 import { Text } from "@/components/text/text";
 import { Tooltip } from "@/components/tooltip/tooltip";
@@ -34,9 +35,9 @@ const meta = {
 	},
 	decorators: [
 		(Story) => (
-			<div {...stylex.props(storyStyles.frame)}>
+			<Box maxWidth="32rem" width="full">
 				<Story />
-			</div>
+			</Box>
 		),
 	],
 } satisfies Meta<typeof Kbd>;
@@ -60,8 +61,8 @@ export const Group: Story = {
 export const Composition: Story = {
 	parameters: { controls: { disable: true } },
 	render: () => (
-		<div {...stylex.props(storyStyles.stack)}>
-			<section {...stylex.props(storyStyles.section)}>
+		<Stack gap={8}>
+			<Stack align="start" gap={3}>
 				<Text color="muted" size="1">
 					Tooltip shortcut
 				</Text>
@@ -78,18 +79,18 @@ export const Composition: Story = {
 						</Tooltip.Popup>
 					</Tooltip.Root>
 				</Tooltip.Provider>
-			</section>
+			</Stack>
 
-			<section {...stylex.props(storyStyles.section)}>
+			<Stack align="start" gap={3}>
 				<Text color="muted" size="1">
 					Button end slot
 				</Text>
 				<Button endSlot={<Kbd>⌘K</Kbd>} variant="secondary">
 					Open command menu
 				</Button>
-			</section>
+			</Stack>
 
-			<section {...stylex.props(storyStyles.section)}>
+			<Stack align="start" gap={3}>
 				<Text color="muted" size="1">
 					Tabs end slot
 				</Text>
@@ -109,36 +110,21 @@ export const Composition: Story = {
 						</Tabs.Panel>
 					</Tabs.Content>
 				</Tabs.Root>
-			</section>
+			</Stack>
 
-			<section {...stylex.props(storyStyles.section)}>
+			<Stack align="start" gap={3}>
 				<Text color="muted" size="1">
 					Badge w/ Kbd
 				</Text>
 				<Badge variant="elevated" pe={0.5}>
 					View actions <Kbd size="sm">⌘K</Kbd>
 				</Badge>
-			</section>
-		</div>
+			</Stack>
+		</Stack>
 	),
 };
 
 const storyStyles = stylex.create({
-	frame: {
-		maxWidth: "32rem",
-		width: "100%",
-	},
-	section: {
-		gap: tokens["--space-3"],
-		alignItems: "flex-start",
-		display: "flex",
-		flexDirection: "column",
-	},
-	stack: {
-		gap: tokens["--space-8"],
-		display: "flex",
-		flexDirection: "column",
-	},
 	tooltipContent: {
 		gap: tokens["--space-1"],
 		alignItems: "center",

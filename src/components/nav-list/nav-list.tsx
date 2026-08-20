@@ -141,7 +141,7 @@ export function Root({ ref, className, style, children, size = "md", onNavigate,
 			<ScrollContext.Provider value={scrollContext}>
 				<nav
 					ref={ref}
-					className={[sxClassName, className].filter(Boolean).join(" ")}
+					className={attrJoin(sxClassName, className)}
 					style={sxStyle}
 					data-presentation={presentation}
 					data-scroll-mode={scrollMode}
@@ -199,7 +199,7 @@ export function Section({
 		<section
 			role="group"
 			aria-labelledby={headingId}
-			className={[sxClassName, className].filter(Boolean).join(" ")}
+			className={attrJoin(sxClassName, className)}
 			style={sxStyle}>
 			{visuallyHideLabel ? <VisuallyHidden id={headingId}>{label}</VisuallyHidden> : heading}
 			<ul {...stylex.props(navListParts.list)}>{children}</ul>
@@ -403,7 +403,7 @@ export function CollapsibleGroup({
 	const { className: sxClassName, style: sxStyle } = stylex.props(navListParts.collapsibleGroup, style);
 
 	return (
-		<li ref={ref} className={[sxClassName, className].filter(Boolean).join(" ")} style={sxStyle}>
+		<li ref={ref} className={attrJoin(sxClassName, className)} style={sxStyle}>
 			<CollapsibleGroupContext.Provider value={context}>
 				<BaseCollapsible.Root
 					{...props}
@@ -517,7 +517,7 @@ export function CollapsibleGroupPanel({
 						{...restPanelProps}
 						aria-hidden={state.open ? undefined : true}
 						inert={state.open ? undefined : true}
-						className={[sx.className, className].filter(Boolean).join(" ")}
+						className={attrJoin(sx.className, className)}
 						style={sx.style}>
 						{children}
 					</ul>

@@ -3,27 +3,28 @@ import { ArrowClockwiseIcon } from "@phosphor-icons/react/dist/csr/ArrowClockwis
 import { ArrowCounterClockwiseIcon } from "@phosphor-icons/react/dist/csr/ArrowCounterClockwise";
 import { CaretUpDownIcon } from "@phosphor-icons/react/dist/csr/CaretUpDown";
 import { CopyIcon } from "@phosphor-icons/react/dist/csr/Copy";
+import { LinkIcon, ListNumbersIcon, PaperclipIcon, CodeIcon, CodeBlockIcon } from "@phosphor-icons/react";
 import { ListBulletsIcon } from "@phosphor-icons/react/dist/csr/ListBullets";
 import { TextAlignCenterIcon } from "@phosphor-icons/react/dist/csr/TextAlignCenter";
 import { TextAlignLeftIcon } from "@phosphor-icons/react/dist/csr/TextAlignLeft";
 import { TextAlignRightIcon } from "@phosphor-icons/react/dist/csr/TextAlignRight";
 import { TextBIcon } from "@phosphor-icons/react/dist/csr/TextB";
 import { TextItalicIcon } from "@phosphor-icons/react/dist/csr/TextItalic";
+import { TextStrikethroughIcon } from "@phosphor-icons/react/dist/ssr/TextStrikethrough";
 import { TextUnderlineIcon } from "@phosphor-icons/react/dist/csr/TextUnderline";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import * as stylex from "@stylexjs/stylex";
-import { breakpoints } from "@/styles/constants.stylex";
-import { tokens } from "@/theme/tokens.stylex";
-
+import { CopyButton } from "@/blocks/copy-button/copy-button";
+import { IconButton } from "@/components/button/button";
+import { Icon } from "@/components/icons";
+import { Grid, Stack } from "@/components/layout/layout";
 import { Menu } from "@/components/menu/menu";
 import { Select } from "@/components/select/select";
-import { Toolbar } from "./toolbar";
-import { CopyButton } from "@/blocks/copy-button/copy-button";
-import { TextStrikethroughIcon } from "@phosphor-icons/react/dist/ssr/TextStrikethrough";
-import { LinkIcon, ListNumbersIcon, PaperclipIcon, CodeIcon, CodeBlockIcon } from "@phosphor-icons/react";
-import { IconButton } from "@/components/button/button";
+import { Text } from "@/components/text/text";
 import { Toggle, ToggleGroup } from "@/components/toggle/toggle";
-import { Icon } from "@/components/icons";
+import { breakpoints } from "@/styles/constants.stylex";
+import { Toolbar } from "./toolbar";
+
 const meta = {
 	title: "Components/Toolbar",
 	component: Toolbar.Root,
@@ -134,16 +135,20 @@ export const Composition: Story = {
 		controls: { disable: true },
 	},
 	render: () => (
-		<div {...stylex.props(storyParts.sections)}>
-			<section {...stylex.props(storyParts.section)}>
-				<h2 {...stylex.props(storyParts.heading)}>Editing controls</h2>
+		<Grid align="start" gap={8} style={storyParts.sections}>
+			<Stack align="start" gap={3}>
+				<Text color="muted" size="1">
+					Editing controls
+				</Text>
 				<EditingToolbar />
-			</section>
-			<section {...stylex.props(storyParts.section)}>
-				<h2 {...stylex.props(storyParts.heading)}>Menus and selects</h2>
+			</Stack>
+			<Stack align="start" gap={3}>
+				<Text color="muted" size="1">
+					Menus and selects
+				</Text>
 				<PopupToolbar />
-			</section>
-		</div>
+			</Stack>
+		</Grid>
 	),
 };
 
@@ -152,13 +157,17 @@ export const States: Story = {
 		controls: { disable: true },
 	},
 	render: () => (
-		<div {...stylex.props(storyParts.sections)}>
-			<section {...stylex.props(storyParts.section)}>
-				<h2 {...stylex.props(storyParts.heading)}>Disabled toolbar</h2>
+		<Grid align="start" gap={8} style={storyParts.sections}>
+			<Stack align="start" gap={3}>
+				<Text color="muted" size="1">
+					Disabled toolbar
+				</Text>
 				<CompactToolbar disabled />
-			</section>
-			<section {...stylex.props(storyParts.section)}>
-				<h2 {...stylex.props(storyParts.heading)}>Disabled group</h2>
+			</Stack>
+			<Stack align="start" gap={3}>
+				<Text color="muted" size="1">
+					Disabled group
+				</Text>
 				<Toolbar.Root aria-label="List actions">
 					<Toolbar.Group disabled aria-label="List formatting">
 						<Toolbar.Button aria-label="Bulleted list">
@@ -173,8 +182,8 @@ export const States: Story = {
 						<Icon.More aria-hidden />
 					</Toolbar.Button>
 				</Toolbar.Root>
-			</section>
-		</div>
+			</Stack>
+		</Grid>
 	),
 };
 
@@ -270,26 +279,10 @@ function CompactToolbar({ disabled }: { disabled?: boolean }) {
 
 const storyParts = stylex.create({
 	sections: {
-		gap: tokens["--space-8"],
-		alignItems: "flex-start",
-		display: "grid",
 		gridTemplateColumns: {
 			default: "1fr",
 			[breakpoints.sm]: "repeat(2, minmax(0, max-content))",
 		},
-	},
-	section: {
-		gap: tokens["--space-3"],
-		display: "flex",
-		flexDirection: "column",
-	},
-	heading: {
-		margin: 0,
-		color: tokens["--fg-muted"],
-		fontSize: tokens["--font-size-1"],
-		fontWeight: tokens["--font-weight-regular"],
-		letterSpacing: tokens["--letter-spacing-1"],
-		lineHeight: tokens["--line-height-1"],
 	},
 	selectButton: {
 		justifyContent: "space-between",

@@ -13,7 +13,8 @@ import {
 	type IconButtonProps,
 } from "@/components/button/button";
 import { buttonThemeProps, type ButtonThemeProps } from "@/components/button/button-theme-props";
-import { tokens } from "@/theme/tokens.stylex";
+import { attrJoin } from "@/utils/attr-join";
+import { toggleGroupMarker, toggleGroupStyles, toggleJoinStyles, toggleMarker } from "./toggle.stylex";
 
 type ToggleBaseProps = Omit<
 	BaseToggle.Props,
@@ -58,6 +59,12 @@ export type ToggleProps = ToggleButtonProps | ToggleIconButtonProps;
 
 export type ToggleGroupProps = Omit<BaseToggleGroup.Props, "className" | "style"> & {
 	className?: string;
+	/**
+	 * Collapse group gap and inner radii so adjacent toggles share edges.
+	 * Ghost selected toggles restore their radius except on edges shared with another selected toggle.
+	 * Other variants stay fully joined when selected.
+	 */
+	join?: boolean;
 	/** StyleX overrides, applied after the component's own styles. */
 	style?: StyleXStyles;
 };
@@ -68,6 +75,10 @@ export type ToggleShape = ButtonShape;
 
 function resolvePressedSlot(pressed: boolean, resting: ReactNode, pressedIcon: ReactNode | undefined) {
 	return pressed && pressedIcon !== undefined ? pressedIcon : resting;
+}
+
+function toggleClassName(className: string | undefined) {
+	return attrJoin(stylex.props(toggleMarker, toggleJoinStyles.root).className, className);
 }
 
 export function Toggle(props: ToggleProps) {
@@ -98,7 +109,7 @@ function ToggleAsButton({
 			render={(renderProps, state) => (
 				<Button
 					{...renderProps}
-					className={className}
+					className={toggleClassName(className)}
 					shape={shape}
 					size={size}
 					startSlot={resolvePressedSlot(state.pressed, startSlot, pressedIcon)}
@@ -138,7 +149,7 @@ function ToggleAsIconButton({
 				return (
 					<IconButton
 						{...iconButtonProps}
-						className={className}
+						className={toggleClassName(className)}
 						icon={resolvePressedSlot(state.pressed, icon, pressedIcon)}
 						label={label}
 						shape={shape}
@@ -155,27 +166,24 @@ function ToggleAsIconButton({
 	);
 }
 
-export function ToggleGroup({ ref, className, style, ...props }: ToggleGroupProps) {
-	const sx = stylex.props(toggleParts.group, style);
+export function ToggleGroup({
+	ref,
+	className,
+	join = false,
+	orientation = "horizontal",
+	style,
+	...props
+}: ToggleGroupProps) {
+	const sx = stylex.props(toggleGroupMarker, toggleGroupStyles.root, style);
 
 	return (
 		<BaseToggleGroup
-			ref={ref}
-			className={[sx.className, className].filter(Boolean).join(" ")}
-			style={sx.style}
 			{...props}
+			ref={ref}
+			orientation={orientation}
+			data-join={join ? "" : undefined}
+			className={attrJoin(sx.className, className)}
+			style={sx.style}
 		/>
 	);
 }
-
-const toggleParts = stylex.create({
-	group: {
-		gap: tokens["--space-0-5"],
-		alignItems: "stretch",
-		display: "inline-flex",
-		flexDirection: {
-			"[data-orientation=vertical]": "column",
-			default: "row",
-		},
-	},
-});

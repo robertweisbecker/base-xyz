@@ -1,9 +1,11 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import * as stylex from "@stylexjs/stylex";
 import { Button, Collapsible, Separator } from "@/components";
-import { tokens } from "@/theme/tokens.stylex";
+import { Stack } from "@/components/layout/layout";
+import { Text } from "@/components/text/text";
 
 import { AsyncJobProgress, type AsyncJobHeadingLevel } from "./async-job-progress";
+
 const meta = {
 	title: "Blocks/Async job progress",
 	component: AsyncJobProgress.Root,
@@ -51,7 +53,7 @@ function Details({ label, children }: { label: string; children: React.ReactNode
 
 export const Examples: Story = {
 	render: () => (
-		<div {...stylex.props(storyParts.list)}>
+		<Stack gap={8}>
 			<State title="Queued">
 				<AsyncJobProgress.Root status="queued">
 					<JobHeader title="Export workspace data" description="The export will start when the current job finishes." />
@@ -71,9 +73,9 @@ export const Examples: Story = {
 					<JobHeader title="Export workspace data" description="Collecting files and preparing the archive." />
 					<AsyncJobProgress.Progress />
 					<Details label="Show export log">
-						<span>Collected 148 of 240 files</span>
-						<span>Compressed 86 MB</span>
-						<span>Estimated time remaining: 24 seconds</span>
+						<Text render={<span />}>Collected 148 of 240 files</Text>
+						<Text render={<span />}>Compressed 86 MB</Text>
+						<Text render={<span />}>Estimated time remaining: 24 seconds</Text>
 					</Details>
 					<AsyncJobProgress.Actions>
 						<Button size="sm" variant="neutral">
@@ -104,8 +106,8 @@ export const Examples: Story = {
 					<JobHeader level={4} title="Export workspace data" description="The archive is ready to download." />
 					<AsyncJobProgress.Progress />
 					<Details label="Show export summary">
-						<span>Created workspace-export.zip</span>
-						<span>240 files · 132 MB</span>
+						<Text render={<span />}>Created workspace-export.zip</Text>
+						<Text render={<span />}>240 files · 132 MB</Text>
 					</Details>
 					<AsyncJobProgress.Actions>
 						<Button size="sm">Download archive</Button>
@@ -122,56 +124,33 @@ export const Examples: Story = {
 						description="The export stopped before the archive could be created."
 					/>
 					<AsyncJobProgress.Progress />
-					<div {...stylex.props(storyParts.controls)}>
+					<Stack align="start" gap={3} justify="space-between" minWidth={0} orientation="horizontal">
 						<Details label="Show error details">
-							<span>UploadError: Storage destination is unavailable</span>
-							<span>Last successful file: assets/research-notes.pdf</span>
+							<Text render={<span />}>UploadError: Storage destination is unavailable</Text>
+							<Text render={<span />}>Last successful file: assets/research-notes.pdf</Text>
 						</Details>
 						<AsyncJobProgress.Actions>
 							<Button size="sm">Retry</Button>
 						</AsyncJobProgress.Actions>
-					</div>
+					</Stack>
 				</AsyncJobProgress.Root>
 			</State>
-		</div>
+		</Stack>
 	),
 };
 
 function State({ children, title }: { children: React.ReactNode; title: string }) {
 	return (
-		<section {...stylex.props(storyParts.state)}>
-			<h2 {...stylex.props(storyParts.heading)}>{title}</h2>
+		<Stack gap={3}>
+			<Text size="1" color="muted">
+				{title}
+			</Text>
 			{children}
-		</section>
+		</Stack>
 	);
 }
 
 const storyParts = stylex.create({
-	list: {
-		gap: tokens["--space-8"],
-		display: "flex",
-		flexDirection: "column",
-	},
-	state: {
-		gap: tokens["--space-3"],
-		display: "flex",
-		flexDirection: "column",
-	},
-	heading: {
-		margin: 0,
-		color: tokens["--fg-muted"],
-		fontSize: tokens["--font-size-1"],
-		fontWeight: tokens["--font-weight-regular"],
-		letterSpacing: tokens["--letter-spacing-1"],
-		lineHeight: tokens["--line-height-1"],
-	},
-	controls: {
-		gap: tokens["--space-3"],
-		alignItems: "flex-start",
-		display: "flex",
-		justifyContent: "space-between",
-		minWidth: 0,
-	},
 	disclosure: {
 		flexBasis: "auto",
 		flexGrow: "1",

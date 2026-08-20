@@ -3,6 +3,8 @@ import * as stylex from "@stylexjs/stylex";
 import type { ReactNode } from "react";
 import { Avatar } from "@/components/avatar/avatar";
 import { Item } from "@/components/item/item";
+import { Box, Grid, Stack } from "@/components/layout/layout";
+import { Text } from "@/components/text/text";
 import { userOptions, userSelectItems, type UserOption } from "@/components/storybook/user-options";
 import { tokens } from "@/theme/tokens.stylex";
 
@@ -79,9 +81,9 @@ const meta: Meta<PlaygroundArgs> = {
 	},
 	decorators: [
 		(Story) => (
-			<div {...stylex.props(storyParts.frame)}>
+			<Box p={8}>
 				<Story />
-			</div>
+			</Box>
 		),
 	],
 };
@@ -150,7 +152,7 @@ export const SelectionModes: Story = {
 		controls: { disable: true },
 	},
 	render: () => (
-		<div {...stylex.props(storyParts.fieldGrid)}>
+		<Grid gap={6} style={storyParts.fieldGrid}>
 			<Select.Root<string> defaultValue="React" items={frameworkItems}>
 				<Select.Label>Single selection</Select.Label>
 				<Select.Trigger />
@@ -174,7 +176,7 @@ export const SelectionModes: Story = {
 					</Select.List>
 				</Select.Popup>
 			</Select.Root>
-		</div>
+		</Grid>
 	),
 };
 
@@ -183,7 +185,7 @@ export const Sizes: Story = {
 		controls: { disable: true },
 	},
 	render: () => (
-		<div {...stylex.props(storyParts.sizeStack)}>
+		<Stack gap={6}>
 			{(["sm", "md", "lg"] as const).map((size) => (
 				<Select.Root<string> key={size} defaultValue="React" items={frameworkItems} size={size}>
 					<Select.Label>{size === "sm" ? "Small" : size === "md" ? "Medium" : "Large"}</Select.Label>
@@ -191,7 +193,7 @@ export const Sizes: Story = {
 					<FrameworkPopup />
 				</Select.Root>
 			))}
-		</div>
+		</Stack>
 	),
 };
 
@@ -200,7 +202,7 @@ export const States: Story = {
 		controls: { disable: true },
 	},
 	render: () => (
-		<div {...stylex.props(storyParts.stateGrid)}>
+		<Grid gap={8} style={storyParts.stateGrid}>
 			<SelectState label="Empty">
 				<Select.Root<string> items={frameworkItems}>
 					<Select.Label>Framework</Select.Label>
@@ -243,16 +245,18 @@ export const States: Story = {
 					<FrameworkPopup />
 				</Select.Root>
 			</SelectState>
-		</div>
+		</Grid>
 	),
 };
 
 function SelectState({ children, label }: { children: ReactNode; label: string }) {
 	return (
-		<section {...stylex.props(storyParts.state)}>
-			<h2 {...stylex.props(storyParts.stateLabel)}>{label}</h2>
+		<Stack align="start" gap={3}>
+			<Text color="muted" size="1">
+				{label}
+			</Text>
 			{children}
-		</section>
+		</Stack>
 	);
 }
 
@@ -422,20 +426,26 @@ export const Options: Story = {
 		controls: { disable: true },
 	},
 	render: () => (
-		<div {...stylex.props(storyParts.story)}>
-			<section {...stylex.props(storyParts.section)}>
-				<h2 {...stylex.props(storyParts.heading)}>Grouped options</h2>
+		<Stack gap={8}>
+			<Stack align="start" gap={4}>
+				<Text color="muted" size="1">
+					Grouped options
+				</Text>
 				<GroupedOptionsSelect />
-			</section>
-			<section {...stylex.props(storyParts.section)}>
-				<h2 {...stylex.props(storyParts.heading)}>Complex values</h2>
+			</Stack>
+			<Stack align="start" gap={4}>
+				<Text color="muted" size="1">
+					Complex values
+				</Text>
 				<ComplexValueSelect />
-			</section>
-			<section {...stylex.props(storyParts.section)}>
-				<h2 {...stylex.props(storyParts.heading)}>Long list</h2>
+			</Stack>
+			<Stack align="start" gap={4}>
+				<Text color="muted" size="1">
+					Long list
+				</Text>
 				<LongListSelect />
-			</section>
-		</div>
+			</Stack>
+		</Stack>
 	),
 };
 
@@ -495,8 +505,10 @@ export const InlineWithBackdrop: Story = {
 		controls: { disable: true },
 	},
 	render: () => (
-		<section {...stylex.props(storyParts.inlineUseCase)}>
-			<h2 {...stylex.props(storyParts.heading)}>Campaign brief</h2>
+		<Stack gap={6} style={storyParts.inlineUseCase}>
+			<Text color="muted" size="1">
+				Campaign brief
+			</Text>
 			<div {...stylex.props(storyParts.adLibSentence)}>
 				<span>Plan a</span>
 				<AdLibSelect defaultValue="product-launch" items={campaignItems} label="Campaign type" />
@@ -505,8 +517,10 @@ export const InlineWithBackdrop: Story = {
 				<span>focused on</span>
 				<AdLibSelect items={goalItems} label="Campaign goal" placeholder="choose a goal" />
 			</div>
-			<p {...stylex.props(storyParts.adLibHint)}>Open any highlighted phrase to revise the brief.</p>
-		</section>
+			<Text color="muted" size="1">
+				Open any highlighted phrase to revise the brief.
+			</Text>
+		</Stack>
 	),
 };
 
@@ -608,31 +622,7 @@ function formatMultipleValue(value: string[], placeholder: string) {
 }
 
 const storyParts = stylex.create({
-	frame: {
-		padding: tokens["--space-8"],
-	},
-	story: {
-		gap: tokens["--space-8"],
-		display: "flex",
-		flexDirection: "column",
-	},
-	section: {
-		gap: tokens["--space-4"],
-		alignItems: "flex-start",
-		display: "flex",
-		flexDirection: "column",
-	},
-	heading: {
-		margin: 0,
-		color: tokens["--fg-muted"],
-		fontSize: tokens["--font-size-1"],
-		fontWeight: tokens["--font-weight-regular"],
-		letterSpacing: tokens["--letter-spacing-1"],
-		lineHeight: tokens["--line-height-1"],
-	},
 	fieldGrid: {
-		gap: tokens["--space-6"],
-		display: "grid",
 		gridTemplateColumns: {
 			default: "repeat(3, minmax(0, 1fr))",
 			"@media (max-width: 760px)": "1fr",
@@ -640,30 +630,10 @@ const storyParts = stylex.create({
 		width: "100%",
 	},
 	stateGrid: {
-		gap: tokens["--space-8"],
-		display: "grid",
 		gridTemplateColumns: {
 			default: "repeat(2, minmax(0, 1fr))",
 			"@media (max-width: 760px)": "1fr",
 		},
-	},
-	state: {
-		gap: tokens["--space-3"],
-		display: "flex",
-		flexDirection: "column",
-	},
-	stateLabel: {
-		margin: 0,
-		color: tokens["--fg-muted"],
-		fontSize: tokens["--font-size-1"],
-		fontWeight: tokens["--font-weight-regular"],
-		letterSpacing: tokens["--letter-spacing-1"],
-		lineHeight: tokens["--line-height-1"],
-	},
-	sizeStack: {
-		gap: tokens["--space-6"],
-		display: "flex",
-		flexDirection: "column",
 	},
 	countryValue: {
 		gap: tokens["--space-2"],
@@ -707,9 +677,6 @@ const storyParts = stylex.create({
 		minWidth: 0,
 	},
 	inlineUseCase: {
-		gap: tokens["--space-6"],
-		display: "flex",
-		flexDirection: "column",
 		minHeight: "12rem",
 	},
 	adLibSentence: {
@@ -726,12 +693,5 @@ const storyParts = stylex.create({
 	},
 	adLibSelect: {
 		alignSelf: "baseline",
-	},
-	adLibHint: {
-		margin: 0,
-		color: tokens["--fg-muted"],
-		fontSize: tokens["--font-size-1"],
-		letterSpacing: tokens["--letter-spacing-1"],
-		lineHeight: tokens["--line-height-1"],
 	},
 });

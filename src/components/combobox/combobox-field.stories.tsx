@@ -16,6 +16,8 @@ import {
 	type ComboboxItemVariant,
 	type ComboboxRootProps,
 } from "@/components/combobox/combobox-field";
+import { Heading } from "@/components/heading/heading";
+import { Box, Stack } from "@/components/layout/layout";
 import { Item } from "@/components/item/item";
 import { userOptions, type UserOption } from "@/components/storybook/user-options";
 import { Text } from "@/components/text/text";
@@ -74,9 +76,9 @@ const meta = {
 	},
 	decorators: [
 		(Story) => (
-			<div {...stylex.props(styles.frame)}>
+			<Box maxWidth="420px">
 				<Story />
-			</div>
+			</Box>
 		),
 	],
 } satisfies Meta<PlaygroundArgs>;
@@ -99,24 +101,24 @@ export const Playground: Story = {
 export const States: Story = {
 	parameters: { controls: { disable: true } },
 	render: () => (
-		<div {...stylex.props(styles.variantStack)}>
+		<Stack gap={6}>
 			<SingleCombobox disabled items={frameworks} label="Disabled" placeholder="Filter frameworks…" />
 			<SingleCombobox readOnly items={frameworks} label="Read only" placeholder="Filter frameworks…" />
 			<SingleCombobox required items={frameworks} label="Required" placeholder="Filter frameworks…" />
 			<SingleCombobox invalid items={frameworks} label="Invalid" placeholder="Filter frameworks…" />
 			<SingleCombobox items={[]} label="Empty" placeholder="Filter frameworks…" />
-		</div>
+		</Stack>
 	),
 };
 
 export const Sizes: Story = {
 	parameters: { controls: { disable: true } },
 	render: () => (
-		<div {...stylex.props(styles.sizeStack)}>
+		<Stack gap={6} maxWidth="420px">
 			<SingleCombobox label="Small" items={frameworks} placeholder="Choose a framework" size="sm" />
 			<SingleCombobox label="Medium" items={frameworks} placeholder="Choose a framework" size="md" />
 			<SingleCombobox label="Large" items={frameworks} placeholder="Choose a framework" size="lg" />
-		</div>
+		</Stack>
 	),
 };
 
@@ -231,7 +233,7 @@ export const UserSelection: Story = {
 export const ChipPlacementOptions: Story = {
 	parameters: { controls: { disable: true } },
 	render: () => (
-		<div {...stylex.props(styles.variantStack)}>
+		<Stack gap={8}>
 			<ExampleSection title="Inside" description="Selected values share the control with the filter input.">
 				<MultipleCombobox
 					label="Programming languages"
@@ -254,7 +256,7 @@ export const ChipPlacementOptions: Story = {
 					chipPlacement="outside"
 				/>
 			</ExampleSection>
-		</div>
+		</Stack>
 	),
 };
 
@@ -265,7 +267,7 @@ export const CreatableTags: Story = {
 export const LimitedChips: Story = {
 	parameters: { controls: { disable: true } },
 	render: () => (
-		<div {...stylex.props(styles.variantStack)}>
+		<Stack gap={8}>
 			<ExampleSection title="Fixed limit" description="The configured limit remains applied while the input is focused.">
 				<MultipleCombobox
 					label="Programming languages"
@@ -299,14 +301,14 @@ export const LimitedChips: Story = {
 					expandChips="always"
 				/>
 			</ExampleSection>
-		</div>
+		</Stack>
 	),
 };
 
 export const ChipLimitExamples: Story = {
 	parameters: { controls: { disable: true } },
 	render: () => (
-		<div {...stylex.props(styles.variantStack)}>
+		<Stack gap={8}>
 			<ExampleSection title="No limit" description="Omitting the limit renders every selected value.">
 				<MultipleCombobox
 					label="Programming languages"
@@ -346,7 +348,7 @@ export const ChipLimitExamples: Story = {
 					maxVisibleChips={3}
 				/>
 			</ExampleSection>
-		</div>
+		</Stack>
 	),
 };
 
@@ -459,7 +461,13 @@ function MultipleCombobox<Value>({
 						{(value: Value[]) => (
 							<>
 								<div {...stylex.props(styles.outsideChipList)}>
-									{value.length > 0 ? renderValues(value) : <span {...stylex.props(styles.noChips)}>No selections</span>}
+									{value.length > 0 ? (
+										renderValues(value)
+									) : (
+										<Text size="1" color="muted">
+											No selections
+										</Text>
+									)}
 								</div>
 								<Combobox.InputGroup ref={inputGroupRef}>
 									<Combobox.Input {...inputProps} placeholder={placeholder} />
@@ -563,7 +571,7 @@ function CreatableTagsExample() {
 	}
 
 	return (
-		<div {...stylex.props(styles.exampleStack)}>
+		<Stack gap={2}>
 			<MultipleCombobox
 				inputValue={inputValue}
 				items={itemsForView}
@@ -587,10 +595,10 @@ function CreatableTagsExample() {
 				}}
 				renderItem={(item) => (item === creatableItem ? `Create “${item}”` : item)}
 			/>
-			<p aria-live="polite" {...stylex.props(styles.status)}>
+			<Text aria-live="polite" color="muted" size="1">
 				{createdItems.length > 0 ? `Created: ${createdItems.join(", ")}` : "Type a new value and press Enter or comma."}
-			</p>
-		</div>
+			</Text>
+		</Stack>
 	);
 }
 
@@ -612,13 +620,17 @@ function ControlledMultipleExample() {
 
 function ExampleSection({ children, description, title }: { children: ReactNode; description: string; title: string }) {
 	return (
-		<section {...stylex.props(styles.exampleSection)}>
-			<div {...stylex.props(styles.exampleHeading)}>
-				<h3 {...stylex.props(styles.exampleTitle)}>{title}</h3>
-				<p {...stylex.props(styles.exampleDescription)}>{description}</p>
-			</div>
+		<Stack align="start" gap={3}>
+			<Stack align="start" gap={1}>
+				<Heading size="2" fontWeight="regular">
+					{title}
+				</Heading>
+				<Text size="1" color="muted">
+					{description}
+				</Text>
+			</Stack>
 			{children}
-		</section>
+		</Stack>
 	);
 }
 
@@ -647,56 +659,6 @@ function normalizeChipLimit(limit?: number) {
 }
 
 const styles = stylex.create({
-	frame: {
-		maxWidth: "420px",
-	},
-	sizeStack: {
-		gap: tokens["--space-6"],
-		display: "flex",
-		flexDirection: "column",
-		maxWidth: "420px",
-	},
-	exampleStack: {
-		gap: tokens["--space-2"],
-		display: "flex",
-		flexDirection: "column",
-	},
-	variantStack: {
-		gap: tokens["--space-8"],
-		display: "flex",
-		flexDirection: "column",
-	},
-	exampleSection: {
-		gap: tokens["--space-3"],
-		display: "flex",
-		flexDirection: "column",
-	},
-	exampleHeading: {
-		gap: tokens["--space-1"],
-		display: "flex",
-		flexDirection: "column",
-	},
-	exampleTitle: {
-		margin: 0,
-		color: tokens["--fg"],
-		fontSize: tokens["--font-size-2"],
-		letterSpacing: tokens["--letter-spacing-2"],
-		lineHeight: tokens["--line-height-2"],
-	},
-	exampleDescription: {
-		margin: 0,
-		color: tokens["--fg-muted"],
-		fontSize: tokens["--font-size-1"],
-		letterSpacing: tokens["--letter-spacing-1"],
-		lineHeight: tokens["--line-height-1"],
-	},
-	status: {
-		margin: 0,
-		color: tokens["--fg-muted"],
-		fontSize: tokens["--font-size-1"],
-		letterSpacing: tokens["--letter-spacing-1"],
-		lineHeight: tokens["--line-height-1"],
-	},
 	userOptionItem: {
 		borderRadius: 0,
 		columnGap: tokens["--space-2"],
@@ -722,11 +684,5 @@ const styles = stylex.create({
 		flexWrap: "wrap",
 		rowGap: 2,
 		minHeight: "30px",
-	},
-	noChips: {
-		color: tokens["--fg-muted"],
-		fontSize: tokens["--font-size-1"],
-		letterSpacing: tokens["--letter-spacing-1"],
-		lineHeight: tokens["--line-height-1"],
 	},
 });

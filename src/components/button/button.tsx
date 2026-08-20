@@ -176,7 +176,8 @@ const colorVariants = stylex.create({
 			[HOVER_NOT_PRESSED_OR_OPEN]: {
 				[media.canHover]: tokens["--bg-primary-highlight"],
 			},
-			[PRESSED]: tokens["--bg-primary-highlight"],
+			":active:not([data-disabled])": `color-mix(in srgb, ${tokens["--bg-primary-highlight"]} 95%, var(--color-black))`,
+			[PRESSED]: `color-mix(in srgb, ${tokens["--bg-primary"]} 90%, var(--color-black))`,
 			"[data-popup-open]": tokens["--bg-primary-highlight"],
 			default: tokens["--bg-primary"],
 		},
@@ -188,18 +189,17 @@ const colorVariants = stylex.create({
 			":active:not([data-disabled])": tokens["--shadow-primary-pressed"],
 		},
 		color: tokens["--fg-accent-contrast"],
-		textShadow: `0 .03em .06em oklch(from ${tokens["--bg-primary"]} calc(l*0.7) calc(c*1.1) h)`,
+		// textShadow: `0 .03em .06em oklch(from ${tokens["--bg-primary"]} calc(l*0.7) calc(c*1.1) h)`,
 	},
 	subtle: {
 		backgroundColor: {
+			default: tokens["--bg-accent"],
 			// eslint-disable-next-line @stylexjs/valid-styles -- the compiler supports chained pseudo-class conditions; the lint rule is stricter than the compiler.
 			[HOVER_NOT_PRESSED_OR_OPEN]: {
 				[media.canHover]: tokens["--bg-accent-hover"],
 			},
-			[PRESSED]: tokens["--bg-accent-active"],
-			"[data-popup-open]": tokens["--bg-accent-hover"],
-			default: tokens["--bg-accent"],
 			":active:not([data-disabled])": tokens["--bg-accent-active"],
+			[PRESSED]: tokens["--bg-accent-active"],
 		},
 		color: {
 			[HOVER_NOT_PRESSED_OR_OPEN]: tokens["--fg-accent-strong"],
@@ -229,10 +229,10 @@ const colorVariants = stylex.create({
 			[HOVER_NOT_PRESSED_OR_OPEN]: {
 				[media.canHover]: tokens["--surface-subtle-hover"],
 			},
-			[PRESSED]: tokens["--surface-subtle-hover"],
+			":active:not([data-disabled])": tokens["--surface-subtle-hover"],
+			[PRESSED]: tokens["--surface-subtle-active"],
 			"[data-popup-open]": tokens["--surface-subtle-hover"],
 			default: tokens["--surface-subtle"],
-			":active:not([data-disabled])": tokens["--surface-subtle-active"],
 		},
 		color: {
 			// eslint-disable-next-line @stylexjs/valid-styles -- the compiler supports chained pseudo-class conditions; the lint rule is stricter than the compiler.

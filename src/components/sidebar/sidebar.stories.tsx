@@ -4,11 +4,14 @@ import { GearIcon } from "@phosphor-icons/react/dist/csr/Gear";
 import { HouseIcon } from "@phosphor-icons/react/dist/csr/House";
 import { UsersIcon } from "@phosphor-icons/react/dist/csr/Users";
 import * as stylex from "@stylexjs/stylex";
-import { useState } from "react";
+import { useState, type ReactNode } from "react";
 import { Avatar } from "@/components/avatar/avatar";
+import { Box, Stack } from "@/components/layout/layout";
 import { NavList } from "@/components/nav-list/nav-list";
+import { Text } from "@/components/text/text";
 import { tokens } from "@/theme/tokens.stylex";
 import { Sidebar, type SidebarCollapseMode, type SidebarSide } from "./sidebar";
+
 type StoryArgs = {
 	collapseMode: SidebarCollapseMode;
 	defaultCollapsed: boolean;
@@ -39,6 +42,30 @@ const meta = {
 export default meta;
 type Story = StoryObj<StoryArgs>;
 
+function StoryShell({
+	children,
+	side = "start",
+}: {
+	children: ReactNode;
+	side?: SidebarSide;
+}) {
+	const shell = stylex.props(storyParts.shell, side === "end" && storyParts.shellEnd);
+
+	return (
+		<Box className={shell.className} display="flex" style={shell.style}>
+			{children}
+		</Box>
+	);
+}
+
+function StoryMain({ children }: { children?: React.ReactNode }) {
+	return (
+		<Stack gap={3} p={4} render={<main />} style={storyParts.main}>
+			{children}
+		</Stack>
+	);
+}
+
 export const Playground: Story = {
 	render: ({ collapseMode, defaultCollapsed, side }) => (
 		<Sidebar.Root
@@ -46,7 +73,7 @@ export const Playground: Story = {
 			collapseMode={collapseMode}
 			defaultCollapsed={defaultCollapsed}
 			side={side}>
-			<div {...stylex.props(storyParts.shell, side === "end" && storyParts.shellEnd)}>
+			<StoryShell side={side}>
 				<Sidebar.Panel>
 					<WorkspaceHeader />
 					<Sidebar.Content>
@@ -56,13 +83,13 @@ export const Playground: Story = {
 					</Sidebar.Content>
 					<WorkspaceFooter />
 				</Sidebar.Panel>
-				<main {...stylex.props(storyParts.main)}>
-					<p {...stylex.props(storyParts.copy)}>
+				<StoryMain>
+					<Text color="muted" size="1">
 						The sidebar trigger lives in the footer here. The same trigger can still render elsewhere when the page owns
 						layout or mobile composition.
-					</p>
-				</main>
-			</div>
+					</Text>
+				</StoryMain>
+			</StoryShell>
 		</Sidebar.Root>
 	),
 };
@@ -70,11 +97,11 @@ export const Playground: Story = {
 export const Modes: Story = {
 	parameters: { controls: { disable: true } },
 	render: () => (
-		<div {...stylex.props(storyParts.examples)}>
+		<Stack align="start" gap={4} orientation="horizontal">
 			<ModeExample label="Expanded" collapseMode="icon" />
 			<ModeExample label="Icon rail" collapseMode="icon" defaultCollapsed />
 			<ModeExample label="Off-canvas" collapseMode="offcanvas" defaultCollapsed />
-		</div>
+		</Stack>
 	),
 };
 
@@ -83,7 +110,7 @@ export const ChildPopovers: Story = {
 	parameters: { controls: { disable: true } },
 	render: () => (
 		<Sidebar.Root collapseMode="icon" defaultCollapsed>
-			<div {...stylex.props(storyParts.shell)}>
+			<StoryShell>
 				<Sidebar.Panel>
 					<WorkspaceHeader />
 					<Sidebar.Content>
@@ -93,13 +120,13 @@ export const ChildPopovers: Story = {
 					</Sidebar.Content>
 					<WorkspaceFooter />
 				</Sidebar.Panel>
-				<main {...stylex.props(storyParts.main)}>
-					<p {...stylex.props(storyParts.copy)}>
+				<StoryMain>
+					<Text color="muted" size="1">
 						Top-level child-bearing rows in an icon rail require icons. Labels are exposed through tooltips or child
 						popovers.
-					</p>
-				</main>
-			</div>
+					</Text>
+				</StoryMain>
+			</StoryShell>
 		</Sidebar.Root>
 	),
 };
@@ -109,7 +136,7 @@ export const SideEnd: Story = {
 	parameters: { controls: { disable: true } },
 	render: () => (
 		<Sidebar.Root side="end" collapseMode="icon">
-			<div {...stylex.props(storyParts.shell, storyParts.shellEnd)}>
+			<StoryShell side="end">
 				<Sidebar.Panel>
 					<WorkspaceHeader />
 					<Sidebar.Content>
@@ -119,8 +146,8 @@ export const SideEnd: Story = {
 					</Sidebar.Content>
 					<WorkspaceFooter />
 				</Sidebar.Panel>
-				<main {...stylex.props(storyParts.main)} />
-			</div>
+				<StoryMain />
+			</StoryShell>
 		</Sidebar.Root>
 	),
 };
@@ -141,8 +168,12 @@ function ModeExample({
 	defaultCollapsed?: boolean;
 }) {
 	return (
-		<div {...stylex.props(storyParts.mode)}>
-			<p {...stylex.props(storyParts.label)}>{label}</p>
+		<Stack style={storyParts.mode}>
+			<Box p={2}>
+				<Text color="muted" size="1">
+					{label}
+				</Text>
+			</Box>
 			<Sidebar.Root collapseMode={collapseMode} defaultCollapsed={defaultCollapsed}>
 				<Sidebar.Panel>
 					<WorkspaceHeader />
@@ -154,7 +185,7 @@ function ModeExample({
 					<WorkspaceFooter />
 				</Sidebar.Panel>
 			</Sidebar.Root>
-		</div>
+		</Stack>
 	);
 }
 
@@ -180,7 +211,7 @@ function ExternalTriggerExample() {
 
 	return (
 		<Sidebar.Root collapsed={collapsed} onCollapsedChange={setCollapsed}>
-			<div {...stylex.props(storyParts.shell)}>
+			<StoryShell>
 				<Sidebar.Panel>
 					<Sidebar.Content>
 						<NavList.Root aria-label="External trigger navigation">
@@ -188,13 +219,13 @@ function ExternalTriggerExample() {
 						</NavList.Root>
 					</Sidebar.Content>
 				</Sidebar.Panel>
-				<main {...stylex.props(storyParts.main)}>
+				<StoryMain>
 					<Sidebar.Trigger />
-					<p {...stylex.props(storyParts.copy)}>
+					<Text color="muted" size="1">
 						This trigger lives outside the panel while sharing the same Sidebar state.
-					</p>
-				</main>
-			</div>
+					</Text>
+				</StoryMain>
+			</StoryShell>
 		</Sidebar.Root>
 	);
 }
@@ -234,7 +265,6 @@ const storyParts = stylex.create({
 		borderRadius: tokens["--radius-lg"],
 		overflow: "hidden",
 		blockSize: "28rem",
-		display: "flex",
 		outlineColor: tokens["--border-input"],
 		outlineOffset: "-1px",
 		outlineStyle: "solid",
@@ -244,33 +274,11 @@ const storyParts = stylex.create({
 		flexDirection: "row-reverse",
 	},
 	main: {
-		padding: tokens["--space-4"],
 		flex: "1",
-		gap: tokens["--space-3"],
-		display: "flex",
-		flexDirection: "column",
 		minInlineSize: 0,
-	},
-	examples: {
-		gap: tokens["--space-4"],
-		alignItems: "start",
-		display: "flex",
 	},
 	mode: {
 		overflow: "hidden",
-		display: "flex",
-		flexDirection: "column",
 		minBlockSize: "24rem",
-	},
-	label: {
-		margin: 0,
-		padding: tokens["--space-2"],
-		color: tokens["--fg-muted"],
-		fontSize: tokens["--font-size-1"],
-	},
-	copy: {
-		margin: 0,
-		color: tokens["--fg-muted"],
-		maxInlineSize: "28rem",
 	},
 });

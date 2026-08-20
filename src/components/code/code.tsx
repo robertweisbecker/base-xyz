@@ -2,6 +2,7 @@ import * as stylex from "@stylexjs/stylex";
 import type { StyleXStyles } from "@stylexjs/stylex";
 import { type ComponentProps } from "react";
 import { tokens } from "@/theme/tokens.stylex";
+import { attrJoin } from "@/utils/attr-join";
 
 
 export type CodeProps = Omit<ComponentProps<"code">, "className" | "style"> & {
@@ -12,7 +13,7 @@ export type CodeProps = Omit<ComponentProps<"code">, "className" | "style"> & {
 
 export function Code({ ref, className, style, ...props }: CodeProps) {
 	const sx = stylex.props(styles.root, style);
-	return <code ref={ref} className={[sx.className, className].filter(Boolean).join(" ")} style={sx.style} {...props} />;
+	return <code ref={ref} className={attrJoin(sx.className, className)} style={sx.style} {...props} />;
 }
 
 const styles = stylex.create({

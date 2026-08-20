@@ -1,7 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import * as stylex from "@stylexjs/stylex";
-import { tokens } from "@/theme/tokens.stylex";
-
+import { Stack } from "@/components/layout";
+import { Text } from "@/components/text/text";
 import { Link } from "./link";
 
 const meta = {
@@ -39,51 +38,37 @@ export const Examples: Story = {
 		controls: { disable: true },
 	},
 	render: () => (
-		<div {...stylex.props(storyStyles.examples)}>
-			<section {...stylex.props(storyStyles.example)}>
-				<span {...stylex.props(storyStyles.label)}>Internal link</span>
+		<Stack gap={6}>
+			<Stack gap={2}>
+				<Text color="muted" size="1">
+					Internal link
+				</Text>
 				<Link href="#account-settings">Account settings</Link>
-			</section>
-			<section {...stylex.props(storyStyles.example)}>
-				<span {...stylex.props(storyStyles.label)}>Neutral link</span>
+			</Stack>
+			<Stack gap={2}>
+				<Text color="muted" size="1">
+					Neutral link
+				</Text>
 				<Link href="#project-overview" color="neutral">
 					Project overview
 				</Link>
-			</section>
-			<section {...stylex.props(storyStyles.example)}>
-				<span {...stylex.props(storyStyles.label)}>External link</span>
+			</Stack>
+			<Stack gap={2}>
+				<Text color="muted" size="1">
+					External link
+				</Text>
 				<Link href="https://base-ui.com/" external>
 					Base UI documentation
 				</Link>
-			</section>
-			<section {...stylex.props(storyStyles.example)}>
-				<span {...stylex.props(storyStyles.label)}>In a sentence</span>
-				<p {...stylex.props(storyStyles.copy)}>
+			</Stack>
+			<Stack gap={2}>
+				<Text color="muted" size="1">
+					In a sentence
+				</Text>
+				<Text>
 					Review the <Link href="#release-notes">release notes</Link> before upgrading.
-				</p>
-			</section>
-		</div>
+				</Text>
+			</Stack>
+		</Stack>
 	),
 };
-
-const storyStyles = stylex.create({
-	examples: {
-		gap: tokens["--space-6"],
-		display: "flex",
-		flexDirection: "column",
-	},
-	example: {
-		gap: tokens["--space-2"],
-		display: "flex",
-		flexDirection: "column",
-	},
-	label: {
-		color: tokens["--fg-muted"],
-		fontSize: tokens["--font-size-1"],
-		letterSpacing: tokens["--letter-spacing-1"],
-		lineHeight: tokens["--line-height-1"],
-	},
-	copy: {
-		margin: 0,
-	},
-});

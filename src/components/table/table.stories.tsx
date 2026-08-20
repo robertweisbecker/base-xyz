@@ -3,9 +3,9 @@ import * as stylex from "@stylexjs/stylex";
 import { useState, type ReactNode } from "react";
 import { Badge } from "@/components/badge/badge";
 import { Icon, IconButton } from "@/components";
+import { Box, Stack } from "@/components/layout/layout";
 import { Text } from "@/components/text/text";
 import { VisuallyHidden } from "@/components/visually-hidden/visually-hidden";
-import { tokens } from "@/theme/tokens.stylex";
 import { Table } from "./table";
 
 type PlaygroundArgs = {
@@ -60,7 +60,7 @@ export const States: Story = {
 		controls: { disable: true },
 	},
 	render: () => (
-		<div {...stylex.props(storyParts.stack)}>
+		<Stack gap={6}>
 			<Example label="Normal rows" checkedRows={[]} />
 			<Example label="One checked row" checkedRows={["app"]} />
 			<Example label="Empty table" empty />
@@ -74,7 +74,7 @@ export const States: Story = {
 			/>
 			<Example groupedHeaders label="Grouped headers" />
 			<Example label="Semantic footer" showFooter />
-		</div>
+		</Stack>
 	),
 };
 
@@ -83,54 +83,19 @@ export const Overflow: Story = {
 		controls: { disable: true },
 	},
 	render: () => (
-		<div {...stylex.props(storyParts.overflowExamples)}>
-			<section>
-				<Text size="1" color="muted" style={storyParts.label}>
-					Without scrolling
-				</Text>
-				<Table.Root>
-					<Table.Content caption={<VisuallyHidden>Recent deployments without scrolling</VisuallyHidden>}>
-						<Table.Header>
-							<Table.Row>
-								<Table.HeaderCell>URL</Table.HeaderCell>
-								<Table.HeaderCell>Status</Table.HeaderCell>
-								<Table.HeaderCell>Environment</Table.HeaderCell>
-							</Table.Row>
-						</Table.Header>
-						<Table.Body>
-							<Table.Row>
-								<Table.Cell>app.example.com</Table.Cell>
-								<Table.Cell>Ready</Table.Cell>
-								<Table.Cell>Production</Table.Cell>
-							</Table.Row>
-							<Table.Row>
-								<Table.Cell>preview.example.com</Table.Cell>
-								<Table.Cell>Building</Table.Cell>
-								<Table.Cell>Preview</Table.Cell>
-							</Table.Row>
-						</Table.Body>
-					</Table.Content>
-				</Table.Root>
-			</section>
-
-			<section>
-				<Text size="1" color="muted" style={storyParts.label}>
-					With horizontal scrolling
-				</Text>
-				<Table.Root>
-					<Table.Container>
-						<Table.Content
-							caption={<VisuallyHidden>Recent deployments with horizontal scrolling</VisuallyHidden>}
-							style={storyParts.wideTable}>
+		<Box maxWidth="42rem" width="100%">
+			<Stack gap={6}>
+				<Stack gap={2}>
+					<Text size="1" color="muted">
+						Without scrolling
+					</Text>
+					<Table.Root>
+						<Table.Content caption={<VisuallyHidden>Recent deployments without scrolling</VisuallyHidden>}>
 							<Table.Header>
 								<Table.Row>
 									<Table.HeaderCell>URL</Table.HeaderCell>
 									<Table.HeaderCell>Status</Table.HeaderCell>
 									<Table.HeaderCell>Environment</Table.HeaderCell>
-									<Table.HeaderCell>Branch</Table.HeaderCell>
-									<Table.HeaderCell>Owner</Table.HeaderCell>
-									<Table.HeaderCell>Region</Table.HeaderCell>
-									<Table.HeaderCell numeric>Updated</Table.HeaderCell>
 								</Table.Row>
 							</Table.Header>
 							<Table.Body>
@@ -138,26 +103,63 @@ export const Overflow: Story = {
 									<Table.Cell>app.example.com</Table.Cell>
 									<Table.Cell>Ready</Table.Cell>
 									<Table.Cell>Production</Table.Cell>
-									<Table.Cell>main</Table.Cell>
-									<Table.Cell>Maya Chen</Table.Cell>
-									<Table.Cell>Washington, D.C., USA</Table.Cell>
-									<Table.Cell numeric>2 minutes ago</Table.Cell>
 								</Table.Row>
 								<Table.Row>
-									<Table.Cell>feature-auth.example.com</Table.Cell>
+									<Table.Cell>preview.example.com</Table.Cell>
 									<Table.Cell>Building</Table.Cell>
 									<Table.Cell>Preview</Table.Cell>
-									<Table.Cell>feature/authentication</Table.Cell>
-									<Table.Cell>Ari Patel</Table.Cell>
-									<Table.Cell>Frankfurt, Germany</Table.Cell>
-									<Table.Cell numeric>12 minutes ago</Table.Cell>
 								</Table.Row>
 							</Table.Body>
 						</Table.Content>
-					</Table.Container>
-				</Table.Root>
-			</section>
-		</div>
+					</Table.Root>
+				</Stack>
+
+				<Stack gap={2}>
+					<Text size="1" color="muted">
+						With horizontal scrolling
+					</Text>
+					<Table.Root>
+						<Table.Container>
+							<Table.Content
+								caption={<VisuallyHidden>Recent deployments with horizontal scrolling</VisuallyHidden>}
+								style={storyParts.wideTable}>
+								<Table.Header>
+									<Table.Row>
+										<Table.HeaderCell>URL</Table.HeaderCell>
+										<Table.HeaderCell>Status</Table.HeaderCell>
+										<Table.HeaderCell>Environment</Table.HeaderCell>
+										<Table.HeaderCell>Branch</Table.HeaderCell>
+										<Table.HeaderCell>Owner</Table.HeaderCell>
+										<Table.HeaderCell>Region</Table.HeaderCell>
+										<Table.HeaderCell numeric>Updated</Table.HeaderCell>
+									</Table.Row>
+								</Table.Header>
+								<Table.Body>
+									<Table.Row>
+										<Table.Cell>app.example.com</Table.Cell>
+										<Table.Cell>Ready</Table.Cell>
+										<Table.Cell>Production</Table.Cell>
+										<Table.Cell>main</Table.Cell>
+										<Table.Cell>Maya Chen</Table.Cell>
+										<Table.Cell>Washington, D.C., USA</Table.Cell>
+										<Table.Cell numeric>2 minutes ago</Table.Cell>
+									</Table.Row>
+									<Table.Row>
+										<Table.Cell>feature-auth.example.com</Table.Cell>
+										<Table.Cell>Building</Table.Cell>
+										<Table.Cell>Preview</Table.Cell>
+										<Table.Cell>feature/authentication</Table.Cell>
+										<Table.Cell>Ari Patel</Table.Cell>
+										<Table.Cell>Frankfurt, Germany</Table.Cell>
+										<Table.Cell numeric>12 minutes ago</Table.Cell>
+									</Table.Row>
+								</Table.Body>
+							</Table.Content>
+						</Table.Container>
+					</Table.Root>
+				</Stack>
+			</Stack>
+		</Box>
 	),
 };
 
@@ -204,8 +206,8 @@ function Example({
 	showFooter?: boolean;
 }) {
 	return (
-		<section>
-			<Text size="1" color="muted" style={storyParts.label}>
+		<Stack gap={2}>
+			<Text size="1" color="muted">
 				{label}
 			</Text>
 			<ManualTable
@@ -215,7 +217,7 @@ function Example({
 				groupedHeaders={groupedHeaders}
 				showFooter={showFooter}
 			/>
-		</section>
+		</Stack>
 	);
 }
 
@@ -338,21 +340,6 @@ function ManualTable({
 }
 
 const storyParts = stylex.create({
-	stack: {
-		gap: tokens["--space-6"],
-		display: "flex",
-		flexDirection: "column",
-	},
-	label: {
-		marginBlockEnd: tokens["--space-2"],
-	},
-	overflowExamples: {
-		gap: tokens["--space-6"],
-		display: "flex",
-		flexDirection: "column",
-		maxWidth: "42rem",
-		width: "100%",
-	},
 	wideTable: {
 		minWidth: "64rem",
 	},

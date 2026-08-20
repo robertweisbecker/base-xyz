@@ -2,12 +2,12 @@ import { BellIcon } from "@phosphor-icons/react/dist/csr/Bell";
 import { GearIcon } from "@phosphor-icons/react/dist/csr/Gear";
 import { InfoIcon } from "@phosphor-icons/react/dist/csr/Info";
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import * as stylex from "@stylexjs/stylex";
-import { tokens } from "@/theme/tokens.stylex";
-
+import { Stack } from "@/components/layout/layout";
 import { Button, IconButton } from "@/components/button/button";
 import { createTooltipHandle } from "@/components/popup-handles";
+import { Text } from "@/components/text/text";
 import { Tooltip } from "./tooltip";
+
 type PopupSide = "top" | "right" | "bottom" | "left";
 type PopupAlign = "start" | "center" | "end";
 type StoryArgs = {
@@ -50,7 +50,7 @@ type Story = StoryObj<StoryArgs>;
 
 export const Playground: Story = {
 	render: ({ _side, _align, _closeDelay, _delay, disabled, _showArrow }) => (
-		<div {...stylex.props(storyParts.stage)}>
+		<Stack align="center" height="320px" justify="center" width="min(640px, calc(100vw - 48px))">
 			<Tooltip.Provider>
 				<Tooltip.Root disabled={disabled}>
 					<Tooltip.Trigger
@@ -71,7 +71,7 @@ export const Playground: Story = {
 					</Tooltip.Popup>
 				</Tooltip.Root>
 			</Tooltip.Provider>
-		</div>
+		</Stack>
 	),
 };
 
@@ -82,20 +82,20 @@ export const Positioning: Story = {
 		controls: { disable: true },
 	},
 	render: () => (
-		<div {...stylex.props(storyParts.positioningStage)}>
+		<Stack align="center" justify="center" minHeight="320px" width="min(720px, calc(100vw - 48px))">
 			<Tooltip.Provider>
-				<div {...stylex.props(storyParts.positioningRow)}>
+				<Stack align="center" gap={6} orientation="horizontal" justify="center">
 					{popupSides.map((side) => (
-						<div key={side} {...stylex.props(storyParts.positioningCell)}>
+						<Stack key={side} align="center" justify="center" minHeight="5rem" minWidth="5rem">
 							<Tooltip.Root>
 								<Tooltip.Trigger render={<Button size="sm" variant="neutral" />}>{capitalize(side)}</Tooltip.Trigger>
 								<Tooltip.Popup positionerProps={{ side }}>{capitalize(side)} tooltip</Tooltip.Popup>
 							</Tooltip.Root>
-						</div>
+						</Stack>
 					))}
-				</div>
+				</Stack>
 			</Tooltip.Provider>
-		</div>
+		</Stack>
 	),
 };
 
@@ -109,9 +109,11 @@ const tooltipActions = [
 export const SharedGroup: Story = {
 	render: ({ _side, _align, _closeDelay, _delay, disabled, _showArrow }) => (
 		<Tooltip.Provider>
-			<div {...stylex.props(storyParts.stack)}>
-				<p {...stylex.props(storyParts.hint)}>Move focus or pointer between actions to see content cross-transition.</p>
-				<div {...stylex.props(storyParts.group)}>
+			<Stack align="center" gap={3}>
+				<Text color="muted" size="1">
+					Move focus or pointer between actions to see content cross-transition.
+				</Text>
+				<Stack gap={2} orientation="horizontal">
 					{tooltipActions.map(({ label, copy, Icon }) => (
 						<Tooltip.Trigger
 							key={label}
@@ -124,7 +126,7 @@ export const SharedGroup: Story = {
 							}
 						/>
 					))}
-				</div>
+				</Stack>
 				<Tooltip.Root disabled={disabled} handle={sharedTooltip}>
 					{({ payload }) => (
 						<Tooltip.Popup arrowProps={_showArrow ? {} : undefined} positionerProps={{ side: _side, align: _align }}>
@@ -132,57 +134,10 @@ export const SharedGroup: Story = {
 						</Tooltip.Popup>
 					)}
 				</Tooltip.Root>
-			</div>
+			</Stack>
 		</Tooltip.Provider>
 	),
 };
-
-const storyParts = stylex.create({
-	stage: {
-		alignItems: "center",
-		display: "grid",
-		justifyItems: "center",
-		height: "320px",
-		width: "min(640px, calc(100vw - 48px))",
-	},
-	positioningStage: {
-		alignItems: "center",
-		display: "flex",
-		justifyContent: "center",
-		minHeight: "320px",
-		width: "min(720px, calc(100vw - 48px))",
-	},
-	positioningRow: {
-		gap: tokens["--space-6"],
-		alignItems: "center",
-		display: "flex",
-		justifyContent: "center",
-	},
-	positioningCell: {
-		alignItems: "center",
-		display: "flex",
-		justifyContent: "center",
-		minHeight: "5rem",
-		minWidth: "5rem",
-	},
-	stack: {
-		gap: tokens["--space-3"],
-		alignItems: "center",
-		display: "flex",
-		flexDirection: "column",
-	},
-	hint: {
-		margin: 0,
-		color: tokens["--fg-muted"],
-		fontSize: tokens["--font-size-1"],
-		letterSpacing: tokens["--letter-spacing-1"],
-		lineHeight: tokens["--line-height-1"],
-	},
-	group: {
-		gap: tokens["--space-2"],
-		display: "flex",
-	},
-});
 
 function capitalize(value: string) {
 	return `${value[0].toUpperCase()}${value.slice(1)}`;

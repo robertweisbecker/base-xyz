@@ -1,17 +1,17 @@
 import { GearIcon } from "@phosphor-icons/react/dist/csr/Gear";
+import { IdentificationCardIcon } from "@phosphor-icons/react/dist/csr/IdentificationCard";
 import { PlusIcon } from "@phosphor-icons/react/dist/csr/Plus";
 import { RobotIcon } from "@phosphor-icons/react/dist/csr/Robot";
 import { SignOutIcon } from "@phosphor-icons/react/dist/csr/SignOut";
 import { UserIcon } from "@phosphor-icons/react/dist/csr/User";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import * as stylex from "@stylexjs/stylex";
-import { tokens } from "@/theme/tokens.stylex";
 import { Button, IconButton } from "@/components/button/button";
 import { Stack } from "@/components/layout/layout";
 import { Menu } from "@/components/menu/menu";
 import { Text } from "@/components/text/text";
+import { tokens } from "@/theme/tokens.stylex";
 import { Avatar, type AvatarProps, type AvatarSize } from "./avatar";
-import { IdentificationCardIcon } from "@phosphor-icons/react/dist/csr/IdentificationCard";
 
 const image = "/avatar-example.svg";
 const sizes = [4, 6, 8, 10, 12, 16] as const satisfies readonly AvatarSize[];
@@ -67,9 +67,11 @@ export const Playground: Story = {};
 export const Composition: Story = {
 	parameters: { controls: { disable: true } },
 	render: () => (
-		<div {...stylex.props(storyStyles.row)}>
-			<section {...stylex.props(storyStyles.section)}>
-				<span {...stylex.props(storyStyles.label)}>Avatar as menu trigger</span>
+		<Stack align="center" gap={6} orientation="horizontal" wrap="wrap">
+			<Stack align="start" gap={3}>
+				<Text size="1" color="muted">
+					Avatar as menu trigger
+				</Text>
 				<Menu.Root>
 					<Avatar
 						aria-label="Open user settings"
@@ -80,17 +82,19 @@ export const Composition: Story = {
 					/>
 					<AccountMenu />
 				</Menu.Root>
-			</section>
-			<section {...stylex.props(storyStyles.section)}>
-				<span {...stylex.props(storyStyles.label)}>Avatar in menu trigger</span>
+			</Stack>
+			<Stack align="start" gap={3}>
+				<Text size="1" color="muted">
+					Avatar in menu trigger
+				</Text>
 				<Menu.Root>
 					<Menu.Trigger
 						render={<IconButton icon={<Avatar image={image} size={4} />} label="Ada Lovelace" variant="neutral" />}
 					/>
 					<AccountMenu />
 				</Menu.Root>
-			</section>
-		</div>
+			</Stack>
+		</Stack>
 	),
 };
 
@@ -159,54 +163,66 @@ const options: { label: string; props: AvatarProps }[] = [
 export const Options: Story = {
 	parameters: { controls: { disable: true } },
 	render: () => (
-		<div {...stylex.props(storyStyles.row)}>
+		<Stack align="center" gap={6} orientation="horizontal" wrap="wrap">
 			{options.map(({ label, props }) => (
-				<div key={label} {...stylex.props(storyStyles.specimen)}>
+				<Stack align="center" gap={2} key={label}>
 					<Avatar size={10} {...props} />
-					<span {...stylex.props(storyStyles.label)}>{label}</span>
-				</div>
+					<Text size="1" color="muted">
+						{label}
+					</Text>
+				</Stack>
 			))}
-		</div>
+		</Stack>
 	),
 };
 
 export const Variants: Story = {
 	parameters: { controls: { disable: true } },
 	render: () => (
-		<div {...stylex.props(storyStyles.row)}>
+		<Stack align="center" gap={6} orientation="horizontal" wrap="wrap">
 			{(["circle", "rounded", "square"] as const).map((shape) => (
-				<div key={shape} {...stylex.props(storyStyles.specimen)}>
+				<Stack align="center" gap={2} key={shape}>
 					<Avatar initials="AS" name={`Avatar ${shape}`} shape={shape} size={10} />
-					<span {...stylex.props(storyStyles.label)}>{shape}</span>
-				</div>
+					<Text size="1" color="muted">
+						{shape}
+					</Text>
+				</Stack>
 			))}
-		</div>
+		</Stack>
 	),
 };
 
 export const Sizes: Story = {
 	parameters: { controls: { disable: true } },
 	render: () => (
-		<div {...stylex.props(storyStyles.sections)}>
-			<section {...stylex.props(storyStyles.section)}>
-				<span {...stylex.props(storyStyles.label)}>Spacing scale</span>
-				<div {...stylex.props(storyStyles.row, storyStyles.alignEnd)}>
+		<Stack gap={8}>
+			<Stack align="start" gap={3}>
+				<Text size="1" color="muted">
+					Spacing scale
+				</Text>
+				<Stack align="end" gap={6} orientation="horizontal" wrap="wrap">
 					{sizes.map((size) => (
-						<div key={size} {...stylex.props(storyStyles.specimen)}>
+						<Stack align="center" gap={2} key={size}>
 							<Avatar initials={String(size)} name={`${size} spacing step avatar`} size={size} />
-							<span {...stylex.props(storyStyles.label)}>{size}</span>
-						</div>
+							<Text size="1" color="muted">
+								{size}
+							</Text>
+						</Stack>
 					))}
-				</div>
-			</section>
-			<section {...stylex.props(storyStyles.section)}>
-				<span {...stylex.props(storyStyles.label)}>Responsive</span>
-				<div {...stylex.props(storyStyles.specimen)}>
+				</Stack>
+			</Stack>
+			<Stack align="start" gap={3}>
+				<Text size="1" color="muted">
+					Responsive
+				</Text>
+				<Stack align="center" gap={2}>
 					<Avatar image={image} name="Responsive avatar" size={{ default: 6, md: 12 }} />
-					<span {...stylex.props(storyStyles.label)}>6 by default, 12 from medium</span>
-				</div>
-			</section>
-		</div>
+					<Text size="1" color="muted">
+						6 by default, 12 from medium
+					</Text>
+				</Stack>
+			</Stack>
+		</Stack>
 	),
 };
 
@@ -220,38 +236,5 @@ const storyStyles = stylex.create({
 	},
 	accountMenu: {
 		width: "20rem",
-	},
-	alignEnd: {
-		alignItems: "end",
-	},
-	label: {
-		color: tokens["--fg-muted"],
-		fontSize: tokens["--font-size-1"],
-		fontWeight: tokens["--font-weight-regular"],
-		letterSpacing: tokens["--letter-spacing-1"],
-		lineHeight: tokens["--line-height-1"],
-	},
-	row: {
-		gap: tokens["--space-6"],
-		alignItems: "center",
-		display: "flex",
-		flexWrap: "wrap",
-	},
-	section: {
-		gap: tokens["--space-3"],
-		display: "flex",
-		flexDirection: "column",
-	},
-	sections: {
-		gap: tokens["--space-8"],
-		display: "flex",
-		flexDirection: "column",
-	},
-	specimen: {
-		gap: tokens["--space-2"],
-		alignItems: "center",
-		display: "flex",
-		flexDirection: "column",
-		textAlign: "center",
 	},
 });

@@ -5,10 +5,11 @@ import { tokens } from "@/theme/tokens.stylex";
 
 import { AlertDialog } from "@/components/alert-dialog/alert-dialog";
 import { Button } from "@/components/button/button";
+import { Stack } from "@/components/layout/layout";
 import { createDrawerHandle } from "@/components/popup-handles";
+import { Text } from "@/components/text/text";
 import { Textarea } from "@/components/textarea/textarea";
 import { Drawer } from "./drawer";
-import { Stack } from "../layout";
 type StoryArgs = {
 	defaultOpen: boolean;
 	disablePointerDismissal: boolean;
@@ -116,7 +117,7 @@ function SnapPointsDrawer() {
 						</Drawer.Header>
 						<Drawer.Content scrollable role="region" aria-label="Project activity list">
 							<Drawer.Body>
-								<div {...stylex.props(storyParts.snapPointControls)}>
+								<Stack gap={2} mb={5} wrap="wrap">
 									{snapPointOptions.map((option) => (
 										<Button
 											key={option.label}
@@ -126,17 +127,17 @@ function SnapPointsDrawer() {
 											{option.label}
 										</Button>
 									))}
-								</div>
-								<div {...stylex.props(storyParts.activityCards)}>
+								</Stack>
+								<Stack gap={3}>
 									{Array.from({ length: 16 }, (_, index) => (
-										<div key={index} {...stylex.props(storyParts.activityCard)}>
-											<strong>Activity {index + 1}</strong>
-											<span {...stylex.props(storyParts.activityMeta)}>
+										<Stack key={index} gap={1} style={storyParts.activityCard}>
+											<Text fontWeight="medium">Activity {index + 1}</Text>
+											<Text color="muted" size="1">
 												Project details were updated by a teammate.
-											</span>
-										</div>
+											</Text>
+										</Stack>
 									))}
-								</div>
+								</Stack>
 							</Drawer.Body>
 						</Drawer.Content>
 						<Drawer.Footer style={storyParts.snapPointFooter}>
@@ -189,15 +190,17 @@ export const DetachedTriggers: Story = {
 		controls: { disable: true },
 	},
 	render: () => (
-		<div {...stylex.props(storyParts.stack)}>
-			<p {...stylex.props(storyParts.hint)}>Several triggers share one drawer and supply its active payload.</p>
-			<div {...stylex.props(storyParts.triggerGroup)}>
+		<Stack align="center" gap={3}>
+			<Text color="muted" size="1">
+				Several triggers share one drawer and supply its active payload.
+			</Text>
+			<Stack gap={2} wrap="wrap">
 				{drawerDestinations.map(({ label, ...payload }) => (
 					<Drawer.Trigger key={label} handle={detachedDrawer} payload={payload} render={<Button variant="secondary" />}>
 						{label}
 					</Drawer.Trigger>
 				))}
-			</div>
+			</Stack>
 			<Drawer.Root handle={detachedDrawer} modal={false} disablePointerDismissal>
 				{({ payload }) =>
 					payload ? (
@@ -226,7 +229,7 @@ export const DetachedTriggers: Story = {
 					) : null
 				}
 			</Drawer.Root>
-		</div>
+		</Stack>
 	),
 };
 
@@ -397,36 +400,8 @@ export const CloseToConfirm: Story = {
 };
 
 const storyParts = stylex.create({
-	stack: {
-		gap: tokens["--space-3"],
-		alignItems: "center",
-		display: "flex",
-		flexDirection: "column",
-	},
-	hint: {
-		margin: 0,
-		color: tokens["--fg-muted"],
-		fontSize: tokens["--font-size-1"],
-		letterSpacing: tokens["--letter-spacing-1"],
-		lineHeight: tokens["--line-height-1"],
-	},
-	triggerGroup: {
-		gap: tokens["--space-2"],
-		display: "flex",
-		flexWrap: "wrap",
-	},
-	snapPointControls: {
-		gap: tokens["--space-2"],
-		display: "flex",
-		flexWrap: "wrap",
-		marginBlockEnd: tokens["--space-5"],
-	},
 	snapPointFooter: {
 		paddingBlockEnd: tokens["--space-4"],
-	},
-	activityCards: {
-		gap: tokens["--space-3"],
-		display: "grid",
 	},
 	activityCard: {
 		padding: tokens["--space-3"],
@@ -434,16 +409,7 @@ const storyParts = stylex.create({
 		borderRadius: tokens["--radius-md"],
 		borderStyle: "solid",
 		borderWidth: "1px",
-		gap: tokens["--space-1"],
 		backgroundColor: tokens["--surface-subtle"],
-		display: "flex",
-		flexDirection: "column",
-	},
-	activityMeta: {
-		color: tokens["--fg-muted"],
-		fontSize: tokens["--font-size-1"],
-		letterSpacing: tokens["--letter-spacing-1"],
-		lineHeight: tokens["--line-height-1"],
 	},
 	detachedViewport: {
 		pointerEvents: "none",

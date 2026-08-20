@@ -1,6 +1,7 @@
 import { useRender } from "@base-ui/react/use-render";
 import * as stylex from "@stylexjs/stylex";
 import type { StyleXStyles } from "@stylexjs/stylex";
+import { attrJoin } from "@/utils/attr-join";
 
 export type VisuallyHiddenProps = Omit<useRender.ComponentProps<"span">, "className" | "render" | "style"> & {
 	className?: string;
@@ -18,7 +19,7 @@ export function VisuallyHidden({ ref, className, render, style, ...props }: Visu
 		render,
 		props: {
 			...props,
-			className: [sx.className, className].filter(Boolean).join(" "),
+			className: attrJoin(sx.className, className),
 			style: sx.style,
 		},
 	});

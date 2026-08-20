@@ -4,6 +4,7 @@ import type { StyleXStyles } from "@stylexjs/stylex";
 import { media } from "@/styles/constants.stylex";
 import { focusRing } from "@/styles/recipes/focus";
 import { tokens } from "@/theme/tokens.stylex";
+import { attrJoin } from "@/utils/attr-join";
 
 const HOVER_WHEN_INACTIVE =
 	':hover:not([aria-disabled="true"]):not([data-disabled]):not([aria-pressed="true"]):not([data-active]):not([data-panel-open]):not([data-popup-open]):not([data-pressed])';
@@ -33,7 +34,7 @@ export function Root({ ref, className, style, variant = "surface", ...props }: T
 	return (
 		<BaseToolbar.Root
 			ref={ref}
-			className={[sx.className, className].filter(Boolean).join(" ")}
+			className={attrJoin(sx.className, className)}
 			style={sx.style}
 			{...props}
 		/>
@@ -46,7 +47,7 @@ export function Group({ ref, className, style, ...props }: ToolbarGroupProps) {
 	return (
 		<BaseToolbar.Group
 			ref={ref}
-			className={[sx.className, className].filter(Boolean).join(" ")}
+			className={attrJoin(sx.className, className)}
 			style={sx.style}
 			{...props}
 		/>
@@ -60,7 +61,7 @@ export function Button({ ref, className, style, type = "button", ...props }: Too
 		<BaseToolbar.Button
 			ref={ref}
 			type={type}
-			className={[sx.className, className].filter(Boolean).join(" ")}
+			className={attrJoin(sx.className, className)}
 			style={sx.style}
 			{...props}
 		/>
@@ -73,7 +74,7 @@ export function Link({ ref, className, style, ...props }: ToolbarLinkProps) {
 	return (
 		<BaseToolbar.Link
 			ref={ref}
-			className={[sx.className, className].filter(Boolean).join(" ")}
+			className={attrJoin(sx.className, className)}
 			style={sx.style}
 			{...props}
 		/>
@@ -86,7 +87,7 @@ export function Input({ ref, className, style, ...props }: ToolbarInputProps) {
 	return (
 		<BaseToolbar.Input
 			ref={ref}
-			className={[sx.className, className].filter(Boolean).join(" ")}
+			className={attrJoin(sx.className, className)}
 			style={sx.style}
 			{...props}
 		/>
@@ -99,7 +100,7 @@ export function Separator({ ref, className, style, ...props }: ToolbarSeparatorP
 	return (
 		<BaseToolbar.Separator
 			ref={ref}
-			className={[sx.className, className].filter(Boolean).join(" ")}
+			className={attrJoin(sx.className, className)}
 			style={sx.style}
 			{...props}
 		/>

@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import * as stylex from "@stylexjs/stylex";
-import { tokens } from "@/theme/tokens.stylex";
-
+import { Box, Stack } from "@/components/layout/layout";
+import { Text } from "@/components/text/text";
 import { Switch } from "./switch";
 
 const meta = {
@@ -46,9 +46,9 @@ const meta = {
 	},
 	decorators: [
 		(Story) => (
-			<div {...stylex.props(styles.frame)}>
+			<Box style={styles.frame}>
 				<Story />
-			</div>
+			</Box>
 		),
 	],
 } satisfies Meta<typeof Switch>;
@@ -65,11 +65,11 @@ export const Sizes: Story = {
 		controls: { disable: true },
 	},
 	render: () => (
-		<section {...stylex.props(styles.section)}>
+		<Stack gap={4}>
 			<Switch label="Small" size="sm" defaultChecked />
 			<Switch label="Medium" size="md" defaultChecked />
 			<Switch label="Large" size="lg" defaultChecked />
-		</section>
+		</Stack>
 	),
 };
 
@@ -78,40 +78,26 @@ export const States: Story = {
 		controls: { disable: true },
 	},
 	render: () => (
-		<div {...stylex.props(styles.story)}>
-			<section {...stylex.props(styles.section)}>
-				<h2 {...stylex.props(styles.heading)}>Selection</h2>
+		<Stack gap={8}>
+			<Stack gap={4}>
+				<Text color="muted" size="1">
+					Selection
+				</Text>
 				<Switch label="Off" />
 				<Switch label="On" defaultChecked />
-			</section>
-			<section {...stylex.props(styles.section)}>
-				<h2 {...stylex.props(styles.heading)}>Interaction</h2>
+			</Stack>
+			<Stack gap={4}>
+				<Text color="muted" size="1">
+					Interaction
+				</Text>
 				<Switch label="Disabled" disabled />
 				<Switch label="Read-only" defaultChecked readOnly />
 				<Switch label="Required" required />
-			</section>
-		</div>
+			</Stack>
+		</Stack>
 	),
 };
 
 const styles = stylex.create({
 	frame: { maxWidth: "420px" },
-	story: {
-		gap: tokens["--space-8"],
-		display: "flex",
-		flexDirection: "column",
-	},
-	section: {
-		gap: tokens["--space-4"],
-		display: "flex",
-		flexDirection: "column",
-	},
-	heading: {
-		margin: 0,
-		color: tokens["--fg-muted"],
-		fontSize: tokens["--font-size-1"],
-		fontWeight: tokens["--font-weight-regular"],
-		letterSpacing: tokens["--letter-spacing-1"],
-		lineHeight: tokens["--line-height-1"],
-	},
 });

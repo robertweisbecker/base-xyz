@@ -3,6 +3,7 @@ import type { StyleXStyles } from "@stylexjs/stylex";
 import { createElement, type ComponentProps, type ReactNode } from "react";
 import { Box, Stack, Text } from "@/components";
 import { tokens } from "@/theme/tokens.stylex";
+import { attrJoin } from "@/utils/attr-join";
 
 export type PageHeaderHeadingLevel = 1 | 2 | 3 | 4 | 5 | 6;
 
@@ -38,7 +39,7 @@ export function PageHeader({
 	const titleNode = createElement(`h${headingLevel}`, stylex.props(parts.title), title);
 
 	return (
-		<section className={[sx.className, className].filter(Boolean).join(" ")} style={sx.style} {...props}>
+		<section className={attrJoin(sx.className, className)} style={sx.style} {...props}>
 			<Stack gap={4}>
 				{breadcrumbs ? <Box style={parts.breadcrumbs}>{breadcrumbs}</Box> : null}
 				<Box style={parts.content}>

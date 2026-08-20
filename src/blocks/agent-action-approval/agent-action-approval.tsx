@@ -1,7 +1,7 @@
 import * as stylex from "@stylexjs/stylex";
 import type { StyleXStyles } from "@stylexjs/stylex";
 import { createContext, type ComponentProps, useContext, useId } from "react";
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components";
+import { Card } from "@/components";
 import { tokens } from "@/theme/tokens.stylex";
 import { attrJoin } from "@/utils/attr-join";
 
@@ -18,11 +18,11 @@ type AgentActionApprovalContextValue = {
 
 const AgentActionApprovalContext = createContext<AgentActionApprovalContextValue | null>(null);
 
-export type AgentActionApprovalRootProps = ComponentProps<typeof Card>;
-export type AgentActionApprovalHeaderProps = ComponentProps<typeof CardHeader>;
-export type AgentActionApprovalTitleProps = ComponentProps<typeof CardTitle>;
-export type AgentActionApprovalDescriptionProps = ComponentProps<typeof CardDescription>;
-export type AgentActionApprovalContentProps = ComponentProps<typeof CardContent>;
+export type AgentActionApprovalRootProps = ComponentProps<typeof Card.Root>;
+export type AgentActionApprovalHeaderProps = ComponentProps<typeof Card.Header>;
+export type AgentActionApprovalTitleProps = ComponentProps<typeof Card.Title>;
+export type AgentActionApprovalDescriptionProps = ComponentProps<typeof Card.Description>;
+export type AgentActionApprovalContentProps = ComponentProps<typeof Card.Content>;
 export type AgentActionApprovalSummaryProps = DivProps;
 export type AgentActionApprovalIconProps = DivProps;
 export type AgentActionApprovalSummaryContentProps = DivProps;
@@ -32,7 +32,7 @@ export type AgentActionApprovalDetailsProps = StyledProps<ComponentProps<"dl">>;
 export type AgentActionApprovalDetailProps = DivProps;
 export type AgentActionApprovalDetailLabelProps = StyledProps<ComponentProps<"dt">>;
 export type AgentActionApprovalDetailValueProps = StyledProps<ComponentProps<"dd">>;
-export type AgentActionApprovalFooterProps = ComponentProps<typeof CardFooter>;
+export type AgentActionApprovalFooterProps = ComponentProps<typeof Card.Footer>;
 export type AgentActionApprovalActionsProps = DivProps;
 
 export function Root({
@@ -46,7 +46,7 @@ export function Root({
 
 	return (
 		<AgentActionApprovalContext.Provider value={{ titleId }}>
-			<Card
+			<Card.Root
 				aria-labelledby={ariaLabelledBy ?? titleId}
 				role={role}
 				style={[parts.root, style]}
@@ -58,21 +58,21 @@ export function Root({
 }
 
 export function Header({ style, ...props }: AgentActionApprovalHeaderProps) {
-	return <CardHeader style={[parts.header, style]} {...props} />;
+	return <Card.Header style={[parts.header, style]} {...props} />;
 }
 
 export function Title({ id, style, ...props }: AgentActionApprovalTitleProps) {
 	const context = useContext(AgentActionApprovalContext);
 
-	return <CardTitle id={id ?? context?.titleId} style={[parts.title, style]} {...props} />;
+	return <Card.Title id={id ?? context?.titleId} style={[parts.title, style]} {...props} />;
 }
 
 export function Description({ style, ...props }: AgentActionApprovalDescriptionProps) {
-	return <CardDescription style={[parts.description, style]} {...props} />;
+	return <Card.Description style={[parts.description, style]} {...props} />;
 }
 
 export function Content({ style, ...props }: AgentActionApprovalContentProps) {
-	return <CardContent style={[parts.content, style]} {...props} />;
+	return <Card.Content style={[parts.content, style]} {...props} />;
 }
 
 export function Summary({ className, style, ...props }: AgentActionApprovalSummaryProps) {
@@ -121,7 +121,7 @@ export function DetailValue({ className, style, ...props }: AgentActionApprovalD
 }
 
 export function Footer({ style, ...props }: AgentActionApprovalFooterProps) {
-	return <CardFooter style={[parts.footer, style]} {...props} />;
+	return <Card.Footer style={[parts.footer, style]} {...props} />;
 }
 
 export function Actions({ className, style, ...props }: AgentActionApprovalActionsProps) {

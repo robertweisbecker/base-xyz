@@ -2,16 +2,17 @@ import type { Meta, StoryObj } from "@storybook/react-vite";
 import { CubeIcon } from "@phosphor-icons/react/dist/csr/Cube";
 import { GearIcon } from "@phosphor-icons/react/dist/csr/Gear";
 import { HouseIcon } from "@phosphor-icons/react/dist/csr/House";
+import { ShieldChevronIcon } from "@phosphor-icons/react/dist/csr/ShieldChevron";
 import { UsersIcon } from "@phosphor-icons/react/dist/csr/Users";
 import * as stylex from "@stylexjs/stylex";
 import { useState } from "react";
 import { Badge } from "@/components/badge/badge";
 import { Button } from "@/components/button/button";
 import { Drawer } from "@/components/drawer/drawer";
+import { Box } from "@/components/layout";
+import { Separator } from "@/components/separator/separator";
 import { tokens } from "@/theme/tokens.stylex";
 import { NavList, type NavListSize } from "./nav-list";
-import { Separator } from "@/components/separator/separator";
-import { ShieldChevronIcon } from "@phosphor-icons/react/dist/csr/ShieldChevron";
 
 type StoryArgs = {
 	size: NavListSize;
@@ -47,7 +48,7 @@ const icons = {
 
 export const Playground: Story = {
 	render: ({ size, current, disabled, _icon }) => (
-		<div {...stylex.props(storyParts.column)}>
+		<Box height="28rem" p={3} radius="lg" style={storyParts.frame} width="18rem">
 			<NavList.Root aria-label="Project navigation" size={size}>
 				<NavList.Section label="Project">
 					<NavList.Item
@@ -71,14 +72,14 @@ export const Playground: Story = {
 					/>
 				</NavList.Section>
 			</NavList.Root>
-		</div>
+		</Box>
 	),
 };
 
 export const Examples: Story = {
 	parameters: { controls: { disable: true } },
 	render: () => (
-		<div {...stylex.props(storyParts.column)}>
+		<Box p={3} radius="lg" style={storyParts.frame} width="18rem">
 			<NavList.Root aria-label="Workspace navigation">
 				<NavList.Section label="Main">
 					<NavList.Item label="Overview" href="#overview" icon={<HouseIcon weight="duotone" />} current="page" />
@@ -99,14 +100,14 @@ export const Examples: Story = {
 					/>
 				</NavList.Section>
 			</NavList.Root>
-		</div>
+		</Box>
 	),
 };
 
 export const Collapsible: Story = {
 	parameters: { controls: { disable: true } },
 	render: () => (
-		<div {...stylex.props(storyParts.shortColumn)}>
+		<Box p={3} radius="lg" style={storyParts.frame} width="18rem">
 			<NavList.Root aria-label="Build navigation">
 				<NavList.Section label="Build">
 					<NavList.CollapsibleGroup defaultOpen>
@@ -135,7 +136,7 @@ export const Collapsible: Story = {
 					</NavList.CollapsibleGroup>
 				</NavList.Section>
 			</NavList.Root>
-		</div>
+		</Box>
 	),
 };
 
@@ -154,7 +155,7 @@ export const CollapsedChildPopovers: Story = {
 	name: "Collapsed child popovers",
 	parameters: { controls: { disable: true } },
 	render: () => (
-		<div {...stylex.props(storyParts.rail)}>
+		<Box height="24rem" p={3} radius="lg" style={[storyParts.frame, storyParts.sidebarRail]}>
 			<NavList.NavListPresentationProvider presentation="icon">
 				<NavList.Root aria-label="Collapsed project navigation">
 					<NavList.Section label="Project" visuallyHideLabel>
@@ -170,7 +171,7 @@ export const CollapsedChildPopovers: Story = {
 					</NavList.Section>
 				</NavList.Root>
 			</NavList.NavListPresentationProvider>
-		</div>
+		</Box>
 	),
 };
 
@@ -178,7 +179,7 @@ function DrilldownExample() {
 	const [value, setValue] = useState("account");
 
 	return (
-		<div {...stylex.props(storyParts.column)}>
+		<Box height="28rem" p={3} radius="lg" style={storyParts.frame} width="18rem">
 			<NavList.Root aria-label="Account navigation">
 				<NavList.Drilldown value={value} defaultValue="account" onValueChange={setValue}>
 					<NavList.DrilldownPanel value="account" label="Account navigation">
@@ -205,7 +206,7 @@ function DrilldownExample() {
 					</NavList.DrilldownPanel>
 				</NavList.Drilldown>
 			</NavList.Root>
-		</div>
+		</Box>
 	);
 }
 
@@ -260,30 +261,12 @@ function DrawerExample() {
 }
 
 const storyParts = stylex.create({
-	column: {
-		padding: tokens["--space-3"],
+	frame: {
 		borderColor: tokens["--border"],
-		borderRadius: tokens["--radius-lg"],
 		borderStyle: "solid",
 		borderWidth: tokens["--border-width"],
-		blockSize: "28rem",
-		inlineSize: "18rem",
 	},
-	shortColumn: {
-		padding: tokens["--space-3"],
-		borderColor: tokens["--border"],
-		borderRadius: tokens["--radius-lg"],
-		borderStyle: "solid",
-		borderWidth: tokens["--border-width"],
-		inlineSize: "18rem",
-	},
-	rail: {
-		padding: tokens["--space-3"],
-		borderColor: tokens["--border"],
-		borderRadius: tokens["--radius-lg"],
-		borderStyle: "solid",
-		borderWidth: tokens["--border-width"],
-		blockSize: "24rem",
-		inlineSize: tokens["--size-sidebar-rail"],
+	sidebarRail: {
+		width: tokens["--size-sidebar-rail"],
 	},
 });

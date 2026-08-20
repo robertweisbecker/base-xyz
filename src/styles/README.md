@@ -261,6 +261,8 @@ markers and are not re-exported through component barrels.
 | `fieldMarker`  | `components/field/field.stylex.ts`         | Field roots observed by descendant form-control styles                     |
 | `itemMarker`   | `components/menu/menu-item.stylex.ts`      | Menu rows and components composing the canonical row, including Select, Combobox, and Autocomplete items |
 | `labelMarker`  | `components/field/field.stylex.ts`         | Label elements associated with form controls                              |
+| `toggleMarker` | `components/toggle/toggle.stylex.ts`       | Toggle controls observed by joined-group sibling and ancestor rules       |
+| `toggleGroupMarker` | `components/toggle/toggle.stylex.ts`  | ToggleGroup roots that opt into join radius and stacking                  |
 
 ```tsx
 import * as stylex from "@stylexjs/stylex";

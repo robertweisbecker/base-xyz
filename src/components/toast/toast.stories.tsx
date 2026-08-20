@@ -10,16 +10,15 @@ import { XIcon } from "@phosphor-icons/react/dist/csr/X";
 import * as stylex from "@stylexjs/stylex";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { useEffect, useRef, useState } from "react";
-import { tokens } from "@/theme/tokens.stylex";
 
 import { Button, IconButton } from "@/components/button/button";
 import { Icon } from "@/components/icons";
+import { Box, Grid, Stack } from "@/components/layout/layout";
 import { Loader } from "@/components/loader";
 import { MeterGauge } from "@/components/meter/meter-gauge";
+import { Text } from "@/components/text/text";
 import { Tooltip } from "@/components/tooltip/tooltip";
 import { Toast } from "./index";
-import { Text } from "../text";
-import { Stack } from "../layout";
 type PopupSide = "top" | "right" | "bottom" | "left";
 type PopupAlign = "start" | "center" | "end";
 type SwipeDirection = "up" | "down" | "left" | "right";
@@ -94,12 +93,12 @@ export const AnchoredVariants: Story = {
 	render: ({ _side, _align, _limit, _timeout }) => (
 		<Toast.AnchoredProvider limit={_limit} timeout={_timeout}>
 			<Tooltip.Provider>
-				<div {...stylex.props(storyStyles.anchoredVariants)}>
+				<Grid gap={6} style={storyStyles.anchoredVariants} width="min(1100px, calc(100vw - 48px))">
 					<DefaultAnchoredExample _side={_side} _align={_align} />
 					<TooltipAnchoredExample _side={_side} _align={_align} />
 					<PopoverAnchoredExample _side={_side} _align={_align} />
 					<PillAnchoredExample _side={_side} _align={_align} />
-				</div>
+				</Grid>
 			</Tooltip.Provider>
 		</Toast.AnchoredProvider>
 	),
@@ -146,7 +145,7 @@ function ToastExample({
 
 	return (
 		<>
-			<div {...stylex.props(storyStyles.controls)}>
+			<Stack align="center" gap={2} justify="center" orientation="horizontal" wrap="wrap">
 				<Button onClick={() => createToast()}>Create toast</Button>
 				{showStackControls ? (
 					<>
@@ -158,7 +157,7 @@ function ToastExample({
 						</Button>
 					</>
 				) : null}
-			</div>
+			</Stack>
 			<Toast.Portal>
 				<Toast.Viewport>
 					<ToastList swipeDirection={swipeDirection} />
@@ -422,7 +421,7 @@ function PillAnchoredExample({ _side, _align }: Pick<StoryArgs, "_side" | "_alig
 
 	return (
 		<AnchoredStage hint="Start a goal, update its progress through five editing snapshots, then complete it or disconnect the agent.">
-			<div {...stylex.props(storyStyles.pillControls)}>
+			<Stack align="center" gap={2} justify="center" orientation="horizontal" wrap="wrap">
 				<Button
 					ref={anchorRef}
 					disabled={status === "ongoing"}
@@ -446,7 +445,7 @@ function PillAnchoredExample({ _side, _align }: Pick<StoryArgs, "_side" | "_alig
 					startSlot={<PlugIcon aria-hidden />}>
 					Disconnect
 				</Button>
-			</div>
+			</Stack>
 		</AnchoredStage>
 	);
 }
@@ -491,10 +490,16 @@ function DeduplicatedAnchoredExample({ _side, _align }: Pick<StoryArgs, "_side" 
 
 function AnchoredStage({ hint, children }: { hint: string; children: React.ReactNode }) {
 	return (
-		<div {...stylex.props(storyStyles.stage)}>
-			<div {...stylex.props(storyStyles.anchor)}>{children}</div>
-			<p {...stylex.props(storyStyles.hint)}>{hint}</p>
-		</div>
+		<Stack align="center" gap={6} justify="center" minHeight="240px" p={6} width="100%">
+			<Stack align="center" justify="center" minHeight="64px">
+				{children}
+			</Stack>
+			<Box maxWidth="440px">
+				<Text color="muted" size="1" textAlign="center" wrap="balance">
+					{hint}
+				</Text>
+			</Box>
+		</Stack>
 	);
 }
 
@@ -517,54 +522,11 @@ function ToastList({ swipeDirection }: { swipeDirection: SwipeDirection }) {
 }
 
 const storyStyles = stylex.create({
-	controls: {
-		gap: "8px",
-		alignItems: "center",
-		display: "flex",
-		flexWrap: "wrap",
-		justifyContent: "center",
-	},
 	anchoredVariants: {
-		gap: tokens["--space-6"],
-		display: "grid",
 		gridTemplateColumns: {
 			default: "repeat(2, minmax(0, 1fr))",
 			"@media (max-width: 900px)": "1fr",
 		},
-		width: "min(1100px, calc(100vw - 48px))",
-	},
-	stage: {
-		padding: tokens["--space-6"],
-		gap: tokens["--space-6"],
-		alignItems: "center",
-		display: "flex",
-		flexDirection: "column",
-		justifyContent: "center",
-		minHeight: "240px",
-		width: "100%",
-	},
-	anchor: {
-		alignItems: "center",
-		display: "flex",
-		justifyContent: "center",
-		minHeight: "64px",
-	},
-	hint: {
-		margin: 0,
-		color: tokens["--fg-muted"],
-		fontSize: tokens["--font-size-1"],
-		letterSpacing: tokens["--letter-spacing-1"],
-		lineHeight: tokens["--line-height-1"],
-		textAlign: "center",
-		textWrap: "balance",
-		maxWidth: "440px",
-	},
-	pillControls: {
-		gap: tokens["--space-2"],
-		alignItems: "center",
-		display: "flex",
-		flexWrap: "wrap",
-		justifyContent: "center",
 	},
 	progressGauge: {
 		color: "inherit",

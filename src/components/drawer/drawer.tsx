@@ -4,6 +4,7 @@ import type { StyleXStyles } from "@stylexjs/stylex";
 import type { ComponentProps } from "react";
 import { tokens } from "@/theme/tokens.stylex";
 import { modalChromeStyles, modalTextStyles } from "@/components/dialog/dialog.stylex";
+import { attrJoin } from "@/utils/attr-join";
 
 type StyledProps<T> = Omit<T, "className" | "style"> & {
 	className?: string;
@@ -29,7 +30,7 @@ export function Backdrop({ ref, className, style, ...props }: StyledProps<BaseDr
 	return (
 		<BaseDrawer.Backdrop
 			ref={ref}
-			className={[sxClassName, className].filter(Boolean).join(" ")}
+			className={attrJoin(sxClassName, className)}
 			style={sxStyle}
 			{...props}
 		/>
@@ -47,7 +48,7 @@ export function Viewport({ ref, className, style, ...props }: StyledProps<BaseDr
 	return (
 		<BaseDrawer.Viewport
 			ref={ref}
-			className={[sxClassName, className].filter(Boolean).join(" ")}
+			className={attrJoin(sxClassName, className)}
 			style={sxStyle}
 			{...props}
 		/>
@@ -66,7 +67,7 @@ export function Popup({ ref, className, style, layout = "default", ...props }: D
 	return (
 		<BaseDrawer.Popup
 			ref={ref}
-			className={[sxClassName, className].filter(Boolean).join(" ")}
+			className={attrJoin(sxClassName, className)}
 			style={sxStyle}
 			{...props}
 		/>
@@ -83,7 +84,7 @@ export function Content({ ref, className, style, scrollable = false, ...props }:
 	return (
 		<BaseDrawer.Content
 			ref={ref}
-			className={[sxClassName, className].filter(Boolean).join(" ")}
+			className={attrJoin(sxClassName, className)}
 			style={sxStyle}
 			{...props}
 		/>
@@ -96,7 +97,7 @@ export function Title({ ref, className, style, ...props }: StyledProps<BaseDrawe
 	return (
 		<BaseDrawer.Title
 			ref={ref}
-			className={[sxClassName, className].filter(Boolean).join(" ")}
+			className={attrJoin(sxClassName, className)}
 			style={sxStyle}
 			{...props}
 		/>
@@ -109,7 +110,7 @@ export function Description({ ref, className, style, ...props }: StyledProps<Bas
 	return (
 		<BaseDrawer.Description
 			ref={ref}
-			className={[sxClassName, className].filter(Boolean).join(" ")}
+			className={attrJoin(sxClassName, className)}
 			style={sxStyle}
 			{...props}
 		/>
@@ -119,26 +120,26 @@ export function Description({ ref, className, style, ...props }: StyledProps<Bas
 export function Handle({ className, style, ...props }: StyledProps<ComponentProps<"div">>) {
 	const { className: sxClassName, style: sxStyle } = stylex.props(drawerParts.handle, style);
 
-	return <div aria-hidden className={[sxClassName, className].filter(Boolean).join(" ")} style={sxStyle} {...props} />;
+	return <div aria-hidden className={attrJoin(sxClassName, className)} style={sxStyle} {...props} />;
 }
 
 export function Header({ className, style, ...props }: StyledProps<ComponentProps<"div">>) {
 	const { className: sxClassName, style: sxStyle } = stylex.props(drawerParts.header, style);
 
-	return <div className={[sxClassName, className].filter(Boolean).join(" ")} style={sxStyle} {...props} />;
+	return <div className={attrJoin(sxClassName, className)} style={sxStyle} {...props} />;
 }
 
 export function Body({ className, style, ...props }: StyledProps<ComponentProps<"div">>) {
 	const { className: sxClassName, style: sxStyle } = stylex.props(modalTextStyles.body, drawerParts.body, style);
 
-	return <div className={[sxClassName, className].filter(Boolean).join(" ")} style={sxStyle} {...props} />;
+	return <div className={attrJoin(sxClassName, className)} style={sxStyle} {...props} />;
 }
 
 export function Footer({ className, style, ...props }: StyledProps<ComponentProps<"div">>) {
 	const { className: sxClassName, style: sxStyle } = stylex.props(modalTextStyles.footer, drawerParts.footer, style);
 
 	return (
-		<div data-slot="footer" className={[sxClassName, className].filter(Boolean).join(" ")} style={sxStyle} {...props} />
+		<div data-slot="footer" className={attrJoin(sxClassName, className)} style={sxStyle} {...props} />
 	);
 }
 

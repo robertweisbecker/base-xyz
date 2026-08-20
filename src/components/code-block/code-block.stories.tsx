@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import * as stylex from "@stylexjs/stylex";
+import { Box } from "@/components/layout/layout";
 import { CodeBlock } from "./code-block";
 
 const meta = {
@@ -20,9 +20,9 @@ submitForReview(message);`,
 	},
 	decorators: [
 		(Story) => (
-			<div {...stylex.props(styles.frame)}>
+			<Box maxWidth="22rem">
 				<Story />
-			</div>
+			</Box>
 		),
 	],
 } satisfies Meta<typeof CodeBlock>;
@@ -31,9 +31,3 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const Playground: Story = {};
-
-const styles = stylex.create({
-	frame: {
-		maxWidth: "22rem",
-	},
-});

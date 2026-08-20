@@ -4,6 +4,7 @@ import type { StyleXStyles } from "@stylexjs/stylex";
 import { textStyles } from "@/components/text/text.stylex";
 import { createContext, useContext, type CSSProperties } from "react";
 import { tokens } from "@/theme/tokens.stylex";
+import { attrJoin } from "@/utils/attr-join";
 
 type StyledProps<T> = Omit<T, "className" | "style"> & {
 	className?: string;
@@ -87,7 +88,7 @@ export function Root({
 		<MeterVariantContext.Provider value={variant}>
 			<BaseMeter.Root
 				ref={ref}
-				className={[sx.className, className].filter(Boolean).join(" ")}
+				className={attrJoin(sx.className, className)}
 				data-meter-state={meterState}
 				max={meterValues.maximumValue}
 				min={meterValues.minimumValue}
@@ -182,7 +183,7 @@ export function Label({ ref, className, style, ...props }: LabelProps) {
 	return (
 		<BaseMeter.Label
 			ref={ref}
-			className={[sx.className, className].filter(Boolean).join(" ")}
+			className={attrJoin(sx.className, className)}
 			style={sx.style}
 			{...props}
 		/>
@@ -201,7 +202,7 @@ export function Value({ ref, className, style, ...props }: ValueProps) {
 	return (
 		<BaseMeter.Value
 			ref={ref}
-			className={[sx.className, className].filter(Boolean).join(" ")}
+			className={attrJoin(sx.className, className)}
 			style={sx.style}
 			{...props}
 		/>
@@ -215,7 +216,7 @@ export function Track({ ref, className, style, ...props }: TrackProps) {
 	return (
 		<BaseMeter.Track
 			ref={ref}
-			className={[sx.className, className].filter(Boolean).join(" ")}
+			className={attrJoin(sx.className, className)}
 			style={sx.style}
 			{...props}
 		/>
@@ -229,7 +230,7 @@ export function Indicator({ ref, className, style, ...props }: IndicatorProps) {
 	return (
 		<BaseMeter.Indicator
 			ref={ref}
-			className={[sx.className, className].filter(Boolean).join(" ")}
+			className={attrJoin(sx.className, className)}
 			style={sx.style}
 			{...props}
 		/>

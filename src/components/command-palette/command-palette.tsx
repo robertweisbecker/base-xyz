@@ -37,6 +37,7 @@ import { ScrollArea } from "@/components/scroll-area/scroll-area";
 import { VisuallyHidden } from "@/components/visually-hidden/visually-hidden";
 import { tokens } from "@/theme/tokens.stylex";
 import { SmileyMeltingIcon } from "@phosphor-icons/react";
+import { attrJoin } from "@/utils/attr-join";
 
 type StyledProps<T> = Omit<T, "className" | "style"> & {
 	className?: string;
@@ -221,7 +222,7 @@ export function Root<ItemValue = unknown>({
 				<div
 					aria-label={label}
 					role={inline ? "group" : undefined}
-					className={[panelSx.className, className].filter(Boolean).join(" ")}
+					className={attrJoin(panelSx.className, className)}
 					style={panelSx.style}>
 					{children}
 				</div>
@@ -285,7 +286,7 @@ export function Input({
 
 	return (
 		<Autocomplete.InputGroup
-			className={[inputGroupSx.className, className].filter(Boolean).join(" ")}
+			className={attrJoin(inputGroupSx.className, className)}
 			style={inputGroupSx.style}>
 			{startSlot ? (
 				<span aria-hidden {...stylex.props(commandPaletteParts.inputSlot)}>
@@ -295,7 +296,7 @@ export function Input({
 			<Autocomplete.Input
 				ref={ref}
 				aria-label={label}
-				autoFocus
+				autoFocus={!context.inline}
 				placeholder={placeholder}
 				onKeyDown={handleKeyDown}
 				{...stylex.props(fieldStyles.inputUnstyled, fieldTextStyles.md, commandPaletteParts.input)}
@@ -331,7 +332,7 @@ export function List({
 			style={[commandPaletteParts.listArea, areaStyle]}
 			viewportStyle={[commandPaletteParts.listViewport, viewportStyle]}
 			contentStyle={[commandPaletteParts.listContent, contentStyle]}>
-			<Autocomplete.List className={[sx.className, className].filter(Boolean).join(" ")} style={sx.style} {...props}>
+			<Autocomplete.List className={attrJoin(sx.className, className)} style={sx.style} {...props}>
 				{children}
 			</Autocomplete.List>
 		</ScrollArea>
@@ -344,7 +345,7 @@ export function Group({ ref, className, style, ...props }: CommandPaletteGroupPr
 	return (
 		<Autocomplete.Group
 			ref={ref}
-			className={[sx.className, className].filter(Boolean).join(" ")}
+			className={attrJoin(sx.className, className)}
 			style={sx.style}
 			{...props}
 		/>
@@ -357,7 +358,7 @@ export function GroupLabel({ ref, className, style, ...props }: CommandPaletteGr
 	return (
 		<Autocomplete.GroupLabel
 			ref={ref}
-			className={[sx.className, className].filter(Boolean).join(" ")}
+			className={attrJoin(sx.className, className)}
 			style={sx.style}
 			{...props}
 		/>
@@ -394,7 +395,7 @@ export function Item({
 	return (
 		<Autocomplete.Item
 			ref={ref}
-			className={[sx.className, className].filter(Boolean).join(" ")}
+			className={attrJoin(sx.className, className)}
 			style={sx.style}
 			onClick={(event) => {
 				onClick?.(event);
@@ -437,7 +438,7 @@ export function Empty({
 	return (
 		<Autocomplete.Empty
 			ref={ref}
-			className={[sx.className, className].filter(Boolean).join(" ")}
+			className={attrJoin(sx.className, className)}
 			style={sx.style}
 			{...props}>
 			{children}
@@ -451,7 +452,7 @@ export function Loading({ ref, children = "Loading…", className, style, ...pro
 	return (
 		<Autocomplete.Status
 			ref={ref}
-			className={[sx.className, className].filter(Boolean).join(" ")}
+			className={attrJoin(sx.className, className)}
 			style={sx.style}
 			{...props}>
 			<Loader aria-hidden />
@@ -463,7 +464,7 @@ export function Loading({ ref, children = "Loading…", className, style, ...pro
 export function Footer({ className, style, ...props }: CommandPaletteFooterProps) {
 	const sx = stylex.props(commandPaletteParts.footer, style);
 
-	return <div className={[sx.className, className].filter(Boolean).join(" ")} style={sx.style} {...props} />;
+	return <div className={attrJoin(sx.className, className)} style={sx.style} {...props} />;
 }
 
 function useCommandPaletteContext() {

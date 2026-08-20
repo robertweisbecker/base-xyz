@@ -5,7 +5,10 @@ import { tokens } from "@/theme/tokens.stylex";
 
 import { AlertDialog } from "@/components/alert-dialog/alert-dialog";
 import { Button } from "@/components/button/button";
+import { Heading } from "@/components/heading/heading";
+import { Stack } from "@/components/layout/layout";
 import { ScrollArea } from "@/components/scroll-area/scroll-area";
+import { Text } from "@/components/text/text";
 import { Textarea } from "@/components/textarea/textarea";
 import { Dialog, type DialogScrollBehavior } from "./dialog";
 type StoryArgs = {
@@ -130,14 +133,16 @@ const dialogSections = [
 
 function DialogSections() {
 	return (
-		<div {...stylex.props(storyParts.sections)}>
+		<Stack gap={5}>
 			{dialogSections.map((section) => (
-				<section key={section.title} {...stylex.props(storyParts.section)}>
-					<h3 {...stylex.props(storyParts.sectionTitle)}>{section.title}</h3>
-					<p {...stylex.props(storyParts.sectionBody)}>{section.body}</p>
-				</section>
+				<Stack key={section.title} gap={1}>
+					<Heading render={<h3 />} size="2">
+						{section.title}
+					</Heading>
+					<Text color="muted">{section.body}</Text>
+				</Stack>
 			))}
-		</div>
+		</Stack>
 	);
 }
 
@@ -196,20 +201,18 @@ export const ScrollBehavior: Story = {
 		controls: { disable: true },
 	},
 	render: () => (
-		<div {...stylex.props(storyParts.sections)}>
-			<section {...stylex.props(storyParts.section)}>
-				<h2 {...stylex.props(storyParts.sectionTitle)}>Inside</h2>
-				<p {...stylex.props(storyParts.sectionBody)}>The popup remains fixed while its content area scrolls.</p>
+		<Stack gap={5}>
+			<Stack gap={1}>
+				<Heading size="2">Inside</Heading>
+				<Text color="muted">The popup remains fixed while its content area scrolls.</Text>
 				<InsideScrollDialog />
-			</section>
-			<section {...stylex.props(storyParts.section)}>
-				<h2 {...stylex.props(storyParts.sectionTitle)}>Outside</h2>
-				<p {...stylex.props(storyParts.sectionBody)}>
-					The surrounding viewport scrolls when the popup exceeds the screen.
-				</p>
+			</Stack>
+			<Stack gap={1}>
+				<Heading size="2">Outside</Heading>
+				<Text color="muted">The surrounding viewport scrolls when the popup exceeds the screen.</Text>
 				<OutsideScrollDialog />
-			</section>
-		</div>
+			</Stack>
+		</Stack>
 	),
 };
 
@@ -217,16 +220,18 @@ function NonModalExample() {
 	const [outsideCount, setOutsideCount] = useState(0);
 
 	return (
-		<div {...stylex.props(storyParts.nonModalStage)}>
-			<div {...stylex.props(storyParts.outsidePanel)}>
-				<div>
-					<strong {...stylex.props(storyParts.panelTitle)}>Workspace canvas</strong>
-					<p {...stylex.props(storyParts.copy)}>This remains interactive while the dialog is open.</p>
-				</div>
+		<Stack align="center" gap={5} style={storyParts.nonModalStage}>
+			<Stack align="center" gap={6} justify="space-between" orientation="horizontal" width="full">
+				<Stack gap={1}>
+					<Heading size="2">Workspace canvas</Heading>
+					<Text color="muted" size="1">
+						This remains interactive while the dialog is open.
+					</Text>
+				</Stack>
 				<Button variant="neutral" onClick={() => setOutsideCount((count) => count + 1)}>
 					Outside action · {outsideCount}
 				</Button>
-			</div>
+			</Stack>
 			<Dialog.Root defaultOpen modal={false} disablePointerDismissal>
 				<Dialog.Trigger render={<Button />}>Open inspector</Dialog.Trigger>
 				<Dialog.Popup
@@ -245,7 +250,7 @@ function NonModalExample() {
 					</Dialog.Footer>
 				</Dialog.Popup>
 			</Dialog.Root>
-		</div>
+		</Stack>
 	);
 }
 
@@ -382,57 +387,8 @@ const storyParts = stylex.create({
 	insideScrollContent: {
 		padding: tokens["--space-5"],
 	},
-	sections: {
-		gap: tokens["--space-5"],
-		display: "flex",
-		flexDirection: "column",
-	},
-	section: {
-		gap: tokens["--space-1"],
-		display: "flex",
-		flexDirection: "column",
-	},
-	sectionTitle: {
-		margin: 0,
-		color: tokens["--fg"],
-		fontSize: tokens["--font-size-2"],
-		fontWeight: tokens["--font-weight-semibold"],
-		letterSpacing: tokens["--letter-spacing-2"],
-		lineHeight: tokens["--line-height-2"],
-	},
-	sectionBody: {
-		margin: 0,
-		color: tokens["--fg-muted"],
-		fontSize: tokens["--font-size-2"],
-		letterSpacing: tokens["--letter-spacing-2"],
-		lineHeight: tokens["--line-height-2"],
-	},
 	nonModalStage: {
-		gap: tokens["--space-5"],
-		alignItems: "center",
-		display: "flex",
-		flexDirection: "column",
 		minWidth: "min(680px, calc(100vw - 48px))",
-	},
-	outsidePanel: {
-		gap: tokens["--space-6"],
-		alignItems: "center",
-		display: "flex",
-		justifyContent: "space-between",
-		width: "100%",
-	},
-	panelTitle: {
-		color: tokens["--fg"],
-		fontSize: tokens["--font-size-2"],
-		letterSpacing: tokens["--letter-spacing-2"],
-		lineHeight: tokens["--line-height-2"],
-	},
-	copy: {
-		marginBlock: tokens["--space-1"],
-		color: tokens["--fg-muted"],
-		fontSize: tokens["--font-size-1"],
-		letterSpacing: tokens["--letter-spacing-1"],
-		lineHeight: tokens["--line-height-1"],
 	},
 	nonModalViewport: {
 		pointerEvents: "none",

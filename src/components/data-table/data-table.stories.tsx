@@ -309,7 +309,7 @@ function DeploymentTable(args: Partial<DataTableProps<Deployment>>) {
 			initialColumnVisibility={args.initialColumnVisibility ?? { updated: true }}
 			showExpandColumn={true}
 			renderExpandedRow={(row) => (
-				<div {...stylex.props(storyParts.details)}>
+				<Stack gap={1}>
 					<Text size="2" color="muted">
 						Deployment <Code>{row.original.id}</Code> was last updated by{" "}
 						<Text size="2" fontWeight="medium" render={<span />}>
@@ -327,7 +327,7 @@ function DeploymentTable(args: Partial<DataTableProps<Deployment>>) {
 							{row.original.url}
 						</Text>{" "}
 					</Text>
-				</div>
+				</Stack>
 			)}
 			getRowActions={(row) => [
 				{ label: "View deployment", icon: <CubeFocusIcon weight="duotone" /> },
@@ -377,14 +377,14 @@ function DeploymentCommandPalette() {
 			</CommandPalette.List>
 			<CommandPalette.Empty />
 			<CommandPalette.Footer>
-				<span {...stylex.props(storyParts.footerHint)}>
+				<Stack align="center" gap={2} orientation="horizontal">
 					<Kbd size="sm">↑↓</Kbd>
 					Navigate
-				</span>
-				<span {...stylex.props(storyParts.footerHint)}>
+				</Stack>
+				<Stack align="center" gap={2} orientation="horizontal">
 					<Kbd size="sm">↵</Kbd>
 					Select
-				</span>
+				</Stack>
 			</CommandPalette.Footer>
 		</CommandPalette.Root>
 	);
@@ -434,15 +434,5 @@ const storyParts = stylex.create({
 	},
 	url: {
 		fontWeight: tokens["--font-weight-medium"],
-	},
-	details: {
-		gap: tokens["--space-1"],
-		display: "flex",
-		flexDirection: "column",
-	},
-	footerHint: {
-		gap: tokens["--space-2"],
-		alignItems: "center",
-		display: "inline-flex",
 	},
 });

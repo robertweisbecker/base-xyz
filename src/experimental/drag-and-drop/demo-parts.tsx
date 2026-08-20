@@ -6,6 +6,7 @@ import type { ReactNode } from "react";
 import { Button, Heading, Text } from "@/components";
 import { focusRing } from "@/styles/recipes/focus";
 import { demoStyles } from "./drag-and-drop-demo.stylex";
+import { attrJoin } from "@/utils/attr-join";
 
 export function DemoComparison({ children }: { children: ReactNode }) {
 	return <div {...stylex.props(demoStyles.comparison)}>{children}</div>;
@@ -78,7 +79,7 @@ export function DemoCard({
 		ref,
 		props: {
 			...props,
-			className: [sx.className, className].filter(Boolean).join(" "),
+			className: attrJoin(sx.className, className),
 			style: sx.style,
 			children: children ?? (
 				<>
@@ -129,7 +130,7 @@ export function DemoHandle({ ref, label, className, style, type = "button", ...p
 			ref={ref}
 			type={type}
 			aria-label={label}
-			className={[sx.className, className].filter(Boolean).join(" ")}
+			className={attrJoin(sx.className, className)}
 			style={sx.style}>
 			<DotsSixVerticalIcon aria-hidden focusable="false" size={18} weight="bold" />
 		</button>

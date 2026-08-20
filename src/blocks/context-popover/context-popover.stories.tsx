@@ -1,10 +1,10 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import * as stylex from "@stylexjs/stylex";
 import type { ReactNode } from "react";
 import { Separator } from "@/components";
 import type { ButtonSize, ButtonVariant } from "@/components";
+import { Stack } from "@/components/layout/layout";
+import { Text } from "@/components/text/text";
 import { PromptComposer } from "@/blocks/prompt-composer/prompt-composer";
-import { tokens } from "@/theme/tokens.stylex";
 import { ContextPopover } from "./context-popover";
 
 const sizes = ["xs", "sm", "md", "lg"] as const satisfies readonly ButtonSize[];
@@ -41,7 +41,7 @@ type Story = StoryObj<typeof meta>;
 
 export const Examples: Story = {
 	render: () => (
-		<div {...stylex.props(storyParts.list)}>
+		<Stack gap={8} maxWidth="42rem">
 			<Example title="Prompt composer placement">
 				<PromptComposer.Root defaultValue="Summarize the open review comments." onSubmit={() => undefined}>
 					<PromptComposer.Surface>
@@ -61,84 +61,48 @@ export const Examples: Story = {
 			<Separator />
 
 			<Example title="Sizes">
-				<div {...stylex.props(storyParts.row)}>
+				<Stack align="center" gap={3} orientation="horizontal" wrap="wrap">
 					{sizes.map((size) => (
 						<ContextPopover key={size} size={size} total={258_000} usage={129_000} variant="secondary" />
 					))}
-				</div>
+				</Stack>
 			</Example>
 
 			<Separator />
 
 			<Example title="Token formatting">
-				<div {...stylex.props(storyParts.row)}>
+				<Stack align="center" gap={3} orientation="horizontal" wrap="wrap">
 					{tokenFormattingExamples.map(({ label, value }) => (
-						<div key={label} {...stylex.props(storyParts.formattingExample)}>
-							<span {...stylex.props(storyParts.label)}>{label} tokens</span>
+						<Stack key={label} align="center" gap={2}>
+							<Text size="1" color="muted">
+								{label} tokens
+							</Text>
 							<ContextPopover total={value} usage={value} />
-						</div>
+						</Stack>
 					))}
-				</div>
+				</Stack>
 			</Example>
 
 			<Separator />
 
 			<Example title="Variants">
-				<div {...stylex.props(storyParts.row)}>
+				<Stack align="center" gap={3} orientation="horizontal" wrap="wrap">
 					{variants.map((variant) => (
 						<ContextPopover key={variant} total={256_000} usage={104_000} variant={variant} />
 					))}
-				</div>
+				</Stack>
 			</Example>
-		</div>
+		</Stack>
 	),
 };
 
 function Example({ children, title }: { children: ReactNode; title: string }) {
 	return (
-		<section {...stylex.props(storyParts.example)}>
-			<h2 {...stylex.props(storyParts.heading)}>{title}</h2>
+		<Stack gap={3}>
+			<Text size="1" color="muted">
+				{title}
+			</Text>
 			{children}
-		</section>
+		</Stack>
 	);
 }
-
-const storyParts = stylex.create({
-	example: {
-		gap: tokens["--space-3"],
-		display: "flex",
-		flexDirection: "column",
-	},
-	formattingExample: {
-		gap: tokens["--space-2"],
-		alignItems: "center",
-		display: "flex",
-		flexDirection: "column",
-	},
-	heading: {
-		margin: 0,
-		color: tokens["--fg-muted"],
-		fontSize: tokens["--font-size-1"],
-		fontWeight: tokens["--font-weight-regular"],
-		letterSpacing: tokens["--letter-spacing-1"],
-		lineHeight: tokens["--line-height-1"],
-	},
-	label: {
-		color: tokens["--fg-muted"],
-		fontSize: tokens["--font-size-1"],
-		fontWeight: tokens["--font-weight-regular"],
-		lineHeight: tokens["--line-height-1"],
-	},
-	list: {
-		gap: tokens["--space-8"],
-		display: "flex",
-		flexDirection: "column",
-		maxWidth: "42rem",
-	},
-	row: {
-		gap: tokens["--space-3"],
-		alignItems: "center",
-		display: "flex",
-		flexWrap: "wrap",
-	},
-});

@@ -20,7 +20,7 @@ test("two-root ownership, callback stability, and cleanup handoff", async ({ pag
 	await expect(page.getByRole("button", { name: "Rerender callbacks" })).toBeVisible();
 
 	await page.getByRole("button", { name: "Rerender callbacks" }).click();
-	await expect(page.getByTestId("rerender-count")).toHaveText(" Rerenders: 1");
+	await expect(page.getByTestId("rerender-count")).toHaveText("Rerenders: 1");
 
 	await page.keyboard.press("Control+K");
 	await expect(page.getByRole("dialog", { name: "Second command palette" })).toBeVisible();

@@ -4,6 +4,7 @@ import type { StyleXStyles } from "@stylexjs/stylex";
 import { type ComponentProps } from "react";
 import { tokens } from "@/theme/tokens.stylex";
 import { focusRing } from "@/styles/recipes/focus";
+import { attrJoin } from "@/utils/attr-join";
 
 export type LinkColor = keyof typeof linkColors;
 
@@ -30,7 +31,7 @@ export function Link({
 	return (
 		<a
 			ref={ref}
-			className={[sx.className, "xyz-link", className].filter(Boolean).join(" ")}
+			className={attrJoin(sx.className, "xyz-link", className)}
 			style={sx.style}
 			rel={external ? mergeRel(rel, "noopener noreferrer") : rel}
 			target={external ? "_blank" : target}

@@ -1,10 +1,11 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import * as stylex from "@stylexjs/stylex";
 import { useEffect, useState } from "react";
-import { Text } from "@/components/text/text";
-import { tokens } from "@/theme/tokens.stylex";
 import { Button } from "@/components/button/button";
+import { Box, Stack } from "@/components/layout/layout";
+import { Text } from "@/components/text/text";
 import { Progress } from "./progress";
+
 function SimulatedProgress() {
 	const [value, setValue] = useState<number | null>(null);
 
@@ -29,7 +30,7 @@ function SimulatedProgress() {
 	const label = value === null ? "Preparing workspace" : value === 100 ? "Workspace ready" : "Processing workspace";
 
 	return (
-		<>
+		<Stack gap={2}>
 			<Progress.Root aria-valuetext={value === null ? label : undefined} value={value}>
 				<Progress.Label>{label}</Progress.Label>
 				{value === null ? <Progress.Value>{() => "In progress"}</Progress.Value> : <Progress.Value />}
@@ -40,7 +41,7 @@ function SimulatedProgress() {
 			<Button onClick={() => setValue(null)} size="sm" variant="secondary" width="fit-content">
 				Restart
 			</Button>
-		</>
+		</Stack>
 	);
 }
 
@@ -65,9 +66,9 @@ const meta = {
 	},
 	decorators: [
 		(Story) => (
-			<div {...stylex.props(storyStyles.frame)}>
+			<Box style={storyStyles.frame}>
 				<Story />
-			</div>
+			</Box>
 		),
 	],
 	render: (args) => (
@@ -91,9 +92,11 @@ export const States: Story = {
 		controls: { disable: true },
 	},
 	render: () => (
-		<div {...stylex.props(storyStyles.stack)}>
-			<section {...stylex.props(storyStyles.specimen)}>
-				<Text>Determinate</Text>
+		<Stack gap={8}>
+			<Stack gap={2}>
+				<Text color="muted" size="1">
+					Determinate
+				</Text>
 				<Progress.Root value={42}>
 					<Progress.Label>Uploading design assets</Progress.Label>
 					<Progress.Value />
@@ -101,9 +104,11 @@ export const States: Story = {
 						<Progress.Indicator />
 					</Progress.Track>
 				</Progress.Root>
-			</section>
-			<section {...stylex.props(storyStyles.specimen)}>
-				<Text>Indeterminate</Text>
+			</Stack>
+			<Stack gap={2}>
+				<Text color="muted" size="1">
+					Indeterminate
+				</Text>
 				<Progress.Root aria-valuetext="Preparing workspace" value={null}>
 					<Progress.Label>Preparing workspace</Progress.Label>
 					<Progress.Value>{() => "Initializing…"}</Progress.Value>
@@ -111,9 +116,11 @@ export const States: Story = {
 						<Progress.Indicator />
 					</Progress.Track>
 				</Progress.Root>
-			</section>
-			<section {...stylex.props(storyStyles.specimen)}>
-				<Text>Complete</Text>
+			</Stack>
+			<Stack gap={2}>
+				<Text color="muted" size="1">
+					Complete
+				</Text>
 				<Progress.Root value={100}>
 					<Progress.Label>Workspace ready</Progress.Label>
 					<Progress.Value />
@@ -121,12 +128,14 @@ export const States: Story = {
 						<Progress.Indicator />
 					</Progress.Track>
 				</Progress.Root>
-			</section>
-			<section {...stylex.props(storyStyles.specimen)}>
-				<Text>Simulated states</Text>
+			</Stack>
+			<Stack gap={2}>
+				<Text color="muted" size="1">
+					Simulated states
+				</Text>
 				<SimulatedProgress />
-			</section>
-		</div>
+			</Stack>
+		</Stack>
 	),
 };
 
@@ -134,15 +143,5 @@ const storyStyles = stylex.create({
 	frame: {
 		maxWidth: "28rem",
 		width: "100%",
-	},
-	stack: {
-		gap: tokens["--space-8"],
-		display: "flex",
-		flexDirection: "column",
-	},
-	specimen: {
-		gap: tokens["--space-2"],
-		display: "flex",
-		flexDirection: "column",
 	},
 });

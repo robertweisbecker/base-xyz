@@ -1,11 +1,11 @@
 import { BookOpenIcon } from "@phosphor-icons/react/dist/csr/BookOpen";
 import { HouseIcon } from "@phosphor-icons/react/dist/csr/House";
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import * as stylex from "@stylexjs/stylex";
+import { Heading } from "@/components/heading/heading";
+import { Stack } from "@/components/layout/layout";
 import { Separator } from "@/components/separator/separator";
-import { tokens } from "@/theme/tokens.stylex";
-import { Breadcrumbs, type BreadcrumbsRootProps } from "./breadcrumbs";
 import type { LinkColor } from "@/components/link/link";
+import { Breadcrumbs, type BreadcrumbsRootProps } from "./breadcrumbs";
 
 const meta: Meta<BreadcrumbsRootProps & { color: LinkColor }> = {
 	title: "Components/Breadcrumbs",
@@ -38,10 +38,7 @@ export const Playground: Story = {
 				Home
 			</Breadcrumbs.Link>
 			<Breadcrumbs.Separator />
-			<Breadcrumbs.Link
-				href="#"
-				color={args.color}
-				startSlot={<BookOpenIcon aria-hidden weight="duotone" />}>
+			<Breadcrumbs.Link href="#" color={args.color} startSlot={<BookOpenIcon aria-hidden weight="duotone" />}>
 				Docs
 			</Breadcrumbs.Link>
 			<Breadcrumbs.Separator />
@@ -56,7 +53,7 @@ export const Examples: Story = {
 		controls: { disable: true },
 	},
 	render: () => (
-		<div {...stylex.props(storyParts.list)}>
+		<Stack gap={6}>
 			<Example title="Basic">
 				<Breadcrumbs.Root>
 					<Breadcrumbs.Link href="#">Home</Breadcrumbs.Link>
@@ -86,36 +83,17 @@ export const Examples: Story = {
 					<Breadcrumbs.Current loading />
 				</Breadcrumbs.Root>
 			</Example>
-		</div>
+		</Stack>
 	),
 };
 
 function Example({ children, title }: { children: React.ReactNode; title: string }) {
 	return (
-		<section {...stylex.props(storyParts.example)}>
-			<h2 {...stylex.props(storyParts.heading)}>{title}</h2>
+		<Stack align="start" gap={2}>
+			<Heading size="1" color="muted" fontWeight="regular">
+				{title}
+			</Heading>
 			{children}
-		</section>
+		</Stack>
 	);
 }
-
-const storyParts = stylex.create({
-	list: {
-		gap: tokens["--space-6"],
-		display: "flex",
-		flexDirection: "column",
-	},
-	example: {
-		gap: tokens["--space-2"],
-		display: "flex",
-		flexDirection: "column",
-	},
-	heading: {
-		margin: 0,
-		color: tokens["--fg-muted"],
-		fontSize: tokens["--font-size-1"],
-		fontWeight: tokens["--font-weight-regular"],
-		letterSpacing: tokens["--letter-spacing-1"],
-		lineHeight: tokens["--line-height-1"],
-	},
-});

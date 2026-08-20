@@ -57,7 +57,7 @@ export function Trigger({ ref, className, style, ...props }: MenuTriggerProps) {
 	return (
 		<BaseMenu.Trigger
 			ref={ref}
-			className={[sxClassName, className].filter(Boolean).join(" ")}
+			className={attrJoin(sxClassName, className)}
 			style={sxStyle}
 			{...props}
 		/>
@@ -86,7 +86,7 @@ function Positioner({
 			align={align}
 			alignOffset={alignOffset ?? defaultAlignOffset}
 			sideOffset={sideOffset}
-			className={[sxClassName, className].filter(Boolean).join(" ")}
+			className={attrJoin(sxClassName, className)}
 			style={sxStyle}
 			{...props}
 		/>
@@ -106,7 +106,7 @@ export function Popup({ ref, children, className, portalProps, positionerProps, 
 			<Positioner {...positionerProps}>
 				<BaseMenu.Popup
 					ref={ref}
-					className={[sxClassName, className].filter(Boolean).join(" ")}
+					className={attrJoin(sxClassName, className)}
 					style={sxStyle}
 					{...props}>
 					{children}
@@ -122,7 +122,7 @@ export function Viewport({ ref, className, style, ...props }: MenuViewportProps)
 	return (
 		<BaseMenu.Viewport
 			ref={ref}
-			className={[sxClassName, "xyz-popup-viewport", className].filter(Boolean).join(" ")}
+			className={attrJoin(sxClassName, "xyz-popup-viewport", className)}
 			style={sxStyle}
 			{...props}
 		/>
@@ -141,7 +141,7 @@ export function Item({ ref, className, style, variant = "default", ...props }: M
 	return (
 		<BaseMenu.Item
 			ref={ref}
-			className={[sxClassName, className].filter(Boolean).join(" ")}
+			className={attrJoin(sxClassName, className)}
 			style={sxStyle}
 			{...props}
 		/>
@@ -160,7 +160,7 @@ export function LinkItem({ ref, className, style, ...props }: StyledProps<BaseMe
 	return (
 		<BaseMenu.LinkItem
 			ref={ref}
-			className={[sxClassName, className].filter(Boolean).join(" ")}
+			className={attrJoin(sxClassName, className)}
 			style={sxStyle}
 			{...props}
 		/>
@@ -179,7 +179,7 @@ export function CheckboxItem({ ref, children, className, style, ...props }: Styl
 	return (
 		<BaseMenu.CheckboxItem
 			ref={ref}
-			className={[sxClassName, className].filter(Boolean).join(" ")}
+			className={attrJoin(sxClassName, className)}
 			style={sxStyle}
 			{...props}>
 			<BaseMenu.CheckboxItemIndicator keepMounted {...stylex.props(menuItemStyles.indicator)}>
@@ -202,7 +202,7 @@ export function SwitchItem({ ref, children, className, style, ...props }: Styled
 	return (
 		<BaseMenu.CheckboxItem
 			ref={ref}
-			className={[sxClassName, className].filter(Boolean).join(" ")}
+			className={attrJoin(sxClassName, className)}
 			style={sxStyle}
 			{...props}>
 			<BaseMenu.CheckboxItemIndicator
@@ -231,7 +231,7 @@ export function RadioItem({ ref, children, className, style, ...props }: StyledP
 	return (
 		<BaseMenu.RadioItem
 			ref={ref}
-			className={[sxClassName, className].filter(Boolean).join(" ")}
+			className={attrJoin(sxClassName, className)}
 			style={sxStyle}
 			{...props}>
 			<BaseMenu.RadioItemIndicator keepMounted {...stylex.props(menuItemStyles.indicator)}>
@@ -261,7 +261,7 @@ export function SubmenuTrigger({
 	return (
 		<BaseMenu.SubmenuTrigger
 			ref={ref}
-			className={[sxClassName, className].filter(Boolean).join(" ")}
+			className={attrJoin(sxClassName, className)}
 			style={sxStyle}
 			{...props}>
 			{children}
@@ -276,7 +276,7 @@ export function CollapsibleGroup({ ref, className, style, ...props }: Collapsibl
 	return (
 		<BaseCollapsible.Root
 			ref={ref}
-			className={[sxClassName, className].filter(Boolean).join(" ")}
+			className={attrJoin(sxClassName, className)}
 			style={sxStyle}
 			{...props}
 		/>
@@ -300,7 +300,7 @@ export function CollapsibleGroupTrigger({ ref, children, className, style, ...pr
 			render={<BaseCollapsible.Trigger />}
 			closeOnClick={false}
 			nativeButton
-			className={[sxClassName, className].filter(Boolean).join(" ")}
+			className={attrJoin(sxClassName, className)}
 			style={sxStyle}
 			{...props}>
 			{children}
@@ -337,7 +337,7 @@ export function CollapsibleGroupPanel({
 			ref={ref}
 			keepMounted={keepMounted}
 			render={panelRender}
-			className={[sxClassName, className].filter(Boolean).join(" ")}
+			className={attrJoin(sxClassName, className)}
 			style={sxStyle}
 			{...props}
 		/>
@@ -350,7 +350,7 @@ export function GroupLabel({ ref, className, style, ...props }: StyledProps<Base
 	return (
 		<BaseMenu.GroupLabel
 			ref={ref}
-			className={[sxClassName, className].filter(Boolean).join(" ")}
+			className={attrJoin(sxClassName, className)}
 			style={sxStyle}
 			{...props}
 		/>
@@ -363,7 +363,7 @@ export function Separator({ ref, className, style, ...props }: StyledProps<BaseM
 	return (
 		<BaseMenu.Separator
 			ref={ref}
-			className={[sxClassName, className].filter(Boolean).join(" ")}
+			className={attrJoin(sxClassName, className)}
 			style={sxStyle}
 			{...props}
 		/>

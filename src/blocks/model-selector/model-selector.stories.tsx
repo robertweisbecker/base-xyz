@@ -1,8 +1,9 @@
+import { CirclesThreeIcon } from "@phosphor-icons/react";
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import * as stylex from "@stylexjs/stylex";
-import { Button, type ButtonSize, type ButtonVariant } from "@/components";
 import { useState } from "react";
-import { tokens } from "@/theme/tokens.stylex";
+import { Button, type ButtonSize, type ButtonVariant } from "@/components";
+import { Stack } from "@/components/layout/layout";
+import { Text } from "@/components/text/text";
 
 import {
 	ModelSelector,
@@ -15,7 +16,6 @@ import {
 	exampleModelGroups,
 	exampleSpeedOptions,
 } from "./model-selector.examples";
-import { CirclesThreeIcon } from "@phosphor-icons/react";
 
 const meta = {
 	title: "Blocks/Model selector",
@@ -29,7 +29,7 @@ type Story = StoryObj<typeof meta>;
 
 export const Examples: Story = {
 	render: () => (
-		<div {...stylex.props(storyParts.stack)}>
+		<Stack align="start" gap={5} pt={8}>
 			<ModelSelectorSample
 				label="Brand icons"
 				groups={exampleModelGroups}
@@ -59,7 +59,7 @@ export const Examples: Story = {
 				size="md"
 				variant="secondary"
 			/>
-		</div>
+		</Stack>
 	),
 };
 
@@ -81,7 +81,7 @@ function NormalizationRegressionFixture() {
 	}
 
 	return (
-		<div {...stylex.props(storyParts.stack)}>
+		<Stack align="start" gap={5} pt={8}>
 			<NormalizationCase
 				label="Controlled invalid model"
 				statusTestId="controlled-status"
@@ -92,8 +92,10 @@ function NormalizationRegressionFixture() {
 				statusTestId="uncontrolled-status"
 				defaultValue={{ model: "removed-model", effort: "Medium", speed: "Default" }}
 			/>
-			<section {...stylex.props(storyParts.sample)}>
-				<h2 {...stylex.props(storyParts.label)}>Dynamic model removal</h2>
+			<Stack align="start" gap={2}>
+				<Text size="1" color="muted">
+					Dynamic model removal
+				</Text>
 				<Button onClick={removeSelectedModel}>Remove selected model</Button>
 				<ModelSelector.Root
 					groups={dynamicGroups}
@@ -105,8 +107,8 @@ function NormalizationRegressionFixture() {
 					<ModelSelector.Popup />
 				</ModelSelector.Root>
 				<RegressionStatus testId="dynamic-status" events={dynamicEvents} />
-			</section>
-		</div>
+			</Stack>
+		</Stack>
 	);
 }
 
@@ -123,8 +125,10 @@ function NormalizationCase({
 }) {
 	const [events, setEvents] = useState<RegressionEvent[]>([]);
 	return (
-		<section {...stylex.props(storyParts.sample)}>
-			<h2 {...stylex.props(storyParts.label)}>{label}</h2>
+		<Stack align="start" gap={2}>
+			<Text size="1" color="muted">
+				{label}
+			</Text>
 			<ModelSelector.Root
 				groups={emptyFirstGroupModelGroups}
 				effortOptions={exampleEffortOptions}
@@ -136,7 +140,7 @@ function NormalizationCase({
 				<ModelSelector.Popup />
 			</ModelSelector.Root>
 			<RegressionStatus testId={statusTestId} events={events} />
-		</section>
+		</Stack>
 	);
 }
 
@@ -145,9 +149,9 @@ type RegressionEvent = { value: ModelSelectorValue; reason: string };
 function RegressionStatus({ events, testId }: { events: readonly RegressionEvent[]; testId: string }) {
 	const latest = events.at(-1);
 	return (
-		<p aria-live="polite" data-testid={testId}>
+		<Text aria-live="polite" data-testid={testId}>
 			{`${events.length}|${latest?.value.model ?? ""}|${latest?.value.effort ?? ""}|${latest?.value.speed ?? ""}|${latest?.reason ?? ""}`}
-		</p>
+		</Text>
 	);
 }
 
@@ -175,8 +179,10 @@ function ModelSelectorSample({
 	variant: ButtonVariant;
 }) {
 	return (
-		<section {...stylex.props(storyParts.sample)}>
-			<h2 {...stylex.props(storyParts.label)}>{label}</h2>
+		<Stack align="start" gap={2}>
+			<Text size="1" color="muted">
+				{label}
+			</Text>
 			<ModelSelector.Root
 				groups={groups}
 				effortOptions={exampleEffortOptions}
@@ -185,7 +191,7 @@ function ModelSelectorSample({
 				<ModelSelector.Trigger showEffort={showEffort} size={size} variant={variant} />
 				<ModelSelector.Popup />
 			</ModelSelector.Root>
-		</section>
+		</Stack>
 	);
 }
 
@@ -225,26 +231,3 @@ const iconlessModelGroups = [
 		],
 	},
 ] satisfies readonly ModelSelectorGroup[];
-
-const storyParts = stylex.create({
-	stack: {
-		gap: tokens["--space-5"],
-		alignItems: "flex-start",
-		display: "flex",
-		flexDirection: "column",
-		paddingBlockStart: tokens["--space-8"],
-	},
-	sample: {
-		gap: tokens["--space-2"],
-		alignItems: "flex-start",
-		display: "flex",
-		flexDirection: "column",
-	},
-	label: {
-		margin: 0,
-		color: tokens["--fg-muted"],
-		fontSize: tokens["--font-size-1"],
-		letterSpacing: tokens["--letter-spacing-1"],
-		lineHeight: tokens["--line-height-1"],
-	},
-});

@@ -2,10 +2,12 @@ import type { Meta, StoryObj } from "@storybook/react-vite";
 import * as stylex from "@stylexjs/stylex";
 import { useState } from "react";
 import { Separator } from "@/components";
+import { Box, Grid, Stack } from "@/components/layout/layout";
+import { Text } from "@/components/text/text";
 import { breakpoints } from "@/styles/constants.stylex";
-import { tokens } from "@/theme/tokens.stylex";
 
 import { PasswordField } from "./password-field";
+
 const passwordRequirements = [/.{8,}/, /[0-9]/, /[a-z]/, /[A-Z]/] as const;
 
 const meta = {
@@ -21,9 +23,9 @@ type Story = StoryObj;
 
 export const Examples: Story = {
 	render: () => (
-		<div {...stylex.props(storyParts.list)}>
+		<Stack gap={8}>
 			<StorySection title="Sign in">
-				<div {...stylex.props(storyParts.frame)}>
+				<Box maxWidth="32rem">
 					<PasswordField.Root>
 						<PasswordField.Label>Password</PasswordField.Label>
 						<PasswordField.Control>
@@ -34,13 +36,13 @@ export const Examples: Story = {
 						</PasswordField.Control>
 						<PasswordField.Description>Enter the password for your account.</PasswordField.Description>
 					</PasswordField.Root>
-				</div>
+				</Box>
 			</StorySection>
 
 			<Separator />
 
 			<StorySection title="Password strength">
-				<div {...stylex.props(storyParts.frame)}>
+				<Box maxWidth="32rem">
 					<PasswordField.Root defaultValue="Password">
 						<PasswordField.Label>Create a password</PasswordField.Label>
 						<PasswordField.Control>
@@ -54,7 +56,7 @@ export const Examples: Story = {
 						</PasswordField.Description>
 						<PasswordField.Meter requirements={passwordRequirements} />
 					</PasswordField.Root>
-				</div>
+				</Box>
 			</StorySection>
 
 			<Separator />
@@ -66,7 +68,7 @@ export const Examples: Story = {
 			<Separator />
 
 			<StorySection title="States">
-				<div {...stylex.props(storyParts.grid)}>
+				<Grid gap={8} maxWidth="56rem" style={storyParts.statesGrid}>
 					<State title="Empty">
 						<PasswordExample label="Password" placeholder="Enter your password" />
 					</State>
@@ -102,9 +104,9 @@ export const Examples: Story = {
 							<PasswordField.Error>Use at least eight characters.</PasswordField.Error>
 						</PasswordField.Root>
 					</State>
-				</div>
+				</Grid>
 			</StorySection>
-		</div>
+		</Stack>
 	),
 };
 
@@ -148,7 +150,7 @@ function ControlledExample() {
 	const [visible, setVisible] = useState(false);
 
 	return (
-		<div {...stylex.props(storyParts.frame)}>
+		<Box maxWidth="32rem">
 			<PasswordField.Root value={value} onValueChange={setValue} visible={visible} onVisibleChange={setVisible}>
 				<PasswordField.Label>API password</PasswordField.Label>
 				<PasswordField.Control>
@@ -161,70 +163,37 @@ function ControlledExample() {
 					The value and visibility state are controlled by the caller.
 				</PasswordField.Description>
 			</PasswordField.Root>
-		</div>
+		</Box>
 	);
 }
 
 function StorySection({ children, title }: { children: React.ReactNode; title: string }) {
 	return (
-		<section {...stylex.props(storyParts.section)}>
-			<h2 {...stylex.props(storyParts.heading)}>{title}</h2>
+		<Stack gap={3}>
+			<Text size="1" color="muted">
+				{title}
+			</Text>
 			{children}
-		</section>
+		</Stack>
 	);
 }
 
 function State({ children, title }: { children: React.ReactNode; title: string }) {
 	return (
-		<section {...stylex.props(storyParts.state)}>
-			<h3 {...stylex.props(storyParts.subheading)}>{title}</h3>
+		<Stack gap={3}>
+			<Text size="1" color="muted">
+				{title}
+			</Text>
 			{children}
-		</section>
+		</Stack>
 	);
 }
 
 const storyParts = stylex.create({
-	list: {
-		gap: tokens["--space-8"],
-		display: "flex",
-		flexDirection: "column",
-	},
-	section: {
-		gap: tokens["--space-3"],
-		display: "flex",
-		flexDirection: "column",
-	},
-	frame: {
-		maxWidth: "32rem",
-	},
-	grid: {
-		gap: tokens["--space-8"],
-		display: "grid",
+	statesGrid: {
 		gridTemplateColumns: {
 			default: "1fr",
 			[breakpoints.md]: "repeat(2, minmax(0, 1fr))",
 		},
-		maxWidth: "56rem",
-	},
-	state: {
-		gap: tokens["--space-3"],
-		display: "flex",
-		flexDirection: "column",
-	},
-	heading: {
-		margin: 0,
-		color: tokens["--fg-muted"],
-		fontSize: tokens["--font-size-1"],
-		fontWeight: tokens["--font-weight-regular"],
-		letterSpacing: tokens["--letter-spacing-1"],
-		lineHeight: tokens["--line-height-1"],
-	},
-	subheading: {
-		margin: 0,
-		color: tokens["--fg-muted"],
-		fontSize: tokens["--font-size-1"],
-		fontWeight: tokens["--font-weight-regular"],
-		letterSpacing: tokens["--letter-spacing-1"],
-		lineHeight: tokens["--line-height-1"],
 	},
 });

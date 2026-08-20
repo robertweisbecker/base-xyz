@@ -4,6 +4,8 @@ import type { Meta, StoryObj } from "@storybook/react-vite";
 import * as stylex from "@stylexjs/stylex";
 import { useEffect, useRef, useState, type ComponentProps, type ReactNode, type RefObject } from "react";
 import { Menu, MeterGauge, Toast, Toolbar } from "@/components";
+import { Box, Stack } from "@/components/layout/layout";
+import { Text } from "@/components/text/text";
 import { tokens } from "@/theme/tokens.stylex";
 
 import { ModelSelector } from "@/blocks/model-selector/model-selector";
@@ -15,6 +17,7 @@ import {
 } from "@/blocks/model-selector/model-selector.examples";
 import { GoalToolbar } from "./goal-toolbar";
 import { PromptComposer } from "./prompt-composer";
+
 type StoryArgs = ComponentProps<typeof GoalToolbar>;
 
 const meta = {
@@ -30,56 +33,62 @@ type Story = StoryObj<StoryArgs>;
 
 export const Examples: Story = {
 	render: () => (
-		<div {...stylex.props(storyParts.examples)}>
-			<section {...stylex.props(storyParts.example)}>
-				<h2 {...stylex.props(storyParts.label)}>Active goal</h2>
+		<Stack gap={8} maxWidth="42rem">
+			<Example title="Active goal">
 				<GoalToolbar active description="Standardize Storybook stories across the component library." />
-			</section>
-			<section {...stylex.props(storyParts.example)}>
-				<h2 {...stylex.props(storyParts.label)}>Inactive goal</h2>
+			</Example>
+			<Example title="Inactive goal">
 				<GoalToolbar active={false} description="Standardize Storybook stories across the component library." />
-			</section>
-			<section {...stylex.props(storyParts.example)}>
-				<h2 {...stylex.props(storyParts.label)}>Long description</h2>
+			</Example>
+			<Example title="Long description">
 				<GoalToolbar
 					active
 					description="Audit every component and block story, consolidate repetitive examples, preserve meaningful controls, and verify the resulting Storybook navigation and behavior."
 				/>
-			</section>
-		</div>
+			</Example>
+		</Stack>
 	),
 };
 
 export const Composition: Story = {
 	render: () => (
-		<div {...stylex.props(storyParts.compositionExamples)}>
-			<section {...stylex.props(storyParts.compositionExample)}>
-				<h2 {...stylex.props(storyParts.label)}>Anchored progress</h2>
-				<div {...stylex.props(storyParts.compositionStage)}>
+		<Stack gap={12} maxWidth="42rem" pt={10}>
+			<Example title="Anchored progress">
+				<Box pt={8}>
 					<GoalProgressDemo id="goal-toolbar-progress" />
-				</div>
-			</section>
-			<section {...stylex.props(storyParts.compositionExample)}>
-				<h2 {...stylex.props(storyParts.label)}>Stacked prompt input</h2>
-				<div {...stylex.props(storyParts.compositionStage)}>
+				</Box>
+			</Example>
+			<Example title="Stacked prompt input">
+				<Box pt={8}>
 					<GoalPromptStackDemo id="goal-toolbar-prompt-progress" />
-				</div>
-			</section>
-		</div>
+				</Box>
+			</Example>
+		</Stack>
 	),
 };
+
+function Example({ children, title }: { children: ReactNode; title: string }) {
+	return (
+		<Stack gap={3}>
+			<Text size="1" color="muted">
+				{title}
+			</Text>
+			{children}
+		</Stack>
+	);
+}
 
 function GoalProgressDemo({ id }: { id: string }) {
 	return (
 		<GoalProgressProvider id={id}>
 			{({ anchorRef, setGoalActive }) => (
-				<div ref={anchorRef} {...stylex.props(storyParts.goalTray)}>
+				<Box ref={anchorRef} mx={6}>
 					<GoalToolbar
 						active
 						description="Refactor the command palette and data table stories."
 						onActiveChange={setGoalActive}
 					/>
-				</div>
+				</Box>
 			)}
 		</GoalProgressProvider>
 	);
@@ -89,14 +98,14 @@ function GoalPromptStackDemo({ id }: { id: string }) {
 	return (
 		<GoalProgressProvider id={id}>
 			{({ anchorRef, setGoalActive }) => (
-				<div {...stylex.props(storyParts.promptStack)}>
-					<div ref={anchorRef} {...stylex.props(storyParts.goalTray)}>
+				<Stack gap={0} width="full">
+					<Box ref={anchorRef} mx={6}>
 						<GoalToolbar
 							active
 							description="Wire the goal state into the next prompt before continuing."
 							onActiveChange={setGoalActive}
 						/>
-					</div>
+					</Box>
 					<PromptComposer.Root
 						clearOnSubmit={false}
 						defaultValue="Continue with the current goal and summarize the next change."
@@ -123,7 +132,7 @@ function GoalPromptStackDemo({ id }: { id: string }) {
 							</PromptComposer.Footer>
 						</PromptComposer.Surface>
 					</PromptComposer.Root>
-				</div>
+				</Stack>
 			)}
 		</GoalProgressProvider>
 	);
@@ -238,60 +247,21 @@ function GoalProgressContent({
 
 function ChangeCount({ additions, deletions }: { additions: number; deletions: number }) {
 	return (
-		<span aria-label={`${additions} additions and ${deletions} deletions`} {...stylex.props(storyParts.changeCount)}>
-			<span aria-hidden {...stylex.props(storyParts.additions)}>
+		<Text
+			aria-label={`${additions} additions and ${deletions} deletions`}
+			render={<span />}
+			style={storyParts.changeCount}>
+			<Text aria-hidden render={<span />} style={storyParts.additions}>
 				+{additions}
-			</span>
-			<span aria-hidden {...stylex.props(storyParts.deletions)}>
+			</Text>
+			<Text aria-hidden render={<span />} style={storyParts.deletions}>
 				−{deletions}
-			</span>
-		</span>
+			</Text>
+		</Text>
 	);
 }
 
 const storyParts = stylex.create({
-	examples: {
-		gap: tokens["--space-8"],
-		display: "flex",
-		flexDirection: "column",
-	},
-	example: {
-		gap: tokens["--space-3"],
-		display: "flex",
-		flexDirection: "column",
-		maxWidth: "42rem",
-	},
-	compositionExamples: {
-		gap: tokens["--space-12"],
-		display: "flex",
-		flexDirection: "column",
-		paddingBlockStart: tokens["--space-10"],
-		maxWidth: "42rem",
-	},
-	compositionExample: {
-		gap: tokens["--space-3"],
-		display: "flex",
-		flexDirection: "column",
-	},
-	compositionStage: {
-		paddingBlockStart: tokens["--space-8"],
-	},
-	goalTray: {
-		marginInline: tokens["--space-6"],
-	},
-	promptStack: {
-		gap: 0,
-		display: "flex",
-		flexDirection: "column",
-		width: "100%",
-	},
-	label: {
-		margin: 0,
-		color: tokens["--fg-muted"],
-		fontSize: tokens["--font-size-1"],
-		letterSpacing: tokens["--letter-spacing-1"],
-		lineHeight: tokens["--line-height-1"],
-	},
 	changeCount: {
 		gap: tokens["--space-1"],
 		display: "inline-flex",

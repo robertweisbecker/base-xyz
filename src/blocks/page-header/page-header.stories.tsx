@@ -3,8 +3,8 @@ import { GitForkIcon } from "@phosphor-icons/react/dist/csr/GitFork";
 import { LockIcon } from "@phosphor-icons/react/dist/csr/Lock";
 import { StarIcon } from "@phosphor-icons/react/dist/csr/Star";
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import * as stylex from "@stylexjs/stylex";
 import { Avatar, Badge, Breadcrumbs, Button, Separator, Tabs } from "@/components";
+import { Stack } from "@/components/layout/layout";
 import { PageHeader } from "./page-header";
 
 const meta = {
@@ -20,7 +20,7 @@ type Story = StoryObj;
 
 export const Examples: Story = {
 	render: () => (
-		<div {...stylex.props(storyParts.list)}>
+		<Stack gap={8}>
 			<PageHeader
 				title="base-stylex-lab"
 				description="React primitives and workflow blocks composed with Base UI and StyleX."
@@ -89,13 +89,6 @@ export const Examples: Story = {
 					</Tabs.Root>
 				}
 			/>
-		</div>
+		</Stack>
 	),
 };
-
-const storyParts = stylex.create({
-	list: {
-		display: "flex",
-		flexDirection: "column",
-	},
-});

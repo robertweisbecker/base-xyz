@@ -18,13 +18,13 @@ import { SignOutIcon } from "@phosphor-icons/react/dist/csr/SignOut";
 import { TrashIcon } from "@phosphor-icons/react/dist/csr/Trash";
 import type { ReactNode } from "react";
 import * as stylex from "@stylexjs/stylex";
-import { textStyles } from "@/components/text/text.stylex";
-import { tokens } from "@/theme/tokens.stylex";
 import { Button } from "@/components/button/button";
+import { Grid, Stack } from "@/components/layout";
+import { Separator } from "@/components/separator/separator";
+import { Text } from "@/components/text/text";
 import { Menu } from "./menu";
 import type { MenuItemSize, MenuItemVariant } from "./menu.types";
 import { menuItemStyles, menuItemVariantStyles } from "./menu-item.stylex";
-import { Text } from "@/components/text/text";
 
 type MenuStoryArgs = {
 	_side: "top" | "right" | "bottom" | "left";
@@ -237,19 +237,21 @@ export const SharedRowParity: Story = {
 		controls: { disable: true },
 	},
 	render: () => (
-		<div {...stylex.props(storyStyles.parityGrid)}>
+		<Grid columns={3} gap={6} maxWidth="54rem">
 			{(["Menu source", "Select borrower", "Combobox borrower"] as const).map((owner, index) => (
-				<section key={owner} {...stylex.props(storyStyles.paritySection)}>
-					<span {...stylex.props(textStyles.supporting)}>{owner}</span>
+				<Stack gap={2} key={owner}>
+					<Text color="muted" size="1">
+						{owner}
+					</Text>
 					<div
 						data-highlighted={index === 1 ? "" : undefined}
 						{...stylex.props(menuItemStyles.item, menuItemVariantStyles.default, storyStyles.parityRow)}>
 						<span aria-hidden {...stylex.props(menuItemStyles.indicator)} />
 						<span {...stylex.props(menuItemStyles.label)}>Shared selectable row</span>
 					</div>
-				</section>
+				</Stack>
 			))}
-		</div>
+		</Grid>
 	),
 };
 
@@ -273,13 +275,13 @@ export const Positioning: Story = {
 		controls: { disable: true },
 	},
 	render: () => (
-		<div {...stylex.props(storyStyles.positioningGrid)}>
+		<Grid columns={2} gap={4} style={storyStyles.positioningGrid}>
 			{positioningPlacements.map(({ _side, _align }) => (
-				<div key={`${_side}-${_align}`} {...stylex.props(storyStyles.positioningCell)}>
+				<Stack align="center" justify="center" key={`${_side}-${_align}`} style={storyStyles.positioningCell}>
 					<PositionedMenu _side={_side} _align={_align} />
-				</div>
+				</Stack>
 			))}
-		</div>
+		</Grid>
 	),
 };
 
@@ -288,9 +290,9 @@ export const MenuTypes: Story = {
 		controls: { disable: true },
 	},
 	render: () => (
-		<div style={{ display: "flex", flexWrap: "wrap", flexDirection: "column", gap: 8 }}>
-			<section>
-				<Text my={2} color="subtle">
+		<Stack gap={8}>
+			<Stack gap={2}>
+				<Text color="muted" size="1">
 					Actions
 				</Text>
 				<MenuExample trigger="Project actions">
@@ -314,9 +316,10 @@ export const MenuTypes: Story = {
 						<Menu.ItemLabel>Delete</Menu.ItemLabel>
 					</Menu.Item>
 				</MenuExample>
-			</section>
-			<section>
-				<Text my={2} color="subtle">
+			</Stack>
+			<Separator />
+			<Stack gap={2}>
+				<Text color="muted" size="1">
 					Links
 				</Text>
 				<MenuExample trigger="Resources">
@@ -333,9 +336,10 @@ export const MenuTypes: Story = {
 						<Menu.ItemLabel>Support</Menu.ItemLabel>
 					</Menu.LinkItem>
 				</MenuExample>
-			</section>
-			<section>
-				<Text my={2} color="subtle">
+			</Stack>
+			<Separator />
+			<Stack gap={2}>
+				<Text color="muted" size="1">
 					Submenu
 				</Text>
 				<MenuExample trigger="Project actions">
@@ -380,9 +384,10 @@ export const MenuTypes: Story = {
 						</Menu.Popup>
 					</Menu.SubmenuRoot>
 				</MenuExample>
-			</section>
-			<section>
-				<Text my={2} color="subtle">
+			</Stack>
+			<Separator />
+			<Stack gap={2}>
+				<Text color="muted" size="1">
 					Radio items
 				</Text>
 				<MenuExample trigger="Sort by">
@@ -401,9 +406,10 @@ export const MenuTypes: Story = {
 						</Menu.RadioGroup>
 					</Menu.Group>
 				</MenuExample>
-			</section>
-			<section>
-				<Text my={2} color="subtle">
+			</Stack>
+			<Separator />
+			<Stack gap={2}>
+				<Text color="muted" size="1">
 					Checkbox items
 				</Text>
 				<MenuExample trigger="View options">
@@ -420,9 +426,10 @@ export const MenuTypes: Story = {
 						</Menu.CheckboxItem>
 					</Menu.Group>
 				</MenuExample>
-			</section>
-			<section>
-				<Text my={2} color="subtle">
+			</Stack>
+			<Separator />
+			<Stack gap={2}>
+				<Text color="muted" size="1">
 					Switch items
 				</Text>
 				<MenuExample trigger="Preferences">
@@ -439,9 +446,10 @@ export const MenuTypes: Story = {
 						</Menu.SwitchItem>
 					</Menu.Group>
 				</MenuExample>
-			</section>
-			<section>
-				<Text my={2} color="subtle">
+			</Stack>
+			<Separator />
+			<Stack gap={2}>
+				<Text color="muted" size="1">
 					Complex
 				</Text>
 				<MenuExample trigger="File options">
@@ -483,8 +491,8 @@ export const MenuTypes: Story = {
 						</Menu.RadioGroup>
 					</Menu.Group>
 				</MenuExample>
-			</section>
-		</div>
+			</Stack>
+		</Stack>
 	),
 };
 
@@ -597,9 +605,7 @@ function MenuExample({ children, trigger }: { children: ReactNode; trigger: stri
 
 const storyStyles = stylex.create({
 	positioningGrid: {
-		gap: tokens["--space-4"],
 		paddingBlock: "10rem",
-		display: "grid",
 		gridTemplateColumns: {
 			default: "repeat(2, minmax(0, 1fr))",
 			"@media (max-width: 900px)": "1fr",
@@ -607,9 +613,6 @@ const storyStyles = stylex.create({
 		width: "min(1120px, calc(100vw - 48px))",
 	},
 	positioningCell: {
-		alignItems: "center",
-		display: "flex",
-		justifyContent: "center",
 		minHeight: "14rem",
 		minWidth: 0,
 	},
@@ -618,17 +621,6 @@ const storyStyles = stylex.create({
 	},
 	itemVariantsMenu: {
 		width: "22rem",
-	},
-	parityGrid: {
-		gap: tokens["--space-6"],
-		display: "grid",
-		gridTemplateColumns: "repeat(3, minmax(0, 1fr))",
-		maxWidth: "54rem",
-	},
-	paritySection: {
-		gap: tokens["--space-2"],
-		display: "flex",
-		flexDirection: "column",
 	},
 	parityRow: {
 		width: "100%",

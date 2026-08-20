@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import * as stylex from "@stylexjs/stylex";
 import { Separator } from "@/components";
-import { tokens } from "@/theme/tokens.stylex";
+import { Stack } from "@/components/layout/layout";
+import { Text } from "@/components/text/text";
 
 import { CopyButton } from "./copy-button";
 
@@ -18,20 +18,20 @@ type Story = StoryObj;
 
 export const Examples: Story = {
 	render: () => (
-		<div {...stylex.props(storyParts.list)}>
+		<Stack gap={8}>
 			<Example title="Common uses">
-				<div {...stylex.props(storyParts.row)}>
+				<Stack align="center" gap={3} orientation="horizontal" wrap="wrap">
 					<CopyButton value="pnpm add @base-ui/react" variant="secondary">
 						Copy install command
 					</CopyButton>
 					<CopyButton tooltip="Copy project ID" value="project_4f28ac" variant="neutral" />
-				</div>
+				</Stack>
 			</Example>
 
 			<Separator />
 
 			<Example title="Sizes">
-				<div {...stylex.props(storyParts.row)}>
+				<Stack align="center" gap={3} orientation="horizontal" wrap="wrap">
 					<CopyButton size="xs" value="Extra small">
 						Extra small
 					</CopyButton>
@@ -44,13 +44,13 @@ export const Examples: Story = {
 					<CopyButton size="lg" value="Large">
 						Large
 					</CopyButton>
-				</div>
+				</Stack>
 			</Example>
 
 			<Separator />
 
 			<Example title="Variants">
-				<div {...stylex.props(storyParts.row)}>
+				<Stack align="center" gap={3} orientation="horizontal" wrap="wrap">
 					<CopyButton value="Primary" variant="primary">
 						Primary
 					</CopyButton>
@@ -69,13 +69,13 @@ export const Examples: Story = {
 					<CopyButton value="Error" variant="error">
 						Error
 					</CopyButton>
-				</div>
+				</Stack>
 			</Example>
 
 			<Separator />
 
 			<Example title="Shapes">
-				<div {...stylex.props(storyParts.row)}>
+				<Stack align="center" gap={3} orientation="horizontal" wrap="wrap">
 					<CopyButton shape="default" value="Default">
 						Default
 					</CopyButton>
@@ -84,44 +84,19 @@ export const Examples: Story = {
 					</CopyButton>
 					<CopyButton shape="square" tooltip="Copy square token" value="square-token" />
 					<CopyButton shape="circle" tooltip="Copy circular token" value="circle-token" />
-				</div>
+				</Stack>
 			</Example>
-		</div>
+		</Stack>
 	),
 };
 
 function Example({ children, title }: { children: React.ReactNode; title: string }) {
 	return (
-		<section {...stylex.props(storyParts.example)}>
-			<h2 {...stylex.props(storyParts.heading)}>{title}</h2>
+		<Stack gap={3}>
+			<Text size="1" color="muted">
+				{title}
+			</Text>
 			{children}
-		</section>
+		</Stack>
 	);
 }
-
-const storyParts = stylex.create({
-	list: {
-		gap: tokens["--space-8"],
-		display: "flex",
-		flexDirection: "column",
-	},
-	example: {
-		gap: tokens["--space-3"],
-		display: "flex",
-		flexDirection: "column",
-	},
-	row: {
-		gap: tokens["--space-3"],
-		alignItems: "center",
-		display: "flex",
-		flexWrap: "wrap",
-	},
-	heading: {
-		margin: 0,
-		color: tokens["--fg-muted"],
-		fontSize: tokens["--font-size-1"],
-		fontWeight: tokens["--font-weight-regular"],
-		letterSpacing: tokens["--letter-spacing-1"],
-		lineHeight: tokens["--line-height-1"],
-	},
-});

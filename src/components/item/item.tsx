@@ -6,6 +6,7 @@ import { media } from "@/styles/constants.stylex";
 import { typescaleStyles, textStyles } from "@/components/text/text.stylex";
 import { focusRing } from "@/styles/recipes/focus";
 import { tokens } from "@/theme/tokens.stylex";
+import { attrJoin } from "@/utils/attr-join";
 
 /**
  * How the description sits relative to the label.
@@ -63,7 +64,7 @@ export function Item({
 		state: { align },
 		props: {
 			...props,
-			className: [sx.className, className].filter(Boolean).join(" "),
+			className: attrJoin(sx.className, className),
 			style: sx.style,
 			children: (
 				<>

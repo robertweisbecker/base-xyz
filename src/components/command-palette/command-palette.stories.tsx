@@ -7,12 +7,12 @@ import {
 	UserCircleGearIcon,
 } from "@phosphor-icons/react";
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import * as stylex from "@stylexjs/stylex";
 import { useState } from "react";
 import { Kbd } from "@/components/kbd/kbd";
+import { Box, Stack } from "@/components/layout/layout";
 import { Text } from "@/components/text/text";
-import { tokens } from "@/theme/tokens.stylex";
 import { CommandPalette } from "./command-palette";
+
 type CommandAction = {
 	id: string;
 	description: string;
@@ -104,13 +104,13 @@ export const Playground: Story = {
 
 export const Inline: Story = {
 	render: () => (
-		<div {...stylex.props(storyParts.inlineFrame)}>
+		<Box width="min(100%, 680px)">
 			<CommandPalette.Root inline items={commandGroups} itemToStringValue={commandToStringValue}>
 				<CommandPalette.Input placeholder="Search inline commands…" />
 				<CommandResults />
 				<CommandPalette.Empty />
 			</CommandPalette.Root>
-		</div>
+		</Box>
 	),
 };
 
@@ -147,21 +147,27 @@ function ShortcutArbitrationFixture() {
 	}
 
 	return (
-		<div {...stylex.props(storyParts.example)}>
-			<div>
+		<Stack align="start" gap={3}>
+			<Stack align="center" gap={2} orientation="horizontal" wrap="wrap">
 				<button type="button" onClick={() => setRerenderCount((count) => count + 1)}>
 					Rerender callbacks
 				</button>
-				<span data-testid="rerender-count"> Rerenders: {rerenderCount}</span>
-			</div>
+				<Text data-testid="rerender-count" size="2">
+					Rerenders: {rerenderCount}
+				</Text>
+			</Stack>
 			<button type="button" onClick={() => setSecondMounted(false)} disabled={!secondMounted}>
 				Unmount second palette
 			</button>
 			<input aria-label="Reserved shortcut input" onKeyDown={handleReservedShortcut} />
-			<div>
-				<span data-testid="first-open-count">First opens: {firstOpens}</span>
-				<span data-testid="second-open-count"> Second opens: {secondOpens}</span>
-			</div>
+			<Stack align="center" gap={2} orientation="horizontal" wrap="wrap">
+				<Text data-testid="first-open-count" size="2">
+					First opens: {firstOpens}
+				</Text>
+				<Text data-testid="second-open-count" size="2">
+					Second opens: {secondOpens}
+				</Text>
+			</Stack>
 			<CommandPalette.Root
 				label="First command palette"
 				open={firstOpen}
@@ -186,7 +192,7 @@ function ShortcutArbitrationFixture() {
 					<CommandPalette.Empty />
 				</CommandPalette.Root>
 			) : null}
-		</div>
+		</Stack>
 	);
 }
 
@@ -198,7 +204,7 @@ function CommandPaletteExample({ shortcut = false }: { shortcut?: boolean }) {
 	}
 
 	return (
-		<div {...stylex.props(storyParts.example)}>
+		<Stack align="start" gap={3}>
 			<CommandPalette.Root
 				shortcut={shortcut}
 				trigger={<CommandPalette.Trigger startSlot={<MagnifyingGlassIcon weight="bold" aria-hidden />} />}
@@ -208,20 +214,20 @@ function CommandPaletteExample({ shortcut = false }: { shortcut?: boolean }) {
 				<CommandResults onSelect={handleSelect} />
 				<CommandPalette.Empty />
 				<CommandPalette.Footer>
-					<span {...stylex.props(storyParts.footerHint)}>
+					<Text render={<Stack align="center" gap={2} orientation="horizontal" />} size="2">
 						<Kbd size="sm">↑↓</Kbd>
 						Navigate
-					</span>
-					<span {...stylex.props(storyParts.footerHint)}>
+					</Text>
+					<Text render={<Stack align="center" gap={2} orientation="horizontal" />} size="2">
 						<Kbd size="sm">↵</Kbd>
 						Select
-					</span>
+					</Text>
 				</CommandPalette.Footer>
 			</CommandPalette.Root>
 			<Text color="muted" size="2" aria-live="polite">
 				{selectedCommand ? `Last selected: ${selectedCommand}` : "Open the palette or press command K."}
 			</Text>
-		</div>
+		</Stack>
 	);
 }
 
@@ -258,20 +264,3 @@ function commandToStringValue(item: CommandAction | CommandGroup) {
 	}
 	return item.label;
 }
-
-const storyParts = stylex.create({
-	example: {
-		gap: tokens["--space-3"],
-		alignItems: "flex-start",
-		display: "flex",
-		flexDirection: "column",
-	},
-	inlineFrame: {
-		width: "min(100%, 680px)",
-	},
-	footerHint: {
-		gap: tokens["--space-2"],
-		alignItems: "center",
-		display: "inline-flex",
-	},
-});

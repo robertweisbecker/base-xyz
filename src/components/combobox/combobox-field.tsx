@@ -75,7 +75,7 @@ export function Root<Value, Multiple extends ComboboxMultipleMode = false>({
 		<Field.Root
 			disabled={disabled}
 			invalid={invalid}
-			className={[sx.className, className].filter(Boolean).join(" ")}
+			className={attrJoin(sx.className, className)}
 			style={sx.style}>
 			<ComboboxContext.Provider value={{ multiple: multiple === true, readOnly, size }}>
 				<BaseCombobox.Root disabled={disabled} multiple={multiple} readOnly={readOnly} {...restProps}>
@@ -94,7 +94,7 @@ export function Label({ ref, className, style, ...props }: ComboboxLabelProps) {
 	return (
 		<Field.Label
 			ref={ref}
-			className={[sx.className, className].filter(Boolean).join(" ")}
+			className={attrJoin(sx.className, className)}
 			style={sx.style}
 			{...props}
 		/>
@@ -127,7 +127,7 @@ export function InputGroup({ ref, children, className, style, variant = "input",
 		<ComboboxChipsContext.Provider value={withChips}>
 			<BaseCombobox.InputGroup
 				ref={ref}
-				className={[sx.className, className].filter(Boolean).join(" ")}
+				className={attrJoin(sx.className, className)}
 				style={sx.style}
 				{...props}>
 				{children}
@@ -156,7 +156,7 @@ export function Input({ ref, className, style, ...props }: ComboboxInputProps) {
 	return (
 		<BaseCombobox.Input
 			ref={ref}
-			className={[sx.className, className].filter(Boolean).join(" ")}
+			className={attrJoin(sx.className, className)}
 			style={sx.style}
 			{...props}
 		/>
@@ -191,7 +191,7 @@ function Clear({ ref, "aria-label": ariaLabel, children, className, style, ...pr
 		<BaseCombobox.Clear
 			ref={ref}
 			aria-label={ariaLabel ?? (children == null ? "Clear selection" : undefined)}
-			className={[sx.className, className].filter(Boolean).join(" ")}
+			className={attrJoin(sx.className, className)}
 			style={sx.style}
 			{...props}>
 			{children ?? <XCircleIcon aria-hidden size="1.25em" weight="fill" />}
@@ -215,7 +215,7 @@ function Trigger({ ref, "aria-label": ariaLabel, children, className, style, ...
 		<BaseCombobox.Trigger
 			ref={ref}
 			aria-label={ariaLabel ?? (children == null ? "Show options" : undefined)}
-			className={[sx.className, className].filter(Boolean).join(" ")}
+			className={attrJoin(sx.className, className)}
 			style={sx.style}
 			{...props}>
 			{children ?? <CaretDownIcon aria-hidden size="1em" weight="bold" />}
@@ -234,7 +234,7 @@ export function Chips({ ref, children, className, style, ...props }: ComboboxChi
 		<ComboboxChipsContext.Provider value>
 			<BaseCombobox.Chips
 				ref={ref}
-				className={[sx.className, className].filter(Boolean).join(" ")}
+				className={attrJoin(sx.className, className)}
 				style={sx.style}
 				{...props}>
 				{children}
@@ -256,7 +256,7 @@ export function Chip({ children, className, endSlot, ref, startSlot, style, ...p
 	return (
 		<BaseCombobox.Chip
 			ref={ref}
-			className={[sx.className, className].filter(Boolean).join(" ")}
+			className={attrJoin(sx.className, className)}
 			style={sx.style}
 			{...props}>
 			{startSlot != null ? (
@@ -294,7 +294,7 @@ export function ChipRemove({
 			ref={ref}
 			aria-label={ariaLabel ?? (children == null && ariaLabelledBy == null ? "Remove selection" : undefined)}
 			aria-labelledby={ariaLabelledBy}
-			className={[sx.className, className].filter(Boolean).join(" ")}
+			className={attrJoin(sx.className, className)}
 			style={sx.style}
 			{...props}>
 			{children ?? <XIcon aria-hidden size={12} weight="bold" />}
@@ -320,7 +320,7 @@ export function ChipOverflow({ anchor, children, className, label, ref, style, .
 		<Tooltip.Root>
 			<Tooltip.Trigger
 				ref={ref}
-				className={[sx.className, className].filter(Boolean).join(" ")}
+				className={attrJoin(sx.className, className)}
 				style={sx.style}
 				{...props}>
 				{label}
@@ -357,12 +357,12 @@ export function Popup({ ref, children, className, portalProps, positionerProps, 
 				align={align}
 				side={side}
 				sideOffset={sideOffset}
-				className={[positionerSx.className, positionerClassName].filter(Boolean).join(" ")}
+				className={attrJoin(positionerSx.className, positionerClassName)}
 				style={positionerSx.style}
 				{...otherPositionerProps}>
 				<BaseCombobox.Popup
 					ref={ref}
-					className={[sx.className, className].filter(Boolean).join(" ")}
+					className={attrJoin(sx.className, className)}
 					style={sx.style}
 					{...props}>
 					{children}
@@ -380,7 +380,7 @@ export function List({ ref, className, style, ...props }: ComboboxListProps) {
 	return (
 		<BaseCombobox.List
 			ref={ref}
-			className={[sx.className, className].filter(Boolean).join(" ")}
+			className={attrJoin(sx.className, className)}
 			style={sx.style}
 			{...props}
 		/>
@@ -434,7 +434,7 @@ export function Empty({ ref, className, style, ...props }: ComboboxEmptyProps) {
 	return (
 		<BaseCombobox.Empty
 			ref={ref}
-			className={[sx.className, className].filter(Boolean).join(" ")}
+			className={attrJoin(sx.className, className)}
 			style={sx.style}
 			{...props}
 		/>

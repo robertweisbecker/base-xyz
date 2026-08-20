@@ -7,6 +7,7 @@ import { NavListPresentationProvider } from "@/components/nav-list/nav-list";
 import { ScrollArea } from "@/components/scroll-area/scroll-area";
 import { typescaleStyles, textStyles, fontWeightStyles } from "@/components/text/text.stylex";
 import { tokens } from "@/theme/tokens.stylex";
+import { attrJoin } from "@/utils/attr-join";
 
 type StyledProps<T> = Omit<T, "className" | "style"> & {
 	className?: string;
@@ -105,7 +106,7 @@ export function Panel({ ref, children, className, style, render, ...props }: Sid
 			"data-collapsed": collapsed ? "" : undefined,
 			"data-side": sidebar.side,
 			inert: offcanvasHidden ? true : undefined,
-			className: [sx.className, className].filter(Boolean).join(" "),
+			className: attrJoin(sx.className, className),
 			style: sx.style,
 			children: (
 				<div {...stylex.props(sidebarParts.rail, iconCollapsed && sidebarParts.railIconCollapsed)}>
@@ -136,7 +137,7 @@ export function Content({ className, style, children, ...props }: SidebarContent
 			{...props}
 			disableFade
 			label="Sidebar content"
-			className={[sx.className, className].filter(Boolean).join(" ")}
+			className={attrJoin(sx.className, className)}
 			style={sx.style}
 			contentStyle={sidebarParts.scrollContent}
 			viewportRef={scrollRef}
@@ -162,7 +163,7 @@ export function Header({ startSlot, endSlot, children, className, style, ...prop
 	return (
 		<div
 			{...props}
-			className={[sx.className, className].filter(Boolean).join(" ")}
+			className={attrJoin(sx.className, className)}
 			data-collapsed={iconCollapsed ? "" : undefined}
 			data-side={sidebar.side}
 			style={sx.style}>
@@ -178,7 +179,7 @@ export function Header({ startSlot, endSlot, children, className, style, ...prop
 export function Footer({ className, style, ...props }: SidebarFooterProps) {
 	const sx = stylex.props(sidebarParts.footer, style);
 
-	return <div className={[sx.className, className].filter(Boolean).join(" ")} style={sx.style} {...props} />;
+	return <div className={attrJoin(sx.className, className)} style={sx.style} {...props} />;
 }
 
 export function Title({ className, style, ...props }: SidebarTitleProps) {
@@ -190,13 +191,13 @@ export function Title({ className, style, ...props }: SidebarTitleProps) {
 		style,
 	);
 
-	return <div className={[sx.className, className].filter(Boolean).join(" ")} style={sx.style} {...props} />;
+	return <div className={attrJoin(sx.className, className)} style={sx.style} {...props} />;
 }
 
 export function Description({ className, style, ...props }: SidebarDescriptionProps) {
 	const sx = stylex.props(textStyles.body, typescaleStyles["1"], sidebarParts.headerDescription, style);
 
-	return <div className={[sx.className, className].filter(Boolean).join(" ")} style={sx.style} {...props} />;
+	return <div className={attrJoin(sx.className, className)} style={sx.style} {...props} />;
 }
 
 export function Trigger({

@@ -5,7 +5,6 @@ import {
 	Box,
 	Button,
 	Card,
-	CardFooter,
 	Checkbox,
 	CheckboxGroup,
 	Grid,
@@ -34,15 +33,15 @@ const unsupportedButtonProps = { bg: "surface" };
 
 export const AllCapabilities: Story = {
 	render: () => (
-		<div data-testid="fixture-ready" {...stylex.props(styles.fixture)}>
+		<Stack data-testid="fixture-ready" gap={4} p={4}>
 			<Stack data-testid="vertical-reverse" reverse>
 				<span>First</span>
 				<span>Second</span>
 			</Stack>
-			<CardFooter data-testid="horizontal-reverse" reverse>
+			<Card.Footer data-testid="horizontal-reverse" reverse>
 				<span>First</span>
 				<span>Second</span>
-			</CardFooter>
+			</Card.Footer>
 			<Stack data-testid="horizontal-stack" orientation="horizontal" reverse>
 				<span>First</span>
 				<span>Second</span>
@@ -60,13 +59,13 @@ export const AllCapabilities: Story = {
 					Responsive span style
 				</Box>
 			</Grid>
-			<Card
+			<Card.Root
 				data-testid="composed-card"
 				orientation="horizontal"
 				radius="lg"
 				shadow="md">
 				<span>Card content</span>
-			</Card>
+			</Card.Root>
 			<Box data-testid="scalar-surface" radius="lg" shadow="md">
 				Scalar surface
 			</Box>
@@ -82,21 +81,21 @@ export const AllCapabilities: Story = {
 				<Box data-testid="inset-end-rtl" insetEnd={-2} position="absolute" />
 			</Box>
 
-			<div {...stylex.props(styles.fixedWidth)}>
+			<Box width="200px">
 				<Badge data-testid="full-badge" width="full">
 					Full badge
 				</Badge>
-			</div>
-			<div {...stylex.props(styles.fixedWidth)}>
+			</Box>
+			<Box width="200px">
 				<Badge data-testid="bounded-badge" maxWidth="100px" width="full">
 					Bounded badge
 				</Badge>
-			</div>
-			<div {...stylex.props(styles.fixedWidth)}>
+			</Box>
+			<Box width="200px">
 				<Button data-testid="full-button" width="full">
 					Full width
 				</Button>
-			</div>
+			</Box>
 
 			<Box aria-label="Semantic box" bg="canvas" color="fg" render={<section />}>
 				Semantic box
@@ -129,22 +128,13 @@ export const AllCapabilities: Story = {
 				<Radio label="First choice" value="first" />
 				<Radio label="Second choice" value="second" />
 			</RadioGroup>
-		</div>
+		</Stack>
 	),
 };
 
 const styles = stylex.create({
-	fixture: {
-		padding: tokens["--space-4"],
-		gap: tokens["--space-4"],
-		display: "flex",
-		flexDirection: "column",
-	},
 	finalPadding: {
 		paddingInlineStart: tokens["--space-4"],
-	},
-	fixedWidth: {
-		width: "200px",
 	},
 	responsiveSpan: {
 		gridColumn: {

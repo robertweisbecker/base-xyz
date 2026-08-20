@@ -172,7 +172,7 @@ function Diamond(props: IconProps) {
 			data-slot="icon"
 			data-glyph="diamond"
 			{...props}>
-			<path strokeLinecap="round" strokeLinejoin="round" d="M12 3v18m9-18v18" />
+			<path strokeLinecap="round" strokeLinejoin="round" d="M12 4 20 12 12 20 4 12Z" />
 		</svg>
 	);
 }

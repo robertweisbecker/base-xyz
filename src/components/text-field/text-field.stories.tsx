@@ -1,11 +1,12 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import * as stylex from "@stylexjs/stylex";
 import type { ReactNode } from "react";
-import { textStyles, fontWeightStyles } from "@/components/text/text.stylex";
-import { tokens } from "@/theme/tokens.stylex";
+import { Code } from "@/components/code/code";
 import { Combobox } from "@/components/combobox/combobox-field";
+import { Box, Grid, Stack } from "@/components/layout/layout";
 import { NumberField } from "@/components/number-field/number-field";
 import { Select } from "@/components/select/select";
+import { Text } from "@/components/text/text";
 import { Textarea } from "@/components/textarea/textarea";
 import { TextField } from "./text-field";
 
@@ -59,12 +60,12 @@ type Story = StoryObj<typeof meta>;
 
 export const Playground: Story = {
 	render: (args) => (
-		<div {...stylex.props(styles.defaultFrame)}>
+		<Box maxWidth="360px">
 			<TextField
 				key={`${args.defaultValue}-${args.disabled}-${args.error}-${args.readOnly}-${args.size}-${args.type}`}
 				{...args}
 			/>
-		</div>
+		</Box>
 	),
 };
 
@@ -81,7 +82,7 @@ export const States: Story = {
 		controls: { disable: true },
 	},
 	render: () => (
-		<div {...stylex.props(styles.stateGrid)}>
+		<Grid gap={8} maxWidth="800px" style={styles.stateGrid}>
 			<StateSpecimen label="Default">
 				<TextField label="Workspace name" placeholder="e.g. Acme Studio" />
 			</StateSpecimen>
@@ -116,7 +117,7 @@ export const States: Story = {
 					description="Workspace names are managed by an administrator."
 				/>
 			</StateSpecimen>
-		</div>
+		</Grid>
 	),
 };
 
@@ -126,7 +127,7 @@ export const FieldFamilyParity: Story = {
 		controls: { disable: true },
 	},
 	render: () => (
-		<div {...stylex.props(styles.familyOverflow)}>
+		<Box pb={2} style={styles.familyOverflow}>
 			<style>{`
 				[data-field-family-control] > * > :first-child {
 					clip: rect(0 0 0 0);
@@ -138,12 +139,12 @@ export const FieldFamilyParity: Story = {
 					width: 1px;
 				}
 			`}</style>
-			<div {...stylex.props(styles.familyGrid)}>
+			<Grid align="start" gap={6} style={styles.familyGrid}>
 				<span aria-hidden />
 				{FIELD_SIZES.map((size) => (
-					<span key={size} {...stylex.props(textStyles.body, fontWeightStyles.semibold, styles.familyColumnLabel)}>
+					<Text key={size} fontWeight="semibold" size="2" textAlign="center" wrap="nowrap">
 						{size}
-					</span>
+					</Text>
 				))}
 				<FamilyRow label="Text field">
 					{(size) => <TextField label="Text field" defaultValue="Shared control surface" size={size} />}
@@ -182,8 +183,8 @@ export const FieldFamilyParity: Story = {
 						</Combobox.Root>
 					)}
 				</FamilyRow>
-			</div>
-		</div>
+			</Grid>
+		</Box>
 	),
 };
 
@@ -198,11 +199,13 @@ function FamilyRow({
 }) {
 	return (
 		<>
-			<span {...stylex.props(textStyles.body, fontWeightStyles.semibold, styles.familyRowLabel)}>{label}</span>
+			<Text fontWeight="semibold" mt={2} size="2" wrap="nowrap">
+				{label}
+			</Text>
 			{FIELD_SIZES.map((size) => (
-				<div key={size} data-field-family-control {...stylex.props(styles.familyControl)}>
+				<Box key={size} data-field-family-control minWidth={0}>
 					{children(size)}
-				</div>
+				</Box>
 			))}
 		</>
 	);
@@ -210,67 +213,30 @@ function FamilyRow({
 
 function StateSpecimen({ attribute, children, label }: { attribute?: string; children: ReactNode; label: string }) {
 	return (
-		<section {...stylex.props(styles.stateSpecimen)}>
-			<div {...stylex.props(styles.stateHeader)}>
-				<h2 {...stylex.props(textStyles.body, fontWeightStyles.semibold, styles.stateTitle)}>{label}</h2>
-				{attribute ? <code {...stylex.props(textStyles.supporting, styles.stateAttribute)}>{attribute}</code> : null}
-			</div>
+		<Stack gap={3}>
+			<Stack align="baseline" gap={2} justify="space-between" orientation="horizontal">
+				<Text color="muted" size="1">
+					{label}
+				</Text>
+				{attribute ? <Code>{attribute}</Code> : null}
+			</Stack>
 			{children}
-		</section>
+		</Stack>
 	);
 }
 
 const styles = stylex.create({
-	defaultFrame: {
-		maxWidth: "360px",
-	},
 	stateGrid: {
-		gap: tokens["--space-8"],
-		display: "grid",
 		gridTemplateColumns: {
 			default: "repeat(2, minmax(0, 1fr))",
 			"@media (max-width: 760px)": "1fr",
 		},
-		maxWidth: "800px",
-	},
-	stateSpecimen: {
-		gap: tokens["--space-3"],
-		display: "flex",
-		flexDirection: "column",
-	},
-	stateHeader: {
-		gap: tokens["--space-2"],
-		alignItems: "baseline",
-		display: "flex",
-		justifyContent: "space-between",
-	},
-	stateTitle: {
-		margin: 0,
-	},
-	stateAttribute: {
-		color: tokens["--fg-muted"],
 	},
 	familyOverflow: {
 		overflowX: "auto",
-		paddingBottom: tokens["--space-2"],
 	},
 	familyGrid: {
-		alignItems: "start",
-		columnGap: tokens["--space-6"],
-		display: "grid",
 		gridTemplateColumns: "max-content repeat(3, minmax(16rem, 1fr))",
-		rowGap: tokens["--space-6"],
 		minWidth: "58rem",
-	},
-	familyColumnLabel: {
-		textAlign: "center",
-		whiteSpace: "nowrap",
-	},
-	familyRowLabel: {
-		whiteSpace: "nowrap",
-		paddingTop: tokens["--space-2"],
-	},
-	familyControl: {
-		minWidth: 0,
 	},
 });

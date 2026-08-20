@@ -24,6 +24,7 @@ import {
 } from "./anchored-toast-manager";
 import { toastMotion } from "./toast-motion.stylex";
 import { toastControlStyles, toastTextStyles } from "./toast-parts";
+import { attrJoin } from "@/utils/attr-join";
 
 export type AnchoredToastObject = BaseToast.Root.ToastObject<AnchoredToastData>;
 
@@ -39,7 +40,7 @@ export function AnchoredViewport({ ref, className, style, ...props }: StyledProp
 	return (
 		<BaseToast.Viewport
 			ref={ref}
-			className={[sx.className, className].filter(Boolean).join(" ")}
+			className={attrJoin(sx.className, className)}
 			style={sx.style}
 			{...props}
 		/>
@@ -54,7 +55,7 @@ export function AnchoredPositioner({ ref, className, style, ...props }: StyledPr
 	return (
 		<BaseToast.Positioner
 			ref={ref}
-			className={[sx.className, className].filter(Boolean).join(" ")}
+			className={attrJoin(sx.className, className)}
 			style={sx.style}
 			{...props}
 		/>
@@ -111,7 +112,7 @@ export function AnchoredToast({ toast, className, positionerClassName, style, po
 				data-variant={variant}
 				data-tone={tone}
 				data-status={status}
-				className={[rootSx.className, className].filter(Boolean).join(" ")}
+				className={attrJoin(rootSx.className, className)}
 				style={rootSx.style}>
 				<BaseToast.Content
 					{...stylex.props(

@@ -4,6 +4,7 @@ import type { StyleXStyles } from "@stylexjs/stylex";
 import type { ReactNode } from "react";
 import { textStyles } from "@/components/text/text.stylex";
 import { tokens } from "@/theme/tokens.stylex";
+import { attrJoin } from "@/utils/attr-join";
 
 const gaugeSizes = {
 	16: { fontSize: 6, fontWeight: tokens["--font-weight-regular"], gap: 9, strokeWidth: 14 },
@@ -75,7 +76,7 @@ export function MeterGauge({
 	return (
 		<BaseMeter.Root
 			{...rootProps}
-			className={[sx.className, className].filter(Boolean).join(" ")}
+			className={attrJoin(sx.className, className)}
 			max={100}
 			min={0}
 			style={sx.style}

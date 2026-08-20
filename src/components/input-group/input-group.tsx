@@ -10,6 +10,7 @@ import type { FieldSize } from "@/components/field/field.types";
 import { focusRing } from "@/styles/recipes/focus";
 import { tokens } from "@/theme/tokens.stylex";
 import { useTextareaAutoResize } from "@/hooks/use-textarea-auto-resize";
+import { attrJoin } from "@/utils/attr-join";
 
 /** Disabled chrome follows a nested input/textarea, not addon action buttons. */
 const GROUP_HAS_DISABLED = ":has(:is(input, textarea):is([data-disabled], :disabled))";
@@ -88,7 +89,7 @@ export function Root({ ref, className, style, size = "md", variant = "standard",
 			ref={ref}
 			data-variant={variant}
 			data-size={size}
-			className={[sx.className, className].filter(Boolean).join(" ")}
+			className={attrJoin(sx.className, className)}
 			style={sx.style}
 		/>
 	);
@@ -98,7 +99,7 @@ export function Input({ ref, className, style, ...props }: InputGroupInputProps)
 	const sx = stylex.props(fieldStyles.inputUnstyled, inputGroupParts.input, style);
 
 	return (
-		<BaseInput ref={ref} className={[sx.className, className].filter(Boolean).join(" ")} style={sx.style} {...props} />
+		<BaseInput ref={ref} className={attrJoin(sx.className, className)} style={sx.style} {...props} />
 	);
 }
 
@@ -134,7 +135,7 @@ export function Textarea({
 			}}
 			value={value}
 			{...(disabled && { "data-disabled": true })}
-			className={[sx.className, className].filter(Boolean).join(" ")}
+			className={attrJoin(sx.className, className)}
 			style={sx.style}
 			{...props}
 		/>
@@ -150,7 +151,7 @@ export function Addon({ ref, className, style, onClick, position = "start", ...p
 		<span
 			ref={ref}
 			data-position={position}
-			className={[sx.className, "xyz-input-group-addon", className].filter(Boolean).join(" ")}
+			className={attrJoin(sx.className, "xyz-input-group-addon", className)}
 			style={sx.style}
 			onClick={(event) => {
 				onClick?.(event);
@@ -175,7 +176,7 @@ function isInteractiveTarget(target: EventTarget) {
 export function Actions({ ref, className, style, ...props }: InputGroupActionsProps) {
 	const sx = stylex.props(inputGroupParts.actions, style);
 
-	return <div ref={ref} className={[sx.className, className].filter(Boolean).join(" ")} style={sx.style} {...props} />;
+	return <div ref={ref} className={attrJoin(sx.className, className)} style={sx.style} {...props} />;
 }
 
 export function Header({ ref, className, style, ...props }: InputGroupHeaderProps) {
@@ -185,7 +186,7 @@ export function Header({ ref, className, style, ...props }: InputGroupHeaderProp
 		<div
 			ref={ref}
 			data-slot="header"
-			className={[sx.className, className].filter(Boolean).join(" ")}
+			className={attrJoin(sx.className, className)}
 			style={sx.style}
 			{...props}
 		/>
@@ -199,7 +200,7 @@ export function Footer({ ref, className, style, ...props }: InputGroupFooterProp
 		<div
 			ref={ref}
 			data-slot="footer"
-			className={[sx.className, className].filter(Boolean).join(" ")}
+			className={attrJoin(sx.className, className)}
 			style={sx.style}
 			{...props}
 		/>

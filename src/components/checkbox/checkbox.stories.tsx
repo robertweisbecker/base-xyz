@@ -1,6 +1,9 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import * as stylex from "@stylexjs/stylex";
 import { useState } from "react";
+import { Heading } from "@/components/heading/heading";
+import { Stack } from "@/components/layout/layout";
+import { Separator } from "@/components/separator/separator";
 import { tokens } from "@/theme/tokens.stylex";
 
 import { Checkbox, CheckboxGroup, type CheckboxSize } from "./checkbox";
@@ -95,9 +98,11 @@ export const Playground: Story = {
 		_groupDefaultValue,
 		_groupDisabled,
 	}) => (
-		<div {...stylex.props(storyParts.story)}>
-			<section {...stylex.props(storyParts.section)}>
-				<h2 {...stylex.props(storyParts.heading)}>Single checkbox</h2>
+		<Stack gap={8} p={4}>
+			<Stack align="start" gap={4}>
+				<Heading size="1" color="muted" fontWeight="regular">
+					Single checkbox
+				</Heading>
 				<Checkbox
 					key={`${defaultChecked}-${indeterminate}`}
 					label={label}
@@ -111,9 +116,11 @@ export const Playground: Story = {
 					size={size}
 					visuallyHideLabel={visuallyHideLabel}
 				/>
-			</section>
-			<section {...stylex.props(storyParts.section)}>
-				<h2 {...stylex.props(storyParts.heading)}>Checkbox group</h2>
+			</Stack>
+			<Stack align="start" gap={4}>
+				<Heading size="1" color="muted" fontWeight="regular">
+					Checkbox group
+				</Heading>
 				<CheckboxGroup
 					key={_groupDefaultValue.join("-")}
 					label="Notification methods"
@@ -124,8 +131,8 @@ export const Playground: Story = {
 					<Checkbox value="push" label="Push" visuallyHideLabel={visuallyHideLabel} />
 					<Checkbox value="sms" label="SMS" visuallyHideLabel={visuallyHideLabel} />
 				</CheckboxGroup>
-			</section>
-		</div>
+			</Stack>
+		</Stack>
 	),
 };
 
@@ -134,10 +141,10 @@ export const Sizes: Story = {
 		controls: { disable: true },
 	},
 	render: () => (
-		<div {...stylex.props(storyParts.stateList)}>
+		<Stack gap={3}>
 			<Checkbox size="sm" label="Small" defaultChecked />
 			<Checkbox size="md" label="Medium" defaultChecked />
-		</div>
+		</Stack>
 	),
 };
 
@@ -146,9 +153,11 @@ export const Groups: Story = {
 		controls: { disable: true },
 	},
 	render: () => (
-		<div {...stylex.props(storyParts.story)}>
-			<section {...stylex.props(storyParts.section)}>
-				<h2 {...stylex.props(storyParts.heading)}>With descriptions</h2>
+		<Stack gap={8}>
+			<Stack align="start" gap={4}>
+				<Heading size="1" color="muted" fontWeight="regular">
+					With descriptions
+				</Heading>
 				<CheckboxGroup
 					label="Notification methods"
 					description="Choose all the ways we may contact you."
@@ -157,16 +166,19 @@ export const Groups: Story = {
 					<Checkbox value="push" label="Push" description="Receive notifications on this device." />
 					<Checkbox value="sms" label="SMS" description="Receive urgent alerts by text message." />
 				</CheckboxGroup>
-			</section>
-			<section {...stylex.props(storyParts.section)}>
-				<h2 {...stylex.props(storyParts.heading)}>Inline group</h2>
+			</Stack>
+			<Separator />
+			<Stack align="start" gap={4}>
+				<Heading size="1" color="muted" fontWeight="regular">
+					Inline group
+				</Heading>
 				<CheckboxGroup label="Allowed network protocols" inline>
 					<Checkbox value="http" label="HTTP" />
 					<Checkbox value="https" label="HTTPS" />
 					<Checkbox value="ssh" label="SSH" />
 				</CheckboxGroup>
-			</section>
-		</div>
+			</Stack>
+		</Stack>
 	),
 };
 
@@ -175,18 +187,23 @@ export const States: Story = {
 		controls: { disable: true },
 	},
 	render: () => (
-		<div {...stylex.props(storyParts.story)}>
-			<section {...stylex.props(storyParts.section)}>
-				<h2 {...stylex.props(storyParts.heading)}>Selection</h2>
-				<div {...stylex.props(storyParts.stateList)}>
+		<Stack gap={8}>
+			<Stack align="start" gap={4}>
+				<Heading size="1" color="muted" fontWeight="regular">
+					Selection
+				</Heading>
+				<Stack gap={3}>
 					<Checkbox label="Unchecked" />
 					<Checkbox label="Checked" defaultChecked />
 					<Checkbox label="Indeterminate" indeterminate />
-				</div>
-			</section>
-			<section {...stylex.props(storyParts.section)}>
-				<h2 {...stylex.props(storyParts.heading)}>Interaction</h2>
-				<div {...stylex.props(storyParts.stateList)}>
+				</Stack>
+			</Stack>
+			<Separator />
+			<Stack align="start" gap={4}>
+				<Heading size="1" color="muted" fontWeight="regular">
+					Interaction
+				</Heading>
+				<Stack gap={3}>
 					<Checkbox label="Disabled" disabled />
 					<Checkbox label="Disabled, checked" defaultChecked disabled />
 					<Checkbox label="Invalid" invalid />
@@ -197,9 +214,9 @@ export const States: Story = {
 					<Checkbox label="Read-only, invalid" invalid readOnly />
 					<Checkbox label="Read-only, invalid, checked" invalid defaultChecked readOnly />
 					<Checkbox label="Required" required />
-				</div>
-			</section>
-		</div>
+				</Stack>
+			</Stack>
+		</Stack>
 	),
 };
 
@@ -226,7 +243,7 @@ function NestedParentCheckboxes() {
 			}}
 			allValues={mainPermissions}>
 			<Checkbox parent indeterminate={managementIsPartial} label="User permissions" />
-			<div {...stylex.props(storyParts.permissionChildren)}>
+			<Stack gap={3} style={storyParts.permissionChildren}>
 				<Checkbox value="view-dashboard" label="View dashboard" />
 				<Checkbox value="access-reports" label="Access reports" />
 				<CheckboxGroup
@@ -243,14 +260,14 @@ function NestedParentCheckboxes() {
 					}}
 					allValues={userManagementPermissions}>
 					<Checkbox parent label="Manage users" />
-					<div {...stylex.props(storyParts.permissionChildren)}>
+					<Stack gap={3} style={storyParts.permissionChildren}>
 						<Checkbox value="create-user" label="Create user" />
 						<Checkbox value="edit-user" label="Edit user" />
 						<Checkbox value="delete-user" label="Delete user" />
 						<Checkbox value="assign-roles" label="Assign roles" />
-					</div>
+					</Stack>
 				</CheckboxGroup>
-			</div>
+			</Stack>
 		</CheckboxGroup>
 	);
 }
@@ -264,36 +281,10 @@ export const NestedParent: Story = {
 };
 
 const storyParts = stylex.create({
-	story: {
-		padding: tokens["--space-4"],
-		gap: tokens["--space-8"],
-		display: "flex",
-		flexDirection: "column",
-	},
-	section: {
-		gap: tokens["--space-4"],
-		display: "flex",
-		flexDirection: "column",
-	},
-	heading: {
-		margin: 0,
-		color: tokens["--fg-muted"],
-		fontSize: tokens["--font-size-1"],
-		fontWeight: tokens["--font-weight-regular"],
-		letterSpacing: tokens["--letter-spacing-1"],
-		lineHeight: tokens["--line-height-1"],
-	},
-	stateList: {
-		gap: tokens["--space-3"],
-		display: "grid",
-	},
 	permissionChildren: {
-		gap: tokens["--space-3"],
 		borderInlineStartColor: tokens["--border"],
 		borderInlineStartStyle: "solid",
 		borderInlineStartWidth: "1px",
-		display: "flex",
-		flexDirection: "column",
 		marginInlineStart: tokens["--space-2"],
 		paddingInlineStart: tokens["--space-5"],
 	},

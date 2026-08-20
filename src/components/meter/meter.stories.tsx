@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import * as stylex from "@stylexjs/stylex";
-import { tokens } from "@/theme/tokens.stylex";
+import { Box, Stack } from "@/components/layout";
 import { Meter } from "./meter";
+
 const meta = {
 	title: "Components/Meter",
 	component: Meter.Root,
@@ -25,9 +25,9 @@ const meta = {
 	},
 	decorators: [
 		(Story) => (
-			<div {...stylex.props(storyStyles.frame)}>
+			<Box maxWidth="28rem" width="full">
 				<Story />
-			</div>
+			</Box>
 		),
 	],
 	render: (args) => (
@@ -63,7 +63,7 @@ export const Variants: Story = {
 		controls: { disable: true },
 	},
 	render: () => (
-		<div {...stylex.props(storyStyles.stack)}>
+		<Stack gap={8}>
 			<Meter.Root value={64}>
 				<Meter.Label>Storage used</Meter.Label>
 				<Meter.Value />
@@ -91,7 +91,7 @@ export const Variants: Story = {
 					<Meter.Indicator />
 				</Meter.Track>
 			</Meter.Root>
-		</div>
+		</Stack>
 	),
 };
 
@@ -100,7 +100,7 @@ export const RangesAndThresholds: Story = {
 		controls: { disable: true },
 	},
 	render: () => (
-		<div {...stylex.props(storyStyles.stack)}>
+		<Stack gap={8}>
 			<Meter.Root value={0}>
 				<Meter.Label>Empty range</Meter.Label>
 				<Meter.Value />
@@ -143,18 +143,6 @@ export const RangesAndThresholds: Story = {
 					<Meter.Indicator />
 				</Meter.Track>
 			</Meter.Root>
-		</div>
+		</Stack>
 	),
 };
-
-const storyStyles = stylex.create({
-	frame: {
-		maxWidth: "28rem",
-		width: "100%",
-	},
-	stack: {
-		gap: tokens["--space-8"],
-		display: "flex",
-		flexDirection: "column",
-	},
-});

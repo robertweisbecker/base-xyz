@@ -8,6 +8,7 @@ import { tokens } from "@/theme/tokens.stylex";
 import { focusRing } from "@/styles/recipes/focus";
 
 import type { ButtonShape, ButtonSize } from "@/components/button/button";
+import { attrJoin } from "@/utils/attr-join";
 
 const HOVER_WHEN_INACTIVE = ":hover:not([data-disabled]):not([data-panel-open])";
 
@@ -38,7 +39,7 @@ export function Root({ ref, className, style, ...props }: CollapsibleRootProps) 
 	return (
 		<BaseCollapsible.Root
 			ref={ref}
-			className={[sxClassName, className].filter(Boolean).join(" ")}
+			className={attrJoin(sxClassName, className)}
 			style={sxStyle}
 			{...props}
 		/>
@@ -71,7 +72,7 @@ export function Trigger({
 			ref={ref}
 			render={render}
 			type={type}
-			className={[sxClassName, className].filter(Boolean).join(" ")}
+			className={attrJoin(sxClassName, className)}
 			style={sxStyle}
 			{...props}
 		/>
@@ -84,7 +85,7 @@ export function Panel({ ref, className, style, ...props }: CollapsiblePanelProps
 	return (
 		<BaseCollapsible.Panel
 			ref={ref}
-			className={[sxClassName, className].filter(Boolean).join(" ")}
+			className={attrJoin(sxClassName, className)}
 			style={sxStyle}
 			{...props}
 		/>
@@ -94,7 +95,7 @@ export function Panel({ ref, className, style, ...props }: CollapsiblePanelProps
 export function Content({ ref, className, style, ...props }: CollapsibleContentProps) {
 	const { className: sxClassName, style: sxStyle } = stylex.props(collapsibleParts.content, style);
 
-	return <div ref={ref} className={[sxClassName, className].filter(Boolean).join(" ")} style={sxStyle} {...props} />;
+	return <div ref={ref} className={attrJoin(sxClassName, className)} style={sxStyle} {...props} />;
 }
 
 export function Icon({ ref, children, className, style, side = "end", ...props }: CollapsibleIconProps) {
@@ -108,7 +109,7 @@ export function Icon({ ref, children, className, style, side = "end", ...props }
 		<span
 			ref={ref}
 			aria-hidden
-			className={[sxClassName, className].filter(Boolean).join(" ")}
+			className={attrJoin(sxClassName, className)}
 			style={sxStyle}
 			{...props}>
 			{children ?? <CaretDownIcon size="1em" weight="regular" />}

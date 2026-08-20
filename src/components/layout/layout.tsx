@@ -19,6 +19,7 @@ import {
 import { spacingThemeProps } from "@/theme/theme-props-spacing.stylex";
 import { surfaceThemeProps } from "@/theme/theme-props-surface.stylex";
 import { layoutBaseStyles } from "./layout.stylex";
+import { attrJoin } from "@/utils/attr-join";
 
 type LayoutElementProps<ThemeProps> = Omit<
 	useRender.ComponentProps<"div">,
@@ -71,7 +72,7 @@ function useLayoutRender<ThemeProps extends object>(
 		render,
 		props: {
 			...restProps,
-			className: [sx.className, className].filter(Boolean).join(" "),
+			className: attrJoin(sx.className, className),
 			style: sx.style,
 		},
 	});

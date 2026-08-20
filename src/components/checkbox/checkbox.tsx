@@ -148,7 +148,7 @@ export function Checkbox({
 		</>
 	);
 	const containerSx = stylex.props(checkboxParts.item, ...styles, style);
-	const containerClassName = [containerSx.className, className].filter(Boolean).join(" ");
+	const containerClassName = attrJoin(containerSx.className, className);
 
 	return groupContext.inGroup ? (
 		<Field.Item
@@ -210,7 +210,7 @@ export function CheckboxGroup({
 					}
 				/>
 			}
-			className={[groupSx.className, className].filter(Boolean).join(" ")}
+			className={attrJoin(groupSx.className, className)}
 			style={groupSx.style}>
 			{label ? (
 				<Fieldset.Legend {...stylex.props(fieldStyles.groupLabel, checkboxParts.legend)}>{label}</Fieldset.Legend>

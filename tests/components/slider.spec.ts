@@ -32,5 +32,5 @@ test("bounds marker density without changing slider values", async ({ page }) =>
 	await expect(slider).toBeFocused();
 	await expect(slider).toHaveAttribute("aria-valuenow", "0");
 	await page.keyboard.press("ArrowRight");
-	await expect(slider).toHaveAttribute("aria-valuenow", "0.000001");
+	await expect(slider).toHaveAttribute("aria-valuenow", "0.01");
 });

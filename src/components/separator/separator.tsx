@@ -13,6 +13,7 @@ import {
 } from "@/theme/theme-props-layout.stylex";
 import { marginThemeProps } from "@/theme/theme-props-spacing.stylex";
 import { tokens } from "@/theme/tokens.stylex";
+import { attrJoin } from "@/utils/attr-join";
 
 const separatorThemeProps = composeThemeProps(
 	marginThemeProps,
@@ -40,7 +41,7 @@ export function Separator({ ref, className, orientation = "horizontal", style, .
 		<BaseSeparator
 			ref={ref}
 			orientation={orientation}
-			className={[sx.className, className].filter(Boolean).join(" ")}
+			className={attrJoin(sx.className, className)}
 			style={sx.style}
 			{...restProps}
 		/>

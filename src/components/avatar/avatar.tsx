@@ -7,6 +7,7 @@ import { breakpointRanges } from "@/styles/constants.stylex";
 import { focusRing } from "@/styles/recipes/focus";
 import { tokens } from "@/theme/tokens.stylex";
 import { Tooltip } from "@/components/tooltip/tooltip";
+import { attrJoin } from "@/utils/attr-join";
 
 const avatarSizeTokens = {
 	4: tokens["--space-4"],
@@ -84,7 +85,7 @@ export function Avatar({
 		<BaseAvatar.Root
 			ref={ref}
 			aria-label={ariaLabel ?? (hasName ? normalizedName : undefined)}
-			className={[sx.className, className].filter(Boolean).join(" ")}
+			className={attrJoin(sx.className, className)}
 			render={render}
 			role={role ?? (render == null && (ariaLabel || hasName) ? "img" : undefined)}
 			style={sx.style}

@@ -1,11 +1,11 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import * as stylex from "@stylexjs/stylex";
-import { tokens } from "@/theme/tokens.stylex";
-
+import { Link } from "@/components/link/link";
+import { Box, Stack } from "@/components/layout";
 import { createLinkPreviewHandle } from "@/components/popup-handles";
 import { popupMotionStyles } from "@/components/popover/popover.stylex";
+import { Text } from "@/components/text/text";
 import { LinkPreview } from "./link-preview";
-import { Link } from "@/components/link/link";
 
 type PopupSide = "top" | "right" | "bottom" | "left";
 type PopupAlign = "start" | "center" | "end";
@@ -54,8 +54,8 @@ function PreviewContent({ title, description }: PreviewPayload) {
 
 export const Playground: Story = {
 	render: ({ _side, _align, _delay, _showArrow }) => (
-		<div {...stylex.props(storyParts.stage)}>
-			<p {...stylex.props(storyParts.copy)}>
+		<Box height="360px" style={storyParts.stage} width="min(720px, calc(100vw - 48px))">
+			<Text>
 				Read more about{" "}
 				<LinkPreview.Root>
 					<LinkPreview.Trigger
@@ -71,8 +71,8 @@ export const Playground: Story = {
 					</LinkPreview.Popup>
 				</LinkPreview.Root>{" "}
 				and its primitives.
-			</p>
-		</div>
+			</Text>
+		</Box>
 	),
 };
 
@@ -102,15 +102,17 @@ const previews: Array<PreviewPayload & { href: string }> = [
 
 export const SharedPreviews: Story = {
 	render: ({ _side, _align, _delay, _showArrow }) => (
-		<div {...stylex.props(storyParts.stack)}>
-			<p {...stylex.props(storyParts.hint)}>Hover or focus each component name to reuse one animated card.</p>
-			<nav aria-label="Component previews" {...stylex.props(storyParts.links)}>
+		<Stack align="center" gap={3}>
+			<Text color="muted" size="1">
+				Hover or focus each component name to reuse one animated card.
+			</Text>
+			<Stack aria-label="Component previews" gap={4} orientation="horizontal" render={<nav />}>
 				{previews.map(({ href, ...payload }) => (
 					<LinkPreview.Trigger key={href} delay={_delay} href={href} handle={sharedPreview} payload={payload}>
 						{payload.title}
 					</LinkPreview.Trigger>
 				))}
-			</nav>
+			</Stack>
 			<LinkPreview.Root handle={sharedPreview}>
 				{({ payload }) => (
 					<LinkPreview.Popup
@@ -125,7 +127,7 @@ export const SharedPreviews: Story = {
 					</LinkPreview.Popup>
 				)}
 			</LinkPreview.Root>
-		</div>
+		</Stack>
 	),
 };
 
@@ -134,31 +136,5 @@ const storyParts = stylex.create({
 		alignItems: "center",
 		display: "grid",
 		justifyItems: "center",
-		height: "360px",
-		width: "min(720px, calc(100vw - 48px))",
-	},
-	copy: {
-		margin: 0,
-		color: tokens["--fg"],
-		fontSize: tokens["--font-size-2"],
-		letterSpacing: tokens["--letter-spacing-2"],
-		lineHeight: tokens["--line-height-2"],
-	},
-	stack: {
-		gap: tokens["--space-3"],
-		alignItems: "center",
-		display: "flex",
-		flexDirection: "column",
-	},
-	hint: {
-		margin: 0,
-		color: tokens["--fg-muted"],
-		fontSize: tokens["--font-size-1"],
-		letterSpacing: tokens["--letter-spacing-1"],
-		lineHeight: tokens["--line-height-1"],
-	},
-	links: {
-		gap: tokens["--space-4"],
-		display: "flex",
 	},
 });

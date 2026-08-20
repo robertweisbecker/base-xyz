@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from "@storybook/react-vite";
 import * as stylex from "@stylexjs/stylex";
 import { breakpoints } from "@/styles/constants.stylex";
 import { tokens } from "@/theme/tokens.stylex";
-import { Card, CardContent, CardTitle } from "@/components/card/card";
+import { Card } from "@/components/card/card";
 import { Box, Grid } from "./layout";
 
 const meta = {
@@ -35,10 +35,10 @@ export const ResponsiveSpanStyle: Story = {
 	parameters: { controls: { disable: true } },
 	render: (args) => (
 		<Grid {...args}>
-			<Card style={styles.responsiveSpan}>
-				<CardContent><CardTitle>Predeclared responsive span</CardTitle></CardContent>
-			</Card>
-			<Card columnSpan={6}><CardContent>Scalar six-column span</CardContent></Card>
+			<Card.Root style={styles.responsiveSpan}>
+				<Card.Content><Card.Title>Predeclared responsive span</Card.Title></Card.Content>
+			</Card.Root>
+			<Card.Root columnSpan={6}><Card.Content>Scalar six-column span</Card.Content></Card.Root>
 		</Grid>
 	),
 };

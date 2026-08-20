@@ -11,6 +11,7 @@ import { tokens } from "@/theme/tokens.stylex";
 
 import { Tooltip } from "@/components/tooltip/tooltip";
 import { VisuallyHidden } from "@/components/visually-hidden/visually-hidden";
+import { attrJoin } from "@/utils/attr-join";
 
 const badgeParts = stylex.create({
 	root: {
@@ -101,8 +102,8 @@ const endSlotOffsets = stylex.create({
 
 const variantAppearance = stylex.create({
 	elevated: {
-		backgroundColor: tokens["--elevated"],
-		boxShadow: tokens["--shadow-xs"],
+		backgroundColor: tokens["--surface"],
+		boxShadow: tokens["--shadow-xs-2"],
 	},
 });
 
@@ -332,7 +333,7 @@ export function Badge({
 		ref,
 		props: {
 			...restProps,
-			className: [sx.className, className].filter(Boolean).join(" "),
+			className: attrJoin(sx.className, className),
 			style: sx.style,
 			tabIndex: tabIndex ?? (hasTooltip ? 0 : undefined),
 			children: (

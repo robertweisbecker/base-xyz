@@ -1,12 +1,13 @@
 import { ArrowRightIcon } from "@phosphor-icons/react/dist/csr/ArrowRight";
 import { PlusIcon } from "@phosphor-icons/react/dist/csr/Plus";
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import * as stylex from "@stylexjs/stylex";
 import type { ReactNode } from "react";
 import { CodeBlock, Collapsible, Separator } from "@/components";
-import { tokens } from "@/theme/tokens.stylex";
+import { Stack } from "@/components/layout/layout";
+import { Text } from "@/components/text/text";
 
 import { WorkflowProgress as Timeline, type WorkflowProgressStatus } from "./workflow-progress";
+
 const meta = {
 	title: "Blocks/Workflow progress",
 	component: Timeline.Root,
@@ -73,9 +74,8 @@ function Activity({
 
 export const Examples: Story = {
 	render: () => (
-		<div {...stylex.props(storyParts.examples)}>
-			<section {...stylex.props(storyParts.example)}>
-				<h2 {...stylex.props(storyParts.label)}>Active workflow</h2>
+		<Stack gap={6} maxWidth="46rem">
+			<Example title="Active workflow">
 				<Timeline.Root aria-label="Active agent workflow">
 					<Activity
 						status="complete"
@@ -100,10 +100,11 @@ export const Examples: Story = {
 					/>
 					<Activity status="queued" title="Run verification" description="Typecheck, lint, and build Storybook." />
 				</Timeline.Root>
-			</section>
+			</Example>
+
 			<Separator />
-			<section {...stylex.props(storyParts.example)}>
-				<h2 {...stylex.props(storyParts.label)}>Failed workflow</h2>
+
+			<Example title="Failed workflow">
 				<Timeline.Root aria-label="Failed agent workflow">
 					<Activity status="complete" title="Searched component files" meta="420ms" />
 					<Activity
@@ -114,28 +115,18 @@ export const Examples: Story = {
 						details={"TypeError: Cannot read properties of undefined\nat WorkflowProgress.stories.tsx:42"}
 					/>
 				</Timeline.Root>
-			</section>
-		</div>
+			</Example>
+		</Stack>
 	),
 };
 
-const storyParts = stylex.create({
-	examples: {
-		gap: tokens["--space-6"],
-		display: "flex",
-		flexDirection: "column",
-		maxWidth: "46rem",
-	},
-	example: {
-		gap: tokens["--space-3"],
-		display: "flex",
-		flexDirection: "column",
-	},
-	label: {
-		margin: 0,
-		color: tokens["--fg-muted"],
-		fontSize: tokens["--font-size-1"],
-		letterSpacing: tokens["--letter-spacing-1"],
-		lineHeight: tokens["--line-height-1"],
-	},
-});
+function Example({ children, title }: { children: ReactNode; title: string }) {
+	return (
+		<Stack gap={3}>
+			<Text size="1" color="muted">
+				{title}
+			</Text>
+			{children}
+		</Stack>
+	);
+}

@@ -14,6 +14,7 @@ import {
 	textThemeProps,
 } from "./text.stylex";
 import type { TypographyStyleProps } from "./text.types";
+import { attrJoin } from "@/utils/attr-join";
 
 export type TextProps = Omit<
 	useRender.ComponentProps<"p">,
@@ -60,7 +61,7 @@ export function Text({
 		ref,
 		props: {
 			...restProps,
-			className: [sx.className, className].filter(Boolean).join(" "),
+			className: attrJoin(sx.className, className),
 			style: sx.style,
 		},
 	});

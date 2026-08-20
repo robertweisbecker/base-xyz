@@ -14,6 +14,7 @@ import {
 import { Button, Dialog, ScrollArea, Toast } from "@/components";
 import type { ButtonProps } from "@/components";
 import { tokens } from "@/theme/tokens.stylex";
+import { attrJoin } from "@/utils/attr-join";
 
 export type ConfirmationDialogSize = "sm" | "md" | "lg";
 
@@ -205,7 +206,7 @@ export function Visual({ className, style, ...props }: ConfirmationDialogVisualP
 	return (
 		<div
 			data-confirmation-dialog-visual
-			className={[sx.className, className].filter(Boolean).join(" ")}
+			className={attrJoin(sx.className, className)}
 			style={sx.style}
 			{...props}
 		/>
@@ -236,7 +237,7 @@ export function Footer({ style, ...props }: ConfirmationDialogFooterProps) {
 export function Actions({ className, style, ...props }: ConfirmationDialogActionsProps) {
 	const sx = stylex.props(confirmationDialogParts.footerActions, style);
 
-	return <div className={[sx.className, className].filter(Boolean).join(" ")} style={sx.style} {...props} />;
+	return <div className={attrJoin(sx.className, className)} style={sx.style} {...props} />;
 }
 
 export function Cancel({ children, variant = "neutral", ...props }: ConfirmationDialogCancelProps) {

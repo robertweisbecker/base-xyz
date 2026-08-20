@@ -1,11 +1,13 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import * as stylex from "@stylexjs/stylex";
 import { tokens } from "@/theme/tokens.stylex";
+import { Box, Grid, Stack } from "@/components/layout/layout";
+import { Code } from "@/components/code/code";
+import { CodeBlock } from "@/components/code-block/code-block";
 import { Heading } from "@/components/heading/heading";
+import { Separator } from "@/components/separator/separator";
 import { Text } from "./text";
 import { textStyles } from "./text.stylex";
-import { Separator } from "@/components/separator/separator";
-import { CodeBlock } from "@/components/code-block/code-block";
 
 const sizeOptions = ["1", "2", "3", "4", "5", "6", "7", "8", "9"] as const;
 
@@ -58,9 +60,9 @@ const meta = {
 	},
 	decorators: [
 		(Story) => (
-			<div {...stylex.props(storyStyles.frame)}>
+			<Box maxWidth="720px">
 				<Story />
-			</div>
+			</Box>
 		),
 	],
 } satisfies Meta<typeof Text>;
@@ -73,14 +75,14 @@ export const Playground: Story = {};
 export const Layout: Story = {
 	parameters: { controls: { disable: true } },
 	render: () => (
-		<div {...stylex.props(storyStyles.frame)}>
+		<Box maxWidth="720px">
 			<Heading mb={3} textAlign="center" size="4">
 				Logical, token-backed spacing
 			</Heading>
 			<Text ms={4} textAlign="center">
 				This text uses logical inline spacing and scalar alignment.
 			</Text>
-		</div>
+		</Box>
 	),
 };
 
@@ -89,16 +91,16 @@ export const Sizes: Story = {
 		controls: { disable: true },
 	},
 	render: () => (
-		<div {...stylex.props(storyStyles.stack)}>
+		<Stack gap={3}>
 			{sizeOptions.map((size) => (
-				<div key={size} {...stylex.props(storyStyles.specimen)}>
+				<Grid key={size} align="baseline" gap={4} style={storyStyles.specimen}>
 					<Text size="1" color="muted" fontFamily="mono">
 						{size}
 					</Text>
 					<Text size={size}>Text size {size}</Text>
-				</div>
+				</Grid>
 			))}
-		</div>
+		</Stack>
 	),
 };
 
@@ -107,7 +109,7 @@ export const Styles: Story = {
 		controls: { disable: true },
 	},
 	render: () => (
-		<div {...stylex.props(storyStyles.styleGrid)}>
+		<Grid gap={3} style={storyStyles.styleGrid}>
 			{(["sans", "serif", "mono"] as const).flatMap((fontFamily) =>
 				(["regular", "medium", "semibold", "bold"] as const).map((fontWeight) => (
 					<Text key={`${fontFamily}-${fontWeight}`} fontFamily={fontFamily} fontWeight={fontWeight} size="3">
@@ -115,7 +117,7 @@ export const Styles: Story = {
 					</Text>
 				)),
 			)}
-		</div>
+		</Grid>
 	),
 };
 
@@ -124,13 +126,13 @@ export const Colors: Story = {
 		controls: { disable: true },
 	},
 	render: () => (
-		<div {...stylex.props(storyStyles.stack)}>
+		<Stack gap={3}>
 			{(["default", "subtle", "muted", "accent", "error", "success", "warning"] as const).map((textColor) => (
 				<Text key={textColor} color={textColor} fontWeight="medium">
 					{textColor}
 				</Text>
 			))}
-		</div>
+		</Stack>
 	),
 };
 
@@ -139,18 +141,18 @@ export const Rendering: Story = {
 		controls: { disable: true },
 	},
 	render: () => (
-		<div {...stylex.props(storyStyles.sections)}>
-			<section {...stylex.props(storyStyles.section)}>
+		<Stack gap={8}>
+			<Stack gap={3}>
 				<Heading render={<h2 />} size="4">
 					Rendering as another element
 				</Heading>
 				<Text render={<label htmlFor="workspace-name" />} fontWeight="medium">
-					Render <code>Text</code> as a label
+					Render <Code>Text</Code> as a label
 				</Text>
 				<input id="workspace-name" {...stylex.props(storyStyles.input)} />
-			</section>
+			</Stack>
 			<Separator />
-			<section {...stylex.props(storyStyles.section)}>
+			<Stack gap={3}>
 				<Heading render={<h2 />} size="4">
 					Exported text styles
 				</Heading>
@@ -163,39 +165,16 @@ export const Rendering: Story = {
 				<CodeBlock>stylex.props(textStyles.label)</CodeBlock>
 				<code {...stylex.props(textStyles.code)}>Code styles on a code element</code>
 				<CodeBlock>stylex.props(textStyles.code)</CodeBlock>
-			</section>
-		</div>
+			</Stack>
+		</Stack>
 	),
 };
 
 const storyStyles = stylex.create({
-	frame: {
-		maxWidth: "720px",
-	},
-	sections: {
-		gap: tokens["--space-8"],
-		display: "flex",
-		flexDirection: "column",
-	},
-	section: {
-		gap: tokens["--space-3"],
-		display: "flex",
-		flexDirection: "column",
-	},
-	stack: {
-		gap: tokens["--space-3"],
-		display: "flex",
-		flexDirection: "column",
-	},
 	styleGrid: {
-		gap: tokens["--space-3"],
-		display: "grid",
 		gridTemplateColumns: "repeat(auto-fit, minmax(12rem, 1fr))",
 	},
 	specimen: {
-		gap: tokens["--space-4"],
-		alignItems: "baseline",
-		display: "grid",
 		gridTemplateColumns: `${tokens["--space-6"]} minmax(0, 1fr)`,
 	},
 	input: {

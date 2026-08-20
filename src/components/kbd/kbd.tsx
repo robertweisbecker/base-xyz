@@ -5,6 +5,7 @@ import { resolveThemeProps } from "@/theme/theme-props";
 import { marginThemeProps } from "@/theme/theme-props-spacing.stylex";
 import type { MarginProps } from "@/theme/theme-props.types";
 import { tokens } from "@/theme/tokens.stylex";
+import { attrJoin } from "@/utils/attr-join";
 
 type KbdSize = "sm" | "md";
 type KbdVariant = "default" | "inverse" | "outline" | "plain";
@@ -28,7 +29,7 @@ export function Kbd({ className, style, size = "md", variant = "default", ...pro
 	return (
 		<kbd
 			data-component="kbd"
-			className={[sx.className, className].filter(Boolean).join(" ")}
+			className={attrJoin(sx.className, className)}
 			style={sx.style}
 			{...restProps}
 		/>
@@ -41,7 +42,7 @@ export function KbdGroup({ className, style, ...props }: StyledProps<React.Compo
 	return (
 		<kbd
 			data-component="kbd-group"
-			className={[sx.className, className].filter(Boolean).join(" ")}
+			className={attrJoin(sx.className, className)}
 			style={sx.style}
 			{...props}
 		/>

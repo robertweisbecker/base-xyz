@@ -9,6 +9,7 @@ import {
 	modalTextStyles,
 } from "@/components/dialog/dialog.stylex";
 import { tokens } from "@/theme/tokens.stylex";
+import { attrJoin } from "@/utils/attr-join";
 
 
 type StyledProps<T> = Omit<T, "className" | "style"> & {
@@ -30,7 +31,7 @@ function Backdrop({ ref, className, style, ...props }: AlertDialogBackdropProps)
 	return (
 		<BaseAlertDialog.Backdrop
 			ref={ref}
-			className={[sxClassName, className].filter(Boolean).join(" ")}
+			className={attrJoin(sxClassName, className)}
 			style={sxStyle}
 			{...props}
 		/>
@@ -43,7 +44,7 @@ function Viewport({ ref, className, style, ...props }: AlertDialogViewportProps)
 	return (
 		<BaseAlertDialog.Viewport
 			ref={ref}
-			className={[sxClassName, className].filter(Boolean).join(" ")}
+			className={attrJoin(sxClassName, className)}
 			style={sxStyle}
 			{...props}
 		/>
@@ -68,7 +69,7 @@ export function Popup({
 			<Viewport {...viewportProps}>
 				<BaseAlertDialog.Popup
 					ref={ref}
-					className={[sxClassName, className].filter(Boolean).join(" ")}
+					className={attrJoin(sxClassName, className)}
 					style={sxStyle}
 					{...props}
 				>
@@ -85,7 +86,7 @@ export function Title({ ref, className, style, ...props }: StyledProps<BaseAlert
 	return (
 		<BaseAlertDialog.Title
 			ref={ref}
-			className={[sxClassName, className].filter(Boolean).join(" ")}
+			className={attrJoin(sxClassName, className)}
 			style={sxStyle}
 			{...props}
 		/>
@@ -98,7 +99,7 @@ export function Description({ ref, className, style, ...props }: StyledProps<Bas
 	return (
 		<BaseAlertDialog.Description
 			ref={ref}
-			className={[sxClassName, className].filter(Boolean).join(" ")}
+			className={attrJoin(sxClassName, className)}
 			style={sxStyle}
 			{...props}
 		/>
@@ -108,13 +109,13 @@ export function Description({ ref, className, style, ...props }: StyledProps<Bas
 export function Header({ className, style, ...props }: StyledProps<ComponentProps<"div">>) {
 	const { className: sxClassName, style: sxStyle } = stylex.props(alertDialogParts.header, style);
 
-	return <div className={[sxClassName, className].filter(Boolean).join(" ")} style={sxStyle} {...props} />;
+	return <div className={attrJoin(sxClassName, className)} style={sxStyle} {...props} />;
 }
 
 export function Footer({ className, style, ...props }: StyledProps<ComponentProps<"div">>) {
 	const { className: sxClassName, style: sxStyle } = stylex.props(modalTextStyles.footer, alertDialogParts.footer, style);
 
-	return <div className={[sxClassName, className].filter(Boolean).join(" ")} style={sxStyle} {...props} />;
+	return <div className={attrJoin(sxClassName, className)} style={sxStyle} {...props} />;
 }
 
 export const Root = BaseAlertDialog.Root;

@@ -109,12 +109,12 @@ Component defaults and variants → broad shorthands → axis props → edge pro
 `reverse` combines with the rendered component's default axis: vertical roots reverse to `column-reverse`, while horizontal roots such as Card Footer reverse to `row-reverse`. It changes visual order only; semantic and keyboard order remain DOM order.
 
 ```tsx
-import { Box, Button, Card, CardContent, Grid, Stack } from "@/components";
+import { Box, Button, Card, Grid, Stack } from "@/components";
 
 <Stack gap={4} orientation="horizontal">
-  <Card flexGrow={1} shadow="lg">
-    <CardContent>Flexible card</CardContent>
-  </Card>
+  <Card.Root flexGrow={1} shadow="lg">
+    <Card.Content>Flexible card</Card.Content>
+  </Card.Root>
   <Button width="full">Continue</Button>
 </Stack>
 
@@ -138,7 +138,7 @@ const styles = stylex.create({
 });
 
 <Grid columns={12}>
-	<Card style={styles.featureCard}>Responsive span</Card>
+	<Card.Root style={styles.featureCard}>Responsive span</Card.Root>
 </Grid>;
 ```
 

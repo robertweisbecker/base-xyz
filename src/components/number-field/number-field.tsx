@@ -14,6 +14,7 @@ import { focusRing } from "@/styles/recipes/focus";
 import { pressable } from "@/styles/recipes/transitions";
 import { tokens } from "@/theme/tokens.stylex";
 import { WarningOctagonIcon } from "@phosphor-icons/react";
+import { attrJoin } from "@/utils/attr-join";
 
 const STEPPER_HOVER = ":hover:not([data-disabled]):not([data-readonly]):not(:active)";
 const STEPPER_ACTIVE = ":active:not([data-disabled]):not([data-readonly])";
@@ -71,7 +72,7 @@ export function NumberField({
 
 	return (
 		<Field.Root
-			className={[rootSx.className, className].filter(Boolean).join(" ")}
+			className={attrJoin(rootSx.className, className)}
 			style={rootSx.style}
 			disabled={disabled}
 			invalid={Boolean(error)}
@@ -106,7 +107,7 @@ export function NumberField({
 					<MinusIcon aria-hidden size={12} weight="bold" />
 				</BaseNumberField.Decrement>
 				<BaseNumberField.Input
-					aria-describedby={[descriptionId, errorId].filter(Boolean).join(" ") || undefined}
+					aria-describedby={attrJoin(descriptionId, errorId) || undefined}
 					aria-invalid={Boolean(error)}
 					{...stylex.props(
 						fieldStyles.inputUnstyled,

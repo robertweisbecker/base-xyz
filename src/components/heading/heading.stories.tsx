@@ -1,9 +1,10 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import * as stylex from "@stylexjs/stylex";
 import { tokens } from "@/theme/tokens.stylex";
+import { Code } from "@/components/code/code";
+import { Box, Grid, Stack } from "@/components/layout/layout";
 import { Text } from "@/components/text/text";
 import { Heading } from "./heading";
-import { Code } from "@/components/code/code";
 
 const sizeOptions = ["1", "2", "3", "4", "5", "6", "7", "8", "9"] as const;
 
@@ -47,9 +48,9 @@ const meta = {
 	},
 	decorators: [
 		(Story) => (
-			<div {...stylex.props(storyStyles.frame)}>
+			<Box style={storyStyles.frame}>
 				<Story />
-			</div>
+			</Box>
 		),
 	],
 } satisfies Meta<typeof Heading>;
@@ -64,18 +65,18 @@ export const Sizes: Story = {
 		controls: { disable: true },
 	},
 	render: () => (
-		<div {...stylex.props(storyStyles.stack)}>
+		<Stack gap={4}>
 			{sizeOptions.map((size) => (
-				<div key={size} {...stylex.props(storyStyles.specimen)}>
-					<Text size="1" color="muted" fontFamily="mono">
+				<Stack key={size} align="baseline" gap={4} orientation="horizontal">
+					<Text color="muted" fontFamily="mono" size="1" style={storyStyles.specimenLabel}>
 						{size}
 					</Text>
 					<Heading truncate size={size}>
 						Heading size {size}
 					</Heading>
-				</div>
+				</Stack>
 			))}
-		</div>
+		</Stack>
 	),
 };
 
@@ -84,7 +85,7 @@ export const Styles: Story = {
 		controls: { disable: true },
 	},
 	render: () => (
-		<div {...stylex.props(storyStyles.styleGrid)}>
+		<Grid columns={4} gap={4}>
 			{(["sans", "serif", "mono"] as const).flatMap((fontFamily) =>
 				(["regular", "medium", "semibold", "bold"] as const).map((fontWeight) => (
 					<Heading key={`${fontFamily}-${fontWeight}`} fontFamily={fontFamily} fontWeight={fontWeight} size="3">
@@ -92,7 +93,7 @@ export const Styles: Story = {
 					</Heading>
 				)),
 			)}
-		</div>
+		</Grid>
 	),
 };
 
@@ -101,13 +102,13 @@ export const Colors: Story = {
 		controls: { disable: true },
 	},
 	render: () => (
-		<div {...stylex.props(storyStyles.stack)}>
+		<Stack gap={4}>
 			{(["default", "subtle", "muted", "accent", "error", "success", "warning"] as const).map((headingColor) => (
 				<Heading key={headingColor} color={headingColor} size="4">
 					{headingColor}
 				</Heading>
 			))}
-		</div>
+		</Stack>
 	),
 };
 
@@ -116,26 +117,26 @@ export const SemanticLevels: Story = {
 		controls: { disable: true },
 	},
 	render: () => (
-		<section {...stylex.props(storyStyles.stack)}>
+		<Stack gap={4}>
 			<Heading render={<h2 />} size="6">
 				Account settings <Code>h2</Code>
 			</Heading>
 			<Text color="muted" size="3">
 				The semantic heading level and visual size are configured independently.
 			</Text>
-			<section {...stylex.props(storyStyles.subsection)}>
+			<Stack gap={2} mt={4}>
 				<Heading render={<h3 />} size="4">
 					Profile <Code>h3</Code>
 				</Heading>
 				<Text>Update your public name and account details.</Text>
-			</section>
-			<section {...stylex.props(storyStyles.subsection)}>
+			</Stack>
+			<Stack gap={2} mt={4}>
 				<Heading render={(props) => <h3 {...props} data-story-element="render-callback" />} size="4">
 					Notifications <Code>h3</Code>
 				</Heading>
 				<Text>Choose when the workspace should contact you.</Text>
-			</section>
-		</section>
+			</Stack>
+		</Stack>
 	),
 };
 
@@ -143,26 +144,7 @@ const storyStyles = stylex.create({
 	frame: {
 		maxWidth: "760px",
 	},
-	stack: {
-		gap: tokens["--space-4"],
-		display: "flex",
-		flexDirection: "column",
-	},
-	styleGrid: {
-		gap: tokens["--space-4"],
-		display: "grid",
-		gridTemplateColumns: "repeat(4, minmax(0, 1fr))",
-	},
-	specimen: {
-		gap: tokens["--space-4"],
-		alignItems: "baseline",
-		display: "grid",
-		gridTemplateColumns: `${tokens["--space-6"]} minmax(0, 1fr)`,
-	},
-	subsection: {
-		gap: tokens["--space-2"],
-		display: "flex",
-		flexDirection: "column",
-		marginBlockStart: tokens["--space-4"],
+	specimenLabel: {
+		minWidth: tokens["--space-6"],
 	},
 });

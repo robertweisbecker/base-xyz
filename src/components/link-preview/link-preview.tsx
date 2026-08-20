@@ -11,6 +11,7 @@ import {
 } from "@/components/popover/popover.stylex";
 import { popupVars } from "@/components/popover/popover-vars.stylex";
 import { tokens } from "@/theme/tokens.stylex";
+import { attrJoin } from "@/utils/attr-join";
 
 type StyledProps<T> = Omit<T, "className" | "style"> & {
 	className?: string;
@@ -35,7 +36,7 @@ export function Trigger({ ref, className, style, delay = 100, ...props }: Styled
 		<BaseLinkPreview.Trigger
 			ref={ref}
 			delay={delay}
-			className={[sxClassName, className].filter(Boolean).join(" ")}
+			className={attrJoin(sxClassName, className)}
 			style={sxStyle}
 			{...props}
 		/>
@@ -49,7 +50,7 @@ function Positioner({ ref, className, style, sideOffset = 8, ...props }: LinkPre
 		<BaseLinkPreview.Positioner
 			ref={ref}
 			sideOffset={sideOffset}
-			className={[sxClassName, className].filter(Boolean).join(" ")}
+			className={attrJoin(sxClassName, className)}
 			style={sxStyle}
 			{...props}
 		/>
@@ -80,7 +81,7 @@ export function Popup({
 			<Positioner {...positionerProps}>
 				<BaseLinkPreview.Popup
 					ref={ref}
-					className={[sxClassName, className].filter(Boolean).join(" ")}
+					className={attrJoin(sxClassName, className)}
 					style={sxStyle}
 					{...props}>
 					{arrowProps ? <Arrow {...arrowProps} /> : null}
@@ -97,7 +98,7 @@ export function Viewport({ ref, className, style, ...props }: LinkPreviewViewpor
 	return (
 		<BaseLinkPreview.Viewport
 			ref={ref}
-			className={[sxClassName, "xyz-popup-viewport", className].filter(Boolean).join(" ")}
+			className={attrJoin(sxClassName, "xyz-popup-viewport", className)}
 			style={sxStyle}
 			{...props}
 		/>
@@ -110,7 +111,7 @@ function Backdrop({ ref, className, style, ...props }: LinkPreviewBackdropProps)
 	return (
 		<BaseLinkPreview.Backdrop
 			ref={ref}
-			className={[sxClassName, className].filter(Boolean).join(" ") || undefined}
+			className={attrJoin(sxClassName, className) || undefined}
 			style={sxStyle}
 			{...props}
 		/>
@@ -123,7 +124,7 @@ function Arrow({ ref, className, style, ...props }: LinkPreviewArrowProps) {
 	return (
 		<BaseLinkPreview.Arrow
 			ref={ref}
-			className={[sxClassName, className].filter(Boolean).join(" ")}
+			className={attrJoin(sxClassName, className)}
 			style={sxStyle}
 			{...props}
 		/>
@@ -133,19 +134,19 @@ function Arrow({ ref, className, style, ...props }: LinkPreviewArrowProps) {
 export function Content({ className, style, ...props }: StyledProps<ComponentProps<"div">>) {
 	const { className: sxClassName, style: sxStyle } = stylex.props(linkPreviewParts.content, style);
 
-	return <div className={[sxClassName, className].filter(Boolean).join(" ")} style={sxStyle} {...props} />;
+	return <div className={attrJoin(sxClassName, className)} style={sxStyle} {...props} />;
 }
 
 export function Title({ className, style, ...props }: StyledProps<ComponentProps<"h3">>) {
 	const { className: sxClassName, style: sxStyle } = stylex.props(linkPreviewParts.title, style);
 
-	return <h3 className={[sxClassName, className].filter(Boolean).join(" ")} style={sxStyle} {...props} />;
+	return <h3 className={attrJoin(sxClassName, className)} style={sxStyle} {...props} />;
 }
 
 export function Description({ className, style, ...props }: StyledProps<ComponentProps<"p">>) {
 	const { className: sxClassName, style: sxStyle } = stylex.props(linkPreviewParts.description, style);
 
-	return <p className={[sxClassName, className].filter(Boolean).join(" ")} style={sxStyle} {...props} />;
+	return <p className={attrJoin(sxClassName, className)} style={sxStyle} {...props} />;
 }
 
 export const Root = BaseLinkPreview.Root;

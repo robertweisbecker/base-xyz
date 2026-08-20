@@ -1,9 +1,10 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import * as stylex from "@stylexjs/stylex";
-import { tokens } from "@/theme/tokens.stylex";
-
 import { CodeBlock } from "@/components/code-block/code-block";
+import { Heading } from "@/components/heading/heading";
+import { Box, Stack } from "@/components/layout/layout";
+import { Separator } from "@/components/separator/separator";
 import { Collapsible, type CollapsibleTriggerSize, type CollapsibleTriggerVariant } from "./collapsible";
+
 type StoryArgs = {
 	defaultOpen: boolean;
 	disabled: boolean;
@@ -33,9 +34,9 @@ const meta = {
 	},
 	decorators: [
 		(Story) => (
-			<div {...stylex.props(storyStyles.frame)}>
+			<Box maxWidth="520px">
 				<Story />
-			</div>
+			</Box>
 		),
 	],
 } satisfies Meta<StoryArgs>;
@@ -69,22 +70,21 @@ export const Examples: Story = {
 		controls: { disable: true },
 	},
 	render: () => (
-		<div {...stylex.props(storyStyles.story)}>
-			<section {...stylex.props(storyStyles.section)}>
-				<h2 {...stylex.props(storyStyles.heading)}>Basic</h2>
+		<Stack gap={8}>
+			<ExampleSection title="Basic">
 				<Example label="Request details">
 					The request reads project metadata and does not modify your workspace.
 				</Example>
-			</section>
-			<section {...stylex.props(storyStyles.section)}>
-				<h2 {...stylex.props(storyStyles.heading)}>Default open</h2>
+			</ExampleSection>
+			<Separator />
+			<ExampleSection title="Default open">
 				<Example defaultOpen label="Included files">
 					<span>release-notes.md</span>
 					<span>migration-guide.md</span>
 				</Example>
-			</section>
-			<section {...stylex.props(storyStyles.section)}>
-				<h2 {...stylex.props(storyStyles.heading)}>Leading icon</h2>
+			</ExampleSection>
+			<Separator />
+			<ExampleSection title="Leading icon">
 				<Collapsible.Root>
 					<Collapsible.Trigger size="xs">
 						<Collapsible.Icon side="start" />
@@ -96,15 +96,15 @@ export const Examples: Story = {
 						</Collapsible.Content>
 					</Collapsible.Panel>
 				</Collapsible.Root>
-			</section>
-			<section {...stylex.props(storyStyles.section)}>
-				<h2 {...stylex.props(storyStyles.heading)}>Link</h2>
+			</ExampleSection>
+			<Separator />
+			<ExampleSection title="Link">
 				<Example label="Show deployment details" variant="link">
 					Production · US West
 				</Example>
-			</section>
-			<section {...stylex.props(storyStyles.section)}>
-				<h2 {...stylex.props(storyStyles.heading)}>Nested</h2>
+			</ExampleSection>
+			<Separator />
+			<ExampleSection title="Nested">
 				<Collapsible.Root>
 					<Collapsible.Trigger>
 						Advanced options
@@ -118,16 +118,27 @@ export const Examples: Story = {
 						</Collapsible.Content>
 					</Collapsible.Panel>
 				</Collapsible.Root>
-			</section>
-			<section {...stylex.props(storyStyles.section)}>
-				<h2 {...stylex.props(storyStyles.heading)}>Disabled</h2>
+			</ExampleSection>
+			<Separator />
+			<ExampleSection title="Disabled">
 				<Example disabled label="Activity summary">
 					Activity is unavailable while the workspace is offline.
 				</Example>
-			</section>
-		</div>
+			</ExampleSection>
+		</Stack>
 	),
 };
+
+function ExampleSection({ children, title }: { children: React.ReactNode; title: string }) {
+	return (
+		<Stack align="start" gap={4}>
+			<Heading size="1" color="muted" fontWeight="regular">
+				{title}
+			</Heading>
+			{children}
+		</Stack>
+	);
+}
 
 function Example({
 	children,
@@ -154,27 +165,3 @@ function Example({
 		</Collapsible.Root>
 	);
 }
-
-const storyStyles = stylex.create({
-	frame: {
-		maxWidth: "520px",
-	},
-	story: {
-		gap: tokens["--space-8"],
-		display: "flex",
-		flexDirection: "column",
-	},
-	section: {
-		gap: tokens["--space-4"],
-		display: "flex",
-		flexDirection: "column",
-	},
-	heading: {
-		margin: 0,
-		color: tokens["--fg-muted"],
-		fontSize: tokens["--font-size-1"],
-		fontWeight: tokens["--font-weight-regular"],
-		letterSpacing: tokens["--letter-spacing-1"],
-		lineHeight: tokens["--line-height-1"],
-	},
-});

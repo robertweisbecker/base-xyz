@@ -3,6 +3,8 @@ import { PlusIcon } from "@phosphor-icons/react/dist/csr/Plus";
 import { TrashIcon } from "@phosphor-icons/react/dist/csr/Trash";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import * as stylex from "@stylexjs/stylex";
+import { Stack } from "@/components/layout/layout";
+import { Text } from "@/components/text/text";
 import { tokens } from "@/theme/tokens.stylex";
 
 import { IconButton } from "./button";
@@ -63,14 +65,18 @@ export const SizesAndShapes: Story = {
 		controls: { disable: true },
 	},
 	render: () => (
-		<div {...stylex.props(storyStyles.options)}>
+		<Stack gap={6}>
 			{(["square", "circle"] as const).map((shape) => (
-				<section key={shape} {...stylex.props(storyStyles.section)}>
-					<span {...stylex.props(storyStyles.label)}>{shape}</span>
-					<div {...stylex.props(storyStyles.row)}>
+				<Stack align="start" gap={2} key={shape}>
+					<Text size="1" color="muted">
+						{shape}
+					</Text>
+					<Stack align="end" gap={3} orientation="horizontal" wrap="wrap">
 						{sizes.map((size) => (
-							<div key={size} {...stylex.props(storyStyles.specimen)}>
-								<span {...stylex.props(storyStyles.label)}>{size}</span>
+							<Stack align="center" gap={2} key={size}>
+								<Text size="1" color="muted">
+									{size}
+								</Text>
 								<IconButton
 									icon={<PlusIcon aria-hidden weight="bold" />}
 									label={`Add item (${size}, ${shape})`}
@@ -78,12 +84,12 @@ export const SizesAndShapes: Story = {
 									size={size}
 									variant="neutral"
 								/>
-							</div>
+							</Stack>
 						))}
-					</div>
-				</section>
+					</Stack>
+				</Stack>
 			))}
-		</div>
+		</Stack>
 	),
 };
 
@@ -94,70 +100,51 @@ export const States: Story = {
 	render: () => (
 		<div {...stylex.props(storyStyles.stateGrid)}>
 			{variants.map((variant) => (
-				<section key={variant} {...stylex.props(storyStyles.stateColumn)}>
-					<span {...stylex.props(storyStyles.label)}>{variant}</span>
-					<div {...stylex.props(storyStyles.stateSpecimen)}>
-						<span {...stylex.props(storyStyles.label)}>Enabled</span>
+				<Stack align="start" gap={5} key={variant}>
+					<Text size="1" color="muted">
+						{variant}
+					</Text>
+					<StateSpecimen label="Enabled">
 						<IconButton
 							icon={<PencilSimpleIcon aria-hidden weight="bold" />}
 							label={`Edit project (${variant})`}
 							variant={variant}
 						/>
-					</div>
-					<div {...stylex.props(storyStyles.stateSpecimen)}>
-						<span {...stylex.props(storyStyles.label)}>Disabled</span>
+					</StateSpecimen>
+					<StateSpecimen label="Disabled">
 						<IconButton
 							disabled
 							icon={<PencilSimpleIcon aria-hidden weight="bold" />}
 							label={`Edit project (${variant}, disabled)`}
 							variant={variant}
 						/>
-					</div>
-					<div {...stylex.props(storyStyles.stateSpecimen)}>
-						<span {...stylex.props(storyStyles.label)}>Loading</span>
+					</StateSpecimen>
+					<StateSpecimen label="Loading">
 						<IconButton
 							icon={<PencilSimpleIcon aria-hidden weight="bold" />}
 							label={`Edit project (${variant}, loading)`}
 							loading
 							variant={variant}
 						/>
-					</div>
-				</section>
+					</StateSpecimen>
+				</Stack>
 			))}
 		</div>
 	),
 };
 
+function StateSpecimen({ children, label }: { children: React.ReactNode; label: string }) {
+	return (
+		<Stack align="start" gap={2}>
+			<Text size="1" color="muted">
+				{label}
+			</Text>
+			{children}
+		</Stack>
+	);
+}
+
 const storyStyles = stylex.create({
-	options: {
-		gap: tokens["--space-6"],
-		display: "flex",
-		flexDirection: "column",
-	},
-	section: {
-		gap: tokens["--space-2"],
-		alignItems: "flex-start",
-		display: "flex",
-		flexDirection: "column",
-	},
-	label: {
-		color: tokens["--fg-muted"],
-		fontSize: tokens["--font-size-1"],
-		letterSpacing: tokens["--letter-spacing-1"],
-		lineHeight: tokens["--line-height-1"],
-		textTransform: "capitalize",
-	},
-	row: {
-		gap: tokens["--space-3"],
-		alignItems: "flex-end",
-		display: "flex",
-	},
-	specimen: {
-		gap: tokens["--space-2"],
-		alignItems: "center",
-		display: "flex",
-		flexDirection: "column",
-	},
 	stateGrid: {
 		gap: tokens["--space-6"],
 		display: "grid",
@@ -165,17 +152,5 @@ const storyStyles = stylex.create({
 		paddingBlockEnd: tokens["--space-2"],
 		maxWidth: "100%",
 		overflowX: "auto",
-	},
-	stateColumn: {
-		gap: tokens["--space-5"],
-		alignItems: "flex-start",
-		display: "flex",
-		flexDirection: "column",
-	},
-	stateSpecimen: {
-		gap: tokens["--space-2"],
-		alignItems: "flex-start",
-		display: "flex",
-		flexDirection: "column",
 	},
 });

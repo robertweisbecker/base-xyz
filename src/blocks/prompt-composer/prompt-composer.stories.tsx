@@ -5,7 +5,8 @@ import type { Meta, StoryObj } from "@storybook/react-vite";
 import * as stylex from "@stylexjs/stylex";
 import { useState, type ReactNode } from "react";
 import { Button, Menu, Separator } from "@/components";
-import { tokens } from "@/theme/tokens.stylex";
+import { Stack } from "@/components/layout/layout";
+import { Text } from "@/components/text/text";
 
 import { ModelSelector } from "@/blocks/model-selector/model-selector";
 import {
@@ -16,6 +17,7 @@ import {
 	getExampleModelLabel,
 } from "@/blocks/model-selector/model-selector.examples";
 import { PromptComposer, type PromptComposerRootProps } from "./prompt-composer";
+
 type ComposerDemoProps = Pick<PromptComposerRootProps, "clearOnSubmit" | "defaultValue" | "disabled">;
 
 const meta = {
@@ -37,7 +39,7 @@ type Story = StoryObj<typeof meta>;
 
 export const Examples: Story = {
 	render: () => (
-		<div {...stylex.props(storyParts.examples)}>
+		<Stack gap={6} maxWidth="42rem">
 			<Example label="Ready, empty">
 				<ComposerDemo clearOnSubmit defaultValue="" disabled={false} />
 			</Example>
@@ -60,7 +62,7 @@ export const Examples: Story = {
 			<Example label="Generating">
 				<GeneratingDemo />
 			</Example>
-		</div>
+		</Stack>
 	),
 };
 
@@ -120,7 +122,7 @@ function GeneratingDemo() {
 	const [webSearch, setWebSearch] = useState(false);
 
 	return (
-		<div {...stylex.props(storyParts.demo)}>
+		<Stack gap={3} maxWidth="42rem" width="full">
 			<PromptComposer.Root
 				defaultValue="Summarize the open review comments."
 				onSubmit={(prompt) => setFeedback(`Submitted: ${prompt}`)}
@@ -147,7 +149,7 @@ function GeneratingDemo() {
 				</ComposerSurface>
 			</PromptComposer.Root>
 			<Feedback>{feedback}</Feedback>
-		</div>
+		</Stack>
 	);
 }
 
@@ -163,7 +165,7 @@ function ComposerDemo({ clearOnSubmit, defaultValue, disabled }: ComposerDemoPro
 	const [feedback, setFeedback] = useState("Press Enter to send. Use Shift + Enter for a new line.");
 
 	return (
-		<div {...stylex.props(storyParts.demo)}>
+		<Stack gap={3} maxWidth="42rem" width="full">
 			<PromptComposer.Root
 				clearOnSubmit={clearOnSubmit}
 				defaultValue={defaultValue}
@@ -198,60 +200,30 @@ function ComposerDemo({ clearOnSubmit, defaultValue, disabled }: ComposerDemoPro
 				</ComposerSurface>
 			</PromptComposer.Root>
 			<Feedback>{feedback}</Feedback>
-		</div>
+		</Stack>
 	);
 }
 
 function Example({ children, label }: { children: ReactNode; label: string }) {
 	return (
-		<section {...stylex.props(storyParts.example)}>
-			<h2 {...stylex.props(storyParts.label)}>{label}</h2>
+		<Stack gap={3}>
+			<Text size="1" color="muted">
+				{label}
+			</Text>
 			{children}
-		</section>
+		</Stack>
 	);
 }
 
 function Feedback({ children }: { children: ReactNode }) {
 	return (
-		<p aria-live="polite" {...stylex.props(storyParts.feedback)}>
+		<Text aria-live="polite" size="1" color="muted">
 			{children}
-		</p>
+		</Text>
 	);
 }
 
 const storyParts = stylex.create({
-	demo: {
-		gap: tokens["--space-3"],
-		display: "flex",
-		flexDirection: "column",
-		maxWidth: "42rem",
-		width: "100%",
-	},
-	examples: {
-		gap: tokens["--space-6"],
-		display: "flex",
-		flexDirection: "column",
-		maxWidth: "42rem",
-	},
-	example: {
-		gap: tokens["--space-3"],
-		display: "flex",
-		flexDirection: "column",
-	},
-	label: {
-		margin: 0,
-		color: tokens["--fg-muted"],
-		fontSize: tokens["--font-size-1"],
-		letterSpacing: tokens["--letter-spacing-1"],
-		lineHeight: tokens["--line-height-1"],
-	},
-	feedback: {
-		margin: 0,
-		color: tokens["--fg-muted"],
-		fontSize: tokens["--font-size-1"],
-		letterSpacing: tokens["--letter-spacing-1"],
-		lineHeight: tokens["--line-height-1"],
-	},
 	modelTrigger: {
 		maxWidth: "100%",
 	},

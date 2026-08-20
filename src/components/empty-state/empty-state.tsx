@@ -14,6 +14,7 @@ import { radiusThemeProps, shadowThemeProps } from "@/theme/theme-props-surface.
 import { tokens } from "@/theme/tokens.stylex";
 import { Heading } from "@/components/heading/heading";
 import { Text } from "@/components/text/text";
+import { attrJoin } from "@/utils/attr-join";
 
 export type EmptyStateSize = "sm" | "md" | "lg";
 export type EmptyStateHeadingLevel = "h1" | "h2" | "h3" | "h4" | "h5" | "h6";
@@ -62,7 +63,7 @@ export function EmptyState({
 	const Title = headingLevel;
 
 	return (
-		<div className={[rootSx.className, className].filter(Boolean).join(" ")} style={rootSx.style} {...restProps}>
+		<div className={attrJoin(rootSx.className, className)} style={rootSx.style} {...restProps}>
 			{icon ? <div {...stylex.props(emptyStateStyles.icon, iconSizeStyles[size])}>{icon}</div> : null}
 			<div {...stylex.props(emptyStateStyles.message)}>
 				<Heading

@@ -4,9 +4,9 @@ import { CopyIcon } from "@phosphor-icons/react/dist/csr/Copy";
 import { FolderOpenIcon } from "@phosphor-icons/react/dist/csr/FolderOpen";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import * as stylex from "@stylexjs/stylex";
-import { tokens } from "@/theme/tokens.stylex";
 import { Avatar } from "@/components/avatar/avatar";
 import { Badge } from "@/components/badge/badge";
+import { Box, Stack } from "@/components/layout/layout";
 import { Separator } from "@/components/separator/separator";
 import { Text } from "@/components/text/text";
 import { Item, type ItemDescriptionLayout, type ItemProps, type ItemVariant } from "./item";
@@ -75,9 +75,9 @@ const meta = {
 	},
 	decorators: [
 		(Story) => (
-			<div {...stylex.props(storyStyles.frame)}>
+			<Box style={storyStyles.frame}>
 				<Story />
-			</div>
+			</Box>
 		),
 	],
 	parameters: {
@@ -114,10 +114,12 @@ export const Layouts: Story = {
 		controls: { disable: true },
 	},
 	render: () => (
-		<div {...stylex.props(storyStyles.stack)}>
+		<Stack gap={6}>
 			{descriptionLayouts.map((layout) => (
-				<section key={layout}>
-					<h2 {...stylex.props(storyStyles.heading)}>{layout}</h2>
+				<Stack key={layout} gap={2}>
+					<Text color="muted" size="1">
+						{layout}
+					</Text>
 					<Item
 						description={
 							layout === "inline-wrap"
@@ -133,9 +135,9 @@ export const Layouts: Story = {
 						label="Item label"
 						startSlot={<BlueprintIcon aria-hidden size="1.25em" weight="duotone" />}
 					/>
-				</section>
+				</Stack>
 			))}
-		</div>
+		</Stack>
 	),
 };
 
@@ -144,9 +146,11 @@ export const Examples: Story = {
 		controls: { disable: true },
 	},
 	render: () => (
-		<div {...stylex.props(storyStyles.stack)}>
-			<section>
-				<h2 {...stylex.props(storyStyles.heading)}>Settings row</h2>
+		<Stack gap={6}>
+			<Stack gap={2}>
+				<Text color="muted" size="1">
+					Settings row
+				</Text>
 				<Item
 					description="Invite teammates and manage workspace roles."
 					endSlot={
@@ -157,10 +161,12 @@ export const Examples: Story = {
 					label="Members"
 					startSlot={<FolderOpenIcon aria-hidden size="1.25em" weight="duotone" />}
 				/>
-			</section>
+			</Stack>
 			<Separator />
-			<section>
-				<h2 {...stylex.props(storyStyles.heading)}>Avatar media</h2>
+			<Stack gap={2}>
+				<Text color="muted" size="1">
+					Avatar media
+				</Text>
 				<Item
 					description="Last active 2 hours ago"
 					descriptionLayout="inline"
@@ -168,10 +174,12 @@ export const Examples: Story = {
 					label="Ada Lovelace"
 					startSlot={<Avatar initials="AL" name="Ada Lovelace" shape="rounded" size={8} />}
 				/>
-			</section>
+			</Stack>
 			<Separator />
-			<section>
-				<h2 {...stylex.props(storyStyles.heading)}>Link row</h2>
+			<Stack gap={2}>
+				<Text color="muted" size="1">
+					Link row
+				</Text>
 				<Item
 					description="Overview of your account and recent activity."
 					label="Dashboard"
@@ -179,42 +187,32 @@ export const Examples: Story = {
 					startSlot={<BlueprintIcon aria-hidden size="1.25em" weight="duotone" />}
 					endSlot={<ArrowRightIcon aria-hidden size="1em" />}
 				/>
-			</section>
+			</Stack>
 			<Separator />
-			<section>
-				<h2 {...stylex.props(storyStyles.heading)}>Label only</h2>
+			<Stack gap={2}>
+				<Text color="muted" size="1">
+					Label only
+				</Text>
 				<Item label="Notifications" endSlot={<CopyIcon aria-hidden size="1em" />} />
-			</section>
+			</Stack>
 			<Separator />
-			<section>
-				<h2 {...stylex.props(storyStyles.heading)}>Inline wrap</h2>
+			<Stack gap={2}>
+				<Text color="muted" size="1">
+					Inline wrap
+				</Text>
 				<Item
 					description="Use when a short meta string should sit beside the label and continue onto the next line if needed."
 					descriptionLayout="inline-wrap"
 					label="Workspace storage"
 					startSlot={<FolderOpenIcon aria-hidden size="1.25em" weight="duotone" />}
 				/>
-			</section>
-		</div>
+			</Stack>
+		</Stack>
 	),
 };
 
 const storyStyles = stylex.create({
 	frame: {
 		maxWidth: "28rem",
-	},
-	stack: {
-		gap: tokens["--space-6"],
-		display: "flex",
-		flexDirection: "column",
-	},
-	heading: {
-		margin: 0,
-		color: tokens["--fg-muted"],
-		fontSize: tokens["--font-size-1"],
-		fontWeight: tokens["--font-weight-regular"],
-		letterSpacing: tokens["--letter-spacing-1"],
-		lineHeight: tokens["--line-height-1"],
-		marginBlockEnd: tokens["--space-2"],
 	},
 });

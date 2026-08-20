@@ -60,7 +60,7 @@ export function Switch({
 	);
 
 	return (
-		<div className={[rootSx.className, className].filter(Boolean).join(" ")} style={rootSx.style}>
+		<div className={attrJoin(rootSx.className, className)} style={rootSx.style}>
 			<label
 				htmlFor={id}
 				data-disabled={disabled ? "" : undefined}

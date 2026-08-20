@@ -1,8 +1,8 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import * as stylex from "@stylexjs/stylex";
 import type { ReactNode } from "react";
-import { tokens } from "@/theme/tokens.stylex";
-
+import { Box, Grid, Stack } from "@/components/layout/layout";
+import { Text } from "@/components/text/text";
 import { Textarea } from "./textarea";
 
 const meta = {
@@ -61,12 +61,12 @@ type Story = StoryObj<typeof meta>;
 
 export const Playground: Story = {
 	render: (args) => (
-		<div {...stylex.props(styles.frame)}>
+		<Box maxWidth="420px">
 			<Textarea
 				key={`${args.defaultValue}-${args.disabled}-${args.error}-${args.readOnly}-${args.rows}-${args.minRows}-${args.maxRows}-${args.size}`}
 				{...args}
 			/>
-		</div>
+		</Box>
 	),
 };
 
@@ -75,7 +75,7 @@ export const Resizing: Story = {
 		controls: { disable: true },
 	},
 	render: () => (
-		<div {...stylex.props(styles.resizingGrid)}>
+		<Grid gap={8} maxWidth="900px" style={styles.responsiveGrid}>
 			<StateSpecimen label="Rows only">
 				<Textarea
 					label="Project update"
@@ -109,7 +109,7 @@ export const Resizing: Story = {
 					defaultValue={"The textarea grows between its two configured row limits."}
 				/>
 			</StateSpecimen>
-		</div>
+		</Grid>
 	),
 };
 
@@ -118,7 +118,7 @@ export const States: Story = {
 		controls: { disable: true },
 	},
 	render: () => (
-		<div {...stylex.props(styles.stateGrid)}>
+		<Grid gap={8} maxWidth="900px" style={styles.responsiveGrid}>
 			<StateSpecimen label="Default">
 				<Textarea label="Project update" placeholder="What changed?" />
 			</StateSpecimen>
@@ -145,7 +145,7 @@ export const States: Story = {
 			<StateSpecimen label="Disabled">
 				<Textarea label="Project update" defaultValue="Updates are disabled for archived projects." disabled />
 			</StateSpecimen>
-		</div>
+		</Grid>
 	),
 };
 
@@ -154,62 +154,30 @@ export const Sizes: Story = {
 		controls: { disable: true },
 	},
 	render: () => (
-		<div {...stylex.props(styles.sizeStack)}>
+		<Stack gap={6} maxWidth="420px">
 			<Textarea label="Small" defaultValue="Small textarea" rows={2} size="sm" />
 			<Textarea label="Medium" defaultValue="Medium textarea" rows={2} size="md" />
 			<Textarea label="Large" defaultValue="Large textarea" rows={2} size="lg" />
-		</div>
+		</Stack>
 	),
 };
 
 function StateSpecimen({ children, label }: { children: ReactNode; label: string }) {
 	return (
-		<section {...stylex.props(styles.stateSpecimen)}>
-			<h2 {...stylex.props(styles.stateTitle)}>{label}</h2>
+		<Stack gap={3}>
+			<Text color="muted" size="1">
+				{label}
+			</Text>
 			{children}
-		</section>
+		</Stack>
 	);
 }
 
 const styles = stylex.create({
-	frame: {
-		maxWidth: "420px",
-	},
-	stateGrid: {
-		gap: tokens["--space-8"],
-		display: "grid",
+	responsiveGrid: {
 		gridTemplateColumns: {
 			default: "repeat(2, minmax(0, 1fr))",
 			"@media (max-width: 760px)": "1fr",
 		},
-		maxWidth: "900px",
-	},
-	resizingGrid: {
-		gap: tokens["--space-8"],
-		display: "grid",
-		gridTemplateColumns: {
-			default: "repeat(2, minmax(0, 1fr))",
-			"@media (max-width: 760px)": "1fr",
-		},
-		maxWidth: "900px",
-	},
-	stateSpecimen: {
-		gap: tokens["--space-3"],
-		display: "flex",
-		flexDirection: "column",
-	},
-	stateTitle: {
-		margin: 0,
-		color: tokens["--fg-muted"],
-		fontSize: tokens["--font-size-1"],
-		fontWeight: tokens["--font-weight-regular"],
-		letterSpacing: tokens["--letter-spacing-1"],
-		lineHeight: tokens["--line-height-1"],
-	},
-	sizeStack: {
-		gap: tokens["--space-6"],
-		display: "flex",
-		flexDirection: "column",
-		maxWidth: "420px",
 	},
 });

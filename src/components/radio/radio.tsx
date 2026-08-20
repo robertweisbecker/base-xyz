@@ -77,7 +77,7 @@ export function Radio({
 	const id = providedId ?? `${generatedId}-control`;
 	const descriptionId = description ? `${generatedId}-description` : undefined;
 	const itemSx = stylex.props(radioParts.item, ...styles, style);
-	const itemClassName = [itemSx.className, className].filter(Boolean).join(" ");
+	const itemClassName = attrJoin(itemSx.className, className);
 	const labelContent = (
 		<>
 			{label}
@@ -174,7 +174,7 @@ export function RadioGroup({
 					}
 				/>
 			}
-			className={[groupSx.className, className].filter(Boolean).join(" ")}
+			className={attrJoin(groupSx.className, className)}
 			style={groupSx.style}>
 			<div {...stylex.props(radioParts.title)}>
 				<Fieldset.Legend {...stylex.props(fieldStyles.groupLabel)}>

@@ -6,6 +6,7 @@ import type { LinkColor } from "@/components/link/link";
 import { Loader } from "@/components/loader/loader";
 import { shimmerTextStyles } from "@/styles/recipes/shimmer-text.stylex";
 import { tokens } from "@/theme/tokens.stylex";
+import { attrJoin } from "@/utils/attr-join";
 
 type StyledProps<T> = Omit<T, "className" | "style"> & {
 	className?: string;
@@ -53,7 +54,7 @@ export function Root({
 		<nav
 			ref={ref}
 			aria-label={label}
-			className={[sx.className, className].filter(Boolean).join(" ")}
+			className={attrJoin(sx.className, className)}
 			style={sx.style}
 			{...props}>
 			<ol {...stylex.props(parts.list)}>{children}</ol>
@@ -77,7 +78,7 @@ export function Link({
 		<li {...stylex.props(parts.item)}>
 			<a
 				ref={ref}
-				className={[sx.className, className].filter(Boolean).join(" ")}
+				className={attrJoin(sx.className, className)}
 				style={sx.style}
 				data-component="breadcrumb-link"
 				data-color={color}
@@ -108,7 +109,7 @@ export function Current({
 				ref={ref}
 				aria-current={loading ? undefined : "page"}
 				aria-busy={loading ? true : undefined}
-				className={[sx.className, className].filter(Boolean).join(" ")}
+				className={attrJoin(sx.className, className)}
 				style={sx.style}
 				{...props}>
 				{renderSlot(startSlot)}
@@ -133,7 +134,7 @@ export function Separator({ ref, children, className, style, ...props }: Breadcr
 		<li
 			ref={ref}
 			aria-hidden
-			className={[sx.className, className].filter(Boolean).join(" ")}
+			className={attrJoin(sx.className, className)}
 			style={sx.style}
 			{...props}>
 			{children ?? (

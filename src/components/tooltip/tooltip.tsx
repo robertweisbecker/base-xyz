@@ -5,6 +5,7 @@ import type { StyleXStyles } from "@stylexjs/stylex";
 import { zIndex } from "@/styles/constants.stylex";
 import { popupArrowStyles, popupPositionerStyles, popupViewportStyles } from "@/components/popover/popover.stylex";
 import { tooltipStyles } from "./tooltip.stylex";
+import { attrJoin } from "@/utils/attr-join";
 
 type StyledProps<T> = Omit<T, "className" | "style"> & {
 	className?: string;
@@ -31,7 +32,7 @@ function Positioner({ ref, className, style, sideOffset = 4, ...props }: Tooltip
 		<BaseTooltip.Positioner
 			ref={ref}
 			sideOffset={sideOffset}
-			className={[sxClassName, className].filter(Boolean).join(" ")}
+			className={attrJoin(sxClassName, className)}
 			style={sxStyle}
 			{...props}
 		/>
@@ -55,7 +56,7 @@ export function Popup({
 			<Positioner {...positionerProps}>
 				<BaseTooltip.Popup
 					ref={ref}
-					className={[sxClassName, className].filter(Boolean).join(" ")}
+					className={attrJoin(sxClassName, className)}
 					style={sxStyle}
 					{...props}>
 					{arrowProps ? <Arrow {...arrowProps} /> : null}
@@ -72,7 +73,7 @@ export function Viewport({ ref, className, style, ...props }: TooltipViewportPro
 	return (
 		<BaseTooltip.Viewport
 			ref={ref}
-			className={[sxClassName, "xyz-popup-viewport", className].filter(Boolean).join(" ")}
+			className={attrJoin(sxClassName, "xyz-popup-viewport", className)}
 			style={sxStyle}
 			{...props}
 		/>
@@ -94,7 +95,7 @@ export function Trigger({
 			ref={ref}
 			closeDelay={closeDelay}
 			delay={delay}
-			className={[sxClassName, className].filter(Boolean).join(" ") || undefined}
+			className={attrJoin(sxClassName, className) || undefined}
 			style={sxStyle}
 			{...props}
 		/>
@@ -113,7 +114,7 @@ function Arrow({ ref, className, style, ...props }: TooltipArrowProps) {
 	return (
 		<BaseTooltip.Arrow
 			ref={ref}
-			className={[sxClassName, className].filter(Boolean).join(" ")}
+			className={attrJoin(sxClassName, className)}
 			style={sxStyle}
 			{...props}
 		/>

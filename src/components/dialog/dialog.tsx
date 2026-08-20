@@ -10,6 +10,7 @@ import {
 } from "@/components/dialog/dialog.stylex";
 import { tokens } from "@/theme/tokens.stylex";
 import { CloseButton as CloseButtonControl } from "@/components/button/close-button";
+import { attrJoin } from "@/utils/attr-join";
 
 type StyledProps<T> = Omit<T, "className" | "style"> & {
 	className?: string;
@@ -43,7 +44,7 @@ function Backdrop({ ref, className, style, ...props }: DialogBackdropProps) {
 	return (
 		<BaseDialog.Backdrop
 			ref={ref}
-			className={[sxClassName, className].filter(Boolean).join(" ")}
+			className={attrJoin(sxClassName, className)}
 			style={sxStyle}
 			{...props}
 		/>
@@ -60,7 +61,7 @@ function Viewport({ ref, className, style, scrollBehavior = "popup", ...props }:
 	return (
 		<BaseDialog.Viewport
 			ref={ref}
-			className={[sxClassName, className].filter(Boolean).join(" ")}
+			className={attrJoin(sxClassName, className)}
 			style={sxStyle}
 			{...props}
 		/>
@@ -92,7 +93,7 @@ export function Popup({
 			<Viewport scrollBehavior={scrollBehavior} {...viewportProps}>
 				<BaseDialog.Popup
 					ref={ref}
-					className={[sxClassName, className].filter(Boolean).join(" ")}
+					className={attrJoin(sxClassName, className)}
 					style={sxStyle}
 					{...props}>
 					{children}
@@ -109,7 +110,7 @@ export function Title({ ref, className, style, ...props }: StyledProps<BaseDialo
 	return (
 		<BaseDialog.Title
 			ref={ref}
-			className={[sxClassName, className].filter(Boolean).join(" ")}
+			className={attrJoin(sxClassName, className)}
 			style={sxStyle}
 			{...props}
 		/>
@@ -122,7 +123,7 @@ export function Description({ ref, className, style, ...props }: StyledProps<Bas
 	return (
 		<BaseDialog.Description
 			ref={ref}
-			className={[sxClassName, className].filter(Boolean).join(" ")}
+			className={attrJoin(sxClassName, className)}
 			style={sxStyle}
 			{...props}
 		/>
@@ -132,19 +133,19 @@ export function Description({ ref, className, style, ...props }: StyledProps<Bas
 export function Header({ className, style, ...props }: StyledProps<ComponentProps<"div">>) {
 	const { className: sxClassName, style: sxStyle } = stylex.props(dialogParts.header, style);
 
-	return <div className={[sxClassName, className].filter(Boolean).join(" ")} style={sxStyle} {...props} />;
+	return <div className={attrJoin(sxClassName, className)} style={sxStyle} {...props} />;
 }
 
 export function Body({ className, style, ...props }: StyledProps<ComponentProps<"div">>) {
 	const { className: sxClassName, style: sxStyle } = stylex.props(modalTextStyles.body, dialogParts.body, style);
 
-	return <div className={[sxClassName, className].filter(Boolean).join(" ")} style={sxStyle} {...props} />;
+	return <div className={attrJoin(sxClassName, className)} style={sxStyle} {...props} />;
 }
 
 export function Footer({ className, style, ...props }: StyledProps<ComponentProps<"div">>) {
 	const { className: sxClassName, style: sxStyle } = stylex.props(modalTextStyles.footer, dialogParts.footer, style);
 
-	return <div className={[sxClassName, className].filter(Boolean).join(" ")} style={sxStyle} {...props} />;
+	return <div className={attrJoin(sxClassName, className)} style={sxStyle} {...props} />;
 }
 
 /** Unstyled close primitive for custom buttons and footer actions. */
@@ -154,7 +155,7 @@ export function Close({ ref, className, style, ...props }: DialogCloseProps) {
 	return (
 		<BaseDialog.Close
 			ref={ref}
-			className={[sxClassName, className].filter(Boolean).join(" ") || undefined}
+			className={attrJoin(sxClassName, className) || undefined}
 			style={sxStyle}
 			{...props}
 		/>

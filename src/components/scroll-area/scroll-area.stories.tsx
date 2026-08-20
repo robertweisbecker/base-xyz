@@ -1,5 +1,8 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import * as stylex from "@stylexjs/stylex";
+import { Box, Grid, Stack } from "@/components/layout/layout";
+import { Separator } from "@/components/separator/separator";
+import { Text } from "@/components/text/text";
 import { tokens } from "@/theme/tokens.stylex";
 import { ScrollArea } from "./scroll-area";
 
@@ -47,12 +50,14 @@ type Story = StoryObj<typeof meta>;
 
 export const Playground: Story = {
 	render: ({ disableFade, label, orientation, showScrollbar, size }) => (
-		<div
-			{...stylex.props(
-				styles.playgroundFrame,
-				orientation === "horizontal" && styles.playgroundFrameHorizontal,
-				orientation === "both" && styles.playgroundFrameBoth,
-			)}>
+		<Box
+			style={
+				orientation === "horizontal"
+					? styles.playgroundFrameHorizontal
+					: orientation === "both"
+						? styles.playgroundFrameBoth
+						: styles.playgroundFrame
+			}>
 			<ScrollArea
 				disableFade={disableFade}
 				label={label}
@@ -66,7 +71,9 @@ export const Playground: Story = {
 						{milestones.map((item) => (
 							<div key={item.label} {...stylex.props(styles.milestone)}>
 								<span>{item.label}</span>
-								<span {...stylex.props(styles.meta)}>{item.date}</span>
+								<Text color="muted" render={<span />} size="1">
+									{item.date}
+								</Text>
 							</div>
 						))}
 					</div>
@@ -83,13 +90,15 @@ export const Playground: Story = {
 						{items.map((item) => (
 							<div key={item.label} {...stylex.props(styles.listItem)}>
 								<span>{item.label}</span>
-								<span {...stylex.props(styles.meta)}>{item.status}</span>
+								<Text color="muted" render={<span />} size="1">
+									{item.status}
+								</Text>
 							</div>
 						))}
 					</div>
 				)}
 			</ScrollArea>
-		</div>
+		</Box>
 	),
 };
 
@@ -98,25 +107,31 @@ export const Orientations: Story = {
 		controls: { disable: true },
 	},
 	render: () => (
-		<div {...stylex.props(styles.orientationExamples)}>
-			<section {...stylex.props(styles.orientationExample)}>
-				<h3 {...stylex.props(styles.exampleHeading)}>Vertical</h3>
-				<div {...stylex.props(styles.verticalFrame)}>
+		<Stack gap={6} wrap="wrap" orientation="horizontal">
+			<Stack gap={2}>
+				<Text color="muted" size="1">
+					Vertical
+				</Text>
+				<Box style={styles.verticalFrame}>
 					<ScrollArea label="Recent prototypes" style={styles.surface} contentStyle={styles.padding}>
 						<div {...stylex.props(styles.list)}>
 							{items.map((item) => (
 								<div key={item.label} {...stylex.props(styles.listItem)}>
 									<span>{item.label}</span>
-									<span {...stylex.props(styles.meta)}>{item.status}</span>
+									<Text color="muted" render={<span />} size="1">
+										{item.status}
+									</Text>
 								</div>
 							))}
 						</div>
 					</ScrollArea>
-				</div>
-			</section>
-			<section {...stylex.props(styles.orientationExample)}>
-				<h3 {...stylex.props(styles.exampleHeading)}>Horizontal</h3>
-				<div {...stylex.props(styles.horizontalFrame)}>
+				</Box>
+			</Stack>
+			<Stack gap={2}>
+				<Text color="muted" size="1">
+					Horizontal
+				</Text>
+				<Box style={styles.horizontalFrame}>
 					<ScrollArea
 						label="Project milestones"
 						orientation="horizontal"
@@ -126,16 +141,20 @@ export const Orientations: Story = {
 							{milestones.map((item) => (
 								<div key={item.label} {...stylex.props(styles.milestone)}>
 									<span>{item.label}</span>
-									<span {...stylex.props(styles.meta)}>{item.date}</span>
+									<Text color="muted" render={<span />} size="1">
+										{item.date}
+									</Text>
 								</div>
 							))}
 						</div>
 					</ScrollArea>
-				</div>
-			</section>
-			<section {...stylex.props(styles.orientationExample)}>
-				<h3 {...stylex.props(styles.exampleHeading)}>Both axes</h3>
-				<div {...stylex.props(styles.bothFrame)}>
+				</Box>
+			</Stack>
+			<Stack gap={2}>
+				<Text color="muted" size="1">
+					Both axes
+				</Text>
+				<Box style={styles.bothFrame}>
 					<ScrollArea label="Planning board" orientation="both" style={styles.surface} contentStyle={styles.padding}>
 						<div {...stylex.props(styles.board)}>
 							{Array.from({ length: 48 }, (_, index) => (
@@ -145,9 +164,9 @@ export const Orientations: Story = {
 							))}
 						</div>
 					</ScrollArea>
-				</div>
-			</section>
-		</div>
+				</Box>
+			</Stack>
+		</Stack>
 	),
 };
 
@@ -167,14 +186,18 @@ export const Options: Story = {
 		controls: { disable: true },
 	},
 	render: () => (
-		<div {...stylex.props(styles.behaviorGroups)}>
-			<section {...stylex.props(styles.behaviorGroup)}>
-				<h2 {...stylex.props(styles.groupHeading)}>Scrollbar visibility</h2>
-				<div {...stylex.props(styles.behaviorExamples)}>
+		<Stack gap={8}>
+			<Stack gap={4}>
+				<Text color="muted" size="1">
+					Scrollbar visibility
+				</Text>
+				<Grid gap={6} style={styles.behaviorExamples}>
 					{scrollbarVisibilityModes.map((mode) => (
-						<div key={mode.value} {...stylex.props(styles.behaviorExample)}>
-							<h3 {...stylex.props(styles.exampleHeading)}>{mode.label}</h3>
-							<div {...stylex.props(styles.visibilityFrame)}>
+						<Stack gap={2} key={mode.value}>
+							<Text color="muted" size="1">
+								{mode.label}
+							</Text>
+							<Box style={styles.visibilityFrame}>
 								<ScrollArea
 									label={`${mode.label} scrollbar visibility`}
 									showScrollbar={mode.value}
@@ -184,23 +207,30 @@ export const Options: Story = {
 										{items.slice(0, 8).map((item) => (
 											<div key={item.label} {...stylex.props(styles.listItem)}>
 												<span>{item.label}</span>
-												<span {...stylex.props(styles.meta)}>{item.status}</span>
+												<Text color="muted" render={<span />} size="1">
+													{item.status}
+												</Text>
 											</div>
 										))}
 									</div>
 								</ScrollArea>
-							</div>
-						</div>
+							</Box>
+						</Stack>
 					))}
-				</div>
-			</section>
-			<section {...stylex.props(styles.behaviorGroup)}>
-				<h2 {...stylex.props(styles.groupHeading)}>Edge fade</h2>
-				<div {...stylex.props(styles.behaviorExamples)}>
+				</Grid>
+			</Stack>
+			<Separator />
+			<Stack gap={4}>
+				<Text color="muted" size="1">
+					Edge fade
+				</Text>
+				<Grid gap={6} style={styles.behaviorExamples}>
 					{fadeModes.map((mode) => (
-						<div key={mode.label} {...stylex.props(styles.behaviorExample)}>
-							<h3 {...stylex.props(styles.exampleHeading)}>{mode.label}</h3>
-							<div {...stylex.props(styles.fadeFrame)}>
+						<Stack gap={2} key={mode.label}>
+							<Text color="muted" size="1">
+								{mode.label}
+							</Text>
+							<Box style={styles.fadeFrame}>
 								<ScrollArea
 									label={mode.label}
 									disableFade={mode.disableFade}
@@ -210,17 +240,19 @@ export const Options: Story = {
 										{items.map((item) => (
 											<div key={item.label} {...stylex.props(styles.listItem)}>
 												<span>{item.label}</span>
-												<span {...stylex.props(styles.meta)}>{item.status}</span>
+												<Text color="muted" render={<span />} size="1">
+													{item.status}
+												</Text>
 											</div>
 										))}
 									</div>
 								</ScrollArea>
-							</div>
-						</div>
+							</Box>
+						</Stack>
 					))}
-				</div>
-			</section>
-		</div>
+				</Grid>
+			</Stack>
+		</Stack>
 	),
 };
 
@@ -249,55 +281,16 @@ const styles = stylex.create({
 		height: "280px",
 		maxWidth: "360px",
 	},
-	orientationExamples: {
-		gap: tokens["--space-6"],
-		display: "flex",
-		flexWrap: "wrap",
-	},
-	orientationExample: {
-		gap: tokens["--space-2"],
-		display: "grid",
-	},
 	visibilityFrame: {
 		height: "200px",
 		width: "280px",
 	},
-	behaviorGroups: {
-		gap: tokens["--space-8"],
-		display: "flex",
-		flexDirection: "column",
-	},
-	behaviorGroup: {
-		gap: tokens["--space-4"],
-		display: "flex",
-		flexDirection: "column",
-	},
 	behaviorExamples: {
-		gap: tokens["--space-6"],
-		display: "flex",
-		flexWrap: "wrap",
-	},
-	behaviorExample: {
-		gap: tokens["--space-2"],
-		display: "grid",
+		gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))",
 	},
 	fadeFrame: {
 		height: "220px",
 		width: "280px",
-	},
-	groupHeading: {
-		margin: 0,
-		fontSize: tokens["--font-size-4"],
-		fontWeight: tokens["--font-weight-semibold"],
-		letterSpacing: tokens["--letter-spacing-4"],
-		lineHeight: tokens["--line-height-4"],
-	},
-	exampleHeading: {
-		margin: 0,
-		fontSize: tokens["--font-size-2"],
-		fontWeight: tokens["--font-weight-medium"],
-		letterSpacing: tokens["--letter-spacing-2"],
-		lineHeight: tokens["--line-height-2"],
 	},
 	surface: {
 		borderRadius: tokens["--radius-md"],
@@ -344,12 +337,6 @@ const styles = stylex.create({
 		lineHeight: tokens["--line-height-2"],
 		minHeight: "76px",
 		width: "140px",
-	},
-	meta: {
-		color: tokens["--fg-muted"],
-		fontSize: tokens["--font-size-1"],
-		letterSpacing: tokens["--letter-spacing-1"],
-		lineHeight: tokens["--line-height-1"],
 	},
 	board: {
 		gap: tokens["--space-2"],

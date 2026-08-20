@@ -1,17 +1,13 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import * as stylex from "@stylexjs/stylex";
-import { tokens } from "@/theme/tokens.stylex";
+import { Box, Grid, Stack } from "@/components/layout/layout";
+import { Text } from "@/components/text/text";
 
 import { Button } from "@/components/button/button";
 import {
 	Card,
-	CardContent,
-	CardDescription,
-	CardFooter,
-	CardHeader,
-	CardTitle,
 	type CardRadius,
-	type CardProps,
+	type CardRootProps,
 	type CardSize,
 	type CardVariant,
 } from "./card";
@@ -19,9 +15,9 @@ import {
 const sizes = ["sm", "md", "lg"] as const;
 const radii = ["xxs", "xs", "sm", "md", "lg", "xl", "full"] as const;
 
-const meta: Meta<typeof Card> = {
+const meta = {
 	title: "Components/Card",
-	component: Card,
+	component: Card.Root,
 	args: {
 		radius: "lg",
 		shadow: undefined,
@@ -50,12 +46,12 @@ const meta: Meta<typeof Card> = {
 	},
 	decorators: [
 		(Story) => (
-			<div {...stylex.props(styles.frame)}>
+			<Box maxWidth="64rem">
 				<Story />
-			</div>
+			</Box>
 		),
 	],
-};
+} satisfies Meta<typeof Card.Root>;
 
 export default meta;
 type Story = StoryObj<typeof meta>;
@@ -69,19 +65,19 @@ export const Playground: Story = {
 export const HorizontalLayout: Story = {
 	parameters: { controls: { disable: true } },
 	render: () => (
-		<Card gap={0} orientation="horizontal" radius="lg">
-			<CardHeader gap={2} justify="center">
-				<CardTitle>Horizontal card</CardTitle>
-				<CardDescription>Uses scalar composition props without a dedicated variant.</CardDescription>
-			</CardHeader>
-			<CardContent flexGrow={1}>Content expands without a dedicated horizontal variant.</CardContent>
-			<CardFooter gap={2} justify="end">
+		<Card.Root gap={0} orientation="horizontal" radius="lg">
+			<Card.Header gap={2} justify="center">
+				<Card.Title>Horizontal card</Card.Title>
+				<Card.Description>Uses scalar composition props without a dedicated variant.</Card.Description>
+			</Card.Header>
+			<Card.Content flexGrow={1}>Content expands without a dedicated horizontal variant.</Card.Content>
+			<Card.Footer gap={2} justify="end">
 				<Button size="sm" variant="secondary">
 					Cancel
 				</Button>
 				<Button size="sm">Save</Button>
-			</CardFooter>
-		</Card>
+			</Card.Footer>
+		</Card.Root>
 	),
 };
 
@@ -90,14 +86,19 @@ export const Variants: Story = {
 		controls: { disable: true },
 	},
 	render: () => (
-		<div {...stylex.props(styles.cards)}>
+		<Grid
+			align="start"
+			gap={4}
+			style={styles.cards}>
 			{(["elevated", "outline"] as const).map((variant) => (
-				<div key={variant} {...stylex.props(styles.specimen)}>
-					<span {...stylex.props(styles.label)}>{variant}</span>
+				<Stack align="start" gap={2} key={variant}>
+					<Text size="1" color="muted">
+						{variant}
+					</Text>
 					<CardExample variant={variant} />
-				</div>
+				</Stack>
 			))}
-		</div>
+		</Grid>
 	),
 };
 
@@ -106,14 +107,19 @@ export const Sizes: Story = {
 		controls: { disable: true },
 	},
 	render: () => (
-		<div {...stylex.props(styles.cards)}>
+		<Grid
+			align="start"
+			gap={4}
+			style={styles.cards}>
 			{sizes.map((size) => (
-				<div key={size} {...stylex.props(styles.specimen)}>
-					<span {...stylex.props(styles.label)}>{size}</span>
+				<Stack align="start" gap={2} key={size}>
+					<Text size="1" color="muted">
+						{size}
+					</Text>
 					<CardExample size={size} variant="elevated" />
-				</div>
+				</Stack>
 			))}
-		</div>
+		</Grid>
 	),
 };
 
@@ -124,47 +130,29 @@ function CardExample({
 	variant,
 }: {
 	radius?: CardRadius;
-	shadow?: CardProps["shadow"];
+	shadow?: CardRootProps["shadow"];
 	size?: CardSize;
 	variant: CardVariant;
 }) {
 	return (
-		<Card radius={radius} shadow={shadow} size={size} variant={variant}>
-			<CardHeader>
-				<CardTitle>Team workspace</CardTitle>
-				<CardDescription>Invite collaborators and organize shared project files.</CardDescription>
-			</CardHeader>
-			<CardContent>
-				<p {...stylex.props(styles.copy)}>Your workspace currently has three active members and twelve projects.</p>
-			</CardContent>
-			<CardFooter>
+		<Card.Root radius={radius} shadow={shadow} size={size} variant={variant}>
+			<Card.Header>
+				<Card.Title>Team workspace</Card.Title>
+				<Card.Description>Invite collaborators and organize shared project files.</Card.Description>
+			</Card.Header>
+			<Card.Content>
+				<Text>Your workspace currently has three active members and twelve projects.</Text>
+			</Card.Content>
+			<Card.Footer>
 				<Button variant="ghost">View members</Button>
 				<Button>Invite member</Button>
-			</CardFooter>
-		</Card>
+			</Card.Footer>
+		</Card.Root>
 	);
 }
 
 const styles = stylex.create({
-	frame: { maxWidth: "64rem" },
 	cards: {
-		gap: tokens["--space-4"],
-		alignItems: "start",
-		display: "grid",
 		gridTemplateColumns: "repeat(auto-fit, minmax(min(16rem, 100%), 1fr))",
-	},
-	specimen: {
-		gap: tokens["--space-2"],
-		display: "flex",
-		flexDirection: "column",
-	},
-	label: {
-		color: tokens["--fg-muted"],
-		fontSize: tokens["--font-size-1"],
-		letterSpacing: tokens["--letter-spacing-1"],
-		lineHeight: tokens["--line-height-1"],
-	},
-	copy: {
-		margin: 0,
 	},
 });

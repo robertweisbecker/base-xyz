@@ -1,11 +1,12 @@
 import { ChatCircleDotsIcon } from "@phosphor-icons/react/dist/csr/ChatCircleDots";
 import { GitPullRequestIcon } from "@phosphor-icons/react/dist/csr/GitPullRequest";
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import * as stylex from "@stylexjs/stylex";
 import { Badge, Code, Button, Checkbox, CodeBlock, Collapsible, Separator } from "@/components";
-import { tokens } from "@/theme/tokens.stylex";
+import { Stack } from "@/components/layout/layout";
+import { Text } from "@/components/text/text";
 
 import { AgentActionApproval } from "./agent-action-approval";
+
 const meta = {
 	title: "Blocks/Agent action approval",
 	component: AgentActionApproval.Root,
@@ -19,7 +20,7 @@ type Story = StoryObj;
 
 export const Examples: Story = {
 	render: () => (
-		<div {...stylex.props(storyParts.list)}>
+		<Stack gap={8}>
 			<Example title="Message approval">
 				<AgentActionApproval.Root>
 					<AgentActionApproval.Header>
@@ -144,36 +145,17 @@ export const Examples: Story = {
 					</AgentActionApproval.Footer>
 				</AgentActionApproval.Root>
 			</Example>
-		</div>
+		</Stack>
 	),
 };
 
 function Example({ children, title }: { children: React.ReactNode; title: string }) {
 	return (
-		<section {...stylex.props(storyParts.example)}>
-			<h2 {...stylex.props(storyParts.heading)}>{title}</h2>
+		<Stack gap={3}>
+			<Text size="1" color="muted">
+				{title}
+			</Text>
 			{children}
-		</section>
+		</Stack>
 	);
 }
-
-const storyParts = stylex.create({
-	list: {
-		gap: tokens["--space-8"],
-		display: "flex",
-		flexDirection: "column",
-	},
-	example: {
-		gap: tokens["--space-3"],
-		display: "flex",
-		flexDirection: "column",
-	},
-	heading: {
-		margin: 0,
-		color: tokens["--fg-muted"],
-		fontSize: tokens["--font-size-1"],
-		fontWeight: tokens["--font-weight-regular"],
-		letterSpacing: tokens["--letter-spacing-1"],
-		lineHeight: tokens["--line-height-1"],
-	},
-});

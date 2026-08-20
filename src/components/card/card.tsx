@@ -12,14 +12,13 @@ import {
 } from "@/theme/theme-props-layout.stylex";
 import { spacingThemeProps } from "@/theme/theme-props-spacing.stylex";
 import { radiusThemeProps, shadowThemeProps } from "@/theme/theme-props-surface.stylex";
-import type {
-	RadiusValue,
-} from "@/theme/theme-props.types";
+import type { RadiusValue } from "@/theme/theme-props.types";
 import { tokens } from "@/theme/tokens.stylex";
 
 import { Heading, type HeadingProps } from "@/components/heading/heading";
 import { Text, type TextProps } from "@/components/text/text";
 import { cardVars } from "./card-vars.stylex";
+import { attrJoin } from "@/utils/attr-join";
 
 type StyledProps<T, ThemeProps = {}> = Omit<
 	T,
@@ -58,7 +57,7 @@ type CardHeaderThemeProps = ThemePropsOf<typeof cardHeaderThemeProps>;
 type CardFooterThemeProps = ThemePropsOf<typeof cardFooterThemeProps>;
 type CardContentThemeProps = ThemePropsOf<typeof cardContentThemeProps>;
 
-export type CardProps = StyledProps<ComponentProps<"div">, CardThemeProps> & {
+export type CardRootProps = StyledProps<ComponentProps<"div">, CardThemeProps> & {
 	size?: CardSize;
 	variant?: CardVariant;
 };
@@ -68,40 +67,40 @@ export type CardContentProps = StyledProps<ComponentProps<"div">, CardContentThe
 export type CardTitleProps = HeadingProps;
 export type CardDescriptionProps = TextProps;
 
-export function Card({ className, radius = "lg", size = "md", style, variant = "elevated", ...props }: CardProps) {
+export function Root({ className, radius = "lg", size = "md", style, variant = "elevated", ...props }: CardRootProps) {
 	const { restProps, styles } = resolveThemeProps({ ...props, radius }, cardThemeProps);
 	const sx = stylex.props(cardParts.root, cardSizeVariants[size], cardVariants[variant], ...styles, style);
 
-	return <div className={[sx.className, className].filter(Boolean).join(" ")} style={sx.style} {...restProps} />;
+	return <div className={attrJoin(sx.className, className)} style={sx.style} {...restProps} />;
 }
 
-export function CardHeader({ className, style, ...props }: CardHeaderProps) {
+export function Header({ className, style, ...props }: CardHeaderProps) {
 	const { restProps, styles } = resolveThemeProps(props, cardHeaderThemeProps);
 	const sx = stylex.props(cardParts.header, ...styles, style);
 
-	return <div className={[sx.className, className].filter(Boolean).join(" ")} style={sx.style} {...restProps} />;
+	return <div className={attrJoin(sx.className, className)} style={sx.style} {...restProps} />;
 }
 
-export function CardTitle(props: CardTitleProps) {
+export function Title(props: CardTitleProps) {
 	return <Heading render={<h3 />} size="3" {...props} />;
 }
 
-export function CardDescription(props: CardDescriptionProps) {
+export function Description(props: CardDescriptionProps) {
 	return <Text size="2" color="muted" {...props} />;
 }
 
-export function CardContent({ className, style, ...props }: CardContentProps) {
+export function Content({ className, style, ...props }: CardContentProps) {
 	const { restProps, styles } = resolveThemeProps(props, cardContentThemeProps);
 	const sx = stylex.props(cardParts.content, ...styles, style);
 
-	return <div className={[sx.className, className].filter(Boolean).join(" ")} style={sx.style} {...restProps} />;
+	return <div className={attrJoin(sx.className, className)} style={sx.style} {...restProps} />;
 }
 
-export function CardFooter({ className, style, ...props }: CardFooterProps) {
+export function Footer({ className, style, ...props }: CardFooterProps) {
 	const { restProps, styles } = resolveThemeProps(props, cardFooterThemeProps);
 	const sx = stylex.props(cardParts.footer, ...styles, style);
 
-	return <div className={[sx.className, className].filter(Boolean).join(" ")} style={sx.style} {...restProps} />;
+	return <div className={attrJoin(sx.className, className)} style={sx.style} {...restProps} />;
 }
 
 const cardParts = stylex.create({
@@ -115,9 +114,10 @@ const cardParts = stylex.create({
 	},
 	header: {
 		gap: cardVars.headerGap,
-		paddingInline: cardVars.headerPaddingInline,
 		display: "flex",
 		flexDirection: "column",
+		paddingInline: cardVars.headerPaddingInline,
+		paddingInlineEnd: cardVars.headerPaddingBlock,
 		paddingBlockEnd: `calc(${cardVars.headerPaddingBlock} / 1.5)`,
 		paddingBlockStart: cardVars.headerPaddingBlock,
 	},
@@ -183,7 +183,7 @@ const cardVariants = stylex.create({
 	elevated: {
 		borderWidth: 0,
 		backgroundColor: tokens["--panel"],
-		boxShadow: tokens["--shadow-md"],
+		boxShadow: tokens["--shadow-sm"],
 	},
 	outline: {
 		borderColor: tokens["--border"],
@@ -193,3 +193,12 @@ const cardVariants = stylex.create({
 		boxShadow: "none",
 	},
 });
+
+export const Card = {
+	Root,
+	Header,
+	Title,
+	Description,
+	Content,
+	Footer,
+} as const;

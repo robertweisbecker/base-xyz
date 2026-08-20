@@ -3,9 +3,10 @@ import { GearIcon } from "@phosphor-icons/react/dist/csr/Gear";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import * as stylex from "@stylexjs/stylex";
 import type { ReactNode } from "react";
+import { Box, Grid, Stack } from "@/components/layout/layout";
 import { Text } from "@/components/text/text";
-import { tokens } from "@/theme/tokens.stylex";
 import { Tabs, type TabsSize } from "./tabs";
+
 const iconOptions = {
 	None: undefined,
 	Folder: <FolderSimpleIcon aria-hidden weight="duotone" />,
@@ -69,9 +70,9 @@ const meta = {
 	},
 	decorators: [
 		(Story) => (
-			<div {...stylex.props(storyStyles.frame)}>
+			<Box maxWidth="48rem" width="100%">
 				<Story />
-			</div>
+			</Box>
 		),
 	],
 } satisfies Meta<TabsPlaygroundArgs>;
@@ -86,9 +87,9 @@ export const Playground: Story = {
 export const Sizes: Story = {
 	parameters: { controls: { disable: true } },
 	render: () => (
-		<div {...stylex.props(storyStyles.stack)}>
+		<Stack gap={6}>
 			{(["sm", "md", "lg"] as const).map((size) => (
-				<section key={size} {...stylex.props(storyStyles.section)}>
+				<Stack key={size} gap={2} minWidth={0}>
 					<Text color="muted" size="1">
 						{size === "sm" ? "Small" : size === "md" ? "Medium" : "Large"}
 					</Text>
@@ -99,29 +100,29 @@ export const Sizes: Story = {
 							<Tabs.Tab value="account">Account</Tabs.Tab>
 						</Tabs.List>
 					</Tabs.Root>
-				</section>
+				</Stack>
 			))}
-		</div>
+		</Stack>
 	),
 };
 
 export const Orientations: Story = {
 	parameters: { controls: { disable: true } },
 	render: () => (
-		<div {...stylex.props(storyStyles.orientationGrid)}>
-			<section {...stylex.props(storyStyles.section)}>
+		<Grid gap={8} style={storyStyles.orientationGrid}>
+			<Stack gap={2} minWidth={0}>
 				<Text color="muted" size="1">
 					Horizontal
 				</Text>
 				<ExampleTabs />
-			</section>
-			<section {...stylex.props(storyStyles.section)}>
+			</Stack>
+			<Stack gap={2} minWidth={0}>
 				<Text color="muted" size="1">
 					Vertical
 				</Text>
 				<ExampleTabs orientation="vertical" />
-			</section>
-		</div>
+			</Stack>
+		</Grid>
 	),
 };
 
@@ -184,24 +185,7 @@ function ExampleTabs({
 }
 
 const storyStyles = stylex.create({
-	frame: {
-		maxWidth: "48rem",
-		width: "100%",
-	},
-	stack: {
-		gap: tokens["--space-6"],
-		display: "flex",
-		flexDirection: "column",
-	},
-	section: {
-		gap: tokens["--space-2"],
-		display: "flex",
-		flexDirection: "column",
-		minWidth: 0,
-	},
 	orientationGrid: {
-		gap: tokens["--space-8"],
-		display: "grid",
 		gridTemplateColumns: "repeat(auto-fit, minmax(18rem, 1fr))",
 	},
 });

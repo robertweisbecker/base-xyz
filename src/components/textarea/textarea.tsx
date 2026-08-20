@@ -64,7 +64,7 @@ export function Textarea({
 
 	return (
 		<Field.Root
-			className={[rootSx.className, className].filter(Boolean).join(" ")}
+			className={attrJoin(rootSx.className, className)}
 			style={rootSx.style}
 			disabled={disabled}
 			invalid={Boolean(error)}

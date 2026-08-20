@@ -1,7 +1,8 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import * as stylex from "@stylexjs/stylex";
 import type { ReactNode } from "react";
-import { tokens } from "@/theme/tokens.stylex";
+import { Box, Grid, Stack } from "@/components/layout";
+import { Text } from "@/components/text/text";
 
 import { NumberField } from "./number-field";
 
@@ -68,12 +69,12 @@ type Story = StoryObj<typeof meta>;
 
 export const Playground: Story = {
 	render: (args) => (
-		<div {...stylex.props(styles.frame)}>
+		<Box maxWidth="320px">
 			<NumberField
-				key={`${args.defaultValue}-${args.disabled}-${args.error}-${args.readOnly}-${args.size}-${args.width}`}
+				key={`${args.defaultValue}-${args.disabled}-${args.error}-${args.readOnly}-${args.size}-${args.inputWidth}`}
 				{...args}
 			/>
-		</div>
+		</Box>
 	),
 };
 
@@ -82,7 +83,7 @@ export const Formatting: Story = {
 		controls: { disable: true },
 	},
 	render: () => (
-		<div {...stylex.props(styles.row)}>
+		<Stack gap={8} maxWidth="680px" orientation="horizontal" wrap="wrap">
 			<NumberField
 				label="Budget"
 				defaultValue={1250}
@@ -100,7 +101,7 @@ export const Formatting: Story = {
 				format={{ style: "percent" }}
 				inputWidth="10rem"
 			/>
-		</div>
+		</Stack>
 	),
 };
 
@@ -109,11 +110,11 @@ export const Sizes: Story = {
 		controls: { disable: true },
 	},
 	render: () => (
-		<div {...stylex.props(styles.row)}>
+		<Stack gap={8} maxWidth="680px" orientation="horizontal" wrap="wrap">
 			<NumberField label="Small" defaultValue={8} size="sm" inputWidth="8rem" />
 			<NumberField label="Medium" defaultValue={8} size="md" inputWidth="8rem" />
 			<NumberField label="Large" defaultValue={8} size="lg" inputWidth="8rem" />
-		</div>
+		</Stack>
 	),
 };
 
@@ -122,7 +123,7 @@ export const States: Story = {
 		controls: { disable: true },
 	},
 	render: () => (
-		<div {...stylex.props(styles.stateGrid)}>
+		<Grid columns={2} gap={8} maxWidth="700px" style={styles.stateGrid}>
 			<StateSpecimen label="Empty">
 				<NumberField label="Seats" min={1} max={100} />
 			</StateSpecimen>
@@ -147,49 +148,26 @@ export const States: Story = {
 			<StateSpecimen label="Disabled">
 				<NumberField label="Seats" defaultValue={8} disabled />
 			</StateSpecimen>
-		</div>
+		</Grid>
 	),
 };
 
 function StateSpecimen({ children, label }: { children: ReactNode; label: string }) {
 	return (
-		<section {...stylex.props(styles.stateSpecimen)}>
-			<h2 {...stylex.props(styles.stateTitle)}>{label}</h2>
+		<Stack gap={3}>
+			<Text color="muted" size="1">
+				{label}
+			</Text>
 			{children}
-		</section>
+		</Stack>
 	);
 }
 
 const styles = stylex.create({
-	frame: {
-		maxWidth: "320px",
-	},
-	row: {
-		gap: tokens["--space-8"],
-		display: "flex",
-		flexWrap: "wrap",
-		maxWidth: "680px",
-	},
 	stateGrid: {
-		gap: tokens["--space-8"],
-		display: "grid",
 		gridTemplateColumns: {
 			default: "repeat(2, minmax(0, 1fr))",
 			"@media (max-width: 680px)": "1fr",
 		},
-		maxWidth: "700px",
-	},
-	stateSpecimen: {
-		gap: tokens["--space-3"],
-		display: "flex",
-		flexDirection: "column",
-	},
-	stateTitle: {
-		margin: 0,
-		color: tokens["--fg-muted"],
-		fontSize: tokens["--font-size-1"],
-		fontWeight: tokens["--font-weight-regular"],
-		letterSpacing: tokens["--letter-spacing-1"],
-		lineHeight: tokens["--line-height-1"],
 	},
 });

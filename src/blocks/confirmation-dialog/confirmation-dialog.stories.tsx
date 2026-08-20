@@ -1,11 +1,12 @@
 import { PaperPlaneTiltIcon } from "@phosphor-icons/react/dist/csr/PaperPlaneTilt";
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import * as stylex from "@stylexjs/stylex";
 import { StrictMode, useState, type ComponentProps, type ReactElement } from "react";
 import { Button, Checkbox, Separator } from "@/components";
-import { tokens } from "@/theme/tokens.stylex";
+import { Stack } from "@/components/layout/layout";
+import { Text } from "@/components/text/text";
 
 import { ConfirmationDialog, type ConfirmationDialogSuccessToast } from "./confirmation-dialog";
+
 const meta = {
 	title: "Blocks/Confirmation dialog",
 	component: ConfirmationDialog.Root,
@@ -24,7 +25,7 @@ const reviewItems = Array.from({ length: 28 }, (_, index) => ({
 
 export const Examples: Story = {
 	render: () => (
-		<div {...stylex.props(storyParts.list)}>
+		<Stack gap={8}>
 			<Example title="Default">
 				<ConfirmationDialog.Root
 					trigger={<Button>Publish project</Button>}
@@ -127,14 +128,18 @@ export const Examples: Story = {
 						</ConfirmationDialog.Description>
 					</ConfirmationDialog.Header>
 					<ConfirmationDialog.Body label="Project milestone status">
-						<div {...stylex.props(storyParts.reviewList)}>
+						<Stack gap={3}>
 							{reviewItems.map((item) => (
-								<div key={item.label} {...stylex.props(storyParts.reviewItem)}>
-									<span {...stylex.props(storyParts.reviewLabel)}>{item.label}</span>
-									<span {...stylex.props(storyParts.reviewStatus)}>{item.status}</span>
-								</div>
+								<Stack key={item.label} align="center" gap={4} justify="space-between" orientation="horizontal">
+									<Text size="2" fontWeight="medium">
+										{item.label}
+									</Text>
+									<Text size="1" color="muted">
+										{item.status}
+									</Text>
+								</Stack>
 							))}
-						</div>
+						</Stack>
 					</ConfirmationDialog.Body>
 					<ConfirmationDialog.Footer>
 						<ConfirmationDialog.Actions>
@@ -144,7 +149,7 @@ export const Examples: Story = {
 					</ConfirmationDialog.Footer>
 				</ConfirmationDialog.Root>
 			</Example>
-		</div>
+		</Stack>
 	),
 };
 
@@ -171,9 +176,9 @@ function AsyncSettlementFixture() {
 	}
 
 	return (
-		<div>
-			<p data-testid="confirmation-operation-count">{operationCount}</p>
-			<p data-testid="confirmation-error-count">{errorCount}</p>
+		<Stack gap={3}>
+			<Text data-testid="confirmation-operation-count">{operationCount}</Text>
+			<Text data-testid="confirmation-error-count">{errorCount}</Text>
 			<AsyncSettlementDialog
 				trigger={<Button>Resolve async action</Button>}
 				confirmLabel="Confirm resolve async action"
@@ -194,7 +199,7 @@ function AsyncSettlementFixture() {
 				onConfirmClick={(event) => event.preventDefault()}
 				successToast={{ title: "Prevented action completed" }}
 			/>
-		</div>
+		</Stack>
 	);
 }
 
@@ -245,55 +250,11 @@ function settleAfterDelay() {
 
 function Example({ children, title }: { children: React.ReactNode; title: string }) {
 	return (
-		<section {...stylex.props(storyParts.example)}>
-			<h2 {...stylex.props(storyParts.heading)}>{title}</h2>
+		<Stack align="start" gap={3}>
+			<Text size="1" color="muted">
+				{title}
+			</Text>
 			{children}
-		</section>
+		</Stack>
 	);
 }
-
-const storyParts = stylex.create({
-	list: {
-		gap: tokens["--space-8"],
-		display: "flex",
-		flexDirection: "column",
-	},
-	example: {
-		gap: tokens["--space-3"],
-		alignItems: "flex-start",
-		display: "flex",
-		flexDirection: "column",
-	},
-	heading: {
-		margin: 0,
-		color: tokens["--fg-muted"],
-		fontSize: tokens["--font-size-1"],
-		fontWeight: tokens["--font-weight-regular"],
-		letterSpacing: tokens["--letter-spacing-1"],
-		lineHeight: tokens["--line-height-1"],
-	},
-	reviewList: {
-		gap: tokens["--space-3"],
-		display: "flex",
-		flexDirection: "column",
-	},
-	reviewItem: {
-		gap: tokens["--space-4"],
-		alignItems: "center",
-		display: "flex",
-		justifyContent: "space-between",
-	},
-	reviewLabel: {
-		color: tokens["--fg"],
-		fontSize: tokens["--font-size-2"],
-		fontWeight: tokens["--font-weight-medium"],
-		letterSpacing: tokens["--letter-spacing-2"],
-		lineHeight: tokens["--line-height-2"],
-	},
-	reviewStatus: {
-		color: tokens["--fg-muted"],
-		fontSize: tokens["--font-size-1"],
-		letterSpacing: tokens["--letter-spacing-1"],
-		lineHeight: tokens["--line-height-1"],
-	},
-});

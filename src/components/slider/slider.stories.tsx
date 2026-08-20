@@ -8,9 +8,9 @@ import type { Meta, StoryObj } from "@storybook/react-vite";
 import * as stylex from "@stylexjs/stylex";
 import { useState } from "react";
 import { IconButton } from "@/components/button/button";
+import { Box, Grid, Stack } from "@/components/layout/layout";
 import { NumberField } from "@/components/number-field/number-field";
 import { Text } from "@/components/text/text";
-import { textStyles } from "@/components/text/text.stylex";
 import { Toggle } from "@/components/toggle/toggle";
 import { tokens } from "@/theme/tokens.stylex";
 import { Slider, type SliderRootProps } from "./slider";
@@ -82,9 +82,9 @@ const meta = {
 	},
 	decorators: [
 		(Story) => (
-			<div {...stylex.props(styles.frame)}>
+			<Box style={styles.frame}>
 				<Story />
-			</div>
+			</Box>
 		),
 	],
 } satisfies Meta<PlaygroundArgs>;
@@ -112,8 +112,8 @@ export const Playground: Story = {
 export const MarkerDensity: Story = {
 	parameters: { controls: { disable: true } },
 	render: () => (
-		<div {...stylex.props(styles.story)}>
-			<div data-testid="dense-slider">
+		<Stack gap={8}>
+			<Box data-testid="dense-slider">
 				<Slider.Root max={1} min={0} step={0.01}>
 					<Slider.Header>
 						<Slider.Label>Dense range</Slider.Label>
@@ -124,8 +124,8 @@ export const MarkerDensity: Story = {
 						</Slider.Control>
 					</Slider.Row>
 				</Slider.Root>
-			</div>
-			<div data-testid="normal-slider">
+			</Box>
+			<Box data-testid="normal-slider">
 				<Slider.Root max={100} min={0} step={10}>
 					<Slider.Header>
 						<Slider.Label>Normal range</Slider.Label>
@@ -136,15 +136,15 @@ export const MarkerDensity: Story = {
 						</Slider.Control>
 					</Slider.Row>
 				</Slider.Root>
-			</div>
-		</div>
+			</Box>
+		</Stack>
 	),
 };
 
 export const Sizes: Story = {
 	parameters: { controls: { disable: true } },
 	render: () => (
-		<section {...stylex.props(styles.section)}>
+		<Stack gap={3}>
 			<Slider.Root defaultValue={60} size="sm" step={10}>
 				<Slider.Header>
 					<Slider.Label>Small</Slider.Label>
@@ -172,16 +172,18 @@ export const Sizes: Story = {
 					<BasicControl markers />
 				</Slider.Row>
 			</Slider.Root>
-		</section>
+		</Stack>
 	),
 };
 
 export const Options: Story = {
 	parameters: { controls: { disable: true } },
 	render: () => (
-		<div {...stylex.props(styles.story)}>
-			<section {...stylex.props(styles.section)}>
-				<h2 {...stylex.props(textStyles.supporting, styles.heading)}>Value beside label</h2>
+		<Stack gap={8}>
+			<Stack gap={3}>
+				<Text color="muted" size="1">
+					Value beside label
+				</Text>
 				<Slider.Root defaultValue={45} step={5}>
 					<Slider.Header>
 						<Slider.Label>Brightness</Slider.Label>
@@ -191,9 +193,11 @@ export const Options: Story = {
 						<BasicControl />
 					</Slider.Row>
 				</Slider.Root>
-			</section>
-			<section {...stylex.props(styles.section)}>
-				<h2 {...stylex.props(textStyles.supporting, styles.heading)}>Value beside slider</h2>
+			</Stack>
+			<Stack gap={3}>
+				<Text color="muted" size="1">
+					Value beside slider
+				</Text>
 				<Slider.Root defaultValue={7} min={0} max={10} step={1}>
 					<Slider.Header>
 						<Slider.Label>Intensity</Slider.Label>
@@ -203,9 +207,11 @@ export const Options: Story = {
 						<Slider.Value />
 					</Slider.Row>
 				</Slider.Root>
-			</section>
-			<section {...stylex.props(styles.section)}>
-				<h2 {...stylex.props(textStyles.supporting, styles.heading)}>Custom side content</h2>
+			</Stack>
+			<Stack gap={3}>
+				<Text color="muted" size="1">
+					Custom side content
+				</Text>
 				<Slider.Root defaultValue={70} step={5}>
 					<Slider.Header>
 						<Slider.Label>Output volume</Slider.Label>
@@ -216,8 +222,8 @@ export const Options: Story = {
 						<SpeakerHighIcon aria-hidden {...stylex.props(styles.sideIcon)} />
 					</Slider.Row>
 				</Slider.Root>
-			</section>
-		</div>
+			</Stack>
+		</Stack>
 	),
 };
 
@@ -253,9 +259,11 @@ export const Controlled: Story = {
 export const Orientations: Story = {
 	parameters: { controls: { disable: true } },
 	render: () => (
-		<div {...stylex.props(styles.orientationGrid)}>
-			<section {...stylex.props(styles.section)}>
-				<h2 {...stylex.props(textStyles.supporting, styles.heading)}>Horizontal</h2>
+		<Grid gap={12} style={styles.orientationGrid}>
+			<Stack gap={3}>
+				<Text color="muted" size="1">
+					Horizontal
+				</Text>
 				<Slider.Root defaultValue={60} step={10}>
 					<Slider.Header>
 						<Slider.Label>Horizontal value</Slider.Label>
@@ -265,9 +273,11 @@ export const Orientations: Story = {
 						<BasicControl markers />
 					</Slider.Row>
 				</Slider.Root>
-			</section>
-			<section {...stylex.props(styles.verticalSection)}>
-				<h2 {...stylex.props(textStyles.supporting, styles.heading)}>Vertical</h2>
+			</Stack>
+			<Stack align="center" gap={3}>
+				<Text color="muted" size="1">
+					Vertical
+				</Text>
 				<Slider.Root defaultValue={40} orientation="vertical" step={10} style={styles.verticalRoot}>
 					<Slider.Header>
 						<Slider.Label>Vertical value</Slider.Label>
@@ -277,17 +287,19 @@ export const Orientations: Story = {
 						<BasicControl markers />
 					</Slider.Row>
 				</Slider.Root>
-			</section>
-		</div>
+			</Stack>
+		</Grid>
 	),
 };
 
 export const States: Story = {
 	parameters: { controls: { disable: true } },
 	render: () => (
-		<div {...stylex.props(styles.story)}>
-			<section {...stylex.props(styles.section)}>
-				<h2 {...stylex.props(textStyles.supporting, styles.heading)}>Default</h2>
+		<Stack gap={8}>
+			<Stack gap={3}>
+				<Text color="muted" size="1">
+					Default
+				</Text>
 				<Slider.Root defaultValue={35} step={5}>
 					<Slider.Header>
 						<Slider.Label>Interactive</Slider.Label>
@@ -297,9 +309,11 @@ export const States: Story = {
 						<BasicControl markers markerEvery={2} />
 					</Slider.Row>
 				</Slider.Root>
-			</section>
-			<section {...stylex.props(styles.section)}>
-				<h2 {...stylex.props(textStyles.supporting, styles.heading)}>Invalid</h2>
+			</Stack>
+			<Stack gap={3}>
+				<Text color="muted" size="1">
+					Invalid
+				</Text>
 				<BaseField.Root invalid>
 					<Slider.Root defaultValue={50} step={5}>
 						<Slider.Header>
@@ -311,9 +325,11 @@ export const States: Story = {
 						</Slider.Row>
 					</Slider.Root>
 				</BaseField.Root>
-			</section>
-			<section {...stylex.props(styles.section)}>
-				<h2 {...stylex.props(textStyles.supporting, styles.heading)}>Disabled</h2>
+			</Stack>
+			<Stack gap={3}>
+				<Text color="muted" size="1">
+					Disabled
+				</Text>
 				<Slider.Root defaultValue={65} disabled step={5}>
 					<Slider.Header>
 						<Slider.Label>Unavailable</Slider.Label>
@@ -323,8 +339,8 @@ export const States: Story = {
 						<BasicControl markers markerEvery={2} />
 					</Slider.Row>
 				</Slider.Root>
-			</section>
-		</div>
+			</Stack>
+		</Stack>
 	),
 };
 
@@ -345,9 +361,11 @@ function ControlledExamples() {
 	const [incrementValue, setIncrementValue] = useState(50);
 
 	return (
-		<div {...stylex.props(styles.story)}>
-			<section {...stylex.props(styles.section)}>
-				<h2 {...stylex.props(textStyles.supporting, styles.heading)}>Number input</h2>
+		<Stack gap={8}>
+			<Stack gap={3}>
+				<Text color="muted" size="1">
+					Number input
+				</Text>
 				<Slider.Root max={max} min={min} onValueChange={setNumberValue} step={step} value={numberValue}>
 					<Slider.Header>
 						<Slider.Label>Opacity</Slider.Label>
@@ -368,10 +386,12 @@ function ControlledExamples() {
 						/>
 					</Slider.Row>
 				</Slider.Root>
-			</section>
+			</Stack>
 
-			<section {...stylex.props(styles.section)}>
-				<h2 {...stylex.props(textStyles.supporting, styles.heading)}>Minimum and maximum presets</h2>
+			<Stack gap={3}>
+				<Text color="muted" size="1">
+					Minimum and maximum presets
+				</Text>
 				<Slider.Root max={max} min={min} onValueChange={setPresetValue} step={step} value={presetValue}>
 					<Slider.Header>
 						<Slider.Label>Volume</Slider.Label>
@@ -400,10 +420,12 @@ function ControlledExamples() {
 						/>
 					</Slider.Row>
 				</Slider.Root>
-			</section>
+			</Stack>
 
-			<section {...stylex.props(styles.section)}>
-				<h2 {...stylex.props(textStyles.supporting, styles.heading)}>Increment buttons</h2>
+			<Stack gap={3}>
+				<Text color="muted" size="1">
+					Increment buttons
+				</Text>
 				<Slider.Root max={max} min={min} onValueChange={setIncrementValue} step={step} value={incrementValue}>
 					<Slider.Header>
 						<Slider.Label>Zoom</Slider.Label>
@@ -435,8 +457,8 @@ function ControlledExamples() {
 						/>
 					</Slider.Row>
 				</Slider.Root>
-			</section>
-		</div>
+			</Stack>
+		</Stack>
 	);
 }
 
@@ -454,20 +476,6 @@ function getMarkerFactor(increment: number, step = 1) {
 
 const styles = stylex.create({
 	frame: { maxWidth: "28rem" },
-	story: {
-		gap: tokens["--space-8"],
-		display: "flex",
-		flexDirection: "column",
-	},
-	section: {
-		gap: tokens["--space-3"],
-		display: "flex",
-		flexDirection: "column",
-	},
-	heading: {
-		margin: 0,
-		color: tokens["--fg-muted"],
-	},
 	sideIcon: {
 		flex: "none",
 		color: tokens["--fg-muted"],
@@ -475,15 +483,7 @@ const styles = stylex.create({
 		width: tokens["--space-5"],
 	},
 	orientationGrid: {
-		gap: tokens["--space-12"],
-		display: "grid",
 		gridTemplateColumns: "minmax(0, 1fr) auto",
-	},
-	verticalSection: {
-		gap: tokens["--space-3"],
-		alignItems: "center",
-		display: "flex",
-		flexDirection: "column",
 	},
 	verticalRoot: {
 		width: "max-content",

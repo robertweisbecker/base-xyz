@@ -9,6 +9,7 @@ import { media } from "@/styles/constants.stylex";
 import { Button } from "@/components/button/button";
 import { fieldStyles, fieldTextStyles } from "@/components/field/field.stylex";
 import { Icon } from "@/components/icons";
+import { Box } from "@/components/layout/layout";
 import { menuItemStyles, menuItemVariantStyles } from "@/components/menu/menu-item.stylex";
 import { popupMotionStyles, popupPositionerStyles } from "@/components/popover/popover.stylex";
 import { popupVars } from "@/components/popover/popover-vars.stylex";
@@ -27,9 +28,9 @@ const meta = {
 	},
 	decorators: [
 		(Story) => (
-			<div {...stylex.props(styles.frame)}>
+			<Box maxWidth="420px">
 				<Story />
-			</div>
+			</Box>
 		),
 	],
 } satisfies Meta;
@@ -202,9 +203,6 @@ function PopupContent({ label }: { label: string }) {
 }
 
 const styles = stylex.create({
-	frame: {
-		maxWidth: "420px",
-	},
 	fieldLayout: {
 		alignItems: "flex-start",
 	},

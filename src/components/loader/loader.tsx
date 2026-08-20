@@ -3,6 +3,7 @@ import type { StyleXStyles } from "@stylexjs/stylex";
 import type { ComponentProps } from "react";
 import { media } from "@/styles/constants.stylex";
 import { tokens } from "@/theme/tokens.stylex";
+import { attrJoin } from "@/utils/attr-join";
 
 export type LoaderProps = Omit<ComponentProps<"svg">, "children" | "height" | "style" | "width"> & {
 	/** StyleX overrides, applied after the component's own styles. */
@@ -25,7 +26,7 @@ export function Loader({
 		<svg
 			aria-hidden={isDecorative || undefined}
 			aria-label={ariaLabel}
-			className={[sx.className, className].filter(Boolean).join(" ")}
+			className={attrJoin(sx.className, className)}
 			focusable={focusable}
 			role={role ?? (isDecorative ? undefined : "progressbar")}
 			style={sx.style}

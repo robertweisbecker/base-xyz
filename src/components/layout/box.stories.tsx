@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import * as stylex from "@stylexjs/stylex";
+import { Heading } from "@/components/heading/heading";
 import { tokens } from "@/theme/tokens.stylex";
 import { Box } from "./layout";
 
@@ -44,9 +45,9 @@ export const Polymorphic: Story = {
 	parameters: { controls: { disable: true } },
 	render: () => (
 		<Box render={<section aria-labelledby="box-heading" />} p={4} style={styles.frame}>
-			<h2 id="box-heading" {...stylex.props(styles.heading)}>
+			<Heading id="box-heading" render={<h2 />} size="4">
 				Rendered as a section
-			</h2>
+			</Heading>
 		</Box>
 	),
 };
@@ -55,7 +56,7 @@ export const CustomWidthAndPrecedence: Story = {
 	args: { bg: undefined, p: undefined, radius: undefined, shadow: undefined },
 	parameters: { controls: { disable: true } },
 	render: () => (
-		<div {...stylex.props(styles.widthFrame)}>
+		<Box width="40rem">
 			<Box data-testid="custom-width" bg="surfaceSubtle" p={2} width="calc(100% - 2rem)">
 				Custom CSS width
 			</Box>
@@ -65,14 +66,12 @@ export const CustomWidthAndPrecedence: Story = {
 			<Box data-testid="mixed-spacing" m={1} mx={2} style={styles.itemOutline}>
 				Axis spacing wins
 			</Box>
-		</div>
+		</Box>
 	),
 };
 
 const styles = stylex.create({
 	frame: { borderColor: tokens["--border"], borderRadius: tokens["--radius-md"], borderStyle: "solid", borderWidth: 1 },
-	heading: { margin: 0 },
 	precedenceWidth: { width: "12rem" },
 	itemOutline: { borderColor: tokens["--border"], borderStyle: "solid", borderWidth: 1 },
-	widthFrame: { width: "40rem" },
 });

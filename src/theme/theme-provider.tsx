@@ -20,6 +20,7 @@ import {
 	type ThemeName,
 } from "./theme-context";
 import { themeStyles } from "./themes.stylex";
+import { attrJoin } from "@/utils/attr-join";
 
 type ThemeProviderState = {
 	mode: ThemeMode;
@@ -78,7 +79,7 @@ export function ThemeProvider({
 		props: {
 			...props,
 			children,
-			className: [hostStyleProps.className, className].filter(Boolean).join(" ") || undefined,
+			className: attrJoin(hostStyleProps.className, className) || undefined,
 			style: hostStyleProps.style,
 			"data-mode": mode,
 			"data-theme": theme,

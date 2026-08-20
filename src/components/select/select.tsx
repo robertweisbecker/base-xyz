@@ -19,6 +19,7 @@ import { tokens } from "@/theme/tokens.stylex";
 import { menuItemSizeStyles, menuItemStyles, menuItemVariantStyles } from "@/components/menu/menu-item.stylex";
 import type { MenuItemVariant } from "@/components/menu/menu.types";
 import { Icon } from "@/components/icons";
+import { attrJoin } from "@/utils/attr-join";
 
 const HOVER_WHEN_INACTIVE = ":hover:not([data-disabled]):not([data-popup-open]):not([data-pressed])";
 const SelectSizeContext = createContext<FieldSize>("md");
@@ -53,7 +54,7 @@ export function Root<Value, Multiple extends SelectMultiple = false>({
 		<Field.Root
 			disabled={disabled}
 			invalid={invalid}
-			className={[sx.className, className].filter(Boolean).join(" ")}
+			className={attrJoin(sx.className, className)}
 			style={sx.style}>
 			<SelectSizeContext.Provider value={size}>
 				<BaseSelect.Root disabled={disabled} {...restProps}>
@@ -76,7 +77,7 @@ export function Label({ ref, className, style, ...props }: SelectLabelProps) {
 	return (
 		<BaseSelect.Label
 			ref={ref}
-			className={[sx.className, className].filter(Boolean).join(" ")}
+			className={attrJoin(sx.className, className)}
 			style={sx.style}
 			{...props}
 		/>
@@ -115,7 +116,7 @@ export function Trigger({
 	return (
 		<BaseSelect.Trigger
 			ref={ref}
-			className={[sx.className, className].filter(Boolean).join(" ")}
+			className={attrJoin(sx.className, className)}
 			style={sx.style}
 			{...props}>
 			<BaseSelect.Value placeholder={placeholder} {...stylex.props(selectParts.value)}>
@@ -185,7 +186,7 @@ export function Popup({
 		<BaseSelect.Portal {...portalProps}>
 			{backdrop ? (
 				<BaseSelect.Backdrop
-					className={[backdropSx.className, backdropClassName].filter(Boolean).join(" ")}
+					className={attrJoin(backdropSx.className, backdropClassName)}
 					style={backdropSx.style}
 					{...otherBackdropProps}
 				/>
@@ -196,12 +197,12 @@ export function Popup({
 				alignOffset={alignOffset}
 				side={side}
 				sideOffset={sideOffset}
-				className={[positionerSx.className, positionerClassName].filter(Boolean).join(" ")}
+				className={attrJoin(positionerSx.className, positionerClassName)}
 				style={positionerSx.style}
 				{...otherPositionerProps}>
 				<BaseSelect.Popup
 					ref={ref}
-					className={[sx.className, className].filter(Boolean).join(" ")}
+					className={attrJoin(sx.className, className)}
 					style={sx.style}
 					{...props}>
 					{children}
@@ -227,7 +228,7 @@ export function List({ ref, className, style, ...props }: SelectListProps) {
 			</BaseSelect.ScrollUpArrow>
 			<BaseSelect.List
 				ref={ref}
-				className={[sx.className, className].filter(Boolean).join(" ")}
+				className={attrJoin(sx.className, className)}
 				style={sx.style}
 				{...props}
 			/>
@@ -261,7 +262,7 @@ export function Item({ ref, children, className, style, variant = "primary", ...
 	return (
 		<BaseSelect.Item
 			ref={ref}
-			className={[sx.className, className].filter(Boolean).join(" ")}
+			className={attrJoin(sx.className, className)}
 			style={sx.style}
 			{...props}>
 			<BaseSelect.ItemIndicator keepMounted {...stylex.props(menuItemStyles.indicator)}>
@@ -287,7 +288,7 @@ export function Group({ ref, children, className, label, style, ...props }: Sele
 	return (
 		<BaseSelect.Group
 			ref={ref}
-			className={[sx.className, className].filter(Boolean).join(" ")}
+			className={attrJoin(sx.className, className)}
 			style={sx.style}
 			{...props}>
 			{label ? <BaseSelect.GroupLabel {...stylex.props(selectParts.groupLabel)}>{label}</BaseSelect.GroupLabel> : null}
@@ -308,7 +309,7 @@ export function Separator({ ref, className, style, ...props }: SelectSeparatorPr
 	return (
 		<BaseSelect.Separator
 			ref={ref}
-			className={[sx.className, className].filter(Boolean).join(" ")}
+			className={attrJoin(sx.className, className)}
 			style={sx.style}
 			{...props}
 		/>

@@ -1,5 +1,6 @@
 import { BellIcon } from "@phosphor-icons/react/dist/csr/Bell";
 import { BellSlashIcon } from "@phosphor-icons/react/dist/csr/BellSlash";
+import { PushPinSimpleIcon } from "@phosphor-icons/react/dist/csr/PushPinSimple";
 import { TextAlignCenterIcon } from "@phosphor-icons/react/dist/csr/TextAlignCenter";
 import { TextAlignLeftIcon } from "@phosphor-icons/react/dist/csr/TextAlignLeft";
 import { TextAlignRightIcon } from "@phosphor-icons/react/dist/csr/TextAlignRight";
@@ -8,11 +9,11 @@ import { TextItalicIcon } from "@phosphor-icons/react/dist/csr/TextItalic";
 import { TextUnderlineIcon } from "@phosphor-icons/react/dist/csr/TextUnderline";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import * as stylex from "@stylexjs/stylex";
-import { tokens } from "@/theme/tokens.stylex";
-
+import { Heading } from "@/components/heading/heading";
+import { Grid, Stack } from "@/components/layout/layout";
+import { Separator } from "@/components/separator/separator";
+import { Text } from "@/components/text/text";
 import { Toggle, ToggleGroup, type ToggleProps, type ToggleVariant } from "./toggle";
-import { firstToggleMarker, secondToggleMarker, thirdToggleMarker } from "./toggle-radius-testing.stylex";
-import { PushPinSimpleIcon } from "@phosphor-icons/react/dist/csr/PushPinSimple";
 
 const iconOptions = {
 	None: undefined,
@@ -22,12 +23,20 @@ const iconOptions = {
 	"Bell slash": <BellSlashIcon aria-hidden weight="duotone" />,
 };
 
+const variants: ToggleVariant[] = ["primary", "subtle", "secondary", "neutral", "ghost", "plain", "error"];
+
 type TogglePlaygroundArgs = ToggleProps & {
 	_appearance: "button" | "iconButton";
+	_join: boolean;
+	_multiple: boolean;
+	_orientation: "horizontal" | "vertical";
 };
 
 function TogglePlaygroundPreview({
 	_appearance = "button",
+	_join = false,
+	_multiple = false,
+	_orientation = "horizontal",
 	children,
 	icon,
 	label,
@@ -37,8 +46,8 @@ function TogglePlaygroundPreview({
 	tooltip,
 	...args
 }: TogglePlaygroundArgs) {
-	if (_appearance === "iconButton") {
-		return (
+	const singleToggle =
+		_appearance === "iconButton" ? (
 			<Toggle
 				key={`${args.defaultPressed}-${args.disabled}-icon`}
 				{...args}
@@ -48,18 +57,96 @@ function TogglePlaygroundPreview({
 				shape={shape === "circle" || shape === "square" ? shape : "square"}
 				tooltip={tooltip}
 			/>
+		) : (
+			<Toggle
+				key={`${args.defaultPressed}-${args.disabled}-button`}
+				{...args}
+				pressedIcon={pressedIcon}
+				shape={shape}
+				startSlot={startSlot}>
+				{children}
+			</Toggle>
 		);
-	}
 
 	return (
-		<Toggle
-			key={`${args.defaultPressed}-${args.disabled}-button`}
-			{...args}
-			pressedIcon={pressedIcon}
-			shape={shape}
-			startSlot={startSlot}>
-			{children}
-		</Toggle>
+		<Stack gap={8}>
+			<Stack align="start" gap={4}>
+				<Heading size="1" color="muted" fontWeight="regular">
+					Toggle
+				</Heading>
+				{singleToggle}
+			</Stack>
+			<Separator />
+			<Stack align="start" gap={4}>
+				<Heading size="1" color="muted" fontWeight="regular">
+					Toggle group
+				</Heading>
+				<ToggleGroup
+					key={`${_join}-${_multiple}-${_orientation}-${args.variant}-${args.size}`}
+					aria-label={_multiple ? "Text formatting" : "Text alignment"}
+					defaultValue={_multiple ? ["italic", "underline"] : ["center"]}
+					join={_join}
+					multiple={_multiple}
+					orientation={_orientation}>
+					{_multiple ? (
+						<FormattingToggles variant={args.variant} />
+					) : (
+						<AlignmentToggles variant={args.variant} />
+					)}
+				</ToggleGroup>
+			</Stack>
+		</Stack>
+	);
+}
+
+function AlignmentToggles({ variant }: { variant?: ToggleVariant }) {
+	return (
+		<>
+			<Toggle icon={<TextAlignLeftIcon aria-hidden weight="bold" />} label="Align left" value="left" variant={variant} />
+			<Toggle
+				icon={<TextAlignCenterIcon aria-hidden weight="bold" />}
+				label="Align center"
+				value="center"
+				variant={variant}
+			/>
+			<Toggle
+				icon={<TextAlignRightIcon aria-hidden weight="bold" />}
+				label="Align right"
+				value="right"
+				variant={variant}
+			/>
+		</>
+	);
+}
+
+function FormattingToggles({ variant }: { variant?: ToggleVariant }) {
+	return (
+		<>
+			<Toggle icon={<TextBIcon aria-hidden weight="bold" />} label="Bold" value="bold" variant={variant} />
+			<Toggle icon={<TextItalicIcon aria-hidden weight="bold" />} label="Italic" value="italic" variant={variant} />
+			<Toggle
+				icon={<TextUnderlineIcon aria-hidden weight="bold" />}
+				label="Underline"
+				value="underline"
+				variant={variant}
+			/>
+		</>
+	);
+}
+
+function SegmentToggles({ variant }: { variant?: ToggleVariant }) {
+	return (
+		<>
+			<Toggle value="left" variant={variant}>
+				Left
+			</Toggle>
+			<Toggle value="center" variant={variant}>
+				Center
+			</Toggle>
+			<Toggle value="right" variant={variant}>
+				Right
+			</Toggle>
+		</>
 	);
 }
 
@@ -69,6 +156,9 @@ const meta = {
 	render: TogglePlaygroundPreview,
 	args: {
 		_appearance: "button",
+		_join: true,
+		_multiple: false,
+		_orientation: "horizontal",
 		children: "Pin message",
 		defaultPressed: false,
 		disabled: false,
@@ -84,13 +174,20 @@ const meta = {
 			options: ["button", "iconButton"],
 			name: "Appearance",
 		},
+		_join: { control: "boolean", name: "join" },
+		_multiple: { control: "boolean", name: "multiple" },
+		_orientation: {
+			control: "inline-radio",
+			options: ["horizontal", "vertical"],
+			name: "orientation",
+		},
 		children: { control: "text" },
 		defaultPressed: { control: "boolean" },
 		disabled: { control: "boolean" },
 		label: { control: "text" },
 		variant: {
 			control: "select",
-			options: ["primary", "subtle", "secondary", "neutral", "ghost", "error"],
+			options: ["primary", "subtle", "secondary", "neutral", "ghost", "plain", "error"],
 		},
 		size: { control: "select", options: ["xs", "sm", "md", "lg"] },
 		shape: { control: "select", options: ["default", "pill", "circle", "square"] },
@@ -115,6 +212,9 @@ const meta = {
 		controls: {
 			include: [
 				"_appearance",
+				"_join",
+				"_multiple",
+				"_orientation",
 				"children",
 				"defaultPressed",
 				"disabled",
@@ -136,26 +236,26 @@ type Story = StoryObj<TogglePlaygroundArgs>;
 
 export const Playground: Story = {};
 
-const variants: ToggleVariant[] = ["primary", "subtle", "secondary", "neutral", "ghost", "error"];
-
 export const Variants: Story = {
 	parameters: {
 		controls: { disable: true },
 	},
 	render: () => (
-		<div {...stylex.props(styles.variantRows)}>
+		<Stack gap={5}>
 			{variants.map((variant) => (
-				<div key={variant} {...stylex.props(styles.variantRow)}>
-					<span {...stylex.props(styles.rowLabel)}>{variant}</span>
-					<div {...stylex.props(styles.row)}>
+				<Grid key={variant} align="center" gap={3} style={styles.variantRow}>
+					<Text color="muted" size="1">
+						{variant}
+					</Text>
+					<Stack align="center" gap={3} orientation="horizontal" wrap="wrap">
 						<Toggle variant={variant}>Off</Toggle>
 						<Toggle variant={variant} defaultPressed>
 							On
 						</Toggle>
-					</div>
-				</div>
+					</Stack>
+				</Grid>
 			))}
-		</div>
+		</Stack>
 	),
 };
 
@@ -165,13 +265,13 @@ export const SizesAndIcons: Story = {
 		controls: { disable: true },
 	},
 	render: () => (
-		<div {...stylex.props(styles.variantRows)}>
+		<Stack gap={5}>
 			{(["xs", "sm", "md", "lg"] as const).map((size) => (
-				<div key={size} {...stylex.props(styles.variantRow)}>
-					<span {...stylex.props(styles.rowLabel)}>
+				<Grid key={size} align="center" gap={3} style={styles.variantRow}>
+					<Text color="muted" size="1">
 						{size === "xs" ? "Extra small" : size === "sm" ? "Small" : size === "md" ? "Medium" : "Large"}
-					</span>
-					<div {...stylex.props(styles.row)}>
+					</Text>
+					<Stack align="center" gap={3} orientation="horizontal" wrap="wrap">
 						<Toggle
 							startSlot={<BellSlashIcon aria-hidden />}
 							pressedIcon={<BellIcon aria-hidden weight="duotone" />}
@@ -198,10 +298,10 @@ export const SizesAndIcons: Story = {
 							pressedIcon={<BellIcon aria-hidden weight="duotone" />}
 							size={size}
 						/>
-					</div>
-				</div>
+					</Stack>
+				</Grid>
 			))}
-		</div>
+		</Stack>
 	),
 };
 
@@ -210,24 +310,28 @@ export const States: Story = {
 		controls: { disable: true },
 	},
 	render: () => (
-		<div {...stylex.props(styles.story)}>
-			<section {...stylex.props(styles.section)}>
-				<h2 {...stylex.props(styles.heading)}>Selection</h2>
-				<div {...stylex.props(styles.row)}>
+		<Stack gap={8}>
+			<Stack align="start" gap={4}>
+				<Heading size="1" color="muted" fontWeight="regular">
+					Selection
+				</Heading>
+				<Stack align="center" gap={3} orientation="horizontal" wrap="wrap">
 					<Toggle>Off</Toggle>
 					<Toggle defaultPressed>On</Toggle>
-				</div>
-			</section>
-			<section {...stylex.props(styles.section)}>
-				<h2 {...stylex.props(styles.heading)}>Disabled</h2>
-				<div {...stylex.props(styles.row)}>
+				</Stack>
+			</Stack>
+			<Stack align="start" gap={4}>
+				<Heading size="1" color="muted" fontWeight="regular">
+					Disabled
+				</Heading>
+				<Stack align="center" gap={3} orientation="horizontal" wrap="wrap">
 					<Toggle disabled>Disabled off</Toggle>
 					<Toggle defaultPressed disabled>
 						Disabled on
 					</Toggle>
-				</div>
-			</section>
-		</div>
+				</Stack>
+			</Stack>
+		</Stack>
 	),
 };
 
@@ -236,231 +340,91 @@ export const Groups: Story = {
 		controls: { disable: true },
 	},
 	render: () => (
-		<div {...stylex.props(styles.story)}>
-			<section {...stylex.props(styles.section)}>
-				<h2 {...stylex.props(styles.heading)}>Single selection</h2>
+		<Stack gap={8}>
+			<Stack align="start" gap={4}>
+				<Heading size="1" color="muted" fontWeight="regular">
+					Single selection
+				</Heading>
 				<ToggleGroup aria-label="Text alignment" defaultValue={["left"]}>
-					<Toggle icon={<TextAlignLeftIcon aria-hidden weight="bold" />} label="Align left" value="left" />
-					<Toggle icon={<TextAlignCenterIcon aria-hidden weight="bold" />} label="Align center" value="center" />
-					<Toggle icon={<TextAlignRightIcon aria-hidden weight="bold" />} label="Align right" value="right" />
+					<AlignmentToggles />
 				</ToggleGroup>
-			</section>
-			<section {...stylex.props(styles.section)}>
-				<h2 {...stylex.props(styles.heading)}>Multiple selection</h2>
+			</Stack>
+			<Stack align="start" gap={4}>
+				<Heading size="1" color="muted" fontWeight="regular">
+					Multiple selection
+				</Heading>
 				<ToggleGroup multiple aria-label="Text formatting" defaultValue={["bold", "italic"]}>
-					<Toggle icon={<TextBIcon aria-hidden weight="bold" />} label="Bold" value="bold" />
-					<Toggle icon={<TextItalicIcon aria-hidden weight="bold" />} label="Italic" value="italic" />
-					<Toggle icon={<TextUnderlineIcon aria-hidden weight="bold" />} label="Underline" value="underline" />
+					<FormattingToggles />
 				</ToggleGroup>
-			</section>
-		</div>
-	),
-};
-
-export const RadiusTesting: Story = {
-	name: "Radius testing",
-	parameters: {
-		controls: { disable: true },
-	},
-	render: () => (
-		<div {...stylex.props(styles.story)}>
-			<section {...stylex.props(styles.section)}>
-				<h2 {...stylex.props(styles.heading)}>Horizontal</h2>
-				<ToggleGroup aria-label="Horizontal radius testing" defaultValue={["two"]}>
-					<Toggle
-						className={stylex.props(firstToggleMarker).className}
-						style={styles.horizontalFirst}
-						value="one"
-						variant="secondary">
-						One
-					</Toggle>
-					<Toggle
-						className={stylex.props(secondToggleMarker).className}
-						style={styles.horizontalSecond}
-						value="two"
-						variant="secondary">
-						Two
-					</Toggle>
-					<Toggle
-						className={stylex.props(thirdToggleMarker).className}
-						style={styles.horizontalThird}
-						value="three"
-						variant="secondary">
-						Three
-					</Toggle>
-				</ToggleGroup>
-			</section>
-			<section {...stylex.props(styles.section)}>
-				<h2 {...stylex.props(styles.heading)}>Vertical</h2>
-				<ToggleGroup aria-label="Vertical radius testing" defaultValue={["two"]} orientation="vertical">
-					<Toggle
-						className={stylex.props(firstToggleMarker).className}
-						style={styles.verticalFirst}
-						value="one"
-						variant="secondary">
-						One
-					</Toggle>
-					<Toggle
-						className={stylex.props(secondToggleMarker).className}
-						style={styles.verticalSecond}
-						value="two"
-						variant="secondary">
-						Two
-					</Toggle>
-					<Toggle
-						className={stylex.props(thirdToggleMarker).className}
-						style={styles.verticalThird}
-						value="three"
-						variant="secondary">
-						Three
-					</Toggle>
-				</ToggleGroup>
-			</section>
-		</div>
+			</Stack>
+			<Separator />
+			<Stack align="start" gap={4}>
+				<Heading size="1" color="muted" fontWeight="regular">
+					Joined, single selection
+				</Heading>
+				<Stack gap={5}>
+					{variants.map((variant) => (
+						<Grid key={variant} align="center" gap={3} style={styles.variantRow}>
+							<Text color="muted" size="1">
+								{variant}
+							</Text>
+							<ToggleGroup aria-label={`${variant} alignment`} defaultValue={["center"]} join>
+								<SegmentToggles variant={variant} />
+							</ToggleGroup>
+						</Grid>
+					))}
+				</Stack>
+			</Stack>
+			<Stack align="start" gap={4}>
+				<Heading size="1" color="muted" fontWeight="regular">
+					Joined, multiple selection
+				</Heading>
+				<Stack gap={5}>
+					{variants.map((variant) => (
+						<Grid key={variant} align="center" gap={3} style={styles.variantRow}>
+							<Text color="muted" size="1">
+								{variant}
+							</Text>
+							<ToggleGroup
+								multiple
+								aria-label={`${variant} formatting`}
+								defaultValue={["italic", "underline"]}
+								join>
+								<FormattingToggles variant={variant} />
+							</ToggleGroup>
+						</Grid>
+					))}
+				</Stack>
+			</Stack>
+			<Separator />
+			<Stack align="start" gap={4}>
+				<Heading size="1" color="muted" fontWeight="regular">
+					Joined, vertical
+				</Heading>
+				<Stack gap={5} orientation="horizontal" wrap="wrap">
+					<ToggleGroup
+						aria-label="Vertical alignment"
+						defaultValue={["center"]}
+						join
+						orientation="vertical">
+						<SegmentToggles variant="secondary" />
+					</ToggleGroup>
+					<ToggleGroup
+						multiple
+						aria-label="Vertical formatting"
+						defaultValue={["italic", "underline"]}
+						join
+						orientation="vertical">
+						<FormattingToggles variant="secondary" />
+					</ToggleGroup>
+				</Stack>
+			</Stack>
+		</Stack>
 	),
 };
 
 const styles = stylex.create({
-	story: {
-		gap: tokens["--space-8"],
-		display: "flex",
-		flexDirection: "column",
-	},
-	section: {
-		gap: tokens["--space-4"],
-		alignItems: "flex-start",
-		display: "flex",
-		flexDirection: "column",
-	},
-	heading: {
-		margin: 0,
-		color: tokens["--fg-muted"],
-		fontSize: tokens["--font-size-1"],
-		fontWeight: tokens["--font-weight-regular"],
-		letterSpacing: tokens["--letter-spacing-1"],
-		lineHeight: tokens["--line-height-1"],
-	},
-	variantRows: {
-		gap: tokens["--space-5"],
-		display: "flex",
-		flexDirection: "column",
-	},
 	variantRow: {
-		gap: tokens["--space-3"],
-		display: "grid",
 		gridTemplateColumns: "6rem minmax(0, 1fr)",
-	},
-	rowLabel: {
-		alignSelf: "center",
-		color: tokens["--fg-muted"],
-		fontSize: tokens["--font-size-1"],
-		letterSpacing: tokens["--letter-spacing-1"],
-		lineHeight: tokens["--line-height-1"],
-	},
-	row: {
-		gap: tokens["--space-3"],
-		alignItems: "center",
-		display: "flex",
-		flexWrap: "wrap",
-	},
-	horizontalFirst: {
-		borderEndEndRadius: {
-			"[data-pressed]": 0,
-			default: tokens["--radius-md"],
-			[stylex.when.siblingAfter("[data-pressed]", secondToggleMarker)]: 0,
-		},
-		borderEndStartRadius: tokens["--radius-md"],
-		borderStartEndRadius: {
-			"[data-pressed]": 0,
-			default: tokens["--radius-md"],
-			[stylex.when.siblingAfter("[data-pressed]", secondToggleMarker)]: 0,
-		},
-		borderStartStartRadius: tokens["--radius-md"],
-	},
-	horizontalSecond: {
-		borderEndEndRadius: {
-			"[data-pressed]": 0,
-			default: tokens["--radius-md"],
-			[stylex.when.siblingAfter("[data-pressed]", thirdToggleMarker)]: 0,
-		},
-		borderEndStartRadius: {
-			"[data-pressed]": 0,
-			default: tokens["--radius-md"],
-			[stylex.when.siblingBefore("[data-pressed]", firstToggleMarker)]: 0,
-		},
-		borderStartEndRadius: {
-			"[data-pressed]": 0,
-			default: tokens["--radius-md"],
-			[stylex.when.siblingAfter("[data-pressed]", thirdToggleMarker)]: 0,
-		},
-		borderStartStartRadius: {
-			"[data-pressed]": 0,
-			default: tokens["--radius-md"],
-			[stylex.when.siblingBefore("[data-pressed]", firstToggleMarker)]: 0,
-		},
-	},
-	horizontalThird: {
-		borderEndEndRadius: tokens["--radius-md"],
-		borderEndStartRadius: {
-			"[data-pressed]": 0,
-			default: tokens["--radius-md"],
-			[stylex.when.siblingBefore("[data-pressed]", secondToggleMarker)]: 0,
-		},
-		borderStartEndRadius: tokens["--radius-md"],
-		borderStartStartRadius: {
-			"[data-pressed]": 0,
-			default: tokens["--radius-md"],
-			[stylex.when.siblingBefore("[data-pressed]", secondToggleMarker)]: 0,
-		},
-	},
-	verticalFirst: {
-		borderEndEndRadius: {
-			"[data-pressed]": 0,
-			default: tokens["--radius-md"],
-			[stylex.when.siblingAfter("[data-pressed]", secondToggleMarker)]: 0,
-		},
-		borderEndStartRadius: {
-			"[data-pressed]": 0,
-			default: tokens["--radius-md"],
-			[stylex.when.siblingAfter("[data-pressed]", secondToggleMarker)]: 0,
-		},
-		borderStartEndRadius: tokens["--radius-md"],
-		borderStartStartRadius: tokens["--radius-md"],
-	},
-	verticalSecond: {
-		borderEndEndRadius: {
-			"[data-pressed]": 0,
-			default: tokens["--radius-md"],
-			[stylex.when.siblingAfter("[data-pressed]", thirdToggleMarker)]: 0,
-		},
-		borderEndStartRadius: {
-			"[data-pressed]": 0,
-			default: tokens["--radius-md"],
-			[stylex.when.siblingAfter("[data-pressed]", thirdToggleMarker)]: 0,
-		},
-		borderStartEndRadius: {
-			"[data-pressed]": 0,
-			default: tokens["--radius-md"],
-			[stylex.when.siblingBefore("[data-pressed]", firstToggleMarker)]: 0,
-		},
-		borderStartStartRadius: {
-			"[data-pressed]": 0,
-			default: tokens["--radius-md"],
-			[stylex.when.siblingBefore("[data-pressed]", firstToggleMarker)]: 0,
-		},
-	},
-	verticalThird: {
-		borderEndEndRadius: tokens["--radius-md"],
-		borderEndStartRadius: tokens["--radius-md"],
-		borderStartEndRadius: {
-			"[data-pressed]": 0,
-			default: tokens["--radius-md"],
-			[stylex.when.siblingBefore("[data-pressed]", secondToggleMarker)]: 0,
-		},
-		borderStartStartRadius: {
-			"[data-pressed]": 0,
-			default: tokens["--radius-md"],
-			[stylex.when.siblingBefore("[data-pressed]", secondToggleMarker)]: 0,
-		},
 	},
 });

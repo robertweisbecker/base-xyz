@@ -2,10 +2,11 @@ import { FolderOpenIcon } from "@phosphor-icons/react/dist/csr/FolderOpen";
 import { MagnifyingGlassIcon } from "@phosphor-icons/react/dist/csr/MagnifyingGlass";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import * as stylex from "@stylexjs/stylex";
-import { tokens } from "@/theme/tokens.stylex";
 
 import { Button } from "@/components/button/button";
+import { Box, Stack } from "@/components/layout/layout";
 import { Separator } from "@/components/separator/separator";
+import { Text } from "@/components/text/text";
 import { EmptyState, type EmptyStateProps, type EmptyStateSize } from "./empty-state";
 
 type EmptyStateStoryArgs = EmptyStateProps & {
@@ -48,9 +49,9 @@ const meta = {
 	},
 	decorators: [
 		(Story) => (
-			<div {...stylex.props(storyStyles.frame)}>
+			<Box style={storyStyles.frame}>
 				<Story />
-			</div>
+			</Box>
 		),
 	],
 	parameters: {
@@ -87,9 +88,11 @@ export const Examples: Story = {
 		controls: { disable: true },
 	},
 	render: () => (
-		<div {...stylex.props(storyStyles.stack)}>
-			<section>
-				<h2 {...stylex.props(storyStyles.heading)}>First-use state</h2>
+		<Stack gap={8}>
+			<Stack gap={2}>
+				<Text color="muted" size="1">
+					First-use state
+				</Text>
 				<EmptyState
 					description="Create your first project to organize files, tasks, and collaborators in one place."
 					headingLevel="h3"
@@ -98,10 +101,12 @@ export const Examples: Story = {
 					<Button>Create project</Button>
 					<Button variant="secondary">Import project</Button>
 				</EmptyState>
-			</section>
+			</Stack>
 			<Separator />
-			<section>
-				<h2 {...stylex.props(storyStyles.heading)}>No results</h2>
+			<Stack gap={2}>
+				<Text color="muted" size="1">
+					No results
+				</Text>
 				<EmptyState
 					description="Try a different keyword or clear the active filters."
 					headingLevel="h3"
@@ -112,36 +117,25 @@ export const Examples: Story = {
 						Clear filters
 					</Button>
 				</EmptyState>
-			</section>
+			</Stack>
 			<Separator />
-			<section>
-				<h2 {...stylex.props(storyStyles.heading)}>Message only</h2>
+			<Stack gap={2}>
+				<Text color="muted" size="1">
+					Message only
+				</Text>
 				<EmptyState
 					description="Files shared with you will appear here."
 					headingLevel="h3"
 					size="sm"
 					title="Nothing shared yet"
 				/>
-			</section>
-		</div>
+			</Stack>
+		</Stack>
 	),
 };
 
 const storyStyles = stylex.create({
 	frame: {
 		maxWidth: "48rem",
-	},
-	stack: {
-		gap: tokens["--space-8"],
-		display: "flex",
-		flexDirection: "column",
-	},
-	heading: {
-		margin: 0,
-		color: tokens["--fg-muted"],
-		fontSize: tokens["--font-size-1"],
-		fontWeight: tokens["--font-weight-regular"],
-		letterSpacing: tokens["--letter-spacing-1"],
-		lineHeight: tokens["--line-height-1"],
 	},
 });

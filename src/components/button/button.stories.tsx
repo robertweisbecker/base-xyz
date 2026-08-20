@@ -3,6 +3,8 @@ import { PlusIcon } from "@phosphor-icons/react/dist/csr/Plus";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import * as stylex from "@stylexjs/stylex";
 import { useState } from "react";
+import { Stack } from "@/components/layout/layout";
+import { Text } from "@/components/text/text";
 import { tokens } from "@/theme/tokens.stylex";
 
 import { Button } from "./button";
@@ -77,11 +79,13 @@ export const SizesAndIcons: Story = {
 		controls: { disable: true },
 	},
 	render: () => (
-		<div {...stylex.props(storyStyles.variantRows)}>
+		<Stack gap={5}>
 			{sizes.map((size) => (
-				<section key={size} {...stylex.props(storyStyles.variantRow)}>
-					<span {...stylex.props(storyStyles.rowLabel)}>{size}</span>
-					<div {...stylex.props(storyStyles.row)}>
+				<Stack align="start" gap={2} key={size}>
+					<Text size="1" color="muted">
+						{size}
+					</Text>
+					<Stack align="center" gap={3} orientation="horizontal" wrap="wrap">
 						<Button size={size}>Create project</Button>
 						<Button size={size} startSlot={<PlusIcon aria-hidden weight="bold" />} variant="secondary">
 							Create project
@@ -89,10 +93,10 @@ export const SizesAndIcons: Story = {
 						<Button size={size} endSlot={<ArrowRightIcon aria-hidden weight="bold" />} variant="neutral">
 							Continue
 						</Button>
-					</div>
-				</section>
+					</Stack>
+				</Stack>
 			))}
-		</div>
+		</Stack>
 	),
 };
 
@@ -103,13 +107,13 @@ export const Variants: Story = {
 		controls: { disable: true },
 	},
 	render: () => (
-		<div {...stylex.props(storyStyles.row)}>
+		<Stack align="center" gap={3} orientation="horizontal" wrap="wrap">
 			{variants.map((variant) => (
 				<Button key={variant} variant={variant}>
 					{variant}
 				</Button>
 			))}
-		</div>
+		</Stack>
 	),
 };
 
@@ -124,34 +128,32 @@ function ButtonStates() {
 	const [loading, setLoading] = useState(false);
 
 	return (
-		<div {...stylex.props(storyStyles.states)}>
+		<Stack align="start" gap={6} maxWidth="100%">
 			<Button size="md" variant="secondary" onClick={() => setLoading((current) => !current)}>
 				{loading ? "Stop loading" : "Start loading"}
 			</Button>
 			<div {...stylex.props(storyStyles.stateGrid)}>
 				{variants.map((variant) => (
-					<section key={variant} {...stylex.props(storyStyles.stateColumn)}>
-						<span {...stylex.props(storyStyles.rowLabel)}>{variant}</span>
-						<div {...stylex.props(storyStyles.stateSpecimen)}>
-							<span {...stylex.props(storyStyles.rowLabel)}>Enabled</span>
+					<Stack align="start" gap={5} key={variant}>
+						<Text size="1" color="muted">
+							{variant}
+						</Text>
+						<StateSpecimen label="Enabled">
 							<Button size="md" variant={variant}>
 								Create project
 							</Button>
-						</div>
-						<div {...stylex.props(storyStyles.stateSpecimen)}>
-							<span {...stylex.props(storyStyles.rowLabel)}>Disabled</span>
+						</StateSpecimen>
+						<StateSpecimen label="Disabled">
 							<Button disabled size="md" variant={variant}>
 								Create project
 							</Button>
-						</div>
-						<div {...stylex.props(storyStyles.stateSpecimen)}>
-							<span {...stylex.props(storyStyles.rowLabel)}>Default loading text</span>
+						</StateSpecimen>
+						<StateSpecimen label="Default loading text">
 							<Button loading={loading} size="md" variant={variant}>
 								Create project
 							</Button>
-						</div>
-						<div {...stylex.props(storyStyles.stateSpecimen)}>
-							<span {...stylex.props(storyStyles.rowLabel)}>Custom loading text</span>
+						</StateSpecimen>
+						<StateSpecimen label="Custom loading text">
 							<Button
 								loading={loading}
 								loadingText="Creating…"
@@ -160,39 +162,31 @@ function ButtonStates() {
 								variant={variant}>
 								Create project
 							</Button>
-						</div>
-						<div {...stylex.props(storyStyles.stateSpecimen)}>
-							<span {...stylex.props(storyStyles.rowLabel)}>Loader only</span>
+						</StateSpecimen>
+						<StateSpecimen label="Loader only">
 							<Button loading={loading} loadingText="" size="md" variant={variant}>
 								Create project
 							</Button>
-						</div>
-					</section>
+						</StateSpecimen>
+					</Stack>
 				))}
 			</div>
-		</div>
+		</Stack>
+	);
+}
+
+function StateSpecimen({ children, label }: { children: React.ReactNode; label: string }) {
+	return (
+		<Stack align="start" gap={2}>
+			<Text size="1" color="muted">
+				{label}
+			</Text>
+			{children}
+		</Stack>
 	);
 }
 
 const storyStyles = stylex.create({
-	variantRows: {
-		gap: tokens["--space-5"],
-		display: "flex",
-		flexDirection: "column",
-	},
-	variantRow: {
-		gap: tokens["--space-2"],
-		alignItems: "flex-start",
-		display: "flex",
-		flexDirection: "column",
-	},
-	states: {
-		gap: tokens["--space-6"],
-		alignItems: "flex-start",
-		display: "flex",
-		flexDirection: "column",
-		maxWidth: "100%",
-	},
 	stateGrid: {
 		gap: tokens["--space-6"],
 		display: "grid",
@@ -200,29 +194,5 @@ const storyStyles = stylex.create({
 		paddingBlockEnd: tokens["--space-2"],
 		maxWidth: "100%",
 		overflowX: "auto",
-	},
-	stateColumn: {
-		gap: tokens["--space-5"],
-		alignItems: "flex-start",
-		display: "flex",
-		flexDirection: "column",
-	},
-	stateSpecimen: {
-		gap: tokens["--space-2"],
-		alignItems: "flex-start",
-		display: "flex",
-		flexDirection: "column",
-	},
-	rowLabel: {
-		color: tokens["--fg-muted"],
-		fontSize: tokens["--font-size-1"],
-		letterSpacing: tokens["--letter-spacing-1"],
-		lineHeight: tokens["--line-height-1"],
-	},
-	row: {
-		gap: tokens["--space-3"],
-		alignItems: "center",
-		display: "flex",
-		flexWrap: "wrap",
 	},
 });

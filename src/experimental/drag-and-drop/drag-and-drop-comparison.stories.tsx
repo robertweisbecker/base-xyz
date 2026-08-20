@@ -1,4 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
+import { Stack } from "@/components/layout/layout";
+import { Text } from "@/components/text/text";
 import { DndKitBoardDemo } from "./dnd-kit/dnd-kit-board-demo";
 import { DndKitFeedbackDemo } from "./dnd-kit/dnd-kit-feedback-demo";
 import { DndKitMenuDemo } from "./dnd-kit/dnd-kit-menu-demo";
@@ -7,7 +9,6 @@ import { DemoComparison } from "./demo-parts";
 import { ReactAriaAccessibilityDemo } from "./react-aria/react-aria-accessibility-demo";
 import { ReactAriaBoardDemo } from "./react-aria/react-aria-board-demo";
 import { ReactAriaTransferDemo } from "./react-aria/react-aria-transfer-demo";
-import { Text } from "@/components/text/text";
 
 const meta = {
 	title: "Experimental/Drag and drop",
@@ -31,15 +32,15 @@ export const BasicTransfer: Story = {
 
 export const SortableBoard: Story = {
 	render: () => (
-		<div>
-			<Text size="1" mb={3} color="subtle">
+		<Stack gap={3}>
+			<Text size="1" color="muted">
 				Notice insertion targeting on the left and live geometric reflow on the right.
 			</Text>
 			<DemoComparison>
 				<ReactAriaBoardDemo />
 				<DndKitBoardDemo />
 			</DemoComparison>
-		</div>
+		</Stack>
 	),
 };
 

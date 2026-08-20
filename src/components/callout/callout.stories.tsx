@@ -5,12 +5,13 @@ import { WarningIcon } from "@phosphor-icons/react/dist/csr/Warning";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import * as stylex from "@stylexjs/stylex";
 import type { ReactNode } from "react";
-import { tokens } from "@/theme/tokens.stylex";
 import { Button } from "@/components/button/button";
 import { CloseButton } from "@/components/button/close-button";
+import { Box, Stack } from "@/components/layout/layout";
 import { Link } from "@/components/link/link";
 import { ScrollArea } from "@/components/scroll-area/scroll-area";
 import { Text } from "@/components/text/text";
+import { tokens } from "@/theme/tokens.stylex";
 import { Callout, type CalloutHue, type CalloutVariant } from "./callout";
 
 const iconOptions = {
@@ -109,10 +110,9 @@ const meta = {
 	},
 	decorators: [
 		(Story, context) => (
-			<div
-				{...stylex.props(context.parameters.layout === "fullscreen" ? storyStyles.fullWidthFrame : storyStyles.frame)}>
+			<Box width="100%" maxWidth={context.parameters.layout === "fullscreen" ? undefined : "48rem"}>
 				<Story />
-			</div>
+			</Box>
 		),
 	],
 } satisfies Meta<typeof Callout>;
@@ -158,13 +158,13 @@ export const Variants: Story = {
 		controls: { disable: true },
 	},
 	render: () => (
-		<div {...stylex.props(storyStyles.sections)}>
+		<Stack gap={8}>
 			{variants.map((variant) => (
-				<section key={variant} {...stylex.props(storyStyles.section)}>
+				<Stack align="start" gap={2} key={variant}>
 					<Text color="muted" size="1">
 						{variant}
 					</Text>
-					<div {...stylex.props(storyStyles.stack)}>
+					<Stack gap={3}>
 						{hues.map((hue) => {
 							const example = examplesByHue[hue];
 
@@ -180,10 +180,10 @@ export const Variants: Story = {
 								/>
 							);
 						})}
-					</div>
-				</section>
+					</Stack>
+				</Stack>
 			))}
-		</div>
+		</Stack>
 	),
 };
 
@@ -192,7 +192,7 @@ export const Options: Story = {
 		controls: { disable: true },
 	},
 	render: () => (
-		<div {...stylex.props(storyStyles.stack)}>
+		<Stack gap={3}>
 			<Callout
 				action={
 					<Button size="sm" variant="secondary">
@@ -217,7 +217,7 @@ export const Options: Story = {
 				icon={<WarningCircleIcon aria-hidden weight="duotone" />}
 				variant="banner"
 			/>
-		</div>
+		</Stack>
 	),
 };
 
@@ -227,8 +227,8 @@ export const Positioning: Story = {
 		layout: "fullscreen",
 	},
 	render: () => (
-		<div {...stylex.props(storyStyles.positioningExamples)}>
-			<section {...stylex.props(storyStyles.section)}>
+		<Stack gap={8} py={4}>
+			<Stack align="start" gap={2}>
 				<Text color="muted" size="1">
 					Absolute
 				</Text>
@@ -249,16 +249,16 @@ export const Positioning: Story = {
 						variant="banner"
 						zIndex={1}
 					/>
-					<div {...stylex.props(storyStyles.log)}>
+					<Stack gap={3} style={storyStyles.log}>
 						{Array.from({ length: 8 }, (_, index) => (
 							<Text key={index} color="muted" size="2">
 								Positioned content row {index + 1}
 							</Text>
 						))}
-					</div>
+					</Stack>
 				</ScrollArea>
-			</section>
-			<section {...stylex.props(storyStyles.section)}>
+			</Stack>
+			<Stack align="start" gap={2}>
 				<Text color="muted" size="1">
 					Sticky
 				</Text>
@@ -279,48 +279,20 @@ export const Positioning: Story = {
 						variant="banner"
 						zIndex={1}
 					/>
-					<div {...stylex.props(storyStyles.log)}>
+					<Stack gap={3} style={storyStyles.log}>
 						{Array.from({ length: 8 }, (_, index) => (
 							<Text key={index} color="muted" size="2">
 								Event {index + 1}
 							</Text>
 						))}
-					</div>
+					</Stack>
 				</ScrollArea>
-			</section>
-		</div>
+			</Stack>
+		</Stack>
 	),
 };
 
 const storyStyles = stylex.create({
-	frame: {
-		maxWidth: "48rem",
-		width: "100%",
-	},
-	fullWidthFrame: {
-		width: "100%",
-	},
-	sections: {
-		gap: tokens["--space-8"],
-		display: "flex",
-		flexDirection: "column",
-	},
-	section: {
-		gap: tokens["--space-2"],
-		display: "flex",
-		flexDirection: "column",
-	},
-	stack: {
-		gap: tokens["--space-3"],
-		display: "flex",
-		flexDirection: "column",
-	},
-	positioningExamples: {
-		gap: tokens["--space-8"],
-		paddingBlock: tokens["--space-4"],
-		display: "flex",
-		flexDirection: "column",
-	},
 	positioningStage: {
 		borderColor: tokens["--border"],
 		borderStyle: "solid",
@@ -340,9 +312,6 @@ const storyStyles = stylex.create({
 		flexDirection: "column",
 	},
 	log: {
-		gap: tokens["--space-3"],
-		display: "flex",
-		flexDirection: "column",
 		minHeight: "18rem",
 	},
 });

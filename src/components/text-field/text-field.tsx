@@ -8,6 +8,7 @@ import type { FieldSize, FieldThemeProps } from "@/components/field/field.types"
 import { fieldStyles, fieldInputStyles, fieldThemeProps } from "@/components/field/field.stylex";
 import { focusRing } from "@/styles/recipes/focus";
 import { InfoTip, type InfoTipProps } from "../info-tip";
+import { attrJoin } from "@/utils/attr-join";
 
 export type TextFieldProps = Omit<
 	InputBase.Props,
@@ -46,7 +47,7 @@ export function TextField({
 
 	return (
 		<FieldBase.Root
-			className={[rootSx.className, className].filter(Boolean).join(" ")}
+			className={attrJoin(rootSx.className, className)}
 			style={rootSx.style}
 			disabled={disabled}
 			invalid={Boolean(error)}
@@ -58,7 +59,7 @@ export function TextField({
 			<InputBase
 				id={id}
 				disabled={disabled}
-				aria-describedby={[descriptionId, errorId].filter(Boolean).join(" ") || undefined}
+				aria-describedby={attrJoin(descriptionId, errorId) || undefined}
 				aria-invalid={Boolean(error)}
 				{...stylex.props(fieldInputStyles[size], focusRing.inset)}
 				{...restProps}

@@ -88,19 +88,14 @@ export {
 export { AlertDialog } from "./alert-dialog/alert-dialog";
 export {
 	Card,
-	CardContent,
-	CardDescription,
-	type CardDescriptionProps,
-	CardFooter,
-	type CardFooterProps,
-	CardHeader,
-	type CardHeaderProps,
 	type CardContentProps,
+	type CardDescriptionProps,
+	type CardFooterProps,
+	type CardHeaderProps,
 	type CardRadius,
-	type CardProps,
+	type CardRootProps,
 	type CardSize,
 	type CardThemeProps,
-	CardTitle,
 	type CardTitleProps,
 	type CardVariant,
 } from "./card/card";
