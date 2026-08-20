@@ -1,5 +1,6 @@
 import { Field } from "@base-ui/react/field";
 import { Input as BaseInput } from "@base-ui/react/input";
+import { useMergedRefs } from "@base-ui/utils/useMergedRefs";
 import * as stylex from "@stylexjs/stylex";
 import type { StyleXStyles } from "@stylexjs/stylex";
 import { type ComponentProps } from "react";
@@ -8,6 +9,7 @@ import { fieldStyles, fieldControlSizes, fieldTextStyles } from "@/components/fi
 import type { FieldSize } from "@/components/field/field.types";
 import { focusRing } from "@/styles/recipes/focus";
 import { tokens } from "@/theme/tokens.stylex";
+import { useTextareaAutoResize } from "@/hooks/use-textarea-auto-resize";
 
 /** Disabled chrome follows a nested input/textarea, not addon action buttons. */
 const GROUP_HAS_DISABLED = ":has(:is(input, textarea):is([data-disabled], :disabled))";
@@ -36,6 +38,10 @@ export type InputGroupTextareaProps = Omit<ComponentProps<"textarea">, "classNam
 	className?: string;
 	/** StyleX overrides, applied after the component's own styles. */
 	style?: StyleXStyles;
+	/** Enables content-based resizing with this minimum row count; defaults to `rows`. */
+	minRows?: number;
+	/** Enables content-based resizing with this maximum row count; content beyond this scrolls. */
+	maxRows?: number;
 };
 
 export type InputGroupAddonProps = Omit<ComponentProps<"span">, "className" | "style"> & {
@@ -96,13 +102,37 @@ export function Input({ ref, className, style, ...props }: InputGroupInputProps)
 	);
 }
 
-export function Textarea({ ref, className, style, rows = 1, disabled, ...props }: InputGroupTextareaProps) {
+export function Textarea({
+	ref,
+	className,
+	style,
+	rows = 1,
+	disabled,
+	minRows,
+	maxRows,
+	onChange,
+	value,
+	...props
+}: InputGroupTextareaProps) {
 	const sx = stylex.props(fieldStyles.inputUnstyled, inputGroupParts.input, inputGroupParts.textarea, style);
+	const autoResizeEnabled = minRows !== undefined || maxRows !== undefined;
+	const autoResizeState = useTextareaAutoResize({
+		enabled: autoResizeEnabled,
+		rows,
+		minRows,
+		maxRows,
+	});
+	const mergedRef = useMergedRefs(ref, autoResizeState.ref);
 	const control = (
 		<textarea
-			ref={ref}
-			rows={rows}
+			ref={mergedRef}
+			rows={autoResizeEnabled ? autoResizeState.minRows : rows}
 			disabled={disabled}
+			onChange={(event) => {
+				onChange?.(event);
+				autoResizeState.resize();
+			}}
+			value={value}
 			{...(disabled && { "data-disabled": true })}
 			className={[sx.className, className].filter(Boolean).join(" ")}
 			style={sx.style}

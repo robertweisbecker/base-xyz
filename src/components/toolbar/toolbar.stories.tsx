@@ -3,7 +3,6 @@ import { ArrowClockwiseIcon } from "@phosphor-icons/react/dist/csr/ArrowClockwis
 import { ArrowCounterClockwiseIcon } from "@phosphor-icons/react/dist/csr/ArrowCounterClockwise";
 import { CaretUpDownIcon } from "@phosphor-icons/react/dist/csr/CaretUpDown";
 import { CopyIcon } from "@phosphor-icons/react/dist/csr/Copy";
-import { DotsThreeIcon } from "@phosphor-icons/react/dist/csr/DotsThree";
 import { ListBulletsIcon } from "@phosphor-icons/react/dist/csr/ListBullets";
 import { TextAlignCenterIcon } from "@phosphor-icons/react/dist/csr/TextAlignCenter";
 import { TextAlignLeftIcon } from "@phosphor-icons/react/dist/csr/TextAlignLeft";
@@ -23,7 +22,8 @@ import { CopyButton } from "@/blocks/copy-button/copy-button";
 import { TextStrikethroughIcon } from "@phosphor-icons/react/dist/ssr/TextStrikethrough";
 import { LinkIcon, ListNumbersIcon, PaperclipIcon, CodeIcon, CodeBlockIcon } from "@phosphor-icons/react";
 import { IconButton } from "@/components/button/button";
-import { Toggle, ToggleGroup } from "../toggle";
+import { Toggle, ToggleGroup } from "@/components/toggle/toggle";
+import { Icon } from "@/components/icons";
 const meta = {
 	title: "Components/Toolbar",
 	component: Toolbar.Root,
@@ -170,7 +170,7 @@ export const States: Story = {
 					</Toolbar.Group>
 					<Toolbar.Separator />
 					<Toolbar.Button aria-label="More actions">
-						<DotsThreeIcon aria-hidden size={18} weight="regular" />
+						<Icon.More aria-hidden />
 					</Toolbar.Button>
 				</Toolbar.Root>
 			</section>
@@ -232,7 +232,7 @@ function PopupToolbar() {
 			<Toolbar.Separator />
 			<Menu.Root>
 				<Toolbar.Button aria-label="More actions" render={<Menu.Trigger />}>
-					<DotsThreeIcon aria-hidden size={18} weight="regular" />
+					<Icon.More aria-hidden />
 				</Toolbar.Button>
 				<Menu.Popup positionerProps={{ align: "end" }}>
 					<Menu.Item>
@@ -262,7 +262,7 @@ function CompactToolbar({ disabled }: { disabled?: boolean }) {
 			</Toolbar.Button>
 			<Toolbar.Separator />
 			<Toolbar.Button aria-label="More actions">
-				<DotsThreeIcon aria-hidden size={18} weight="regular" />
+				<Icon.More aria-hidden />
 			</Toolbar.Button>
 		</Toolbar.Root>
 	);

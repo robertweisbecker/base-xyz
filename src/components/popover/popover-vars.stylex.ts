@@ -6,9 +6,9 @@ import { tokens } from "@/theme/tokens.stylex";
  * generated viewport payload wrappers.
  */
 export const popupVars = stylex.defineVars({
-	background: tokens["--bg-inverse"],
+	background: tokens["--elevated"],
 	border: tokens["--border"],
-	foreground: tokens["--fg-inverse"],
+	foreground: tokens["--fg"],
 	duration: tokens["--motion-duration-content"],
 	easing: tokens["--motion-ease-smooth-out"],
 	distance: "12px",

@@ -10,10 +10,11 @@ import { popupMotionStyles, popupPositionerStyles, popupViewportStyles } from "@
 import { popupVars } from "@/components/popover/popover-vars.stylex";
 
 import { Collapsible } from "@/components/collapsible/collapsible";
-import { Icon as Icons } from "@/components/icons";
+import { Icon } from "@/components/icons";
 import { menuItemSizeStyles, menuItemStyles, menuItemVariantStyles } from "./menu-item.stylex";
 import { menuTriggerMarker } from "./menu.stylex";
 import type { MenuItemSize, MenuItemVariant } from "./menu.types";
+import { attrJoin } from "@/utils/attr-join";
 
 const MenuSizeContext = createContext<MenuItemSize>("md");
 
@@ -37,7 +38,7 @@ export type MenuPopupProps = StyledProps<BaseMenu.Popup.Props> & {
 export type MenuItemProps = StyledProps<BaseMenu.Item.Props> & {
 	variant?: MenuItemVariant;
 };
-export type MenuIconProps = StyledProps<ComponentProps<"span">>;
+export type MenuTriggerIconProps = StyledProps<ComponentProps<"svg">>;
 export type CollapsibleGroupProps = StyledProps<BaseCollapsible.Root.Props>;
 export type CollapsibleGroupTriggerProps = Omit<MenuItemProps, "closeOnClick" | "nativeButton" | "render" | "variant">;
 export type CollapsibleGroupPanelProps = StyledProps<BaseCollapsible.Panel.Props>;
@@ -182,7 +183,7 @@ export function CheckboxItem({ ref, children, className, style, ...props }: Styl
 			style={sxStyle}
 			{...props}>
 			<BaseMenu.CheckboxItemIndicator keepMounted {...stylex.props(menuItemStyles.indicator)}>
-				<Icons.Checkmark width="1em" height="1em" />
+				<Icon.Checkmark width="1em" height="1em" strokeWidth={2.5} />
 			</BaseMenu.CheckboxItemIndicator>
 			{children}
 		</BaseMenu.CheckboxItem>
@@ -381,18 +382,19 @@ export function ItemIcon({ children }: { children: ReactNode }) {
 	);
 }
 
-export function Icon({ ref, children, className, style, ...props }: MenuIconProps) {
-	const { className: sxClassName, style: sxStyle } = stylex.props(menuParts.icon, style);
+export function TriggerIcon({ ref, children, className, style, ...props }: MenuTriggerIconProps) {
+	const { className: sxClassName, style: sxStyle } = stylex.props(menuParts.triggerIcon, style);
 
 	return (
-		<span
+		<Icon.ChevronDown
 			ref={ref}
 			aria-hidden
-			className={[sxClassName, className].filter(Boolean).join(" ")}
+			className={attrJoin(sxClassName, className)}
 			style={sxStyle}
-			{...props}>
-			{children ?? <Icons.ChevronDown width="1em" height="1em" />}
-		</span>
+			width="1em"
+			height="1em"
+			{...props}
+		/>
 	);
 }
 
@@ -437,7 +439,7 @@ const menuParts = stylex.create({
 		height: tokens["--space-4"],
 		width: tokens["--space-4"],
 	},
-	icon: {
+	triggerIcon: {
 		alignItems: "center",
 		display: "inline-flex",
 		flexShrink: 0,
@@ -530,21 +532,21 @@ const menuParts = stylex.create({
 		transitionDuration: tokens["--motion-duration-quick"],
 		transitionProperty: "background-color",
 		transitionTimingFunction: tokens["--motion-ease-smooth-out"],
-		height: tokens["--space-4"],
-		width: tokens["--space-6"],
+		height: `calc(${tokens["--space-4"]} - ${tokens["--space-0-5"]})`,
+		width: `calc(${tokens["--space-6"]} - ${tokens["--space-0-5"]})`,
 	},
 	switchThumb: {
 		borderRadius: tokens["--radius-full"],
 		marginInline: "0.125rem",
 		aspectRatio: 1,
-		backgroundColor: tokens["--fg-inverse"],
+		backgroundColor: tokens["--color-white"],
 		transform: {
 			"[data-checked]": `translateX(${tokens["--space-2"]})`,
 			default: "translateX(0)",
 		},
-		transitionDuration: tokens["--motion-duration-quick"],
+		transitionDuration: "inherit",
 		transitionProperty: "transform",
-		transitionTimingFunction: tokens["--motion-ease-out"],
+		transitionTimingFunction: "inherit",
 		height: "calc(100% - 0.25rem)",
 	},
 	groupLabel: {
@@ -587,6 +589,6 @@ export const Menu = {
 	CollapsibleGroupPanel,
 	ItemLabel,
 	ItemIcon,
-	Icon,
+	TriggerIcon,
 	ItemShortcut,
 } as const;

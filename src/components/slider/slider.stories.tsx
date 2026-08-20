@@ -114,12 +114,12 @@ export const MarkerDensity: Story = {
 	render: () => (
 		<div {...stylex.props(styles.story)}>
 			<div data-testid="dense-slider">
-				<Slider.Root max={1} min={0} step={0.000001}>
+				<Slider.Root max={1} min={0} step={0.01}>
 					<Slider.Header>
 						<Slider.Label>Dense range</Slider.Label>
 					</Slider.Header>
 					<Slider.Row>
-						<Slider.Control markers>
+						<Slider.Control markers={{ every: 1 }}>
 							<Slider.Thumb />
 						</Slider.Control>
 					</Slider.Row>

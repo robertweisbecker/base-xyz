@@ -8,6 +8,7 @@ import { Button } from "@/components/button/button";
 import { createDrawerHandle } from "@/components/popup-handles";
 import { Textarea } from "@/components/textarea/textarea";
 import { Drawer } from "./drawer";
+import { Stack } from "../layout";
 type StoryArgs = {
 	defaultOpen: boolean;
 	disablePointerDismissal: boolean;
@@ -39,20 +40,22 @@ const meta = {
 export default meta;
 type Story = StoryObj<StoryArgs>;
 
-function DrawerSurface({
+function DrawerExample({
 	title,
 	description,
 	body,
 	closeLabel = "Close",
+	backdrop = true,
 }: {
 	title: string;
 	description: string;
 	body: React.ReactNode;
 	closeLabel?: string;
+	backdrop?: boolean;
 }) {
 	return (
 		<Drawer.Portal>
-			<Drawer.Backdrop />
+			{backdrop && <Drawer.Backdrop />}
 			<Drawer.Viewport>
 				<Drawer.Popup>
 					<Drawer.Handle />
@@ -80,7 +83,7 @@ export const Playground: Story = {
 			disablePointerDismissal={disablePointerDismissal}
 			modal={modal}>
 			<Drawer.Trigger render={<Button />}>Open drawer</Drawer.Trigger>
-			<DrawerSurface
+			<DrawerExample
 				title="Project settings"
 				description="Swipe down or use the close button to dismiss."
 				body="Drawer content can hold forms, navigation, or focused workflows."
@@ -195,15 +198,31 @@ export const DetachedTriggers: Story = {
 					</Drawer.Trigger>
 				))}
 			</div>
-			<Drawer.Root handle={detachedDrawer}>
+			<Drawer.Root handle={detachedDrawer} modal={false} disablePointerDismissal>
 				{({ payload }) =>
 					payload ? (
-						<DrawerSurface
-							title={payload.title}
-							description={payload.description}
-							body={payload.body}
-							closeLabel="Done"
-						/>
+						<Drawer.Portal>
+							<Drawer.Viewport style={storyParts.detachedViewport}>
+								<Drawer.Popup>
+									<Drawer.Handle />
+									<Drawer.Content key={payload.title}>
+										<Drawer.Header>
+											<Stack orientation="horizontal">
+												<Stack orientation="vertical" gap={0}>
+													<Drawer.Title>{payload.title}</Drawer.Title>
+													<Drawer.Description>{payload.description}</Drawer.Description>
+												</Stack>
+												<Drawer.Close render={<Button variant="ghost" />}>Done</Drawer.Close>
+											</Stack>
+										</Drawer.Header>
+										<Drawer.Body>{payload.body}</Drawer.Body>
+										<Drawer.Footer>
+											<Drawer.Close render={<Button variant="secondary" />}>Done</Drawer.Close>
+										</Drawer.Footer>
+									</Drawer.Content>
+								</Drawer.Popup>
+							</Drawer.Viewport>
+						</Drawer.Portal>
 					) : null
 				}
 			</Drawer.Root>
@@ -425,5 +444,8 @@ const storyParts = stylex.create({
 		fontSize: tokens["--font-size-1"],
 		letterSpacing: tokens["--letter-spacing-1"],
 		lineHeight: tokens["--line-height-1"],
+	},
+	detachedViewport: {
+		pointerEvents: "none",
 	},
 });

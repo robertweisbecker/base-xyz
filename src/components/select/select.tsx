@@ -254,7 +254,6 @@ export function Item({ ref, children, className, style, variant = "primary", ...
 		menuItemStyles.item,
 		menuItemSizeStyles[size],
 		menuItemVariantStyles[variant],
-		itemOverrides[size],
 		focusRing.inset,
 		style,
 	);
@@ -318,13 +317,16 @@ export function Separator({ ref, className, style, ...props }: SelectSeparatorPr
 
 const selectParts = stylex.create({
 	panelSurface: {
-		[popupVars.background]: tokens["--elevated"],
-		[popupVars.border]: tokens["--border"],
-		[popupVars.foreground]: tokens["--fg"],
+		// [popupVars.background]: tokens["--elevated"],
+		// [popupVars.border]: tokens["--border"],
+		// [popupVars.foreground]: tokens["--fg"],
 		borderRadius: tokens["--radius-lg"],
+		cornerShape: "superellipse(1.3)",
 		backgroundColor: popupVars.background,
-		boxShadow: tokens["--shadow-md"],
 		color: popupVars.foreground,
+		boxShadow: tokens["--shadow-md"],
+		minWidth: "calc(var(--anchor-width) + 1.75rem)",
+		overscrollBehavior: "contain",
 	},
 	root: {
 		gap: tokens["--space-2"],
@@ -421,7 +423,18 @@ const selectParts = stylex.create({
 	popup: {
 		outline: "0",
 		maxWidth: "min(24rem, var(--available-width))",
-		minWidth: "var(--anchor-width)",
+		minWidth: {
+			"[data-side='none']": "calc(var(--anchor-width) + var(--size-control-md))",
+			default: "var(--anchor-width)",
+		},
+		transitionDuration: {
+			"[data-side='none']": 0,
+			default: tokens["--motion-duration-content"],
+		},
+		opacity: {
+			"[data-side='none']": 1,
+			default: 1,
+		},
 	},
 	list: {
 		padding: tokens["--space-1"],
@@ -517,20 +530,20 @@ const selectParts = stylex.create({
 	},
 });
 
-const itemOverrides = stylex.create({
-	xs: {
-		paddingInlineEnd: tokens["--size-control-xs"],
-	},
-	sm: {
-		paddingInlineEnd: tokens["--size-control-sm"],
-	},
-	md: {
-		paddingInlineEnd: tokens["--size-control-md"],
-	},
-	lg: {
-		paddingInlineEnd: tokens["--size-control-lg"],
-	},
-});
+// const itemOverrides = stylex.create({
+// 	xs: {
+// 		paddingInlineEnd: tokens["--size-control-xs"],
+// 	},
+// 	sm: {
+// 		paddingInlineEnd: tokens["--size-control-sm"],
+// 	},
+// 	md: {
+// 		paddingInlineEnd: tokens["--size-control-md"],
+// 	},
+// 	lg: {
+// 		paddingInlineEnd: tokens["--size-control-lg"],
+// 	},
+// });
 
 export const Select = {
 	Root,

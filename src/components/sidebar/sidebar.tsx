@@ -308,6 +308,8 @@ const sidebarParts = stylex.create({
 		boxSizing: "border-box",
 		display: "flex",
 		flexDirection: "column",
+		gap: tokens["--space-2"],
+		alignItems: "stretch",
 		inlineSize: tokens["--size-sidebar"],
 		minBlockSize: 0,
 		transform: "translateX(0)",
@@ -321,6 +323,7 @@ const sidebarParts = stylex.create({
 		flexShrink: "1",
 		minBlockSize: 0,
 		minInlineSize: 0,
+		paddingBlock: tokens["--space-2"],
 	},
 	contentIconCollapsed: {
 		paddingInline: tokens["--space-2"],

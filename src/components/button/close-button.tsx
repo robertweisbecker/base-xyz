@@ -9,7 +9,7 @@ export type CloseButtonProps = Omit<IconButtonProps, "icon" | "label" | "shape">
 export function CloseButton({ label = "Close", size = "xs", variant = "neutral", ...props }: CloseButtonProps) {
 	return (
 		<IconButton
-			icon={<XIcon aria-hidden weight="bold" />}
+			icon={<XIcon aria-hidden weight="bold" size={12} stroke="currentColor" strokeWidth={4} />}
 			label={label}
 			shape="circle"
 			size={size}

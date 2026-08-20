@@ -18,6 +18,8 @@ const meta = {
 		readOnly: false,
 		required: false,
 		rows: 5,
+		minRows: undefined,
+		maxRows: undefined,
 		size: "md",
 	},
 	argTypes: {
@@ -30,6 +32,8 @@ const meta = {
 		readOnly: { control: "boolean" },
 		required: { control: "boolean" },
 		rows: { control: { type: "number", min: 2, max: 12, step: 1 } },
+		minRows: { control: { type: "number", min: 1, max: 12, step: 1 } },
+		maxRows: { control: { type: "number", min: 1, max: 20, step: 1 } },
 		size: { control: "inline-radio", options: ["sm", "md", "lg"] },
 	},
 	parameters: {
@@ -44,6 +48,8 @@ const meta = {
 				"readOnly",
 				"required",
 				"rows",
+				"minRows",
+				"maxRows",
 				"size",
 			],
 		},
@@ -57,9 +63,52 @@ export const Playground: Story = {
 	render: (args) => (
 		<div {...stylex.props(styles.frame)}>
 			<Textarea
-				key={`${args.defaultValue}-${args.disabled}-${args.error}-${args.readOnly}-${args.rows}-${args.size}`}
+				key={`${args.defaultValue}-${args.disabled}-${args.error}-${args.readOnly}-${args.rows}-${args.minRows}-${args.maxRows}-${args.size}`}
 				{...args}
 			/>
+		</div>
+	),
+};
+
+export const Resizing: Story = {
+	parameters: {
+		controls: { disable: true },
+	},
+	render: () => (
+		<div {...stylex.props(styles.resizingGrid)}>
+			<StateSpecimen label="Rows only">
+				<Textarea
+					label="Project update"
+					rows={2}
+					defaultValue={"The native rows height remains fixed while extra content scrolls."}
+				/>
+			</StateSpecimen>
+			<StateSpecimen label="Minimum rows only">
+				<Textarea
+					label="Project update"
+					rows={2}
+					minRows={3}
+					defaultValue={"The textarea grows with content and never becomes shorter than three rows."}
+				/>
+			</StateSpecimen>
+			<StateSpecimen label="Maximum rows only">
+				<Textarea
+					label="Project update"
+					rows={2}
+					maxRows={4}
+					defaultValue={
+						"The textarea grows from its rows value up to four rows, then scrolls as more content is added."
+					}
+				/>
+			</StateSpecimen>
+			<StateSpecimen label="Minimum and maximum rows">
+				<Textarea
+					label="Project update"
+					minRows={2}
+					maxRows={4}
+					defaultValue={"The textarea grows between its two configured row limits."}
+				/>
+			</StateSpecimen>
 		</div>
 	),
 };
@@ -127,6 +176,15 @@ const styles = stylex.create({
 		maxWidth: "420px",
 	},
 	stateGrid: {
+		gap: tokens["--space-8"],
+		display: "grid",
+		gridTemplateColumns: {
+			default: "repeat(2, minmax(0, 1fr))",
+			"@media (max-width: 760px)": "1fr",
+		},
+		maxWidth: "900px",
+	},
+	resizingGrid: {
 		gap: tokens["--space-8"],
 		display: "grid",
 		gridTemplateColumns: {

@@ -1,7 +1,7 @@
 import { Drawer as BaseDrawer } from "@base-ui/react/drawer";
 import * as stylex from "@stylexjs/stylex";
 import type { StyleXStyles } from "@stylexjs/stylex";
-import { type ComponentProps } from "react";
+import type { ComponentProps } from "react";
 import { tokens } from "@/theme/tokens.stylex";
 import { modalChromeStyles, modalTextStyles } from "@/components/dialog/dialog.stylex";
 
@@ -137,7 +137,9 @@ export function Body({ className, style, ...props }: StyledProps<ComponentProps<
 export function Footer({ className, style, ...props }: StyledProps<ComponentProps<"div">>) {
 	const { className: sxClassName, style: sxStyle } = stylex.props(modalTextStyles.footer, drawerParts.footer, style);
 
-	return <div className={[sxClassName, className].filter(Boolean).join(" ")} style={sxStyle} {...props} />;
+	return (
+		<div data-slot="footer" className={[sxClassName, className].filter(Boolean).join(" ")} style={sxStyle} {...props} />
+	);
 }
 
 export const Root = BaseDrawer.Root;
@@ -224,7 +226,10 @@ const drawerParts = stylex.create({
 			"[data-nested-drawer-open]": "hidden",
 			default: "auto",
 		},
-		paddingBottom: "calc(1.5rem + env(safe-area-inset-bottom, 0px) + var(--_drawer-bleed))",
+		paddingBottom: {
+			default: "calc(1.5rem + env(safe-area-inset-bottom, 0px) + var(--_drawer-bleed))",
+			":has([data-slot='footer'])": 0,
+		},
 		"::after": {
 			backgroundColor: {
 				"[data-close-confirmation-open]": "rgb(0 0 0 / 5%)",
@@ -258,12 +263,13 @@ const drawerParts = stylex.create({
 		display: "flex",
 		flexDirection: "column",
 		opacity: {
-			default: "1",
-			[stylex.when.ancestor("[data-nested-drawer-open]")]: "0",
-			[stylex.when.ancestor("[data-nested-drawer-open][data-nested-drawer-swiping]")]: "1",
+			"@starting-style": 0,
+			default: 1,
+			[stylex.when.ancestor("[data-nested-drawer-open]")]: 0,
+			[stylex.when.ancestor("[data-nested-drawer-open][data-nested-drawer-swiping]")]: 1,
 		},
 		transitionDuration: tokens["--motion-duration-medium"],
-		transitionProperty: "opacity",
+		transitionProperty: "opacity, height",
 		transitionTimingFunction: tokens["--motion-ease-out"],
 		width: "100%",
 	},
@@ -291,12 +297,10 @@ const drawerParts = stylex.create({
 		transitionTimingFunction: tokens["--motion-ease-out"],
 		height: "4px",
 		width: "58px",
+		cursor: "grab",
 	},
 	header: {
-		gap: tokens["--space-1"],
 		paddingInline: tokens["--space-5"],
-		display: "flex",
-		flexDirection: "column",
 		paddingBlockEnd: tokens["--space-3"],
 		paddingBlockStart: tokens["--space-2"],
 		borderBottomColor: tokens["--border"],
@@ -310,9 +314,14 @@ const drawerParts = stylex.create({
 		gap: tokens["--space-3"],
 		paddingInline: tokens["--space-5"],
 		paddingBlockStart: tokens["--space-3"],
+		paddingBottom: "calc(1.5rem + env(safe-area-inset-bottom, 0px) + var(--_drawer-bleed))",
 		borderTopColor: tokens["--border"],
 		borderTopStyle: "solid",
-		borderTopWidth: "1px",
+		borderTopWidth: "0.5px",
+		position: "sticky",
+		bottom: 0,
+		backgroundColor: tokens["--surface"],
+		zIndex: 1,
 	},
 });
 

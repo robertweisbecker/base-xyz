@@ -38,15 +38,28 @@ import { Button, IconButton } from "@/components/button/button";
 import { InputGroup } from "@/components/input-group/input-group";
 import { Menu } from "@/components/menu/menu";
 import { Table } from "@/components/table/table";
+import { Toggle } from "@/components/toggle/toggle";
 import { typescaleStyles } from "@/components/text/text.stylex";
 import { VisuallyHidden } from "@/components/visually-hidden/visually-hidden";
 import { tokens } from "@/theme/tokens.stylex";
-import { ArrowsDownUpIcon, SortAscendingIcon, SortDescendingIcon } from "@phosphor-icons/react";
+import {
+	ArrowsDownUpIcon,
+	ArrowsInLineVerticalIcon,
+	ArrowsOutLineVerticalIcon,
+	SortAscendingIcon,
+	SortDescendingIcon,
+} from "@phosphor-icons/react";
 
 const dataTableColumnRole = Symbol("data-table-column-role");
 type DataTableColumnRole = "selection" | "action";
 type DataTableColumnMeta = Record<string, unknown> & {
 	[dataTableColumnRole]?: DataTableColumnRole;
+	numeric?: boolean;
+};
+
+type DataTableColumnNumeric = {
+	/** End-aligns header and body cells and applies tabular numbers. */
+	numeric?: boolean;
 };
 
 const dataTableFeatures = tableFeatures({
@@ -66,12 +79,14 @@ const dataTableFeatures = tableFeatures({
 
 type DataTableFeatures = typeof dataTableFeatures;
 
-export type DataTableColumnDef<TData extends RowData, TValue = unknown> = ColumnDef<DataTableFeatures, TData, TValue>;
+export type DataTableColumnDef<TData extends RowData, TValue = unknown> = ColumnDef<DataTableFeatures, TData, TValue> &
+	DataTableColumnNumeric;
 export type DataTableRow<TData extends RowData> = Row<DataTableFeatures, TData>;
 export type DataTableColumn<TData extends RowData> = Column<DataTableFeatures, TData, unknown>;
 
 export type DataTableRowAction<TData extends RowData> = {
 	label: ReactNode;
+	icon?: ReactNode;
 	disabled?: boolean;
 	variant?: "default" | "danger";
 	onSelect?: (row: DataTableRow<TData>) => void;
@@ -161,17 +176,31 @@ export function DataTable<TData extends RowData, TValue = unknown>({
 				enableHiding: false,
 				enableSorting: false,
 				meta: { [dataTableColumnRole]: "action" },
-				header: () => <VisuallyHidden>Expand row</VisuallyHidden>,
-				cell: ({ row }) =>
-					row.getCanExpand() ? (
-						<IconButton
-							type="button"
+				header: ({ table }) => {
+					const allExpanded = table.getIsAllRowsExpanded();
+					return (
+						<Toggle
 							variant="ghost"
 							size="xs"
-							aria-expanded={row.getIsExpanded()}
+							pressed={allExpanded}
+							disabled={!table.getCanSomeRowsExpand()}
+							label={allExpanded ? "Collapse all" : "Expand all"}
+							onPressedChange={table.getToggleAllRowsExpandedHandler()}
+							icon={<ArrowsOutLineVerticalIcon aria-hidden />}
+							pressedIcon={<ArrowsInLineVerticalIcon aria-hidden />}
+						/>
+					);
+				},
+				cell: ({ row }) =>
+					row.getCanExpand() ? (
+						<Toggle
+							variant="ghost"
+							size="xs"
+							pressed={row.getIsExpanded()}
 							label={`${row.getIsExpanded() ? "Collapse" : "Expand"} row ${row.index + 1}`}
-							onClick={row.getToggleExpandedHandler()}
-							icon={row.getIsExpanded() ? <CaretDownIcon aria-hidden /> : <CaretRightIcon aria-hidden />}
+							onPressedChange={row.getToggleExpandedHandler()}
+							icon={<CaretRightIcon aria-hidden />}
+							pressedIcon={<CaretDownIcon aria-hidden />}
 						/>
 					) : null,
 			});
@@ -179,11 +208,12 @@ export function DataTable<TData extends RowData, TValue = unknown>({
 
 		// SAFETY: TanStack's column definition is invariant in TValue, while this table preserves each definition unchanged.
 		const typedColumns = (columns as Array<DataTableColumnDef<TData, unknown>>).map((column) => {
-			const columnId = getColumnDefId(column);
-			if (columnId && defaultFilterColumnIds.has(columnId) && column.filterFn == null) {
-				return { ...column, filterFn: dataTableFilter };
+			const normalized = withNumericMeta(column);
+			const columnId = getColumnDefId(normalized);
+			if (columnId && defaultFilterColumnIds.has(columnId) && normalized.filterFn == null) {
+				return { ...normalized, filterFn: dataTableFilter };
 			}
-			return column;
+			return normalized;
 		});
 
 		if (supportsActions) {
@@ -293,27 +323,29 @@ export function DataTable<TData extends RowData, TValue = unknown>({
 										);
 									}
 
-									const content = header.isPlaceholder ? null : (
-										<HeaderContent column={header.column} header={header} />
-									);
-
 									if (columnRole === "action") {
 										return (
 											<Table.HeaderAction
 												key={header.id}
 												colSpan={header.colSpan}
 												scope={header.colSpan > 1 ? "colgroup" : "col"}>
-												{content}
+												{header.isPlaceholder ? null : flexRender(header.column.columnDef.header, header.getContext())}
 											</Table.HeaderAction>
 										);
 									}
+
+									const numeric = isNumericColumn(header.column);
+									const content = header.isPlaceholder ? null : (
+										<HeaderContent column={header.column} header={header} numeric={numeric} />
+									);
 
 									return (
 										<Table.HeaderCell
 											key={header.id}
 											colSpan={header.colSpan}
 											scope={header.colSpan > 1 ? "colgroup" : "col"}
-											aria-sort={getAriaSort(header.column)}>
+											aria-sort={getAriaSort(header.column)}
+											numeric={numeric}>
 											{content}
 										</Table.HeaderCell>
 									);
@@ -325,9 +357,7 @@ export function DataTable<TData extends RowData, TValue = unknown>({
 						{visibleRows.length > 0 ? (
 							visibleRows.map((row) => (
 								<Fragment key={row.id}>
-									<Table.Row
-										data-expanded={row.getIsExpanded() ? "" : undefined}
-										checked={row.getIsSelected()}>
+									<Table.Row data-expanded={row.getIsExpanded() ? "" : undefined} checked={row.getIsSelected()}>
 										{row.getVisibleCells().map((cell) => {
 											const columnRole = getDataTableColumnRole(cell.column);
 
@@ -349,7 +379,11 @@ export function DataTable<TData extends RowData, TValue = unknown>({
 												return <Table.CellAction key={cell.id}>{content}</Table.CellAction>;
 											}
 
-											return <Table.Cell key={cell.id}>{content}</Table.Cell>;
+											return (
+												<Table.Cell key={cell.id} numeric={isNumericColumn(cell.column)}>
+													{content}
+												</Table.Cell>
+											);
 										})}
 									</Table.Row>
 									{renderExpandedRow && row.getIsExpanded() ? (
@@ -383,9 +417,11 @@ export function DataTable<TData extends RowData, TValue = unknown>({
 function HeaderContent<TData extends RowData>({
 	column,
 	header,
+	numeric,
 }: {
 	column: DataTableColumn<TData>;
 	header: Header<DataTableFeatures, TData, unknown>;
+	numeric: boolean;
 }) {
 	const content = flexRender(column.columnDef.header, header.getContext());
 	const sorted = column.getIsSorted();
@@ -400,6 +436,8 @@ function HeaderContent<TData extends RowData>({
 				endSlot={getSortIcon(sorted)}
 				aria-label={getSortLabel(content, sorted)}
 				variant="plain"
+				ms={numeric ? undefined : -2}
+				me={numeric ? -2 : undefined}
 				size="xs"
 				onClick={() => column.toggleSorting(sorted === "asc")}>
 				<span {...stylex.props(dataTableParts.headerLabel)}>{content}</span>
@@ -455,10 +493,18 @@ function ColumnFilterMenu<TData extends RowData>({
 			<Menu.Trigger
 				render={
 					<Button
-						variant={selectedValues.length > 0 ? "neutral" : "ghost"}
-						endSlot={<CaretDownIcon aria-hidden weight="bold" />}
+						variant={"secondary"}
+						endSlot={
+							selectedValues.length > 0 ? (
+								<Badge variant="solid" hue="neutral" size="sm">
+									{selectedValues.length}
+								</Badge>
+							) : (
+								<Menu.TriggerIcon />
+							)
+						}
 						style={dataTableParts.filterTrigger}>
-						<FilterTriggerContent filter={filter} selectedValues={selectedValues} />
+						<span {...stylex.props(dataTableParts.filterTriggerLabel)}>{filter.label}</span>
 					</Button>
 				}
 			/>
@@ -476,21 +522,6 @@ function ColumnFilterMenu<TData extends RowData>({
 				</Menu.Group>
 			</Menu.Popup>
 		</Menu.Root>
-	);
-}
-
-function FilterTriggerContent({ filter, selectedValues }: { filter: DataTableFilter; selectedValues: string[] }) {
-	if (selectedValues.length === 0) {
-		return <span {...stylex.props(dataTableParts.filterTriggerLabel)}>{filter.label}</span>;
-	}
-
-	return (
-		<span {...stylex.props(dataTableParts.filterTriggerContent)}>
-			<span {...stylex.props(dataTableParts.filterTriggerLabel)}>{filter.label}</span>
-			<Badge variant="elevated" size="sm">
-				{selectedValues.length}
-			</Badge>
-		</span>
 	);
 }
 
@@ -512,7 +543,7 @@ function RowActions<TData extends RowData>({
 	}
 
 	return (
-		<Menu.Root size="sm">
+		<Menu.Root>
 			<Menu.Trigger
 				render={
 					<IconButton
@@ -532,6 +563,7 @@ function RowActions<TData extends RowData>({
 							disabled={action.disabled}
 							variant={action.variant === "danger" ? "error" : "default"}
 							onClick={() => action.onSelect?.(row)}>
+							{action.icon && <Menu.ItemIcon>{action.icon}</Menu.ItemIcon>}
 							<Menu.ItemLabel>{action.label}</Menu.ItemLabel>
 						</Menu.Item>
 					))}
@@ -555,27 +587,20 @@ function ColumnVisibilityMenu<TData extends RowData>({
 	}
 
 	return (
-		<Menu.Root size="sm">
+		<Menu.Root>
 			<Menu.Trigger
-				render={
-					<IconButton
-						variant="neutral"
-						icon={<SlidersHorizontalIcon aria-hidden />}
-						label="Open columns menu"
-						tooltip={"Edit columns"}
-					/>
-				}
+				render={<IconButton variant="neutral" icon={<SlidersHorizontalIcon aria-hidden />} label="Column settings" />}
 			/>
 			<Menu.Popup positionerProps={{ align: "end" }}>
 				<Menu.Group>
 					<Menu.GroupLabel>Visible columns</Menu.GroupLabel>
 					{hideableColumns.map((column) => (
-						<Menu.CheckboxItem
+						<Menu.SwitchItem
 							key={column.id}
 							checked={column.getIsVisible()}
 							onCheckedChange={(checked) => column.toggleVisibility(checked)}>
 							<Menu.ItemLabel>{getColumnLabel(column)}</Menu.ItemLabel>
-						</Menu.CheckboxItem>
+						</Menu.SwitchItem>
 					))}
 				</Menu.Group>
 			</Menu.Popup>
@@ -600,6 +625,26 @@ function getAriaSort<TData extends RowData>(column: DataTableColumn<TData>) {
 
 function getDataTableColumnRole<TData extends RowData>(column: DataTableColumn<TData>) {
 	return column.columnDef.meta?.[dataTableColumnRole];
+}
+
+function isNumericColumn<TData extends RowData>(column: DataTableColumn<TData>) {
+	return column.columnDef.meta?.numeric === true;
+}
+
+function withNumericMeta<TData extends RowData, TValue>(
+	column: DataTableColumnDef<TData, TValue>,
+): DataTableColumnDef<TData, TValue> {
+	if (column.numeric == null) {
+		return column;
+	}
+
+	return {
+		...column,
+		meta: {
+			...column.meta,
+			numeric: column.numeric,
+		},
+	};
 }
 
 function getColumnDefId<TData extends RowData, TValue>(column: DataTableColumnDef<TData, TValue>) {
@@ -643,7 +688,7 @@ const dataTableParts = stylex.create({
 	},
 	filter: {
 		flexBasis: "10rem",
-		flexGrow: "0",
+		flexGrow: "1",
 		flexShrink: "1",
 		flexWrap: "nowrap",
 	},
@@ -656,12 +701,6 @@ const dataTableParts = stylex.create({
 	},
 	filterTrigger: {
 		maxWidth: "100%",
-	},
-	filterTriggerContent: {
-		gap: tokens["--space-1"],
-		alignItems: "center",
-		display: "inline-flex",
-		minWidth: 0,
 	},
 	filterTriggerLabel: {
 		overflow: "hidden",

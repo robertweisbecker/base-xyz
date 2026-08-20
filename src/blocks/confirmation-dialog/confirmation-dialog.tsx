@@ -184,7 +184,10 @@ function ConfirmationDialogRoot({
 		<ConfirmationDialogContext.Provider value={{ confirm, pending }}>
 			<Dialog.Root {...rootProps} actionsRef={resolvedActionsRef} modal disablePointerDismissal>
 				{trigger ? <Dialog.Trigger render={trigger} /> : null}
-				<Dialog.Popup scrollBehavior="inside" style={[confirmationDialogParts.popup, dialogSizes[size]]}>
+				<Dialog.Popup
+					scrollBehavior="inside"
+					style={[confirmationDialogParts.popup, dialogSizes[size]]}
+					showClose={false}>
 					{children}
 				</Dialog.Popup>
 			</Dialog.Root>
@@ -295,7 +298,7 @@ const confirmationDialogParts = stylex.create({
 		color: tokens["--fg"],
 		display: "flex",
 		justifyContent: "center",
-		marginBlockEnd: tokens["--space-2"],
+		marginBlockEnd: tokens["--space-4"],
 		height: tokens["--space-10"],
 		width: tokens["--space-10"],
 	},

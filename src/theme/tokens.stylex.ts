@@ -9,22 +9,28 @@ import * as stylex from "@stylexjs/stylex";
 export const tokens = stylex.defineVars({
 	"--color-white": "#ffffff",
 	"--color-black": "#000000",
-	"--color-gray-s1": "light-dark(oklch(99% 0 0deg), oklch(21% 0 0deg))",
-	"--color-gray-s2": "light-dark(oklch(97.5% 0 0deg), oklch(23% 0 0deg))",
-	"--color-gray-s3": "light-dark(oklch(96% 0 0deg), oklch(25% 0 0deg))",
-	"--color-gray-c1": "light-dark(oklch(95.25% 0 0deg), oklch(30% 0 0deg))",
-	"--color-gray-c2": "light-dark(oklch(93.5% 0 0deg), oklch(32% 0 0deg))",
+
+	"--color-gray-s1": "light-dark(oklch(99% 0 0deg), oklch(20% 0 0deg))",
+	"--color-gray-s2": "light-dark(oklch(97.5% 0 0deg), oklch(21% 0 0deg))",
+	"--color-gray-s3": "light-dark(oklch(96% 0 0deg), oklch(24% 0 0deg))",
+
+	"--color-gray-c1": "light-dark(oklch(95.25% 0 0deg), oklch(27% 0 0deg))",
+	"--color-gray-c2": "light-dark(oklch(93.5% 0 0deg), oklch(31% 0 0deg))",
 	"--color-gray-c3": "light-dark(oklch(92.25% 0 0deg), oklch(34% 0 0deg))",
+
 	"--color-gray-b1": "light-dark(hsl(0 0% 91.5%), oklch(35.5% 0 0))",
 	"--color-gray-b2": "light-dark(hsl(0 0% 81%), oklch(41.33% 0 0))",
 	"--color-gray-b3": "light-dark(hsl(0 0% 73%), oklch(48% 0 0))",
+
 	"--color-gray-p1": "light-dark(oklch(73% 0 0deg), oklch(73% 0 0deg))",
 	"--color-gray-p2": "light-dark(oklch(67% 0 0deg), oklch(67% 0 0deg))",
 	"--color-gray-p3": "light-dark(oklch(64% 0 0deg), oklch(64% 0 0deg))",
 	"--color-gray-p4": "light-dark(oklch(62.5% 0 0deg), oklch(62.5% 0 0deg))",
+
 	"--color-gray-t1": "light-dark(oklch(61% 0 0deg), oklch(61% 0 0deg))",
 	"--color-gray-t2": "light-dark(oklch(53% 0 0deg), oklch(74% 0 0deg))",
 	"--color-gray-t3": "light-dark(oklch(30% 0 0deg), oklch(93% 0 0deg))",
+
 	"--color-gray-a1": "light-dark(var(--color-black-a1), var(--color-white-a1))",
 	"--color-gray-a2": "light-dark(var(--color-black-a2), var(--color-white-a2))",
 	"--color-gray-a3": "light-dark(var(--color-black-a3), var(--color-white-a3))",
@@ -42,8 +48,11 @@ export const tokens = stylex.defineVars({
 	"--color-accent-b1": "light-dark(oklch(90.163% 0.049 243.67), oklch(34.75% 0.13 262))",
 	"--color-accent-b2": "light-dark(oklch(85.134% 0.07 243.106), oklch(36.33% 0.13 260))",
 	"--color-accent-b3": "light-dark(oklch(80% 0.09 242.684), oklch(41% 0.15 258))",
-	"--color-accent-p1": "light-dark(hsl(214deg 98% 50%), #0169CC)",
-	"--color-accent-p2": "light-dark(hsl(207deg 96% 48%), oklch(64.544% 0.18129 256.706))",
+	// Linear blue: oklch(0.74 0.15 249.88)
+
+	// "--color-accent-p1": "light-dark(hsl(214deg 98% 50%), #0169CC)",
+	"--color-accent-p1": "light-dark(#1470f4, oklch(54.544% 0.18129 256.706))",
+	"--color-accent-p2": "light-dark(hsl(207deg 96% 48%), oklch(47% 0.19 252))",
 	"--color-accent-t1": "light-dark(oklch(53.072% 0.20334 262.925), oklch(69.483% 0.15223 255.815))",
 	"--color-accent-t2": "light-dark(oklch(28.072% 0.09716 262.82), oklch(87.811% 0.0624 249.313))",
 
@@ -118,6 +127,7 @@ export const tokens = stylex.defineVars({
 	"--surface-subtle-hover": "var(--color-gray-a2)",
 	"--surface-subtle-active": "var(--color-gray-a3)",
 	"--bg-highlight": "var(--color-gray-a1)",
+	"--bg-disabled": "var(--color-gray-a2)",
 	"--fg": "var(--color-gray-t3)",
 	"--fg-muted": "var(--color-gray-t2)",
 	"--fg-subtle": "var(--color-gray-t1)",
@@ -142,7 +152,7 @@ export const tokens = stylex.defineVars({
 	"--fg-neutral-contrast": "var(--color-white)",
 	"--bg-error-primary": "var(--color-error-p1)",
 	"--fg-error": "var(--color-error-t1)",
-	"--bg-error": "var(--color-error-c1)",
+	"--bg-error": "var(--color-error-c2)",
 	"--fg-success": "var(--color-success-t1)",
 	"--bg-success-primary": "var(--color-success-p1)",
 	"--bg-success": "var(--color-success-c1)",
@@ -222,7 +232,7 @@ export const tokens = stylex.defineVars({
 	"--motion-duration-medium": "250ms",
 	"--motion-duration-content": "350ms",
 	"--motion-duration-long": "450ms",
-	"--motion-ease-popup": "ease-out",
+	"--motion-ease-popup": "var(--motion-ease-out)",
 	"--motion-ease-out": "cubic-bezier(0.16, 1, 0.3, 1)",
 	"--motion-ease-smooth-out": "cubic-bezier(0.22, 1, 0.36, 1)",
 
@@ -245,9 +255,9 @@ export const tokens = stylex.defineVars({
 	"--shadow-lg":
 		"0 2.8px 2.2px rgba(0, 0, 0, 0.034), 0 6.7px 5.3px rgba(0, 0, 0, 0.048), 0 12.5px 10px rgba(0, 0, 0, 0.06), 0 22.3px 17.9px rgba(0, 0, 0, 0.072), 0 41.8px 33.4px rgba(0, 0, 0, 0.086), 0 100px 80px rgba(0, 0, 0, 0.12), var(--shadow-ring),0px 0px 0px 1px var(--shadow-color-outer-ring)",
 	"--shadow-primary":
-		"inset 0 0 0.04em 0.08em color-mix(in srgb, var(--bg-primary) 90%, var(--fg)), inset 0 0.04em 0.04em 0.08em color-mix(in oklch, white 40%, var(--bg-primary)), var(--shadow-ring)",
+		"inset 0 0 0.03125em 0.0675em color-mix(in srgb, var(--bg-primary) 94%, var(--fg)), inset 0 0.03125em 0.03125em 0.0675em color-mix(in oklch, white 30%, var(--bg-primary)), var(--shadow-ring)",
 	"--shadow-primary-pressed":
-		"inset 0 0 0.08em color-mix(in oklch, black 20%, var(--bg-primary)), inset 0 0.08em 0.16em 0.08em color-mix(in oklch, black 10%, var(--bg-primary))",
+		"inset 0 0 0.08em color-mix(in oklch, black 20%, var(--bg-primary)), inset 0 0.08em 0.16em 0.08em color-mix(in oklch, black 20%, var(--bg-primary))",
 
 	"--font-family-sans":
 		'-apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji"',

@@ -46,6 +46,13 @@ export const Examples: Story = {
 				<ComposerDemo clearOnSubmit={false} defaultValue="Summarize the open review comments." />
 			</Example>
 			<Separator />
+			<Example label="Growing input">
+				<ComposerDemo
+					clearOnSubmit={false}
+					defaultValue={'Summarize the open review comments.\nInclude the affected components and the verification steps.'}
+				/>
+			</Example>
+			<Separator />
 			<Example label="Disabled">
 				<DisabledDemo />
 			</Example>

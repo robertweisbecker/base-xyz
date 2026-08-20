@@ -392,6 +392,7 @@ function SingleCombobox<Value>({
 
 type MultipleComboboxProps<Value> = Omit<ComboboxRootProps<Value, true>, "children" | "items" | "multiple"> & {
 	chipPlacement?: "inside" | "outside";
+	creatableItem?: Value;
 	expandChips?: "input-focus" | "always";
 	inputProps?: ComboboxInputProps;
 	itemVariant?: ComboboxItemVariant;
@@ -405,6 +406,7 @@ type MultipleComboboxProps<Value> = Omit<ComboboxRootProps<Value, true>, "childr
 
 function MultipleCombobox<Value>({
 	chipPlacement = "inside",
+	creatableItem,
 	expandChips,
 	inputProps,
 	itemVariant = "default",
@@ -471,7 +473,11 @@ function MultipleCombobox<Value>({
 				<Combobox.Empty>No matching options.</Combobox.Empty>
 				<Combobox.List>
 					{(item: Value) => (
-						<Combobox.Item key={getItemKey(item, props)} value={item} variant={itemVariant}>
+						<Combobox.Item
+							creatable={creatableItem !== undefined && item === creatableItem}
+							key={getItemKey(item, props)}
+							value={item}
+							variant={itemVariant}>
 							{renderItem?.(item) ?? getItemLabel(item, props)}
 						</Combobox.Item>
 					)}
@@ -561,6 +567,7 @@ function CreatableTagsExample() {
 			<MultipleCombobox
 				inputValue={inputValue}
 				items={itemsForView}
+				creatableItem={creatableItem}
 				label="Harness"
 				placeholder="Type to choose…"
 				value={selectedValues}

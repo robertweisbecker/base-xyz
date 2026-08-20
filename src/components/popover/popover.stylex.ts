@@ -41,17 +41,20 @@ export const popupMotionStyles = stylex.create({
 		opacity: {
 			"[data-ending-style]": 0,
 			"[data-starting-style]": 0,
+			"[data-side='none']": 1,
 			default: 1,
 		},
 		transform: {
 			"[data-ending-style]": "scale(0.98)",
 			"[data-starting-style]": "scale(0.98)",
+			"[data-side='none']": "scale(1)",
 			default: "scale(1)",
 		},
 		transformOrigin: "var(--transform-origin)",
 		transitionDuration: `${popupVars.duration}`,
 		transitionProperty: {
 			"[data-instant]": "none",
+			"[data-side='none']": "none",
 			default: "transform, opacity",
 		},
 		transitionTimingFunction: popupVars.easing,

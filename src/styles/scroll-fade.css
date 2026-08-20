@@ -25,6 +25,96 @@
  * prefers-reduced-motion likewise uses static fades (no scroll-linked animation).
  */
 
+/* Match ScrollArea's native-scroll fallback: a subtle track with a 4px thumb
+ * that grows to 6px on hover. */
+.xyz-scroll-fade,
+.xyz-scroll-fade-y,
+.xyz-scroll-fade-x,
+.xyz-scroll-fade-t,
+.xyz-scroll-fade-b,
+.xyz-scroll-fade-l,
+.xyz-scroll-fade-r,
+.xyz-scroll-fade-s,
+.xyz-scroll-fade-e {
+	scrollbar-color: var(--fill-neutral) var(--fill-track);
+	scrollbar-width: thin;
+}
+
+.xyz-scroll-fade::-webkit-scrollbar,
+.xyz-scroll-fade-y::-webkit-scrollbar,
+.xyz-scroll-fade-x::-webkit-scrollbar,
+.xyz-scroll-fade-t::-webkit-scrollbar,
+.xyz-scroll-fade-b::-webkit-scrollbar,
+.xyz-scroll-fade-l::-webkit-scrollbar,
+.xyz-scroll-fade-r::-webkit-scrollbar,
+.xyz-scroll-fade-s::-webkit-scrollbar,
+.xyz-scroll-fade-e::-webkit-scrollbar {
+	height: 10px;
+	width: 10px;
+}
+
+.xyz-scroll-fade::-webkit-scrollbar-track,
+.xyz-scroll-fade-y::-webkit-scrollbar-track,
+.xyz-scroll-fade-x::-webkit-scrollbar-track,
+.xyz-scroll-fade-t::-webkit-scrollbar-track,
+.xyz-scroll-fade-b::-webkit-scrollbar-track,
+.xyz-scroll-fade-l::-webkit-scrollbar-track,
+.xyz-scroll-fade-r::-webkit-scrollbar-track,
+.xyz-scroll-fade-s::-webkit-scrollbar-track,
+.xyz-scroll-fade-e::-webkit-scrollbar-track {
+	background: var(--fill-track);
+	border-radius: var(--radius-full);
+}
+
+.xyz-scroll-fade::-webkit-scrollbar-thumb,
+.xyz-scroll-fade-y::-webkit-scrollbar-thumb,
+.xyz-scroll-fade-x::-webkit-scrollbar-thumb,
+.xyz-scroll-fade-t::-webkit-scrollbar-thumb,
+.xyz-scroll-fade-b::-webkit-scrollbar-thumb,
+.xyz-scroll-fade-l::-webkit-scrollbar-thumb,
+.xyz-scroll-fade-r::-webkit-scrollbar-thumb,
+.xyz-scroll-fade-s::-webkit-scrollbar-thumb,
+.xyz-scroll-fade-e::-webkit-scrollbar-thumb {
+	background-clip: content-box;
+	background-color: var(--fill-neutral);
+	border: 3px solid transparent;
+	border-radius: var(--radius-full);
+}
+
+.xyz-scroll-fade::-webkit-scrollbar-thumb:hover,
+.xyz-scroll-fade::-webkit-scrollbar-thumb:active,
+.xyz-scroll-fade-y::-webkit-scrollbar-thumb:hover,
+.xyz-scroll-fade-y::-webkit-scrollbar-thumb:active,
+.xyz-scroll-fade-x::-webkit-scrollbar-thumb:hover,
+.xyz-scroll-fade-x::-webkit-scrollbar-thumb:active,
+.xyz-scroll-fade-t::-webkit-scrollbar-thumb:hover,
+.xyz-scroll-fade-t::-webkit-scrollbar-thumb:active,
+.xyz-scroll-fade-b::-webkit-scrollbar-thumb:hover,
+.xyz-scroll-fade-b::-webkit-scrollbar-thumb:active,
+.xyz-scroll-fade-l::-webkit-scrollbar-thumb:hover,
+.xyz-scroll-fade-l::-webkit-scrollbar-thumb:active,
+.xyz-scroll-fade-r::-webkit-scrollbar-thumb:hover,
+.xyz-scroll-fade-r::-webkit-scrollbar-thumb:active,
+.xyz-scroll-fade-s::-webkit-scrollbar-thumb:hover,
+.xyz-scroll-fade-s::-webkit-scrollbar-thumb:active,
+.xyz-scroll-fade-e::-webkit-scrollbar-thumb:hover,
+.xyz-scroll-fade-e::-webkit-scrollbar-thumb:active {
+	background-color: var(--fg-subtle);
+	border-width: 2px;
+}
+
+.xyz-scroll-fade::-webkit-scrollbar-corner,
+.xyz-scroll-fade-y::-webkit-scrollbar-corner,
+.xyz-scroll-fade-x::-webkit-scrollbar-corner,
+.xyz-scroll-fade-t::-webkit-scrollbar-corner,
+.xyz-scroll-fade-b::-webkit-scrollbar-corner,
+.xyz-scroll-fade-l::-webkit-scrollbar-corner,
+.xyz-scroll-fade-r::-webkit-scrollbar-corner,
+.xyz-scroll-fade-s::-webkit-scrollbar-corner,
+.xyz-scroll-fade-e::-webkit-scrollbar-corner {
+	background: var(--fill-track);
+}
+
 @property --scroll-fade-t {
 	syntax: "<length-percentage>";
 	inherits: false;

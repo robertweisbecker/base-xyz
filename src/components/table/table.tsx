@@ -3,7 +3,7 @@ import type { StyleXStyles } from "@stylexjs/stylex";
 import { createContext, useContext, type ComponentProps, type ReactNode } from "react";
 import { Checkbox, type CheckboxProps } from "@/components/checkbox/checkbox";
 import { ScrollArea } from "@/components/scroll-area/scroll-area";
-import { fontWeightStyles, typescaleStyles } from "@/components/text/text.stylex";
+import { fontWeightStyles, textTabularStyles, typescaleStyles } from "@/components/text/text.stylex";
 import { tokens } from "@/theme/tokens.stylex";
 import { attrJoin } from "@/utils/attr-join";
 
@@ -29,10 +29,15 @@ export type TableRowProps = StyledProps<ComponentProps<"tr">> & {
 	checked?: boolean;
 };
 
-export type TableHeaderCellProps = StyledProps<ComponentProps<"th">>;
-export type TableCellProps = StyledProps<ComponentProps<"td">>;
-export type TableHeaderActionProps = TableHeaderCellProps;
-export type TableCellActionProps = TableCellProps;
+type CellLayoutProps = {
+	/** End-aligns contents and applies tabular numbers. */
+	numeric?: boolean;
+};
+
+export type TableHeaderCellProps = StyledProps<ComponentProps<"th">> & CellLayoutProps;
+export type TableCellProps = StyledProps<ComponentProps<"td">> & CellLayoutProps;
+export type TableHeaderActionProps = Omit<TableHeaderCellProps, "numeric">;
+export type TableCellActionProps = Omit<TableCellProps, "numeric">;
 
 type TableCheckboxControlProps = Pick<
 	CheckboxProps,
@@ -224,25 +229,35 @@ function useDataRow(message: string) {
 	invariantDev(row === "body" || row === "footer", message);
 }
 
-export function HeaderCell({ ref, className, scope, style, children, ...props }: TableHeaderCellProps) {
+export function HeaderCell({
+	ref,
+	className,
+	numeric = false,
+	scope,
+	style,
+	children,
+	...props
+}: TableHeaderCellProps) {
 	useHeaderRow("Table.HeaderCell must be rendered inside a header Table.Row.");
-	const sx = stylex.props(tableParts.headerCell, typescaleStyles["1"], fontWeightStyles.medium, style);
+	const sx = stylex.props(
+		tableParts.headerCell,
+		typescaleStyles["1"],
+		fontWeightStyles.medium,
+		numeric && tableParts.numeric,
+		numeric && textTabularStyles.tabular,
+		style,
+	);
 
 	return (
-		<th
-			{...props}
-			ref={ref}
-			scope={scope ?? "col"}
-			className={attrJoin(sx.className, className)}
-			style={sx.style}>
+		<th {...props} ref={ref} scope={scope ?? "col"} className={attrJoin(sx.className, className)} style={sx.style}>
 			{children}
 		</th>
 	);
 }
 
-export function Cell({ ref, className, style, children, ...props }: TableCellProps) {
+export function Cell({ ref, className, numeric = false, style, children, ...props }: TableCellProps) {
 	useDataRow("Table.Cell must be rendered inside a body or footer Table.Row.");
-	const sx = stylex.props(tableParts.cell, style);
+	const sx = stylex.props(tableParts.cell, numeric && tableParts.numeric, numeric && textTabularStyles.tabular, style);
 
 	return (
 		<td {...props} ref={ref} className={attrJoin(sx.className, className)} style={sx.style}>
@@ -262,12 +277,7 @@ export function HeaderAction({ ref, className, scope, style, children, ...props 
 	);
 
 	return (
-		<th
-			{...props}
-			ref={ref}
-			scope={scope ?? "col"}
-			className={attrJoin(sx.className, className)}
-			style={sx.style}>
+		<th {...props} ref={ref} scope={scope ?? "col"} className={attrJoin(sx.className, className)} style={sx.style}>
 			{children}
 		</th>
 	);
@@ -299,6 +309,7 @@ function CheckboxContent({
 	return (
 		<span {...stylex.props(tableParts.checkboxFrame)}>
 			<Checkbox
+				data-component="checkbox"
 				checked={checked}
 				defaultChecked={defaultChecked}
 				disabled={disabled}
@@ -335,21 +346,10 @@ export function HeaderCheckbox({
 	...props
 }: TableHeaderCheckboxProps) {
 	useHeaderRow("Table.HeaderCheckbox must be rendered inside a header Table.Row.");
-	const sx = stylex.props(
-		tableParts.headerCell,
-		typescaleStyles["1"],
-		fontWeightStyles.medium,
-		tableParts.actionCell,
-		style,
-	);
+	const sx = stylex.props(tableParts.headerCell, tableParts.checkboxCell, style);
 
 	return (
-		<th
-			{...props}
-			ref={ref}
-			scope={scope ?? "col"}
-			className={attrJoin(sx.className, className)}
-			style={sx.style}>
+		<th {...props} ref={ref} scope={scope ?? "col"} className={attrJoin(sx.className, className)} style={sx.style}>
 			<CheckboxContent
 				checked={checked}
 				defaultChecked={defaultChecked}
@@ -383,7 +383,7 @@ export function CellCheckbox({
 	...props
 }: TableCellCheckboxProps) {
 	useDataRow("Table.CellCheckbox must be rendered inside a body or footer Table.Row.");
-	const sx = stylex.props(tableParts.cell, tableParts.actionCell, style);
+	const sx = stylex.props(tableParts.cell, tableParts.checkboxCell, style);
 
 	return (
 		<td {...props} ref={ref} className={attrJoin(sx.className, className)} style={sx.style}>
@@ -456,7 +456,10 @@ const tableParts = stylex.create({
 		borderBlockEndStyle: "solid",
 		borderBlockEndWidth: "1px",
 		color: tokens["--fg-subtle"],
-		paddingInlineStart: tokens["--space-3"],
+		paddingInlineStart: {
+			default: tokens["--space-2"],
+			":first-child": tokens["--space-3"],
+		},
 		textAlign: "start",
 		verticalAlign: "middle",
 		whiteSpace: "nowrap",
@@ -478,8 +481,14 @@ const tableParts = stylex.create({
 		borderBlockStartColor: tokens["--border"],
 		borderBlockStartStyle: "solid",
 		borderBlockStartWidth: "1px",
-		paddingInlineEnd: tokens["--space-3"],
-		paddingInlineStart: tokens["--space-3"],
+		paddingInlineEnd: {
+			default: tokens["--space-2"],
+			":last-child": tokens["--space-3"],
+		},
+		paddingInlineStart: {
+			default: tokens["--space-2"],
+			":first-child": tokens["--space-3"],
+		},
 		textAlign: "start",
 		verticalAlign: "middle",
 		minHeight: tokens["--size-control-md"],
@@ -492,8 +501,20 @@ const tableParts = stylex.create({
 	},
 	actionCell: {
 		paddingBlock: tokens["--space-0-5"],
-		paddingInline: tokens["--space-1"],
+		paddingInlineEnd: tokens["--space-1-5"],
+		paddingInlineStart: tokens["--space-1-5"],
 		textAlign: "center",
+		whiteSpace: "nowrap",
+		width: "1%",
+	},
+	numeric: {
+		paddingInlineEnd: tokens["--space-3"],
+		textAlign: "end",
+	},
+	checkboxCell: {
+		paddingBlock: tokens["--space-0-5"],
+		paddingInlineStart: tokens["--space-3"],
+		paddingInlineEnd: tokens["--space-1"],
 		whiteSpace: "nowrap",
 		width: "1%",
 	},

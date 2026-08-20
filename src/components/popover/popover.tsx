@@ -199,13 +199,13 @@ const popoverParts = stylex.create({
 		[popupVars.background]: tokens["--panel"],
 		[popupVars.border]: tokens["--border"],
 		[popupVars.foreground]: tokens["--fg"],
-		borderRadius: tokens["--radius-lg"],
+		borderRadius: tokens["--radius-md"],
 		backgroundColor: popupVars.background,
 		boxShadow: tokens["--shadow-md"],
 		color: popupVars.foreground,
 	},
 	popup: {
-		gap: tokens["--space-2"],
+		gap: tokens["--space-1"],
 		outline: "0",
 		paddingBlock: tokens["--space-3"],
 		paddingInline: tokens["--space-3"],
@@ -233,7 +233,7 @@ const popoverParts = stylex.create({
 });
 
 const popoverTextParts = stylex.create({
-	title: { marginTop: `-.25em` },
+	title: { marginTop: 0 },
 	description: { margin: 0, color: tokens["--fg-muted"] },
 });
 

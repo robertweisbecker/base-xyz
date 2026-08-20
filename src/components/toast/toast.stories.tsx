@@ -13,7 +13,9 @@ import { useEffect, useRef, useState } from "react";
 import { tokens } from "@/theme/tokens.stylex";
 
 import { Button, IconButton } from "@/components/button/button";
+import { Icon } from "@/components/icons";
 import { Loader } from "@/components/loader";
+import { MeterGauge } from "@/components/meter/meter-gauge";
 import { Tooltip } from "@/components/tooltip/tooltip";
 import { Toast } from "./index";
 import { Text } from "../text";
@@ -319,6 +321,21 @@ const editingSteps = [
 	{ files: 42, additions: 398, deletions: 331 },
 ] as const;
 
+function EditingProgressGauge({ complete = false, value }: { complete?: boolean; value: number }) {
+	return (
+		<MeterGauge
+			aria-hidden
+			fillColor="currentColor"
+			showValue={false}
+			size={16}
+			style={storyStyles.progressGauge}
+			trackColor="color-mix(in srgb, currentColor 25%, transparent)"
+			value={value}>
+			{complete ? <Icon.Checkmark height={10} strokeWidth={3} width={10} /> : null}
+		</MeterGauge>
+	);
+}
+
 function PillAnchoredExample({ _side, _align }: Pick<StoryArgs, "_side" | "_align">) {
 	const manager = Toast.useAnchoredToastManager();
 	const anchorRef = useRef<HTMLButtonElement | null>(null);
@@ -360,6 +377,7 @@ function PillAnchoredExample({ _side, _align }: Pick<StoryArgs, "_side" | "_alig
 				variant: "pill",
 				tone: "accent",
 				status: "ongoing",
+				icon: <EditingProgressGauge value={((nextStepIndex + 1) / editingSteps.length) * 100} />,
 				dismissible: false,
 			},
 		});
@@ -393,7 +411,7 @@ function PillAnchoredExample({ _side, _align }: Pick<StoryArgs, "_side" | "_alig
 				status: nextStatus,
 				icon:
 					nextStatus === "success" ? (
-						<CheckCircleIcon aria-hidden size={16} weight="fill" />
+						<EditingProgressGauge complete value={100} />
 					) : (
 						<PlugIcon aria-hidden size={16} weight="fill" />
 					),
@@ -547,5 +565,8 @@ const storyStyles = stylex.create({
 		display: "flex",
 		flexWrap: "wrap",
 		justifyContent: "center",
+	},
+	progressGauge: {
+		color: "inherit",
 	},
 });

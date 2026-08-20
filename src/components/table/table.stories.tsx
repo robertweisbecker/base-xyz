@@ -12,6 +12,7 @@ type PlaygroundArgs = {
 	_caption: string;
 	_checked: boolean;
 	_empty: boolean;
+	_numeric: boolean;
 	_showFooter: boolean;
 };
 
@@ -21,17 +22,19 @@ const meta = {
 		_caption: "Deployments",
 		_checked: false,
 		_empty: false,
+		_numeric: false,
 		_showFooter: true,
 	},
 	argTypes: {
 		_caption: { control: "text" },
 		_checked: { control: "boolean" },
 		_empty: { control: "boolean" },
+		_numeric: { control: "boolean" },
 		_showFooter: { control: "boolean" },
 	},
 	parameters: {
 		controls: {
-			include: ["_caption", "_checked", "_empty", "_showFooter"],
+			include: ["_caption", "_checked", "_empty", "_numeric", "_showFooter"],
 		},
 	},
 } satisfies Meta<PlaygroundArgs>;
@@ -40,12 +43,13 @@ export default meta;
 type Story = StoryObj<PlaygroundArgs>;
 
 export const Playground: Story = {
-	render: ({ _caption, _checked, _empty, _showFooter }) => (
+	render: ({ _caption, _checked, _empty, _numeric, _showFooter }) => (
 		<ControlledTable
 			key={_checked ? "checked" : "unchecked"}
 			caption={<VisuallyHidden>{_caption}</VisuallyHidden>}
 			checked={_checked}
 			empty={_empty}
+			numeric={_numeric}
 			showFooter={_showFooter}
 		/>
 	),
@@ -126,7 +130,7 @@ export const Overflow: Story = {
 									<Table.HeaderCell>Branch</Table.HeaderCell>
 									<Table.HeaderCell>Owner</Table.HeaderCell>
 									<Table.HeaderCell>Region</Table.HeaderCell>
-									<Table.HeaderCell>Updated</Table.HeaderCell>
+									<Table.HeaderCell numeric>Updated</Table.HeaderCell>
 								</Table.Row>
 							</Table.Header>
 							<Table.Body>
@@ -137,7 +141,7 @@ export const Overflow: Story = {
 									<Table.Cell>main</Table.Cell>
 									<Table.Cell>Maya Chen</Table.Cell>
 									<Table.Cell>Washington, D.C., USA</Table.Cell>
-									<Table.Cell>2 minutes ago</Table.Cell>
+									<Table.Cell numeric>2 minutes ago</Table.Cell>
 								</Table.Row>
 								<Table.Row>
 									<Table.Cell>feature-auth.example.com</Table.Cell>
@@ -146,7 +150,7 @@ export const Overflow: Story = {
 									<Table.Cell>feature/authentication</Table.Cell>
 									<Table.Cell>Ari Patel</Table.Cell>
 									<Table.Cell>Frankfurt, Germany</Table.Cell>
-									<Table.Cell>12 minutes ago</Table.Cell>
+									<Table.Cell numeric>12 minutes ago</Table.Cell>
 								</Table.Row>
 							</Table.Body>
 						</Table.Content>
@@ -161,11 +165,13 @@ function ControlledTable({
 	caption,
 	checked: initialChecked,
 	empty = false,
+	numeric = false,
 	showFooter = false,
 }: {
 	caption: ReactNode;
 	checked: boolean;
 	empty?: boolean;
+	numeric?: boolean;
 	showFooter?: boolean;
 }) {
 	const [checkedRows, setCheckedRows] = useState<string[]>(initialChecked ? ["app"] : []);
@@ -175,6 +181,7 @@ function ControlledTable({
 			caption={caption}
 			checkedRows={checkedRows}
 			empty={empty}
+			numeric={numeric}
 			onCheckedRowsChange={setCheckedRows}
 			showFooter={showFooter}
 		/>
@@ -217,6 +224,7 @@ function ManualTable({
 	checkedRows,
 	empty = false,
 	groupedHeaders = false,
+	numeric = false,
 	onCheckedRowsChange,
 	showFooter = false,
 }: {
@@ -224,6 +232,7 @@ function ManualTable({
 	checkedRows: string[];
 	empty?: boolean;
 	groupedHeaders?: boolean;
+	numeric?: boolean;
 	onCheckedRowsChange?: (rows: string[]) => void;
 	showFooter?: boolean;
 }) {
@@ -264,7 +273,7 @@ function ManualTable({
 								</Table.Row>
 								<Table.Row>
 									<Table.HeaderCell>URL</Table.HeaderCell>
-									<Table.HeaderCell>Status</Table.HeaderCell>
+									<Table.HeaderCell numeric={numeric}>Status</Table.HeaderCell>
 								</Table.Row>
 							</>
 						) : (
@@ -279,7 +288,7 @@ function ManualTable({
 									}
 								/>
 								<Table.HeaderCell>Name</Table.HeaderCell>
-								<Table.HeaderCell>Status</Table.HeaderCell>
+								<Table.HeaderCell numeric={numeric}>Status</Table.HeaderCell>
 								<Table.HeaderAction>
 									<VisuallyHidden>Row actions</VisuallyHidden>
 								</Table.HeaderAction>
@@ -298,7 +307,7 @@ function ManualTable({
 										onCheckedChange={(checked) => updateRow(row.id, checked)}
 									/>
 									<Table.Cell>{row.url}</Table.Cell>
-									<Table.Cell>
+									<Table.Cell numeric={numeric}>
 										<Badge variant="subtle" hue={row.status === "Ready" ? "accent" : "neutral"}>
 											{row.status}
 										</Badge>

@@ -16,7 +16,7 @@ export const itemMarker = stylex.defineMarker();
 const menuItemParts = stylex.create({
 	itemBase: {
 		borderRadius: tokens["--radius-md"],
-		cornerShape: "superellipse(1.3)",
+		cornerShape: "superellipse(1.4)",
 		outline: "0",
 		paddingBlock: menuItemVars.paddingBlock,
 		textDecoration: "none",

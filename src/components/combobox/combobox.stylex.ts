@@ -88,6 +88,9 @@ export const comboboxParts = stylex.create({
 		justifyContent: "center",
 		lineHeight: 0,
 	},
+	creatableIndicator: {
+		visibility: "visible",
+	},
 	chipOverflow: {
 		paddingInline: tokens["--space-1"],
 		alignItems: "center",

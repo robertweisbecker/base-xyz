@@ -1,4 +1,5 @@
 import { Field } from "@base-ui/react/field";
+import { useMergedRefs } from "@base-ui/utils/useMergedRefs";
 import * as stylex from "@stylexjs/stylex";
 import type { StyleXStyles } from "@stylexjs/stylex";
 import { useId, type ComponentProps } from "react";
@@ -7,6 +8,7 @@ import type { FieldSize, FieldThemeProps } from "@/components/field/field.types"
 import { fieldStyles, fieldInputStyles, fieldThemeProps } from "@/components/field/field.stylex";
 import { focusRing } from "@/styles/recipes/focus";
 import { attrJoin } from "@/utils/attr-join";
+import { useTextareaAutoResize } from "@/hooks/use-textarea-auto-resize";
 
 export type TextareaProps = Omit<
 	ComponentProps<"textarea">,
@@ -20,6 +22,10 @@ export type TextareaProps = Omit<
 	/** StyleX overrides, applied after the component's own styles. */
 	style?: StyleXStyles;
 	size?: FieldSize;
+	/** Enables content-based resizing with this minimum row count; defaults to `rows`. */
+	minRows?: number;
+	/** Enables content-based resizing with this maximum row count; content beyond this scrolls. */
+	maxRows?: number;
 };
 
 export function Textarea({
@@ -34,11 +40,22 @@ export function Textarea({
 	readOnly,
 	rows = 4,
 	size = "md",
+	minRows,
+	maxRows,
 	"aria-describedby": ariaDescribedBy,
 	"aria-invalid": ariaInvalid,
+	onChange,
 	...props
 }: TextareaProps) {
 	const { restProps, styles } = resolveThemeProps(props, fieldThemeProps);
+	const autoResizeEnabled = minRows !== undefined || maxRows !== undefined;
+	const autoResizeState = useTextareaAutoResize({
+		enabled: autoResizeEnabled,
+		rows,
+		minRows,
+		maxRows,
+	});
+	const mergedRef = useMergedRefs(ref, autoResizeState.ref);
 	const generatedId = useId();
 	const id = providedId ?? generatedId;
 	const descriptionId = description ? `${id}-description` : undefined;
@@ -56,7 +73,7 @@ export function Textarea({
 				{label}
 			</Field.Label>
 			<textarea
-				ref={ref}
+				ref={mergedRef}
 				id={id}
 				aria-describedby={attrJoin(ariaDescribedBy, descriptionId, errorId) || undefined}
 				aria-invalid={error ? true : ariaInvalid}
@@ -65,8 +82,17 @@ export function Textarea({
 				data-readonly={readOnly ? "" : undefined}
 				disabled={disabled}
 				readOnly={readOnly}
-				rows={rows}
-				{...stylex.props(fieldInputStyles[size], textareaParts.control, focusRing.inset)}
+				rows={autoResizeEnabled ? autoResizeState.minRows : rows}
+				onChange={(event) => {
+					onChange?.(event);
+					autoResizeState.resize();
+				}}
+				{...stylex.props(
+					fieldInputStyles[size],
+					textareaParts.control,
+					autoResizeEnabled && textareaParts.autoResize,
+					focusRing.inset,
+				)}
 				{...restProps}
 			/>
 			{description ? (
@@ -88,5 +114,8 @@ const textareaParts = stylex.create({
 		fontFamily: "inherit",
 		resize: "vertical",
 		height: "auto",
+	},
+	autoResize: {
+		resize: "none",
 	},
 });

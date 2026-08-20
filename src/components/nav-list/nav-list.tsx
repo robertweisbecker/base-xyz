@@ -21,11 +21,7 @@ import {
 	type Ref,
 	type RefObject,
 } from "react";
-import {
-	menuItemSizeStyles,
-	menuItemStyles,
-	menuItemVariantStyles,
-} from "@/components/menu/menu-item.stylex";
+import { menuItemSizeStyles, menuItemStyles, menuItemVariantStyles } from "@/components/menu/menu-item.stylex";
 import { menuItemVars } from "@/components/menu/menu-item-vars.stylex";
 import { Popover } from "@/components/popover/popover";
 import { typescaleStyles, textStyles, fontWeightStyles } from "@/components/text/text.stylex";
@@ -668,9 +664,7 @@ export function Drilldown({ value, defaultValue, onValueChange, children }: NavL
 							role="group"
 							tabIndex={active ? -1 : undefined}
 							{...stylex.props(navListParts.drilldownPanel)}>
-							<DrilldownPanelContext.Provider value={panel.label}>
-								{panel.node}
-							</DrilldownPanelContext.Provider>
+							<DrilldownPanelContext.Provider value={panel.label}>{panel.node}</DrilldownPanelContext.Provider>
 						</section>
 					);
 				})}
@@ -933,9 +927,7 @@ function CollapsedDrilldownPopover({
 						value={{ presentation: "expanded", popoverSide, scrollMode: "internal" }}>
 						<DrilldownContext.Provider value={localContext}>
 							<div aria-label={panel.label} role="group">
-								<DrilldownPanelContext.Provider value={panel.label}>
-									{panel.node}
-								</DrilldownPanelContext.Provider>
+								<DrilldownPanelContext.Provider value={panel.label}>{panel.node}</DrilldownPanelContext.Provider>
 							</div>
 						</DrilldownContext.Provider>
 					</NavListPresentationContext.Provider>
@@ -963,7 +955,7 @@ const navListParts = stylex.create({
 	scroller: {
 		gap: tokens["--space-2"],
 		overscrollBehavior: "contain",
-		paddingBlock: tokens["--space-1"],
+		// paddingBlock: tokens["--space-1"],
 		display: "flex",
 		flexBasis: "auto",
 		flexDirection: "column",
@@ -994,6 +986,7 @@ const navListParts = stylex.create({
 		[menuItemVars.columnGap]: tokens["--space-2"],
 		[menuItemVars.paddingInlineEnd]: tokens["--space-2"],
 		[menuItemVars.paddingInlineStart]: tokens["--space-2"],
+		height: tokens["--size-control-md"],
 		borderColor: "transparent",
 		borderRadius: tokens["--radius-md"],
 		borderStyle: "solid",
@@ -1034,11 +1027,11 @@ const navListParts = stylex.create({
 	iconModeRow: {
 		[menuItemVars.columns]: "1fr",
 		[menuItemVars.columnGap]: 0,
-		[menuItemVars.minHeight]: tokens["--size-control-lg"],
+		[menuItemVars.minHeight]: tokens["--size-control-md"],
 		[menuItemVars.paddingInlineEnd]: 0,
 		[menuItemVars.paddingInlineStart]: 0,
 		justifyContent: "center",
-		minInlineSize: tokens["--size-control-lg"],
+		minInlineSize: [menuItemVars.minHeight],
 	},
 	icon: {
 		gridColumn: "1",
@@ -1089,7 +1082,8 @@ const navListParts = stylex.create({
 		flexDirection: "column",
 	},
 	sectionLabel: {
-		paddingBlock: tokens["--space-1"],
+		paddingBlockStart: tokens["--space-3"],
+		paddingBlockEnd: tokens["--space-1"],
 		paddingInline: tokens["--space-3"],
 		display: "grid",
 		fontSize: tokens["--font-size-1"],
@@ -1113,17 +1107,18 @@ const navListParts = stylex.create({
 	collapsibleGroup: {
 		display: "flex",
 		flexDirection: "column",
+		gap: 1,
 	},
 	collapsiblePanel: {
 		margin: 0,
-		gap: 0,
+		gap: 1,
 		listStyle: "none",
 		overflow: "hidden",
-		paddingBlock: {
+		marginBlock: {
 			'[aria-hidden="true"]': 0,
 			"[data-ending-style]": 0,
 			"[data-starting-style]": 0,
-			default: tokens["--space-1"],
+			default: 2,
 		},
 		borderInlineStartColor: tokens["--border"],
 		borderInlineStartStyle: "solid",
@@ -1133,7 +1128,7 @@ const navListParts = stylex.create({
 		flexDirection: "column",
 		marginInlineStart: tokens["--space-4"],
 		paddingInlineEnd: tokens["--space-0"],
-		paddingInlineStart: tokens["--space-3"],
+		paddingInlineStart: tokens["--space-1-5"],
 		transitionDuration: tokens["--motion-duration-short"],
 		transitionProperty: "height, padding",
 		transitionTimingFunction: tokens["--motion-ease-out"],
@@ -1181,7 +1176,12 @@ const navListParts = stylex.create({
 		minWidth: 0,
 	},
 	backControl: {
-		marginBlockEnd: tokens["--space-1"],
+		fontSize: tokens["--font-size-1"],
+		fontWeight: tokens["--font-weight-regular"],
+		letterSpacing: tokens["--letter-spacing-1"],
+		lineHeight: tokens["--line-height-1"],
+		paddingBlock: tokens["--space-1"],
+		marginBlockEnd: 1,
 	},
 	childPopover: {
 		gap: tokens["--space-1"],

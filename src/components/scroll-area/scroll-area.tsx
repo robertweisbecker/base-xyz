@@ -109,7 +109,7 @@ const parts = stylex.create({
 		position: "relative",
 	},
 	viewport: {
-		overscrollBehavior: "contain",
+		overscrollBehaviorX: "contain",
 		scrollbarWidth: "none",
 		height: "100%",
 		width: "100%",
@@ -119,7 +119,7 @@ const parts = stylex.create({
 		"--scroll-area-overflow-x-start": "inherit",
 		"--scroll-area-overflow-y-end": "inherit",
 		"--scroll-area-overflow-y-start": "inherit",
-		overscrollBehavior: "contain",
+		overscrollBehaviorX: "contain",
 	},
 	fade: {
 		// "--scroll-area-mask-x-end": {

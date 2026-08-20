@@ -12,6 +12,7 @@ import { Loader } from "@/components/loader/loader";
 import { Tooltip } from "@/components/tooltip/tooltip";
 import { buttonThemeProps, type ButtonThemeProps } from "./button-theme-props";
 import { buttonMarker } from "./button.stylex";
+import { attrJoin } from "@/utils/attr-join";
 
 export type { ButtonThemeProps } from "./button-theme-props";
 
@@ -117,7 +118,7 @@ const slotSizes = stylex.create({
 });
 
 const iconOnlySlotSizes = stylex.create({
-	xs: { fontSize: "1rem" }, // 14px
+	xs: { fontSize: ".875rem" }, // 14px
 	sm: { fontSize: "1rem" }, // 16px
 	md: { fontSize: "1.125rem" }, // 20px
 	lg: { fontSize: "1.25rem" }, // 24px
@@ -126,23 +127,31 @@ const iconOnlySlotSizes = stylex.create({
 const iconOnlyControlSizes = stylex.create({
 	xs: {
 		height: tokens["--size-control-xs"],
-		minWidth: tokens["--size-control-xs"],
+		minWidth: 0,
 		width: tokens["--size-control-xs"],
+		padding: 0,
+		flexShrink: 0,
 	},
 	sm: {
 		height: tokens["--size-control-sm"],
-		minWidth: tokens["--size-control-sm"],
+		minWidth: 0,
 		width: tokens["--size-control-sm"],
+		padding: 0,
+		flexShrink: 0,
 	},
 	md: {
 		height: tokens["--size-control-md"],
-		minWidth: tokens["--size-control-md"],
+		// minWidth: tokens["--size-control-md"],
 		width: tokens["--size-control-md"],
+		padding: 0,
+		flexShrink: 0,
 	},
 	lg: {
 		height: tokens["--size-control-lg"],
-		minWidth: tokens["--size-control-lg"],
+		// minWidth: tokens["--size-control-lg"],
 		width: tokens["--size-control-lg"],
+		padding: 0,
+		flexShrink: 0,
 	},
 });
 
@@ -202,7 +211,7 @@ const colorVariants = stylex.create({
 		backgroundColor: {
 			[HOVER_NOT_PRESSED_OR_OPEN]: `light-dark(${tokens["--elevated-2"]}, ${tokens["--elevated"]})`,
 			[PRESSED]: tokens["--inset"],
-			"[data-popup-open]": tokens["--elevated"],
+			"[data-popup-open]": tokens["--inset"],
 			default: `light-dark(${tokens["--elevated"]}, ${tokens["--elevated-2"]})`,
 			":active:not([data-disabled])": tokens["--inset"],
 		},
@@ -446,14 +455,15 @@ function ButtonRoot({
 		colorVariants[variant],
 		sizeVariants[size],
 		shapeVariants[shape],
-		...styles,
 		iconOnly && iconOnlyControlSizes[size],
+		...styles,
 		style,
 	);
 	const resolvedLoadingText = iconOnly ? "" : loadingText;
 
 	return (
 		<BaseButton
+			{...sx}
 			ref={ref}
 			type={type}
 			render={render}
@@ -466,8 +476,7 @@ function ButtonRoot({
 			data-shape={shape}
 			data-size={size}
 			data-variant={variant}
-			className={[sx.className, className].filter(Boolean).join(" ")}
-			style={sx.style}
+			className={attrJoin(sx.className, className)}
 			{...restProps}>
 			<span {...stylex.props(loadingStyles.resting, loading && loadingStyles.hidden)}>
 				{renderSlot(startSlot, "start", size, variant, iconOnly)}
@@ -506,7 +515,7 @@ function renderSlot(
 	);
 
 	return (
-		<span aria-hidden className={sx.className} style={sx.style}>
+		<span className={sx.className} style={sx.style}>
 			{slot}
 		</span>
 	);

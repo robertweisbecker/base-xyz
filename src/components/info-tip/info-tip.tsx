@@ -1,10 +1,10 @@
 import { InfoIcon } from "@phosphor-icons/react/dist/csr/Info";
 import { QuestionIcon } from "@phosphor-icons/react/dist/csr/Question";
 import type { ReactNode } from "react";
-import { IconButton, type ButtonSize } from "@/components/button/button";
+import { IconButton, type IconButtonProps, type ButtonSize } from "@/components/button/button";
 import { Popover } from "@/components/popover/popover";
 
-export type InfoTipProps = {
+export type InfoTipProps = Omit<IconButtonProps, "icon" | "label" | "tooltip"> & {
 	/** Content shown in the popover. Strings receive description semantics. */
 	content: ReactNode;
 	/** Uses a question-mark trigger and help-oriented accessible label. */
@@ -12,7 +12,7 @@ export type InfoTipProps = {
 	size?: ButtonSize;
 };
 
-export function InfoTip({ content, help = false, size = "sm" }: InfoTipProps) {
+export function InfoTip({ content, help = false, size = "sm", ...props }: InfoTipProps) {
 	const label = help ? "Help" : "More information";
 
 	return (
@@ -27,6 +27,7 @@ export function InfoTip({ content, help = false, size = "sm" }: InfoTipProps) {
 						size={size}
 						tooltip={false}
 						variant="ghost"
+						{...props}
 					/>
 				}
 			/>

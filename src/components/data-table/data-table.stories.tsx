@@ -7,23 +7,31 @@ import { Badge } from "@/components/badge/badge";
 import { CommandPalette } from "@/components/command-palette/command-palette";
 import { Breadcrumbs } from "@/components/breadcrumbs/breadcrumbs";
 import { Kbd } from "@/components/kbd/kbd";
-import { Stack } from "@/components/layout/layout";
 import { Text } from "@/components/text/text";
+import { Code } from "@/components/code/code";
 import { tokens } from "@/theme/tokens.stylex";
 import { DataTable, type DataTableColumnDef, type DataTableFilter, type DataTableProps } from "./data-table";
 import { Loader } from "@/components/loader";
-import { Button, IconButton } from "@/components/button";
-import { CaretDownIcon } from "@phosphor-icons/react/dist/csr/CaretDown";
+import { Button } from "@/components/button";
 import { CaretRightIcon } from "@phosphor-icons/react/dist/csr/CaretRight";
 import { CheckCircleIcon } from "@phosphor-icons/react/dist/csr/CheckCircle";
 import { XCircleIcon } from "@phosphor-icons/react/dist/csr/XCircle";
-import { GearFineIcon, ScrollIcon } from "@phosphor-icons/react";
+import {
+	ArrowClockwiseIcon,
+	CopyIcon,
+	CubeFocusIcon,
+	GearFineIcon,
+	ScrollIcon,
+	TrashIcon,
+} from "@phosphor-icons/react";
+import { Avatar } from "@/components/avatar/avatar";
+import { Stack } from "@/components/layout/layout";
 
 type Deployment = {
 	id: string;
 	environment: "Production" | "Preview" | "Staging";
 	owner: string;
-	status: "Ready" | "Building" | "Failed";
+	status: "Deployed" | "Building" | "Failed";
 	updated: string;
 	url: string;
 };
@@ -49,7 +57,7 @@ const deployments: Deployment[] = [
 		id: "dep_3gt9m",
 		environment: "Production",
 		owner: "Maya Chen",
-		status: "Ready",
+		status: "Deployed",
 		updated: "2 minutes ago",
 		url: "app.example.com",
 	},
@@ -73,7 +81,7 @@ const deployments: Deployment[] = [
 		id: "dep_9km30",
 		environment: "Preview",
 		owner: "Noah Kim",
-		status: "Ready",
+		status: "Deployed",
 		updated: "41 minutes ago",
 		url: "checkout-copy.example.com",
 	},
@@ -81,7 +89,7 @@ const deployments: Deployment[] = [
 		id: "dep_1rx64",
 		environment: "Production",
 		owner: "Iris Wu",
-		status: "Ready",
+		status: "Deployed",
 		updated: "1 minute ago",
 		url: "docs.example.com",
 	},
@@ -94,12 +102,12 @@ const commandGroups: DeploymentCommandGroup[] = [
 		items: [
 			{
 				id: "search-deployments",
-				title: "Search deployments",
-				description: "Filter the deployment table by URL or owner.",
+				title: "Find a deployment",
+				description: "Search the deployment table by URL or owner.",
 				group: "Deployments",
-				keywords: "find filter url owner",
+				keywords: "find filter search url owner",
 				shortcut: "/",
-				icon: <CaretRightIcon aria-hidden />,
+				icon: <CubeFocusIcon aria-hidden />,
 			},
 			{
 				id: "new-deployment",
@@ -150,7 +158,7 @@ const columns: Array<DataTableColumnDef<Deployment>> = [
 		header: "URL",
 		cell: ({ row }) => (
 			<span {...stylex.props(storyParts.urlCell)}>
-				{row.getCanExpand() ? (
+				{/* {row.getCanExpand() ? (
 					<IconButton
 						type="button"
 						variant="ghost"
@@ -161,7 +169,7 @@ const columns: Array<DataTableColumnDef<Deployment>> = [
 						onClick={row.getToggleExpandedHandler()}
 						icon={row.getIsExpanded() ? <CaretDownIcon aria-hidden /> : <CaretRightIcon aria-hidden />}
 					/>
-				) : null}
+				) : null} */}
 				<span {...stylex.props(storyParts.url)}>{row.original.url}</span>
 			</span>
 		),
@@ -174,15 +182,36 @@ const columns: Array<DataTableColumnDef<Deployment>> = [
 	{
 		accessorKey: "environment",
 		header: "Environment",
+		cell: ({ row }) => (
+			<Text size="2" render={<span />} wrap="truncate">
+				{row.original.environment}
+			</Text>
+		),
 	},
 	{
 		accessorKey: "owner",
 		header: "Owner",
+		cell: ({ row }) => (
+			<>
+				<Stack gap={2} align="center" orientation="horizontal" wrap="nowrap">
+					<Avatar name={row.original.owner} size={5} />
+					<Text size="2" color="muted" render={<span />} wrap="truncate">
+						{row.original.owner}
+					</Text>
+				</Stack>
+			</>
+		),
 	},
 	{
 		accessorKey: "updated",
 		header: "Updated",
 		enableHiding: true,
+		numeric: true,
+		cell: ({ row }) => (
+			<Text size="1" color="muted" render={<span />} wrap="truncate">
+				{row.original.updated}
+			</Text>
+		),
 	},
 ];
 
@@ -190,7 +219,7 @@ const filters: DataTableFilter[] = [
 	{
 		columnId: "status",
 		label: "Status",
-		options: ["Ready", "Building", "Failed"].map((value) => ({ label: value, value })),
+		options: ["Deployed", "Building", "Failed"].map((value) => ({ label: value, value })),
 	},
 	{
 		columnId: "environment",
@@ -278,22 +307,37 @@ function DeploymentTable(args: Partial<DataTableProps<Deployment>>) {
 			filters={filters}
 			getRowId={(deployment) => deployment.id}
 			initialColumnVisibility={args.initialColumnVisibility ?? { updated: true }}
-			showExpandColumn={false}
+			showExpandColumn={true}
 			renderExpandedRow={(row) => (
 				<div {...stylex.props(storyParts.details)}>
 					<Text size="2" color="muted">
-						Deployment {row.original.id} was last updated by {row.original.owner}.
+						Deployment <Code>{row.original.id}</Code> was last updated by{" "}
+						<Text size="2" fontWeight="medium" render={<span />}>
+							{row.original.owner}
+						</Text>
+						.
 					</Text>
-					<Text size="2" color="muted">
-						Target: {row.original.environment} · Hostname: {row.original.url}
+					<Text size="1" color="muted">
+						Target:{" "}
+						<Text size="1" fontWeight="medium" render={<span />}>
+							{row.original.environment}
+						</Text>{" "}
+						∙ Hostname:{" "}
+						<Text size="1" fontWeight="medium" render={<span />}>
+							{row.original.url}
+						</Text>{" "}
 					</Text>
 				</div>
 			)}
 			getRowActions={(row) => [
-				{ label: "View deployment" },
-				{ label: "Copy deployment ID", onSelect: () => navigator.clipboard?.writeText(row.original.id) },
-				{ label: "Redeploy", disabled: row.original.status === "Building" },
-				{ label: "Delete deployment", variant: "danger" },
+				{ label: "View deployment", icon: <CubeFocusIcon weight="duotone" /> },
+				{
+					label: "Copy deployment ID",
+					icon: <CopyIcon weight="duotone" />,
+					onSelect: () => navigator.clipboard?.writeText(row.original.id),
+				},
+				{ label: "Redeploy", icon: <ArrowClockwiseIcon />, disabled: row.original.status === "Building" },
+				{ label: "Delete deployment", icon: <TrashIcon weight="duotone" />, variant: "danger" },
 			]}
 		/>
 	);
@@ -371,8 +415,8 @@ function StatusBadge({ status }: { status: Deployment["status"] }) {
 	}
 
 	return (
-		<Badge hue="success" startSlot={<Icon.Checkmark aria-hidden />}>
-			Ready
+		<Badge hue="success" startSlot={<Icon.Dot aria-hidden />}>
+			Deployed
 		</Badge>
 	);
 }

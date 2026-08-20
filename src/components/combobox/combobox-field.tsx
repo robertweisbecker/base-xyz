@@ -1,6 +1,7 @@
 import { Combobox as BaseCombobox } from "@base-ui/react/combobox";
 import { Field } from "@base-ui/react/field";
 import { CaretDownIcon } from "@phosphor-icons/react/dist/csr/CaretDown";
+import { PlusIcon } from "@phosphor-icons/react/dist/csr/Plus";
 import { XCircleIcon } from "@phosphor-icons/react/dist/csr/XCircle";
 import { XIcon } from "@phosphor-icons/react/dist/csr/X";
 import * as stylex from "@stylexjs/stylex";
@@ -16,6 +17,7 @@ import { Tooltip } from "@/components/tooltip/tooltip";
 import { focusRing } from "@/styles/recipes/focus";
 import { pressable } from "@/styles/recipes/transitions";
 import { resolveThemeProps } from "@/theme/theme-props";
+import { attrJoin } from "@/utils/attr-join";
 import {
 	comboboxActionSizeVariants,
 	comboboxGroupSizeVariants,
@@ -389,10 +391,12 @@ export type ComboboxItemVariant = MenuItemVariant;
 
 export type ComboboxItemProps = Omit<StyledProps<BaseCombobox.Item.Props>, "children"> & {
 	children?: ReactNode;
+	/** Shows a plus affordance in the shared indicator slot for a creatable item. */
+	creatable?: boolean;
 	variant?: ComboboxItemVariant;
 };
 
-export function Item({ ref, children, className, style, variant = "default", ...props }: ComboboxItemProps) {
+export function Item({ ref, children, className, creatable = false, style, variant = "default", ...props }: ComboboxItemProps) {
 	const { size } = useContext(ComboboxContext);
 	const sx = stylex.props(
 		menuItemStyles.item,
@@ -405,12 +409,18 @@ export function Item({ ref, children, className, style, variant = "default", ...
 	return (
 		<BaseCombobox.Item
 			ref={ref}
-			className={[sx.className, className].filter(Boolean).join(" ")}
+			className={attrJoin(sx.className, className)}
 			style={sx.style}
 			{...props}>
-			<BaseCombobox.ItemIndicator keepMounted {...stylex.props(menuItemStyles.indicator)}>
-				<Icon.Checkmark width="1em" height="1em" strokeWidth={3} />
-			</BaseCombobox.ItemIndicator>
+			{creatable ? (
+				<span aria-hidden {...stylex.props(menuItemStyles.indicator, comboboxParts.creatableIndicator)}>
+					<PlusIcon aria-hidden size={16} weight="bold" />
+				</span>
+			) : (
+				<BaseCombobox.ItemIndicator keepMounted {...stylex.props(menuItemStyles.indicator)}>
+					<Icon.Checkmark width="1em" height="1em" strokeWidth={3} />
+				</BaseCombobox.ItemIndicator>
+			)}
 			<div {...stylex.props(menuItemStyles.label)}>{children}</div>
 		</BaseCombobox.Item>
 	);

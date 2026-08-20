@@ -60,15 +60,16 @@ const parts = stylex.create({
 		minWidth: 0,
 	},
 	label: {
-		opacity: {
-			"[data-disabled]": 0.5,
-			default: 1,
+		lineHeight: tokens["--line-height-2"],
+		color: {
+			"[data-disabled]": tokens["--fg-subtle"],
+			default: tokens["--fg"],
 		},
 	},
 	groupLabel: {
-		opacity: {
-			"[data-disabled]": 0.5,
-			default: 1,
+		color: {
+			"[data-disabled]": tokens["--fg-subtle"],
+			default: tokens["--fg"],
 		},
 	},
 	description: { color: tokens["--fg-muted"] },
@@ -77,6 +78,19 @@ const parts = stylex.create({
 		alignItems: "center",
 		color: tokens["--fg-error"],
 		display: "inline-flex",
+		opacity: {
+			"[data-starting-style]": 0,
+			default: 1,
+			"[data-ending-style]": 1,
+		},
+		transform: {
+			"[data-starting-style]": "translateY(-4px)",
+			default: "translateY(0)",
+			"[data-ending-style]": "translateY(0)",
+		},
+		transitionDuration: tokens["--motion-duration-short"],
+		transitionProperty: "opacity, transform",
+		transitionTimingFunction: tokens["--motion-ease-out"],
 	},
 	requiredIndicator: {
 		color: tokens["--fg-error"],
@@ -97,7 +111,11 @@ const parts = stylex.create({
 		borderStyle: "solid",
 		borderWidth: "1px",
 		backgroundColor: {
-			"[data-disabled]": "transparent",
+			// eslint-disable-next-line @stylexjs/valid-styles -- the compiler supports chained pseudo-class conditions; the lint rule is stricter than the compiler.
+			[INTERACTIVE_CONTROL_HOVER]: {
+				[media.canHover]: tokens["--color-gray-s3"],
+			},
+			"[data-disabled]": tokens["--bg-disabled"],
 			default: tokens["--surface"],
 		},
 		color: {

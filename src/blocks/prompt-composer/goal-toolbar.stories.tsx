@@ -3,7 +3,7 @@ import { PaperclipIcon } from "@phosphor-icons/react/dist/csr/Paperclip";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import * as stylex from "@stylexjs/stylex";
 import { useEffect, useRef, useState, type ComponentProps, type ReactNode, type RefObject } from "react";
-import { Menu, Loader, Toast, Toolbar } from "@/components";
+import { Menu, MeterGauge, Toast, Toolbar } from "@/components";
 import { tokens } from "@/theme/tokens.stylex";
 
 import { ModelSelector } from "@/blocks/model-selector/model-selector";
@@ -157,6 +157,9 @@ function GoalComposerAddMenu() {
 	);
 }
 
+const goalProgressStep = 1;
+const goalProgressSteps = 5;
+
 function GoalProgressProvider({
 	children,
 	id,
@@ -201,7 +204,7 @@ function GoalProgressContent({
 
 		managerRef.current.add({
 			id,
-			title: "Step 1 / 5 · 4 files changed",
+			title: `Step ${goalProgressStep} / ${goalProgressSteps} · 4 files changed`,
 			description: <ChangeCount additions={12} deletions={3} />,
 			timeout: 0,
 			positionerProps: {
@@ -214,7 +217,17 @@ function GoalProgressContent({
 				variant: "pill",
 				tone: "accent",
 				status: "ongoing",
-				icon: <Loader aria-hidden />,
+				icon: (
+					<MeterGauge
+						aria-hidden
+						fillColor="currentColor"
+						showValue={false}
+						size={16}
+						style={storyParts.progressGauge}
+						trackColor="color-mix(in srgb, currentColor 25%, transparent)"
+						value={(goalProgressStep / goalProgressSteps) * 100}
+					/>
+				),
 				dismissible: false,
 			},
 		});
@@ -291,5 +304,8 @@ const storyParts = stylex.create({
 	},
 	modelTrigger: {
 		maxWidth: "100%",
+	},
+	progressGauge: {
+		color: "inherit",
 	},
 });

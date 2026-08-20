@@ -124,6 +124,8 @@ export function Input({
 	"aria-label": ariaLabel = "Message",
 	placeholder = "Ask anything…",
 	rows = 3,
+	minRows,
+	maxRows,
 	className,
 	style,
 	onChange,
@@ -132,6 +134,7 @@ export function Input({
 	...props
 }: PromptComposerInputProps) {
 	const context = usePromptComposerContext("Input");
+	const resolvedMinRows = minRows ?? rows;
 	const scrollFade = useScrollFade({ axis: "y", contentKey: context.value });
 	const mergedRef = useMergedRefs(ref, scrollFade.ref);
 
@@ -158,6 +161,8 @@ export function Input({
 			placeholder={placeholder}
 			ref={mergedRef}
 			rows={rows}
+			minRows={resolvedMinRows}
+			maxRows={maxRows}
 			style={style}
 			value={context.value}
 			{...props}
