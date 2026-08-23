@@ -1,6 +1,6 @@
 # ADR 0003: StyleX ownership and application boundaries
 
-- Status: Accepted
+- Status: Accepted. Amended by [ADR 0011](./0011-layout-primitives-common-margins-and-stylex-overrides.md) for component layout ownership and the `style` / `xstyle` split.
 - Date: 2026-08-13
 
 ## Context
@@ -22,7 +22,7 @@ Organize StyleX by ownership:
 Apply and compose styles as follows:
 
 - Import `.stylex.ts` bindings directly by named export. Do not barrel-re-export them or namespace-import component style modules.
-- Use StyleX composition order for precedence. Component defaults and variants come first; the caller's typed `style?: StyleXStyles` comes last.
+- Use StyleX composition order for precedence. Component defaults and variants come first, named margin props follow on eligible normal-flow roots, and the caller's `xstyle?: StyleXStyles` comes last inside `stylex.props(...)`. Native `style?: CSSProperties` is merged after generated inline values.
 - Spread the complete `{...stylex.props(...)}` result when a native, React, or Base UI recipient accepts both `className` and `style`. Extract `.className` only for a string-only adapter or an intentional manual merge that also preserves any generated inline style.
 - Native JSX elements use the explicit `stylex.props(...)` spread. Do not add lowercase intrinsic `sx`, global React/JSX augmentation, a custom transform shim, or a TypeScript suppression to support the shorthand.
 - Do not use class-token order or `tailwind-merge` to resolve StyleX conflicts.

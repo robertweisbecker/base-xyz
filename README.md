@@ -34,8 +34,8 @@ src/
     tokens.stylex.ts        Unified themeable StyleX token contract
     themes.stylex.ts        Named partial token overrides
     theme-provider.tsx      Theme context, host, and root synchronization
-    theme-props-*.stylex.ts Token-backed component prop compilers
   styles/
+    props/                  Layout maps plus the common-margin extraction boundary
     constants.stylex.ts     Fixed breakpoints, z-index, keyframes, and style utilities (ie. selector aliases, truncation)
     recipes/                Shared cross-component styles and variables (ie. popups, input wrappers)
     reset.css               Modified Tailwind v4 reset with opinionated a11y and theme-specific tweaks
@@ -82,7 +82,7 @@ Named themes in `@/theme/themes` provide partial overrides to `tokens` and inher
 
 `ThemeProvider` applies the selected theme and mode to a real host and mirrors the outermost provider onto the
 document root so body-level portals inherit it. See:
-- [`docs/adr/ADR-0001`](docs/adr/0001-token-backed-theme-props.md) for the token-backed theme-prop contract,
+- [`docs/adr/ADR-0011`](docs/adr/0011-layout-primitives-common-margins-and-stylex-overrides.md) for layout primitives, eligible common margins, and the `style`/`xstyle` split,
 - [`docs/adr/ADR-0003`](docs/adr/0003-stylex-ownership-and-application.md) for StyleX ownership and application boundaries,
 - and [`src/styles/README.md`](src/styles/README.md) for the current implementation map.
 
@@ -102,7 +102,7 @@ manually maintained component catalog here.
 
 ## Agent / architecture decisions
 
-- [ADR 0001: Token-backed theme props and layout primitives](docs/adr/0001-token-backed-theme-props.md)
+- [ADR 0001: Token-backed theme props and layout primitives](docs/adr/archive/0001-token-backed-theme-props.md) (superseded)
 - [ADR 0002: Explicit semantic table primitives](docs/adr/0002-semantic-table-primitives.md)
 - [ADR 0003: StyleX ownership and application boundaries](docs/adr/0003-stylex-ownership-and-application.md)
 - [ADR 0004: Component, block, and compound ownership](docs/adr/0004-component-block-and-compound-ownership.md)
@@ -111,6 +111,8 @@ manually maintained component catalog here.
 - [ADR 0007: Bound derived presentation without changing semantics](docs/adr/0007-bound-derived-presentation-without-changing-semantics.md)
 - [ADR 0008: Reset identity-bound state before first render](docs/adr/0008-reset-identity-bound-state-before-first-render.md)
 - [ADR 0009: Normalize effective values without unsolicited callbacks](docs/adr/0009-normalize-effective-values-without-unsolicited-callbacks.md)
+- [ADR 0010: Static style-prop maps, tiered component surfaces, and the xstyle escape hatch](docs/adr/archive/0010-static-style-prop-maps-tiered-surfaces-and-xstyle.md) (superseded by ADR 0011)
+- [ADR 0011: Layout primitives, common margins, and StyleX overrides](docs/adr/0011-layout-primitives-common-margins-and-stylex-overrides.md)
 
 Repository terminology lives in [`CONTEXT.md`](CONTEXT.md). Agent-facing
 working rules live in [`AGENTS.md`](AGENTS.md); durable architectural rationale

@@ -37,7 +37,7 @@ type Story = StoryObj<typeof meta>;
 
 export const Playground: Story = {
 	render: (args) => (
-		<Box style={styles.frame}>
+		<Box xstyle={styles.frame}>
 			<Field.Root {...stylex.props(fieldStyles.root)}>
 				<Field.Label {...stylex.props(fieldStyles.label)}>Search projects</Field.Label>
 				<InputGroup.Root {...args}>
@@ -60,10 +60,10 @@ export const Sizes: Story = {
 		controls: { disable: true },
 	},
 	render: () => (
-		<Stack gap={8} style={styles.variants}>
+		<Stack gap={8} xstyle={styles.variants}>
 			{(["sm", "md", "lg"] as const).map((size) => (
 				<State key={size} label={size}>
-					<Grid align="center" columns={2} gap={3} style={styles.sizeRow}>
+					<Grid align="center" columns={2} gap={3} xstyle={styles.sizeRow}>
 						<InputGroup.Root size={size}>
 							<InputGroup.Input aria-label={`${size} input group`} defaultValue="Search projects" />
 							<InputGroup.Addon position="start">
@@ -88,7 +88,7 @@ export const Variants: Story = {
 		controls: { disable: true },
 	},
 	render: () => (
-		<Stack gap={8} style={styles.variants}>
+		<Stack gap={8} xstyle={styles.variants}>
 			<State label="Standard">
 				<InputGroup.Root>
 					<InputGroup.Input aria-label="Standard input group" placeholder="Enter a value…" />
@@ -113,7 +113,7 @@ export const Alignments: Story = {
 		controls: { disable: true },
 	},
 	render: () => (
-		<Stack gap={8} style={styles.variants}>
+		<Stack gap={8} xstyle={styles.variants}>
 			<State label="Solo input">
 				<InputGroup.Root>
 					<InputGroup.Input aria-label="Solo input" placeholder="Enter a value…" />
@@ -200,7 +200,7 @@ export const States: Story = {
 		controls: { disable: true },
 	},
 	render: () => (
-		<Grid gap={8} style={styles.states}>
+		<Grid gap={8} xstyle={styles.states}>
 			<State label="Default">
 				<InputGroup.Root>
 					<InputGroup.Input aria-label="Default input" placeholder="Enter a value…" />

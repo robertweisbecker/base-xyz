@@ -14,6 +14,7 @@ import { popupMotionStyles } from "@/components/popover/popover.stylex";
 import { tooltipStyles } from "@/components/tooltip/tooltip.stylex";
 import { popupVars } from "@/components/popover/popover-vars.stylex";
 import { pressable } from "@/styles/recipes/transitions";
+import { mergeStyle, type BaseStyleProps } from "@/styles/props/base";
 
 import {
 	anchoredToastManager,
@@ -28,48 +29,42 @@ import { attrJoin } from "@/utils/attr-join";
 
 export type AnchoredToastObject = BaseToast.Root.ToastObject<AnchoredToastData>;
 
-type StyledProps<T> = Omit<T, "className" | "style"> & {
-	className?: string;
-	/** StyleX overrides, applied after the component's own styles. */
-	style?: StyleXStyles;
-};
+type StyledProps<T> = Omit<T, "className" | "style" | "xstyle"> & BaseStyleProps & { className?: string };
 
-export function AnchoredViewport({ ref, className, style, ...props }: StyledProps<BaseToast.Viewport.Props>) {
-	const sx = stylex.props(anchoredParts.viewport, style);
+export function AnchoredViewport({ ref, className, style, xstyle, ...props }: StyledProps<BaseToast.Viewport.Props>) {
+	const sx = stylex.props(anchoredParts.viewport, xstyle);
 
 	return (
 		<BaseToast.Viewport
 			ref={ref}
 			className={attrJoin(sx.className, className)}
-			style={sx.style}
+			style={mergeStyle(sx.style, style)}
 			{...props}
 		/>
 	);
 }
 
-export function AnchoredPositioner({ ref, className, style, ...props }: StyledProps<BaseToast.Positioner.Props>) {
+export function AnchoredPositioner({ ref, className, style, xstyle, ...props }: StyledProps<BaseToast.Positioner.Props>) {
 	// The positioner must snap to Base UI's first resolved coordinates.
 	// Entry/exit motion belongs to the toast root so it grows from the anchor.
-	const sx = stylex.props(anchoredParts.positioner, style);
+	const sx = stylex.props(anchoredParts.positioner, xstyle);
 
 	return (
 		<BaseToast.Positioner
 			ref={ref}
 			className={attrJoin(sx.className, className)}
-			style={sx.style}
+			style={mergeStyle(sx.style, style)}
 			{...props}
 		/>
 	);
 }
 
-export type AnchoredToastProps = {
+export type AnchoredToastProps = BaseStyleProps & {
 	toast: AnchoredToastObject;
 	className?: string;
 	positionerClassName?: string;
-	/** StyleX overrides, applied after the component's own styles. */
-	style?: StyleXStyles;
-	/** StyleX overrides for the positioner, applied after its own styles. */
-	positionerStyle?: StyleXStyles;
+	positionerStyle?: BaseStyleProps["style"];
+	positionerXstyle?: StyleXStyles;
 };
 
 /**
@@ -78,7 +73,15 @@ export type AnchoredToastProps = {
  * Use this directly for custom viewports, or use AnchoredProvider for the
  * complete provider/portal/viewport composition.
  */
-export function AnchoredToast({ toast, className, positionerClassName, style, positionerStyle }: AnchoredToastProps) {
+export function AnchoredToast({
+	toast,
+	className,
+	positionerClassName,
+	positionerStyle,
+	positionerXstyle,
+	style,
+	xstyle,
+}: AnchoredToastProps) {
 	const data = toast.data ?? {};
 	const variant = data.variant ?? "default";
 	const status = data.status ?? (variant === "pill" ? "ongoing" : "idle");
@@ -102,18 +105,23 @@ export function AnchoredToast({ toast, className, positionerClassName, style, po
 		rootVariants[variant],
 		pulseStyle,
 		focusRing.inset,
-		style,
+		xstyle,
 	);
 
 	return (
-		<AnchoredPositioner toast={toast} sideOffset={sideOffset} className={positionerClassName} style={positionerStyle}>
+		<AnchoredPositioner
+			toast={toast}
+			sideOffset={sideOffset}
+			className={positionerClassName}
+			style={positionerStyle}
+			xstyle={positionerXstyle}>
 			<BaseToast.Root
 				toast={toast}
 				data-variant={variant}
 				data-tone={tone}
 				data-status={status}
 				className={attrJoin(rootSx.className, className)}
-				style={rootSx.style}>
+				style={mergeStyle(rootSx.style, style)}>
 				<BaseToast.Content
 					{...stylex.props(
 						anchoredParts.content,

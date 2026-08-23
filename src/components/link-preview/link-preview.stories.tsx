@@ -54,7 +54,7 @@ function PreviewContent({ title, description }: PreviewPayload) {
 
 export const Playground: Story = {
 	render: ({ _side, _align, _delay, _showArrow }) => (
-		<Box height="360px" style={storyParts.stage} width="min(720px, calc(100vw - 48px))">
+		<Box height="360px" xstyle={storyParts.stage} width="min(720px, calc(100vw - 48px))">
 			<Text>
 				Read more about{" "}
 				<LinkPreview.Root>
@@ -120,9 +120,9 @@ export const SharedPreviews: Story = {
 						positionerProps={{
 							side: _side,
 							align: _align,
-							style: popupMotionStyles.movingPositioner,
+							xstyle: popupMotionStyles.movingPositioner,
 						}}
-						style={popupMotionStyles.movingPopup}>
+						xstyle={popupMotionStyles.movingPopup}>
 						<LinkPreview.Viewport>{payload ? <PreviewContent {...payload} /> : null}</LinkPreview.Viewport>
 					</LinkPreview.Popup>
 				)}

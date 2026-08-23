@@ -1,17 +1,16 @@
 import * as stylex from "@stylexjs/stylex";
-import type { StyleXStyles } from "@stylexjs/stylex";
 import { type ComponentProps, type ReactNode } from "react";
 import { CopyButton } from "@/blocks/copy-button/copy-button";
 import type { LinkColor } from "@/components/link/link";
 import { Loader } from "@/components/loader/loader";
 import { shimmerTextStyles } from "@/styles/recipes/shimmer-text.stylex";
+import { mergeStyle, type BaseStyleProps } from "@/styles/props/base";
+import { extractMarginProps, type MarginProps } from "@/styles/props/spacing.stylex";
 import { tokens } from "@/theme/tokens.stylex";
 import { attrJoin } from "@/utils/attr-join";
 
-type StyledProps<T> = Omit<T, "className" | "style"> & {
+type PartStyleProps = BaseStyleProps & {
 	className?: string;
-	/** StyleX overrides, applied after the component's own styles. */
-	style?: StyleXStyles;
 };
 
 type SlotProps = {
@@ -20,23 +19,35 @@ type SlotProps = {
 };
 
 export type BreadcrumbsSize = "sm" | "md";
-export type BreadcrumbsRootProps = StyledProps<ComponentProps<"nav">> & {
-	size?: BreadcrumbsSize;
-	label?: string;
-};
-export type BreadcrumbsLinkProps = StyledProps<ComponentProps<"a">> &
+
+export type BreadcrumbsRootProps = Omit<ComponentProps<"nav">, "className" | "style" | keyof MarginProps> &
+	MarginProps &
+	BaseStyleProps & {
+		className?: string;
+		size?: BreadcrumbsSize;
+		label?: string;
+	};
+
+export type BreadcrumbsLinkProps = Omit<ComponentProps<"a">, "className" | "style"> &
+	PartStyleProps &
 	SlotProps & {
 		color?: LinkColor;
 	};
-export type BreadcrumbsCurrentProps = StyledProps<ComponentProps<"span">> &
+
+export type BreadcrumbsCurrentProps = Omit<ComponentProps<"span">, "className" | "style"> &
+	PartStyleProps &
 	SlotProps & {
 		loading?: boolean;
 	};
-export type BreadcrumbsSeparatorProps = StyledProps<ComponentProps<"li">>;
-export type BreadcrumbsCopyProps = Omit<StyledProps<ComponentProps<"button">>, "children" | "onClick"> & {
-	label?: string;
-	text: string;
-};
+
+export type BreadcrumbsSeparatorProps = Omit<ComponentProps<"li">, "className" | "style"> & PartStyleProps;
+
+export type BreadcrumbsCopyProps = Omit<ComponentProps<"button">, "children" | "className" | "onClick" | "style"> &
+	PartStyleProps & {
+		label?: string;
+		text: string;
+	};
+
 export type BreadcrumbsClipboardProps = BreadcrumbsCopyProps;
 
 export function Root({
@@ -46,17 +57,24 @@ export function Root({
 	label = "Breadcrumbs",
 	size = "md",
 	style,
+	xstyle,
 	...props
 }: BreadcrumbsRootProps) {
-	const sx = stylex.props(parts.root, sizeStyles[size], style);
+	const { marginStyles, rest } = extractMarginProps(props);
+	const sx = stylex.props(
+		parts.root,
+		sizeStyles[size],
+		...marginStyles,
+		xstyle,
+	);
 
 	return (
 		<nav
 			ref={ref}
 			aria-label={label}
 			className={attrJoin(sx.className, className)}
-			style={sx.style}
-			{...props}>
+			style={mergeStyle(sx.style, style)}
+			{...rest}>
 			<ol {...stylex.props(parts.list)}>{children}</ol>
 		</nav>
 	);
@@ -70,16 +88,17 @@ export function Link({
 	endSlot,
 	color = "accent",
 	style,
+	xstyle,
 	...props
 }: BreadcrumbsLinkProps) {
-	const sx = stylex.props(parts.item, parts.link, style);
+	const sx = stylex.props(parts.item, parts.link, xstyle);
 
 	return (
 		<li {...stylex.props(parts.item)}>
 			<a
 				ref={ref}
 				className={attrJoin(sx.className, className)}
-				style={sx.style}
+				style={mergeStyle(sx.style, style)}
 				data-component="breadcrumb-link"
 				data-color={color}
 				{...props}>
@@ -99,9 +118,10 @@ export function Current({
 	loading,
 	startSlot,
 	style,
+	xstyle,
 	...props
 }: BreadcrumbsCurrentProps) {
-	const sx = stylex.props(parts.item, parts.current, loading && parts.loadingCurrent, style);
+	const sx = stylex.props(parts.item, parts.current, loading && parts.loadingCurrent, xstyle);
 
 	return (
 		<li {...stylex.props(parts.item)}>
@@ -110,7 +130,7 @@ export function Current({
 				aria-current={loading ? undefined : "page"}
 				aria-busy={loading ? true : undefined}
 				className={attrJoin(sx.className, className)}
-				style={sx.style}
+				style={mergeStyle(sx.style, style)}
 				{...props}>
 				{renderSlot(startSlot)}
 				{loading ? (
@@ -127,15 +147,15 @@ export function Current({
 	);
 }
 
-export function Separator({ ref, children, className, style, ...props }: BreadcrumbsSeparatorProps) {
-	const sx = stylex.props(parts.separator, style);
+export function Separator({ ref, children, className, style, xstyle, ...props }: BreadcrumbsSeparatorProps) {
+	const sx = stylex.props(parts.separator, xstyle);
 
 	return (
 		<li
 			ref={ref}
 			aria-hidden
 			className={attrJoin(sx.className, className)}
-			style={sx.style}
+			style={mergeStyle(sx.style, style)}
 			{...props}>
 			{children ?? (
 				<svg fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" width="1.25em" height="1.25em">

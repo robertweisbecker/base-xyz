@@ -2,12 +2,12 @@ import { Menu as BaseMenu } from "@base-ui/react/menu";
 import { Collapsible as BaseCollapsible } from "@base-ui/react/collapsible";
 import { CaretRightIcon } from "@phosphor-icons/react/dist/csr/CaretRight";
 import * as stylex from "@stylexjs/stylex";
-import type { StyleXStyles } from "@stylexjs/stylex";
 import { createContext, useContext, type ComponentProps, type ReactNode } from "react";
 import { fontFamilyStyles, textStyles, fontWeightStyles } from "@/components/text/text.stylex";
 import { tokens } from "@/theme/tokens.stylex";
 import { popupMotionStyles, popupPositionerStyles, popupViewportStyles } from "@/components/popover/popover.stylex";
 import { popupVars } from "@/components/popover/popover-vars.stylex";
+import { mergeStyle, type BaseStyleProps } from "@/styles/props/base";
 
 import { Collapsible } from "@/components/collapsible/collapsible";
 import { Icon } from "@/components/icons";
@@ -18,10 +18,7 @@ import { attrJoin } from "@/utils/attr-join";
 
 const MenuSizeContext = createContext<MenuItemSize>("md");
 
-type StyledProps<T> = Omit<T, "className" | "style"> & {
-	className?: string;
-	style?: StyleXStyles;
-};
+type StyledProps<T> = Omit<T, "className" | "style" | "xstyle"> & BaseStyleProps & { className?: string };
 
 export type { MenuItemSize, MenuItemVariant } from "./menu.types";
 export type MenuRootProps<Payload = unknown> = Omit<BaseMenu.Root.Props<Payload>, "size"> & {
@@ -51,14 +48,14 @@ export function Root<Payload = unknown>({ children, size = "md", ...props }: Men
 	);
 }
 
-export function Trigger({ ref, className, style, ...props }: MenuTriggerProps) {
-	const { className: sxClassName, style: sxStyle } = stylex.props(menuTriggerMarker, style);
+export function Trigger({ ref, className, style, xstyle, ...props }: MenuTriggerProps) {
+	const { className: sxClassName, style: sxStyle } = stylex.props(menuTriggerMarker, xstyle);
 
 	return (
 		<BaseMenu.Trigger
 			ref={ref}
 			className={attrJoin(sxClassName, className)}
-			style={sxStyle}
+			style={mergeStyle(sxStyle, style)}
 			{...props}
 		/>
 	);
@@ -74,11 +71,12 @@ function Positioner({
 	alignOffset,
 	className,
 	style,
+	xstyle,
 	sideOffset = 6,
 	...props
 }: MenuPositionerProps) {
 	const defaultAlignOffset = align === "center" ? undefined : -2;
-	const { className: sxClassName, style: sxStyle } = stylex.props(popupPositionerStyles, style);
+	const { className: sxClassName, style: sxStyle } = stylex.props(popupPositionerStyles, xstyle);
 
 	return (
 		<BaseMenu.Positioner
@@ -87,18 +85,18 @@ function Positioner({
 			alignOffset={alignOffset ?? defaultAlignOffset}
 			sideOffset={sideOffset}
 			className={attrJoin(sxClassName, className)}
-			style={sxStyle}
+			style={mergeStyle(sxStyle, style)}
 			{...props}
 		/>
 	);
 }
 
-export function Popup({ ref, children, className, portalProps, positionerProps, style, ...props }: MenuPopupProps) {
+export function Popup({ ref, children, className, portalProps, positionerProps, style, xstyle, ...props }: MenuPopupProps) {
 	const { className: sxClassName, style: sxStyle } = stylex.props(
 		menuParts.panelSurface,
 		menuParts.popup,
 		popupMotionStyles.anchoredPopup,
-		style,
+		xstyle,
 	);
 
 	return (
@@ -107,7 +105,7 @@ export function Popup({ ref, children, className, portalProps, positionerProps, 
 				<BaseMenu.Popup
 					ref={ref}
 					className={attrJoin(sxClassName, className)}
-					style={sxStyle}
+					style={mergeStyle(sxStyle, style)}
 					{...props}>
 					{children}
 				</BaseMenu.Popup>
@@ -116,71 +114,71 @@ export function Popup({ ref, children, className, portalProps, positionerProps, 
 	);
 }
 
-export function Viewport({ ref, className, style, ...props }: MenuViewportProps) {
-	const { className: sxClassName, style: sxStyle } = stylex.props(menuParts.viewport, popupViewportStyles, style);
+export function Viewport({ ref, className, style, xstyle, ...props }: MenuViewportProps) {
+	const { className: sxClassName, style: sxStyle } = stylex.props(menuParts.viewport, popupViewportStyles, xstyle);
 
 	return (
 		<BaseMenu.Viewport
 			ref={ref}
 			className={attrJoin(sxClassName, "xyz-popup-viewport", className)}
-			style={sxStyle}
+			style={mergeStyle(sxStyle, style)}
 			{...props}
 		/>
 	);
 }
 
-export function Item({ ref, className, style, variant = "default", ...props }: MenuItemProps) {
+export function Item({ ref, className, style, xstyle, variant = "default", ...props }: MenuItemProps) {
 	const sizeStyle = useMenuItemSizeStyle();
 	const { className: sxClassName, style: sxStyle } = stylex.props(
 		menuItemStyles.item,
 		sizeStyle,
 		menuItemVariantStyles[variant],
-		style,
+		xstyle,
 	);
 
 	return (
 		<BaseMenu.Item
 			ref={ref}
 			className={attrJoin(sxClassName, className)}
-			style={sxStyle}
+			style={mergeStyle(sxStyle, style)}
 			{...props}
 		/>
 	);
 }
 
-export function LinkItem({ ref, className, style, ...props }: StyledProps<BaseMenu.LinkItem.Props>) {
+export function LinkItem({ ref, className, style, xstyle, ...props }: StyledProps<BaseMenu.LinkItem.Props>) {
 	const sizeStyle = useMenuItemSizeStyle();
 	const { className: sxClassName, style: sxStyle } = stylex.props(
 		menuItemStyles.item,
 		sizeStyle,
 		menuItemVariantStyles.default,
-		style,
+		xstyle,
 	);
 
 	return (
 		<BaseMenu.LinkItem
 			ref={ref}
 			className={attrJoin(sxClassName, className)}
-			style={sxStyle}
+			style={mergeStyle(sxStyle, style)}
 			{...props}
 		/>
 	);
 }
 
-export function CheckboxItem({ ref, children, className, style, ...props }: StyledProps<BaseMenu.CheckboxItem.Props>) {
+export function CheckboxItem({ ref, children, className, style, xstyle, ...props }: StyledProps<BaseMenu.CheckboxItem.Props>) {
 	const sizeStyle = useMenuItemSizeStyle();
 	const { className: sxClassName, style: sxStyle } = stylex.props(
 		menuItemStyles.item,
 		sizeStyle,
 		menuItemVariantStyles.default,
-		style,
+		xstyle,
 	);
 
 	return (
 		<BaseMenu.CheckboxItem
 			ref={ref}
 			className={attrJoin(sxClassName, className)}
-			style={sxStyle}
+			style={mergeStyle(sxStyle, style)}
 			{...props}>
 			<BaseMenu.CheckboxItemIndicator keepMounted {...stylex.props(menuItemStyles.indicator)}>
 				<Icon.Checkmark width="1em" height="1em" strokeWidth={2.5} />
@@ -190,20 +188,20 @@ export function CheckboxItem({ ref, children, className, style, ...props }: Styl
 	);
 }
 
-export function SwitchItem({ ref, children, className, style, ...props }: StyledProps<BaseMenu.CheckboxItem.Props>) {
+export function SwitchItem({ ref, children, className, style, xstyle, ...props }: StyledProps<BaseMenu.CheckboxItem.Props>) {
 	const sizeStyle = useMenuItemSizeStyle();
 	const { className: sxClassName, style: sxStyle } = stylex.props(
 		menuItemStyles.item,
 		sizeStyle,
 		menuItemVariantStyles.default,
-		style,
+		xstyle,
 	);
 
 	return (
 		<BaseMenu.CheckboxItem
 			ref={ref}
 			className={attrJoin(sxClassName, className)}
-			style={sxStyle}
+			style={mergeStyle(sxStyle, style)}
 			{...props}>
 			<BaseMenu.CheckboxItemIndicator
 				keepMounted
@@ -219,20 +217,20 @@ export function SwitchItem({ ref, children, className, style, ...props }: Styled
 	);
 }
 
-export function RadioItem({ ref, children, className, style, ...props }: StyledProps<BaseMenu.RadioItem.Props>) {
+export function RadioItem({ ref, children, className, style, xstyle, ...props }: StyledProps<BaseMenu.RadioItem.Props>) {
 	const sizeStyle = useMenuItemSizeStyle();
 	const { className: sxClassName, style: sxStyle } = stylex.props(
 		menuItemStyles.item,
 		sizeStyle,
 		menuItemVariantStyles.default,
-		style,
+		xstyle,
 	);
 
 	return (
 		<BaseMenu.RadioItem
 			ref={ref}
 			className={attrJoin(sxClassName, className)}
-			style={sxStyle}
+			style={mergeStyle(sxStyle, style)}
 			{...props}>
 			<BaseMenu.RadioItemIndicator keepMounted {...stylex.props(menuItemStyles.indicator)}>
 				<span {...stylex.props(menuParts.indicatorDot)} />
@@ -247,6 +245,7 @@ export function SubmenuTrigger({
 	children,
 	className,
 	style,
+	xstyle,
 	...props
 }: StyledProps<BaseMenu.SubmenuTrigger.Props>) {
 	const sizeStyle = useMenuItemSizeStyle();
@@ -255,14 +254,14 @@ export function SubmenuTrigger({
 		sizeStyle,
 		menuItemVariantStyles.default,
 		menuParts.submenuTrigger,
-		style,
+		xstyle,
 	);
 
 	return (
 		<BaseMenu.SubmenuTrigger
 			ref={ref}
 			className={attrJoin(sxClassName, className)}
-			style={sxStyle}
+			style={mergeStyle(sxStyle, style)}
 			{...props}>
 			{children}
 			<CaretRightIcon aria-hidden size="1em" weight="bold" {...stylex.props(menuParts.submenuIcon)} />
@@ -270,20 +269,20 @@ export function SubmenuTrigger({
 	);
 }
 
-export function CollapsibleGroup({ ref, className, style, ...props }: CollapsibleGroupProps) {
-	const { className: sxClassName, style: sxStyle } = stylex.props(menuParts.collapsibleGroup, style);
+export function CollapsibleGroup({ ref, className, style, xstyle, ...props }: CollapsibleGroupProps) {
+	const { className: sxClassName, style: sxStyle } = stylex.props(menuParts.collapsibleGroup, xstyle);
 
 	return (
 		<BaseCollapsible.Root
 			ref={ref}
 			className={attrJoin(sxClassName, className)}
-			style={sxStyle}
+			style={mergeStyle(sxStyle, style)}
 			{...props}
 		/>
 	);
 }
 
-export function CollapsibleGroupTrigger({ ref, children, className, style, ...props }: CollapsibleGroupTriggerProps) {
+export function CollapsibleGroupTrigger({ ref, children, className, style, xstyle, ...props }: CollapsibleGroupTriggerProps) {
 	const sizeStyle = useMenuItemSizeStyle();
 	const { className: sxClassName, style: sxStyle } = stylex.props(
 		menuItemStyles.item,
@@ -291,7 +290,7 @@ export function CollapsibleGroupTrigger({ ref, children, className, style, ...pr
 		menuItemVariantStyles.default,
 		menuParts.collapsibleGroupTrigger,
 		stylex.defaultMarker(),
-		style,
+		xstyle,
 	);
 
 	return (
@@ -301,10 +300,10 @@ export function CollapsibleGroupTrigger({ ref, children, className, style, ...pr
 			closeOnClick={false}
 			nativeButton
 			className={attrJoin(sxClassName, className)}
-			style={sxStyle}
+			style={mergeStyle(sxStyle, style)}
 			{...props}>
 			{children}
-			<Collapsible.Icon style={menuParts.submenuIcon} />
+			<Collapsible.Icon {...stylex.props(menuParts.submenuIcon)} />
 		</BaseMenu.Item>
 	);
 }
@@ -313,6 +312,7 @@ export function CollapsibleGroupPanel({
 	ref,
 	className,
 	style,
+	xstyle,
 	keepMounted = true,
 	render,
 	...props
@@ -330,7 +330,7 @@ export function CollapsibleGroupPanel({
 				/>
 			);
 		});
-	const { className: sxClassName, style: sxStyle } = stylex.props(menuParts.collapsibleGroupPanel, style);
+	const { className: sxClassName, style: sxStyle } = stylex.props(menuParts.collapsibleGroupPanel, xstyle);
 
 	return (
 		<BaseCollapsible.Panel
@@ -338,33 +338,33 @@ export function CollapsibleGroupPanel({
 			keepMounted={keepMounted}
 			render={panelRender}
 			className={attrJoin(sxClassName, className)}
-			style={sxStyle}
+			style={mergeStyle(sxStyle, style)}
 			{...props}
 		/>
 	);
 }
 
-export function GroupLabel({ ref, className, style, ...props }: StyledProps<BaseMenu.GroupLabel.Props>) {
-	const { className: sxClassName, style: sxStyle } = stylex.props(menuText.groupLabel, menuParts.groupLabel, style);
+export function GroupLabel({ ref, className, style, xstyle, ...props }: StyledProps<BaseMenu.GroupLabel.Props>) {
+	const { className: sxClassName, style: sxStyle } = stylex.props(menuText.groupLabel, menuParts.groupLabel, xstyle);
 
 	return (
 		<BaseMenu.GroupLabel
 			ref={ref}
 			className={attrJoin(sxClassName, className)}
-			style={sxStyle}
+			style={mergeStyle(sxStyle, style)}
 			{...props}
 		/>
 	);
 }
 
-export function Separator({ ref, className, style, ...props }: StyledProps<BaseMenu.Separator.Props>) {
-	const { className: sxClassName, style: sxStyle } = stylex.props(menuParts.separator, style);
+export function Separator({ ref, className, style, xstyle, ...props }: StyledProps<BaseMenu.Separator.Props>) {
+	const { className: sxClassName, style: sxStyle } = stylex.props(menuParts.separator, xstyle);
 
 	return (
 		<BaseMenu.Separator
 			ref={ref}
 			className={attrJoin(sxClassName, className)}
-			style={sxStyle}
+			style={mergeStyle(sxStyle, style)}
 			{...props}
 		/>
 	);
@@ -382,15 +382,15 @@ export function ItemIcon({ children }: { children: ReactNode }) {
 	);
 }
 
-export function TriggerIcon({ ref, children, className, style, ...props }: MenuTriggerIconProps) {
-	const { className: sxClassName, style: sxStyle } = stylex.props(menuParts.triggerIcon, style);
+export function TriggerIcon({ ref, children, className, style, xstyle, ...props }: MenuTriggerIconProps) {
+	const { className: sxClassName, style: sxStyle } = stylex.props(menuParts.triggerIcon, xstyle);
 
 	return (
 		<Icon.ChevronDown
 			ref={ref}
 			aria-hidden
 			className={attrJoin(sxClassName, className)}
-			style={sxStyle}
+			style={mergeStyle(sxStyle, style)}
 			width="1em"
 			height="1em"
 			{...props}

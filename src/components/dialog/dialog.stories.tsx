@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
+import x from "@stylexjs/atoms";
 import * as stylex from "@stylexjs/stylex";
 import { useRef, useState } from "react";
 import { tokens } from "@/theme/tokens.stylex";
@@ -150,7 +151,7 @@ function InsideScrollDialog() {
 	return (
 		<Dialog.Root>
 			<Dialog.Trigger render={<Button />}>Open inside-scroll dialog</Dialog.Trigger>
-			<Dialog.Popup scrollBehavior="inside" style={storyParts.insideScrollPopup}>
+			<Dialog.Popup scrollBehavior="inside" xstyle={storyParts.insideScrollPopup}>
 				<Dialog.Header>
 					<Dialog.Title>Dialog guidelines</Dialog.Title>
 					<Dialog.Description>
@@ -160,9 +161,10 @@ function InsideScrollDialog() {
 				<ScrollArea
 					label="Dialog guidelines"
 					size="content"
-					style={storyParts.insideScrollArea}
-					contentStyle={storyParts.insideScrollContent}>
-					<DialogSections />
+					xstyle={storyParts.insideScrollArea}>
+					<div {...stylex.props(x.padding(tokens["--space-5"]))}>
+						<DialogSections />
+					</div>
 				</ScrollArea>
 				<Dialog.Footer>
 					<Dialog.Close render={<Button variant="neutral" />}>Close</Dialog.Close>
@@ -220,7 +222,7 @@ function NonModalExample() {
 	const [outsideCount, setOutsideCount] = useState(0);
 
 	return (
-		<Stack align="center" gap={5} style={storyParts.nonModalStage}>
+		<Stack align="center" gap={5} xstyle={storyParts.nonModalStage}>
 			<Stack align="center" gap={6} justify="space-between" orientation="horizontal" width="full">
 				<Stack gap={1}>
 					<Heading size="2">Workspace canvas</Heading>
@@ -236,8 +238,8 @@ function NonModalExample() {
 				<Dialog.Trigger render={<Button />}>Open inspector</Dialog.Trigger>
 				<Dialog.Popup
 					backdropProps={false}
-					viewportProps={{ style: storyParts.nonModalViewport }}
-					style={storyParts.nonModalPopup}>
+					viewportProps={{ xstyle: storyParts.nonModalViewport }}
+					xstyle={storyParts.nonModalPopup}>
 					<Dialog.Header>
 						<Dialog.Title>Selection inspector</Dialog.Title>
 						<Dialog.Description>A non-modal dialog for supporting controls.</Dialog.Description>
@@ -383,9 +385,6 @@ const storyParts = stylex.create({
 		flexGrow: "1",
 		flexShrink: "1",
 		minHeight: 0,
-	},
-	insideScrollContent: {
-		padding: tokens["--space-5"],
 	},
 	nonModalStage: {
 		minWidth: "min(680px, calc(100vw - 48px))",

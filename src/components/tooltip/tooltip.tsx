@@ -1,16 +1,13 @@
 import { Tooltip as BaseTooltip } from "@base-ui/react/tooltip";
 
 import * as stylex from "@stylexjs/stylex";
-import type { StyleXStyles } from "@stylexjs/stylex";
 import { zIndex } from "@/styles/constants.stylex";
+import { mergeStyle, type BaseStyleProps } from "@/styles/props/base";
 import { popupArrowStyles, popupPositionerStyles, popupViewportStyles } from "@/components/popover/popover.stylex";
 import { tooltipStyles } from "./tooltip.stylex";
 import { attrJoin } from "@/utils/attr-join";
 
-type StyledProps<T> = Omit<T, "className" | "style"> & {
-	className?: string;
-	style?: StyleXStyles;
-};
+type StyledProps<T> = Omit<T, "className" | "style" | "xstyle"> & BaseStyleProps & { className?: string };
 
 export type TooltipPositionerProps = StyledProps<BaseTooltip.Positioner.Props>;
 export type TooltipViewportProps = StyledProps<BaseTooltip.Viewport.Props>;
@@ -21,11 +18,11 @@ export type TooltipPopupProps = StyledProps<BaseTooltip.Popup.Props> & {
 	positionerProps?: TooltipPositionerProps;
 };
 
-function Positioner({ ref, className, style, sideOffset = 4, ...props }: TooltipPositionerProps) {
+function Positioner({ ref, className, style, xstyle, sideOffset = 4, ...props }: TooltipPositionerProps) {
 	const { className: sxClassName, style: sxStyle } = stylex.props(
 		popupPositionerStyles,
 		tooltipParts.positioner,
-		style,
+		xstyle,
 	);
 
 	return (
@@ -33,7 +30,7 @@ function Positioner({ ref, className, style, sideOffset = 4, ...props }: Tooltip
 			ref={ref}
 			sideOffset={sideOffset}
 			className={attrJoin(sxClassName, className)}
-			style={sxStyle}
+			style={mergeStyle(sxStyle, style)}
 			{...props}
 		/>
 	);
@@ -47,9 +44,10 @@ export function Popup({
 	portalProps,
 	positionerProps,
 	style,
+	xstyle,
 	...props
 }: TooltipPopupProps) {
-	const { className: sxClassName, style: sxStyle } = stylex.props(tooltipStyles.popup, tooltipParts.popup, style);
+	const { className: sxClassName, style: sxStyle } = stylex.props(tooltipStyles.popup, tooltipParts.popup, xstyle);
 
 	return (
 		<BaseTooltip.Portal {...portalProps}>
@@ -57,7 +55,7 @@ export function Popup({
 				<BaseTooltip.Popup
 					ref={ref}
 					className={attrJoin(sxClassName, className)}
-					style={sxStyle}
+					style={mergeStyle(sxStyle, style)}
 					{...props}>
 					{arrowProps ? <Arrow {...arrowProps} /> : null}
 					{children}
@@ -67,14 +65,14 @@ export function Popup({
 	);
 }
 
-export function Viewport({ ref, className, style, ...props }: TooltipViewportProps) {
-	const { className: sxClassName, style: sxStyle } = stylex.props(popupViewportStyles, style);
+export function Viewport({ ref, className, style, xstyle, ...props }: TooltipViewportProps) {
+	const { className: sxClassName, style: sxStyle } = stylex.props(popupViewportStyles, xstyle);
 
 	return (
 		<BaseTooltip.Viewport
 			ref={ref}
 			className={attrJoin(sxClassName, "xyz-popup-viewport", className)}
-			style={sxStyle}
+			style={mergeStyle(sxStyle, style)}
 			{...props}
 		/>
 	);
@@ -86,9 +84,10 @@ export function Trigger({
 	delay = 250,
 	className,
 	style,
+	xstyle,
 	...props
 }: StyledProps<BaseTooltip.Trigger.Props>) {
-	const { className: sxClassName, style: sxStyle } = stylex.props(style);
+	const { className: sxClassName, style: sxStyle } = stylex.props(xstyle);
 
 	return (
 		<BaseTooltip.Trigger
@@ -96,7 +95,7 @@ export function Trigger({
 			closeDelay={closeDelay}
 			delay={delay}
 			className={attrJoin(sxClassName, className) || undefined}
-			style={sxStyle}
+			style={mergeStyle(sxStyle, style)}
 			{...props}
 		/>
 	);
@@ -108,14 +107,14 @@ export function Root<Payload>(props: BaseTooltip.Root.Props<Payload>) {
 	return <BaseTooltip.Root {...props} />;
 }
 
-function Arrow({ ref, className, style, ...props }: TooltipArrowProps) {
-	const { className: sxClassName, style: sxStyle } = stylex.props(popupArrowStyles, style);
+function Arrow({ ref, className, style, xstyle, ...props }: TooltipArrowProps) {
+	const { className: sxClassName, style: sxStyle } = stylex.props(popupArrowStyles, xstyle);
 
 	return (
 		<BaseTooltip.Arrow
 			ref={ref}
 			className={attrJoin(sxClassName, className)}
-			style={sxStyle}
+			style={mergeStyle(sxStyle, style)}
 			{...props}
 		/>
 	);

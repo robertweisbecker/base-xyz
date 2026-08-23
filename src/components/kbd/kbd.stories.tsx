@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
+import x from "@stylexjs/atoms";
 import * as stylex from "@stylexjs/stylex";
 import { Badge } from "@/components/badge/badge";
 import { Button } from "@/components/button/button";
@@ -116,7 +117,7 @@ export const Composition: Story = {
 				<Text color="muted" size="1">
 					Badge w/ Kbd
 				</Text>
-				<Badge variant="elevated" pe={0.5}>
+				<Badge variant="elevated" xstyle={x.paddingInlineEnd(tokens["--space-0-5"])}>
 					View actions <Kbd size="sm">⌘K</Kbd>
 				</Badge>
 			</Stack>

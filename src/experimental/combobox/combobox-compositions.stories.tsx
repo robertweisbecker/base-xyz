@@ -4,6 +4,7 @@ import { MagnifyingGlassIcon } from "@phosphor-icons/react/dist/csr/MagnifyingGl
 import { PlusCircleIcon } from "@phosphor-icons/react/dist/csr/PlusCircle";
 import { XIcon } from "@phosphor-icons/react/dist/csr/X";
 import type { Meta, StoryObj } from "@storybook/react-vite";
+import x from "@stylexjs/atoms";
 import * as stylex from "@stylexjs/stylex";
 import { media } from "@/styles/constants.stylex";
 import { Button } from "@/components/button/button";
@@ -59,8 +60,7 @@ function SingleSelectPopupExample() {
 					render={
 						<Button
 							variant="secondary"
-							style={styles.trigger}
-							width="fit-content"
+							xstyle={[styles.trigger, x.width["fit-content"]]}
 							endSlot={<CaretUpDownIcon aria-hidden weight="bold" />}
 						/>
 					}>
@@ -88,7 +88,7 @@ function MultipleSummaryPopupExample() {
 					render={
 						<Button
 							variant="secondary"
-							style={styles.trigger}
+							xstyle={styles.trigger}
 							endSlot={<CaretUpDownIcon aria-hidden weight="bold" />}
 						/>
 					}>
@@ -135,7 +135,7 @@ function FilterChipsPopupExample() {
 								size="sm"
 								shape="pill"
 								variant="plain"
-								style={styles.addTrigger}
+								xstyle={x.flexShrink._0}
 								startSlot={<PlusCircleIcon aria-hidden weight="bold" />}>
 								Add
 							</Button>
@@ -220,9 +220,6 @@ const styles = stylex.create({
 		flexWrap: "wrap",
 		rowGap: 2,
 		minWidth: 0,
-	},
-	addTrigger: {
-		flexShrink: 0,
 	},
 	chip: {
 		padding: tokens["--space-1"],

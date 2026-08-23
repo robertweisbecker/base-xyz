@@ -17,9 +17,9 @@ const meta = {
 	},
 	render: (args) => (
 		<Stack {...args}>
-			<Box p={3} style={styles.item}>First</Box>
-			<Box p={3} style={styles.item}>Second</Box>
-			<Box p={3} style={styles.item}>Third</Box>
+			<Box p={3} xstyle={styles.item}>First</Box>
+			<Box p={3} xstyle={styles.item}>Second</Box>
+			<Box p={3} xstyle={styles.item}>Third</Box>
 		</Stack>
 	),
 } satisfies Meta<typeof Stack>;

@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
+import x from "@stylexjs/atoms";
 import * as stylex from "@stylexjs/stylex";
 import {
 	Fragment,
@@ -212,7 +213,11 @@ export const UserSelection: Story = {
 					aria-label={`${user.name} ${user.email}`}
 					startSlot={<Avatar aria-hidden initials={user.initials} size={5} shape="rounded" />}
 					endSlot={<Combobox.ChipRemove aria-label={`Remove ${user.name}`} />}>
-					<Text render={<span />} size="1" truncate style={[styles.userChipContent, styles.userName]}>
+					<Text
+						render={<span />}
+						size="1"
+						truncate
+						xstyle={[x.display.block, x.maxWidth("9rem"), x.minWidth._0]}>
 						{user.name}
 					</Text>
 				</Combobox.Chip>
@@ -222,7 +227,7 @@ export const UserSelection: Story = {
 					description={user.email}
 					label={user.name}
 					startSlot={<Avatar initials={user.initials} size={8} />}
-					style={styles.userOptionItem}
+					xstyle={[x.borderRadius._0, x.columnGap(tokens["--space-2"]), x.minWidth._0]}
 					variant="embedded"
 				/>
 			)}
@@ -456,7 +461,9 @@ function MultipleCombobox<Value>({
 					</Combobox.Chips>
 				</Combobox.InputGroup>
 			) : (
-				<Combobox.Chips style={styles.outsideComposition} {...focusProps}>
+				<Combobox.Chips
+					xstyle={[x.alignItems.stretch, x.flexDirection.column, x.gap(tokens["--space-2"])]}
+					{...focusProps}>
 					<Combobox.Value>
 						{(value: Value[]) => (
 							<>
@@ -659,24 +666,6 @@ function normalizeChipLimit(limit?: number) {
 }
 
 const styles = stylex.create({
-	userOptionItem: {
-		borderRadius: 0,
-		columnGap: tokens["--space-2"],
-		minWidth: 0,
-	},
-	userChipContent: {
-		maxWidth: "9rem",
-		minWidth: 0,
-	},
-	userName: {
-		display: "block",
-		minWidth: 0,
-	},
-	outsideComposition: {
-		gap: tokens["--space-2"],
-		alignItems: "stretch",
-		flexDirection: "column",
-	},
 	outsideChipList: {
 		alignItems: "center",
 		columnGap: tokens["--space-1"],

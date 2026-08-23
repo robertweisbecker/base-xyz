@@ -35,15 +35,21 @@ export const Examples: Story = {
 	render: () => (
 		<Stack gap={8} maxWidth="42rem">
 			<Example title="Active goal">
-				<GoalToolbar active description="Standardize Storybook stories across the component library." />
+				<GoalToolbar
+					defaultActive
+					defaultDescription="Standardize Storybook stories across the component library."
+				/>
 			</Example>
 			<Example title="Inactive goal">
-				<GoalToolbar active={false} description="Standardize Storybook stories across the component library." />
+				<GoalToolbar
+					defaultActive={false}
+					defaultDescription="Standardize Storybook stories across the component library."
+				/>
 			</Example>
 			<Example title="Long description">
 				<GoalToolbar
-					active
-					description="Audit every component and block story, consolidate repetitive examples, preserve meaningful controls, and verify the resulting Storybook navigation and behavior."
+					defaultActive
+					defaultDescription="Audit every component and block story, consolidate repetitive examples, preserve meaningful controls, and verify the resulting Storybook navigation and behavior."
 				/>
 			</Example>
 		</Stack>
@@ -84,8 +90,8 @@ function GoalProgressDemo({ id }: { id: string }) {
 			{({ anchorRef, setGoalActive }) => (
 				<Box ref={anchorRef} mx={6}>
 					<GoalToolbar
-						active
-						description="Refactor the command palette and data table stories."
+						defaultActive
+						defaultDescription="Refactor the command palette and data table stories."
 						onActiveChange={setGoalActive}
 					/>
 				</Box>
@@ -101,8 +107,8 @@ function GoalPromptStackDemo({ id }: { id: string }) {
 				<Stack gap={0} width="full">
 					<Box ref={anchorRef} mx={6}>
 						<GoalToolbar
-							active
-							description="Wire the goal state into the next prompt before continuing."
+							defaultActive
+							defaultDescription="Wire the goal state into the next prompt before continuing."
 							onActiveChange={setGoalActive}
 						/>
 					</Box>
@@ -121,7 +127,7 @@ function GoalPromptStackDemo({ id }: { id: string }) {
 											effortOptions={exampleEffortOptions}
 											speedOptions={exampleSpeedOptions}
 											defaultValue={exampleDefaultValue}>
-											<ModelSelector.Trigger render={<Toolbar.Button style={storyParts.modelTrigger} />} />
+											<ModelSelector.Trigger render={<Toolbar.Button xstyle={storyParts.modelTrigger} />} />
 											<ModelSelector.Popup />
 										</ModelSelector.Root>
 									</Toolbar.Root>
@@ -199,19 +205,16 @@ function GoalProgressContent({
 	id: string;
 }) {
 	const manager = Toast.useAnchoredToastManager();
-	const managerRef = useRef(manager);
 	const anchorRef = useRef<HTMLDivElement | null>(null);
 	const [goalActive, setGoalActive] = useState(true);
 
-	managerRef.current = manager;
-
 	useEffect(() => {
 		if (!goalActive) {
-			managerRef.current.close(id);
+			manager.close(id);
 			return;
 		}
 
-		managerRef.current.add({
+		manager.add({
 			id,
 			title: `Step ${goalProgressStep} / ${goalProgressSteps} · 4 files changed`,
 			description: <ChangeCount additions={12} deletions={3} />,
@@ -232,7 +235,7 @@ function GoalProgressContent({
 						fillColor="currentColor"
 						showValue={false}
 						size={16}
-						style={storyParts.progressGauge}
+						xstyle={storyParts.progressGauge}
 						trackColor="color-mix(in srgb, currentColor 25%, transparent)"
 						value={(goalProgressStep / goalProgressSteps) * 100}
 					/>
@@ -240,7 +243,7 @@ function GoalProgressContent({
 				dismissible: false,
 			},
 		});
-	}, [goalActive, id]);
+	}, [goalActive, id, manager]);
 
 	return children({ anchorRef, setGoalActive });
 }
@@ -250,11 +253,11 @@ function ChangeCount({ additions, deletions }: { additions: number; deletions: n
 		<Text
 			aria-label={`${additions} additions and ${deletions} deletions`}
 			render={<span />}
-			style={storyParts.changeCount}>
-			<Text aria-hidden render={<span />} style={storyParts.additions}>
+			xstyle={storyParts.changeCount}>
+			<Text aria-hidden render={<span />} xstyle={storyParts.additions}>
 				+{additions}
 			</Text>
-			<Text aria-hidden render={<span />} style={storyParts.deletions}>
+			<Text aria-hidden render={<span />} xstyle={storyParts.deletions}>
 				−{deletions}
 			</Text>
 		</Text>

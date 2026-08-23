@@ -1,49 +1,35 @@
 import { Separator as BaseSeparator } from "@base-ui/react/separator";
 import * as stylex from "@stylexjs/stylex";
-import type { StyleXStyles } from "@stylexjs/stylex";
-import {
-	composeThemeProps,
-	resolveThemeProps,
-	type ThemePropsOf,
-} from "@/theme/theme-props";
-import {
-	childLayoutThemeProps,
-	positioningThemeProps,
-	sizingThemeProps,
-} from "@/theme/theme-props-layout.stylex";
-import { marginThemeProps } from "@/theme/theme-props-spacing.stylex";
+import { mergeStyle, type BaseStyleProps } from "@/styles/props/base";
+import { extractMarginProps, type MarginProps } from "@/styles/props/spacing.stylex";
 import { tokens } from "@/theme/tokens.stylex";
 import { attrJoin } from "@/utils/attr-join";
 
-const separatorThemeProps = composeThemeProps(
-	marginThemeProps,
-	sizingThemeProps,
-	positioningThemeProps,
-	childLayoutThemeProps,
-);
-export type SeparatorThemeProps = ThemePropsOf<typeof separatorThemeProps>;
-
 export type SeparatorProps = Omit<
 	BaseSeparator.Props,
-	"className" | "color" | "height" | "style" | "width" | keyof SeparatorThemeProps
+	"className" | "color" | "height" | "style" | "width" | keyof MarginProps
 > &
-	SeparatorThemeProps & {
-	className?: string;
-	/** StyleX overrides, applied after the component's own styles. */
-	style?: StyleXStyles;
-};
+	MarginProps &
+	BaseStyleProps & {
+		className?: string;
+	};
 
-export function Separator({ ref, className, orientation = "horizontal", style, ...props }: SeparatorProps) {
-	const { restProps, styles } = resolveThemeProps(props, separatorThemeProps);
-	const sx = stylex.props(separatorParts.root, orientationVariants[orientation], ...styles, style);
+export function Separator({ ref, className, orientation = "horizontal", style, xstyle, ...props }: SeparatorProps) {
+	const { marginStyles, rest } = extractMarginProps(props);
+	const sx = stylex.props(
+		separatorParts.root,
+		orientationVariants[orientation],
+		...marginStyles,
+		xstyle,
+	);
 
 	return (
 		<BaseSeparator
 			ref={ref}
 			orientation={orientation}
 			className={attrJoin(sx.className, className)}
-			style={sx.style}
-			{...restProps}
+			style={mergeStyle(sx.style, style)}
+			{...rest}
 		/>
 	);
 }

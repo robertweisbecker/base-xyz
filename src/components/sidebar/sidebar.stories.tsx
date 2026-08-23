@@ -49,10 +49,8 @@ function StoryShell({
 	children: ReactNode;
 	side?: SidebarSide;
 }) {
-	const shell = stylex.props(storyParts.shell, side === "end" && storyParts.shellEnd);
-
 	return (
-		<Box className={shell.className} display="flex" style={shell.style}>
+		<Box display="flex" xstyle={[storyParts.shell, side === "end" && storyParts.shellEnd]}>
 			{children}
 		</Box>
 	);
@@ -60,7 +58,7 @@ function StoryShell({
 
 function StoryMain({ children }: { children?: React.ReactNode }) {
 	return (
-		<Stack gap={3} p={4} render={<main />} style={storyParts.main}>
+		<Stack gap={3} p={4} render={<main />} xstyle={storyParts.main}>
 			{children}
 		</Stack>
 	);
@@ -168,7 +166,7 @@ function ModeExample({
 	defaultCollapsed?: boolean;
 }) {
 	return (
-		<Stack style={storyParts.mode}>
+		<Stack xstyle={storyParts.mode}>
 			<Box p={2}>
 				<Text color="muted" size="1">
 					{label}

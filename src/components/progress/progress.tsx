@@ -1,83 +1,87 @@
 import { Progress as BaseProgress } from "@base-ui/react/progress";
 import * as stylex from "@stylexjs/stylex";
-import type { StyleXStyles } from "@stylexjs/stylex";
+import { mergeStyle, type BaseStyleProps } from "@/styles/props/base";
+import { extractMarginProps, type MarginProps } from "@/styles/props/spacing.stylex";
 import { media } from "@/styles/constants.stylex";
 import { textStyles } from "@/components/text/text.stylex";
 import { tokens } from "@/theme/tokens.stylex";
 import { attrJoin } from "@/utils/attr-join";
 
-type StyledProps<T> = Omit<T, "className" | "style"> & {
-	className?: string;
-	/** StyleX overrides, applied after the component's own styles. */
-	style?: StyleXStyles;
-};
+type PartProps<T> = Omit<T, "className" | "style" | "xstyle"> & BaseStyleProps & { className?: string };
 
-export type RootProps = StyledProps<BaseProgress.Root.Props>;
-export type LabelProps = StyledProps<BaseProgress.Label.Props>;
-export type ValueProps = StyledProps<BaseProgress.Value.Props>;
-export type TrackProps = StyledProps<BaseProgress.Track.Props>;
-export type IndicatorProps = StyledProps<BaseProgress.Indicator.Props>;
+export type RootProps = Omit<BaseProgress.Root.Props, "className" | "style" | "xstyle" | keyof MarginProps> &
+	MarginProps &
+	PartProps<BaseProgress.Root.Props>;
+export type LabelProps = PartProps<BaseProgress.Label.Props>;
+export type ValueProps = PartProps<BaseProgress.Value.Props>;
+export type TrackProps = PartProps<BaseProgress.Track.Props>;
+export type IndicatorProps = PartProps<BaseProgress.Indicator.Props>;
 
-export function Root({ ref, className, style, ...props }: RootProps) {
-	const sx = stylex.props(progressParts.root, style);
+export function Root({ ref, className, style, xstyle, ...props }: RootProps) {
+	const { marginStyles, rest } = extractMarginProps(props);
+	const sx = stylex.props(
+		progressParts.root,
+		marginStyles,
+		xstyle,
+	);
 
 	return (
 		<BaseProgress.Root
 			ref={ref}
 			className={attrJoin(sx.className, className)}
-			style={sx.style}
-			{...props}
+			style={mergeStyle(sx.style, style)}
+			{...rest}
 		/>
 	);
 }
 
-export function Label({ ref, className, style, ...props }: LabelProps) {
-	const sx = stylex.props(textStyles.supporting, progressParts.label, style);
+export function Label({ ref, className, style, xstyle, ...props }: LabelProps) {
+	const sx = stylex.props(textStyles.supporting, progressParts.label, xstyle);
 
 	return (
 		<BaseProgress.Label
 			ref={ref}
 			className={attrJoin(sx.className, className)}
-			style={sx.style}
+			style={mergeStyle(sx.style, style)}
 			{...props}
 		/>
 	);
 }
 
-export function Value({ ref, className, style, ...props }: ValueProps) {
-	const sx = stylex.props(textStyles.supporting, progressParts.value, style);
+export function Value({ ref, className, style, xstyle, ...props }: ValueProps) {
+	const sx = stylex.props(textStyles.supporting, progressParts.value, xstyle);
 
 	return (
 		<BaseProgress.Value
 			ref={ref}
 			className={attrJoin(sx.className, className)}
-			style={sx.style}
+			style={mergeStyle(sx.style, style)}
 			{...props}
 		/>
 	);
 }
 
-export function Track({ ref, className, style, ...props }: TrackProps) {
-	const sx = stylex.props(progressParts.track, style);
+export function Track({ ref, className, style, xstyle, ...props }: TrackProps) {
+	const sx = stylex.props(progressParts.track, xstyle);
 
 	return (
 		<BaseProgress.Track
 			ref={ref}
 			className={attrJoin(sx.className, className)}
-			style={sx.style}
+			style={mergeStyle(sx.style, style)}
 			{...props}
 		/>
 	);
 }
 
-export function Indicator({ ref, className, style, ...props }: IndicatorProps) {
-	const sx = stylex.props(progressParts.indicator, style);
+export function Indicator({ ref, className, style, xstyle, ...props }: IndicatorProps) {
+	const sx = stylex.props(progressParts.indicator, xstyle);
 
 	return (
 		<BaseProgress.Indicator
 			ref={ref}
 			className={attrJoin(sx.className, className)}
-			style={sx.style}
+			style={mergeStyle(sx.style, style)}
 			{...props}
 		/>
 	);

@@ -1,13 +1,14 @@
 import * as stylex from "@stylexjs/stylex";
-import type { StyleXStyles } from "@stylexjs/stylex";
 import { createElement, type ComponentProps, type ReactNode } from "react";
 import { Box, Stack, Text } from "@/components";
+import { mergeStyle, type BaseStyleProps } from "@/styles/props/base";
 import { tokens } from "@/theme/tokens.stylex";
 import { attrJoin } from "@/utils/attr-join";
 
 export type PageHeaderHeadingLevel = 1 | 2 | 3 | 4 | 5 | 6;
 
-export type PageHeaderProps = Omit<ComponentProps<"section">, "style" | "title"> & {
+export type PageHeaderProps = Omit<ComponentProps<"section">, "style" | "title"> &
+	BaseStyleProps & {
 	actions?: ReactNode;
 	breadcrumbs?: ReactNode;
 	description?: ReactNode;
@@ -17,8 +18,6 @@ export type PageHeaderProps = Omit<ComponentProps<"section">, "style" | "title">
 	navigation?: ReactNode;
 	startSlot?: ReactNode;
 	title: string;
-	/** StyleX overrides, applied after the component's own styles. */
-	style?: StyleXStyles;
 };
 
 export function PageHeader({
@@ -33,29 +32,30 @@ export function PageHeader({
 	startSlot,
 	style,
 	title,
+	xstyle,
 	...props
 }: PageHeaderProps) {
-	const sx = stylex.props(parts.root, style);
+	const sx = stylex.props(parts.root, xstyle);
 	const titleNode = createElement(`h${headingLevel}`, stylex.props(parts.title), title);
 
 	return (
-		<section className={attrJoin(sx.className, className)} style={sx.style} {...props}>
+		<section className={attrJoin(sx.className, className)} style={mergeStyle(sx.style, style)} {...props}>
 			<Stack gap={4}>
-				{breadcrumbs ? <Box style={parts.breadcrumbs}>{breadcrumbs}</Box> : null}
-				<Box style={parts.content}>
-					<Box style={parts.headingArea}>
-						<Stack gap={1} style={parts.textArea}>
-							<Box style={parts.titleRow}>
+				{breadcrumbs ? <Box {...stylex.props(parts.breadcrumbs)}>{breadcrumbs}</Box> : null}
+				<Box {...stylex.props(parts.content)}>
+					<Box {...stylex.props(parts.headingArea)}>
+						<Stack gap={1} {...stylex.props(parts.textArea)}>
+							<Box {...stylex.props(parts.titleRow)}>
 								{startSlot}
 								{titleNode}
 								{metadata ? (
-									<Text color="muted" size="1" style={parts.metadata}>
+									<Text color="muted" size="1" {...stylex.props(parts.metadata)}>
 										{metadata}
 									</Text>
 								) : null}
 							</Box>
 							{description ? (
-								<Text color="muted" size="2" wrap="pretty" style={parts.description}>
+								<Text color="muted" size="2" wrap="pretty" {...stylex.props(parts.description)}>
 									{description}
 								</Text>
 							) : null}
@@ -64,9 +64,9 @@ export function PageHeader({
 							<span {...stylex.props(parts.endSlot)}>{endSlot}</span>
 						)}
 					</Box>
-					{actions ? <Box style={parts.actions}>{actions}</Box> : null}
+					{actions ? <Box {...stylex.props(parts.actions)}>{actions}</Box> : null}
 				</Box>
-				{navigation ? <Box style={parts.navigation}>{navigation}</Box> : null}
+				{navigation ? <Box {...stylex.props(parts.navigation)}>{navigation}</Box> : null}
 			</Stack>
 		</section>
 	);

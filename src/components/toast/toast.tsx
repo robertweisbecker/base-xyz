@@ -1,8 +1,8 @@
 import { Toast as BaseToast } from "@base-ui/react/toast";
 import * as stylex from "@stylexjs/stylex";
-import type { StyleXStyles } from "@stylexjs/stylex";
 import { type ComponentProps } from "react";
 import { zIndex } from "@/styles/constants.stylex";
+import { mergeStyle, type BaseStyleProps } from "@/styles/props/base";
 import { tokens } from "@/theme/tokens.stylex";
 import { pressable } from "@/styles/recipes/transitions";
 
@@ -10,111 +10,108 @@ import { toastMotion } from "./toast-motion.stylex";
 import { toastControlStyles, toastTextStyles } from "./toast-parts";
 import { attrJoin } from "@/utils/attr-join";
 
-type StyledProps<T> = Omit<T, "className" | "style"> & {
-	className?: string;
-	style?: StyleXStyles;
-};
+type StyledProps<T> = Omit<T, "className" | "style" | "xstyle"> & BaseStyleProps & { className?: string };
 
-export function Viewport({ ref, className, style, ...props }: StyledProps<BaseToast.Viewport.Props>) {
-	const { className: sxClassName, style: sxStyle } = stylex.props(toastParts.viewport, style);
+export function Viewport({ ref, className, style, xstyle, ...props }: StyledProps<BaseToast.Viewport.Props>) {
+	const { className: sxClassName, style: sxStyle } = stylex.props(toastParts.viewport, xstyle);
 
 	return (
 		<BaseToast.Viewport
 			ref={ref}
 			className={attrJoin(sxClassName, className)}
-			style={sxStyle}
+			style={mergeStyle(sxStyle, style)}
 			{...props}
 		/>
 	);
 }
 
-export function Root({ ref, className, style, ...props }: StyledProps<BaseToast.Root.Props>) {
-	const { className: sxClassName, style: sxStyle } = stylex.props(toastParts.root, style);
+export function Root({ ref, className, style, xstyle, ...props }: StyledProps<BaseToast.Root.Props>) {
+	const { className: sxClassName, style: sxStyle } = stylex.props(toastParts.root, xstyle);
 
 	return (
 		<BaseToast.Root
 			ref={ref}
 			className={attrJoin(sxClassName, className)}
-			style={sxStyle}
+			style={mergeStyle(sxStyle, style)}
 			{...props}
 		/>
 	);
 }
 
-export function Content({ ref, className, style, ...props }: StyledProps<BaseToast.Content.Props>) {
-	const { className: sxClassName, style: sxStyle } = stylex.props(toastParts.content, style);
+export function Content({ ref, className, style, xstyle, ...props }: StyledProps<BaseToast.Content.Props>) {
+	const { className: sxClassName, style: sxStyle } = stylex.props(toastParts.content, xstyle);
 
 	return (
 		<BaseToast.Content
 			ref={ref}
 			className={attrJoin(sxClassName, className)}
-			style={sxStyle}
+			style={mergeStyle(sxStyle, style)}
 			{...props}
 		/>
 	);
 }
 
-export function Title({ ref, className, style, ...props }: StyledProps<BaseToast.Title.Props>) {
-	const { className: sxClassName, style: sxStyle } = stylex.props(toastTextStyles.title, style);
+export function Title({ ref, className, style, xstyle, ...props }: StyledProps<BaseToast.Title.Props>) {
+	const { className: sxClassName, style: sxStyle } = stylex.props(toastTextStyles.title, xstyle);
 
 	return (
 		<BaseToast.Title
 			ref={ref}
 			className={attrJoin(sxClassName, className)}
-			style={sxStyle}
+			style={mergeStyle(sxStyle, style)}
 			{...props}
 		/>
 	);
 }
 
-export function Description({ ref, className, style, ...props }: StyledProps<BaseToast.Description.Props>) {
-	const { className: sxClassName, style: sxStyle } = stylex.props(toastTextStyles.description, style);
+export function Description({ ref, className, style, xstyle, ...props }: StyledProps<BaseToast.Description.Props>) {
+	const { className: sxClassName, style: sxStyle } = stylex.props(toastTextStyles.description, xstyle);
 
 	return (
 		<BaseToast.Description
 			ref={ref}
 			className={attrJoin(sxClassName, className)}
-			style={sxStyle}
+			style={mergeStyle(sxStyle, style)}
 			{...props}
 		/>
 	);
 }
 
-export function Action({ ref, className, style, ...props }: StyledProps<BaseToast.Action.Props>) {
-	const { className: sxClassName, style: sxStyle } = stylex.props(toastControlStyles.action, style);
+export function Action({ ref, className, style, xstyle, ...props }: StyledProps<BaseToast.Action.Props>) {
+	const { className: sxClassName, style: sxStyle } = stylex.props(toastControlStyles.action, xstyle);
 
 	return (
 		<BaseToast.Action
 			ref={ref}
 			className={attrJoin(sxClassName, className)}
-			style={sxStyle}
+			style={mergeStyle(sxStyle, style)}
 			{...props}
 		/>
 	);
 }
 
-export function Close({ ref, className, style, ...props }: StyledProps<BaseToast.Close.Props>) {
+export function Close({ ref, className, style, xstyle, ...props }: StyledProps<BaseToast.Close.Props>) {
 	const { className: sxClassName, style: sxStyle } = stylex.props(
 		toastControlStyles.close,
 		toastControlStyles.stackedClose,
 		pressable.transition,
-		style,
+		xstyle,
 	);
 
 	return (
 		<BaseToast.Close
 			ref={ref}
 			className={attrJoin(sxClassName, className)}
-			style={sxStyle}
+			style={mergeStyle(sxStyle, style)}
 			{...props}
 		/>
 	);
 }
 
-export function Text({ className, style, ...props }: StyledProps<ComponentProps<"div">>) {
-	const { className: sxClassName, style: sxStyle } = stylex.props(toastParts.text, style);
+export function Text({ className, style, xstyle, ...props }: StyledProps<ComponentProps<"div">>) {
+	const { className: sxClassName, style: sxStyle } = stylex.props(toastParts.text, xstyle);
 
-	return <div className={attrJoin(sxClassName, className)} style={sxStyle} {...props} />;
+	return <div className={attrJoin(sxClassName, className)} style={mergeStyle(sxStyle, style)} {...props} />;
 }
 
 export const Provider = BaseToast.Provider;

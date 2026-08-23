@@ -1,6 +1,5 @@
 import { XIcon } from "@phosphor-icons/react/dist/csr/X";
 import * as stylex from "@stylexjs/stylex";
-import type { StyleXStyles } from "@stylexjs/stylex";
 import {
 	createContext,
 	type ComponentProps,
@@ -13,6 +12,7 @@ import {
 } from "react";
 import { Button, Dialog, ScrollArea, Toast } from "@/components";
 import type { ButtonProps } from "@/components";
+import { mergeStyle, type BaseStyleProps } from "@/styles/props/base";
 import { tokens } from "@/theme/tokens.stylex";
 import { attrJoin } from "@/utils/attr-join";
 
@@ -45,25 +45,20 @@ export type ConfirmationDialogProps = DialogRootProps & {
 	failureToast?: ConfirmationDialogSuccessToast | false;
 };
 
-type StyledProps<T> = Omit<T, "style"> & {
-	/** StyleX overrides, applied after the component's own styles. */
-	style?: StyleXStyles;
-};
+type StyledProps<T> = Omit<T, "style" | "xstyle"> & BaseStyleProps;
 
 export type ConfirmationDialogHeaderProps = ComponentProps<typeof Dialog.Header>;
 export type ConfirmationDialogVisualProps = StyledProps<ComponentProps<"div">>;
 export type ConfirmationDialogTitleProps = ComponentProps<typeof Dialog.Title>;
 export type ConfirmationDialogDescriptionProps = ComponentProps<typeof Dialog.Description>;
 
-export type ConfirmationDialogBodyProps = {
+export type ConfirmationDialogBodyProps = BaseStyleProps & {
 	children: ReactNode;
 	/**
 	 * Accessible name for the internally scrollable region.
 	 */
 	label?: string;
 	className?: string;
-	/** StyleX overrides, applied after the component's own styles. */
-	style?: StyleXStyles;
 };
 
 export type ConfirmationDialogFooterProps = ComponentProps<typeof Dialog.Footer>;
@@ -187,7 +182,7 @@ function ConfirmationDialogRoot({
 				{trigger ? <Dialog.Trigger render={trigger} /> : null}
 				<Dialog.Popup
 					scrollBehavior="inside"
-					style={[confirmationDialogParts.popup, dialogSizes[size]]}
+					{...stylex.props(confirmationDialogParts.popup, dialogSizes[size])}
 					showClose={false}>
 					{children}
 				</Dialog.Popup>
@@ -196,18 +191,18 @@ function ConfirmationDialogRoot({
 	);
 }
 
-export function Header({ style, ...props }: ConfirmationDialogHeaderProps) {
-	return <Dialog.Header style={[confirmationDialogParts.header, style]} {...props} />;
+export function Header({ xstyle, ...props }: ConfirmationDialogHeaderProps) {
+	return <Dialog.Header xstyle={[confirmationDialogParts.header, xstyle]} {...props} />;
 }
 
-export function Visual({ className, style, ...props }: ConfirmationDialogVisualProps) {
-	const sx = stylex.props(confirmationDialogParts.visual, style);
+export function Visual({ className, style, xstyle, ...props }: ConfirmationDialogVisualProps) {
+	const sx = stylex.props(confirmationDialogParts.visual, xstyle);
 
 	return (
 		<div
 			data-confirmation-dialog-visual
 			className={attrJoin(sx.className, className)}
-			style={sx.style}
+			style={mergeStyle(sx.style, style)}
 			{...props}
 		/>
 	);
@@ -216,28 +211,27 @@ export function Visual({ className, style, ...props }: ConfirmationDialogVisualP
 export const Title = Dialog.Title;
 export const Description = Dialog.Description;
 
-export function Body({ children, label = "Confirmation details", className, style }: ConfirmationDialogBodyProps) {
+export function Body({ children, label = "Confirmation details", className, style, xstyle }: ConfirmationDialogBodyProps) {
 	return (
 		<ScrollArea
 			label={label}
 			size="content"
 			className={className}
-			style={[confirmationDialogParts.body, style]}
-			viewportStyle={confirmationDialogParts.bodyViewport}
-			contentStyle={confirmationDialogParts.bodyContent}>
-			{children}
+			style={style}
+			xstyle={[confirmationDialogParts.body, confirmationDialogParts.bodyMaxHeight, xstyle]}>
+			<div {...stylex.props(confirmationDialogParts.bodyContent)}>{children}</div>
 		</ScrollArea>
 	);
 }
 
-export function Footer({ style, ...props }: ConfirmationDialogFooterProps) {
-	return <Dialog.Footer style={[confirmationDialogParts.footer, style]} {...props} />;
+export function Footer({ xstyle, ...props }: ConfirmationDialogFooterProps) {
+	return <Dialog.Footer xstyle={[confirmationDialogParts.footer, xstyle]} {...props} />;
 }
 
-export function Actions({ className, style, ...props }: ConfirmationDialogActionsProps) {
-	const sx = stylex.props(confirmationDialogParts.footerActions, style);
+export function Actions({ className, style, xstyle, ...props }: ConfirmationDialogActionsProps) {
+	const sx = stylex.props(confirmationDialogParts.footerActions, xstyle);
 
-	return <div className={attrJoin(sx.className, className)} style={sx.style} {...props} />;
+	return <div className={attrJoin(sx.className, className)} style={mergeStyle(sx.style, style)} {...props} />;
 }
 
 export function Cancel({ children, variant = "neutral", ...props }: ConfirmationDialogCancelProps) {
@@ -309,7 +303,7 @@ const confirmationDialogParts = stylex.create({
 		flexShrink: "1",
 		minHeight: 0,
 	},
-	bodyViewport: {
+	bodyMaxHeight: {
 		maxHeight: "min(50dvh, 28rem)",
 	},
 	bodyContent: {

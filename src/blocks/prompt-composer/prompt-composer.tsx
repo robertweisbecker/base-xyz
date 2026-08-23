@@ -4,7 +4,6 @@ import { ArrowUpIcon } from "@phosphor-icons/react/dist/csr/ArrowUp";
 import { PlusIcon } from "@phosphor-icons/react/dist/csr/Plus";
 import { SquareIcon } from "@phosphor-icons/react/dist/csr/Square";
 import * as stylex from "@stylexjs/stylex";
-import type { StyleXStyles } from "@stylexjs/stylex";
 import {
 	createContext,
 	type ComponentProps,
@@ -17,6 +16,7 @@ import {
 import { Button, IconButton, InputGroup, Menu } from "@/components";
 import type { ButtonProps } from "@/components";
 import { useScrollFade } from "@/hooks/use-scroll-fade";
+import { mergeStyle, type BaseStyleProps } from "@/styles/props/base";
 import { tokens } from "@/theme/tokens.stylex";
 import { attrJoin } from "@/utils/attr-join";
 
@@ -32,10 +32,7 @@ type PromptComposerContextValue = {
 
 const PromptComposerContext = createContext<PromptComposerContextValue | null>(null);
 
-type StyledProps<T> = Omit<T, "style"> & {
-	/** StyleX overrides, applied after the component's own styles. */
-	style?: StyleXStyles;
-};
+type StyledProps<T> = Omit<T, "style" | "xstyle"> & BaseStyleProps;
 
 type FormProps = StyledProps<Omit<ComponentProps<typeof Form>, "className" | "onSubmit" | "onFormSubmit">> & {
 	className?: string;
@@ -75,6 +72,7 @@ export function Root({
 	clearOnSubmit = true,
 	className,
 	style,
+	xstyle,
 	...props
 }: PromptComposerRootProps) {
 	const [uncontrolledValue, setUncontrolledValue] = useState(defaultValue);
@@ -95,7 +93,7 @@ export function Root({
 		if (clearOnSubmit) updateValue("");
 	}
 
-	const sx = stylex.props(parts.root, style);
+	const sx = stylex.props(parts.root, xstyle);
 
 	return (
 		<PromptComposerContext.Provider
@@ -108,16 +106,21 @@ export function Root({
 				updateValue,
 				submit,
 			}}>
-			<Form className={attrJoin(sx.className, className)} onFormSubmit={submit} style={sx.style} {...props} />
+			<Form
+				className={attrJoin(sx.className, className)}
+				onFormSubmit={submit}
+				style={mergeStyle(sx.style, style)}
+				{...props}
+			/>
 		</PromptComposerContext.Provider>
 	);
 }
 
-export function Surface({ ref: forwardedRef, variant = "elevated", style, ...props }: PromptComposerSurfaceProps) {
+export function Surface({ ref: forwardedRef, variant = "elevated", xstyle, ...props }: PromptComposerSurfaceProps) {
 	const { surfaceRef } = usePromptComposerContext("Surface");
 	const mergedRef = useMergedRefs(forwardedRef, surfaceRef);
 
-	return <InputGroup.Root ref={mergedRef} size="lg" variant={variant} {...props} style={[parts.inputGroup, style]} />;
+	return <InputGroup.Root ref={mergedRef} size="lg" variant={variant} {...props} xstyle={[parts.inputGroup, xstyle]} />;
 }
 
 export function Input({
@@ -174,9 +177,9 @@ export const Header = InputGroup.Header;
 
 export const Footer = InputGroup.Footer;
 
-export function Options({ className, style, ...props }: PromptComposerOptionsProps) {
-	const sx = stylex.props(parts.options, style);
-	return <div className={attrJoin(sx.className, className)} style={sx.style} {...props} />;
+export function Options({ className, style, xstyle, ...props }: PromptComposerOptionsProps) {
+	const sx = stylex.props(parts.options, xstyle);
+	return <div className={attrJoin(sx.className, className)} style={mergeStyle(sx.style, style)} {...props} />;
 }
 
 export const Actions = InputGroup.Actions;
@@ -270,7 +273,7 @@ export function AddTrigger({ children, render, ...props }: PromptComposerAddTrig
 	);
 }
 
-export function AddPopup({ positionerProps, style, ...props }: PromptComposerAddPopupProps) {
+export function AddPopup({ positionerProps, xstyle, ...props }: PromptComposerAddPopupProps) {
 	const { surfaceRef } = usePromptComposerContext("AddPopup");
 	return (
 		<Menu.Popup
@@ -280,20 +283,20 @@ export function AddPopup({ positionerProps, style, ...props }: PromptComposerAdd
 				side: "top",
 				...positionerProps,
 			}}
-			style={[parts.addMenu, style]}
+			xstyle={[parts.addMenu, xstyle]}
 			{...props}
 		/>
 	);
 }
 
-export function AddItemContent({ className, style, ...props }: PromptComposerAddItemContentProps) {
-	const sx = stylex.props(parts.addMenuCopy, style);
-	return <span className={attrJoin(sx.className, className)} style={sx.style} {...props} />;
+export function AddItemContent({ className, style, xstyle, ...props }: PromptComposerAddItemContentProps) {
+	const sx = stylex.props(parts.addMenuCopy, xstyle);
+	return <span className={attrJoin(sx.className, className)} style={mergeStyle(sx.style, style)} {...props} />;
 }
 
-export function AddItemDescription({ className, style, ...props }: PromptComposerAddItemDescriptionProps) {
-	const sx = stylex.props(parts.addMenuDescription, style);
-	return <span className={attrJoin(sx.className, className)} style={sx.style} {...props} />;
+export function AddItemDescription({ className, style, xstyle, ...props }: PromptComposerAddItemDescriptionProps) {
+	const sx = stylex.props(parts.addMenuDescription, xstyle);
+	return <span className={attrJoin(sx.className, className)} style={mergeStyle(sx.style, style)} {...props} />;
 }
 
 function usePromptComposerContext(part: string) {

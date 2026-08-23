@@ -1,107 +1,120 @@
 import { Toolbar as BaseToolbar } from "@base-ui/react/toolbar";
 import * as stylex from "@stylexjs/stylex";
-import type { StyleXStyles } from "@stylexjs/stylex";
 import { media } from "@/styles/constants.stylex";
 import { focusRing } from "@/styles/recipes/focus";
 import { tokens } from "@/theme/tokens.stylex";
 import { attrJoin } from "@/utils/attr-join";
+import { mergeStyle, type BaseStyleProps } from "@/styles/props/base";
+import { extractMarginProps, type MarginProps } from "@/styles/props/spacing.stylex";
 
 const HOVER_WHEN_INACTIVE =
 	':hover:not([aria-disabled="true"]):not([data-disabled]):not([aria-pressed="true"]):not([data-active]):not([data-panel-open]):not([data-popup-open]):not([data-pressed])';
 const TOGGLED_ON =
 	':is([aria-pressed="true"], [data-active], [data-pressed]):not([data-panel-open]):not([data-popup-open])';
 
-type StyledProps<T> = Omit<T, "className" | "style"> & {
+type StyledProps<T> = Omit<T, "className" | "style"> & BaseStyleProps & {
 	className?: string;
-	/** StyleX overrides, applied after the component's own styles. */
-	style?: StyleXStyles;
 };
 
 export type ToolbarVariant = "surface" | "elevated" | "unstyled";
 
-export type ToolbarRootProps = StyledProps<BaseToolbar.Root.Props> & {
-	variant?: ToolbarVariant;
-};
+export type ToolbarRootProps = Omit<StyledProps<BaseToolbar.Root.Props>, keyof MarginProps> &
+	MarginProps & {
+		variant?: ToolbarVariant;
+	};
 export type ToolbarGroupProps = StyledProps<BaseToolbar.Group.Props>;
 export type ToolbarButtonProps = StyledProps<BaseToolbar.Button.Props>;
 export type ToolbarLinkProps = StyledProps<BaseToolbar.Link.Props>;
 export type ToolbarInputProps = StyledProps<BaseToolbar.Input.Props>;
 export type ToolbarSeparatorProps = StyledProps<BaseToolbar.Separator.Props>;
 
-export function Root({ ref, className, style, variant = "surface", ...props }: ToolbarRootProps) {
-	const sx = stylex.props(toolbarParts.root, toolbarVariants[variant], style);
+export function Root({
+	ref,
+	className,
+	style,
+	xstyle,
+	variant = "surface",
+	...props
+}: ToolbarRootProps) {
+	const { marginStyles, rest } = extractMarginProps(props);
+	const sx = stylex.props(
+		toolbarParts.root,
+		toolbarVariants[variant],
+		marginStyles,
+		xstyle,
+	);
 
 	return (
 		<BaseToolbar.Root
 			ref={ref}
 			className={attrJoin(sx.className, className)}
-			style={sx.style}
-			{...props}
+			style={mergeStyle(sx.style, style)}
+			{...rest}
 		/>
 	);
 }
 
-export function Group({ ref, className, style, ...props }: ToolbarGroupProps) {
-	const sx = stylex.props(toolbarParts.group, style);
+export function Group({ ref, className, style, xstyle, ...props }: ToolbarGroupProps) {
+	const sx = stylex.props(toolbarParts.group, xstyle);
 
 	return (
 		<BaseToolbar.Group
 			ref={ref}
 			className={attrJoin(sx.className, className)}
-			style={sx.style}
+			style={mergeStyle(sx.style, style)}
 			{...props}
 		/>
 	);
 }
 
-export function Button({ ref, className, style, type = "button", ...props }: ToolbarButtonProps) {
-	const sx = stylex.props(toolbarParts.control, toolbarParts.button, focusRing.offset, style);
+export function Button({ ref, className, style, xstyle, type = "button", ...props }: ToolbarButtonProps) {
+	const sx = stylex.props(toolbarParts.control, toolbarParts.button, focusRing.offset, xstyle);
 
 	return (
 		<BaseToolbar.Button
 			ref={ref}
 			type={type}
 			className={attrJoin(sx.className, className)}
-			style={sx.style}
+			style={mergeStyle(sx.style, style)}
 			{...props}
 		/>
 	);
 }
 
-export function Link({ ref, className, style, ...props }: ToolbarLinkProps) {
-	const sx = stylex.props(toolbarParts.link, focusRing.offset, style);
+export function Link({ ref, className, style, xstyle, ...props }: ToolbarLinkProps) {
+	const sx = stylex.props(toolbarParts.link, focusRing.offset, xstyle);
 
 	return (
 		<BaseToolbar.Link
 			ref={ref}
 			className={attrJoin(sx.className, className)}
-			style={sx.style}
+			style={mergeStyle(sx.style, style)}
 			{...props}
 		/>
 	);
 }
 
-export function Input({ ref, className, style, ...props }: ToolbarInputProps) {
-	const sx = stylex.props(toolbarParts.input, focusRing.inset, style);
+export function Input({ ref, className, style, xstyle, ...props }: ToolbarInputProps) {
+	const sx = stylex.props(toolbarParts.input, focusRing.inset, xstyle);
 
 	return (
 		<BaseToolbar.Input
 			ref={ref}
 			className={attrJoin(sx.className, className)}
-			style={sx.style}
+			style={mergeStyle(sx.style, style)}
 			{...props}
 		/>
 	);
 }
 
-export function Separator({ ref, className, style, ...props }: ToolbarSeparatorProps) {
-	const sx = stylex.props(toolbarParts.separator, style);
+export function Separator({ ref, className, style, xstyle, ...props }: ToolbarSeparatorProps) {
+	const sx = stylex.props(toolbarParts.separator, xstyle);
 
 	return (
 		<BaseToolbar.Separator
 			ref={ref}
 			className={attrJoin(sx.className, className)}
-			style={sx.style}
+			style={mergeStyle(sx.style, style)}
 			{...props}
 		/>
 	);

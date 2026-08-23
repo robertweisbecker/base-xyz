@@ -1,20 +1,17 @@
 import { Button as BaseButton } from "@base-ui/react/button";
 import * as stylex from "@stylexjs/stylex";
-import type { StyleXStyles } from "@stylexjs/stylex";
 import type { ReactNode } from "react";
 import { media } from "@/styles/constants.stylex";
-import { resolveThemeProps } from "@/theme/theme-props";
+import { mergeStyle, type BaseStyleProps } from "@/styles/props/base";
+import { extractMarginProps, type MarginProps } from "@/styles/props/spacing.stylex";
 import { focusRing } from "@/styles/recipes/focus";
 import { pressable } from "@/styles/recipes/transitions";
 import { tokens } from "@/theme/tokens.stylex";
 
 import { Loader } from "@/components/loader/loader";
 import { Tooltip } from "@/components/tooltip/tooltip";
-import { buttonThemeProps, type ButtonThemeProps } from "./button-theme-props";
 import { buttonMarker } from "./button.stylex";
 import { attrJoin } from "@/utils/attr-join";
-
-export type { ButtonThemeProps } from "./button-theme-props";
 
 const HOVER_NOT_PRESSED_OR_OPEN = ":hover:not([data-disabled],:active,[data-pressed])";
 const PRESSED = ':is([aria-pressed="true"],[data-active],[data-pressed]):not([data-panel-open],[data-disabled])';
@@ -373,8 +370,10 @@ const shapeVariants = stylex.create({
 export type ButtonVariant = keyof typeof colorVariants;
 export type ButtonSize = keyof typeof sizeVariants;
 export type ButtonShape = keyof typeof shapeVariants;
-export type ButtonProps = Omit<BaseButton.Props, "className" | "color" | "style" | keyof ButtonThemeProps> &
-	ButtonThemeProps & {
+
+export type ButtonProps = Omit<BaseButton.Props, "className" | "color" | "style" | keyof MarginProps> &
+	MarginProps &
+	BaseStyleProps & {
 		variant?: ButtonVariant;
 		size?: ButtonSize;
 		shape?: ButtonShape;
@@ -387,8 +386,6 @@ export type ButtonProps = Omit<BaseButton.Props, "className" | "color" | "style"
 		loading?: boolean;
 		/** Visible loading label. Defaults to `"Loading…"`; use an empty string for a loader only. */
 		loadingText?: string;
-		/** StyleX overrides, applied after the component's own styles. */
-		style?: StyleXStyles;
 	};
 
 export type IconButtonProps = Omit<
@@ -432,6 +429,7 @@ function ButtonRoot({
 	shape = "default",
 	className,
 	style,
+	xstyle,
 	type = "button",
 	render,
 	nativeButton,
@@ -446,7 +444,7 @@ function ButtonRoot({
 	iconOnly = false,
 	...props
 }: ButtonRootProps) {
-	const { restProps, styles } = resolveThemeProps(props, buttonThemeProps);
+	const { marginStyles, rest } = extractMarginProps(props);
 	const sx = stylex.props(
 		buttonMarker,
 		buttonParts.root,
@@ -456,14 +454,13 @@ function ButtonRoot({
 		sizeVariants[size],
 		shapeVariants[shape],
 		iconOnly && iconOnlyControlSizes[size],
-		...styles,
-		style,
+		...marginStyles,
+		xstyle,
 	);
 	const resolvedLoadingText = iconOnly ? "" : loadingText;
 
 	return (
 		<BaseButton
-			{...sx}
 			ref={ref}
 			type={type}
 			render={render}
@@ -477,7 +474,8 @@ function ButtonRoot({
 			data-size={size}
 			data-variant={variant}
 			className={attrJoin(sx.className, className)}
-			{...restProps}>
+			style={mergeStyle(sx.style, style)}
+			{...rest}>
 			<span {...stylex.props(loadingStyles.resting, loading && loadingStyles.hidden)}>
 				{renderSlot(startSlot, "start", size, variant, iconOnly)}
 				{children}

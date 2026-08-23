@@ -213,7 +213,7 @@ function getComponentCells(): GalleryCell[] {
 		{
 			title: "Card",
 			content: (
-				<Card.Root size="sm" style={styles.cardSample}>
+				<Card.Root size="sm" xstyle={styles.cardSample}>
 					<Card.Header>
 						<Card.Title>Next steps</Card.Title>
 						<Card.Description>Review changes</Card.Description>
@@ -249,12 +249,12 @@ function getComponentCells(): GalleryCell[] {
 		},
 		{
 			title: "CodeBlock",
-			content: <CodeBlock style={styles.codeSample}>{"const sum = (a, b) => {\n  return a + b;\n};"}</CodeBlock>,
+			content: <CodeBlock xstyle={styles.codeSample}>{"const sum = (a, b) => {\n  return a + b;\n};"}</CodeBlock>,
 		},
 		{
 			title: "Collapsible",
 			content: (
-				<Collapsible.Root defaultOpen style={styles.compactWide}>
+				<Collapsible.Root defaultOpen xstyle={styles.compactWide}>
 					<Collapsible.Trigger>
 						Details
 						<Collapsible.Icon />
@@ -279,7 +279,7 @@ function getComponentCells(): GalleryCell[] {
 				<CommandPalette.Root
 					inline
 					items={["Create project", "Search docs", "Open settings"]}
-					style={styles.galleryWide}>
+					xstyle={styles.galleryWide}>
 					<CommandPalette.Input placeholder="Search commands..." />
 					<CommandPalette.List>
 						{(item: string) => (
@@ -301,7 +301,7 @@ function getComponentCells(): GalleryCell[] {
 					filterColumnId="url"
 					filterPlaceholder="Filter"
 					rowSelection={false}
-					style={styles.galleryWide}
+					xstyle={styles.galleryWide}
 				/>
 			),
 		},
@@ -342,7 +342,7 @@ function getComponentCells(): GalleryCell[] {
 								</Drawer.Header>
 								<Drawer.Body>All checks passed.</Drawer.Body>
 								<Drawer.Footer>
-									<Drawer.Close render={<Button width={"100%"} shape="pill" size="lg" />}>Done</Drawer.Close>
+									<Drawer.Close render={<Button xstyle={styles.fullWidth} shape="pill" size="lg" />}>Done</Drawer.Close>
 								</Drawer.Footer>
 							</Drawer.Popup>
 						</Drawer.Viewport>
@@ -381,7 +381,7 @@ function getComponentCells(): GalleryCell[] {
 		{
 			title: "InputGroup",
 			content: (
-				<InputGroup.Root style={styles.inputGroupSample}>
+				<InputGroup.Root xstyle={styles.inputGroupSample}>
 					<InputGroup.Addon>
 						<FileSearchIcon aria-hidden size={13} />
 					</InputGroup.Addon>
@@ -540,15 +540,14 @@ function getComponentCells(): GalleryCell[] {
 		{
 			title: "ScrollArea",
 			content: (
-				<ScrollArea
-					label="Recent component updates"
-					style={styles.scrollAreaSample}
-					contentStyle={styles.scrollAreaContent}>
-					{["Button refined", "Menu grouped", "Toast anchored", "Dialog opened", "Tooltip tuned"].map((item) => (
-						<div key={item} {...stylex.props(styles.scrollItem)}>
-							{item}
-						</div>
-					))}
+				<ScrollArea label="Recent component updates" xstyle={styles.scrollAreaSample}>
+					<div {...stylex.props(styles.scrollAreaContent)}>
+						{["Button refined", "Menu grouped", "Toast anchored", "Dialog opened", "Tooltip tuned"].map((item) => (
+							<div key={item} {...stylex.props(styles.scrollItem)}>
+								{item}
+							</div>
+						))}
+					</div>
 				</ScrollArea>
 			),
 		},
@@ -652,18 +651,18 @@ function getComponentCells(): GalleryCell[] {
 		},
 		{
 			title: "Textarea",
-			content: <Textarea label="Message" placeholder="Enter your name" rows={2} style={styles.compactField} />,
+			content: <Textarea label="Message" placeholder="Enter your name" rows={2} xstyle={styles.compactField} />,
 		},
 		{
 			title: "TextField",
 			content: (
 				<div {...stylex.props(styles.controlStack)}>
-					<TextField label="Name" placeholder="Type something..." style={styles.compactField} />
+					<TextField label="Name" placeholder="Type something..." xstyle={styles.compactField} />
 					<TextField
 						label="Project"
 						defaultValue="Invalid"
 						error="Use at least 8 characters."
-						style={styles.compactField}
+						xstyle={styles.compactField}
 					/>
 				</div>
 			),
@@ -894,7 +893,7 @@ function getBlockCells(): GalleryCell[] {
 			title: "GoalToolbar",
 			content: (
 				<div {...stylex.props(styles.blockWide)}>
-					<GoalToolbar active description="Redesign the demo gallery" />
+					<GoalToolbar defaultActive defaultDescription="Redesign the demo gallery" />
 				</div>
 			),
 		},
@@ -926,7 +925,7 @@ function getBlockCells(): GalleryCell[] {
 							<Breadcrumbs.Current>Components</Breadcrumbs.Current>
 						</Breadcrumbs.Root>
 					}
-					style={styles.blockWide}
+					xstyle={styles.blockWide}
 					actions={
 						<Button size="sm" variant="neutral">
 							New
@@ -938,7 +937,7 @@ function getBlockCells(): GalleryCell[] {
 		{
 			title: "PasswordField",
 			content: (
-				<PasswordField.Root defaultValue="correct-horse-2" style={styles.galleryWide}>
+				<PasswordField.Root defaultValue="correct-horse-2" xstyle={styles.galleryWide}>
 					<PasswordField.Label>Password</PasswordField.Label>
 					<PasswordField.Control>
 						<PasswordField.Input />
@@ -957,7 +956,7 @@ function getBlockCells(): GalleryCell[] {
 					defaultValue="Summarize the component API changes"
 					onSubmit={() => {}}
 					clearOnSubmit={false}
-					style={styles.blockWide}>
+					xstyle={styles.blockWide}>
 					<PromptComposer.Surface>
 						<PromptComposer.Input />
 						<PromptComposer.Footer>
@@ -1137,10 +1136,10 @@ function AppContent({
 					<span>BaseX</span>
 				</a>
 				<div {...stylex.props(styles.headerMeta)}>
-					<Link href="#components" style={styles.headerNavLink}>
+					<Link href="#components" xstyle={styles.headerNavLink}>
 						components
 					</Link>{" "}
-					<Link href="#blocks" style={styles.headerNavLink}>
+					<Link href="#blocks" xstyle={styles.headerNavLink}>
 						blocks
 					</Link>
 					<Separator orientation="vertical" />
@@ -1484,6 +1483,9 @@ const styles = stylex.create({
 	},
 	blockWide: {
 		width: "min(100%, 36rem)",
+	},
+	fullWidth: {
+		width: "100%",
 	},
 });
 

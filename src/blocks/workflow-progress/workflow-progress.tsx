@@ -4,16 +4,13 @@ import type { BadgeHue, BadgeProps } from "@/components";
 import { ClockIcon } from "@phosphor-icons/react/dist/csr/Clock";
 import { WarningDiamondIcon } from "@phosphor-icons/react/dist/csr/WarningDiamond";
 import * as stylex from "@stylexjs/stylex";
-import type { StyleXStyles } from "@stylexjs/stylex";
 import { textStyles, fontWeightStyles } from "@/components/text/text.stylex";
 import { createContext, type ComponentProps, type ReactNode, useContext } from "react";
 import { tokens } from "@/theme/tokens.stylex";
+import { mergeStyle, type BaseStyleProps } from "@/styles/props/base";
 import { attrJoin } from "@/utils/attr-join";
 
-type StyledProps<T> = Omit<T, "style"> & {
-	/** StyleX overrides, applied after the component's own styles. */
-	style?: StyleXStyles;
-};
+type StyledProps<T> = Omit<T, "style" | "xstyle"> & BaseStyleProps;
 
 export type WorkflowProgressStatus = "queued" | "running" | "complete" | "approval" | "error";
 
@@ -49,59 +46,67 @@ export function Root({
 	"aria-label": ariaLabel = "Workflow progress",
 	className,
 	style,
+	xstyle,
 	...props
 }: WorkflowProgressRootProps) {
-	const sx = stylex.props(parts.timeline, style);
-	return <ol aria-label={ariaLabel} className={attrJoin(sx.className, className)} style={sx.style} {...props} />;
+	const sx = stylex.props(parts.timeline, xstyle);
+	return (
+		<ol
+			aria-label={ariaLabel}
+			className={attrJoin(sx.className, className)}
+			style={mergeStyle(sx.style, style)}
+			{...props}
+		/>
+	);
 }
 
-export function Item({ status, className, style, ...props }: WorkflowProgressItemProps) {
-	const sx = stylex.props(parts.item, style);
+export function Item({ status, className, style, xstyle, ...props }: WorkflowProgressItemProps) {
+	const sx = stylex.props(parts.item, xstyle);
 	return (
 		<WorkflowProgressItemContext.Provider value={status}>
-			<li className={attrJoin(sx.className, className)} style={sx.style} {...props} />
+			<li className={attrJoin(sx.className, className)} style={mergeStyle(sx.style, style)} {...props} />
 		</WorkflowProgressItemContext.Provider>
 	);
 }
 
-export function Marker({ className, style, ...props }: WorkflowProgressMarkerProps) {
+export function Marker({ className, style, xstyle, ...props }: WorkflowProgressMarkerProps) {
 	const status = useWorkflowProgressStatus("Marker");
-	const sx = stylex.props(parts.marker, markerStatus[status], style);
+	const sx = stylex.props(parts.marker, markerStatus[status], xstyle);
 	return (
-		<div aria-hidden className={attrJoin(sx.className, className)} style={sx.style} {...props}>
+		<div aria-hidden className={attrJoin(sx.className, className)} style={mergeStyle(sx.style, style)} {...props}>
 			{renderStatusIcon(status)}
 		</div>
 	);
 }
 
-export function Content({ className, style, ...props }: WorkflowProgressContentProps) {
-	const sx = stylex.props(parts.content, style);
-	return <div className={attrJoin(sx.className, className)} style={sx.style} {...props} />;
+export function Content({ className, style, xstyle, ...props }: WorkflowProgressContentProps) {
+	const sx = stylex.props(parts.content, xstyle);
+	return <div className={attrJoin(sx.className, className)} style={mergeStyle(sx.style, style)} {...props} />;
 }
 
-export function Header({ className, style, ...props }: WorkflowProgressHeaderProps) {
-	const sx = stylex.props(parts.header, style);
-	return <div className={attrJoin(sx.className, className)} style={sx.style} {...props} />;
+export function Header({ className, style, xstyle, ...props }: WorkflowProgressHeaderProps) {
+	const sx = stylex.props(parts.header, xstyle);
+	return <div className={attrJoin(sx.className, className)} style={mergeStyle(sx.style, style)} {...props} />;
 }
 
-export function Title({ className, style, ...props }: WorkflowProgressTitleProps) {
-	const sx = stylex.props(textStyles.body, fontWeightStyles.semibold, parts.title, style);
-	return <div className={attrJoin(sx.className, className)} style={sx.style} {...props} />;
+export function Title({ className, style, xstyle, ...props }: WorkflowProgressTitleProps) {
+	const sx = stylex.props(textStyles.body, fontWeightStyles.semibold, parts.title, xstyle);
+	return <div className={attrJoin(sx.className, className)} style={mergeStyle(sx.style, style)} {...props} />;
 }
 
-export function Description({ className, style, ...props }: WorkflowProgressDescriptionProps) {
-	const sx = stylex.props(textStyles.body, parts.description, style);
-	return <div className={attrJoin(sx.className, className)} style={sx.style} {...props} />;
+export function Description({ className, style, xstyle, ...props }: WorkflowProgressDescriptionProps) {
+	const sx = stylex.props(textStyles.body, parts.description, xstyle);
+	return <div className={attrJoin(sx.className, className)} style={mergeStyle(sx.style, style)} {...props} />;
 }
 
-export function Metadata({ className, style, ...props }: WorkflowProgressMetadataProps) {
-	const sx = stylex.props(parts.metadata, style);
-	return <div className={attrJoin(sx.className, className)} style={sx.style} {...props} />;
+export function Metadata({ className, style, xstyle, ...props }: WorkflowProgressMetadataProps) {
+	const sx = stylex.props(parts.metadata, xstyle);
+	return <div className={attrJoin(sx.className, className)} style={mergeStyle(sx.style, style)} {...props} />;
 }
 
-export function Meta({ className, style, ...props }: WorkflowProgressMetaProps) {
-	const sx = stylex.props(textStyles.supporting, parts.meta, style);
-	return <span className={attrJoin(sx.className, className)} style={sx.style} {...props} />;
+export function Meta({ className, style, xstyle, ...props }: WorkflowProgressMetaProps) {
+	const sx = stylex.props(textStyles.supporting, parts.meta, xstyle);
+	return <span className={attrJoin(sx.className, className)} style={mergeStyle(sx.style, style)} {...props} />;
 }
 
 export function Status({

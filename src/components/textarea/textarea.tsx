@@ -1,32 +1,36 @@
 import { Field } from "@base-ui/react/field";
 import { useMergedRefs } from "@base-ui/utils/useMergedRefs";
 import * as stylex from "@stylexjs/stylex";
-import type { StyleXStyles } from "@stylexjs/stylex";
 import { useId, type ComponentProps } from "react";
-import { resolveThemeProps } from "@/theme/theme-props";
-import type { FieldSize, FieldThemeProps } from "@/components/field/field.types";
-import { fieldStyles, fieldInputStyles, fieldThemeProps } from "@/components/field/field.stylex";
+import type { FieldSize } from "@/components/field/field.types";
+import { fieldStyles, fieldInputStyles } from "@/components/field/field.stylex";
+import { mergeStyle, type BaseStyleProps } from "@/styles/props/base";
+import { extractMarginProps, type MarginProps } from "@/styles/props/spacing.stylex";
 import { focusRing } from "@/styles/recipes/focus";
 import { attrJoin } from "@/utils/attr-join";
 import { useTextareaAutoResize } from "@/hooks/use-textarea-auto-resize";
 
 export type TextareaProps = Omit<
 	ComponentProps<"textarea">,
-	"className" | "color" | "height" | "style" | "width" | keyof FieldThemeProps
+	| "className"
+	| "color"
+	| "height"
+	| "style"
+	| "width"
+	| keyof MarginProps
 > &
-	FieldThemeProps & {
-	label: string;
-	description?: string;
-	error?: string;
-	className?: string;
-	/** StyleX overrides, applied after the component's own styles. */
-	style?: StyleXStyles;
-	size?: FieldSize;
-	/** Enables content-based resizing with this minimum row count; defaults to `rows`. */
-	minRows?: number;
-	/** Enables content-based resizing with this maximum row count; content beyond this scrolls. */
-	maxRows?: number;
-};
+	MarginProps &
+	BaseStyleProps & {
+		label: string;
+		description?: string;
+		error?: string;
+		className?: string;
+		size?: FieldSize;
+		/** Enables content-based resizing with this minimum row count; defaults to `rows`. */
+		minRows?: number;
+		/** Enables content-based resizing with this maximum row count; content beyond this scrolls. */
+		maxRows?: number;
+	};
 
 export function Textarea({
 	ref,
@@ -35,6 +39,7 @@ export function Textarea({
 	error,
 	className,
 	style,
+	xstyle,
 	disabled,
 	id: providedId,
 	readOnly,
@@ -47,7 +52,7 @@ export function Textarea({
 	onChange,
 	...props
 }: TextareaProps) {
-	const { restProps, styles } = resolveThemeProps(props, fieldThemeProps);
+	const { marginStyles, rest } = extractMarginProps(props);
 	const autoResizeEnabled = minRows !== undefined || maxRows !== undefined;
 	const autoResizeState = useTextareaAutoResize({
 		enabled: autoResizeEnabled,
@@ -60,12 +65,16 @@ export function Textarea({
 	const id = providedId ?? generatedId;
 	const descriptionId = description ? `${id}-description` : undefined;
 	const errorId = error ? `${id}-error` : undefined;
-	const rootSx = stylex.props(fieldStyles.root, ...styles, style);
+	const rootSx = stylex.props(
+		fieldStyles.root,
+		marginStyles,
+		xstyle,
+	);
 
 	return (
 		<Field.Root
 			className={attrJoin(rootSx.className, className)}
-			style={rootSx.style}
+			style={mergeStyle(rootSx.style, style)}
 			disabled={disabled}
 			invalid={Boolean(error)}
 		>
@@ -93,7 +102,7 @@ export function Textarea({
 					autoResizeEnabled && textareaParts.autoResize,
 					focusRing.inset,
 				)}
-				{...restProps}
+				{...rest}
 			/>
 			{description ? (
 				<Field.Description id={descriptionId} {...stylex.props(fieldStyles.description)}>

@@ -2,23 +2,29 @@ import { CheckCircleIcon } from "@phosphor-icons/react/dist/csr/CheckCircle";
 import { WarningCircleIcon } from "@phosphor-icons/react/dist/csr/WarningCircle";
 import { ProhibitInsetIcon } from "@phosphor-icons/react/dist/csr/ProhibitInset";
 import * as stylex from "@stylexjs/stylex";
-import type { StyleXStyles } from "@stylexjs/stylex";
-import { createContext, type ComponentProps, useContext, useEffect, useMemo, useRef, useState } from "react";
+import {
+	createContext,
+	type ComponentProps,
+	useContext,
+	useEffect,
+	useEffectEvent,
+	useMemo,
+	useRef,
+	useState,
+} from "react";
 import { Toolbar as ToolbarPrimitive, Loader } from "@/components";
 import { typescaleStyles, textStyles } from "@/components/text/text.stylex";
 import { shimmerTextStyles } from "@/styles/recipes/shimmer-text.stylex";
 import { typingTextStyles } from "./typing-text.stylex";
 import { tokens } from "@/theme/tokens.stylex";
+import { mergeStyle, type BaseStyleProps } from "@/styles/props/base";
 import { attrJoin } from "@/utils/attr-join";
 
 export type StreamingResponseStatus = "streaming" | "complete" | "stopped" | "error";
 
 const StreamingResponseContext = createContext<StreamingResponseContextValue | null>(null);
 
-type StyledProps<T> = Omit<T, "style"> & {
-	/** StyleX overrides, applied after the component's own styles. */
-	style?: StyleXStyles;
-};
+type StyledProps<T> = Omit<T, "style" | "xstyle"> & BaseStyleProps;
 
 type StreamingResponseContextValue = {
 	elapsedSeconds: number | undefined;
@@ -54,20 +60,26 @@ export function Root({
 	"aria-label": ariaLabel = "Assistant response",
 	className,
 	style,
+	xstyle,
 	...props
 }: StreamingResponseRootProps) {
-	const sx = stylex.props(parts.root, style);
+	const sx = stylex.props(parts.root, xstyle);
 	return (
 		<StreamingResponseContext.Provider value={{ elapsedSeconds, status }}>
-			<article aria-label={ariaLabel} className={attrJoin(sx.className, className)} style={sx.style} {...props} />
+			<article
+				aria-label={ariaLabel}
+				className={attrJoin(sx.className, className)}
+				style={mergeStyle(sx.style, style)}
+				{...props}
+			/>
 		</StreamingResponseContext.Provider>
 	);
 }
 
-export function Status({ className, style, ...props }: StreamingResponseStatusProps) {
+export function Status({ className, style, xstyle, ...props }: StreamingResponseStatusProps) {
 	const { elapsedSeconds, status } = useStreamingResponseContext("Status");
 	const isStreaming = status === "streaming";
-	const sx = stylex.props(textStyles.supporting, parts.status, statusColor[status], style);
+	const sx = stylex.props(textStyles.supporting, parts.status, statusColor[status], xstyle);
 	const label =
 		status === "complete" && elapsedSeconds != null
 			? `Worked for ${formatElapsedTime(elapsedSeconds)}`
@@ -78,7 +90,7 @@ export function Status({ className, style, ...props }: StreamingResponseStatusPr
 			role="status"
 			aria-live={isStreaming ? "polite" : "off"}
 			className={attrJoin(sx.className, className)}
-			style={sx.style}
+			style={mergeStyle(sx.style, style)}
 			{...props}>
 			{renderStatusIcon(status)}
 			<span {...stylex.props(isStreaming && shimmerTextStyles.effect)}>{label}</span>
@@ -92,14 +104,19 @@ export function Content({
 	onStreamingComplete,
 	streamKey,
 	style,
+	xstyle,
 	...props
 }: StreamingResponseContentProps) {
 	const { status } = useStreamingResponseContext("Content");
 	const isStreaming = status === "streaming";
-	const sx = stylex.props(typescaleStyles["3"], parts.content, style);
+	const sx = stylex.props(typescaleStyles["3"], parts.content, xstyle);
 
 	return (
-		<div aria-busy={isStreaming} className={attrJoin(sx.className, className)} style={sx.style} {...props}>
+		<div
+			aria-busy={isStreaming}
+			className={attrJoin(sx.className, className)}
+			style={mergeStyle(sx.style, style)}
+			{...props}>
 			{isStreaming ? (
 				<StreamingText onStreamingComplete={onStreamingComplete} streamKey={streamKey}>
 					{children}
@@ -113,11 +130,11 @@ export function Content({
 
 export function Actions({
 	"aria-label": ariaLabel = "Response actions",
-	style,
+	xstyle,
 	variant = "unstyled",
 	...props
 }: StreamingResponseActionsProps) {
-	return <ToolbarPrimitive.Root aria-label={ariaLabel} style={[parts.toolbar, style]} variant={variant} {...props} />;
+	return <ToolbarPrimitive.Root aria-label={ariaLabel} xstyle={[parts.toolbar, xstyle]} variant={variant} {...props} />;
 }
 
 function useStreamingResponseContext(part: string) {
@@ -166,15 +183,13 @@ function ChunkedStreamingText({
 	const chunks = useMemo(() => chunkStreamingText(text), [text]);
 	const [visibleCount, setVisibleCount] = useState(1);
 	const completionNotifiedRef = useRef(false);
-	const onCompleteRef = useRef(onStreamingComplete);
-
-	onCompleteRef.current = onStreamingComplete;
+	const notifyStreamingComplete = useEffectEvent(() => onStreamingComplete?.());
 
 	useEffect(() => {
 		if (visibleCount >= chunks.length) {
 			if (!completionNotifiedRef.current) {
 				completionNotifiedRef.current = true;
-				onCompleteRef.current?.();
+				notifyStreamingComplete();
 			}
 			return;
 		}

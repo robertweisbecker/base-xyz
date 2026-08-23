@@ -1,9 +1,20 @@
 import * as stylex from "@stylexjs/stylex";
-import { composeThemeProps } from "@/theme/theme-props";
-import { marginThemeProps, textAlignThemeProps } from "@/theme/theme-props-spacing.stylex";
 import { tokens } from "@/theme/tokens.stylex";
 
-export const textThemeProps = composeThemeProps(marginThemeProps, textAlignThemeProps);
+export const fontWeightStyles = stylex.create({
+	regular: { fontWeight: tokens["--font-weight-regular"] },
+	medium: { fontWeight: tokens["--font-weight-medium"] },
+	semibold: { fontWeight: tokens["--font-weight-semibold"] },
+	bold: { fontWeight: tokens["--font-weight-bold"] },
+	inherit: { fontWeight: "inherit" },
+});
+
+export const fontFamilyStyles = stylex.create({
+	sans: { fontFamily: tokens["--font-family-sans"] },
+	serif: { fontFamily: tokens["--font-family-serif"] },
+	mono: { fontFamily: tokens["--font-family-mono"] },
+	inherit: { fontFamily: "inherit" },
+});
 
 export const textBaseStyles = stylex.create({
 	root: {
@@ -24,21 +35,6 @@ export const textColorStyles = stylex.create({
 	inverse: { color: tokens["--fg-inverse"] },
 	"inverse-muted": { color: tokens["--fg-inverse-muted"] },
 	inherit: { color: "inherit" },
-});
-
-export const fontWeightStyles = stylex.create({
-	regular: { fontWeight: tokens["--font-weight-regular"] },
-	medium: { fontWeight: tokens["--font-weight-medium"] },
-	semibold: { fontWeight: tokens["--font-weight-semibold"] },
-	bold: { fontWeight: tokens["--font-weight-bold"] },
-	inherit: { fontWeight: "inherit" },
-});
-
-export const fontFamilyStyles = stylex.create({
-	sans: { fontFamily: tokens["--font-family-sans"] },
-	serif: { fontFamily: tokens["--font-family-serif"] },
-	mono: { fontFamily: tokens["--font-family-mono"] },
-	inherit: { fontFamily: "inherit" },
 });
 
 export const typescaleStyles = stylex.create({

@@ -1,11 +1,9 @@
 import { useRender } from "@base-ui/react/use-render";
 import * as stylex from "@stylexjs/stylex";
-import type { StyleXStyles } from "@stylexjs/stylex";
 import type { ReactNode } from "react";
 import { useTextTruncation } from "@/hooks/use-text-truncation";
-import { composeThemeProps, resolveThemeProps, type ThemePropsOf } from "@/theme/theme-props";
-import { childLayoutThemeProps, positioningThemeProps, sizingThemeProps } from "@/theme/theme-props-layout.stylex";
-import { gapThemeProps, spacingThemeProps } from "@/theme/theme-props-spacing.stylex";
+import { mergeStyle, type BaseStyleProps } from "@/styles/props/base";
+import { extractMarginProps, type MarginProps } from "@/styles/props/spacing.stylex";
 import { focusRing } from "@/styles/recipes/focus";
 import { tokens } from "@/theme/tokens.stylex";
 
@@ -31,9 +29,6 @@ const badgeParts = stylex.create({
 		whiteSpace: "nowrap",
 		maxWidth: "fit-content",
 		minWidth: 0,
-	},
-	unboundedWidth: {
-		maxWidth: "none",
 	},
 	slot: {
 		alignItems: "center",
@@ -246,27 +241,18 @@ export type BadgeVariant = keyof (typeof stylesByHue)["neutral"];
 export type BadgeHue = keyof typeof stylesByHue;
 export type BadgeSize = keyof typeof sizeVariants;
 export type BadgeShape = keyof typeof shapeVariants;
-const badgeThemeProps = composeThemeProps(
-	spacingThemeProps,
-	sizingThemeProps,
-	positioningThemeProps,
-	childLayoutThemeProps,
-	gapThemeProps,
-);
-export type BadgeThemeProps = ThemePropsOf<typeof badgeThemeProps>;
 
 type BadgeSharedProps = Omit<
 	useRender.ComponentProps<"span">,
-	"className" | "children" | "color" | "height" | "render" | "style" | "width" | keyof BadgeThemeProps
+	"className" | "children" | "color" | "height" | "render" | "style" | "width" | keyof MarginProps
 > &
-	BadgeThemeProps & {
+	MarginProps &
+	BaseStyleProps & {
 		className?: string;
 		hue?: BadgeHue;
 		render?: useRender.RenderProp;
 		shape?: BadgeShape;
 		size?: BadgeSize;
-		/** StyleX overrides, applied after the component's own styles. */
-		style?: StyleXStyles;
 		variant?: BadgeVariant;
 	};
 
@@ -300,14 +286,14 @@ export function Badge({
 	size = "md",
 	startSlot,
 	style,
+	xstyle,
 	tabIndex,
 	tooltip,
 	variant = "subtle",
 	...props
 }: BadgeProps) {
-	const unboundedWidth = props.width !== undefined && props.maxWidth === undefined;
-	const { restProps, styles } = resolveThemeProps(props, badgeThemeProps);
 	const truncation = useTextTruncation<HTMLSpanElement>({ normalizeWhitespace: true });
+	const { marginStyles, rest } = extractMarginProps(props);
 
 	const sx = stylex.props(
 		badgeParts.root,
@@ -316,9 +302,8 @@ export function Badge({
 		stylesByHue[hue][variant],
 		sizeVariants[size],
 		shapeVariants[shape],
-		unboundedWidth && badgeParts.unboundedWidth,
-		...styles,
-		style,
+		...marginStyles,
+		xstyle,
 	);
 	const iconOnly = children == null;
 	const resolvedTooltipText =
@@ -332,9 +317,9 @@ export function Badge({
 		render,
 		ref,
 		props: {
-			...restProps,
+			...rest,
 			className: attrJoin(sx.className, className),
-			style: sx.style,
+			style: mergeStyle(sx.style, style),
 			tabIndex: tabIndex ?? (hasTooltip ? 0 : undefined),
 			children: (
 				<>
@@ -353,7 +338,7 @@ export function Badge({
 
 	return (
 		<Tooltip.Root disabled={!hasTooltip}>
-			<Tooltip.Trigger render={element} style={hasTooltip ? badgeParts.tooltipTrigger : undefined} />
+			<Tooltip.Trigger render={element} {...stylex.props(hasTooltip && badgeParts.tooltipTrigger)} />
 			<Tooltip.Popup positionerProps={{ side: "inline-start" }}>{resolvedTooltipText}</Tooltip.Popup>
 		</Tooltip.Root>
 	);

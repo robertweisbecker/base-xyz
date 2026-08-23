@@ -135,7 +135,7 @@ export const Composition: Story = {
 		controls: { disable: true },
 	},
 	render: () => (
-		<Grid align="start" gap={8} style={storyParts.sections}>
+		<Grid align="start" gap={8} xstyle={storyParts.sections}>
 			<Stack align="start" gap={3}>
 				<Text color="muted" size="1">
 					Editing controls
@@ -157,7 +157,7 @@ export const States: Story = {
 		controls: { disable: true },
 	},
 	render: () => (
-		<Grid align="start" gap={8} style={storyParts.sections}>
+		<Grid align="start" gap={8} xstyle={storyParts.sections}>
 			<Stack align="start" gap={3}>
 				<Text color="muted" size="1">
 					Disabled toolbar
@@ -224,7 +224,7 @@ function PopupToolbar() {
 	return (
 		<Toolbar.Root aria-label="Editor options">
 			<BaseSelect.Root defaultValue="balanced">
-				<Toolbar.Button aria-label="Response length" style={storyParts.selectButton} render={<BaseSelect.Trigger />}>
+				<Toolbar.Button aria-label="Response length" xstyle={storyParts.selectButton} render={<BaseSelect.Trigger />}>
 					<BaseSelect.Value />
 					<BaseSelect.Icon>
 						<CaretUpDownIcon aria-hidden size={14} weight="regular" />

@@ -4,12 +4,12 @@ import { CaretDownIcon } from "@phosphor-icons/react/dist/csr/CaretDown";
 import { CaretUpIcon } from "@phosphor-icons/react/dist/csr/CaretUp";
 import { CaretUpDownIcon } from "@phosphor-icons/react/dist/csr/CaretUpDown";
 import * as stylex from "@stylexjs/stylex";
-import type { StyleXStyles } from "@stylexjs/stylex";
 import { createContext, useContext, type ReactNode } from "react";
 import { media } from "@/styles/constants.stylex";
-import { resolveThemeProps } from "@/theme/theme-props";
-import type { FieldSize, FieldThemeProps } from "@/components/field/field.types";
-import { fieldStyles, fieldControlStyles, fieldThemeProps } from "@/components/field/field.stylex";
+import { mergeStyle, type BaseStyleProps } from "@/styles/props/base";
+import { extractMarginProps, type MarginProps } from "@/styles/props/spacing.stylex";
+import type { FieldSize } from "@/components/field/field.types";
+import { fieldStyles, fieldControlStyles } from "@/components/field/field.stylex";
 import { focusRing } from "@/styles/recipes/focus";
 import { modalMotionStyles } from "@/components/dialog/dialog.stylex";
 import { popupMotionStyles, popupPositionerStyles } from "@/components/popover/popover.stylex";
@@ -25,17 +25,17 @@ const HOVER_WHEN_INACTIVE = ":hover:not([data-disabled]):not([data-popup-open]):
 const SelectSizeContext = createContext<FieldSize>("md");
 
 type SelectMultiple = boolean | undefined;
+type SelectPartStyleProps = BaseStyleProps & { className?: string };
 
 export type SelectRootProps<Value, Multiple extends SelectMultiple = false> = Omit<
 	BaseSelect.Root.Props<Value, Multiple>,
-	"className" | "color" | "size" | "style" | keyof FieldThemeProps
+	"className" | "color" | "size" | "style" | keyof MarginProps
 > &
-	FieldThemeProps & {
+	MarginProps &
+	BaseStyleProps & {
 		className?: string;
 		invalid?: boolean;
 		size?: FieldSize;
-		/** StyleX overrides, applied after the component's own styles. */
-		style?: StyleXStyles;
 	};
 
 export function Root<Value, Multiple extends SelectMultiple = false>({
@@ -45,19 +45,24 @@ export function Root<Value, Multiple extends SelectMultiple = false>({
 	invalid,
 	size = "md",
 	style,
+	xstyle,
 	...props
 }: SelectRootProps<Value, Multiple>) {
-	const { restProps, styles } = resolveThemeProps(props, fieldThemeProps);
-	const sx = stylex.props(selectParts.root, ...styles, style);
+	const { marginStyles, rest } = extractMarginProps(props);
+	const sx = stylex.props(
+		selectParts.root,
+		marginStyles,
+		xstyle,
+	);
 
 	return (
 		<Field.Root
 			disabled={disabled}
 			invalid={invalid}
 			className={attrJoin(sx.className, className)}
-			style={sx.style}>
+			style={mergeStyle(sx.style, style)}>
 			<SelectSizeContext.Provider value={size}>
-				<BaseSelect.Root disabled={disabled} {...restProps}>
+				<BaseSelect.Root disabled={disabled} {...rest}>
 					{children}
 				</BaseSelect.Root>
 			</SelectSizeContext.Provider>
@@ -65,33 +70,27 @@ export function Root<Value, Multiple extends SelectMultiple = false>({
 	);
 }
 
-export type SelectLabelProps = Omit<BaseSelect.Label.Props, "className" | "style"> & {
-	className?: string;
-	/** StyleX overrides, applied after the component's own styles. */
-	style?: StyleXStyles;
-};
+export type SelectLabelProps = Omit<BaseSelect.Label.Props, "className" | "style"> & SelectPartStyleProps;
 
-export function Label({ ref, className, style, ...props }: SelectLabelProps) {
-	const sx = stylex.props(fieldStyles.label, style);
+export function Label({ ref, className, style, xstyle, ...props }: SelectLabelProps) {
+	const sx = stylex.props(fieldStyles.label, xstyle);
 
 	return (
 		<BaseSelect.Label
 			ref={ref}
 			className={attrJoin(sx.className, className)}
-			style={sx.style}
+			style={mergeStyle(sx.style, style)}
 			{...props}
 		/>
 	);
 }
 
-export type SelectTriggerProps = Omit<BaseSelect.Trigger.Props, "children" | "className" | "style"> & {
-	children?: BaseSelect.Value.Props["children"];
-	className?: string;
-	placeholder?: ReactNode;
-	/** StyleX overrides, applied after the component's own styles. */
-	style?: StyleXStyles;
-	variant?: SelectTriggerVariant;
-};
+export type SelectTriggerProps = Omit<BaseSelect.Trigger.Props, "children" | "className" | "style"> &
+	SelectPartStyleProps & {
+		children?: BaseSelect.Value.Props["children"];
+		placeholder?: ReactNode;
+		variant?: SelectTriggerVariant;
+	};
 
 export type SelectTriggerVariant = "default" | "inline";
 
@@ -101,6 +100,7 @@ export function Trigger({
 	className,
 	placeholder = "Select an option",
 	style,
+	xstyle,
 	variant = "default",
 	...props
 }: SelectTriggerProps) {
@@ -110,14 +110,14 @@ export function Trigger({
 		selectParts.trigger,
 		variant === "inline" && selectParts.inlineTrigger,
 		focusRing.inset,
-		style,
+		xstyle,
 	);
 
 	return (
 		<BaseSelect.Trigger
 			ref={ref}
 			className={attrJoin(sx.className, className)}
-			style={sx.style}
+			style={mergeStyle(sx.style, style)}
 			{...props}>
 			<BaseSelect.Value placeholder={placeholder} {...stylex.props(selectParts.value)}>
 				{children}
@@ -133,27 +133,17 @@ export function Trigger({
 	);
 }
 
-export type SelectBackdropProps = Omit<BaseSelect.Backdrop.Props, "className" | "style"> & {
-	className?: string;
-	/** StyleX overrides, applied after the component's own styles. */
-	style?: StyleXStyles;
-};
+export type SelectBackdropProps = Omit<BaseSelect.Backdrop.Props, "className" | "style"> & SelectPartStyleProps;
 
-export type SelectPositionerProps = Omit<BaseSelect.Positioner.Props, "className" | "style"> & {
-	className?: string;
-	/** StyleX overrides, applied after the component's own styles. */
-	style?: StyleXStyles;
-};
+export type SelectPositionerProps = Omit<BaseSelect.Positioner.Props, "className" | "style"> & SelectPartStyleProps;
 
-export type SelectPopupProps = Omit<BaseSelect.Popup.Props, "className" | "style"> & {
-	backdrop?: boolean;
-	backdropProps?: SelectBackdropProps;
-	className?: string;
-	portalProps?: Omit<BaseSelect.Portal.Props, "children">;
-	positionerProps?: SelectPositionerProps;
-	/** StyleX overrides, applied after the component's own styles. */
-	style?: StyleXStyles;
-};
+export type SelectPopupProps = Omit<BaseSelect.Popup.Props, "className" | "style"> &
+	SelectPartStyleProps & {
+		backdrop?: boolean;
+		backdropProps?: SelectBackdropProps;
+		portalProps?: Omit<BaseSelect.Portal.Props, "children">;
+		positionerProps?: SelectPositionerProps;
+	};
 
 export function Popup({
 	ref,
@@ -164,6 +154,7 @@ export function Popup({
 	portalProps,
 	positionerProps,
 	style,
+	xstyle,
 	...props
 }: SelectPopupProps) {
 	const {
@@ -174,20 +165,26 @@ export function Popup({
 		side = "bottom",
 		sideOffset = 6,
 		style: positionerStyle,
+		xstyle: positionerXstyle,
 		...otherPositionerProps
 	} = positionerProps ?? {};
 
-	const sx = stylex.props(selectParts.panelSurface, selectParts.popup, popupMotionStyles.anchoredPopup, style);
-	const positionerSx = stylex.props(popupPositionerStyles, selectParts.positioner, positionerStyle);
-	const { className: backdropClassName, style: backdropStyle, ...otherBackdropProps } = backdropProps ?? {};
-	const backdropSx = stylex.props(selectParts.backdrop, modalMotionStyles.backdrop, backdropStyle);
+	const sx = stylex.props(selectParts.panelSurface, selectParts.popup, popupMotionStyles.anchoredPopup, xstyle);
+	const positionerSx = stylex.props(popupPositionerStyles, selectParts.positioner, positionerXstyle);
+	const {
+		className: backdropClassName,
+		style: backdropStyle,
+		xstyle: backdropXstyle,
+		...otherBackdropProps
+	} = backdropProps ?? {};
+	const backdropSx = stylex.props(selectParts.backdrop, modalMotionStyles.backdrop, backdropXstyle);
 
 	return (
 		<BaseSelect.Portal {...portalProps}>
 			{backdrop ? (
 				<BaseSelect.Backdrop
 					className={attrJoin(backdropSx.className, backdropClassName)}
-					style={backdropSx.style}
+					style={mergeStyle(backdropSx.style, backdropStyle)}
 					{...otherBackdropProps}
 				/>
 			) : null}
@@ -198,12 +195,12 @@ export function Popup({
 				side={side}
 				sideOffset={sideOffset}
 				className={attrJoin(positionerSx.className, positionerClassName)}
-				style={positionerSx.style}
+				style={mergeStyle(positionerSx.style, positionerStyle)}
 				{...otherPositionerProps}>
 				<BaseSelect.Popup
 					ref={ref}
 					className={attrJoin(sx.className, className)}
-					style={sx.style}
+					style={mergeStyle(sx.style, style)}
 					{...props}>
 					{children}
 				</BaseSelect.Popup>
@@ -212,14 +209,10 @@ export function Popup({
 	);
 }
 
-export type SelectListProps = Omit<BaseSelect.List.Props, "className" | "style"> & {
-	className?: string;
-	/** StyleX overrides, applied after the component's own styles. */
-	style?: StyleXStyles;
-};
+export type SelectListProps = Omit<BaseSelect.List.Props, "className" | "style"> & SelectPartStyleProps;
 
-export function List({ ref, className, style, ...props }: SelectListProps) {
-	const sx = stylex.props(selectParts.list, style);
+export function List({ ref, className, style, xstyle, ...props }: SelectListProps) {
+	const sx = stylex.props(selectParts.list, xstyle);
 
 	return (
 		<>
@@ -229,7 +222,7 @@ export function List({ ref, className, style, ...props }: SelectListProps) {
 			<BaseSelect.List
 				ref={ref}
 				className={attrJoin(sx.className, className)}
-				style={sx.style}
+				style={mergeStyle(sx.style, style)}
 				{...props}
 			/>
 			<BaseSelect.ScrollDownArrow {...stylex.props(selectParts.scrollArrow, selectParts.scrollDown)}>
@@ -239,31 +232,29 @@ export function List({ ref, className, style, ...props }: SelectListProps) {
 	);
 }
 
-export type SelectItemProps = Omit<BaseSelect.Item.Props, "children" | "className" | "style"> & {
-	children?: ReactNode;
-	className?: string;
-	/** StyleX overrides, applied after the component's own styles. */
-	style?: StyleXStyles;
-	variant?: SelectItemVariant;
-};
+export type SelectItemProps = Omit<BaseSelect.Item.Props, "children" | "className" | "style"> &
+	SelectPartStyleProps & {
+		children?: ReactNode;
+		variant?: SelectItemVariant;
+	};
 
 export type SelectItemVariant = MenuItemVariant;
 
-export function Item({ ref, children, className, style, variant = "primary", ...props }: SelectItemProps) {
+export function Item({ ref, children, className, style, xstyle, variant = "primary", ...props }: SelectItemProps) {
 	const size = useContext(SelectSizeContext);
 	const sx = stylex.props(
 		menuItemStyles.item,
 		menuItemSizeStyles[size],
 		menuItemVariantStyles[variant],
 		focusRing.inset,
-		style,
+		xstyle,
 	);
 
 	return (
 		<BaseSelect.Item
 			ref={ref}
 			className={attrJoin(sx.className, className)}
-			style={sx.style}
+			style={mergeStyle(sx.style, style)}
 			{...props}>
 			<BaseSelect.ItemIndicator keepMounted {...stylex.props(menuItemStyles.indicator)}>
 				<Icon.Checkmark width="1em" height="1em" strokeWidth={3} />
@@ -275,21 +266,19 @@ export function Item({ ref, children, className, style, variant = "primary", ...
 	);
 }
 
-export type SelectGroupProps = Omit<BaseSelect.Group.Props, "className" | "style"> & {
-	className?: string;
-	label?: ReactNode;
-	/** StyleX overrides, applied after the component's own styles. */
-	style?: StyleXStyles;
-};
+export type SelectGroupProps = Omit<BaseSelect.Group.Props, "className" | "style"> &
+	SelectPartStyleProps & {
+		label?: ReactNode;
+	};
 
-export function Group({ ref, children, className, label, style, ...props }: SelectGroupProps) {
-	const sx = stylex.props(selectParts.group, style);
+export function Group({ ref, children, className, label, style, xstyle, ...props }: SelectGroupProps) {
+	const sx = stylex.props(selectParts.group, xstyle);
 
 	return (
 		<BaseSelect.Group
 			ref={ref}
 			className={attrJoin(sx.className, className)}
-			style={sx.style}
+			style={mergeStyle(sx.style, style)}
 			{...props}>
 			{label ? <BaseSelect.GroupLabel {...stylex.props(selectParts.groupLabel)}>{label}</BaseSelect.GroupLabel> : null}
 			{children}
@@ -297,20 +286,16 @@ export function Group({ ref, children, className, label, style, ...props }: Sele
 	);
 }
 
-export type SelectSeparatorProps = Omit<BaseSelect.Separator.Props, "className" | "style"> & {
-	className?: string;
-	/** StyleX overrides, applied after the component's own styles. */
-	style?: StyleXStyles;
-};
+export type SelectSeparatorProps = Omit<BaseSelect.Separator.Props, "className" | "style"> & SelectPartStyleProps;
 
-export function Separator({ ref, className, style, ...props }: SelectSeparatorProps) {
-	const sx = stylex.props(selectParts.separator, style);
+export function Separator({ ref, className, style, xstyle, ...props }: SelectSeparatorProps) {
+	const sx = stylex.props(selectParts.separator, xstyle);
 
 	return (
 		<BaseSelect.Separator
 			ref={ref}
 			className={attrJoin(sx.className, className)}
-			style={sx.style}
+			style={mergeStyle(sx.style, style)}
 			{...props}
 		/>
 	);

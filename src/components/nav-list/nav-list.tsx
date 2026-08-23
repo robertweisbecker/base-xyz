@@ -28,34 +28,33 @@ import { typescaleStyles, textStyles, fontWeightStyles } from "@/components/text
 import { Tooltip } from "@/components/tooltip/tooltip";
 import { VisuallyHidden } from "@/components/visually-hidden/visually-hidden";
 import { focusRing } from "@/styles/recipes/focus";
+import { mergeStyle, type BaseStyleProps } from "@/styles/props/base";
+import { extractMarginProps, type MarginProps } from "@/styles/props/spacing.stylex";
 import { tokens } from "@/theme/tokens.stylex";
 import { attrJoin } from "@/utils/attr-join";
 
-type StyledProps<T> = Omit<T, "className" | "style"> & {
-	className?: string;
-	style?: StyleXStyles;
-};
+export type NavListRootProps = Omit<ComponentProps<"nav">, "className" | "style" | keyof MarginProps> &
+	MarginProps &
+	BaseStyleProps & {
+		className?: string;
+		children: ReactNode;
+		size?: NavListSize;
+		onNavigate?: (event: MouseEvent<HTMLElement>) => void;
+	};
 
 export type NavListSize = "sm" | "md";
 export type NavListCurrent = "page" | "location";
 
-export type NavListRootProps = StyledProps<ComponentProps<"nav">> & {
-	children: ReactNode;
-	size?: NavListSize;
-	onNavigate?: (event: MouseEvent<HTMLElement>) => void;
-};
-
-export type NavListSectionProps = {
+export type NavListSectionProps = BaseStyleProps & {
 	label: string;
 	description?: string;
 	endSlot?: ReactNode;
 	visuallyHideLabel?: boolean;
 	children: ReactNode;
 	className?: string;
-	style?: StyleXStyles;
 };
 
-export type NavListItemProps = {
+export type NavListItemProps = BaseStyleProps & {
 	label: string;
 	icon?: ReactNode;
 	startSlot?: ReactNode;
@@ -71,7 +70,6 @@ export type NavListItemProps = {
 	"aria-label"?: string;
 	onClick?: MouseEventHandler<HTMLElement>;
 	className?: string;
-	style?: StyleXStyles;
 };
 
 type MouseEventHandler<T extends HTMLElement> = (event: MouseEvent<T>) => void;
@@ -120,16 +118,27 @@ export function NavListPresentationProvider({
 	return <NavListPresentationContext.Provider value={value}>{children}</NavListPresentationContext.Provider>;
 }
 
-export function Root({ ref, className, style, children, size = "md", onNavigate, ...props }: NavListRootProps) {
+export function Root({
+	ref,
+	className,
+	style,
+	xstyle,
+	children,
+	size = "md",
+	onNavigate,
+	...props
+}: NavListRootProps) {
 	const localScrollRef = useRef<HTMLDivElement>(null);
 	const { presentation, scrollMode, scrollRef: externalScrollRef } = useContext(NavListPresentationContext);
 	const context = useMemo(() => ({ size, onNavigate }), [onNavigate, size]);
 	const scrollRef = externalScrollRef ?? localScrollRef;
 	const scrollContext = useMemo(() => ({ scrollRef }), [scrollRef]);
-	const { className: sxClassName, style: sxStyle } = stylex.props(
+	const { marginStyles, rest } = extractMarginProps(props);
+	const sx = stylex.props(
 		navListParts.root,
 		scrollMode === "external" && navListParts.rootExternal,
-		style,
+		marginStyles,
+		xstyle,
 	);
 
 	if (import.meta.env.DEV && props["aria-label"] == null && props["aria-labelledby"] == null) {
@@ -141,12 +150,12 @@ export function Root({ ref, className, style, children, size = "md", onNavigate,
 			<ScrollContext.Provider value={scrollContext}>
 				<nav
 					ref={ref}
-					className={attrJoin(sxClassName, className)}
-					style={sxStyle}
+					className={attrJoin(sx.className, className)}
+					style={mergeStyle(sx.style, style)}
 					data-presentation={presentation}
 					data-scroll-mode={scrollMode}
 					data-size={size}
-					{...props}>
+					{...rest}>
 					<div
 						ref={localScrollRef}
 						{...stylex.props(navListParts.scroller, scrollMode === "external" && navListParts.scrollerExternal)}>
@@ -166,9 +175,10 @@ export function Section({
 	children,
 	className,
 	style,
+	xstyle,
 }: NavListSectionProps) {
 	const headingId = useId();
-	const { className: sxClassName, style: sxStyle } = stylex.props(navListParts.section, style);
+	const { className: sxClassName, style: sxStyle } = stylex.props(navListParts.section, xstyle);
 	const heading = (
 		<div
 			id={headingId}
@@ -200,7 +210,7 @@ export function Section({
 			role="group"
 			aria-labelledby={headingId}
 			className={attrJoin(sxClassName, className)}
-			style={sxStyle}>
+			style={mergeStyle(sxStyle, style)}>
 			{visuallyHideLabel ? <VisuallyHidden id={headingId}>{label}</VisuallyHidden> : heading}
 			<ul {...stylex.props(navListParts.list)}>{children}</ul>
 		</section>
@@ -248,6 +258,7 @@ function Row({
 	suppressNavigate = false,
 	className,
 	style,
+	xstyle,
 }: RowProps) {
 	const navList = useContext(NavListContext);
 	const { presentation, popoverSide } = useContext(NavListPresentationContext);
@@ -302,7 +313,7 @@ function Row({
 		disclosure === "collapse" && collapseOpen && !disabled && navListParts.collapsibleTriggerOpen,
 		disclosure === "back" && navListParts.backRow,
 		isIconMode && navListParts.iconModeRow,
-		style,
+		xstyle,
 	);
 	const row = useRender<{}, HTMLElement>({
 		defaultTagName: isLink ? "a" : isAction ? "button" : "div",
@@ -320,7 +331,7 @@ function Row({
 			"data-icon-mode": isIconMode ? "" : undefined,
 			"data-nav-list-back": dataNavListBack ? "" : undefined,
 			className: attrJoin(rowSx.className, className),
-			style: rowSx.style,
+			style: mergeStyle(rowSx.style, style),
 			onClick: isStatic
 				? undefined
 				: (event: MouseEvent<HTMLElement>) => {
@@ -365,13 +376,12 @@ function Row({
 	return <li {...stylex.props(navListParts.listItem)}>{rowWithTooltip}</li>;
 }
 
-export type CollapsibleGroupProps = {
+export type CollapsibleGroupProps = BaseStyleProps & {
 	children: ReactNode;
 	open?: boolean;
 	defaultOpen?: boolean;
 	onOpenChange?: (open: boolean) => void;
 	className?: string;
-	style?: StyleXStyles;
 };
 
 type CollapsibleGroupContextValue = {
@@ -390,6 +400,7 @@ export function CollapsibleGroup({
 	onOpenChange,
 	open,
 	style,
+	xstyle,
 	...props
 }: CollapsibleGroupProps & { ref?: Ref<HTMLLIElement> }) {
 	const controlled = open !== undefined;
@@ -400,10 +411,10 @@ export function CollapsibleGroup({
 		() => ({ open: resolvedOpen, popoverContent, setPopoverContent }),
 		[popoverContent, resolvedOpen],
 	);
-	const { className: sxClassName, style: sxStyle } = stylex.props(navListParts.collapsibleGroup, style);
+	const { className: sxClassName, style: sxStyle } = stylex.props(navListParts.collapsibleGroup, xstyle);
 
 	return (
-		<li ref={ref} className={attrJoin(sxClassName, className)} style={sxStyle}>
+		<li ref={ref} className={attrJoin(sxClassName, className)} style={mergeStyle(sxStyle, style)}>
 			<CollapsibleGroupContext.Provider value={context}>
 				<BaseCollapsible.Root
 					{...props}
@@ -437,6 +448,7 @@ export function CollapsibleGroupTrigger({
 	onClick,
 	className,
 	style,
+	xstyle,
 }: CollapsibleGroupTriggerProps) {
 	const { presentation, popoverSide } = useContext(NavListPresentationContext);
 	const group = useContext(CollapsibleGroupContext);
@@ -451,7 +463,8 @@ export function CollapsibleGroupTrigger({
 				startSlot={startSlot}
 				tooltip={tooltip}
 				triggerClassName={className}
-				triggerStyle={style}>
+				triggerInlineStyle={style}
+				triggerStyle={xstyle}>
 				<ul {...stylex.props(navListParts.list)}>{group?.popoverContent}</ul>
 			</CollapsedChildrenPopover>
 		);
@@ -461,6 +474,7 @@ export function CollapsibleGroupTrigger({
 		<Row
 			asListItem={false}
 			className={className}
+			style={style}
 			collapseOpen={group?.open}
 			disclosure="collapse"
 			disabled={disabled}
@@ -472,7 +486,7 @@ export function CollapsibleGroupTrigger({
 			label={label}
 			onClick={onClick}
 			render={<BaseCollapsible.Trigger />}
-			style={style}
+			xstyle={xstyle}
 			suppressNavigate
 			tooltip={tooltip}>
 			{children}
@@ -480,11 +494,10 @@ export function CollapsibleGroupTrigger({
 	);
 }
 
-export type CollapsibleGroupPanelProps = {
+export type CollapsibleGroupPanelProps = BaseStyleProps & {
 	children: ReactNode;
 	keepMounted?: boolean;
 	className?: string;
-	style?: StyleXStyles;
 };
 
 export function CollapsibleGroupPanel({
@@ -493,6 +506,7 @@ export function CollapsibleGroupPanel({
 	keepMounted = true,
 	className,
 	style,
+	xstyle,
 }: CollapsibleGroupPanelProps & { ref?: Ref<HTMLDivElement> }) {
 	const group = useContext(CollapsibleGroupContext);
 	useEffect(() => {
@@ -510,7 +524,7 @@ export function CollapsibleGroupPanel({
 			keepMounted={keepMounted}
 			render={(panelProps, state) => {
 				const { hidden: _hidden, ...restPanelProps } = panelProps;
-				const sx = stylex.props(navListParts.collapsiblePanel, style);
+				const sx = stylex.props(navListParts.collapsiblePanel, xstyle);
 
 				return (
 					<ul
@@ -518,7 +532,7 @@ export function CollapsibleGroupPanel({
 						aria-hidden={state.open ? undefined : true}
 						inert={state.open ? undefined : true}
 						className={attrJoin(sx.className, className)}
-						style={sx.style}>
+						style={mergeStyle(sx.style, style)}>
 						{children}
 					</ul>
 				);
@@ -544,11 +558,10 @@ export type NavListDrilldownTriggerProps = Omit<NavListItemProps, "current" | "h
 	to: string;
 };
 
-export type NavListDrilldownBackProps = {
+export type NavListDrilldownBackProps = BaseStyleProps & {
 	to: string;
 	label?: string;
 	className?: string;
-	style?: StyleXStyles;
 };
 
 type DrilldownPanelRecord = {
@@ -691,6 +704,7 @@ export function DrilldownTrigger({
 	onClick,
 	className,
 	style,
+	xstyle,
 }: NavListDrilldownTriggerProps) {
 	const drilldown = useContext(DrilldownContext);
 	const { presentation, popoverSide } = useContext(NavListPresentationContext);
@@ -706,7 +720,8 @@ export function DrilldownTrigger({
 				targetValue={to}
 				tooltip={tooltip}
 				triggerClassName={className}
-				triggerStyle={style}
+				triggerInlineStyle={style}
+				triggerStyle={xstyle}
 			/>
 		);
 	}
@@ -715,6 +730,7 @@ export function DrilldownTrigger({
 		<Row
 			asListItem
 			className={className}
+			style={style}
 			disclosure="forward"
 			disabled={disabled}
 			aria-label={ariaLabel}
@@ -725,14 +741,14 @@ export function DrilldownTrigger({
 			label={label}
 			onClick={onClick}
 			onDisclosureClick={(event) => drilldown?.setValue(to, "forward", event.currentTarget)}
-			style={style}
+			xstyle={xstyle}
 			tooltip={tooltip}>
 			{children}
 		</Row>
 	);
 }
 
-export function DrilldownBack({ to, label, className, style }: NavListDrilldownBackProps) {
+export function DrilldownBack({ to, label, className, style, xstyle }: NavListDrilldownBackProps) {
 	const drilldown = useContext(DrilldownContext);
 	const panelLabel = useContext(DrilldownPanelContext);
 	const destinationLabel = drilldown?.panels.get(to)?.label;
@@ -749,12 +765,13 @@ export function DrilldownBack({ to, label, className, style }: NavListDrilldownB
 			aria-label={accessibleLabel}
 			asListItem={false}
 			className={className}
+			style={style}
 			dataNavListBack
 			disclosure="back"
 			forceButton
 			label={visibleLabel}
 			onDisclosureClick={() => drilldown?.setValue(to, "back")}
-			style={[navListParts.backControl, style]}
+			xstyle={[navListParts.backControl, xstyle]}
 			tooltip={false}
 		/>
 	);
@@ -791,6 +808,7 @@ function CollapsedChildrenPopover({
 	tooltip,
 	popoverSide,
 	triggerClassName,
+	triggerInlineStyle,
 	triggerStyle,
 }: {
 	label: string;
@@ -801,6 +819,7 @@ function CollapsedChildrenPopover({
 	tooltip?: string | false;
 	popoverSide: "left" | "right";
 	triggerClassName?: string;
+	triggerInlineStyle?: BaseStyleProps["style"];
 	triggerStyle?: StyleXStyles;
 }) {
 	return (
@@ -811,12 +830,13 @@ function CollapsedChildrenPopover({
 					<Row
 						asListItem={false}
 						className={triggerClassName}
+						style={triggerInlineStyle}
 						disclosure="forward"
 						forceButton
 						icon={icon}
 						label={label}
 						startSlot={startSlot}
-						style={triggerStyle}
+						xstyle={triggerStyle}
 						tooltip={tooltip}
 					/>
 				}
@@ -824,7 +844,7 @@ function CollapsedChildrenPopover({
 			<Popover.Popup
 				positionerProps={{ side: popoverSide, align: "start", sideOffset: -8 }}
 				showClose={false}
-				style={navListParts.childPopover}>
+				{...stylex.props(navListParts.childPopover)}>
 				<NavListPresentationProvider presentation="expanded" popoverSide={popoverSide}>
 					{children}
 				</NavListPresentationProvider>
@@ -842,6 +862,7 @@ function CollapsedDrilldownPopover({
 	targetValue,
 	popoverSide,
 	triggerClassName,
+	triggerInlineStyle,
 	triggerStyle,
 }: {
 	label: string;
@@ -852,6 +873,7 @@ function CollapsedDrilldownPopover({
 	targetValue: string;
 	popoverSide: "left" | "right";
 	triggerClassName?: string;
+	triggerInlineStyle?: BaseStyleProps["style"];
 	triggerStyle?: StyleXStyles;
 }) {
 	const drilldown = useContext(DrilldownContext);
@@ -877,14 +899,12 @@ function CollapsedDrilldownPopover({
 				}
 
 				if (nextDirection === "back") {
-					setStack((currentStack) => {
-						if (currentStack.length <= 1) {
-							setOpen(false);
-							return [targetValue];
-						}
-
-						return currentStack.slice(0, -1);
-					});
+					if (stack.length <= 1) {
+						setOpen(false);
+						setStack([targetValue]);
+					} else {
+						setStack((currentStack) => currentStack.slice(0, -1));
+					}
 					return;
 				}
 
@@ -908,12 +928,13 @@ function CollapsedDrilldownPopover({
 					<Row
 						asListItem={false}
 						className={triggerClassName}
+						style={triggerInlineStyle}
 						disclosure="forward"
 						forceButton
 						icon={icon}
 						label={label}
 						startSlot={startSlot}
-						style={triggerStyle}
+						xstyle={triggerStyle}
 						tooltip={tooltip}
 					/>
 				}
@@ -921,7 +942,7 @@ function CollapsedDrilldownPopover({
 			<Popover.Popup
 				positionerProps={{ side: popoverSide, align: "start" }}
 				showClose={false}
-				style={navListParts.childPopover}>
+				{...stylex.props(navListParts.childPopover)}>
 				{localContext && panel ? (
 					<NavListPresentationContext.Provider
 						value={{ presentation: "expanded", popoverSide, scrollMode: "internal" }}>

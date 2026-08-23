@@ -4,6 +4,8 @@ import * as stylex from "@stylexjs/stylex";
 import type { StyleXStyles } from "@stylexjs/stylex";
 import type { ReactNode } from "react";
 import { breakpointRanges } from "@/styles/constants.stylex";
+import { mergeStyle, type BaseStyleProps } from "@/styles/props/base";
+import { extractMarginProps, type MarginProps } from "@/styles/props/spacing.stylex";
 import { focusRing } from "@/styles/recipes/focus";
 import { tokens } from "@/theme/tokens.stylex";
 import { Tooltip } from "@/components/tooltip/tooltip";
@@ -29,8 +31,10 @@ export type AvatarResponsiveSize = Partial<Record<AvatarBreakpoint, AvatarSize>>
 };
 export type AvatarShape = keyof typeof shapeVariants;
 
-export type AvatarProps = Omit<BaseAvatar.Root.Props, "children" | "className" | "style"> & {
-	className?: string;
+export type AvatarProps = Omit<BaseAvatar.Root.Props, "children" | "className" | "style" | keyof MarginProps> &
+	MarginProps &
+	BaseStyleProps & {
+		className?: string;
 	/** URL for the avatar image. */
 	image?: string;
 	/** Alternative text for the image when the avatar has no name. */
@@ -44,8 +48,6 @@ export type AvatarProps = Omit<BaseAvatar.Root.Props, "children" | "className" |
 	/** Avatar dimension using the spacing scale. */
 	size?: AvatarSize | AvatarResponsiveSize;
 	shape?: AvatarShape;
-	/** StyleX overrides, applied after the component's own styles. */
-	style?: StyleXStyles;
 };
 
 export function Avatar({
@@ -62,9 +64,11 @@ export function Avatar({
 	shape = "circle",
 	size = 8,
 	style,
+	xstyle,
 	tabIndex,
 	...props
 }: AvatarProps) {
+	const { marginStyles, rest } = extractMarginProps(props);
 	const normalizedName = name?.trim().replace(/\s+/gu, " ") ?? "";
 	const resolvedInitials = initials?.trim() || deriveInitials(normalizedName);
 	const fallback =
@@ -78,7 +82,8 @@ export function Avatar({
 		focusRing.offsetInteractive,
 		responsiveSizeStyle(size),
 		shapeVariants[shape],
-		style,
+		...marginStyles,
+		xstyle,
 	);
 
 	const element = (
@@ -88,9 +93,9 @@ export function Avatar({
 			className={attrJoin(sx.className, className)}
 			render={render}
 			role={role ?? (render == null && (ariaLabel || hasName) ? "img" : undefined)}
-			style={sx.style}
+			style={mergeStyle(sx.style, style)}
 			tabIndex={tabIndex ?? (render == null && hasName ? 0 : undefined)}
-			{...props}>
+			{...rest}>
 			{image ? (
 				<BaseAvatar.Image alt={hasName ? "" : (imageAlt ?? "")} src={image} {...stylex.props(avatarParts.image)} />
 			) : null}

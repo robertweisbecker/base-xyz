@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
+import x from "@stylexjs/atoms";
 import * as stylex from "@stylexjs/stylex";
 import { Box, Grid, Stack } from "@/components/layout/layout";
 import { Separator } from "@/components/separator/separator";
@@ -30,18 +31,12 @@ const meta = {
 	argTypes: {
 		children: { control: false },
 		className: { control: false },
-		contentClassName: { control: false },
-		contentStyle: { control: false },
 		disableFade: { control: "boolean" },
 		label: { control: "text" },
 		orientation: { control: "inline-radio", options: ["vertical", "horizontal", "both"] },
-		scrollbarClassName: { control: false },
-		scrollbarStyle: { control: false },
 		showScrollbar: { control: "inline-radio", options: ["always", "scroll", "hover"] },
 		size: { control: "inline-radio", options: ["fill", "content"] },
 		style: { control: false },
-		viewportClassName: { control: false },
-		viewportStyle: { control: false },
 	},
 } satisfies Meta<typeof ScrollArea>;
 
@@ -64,39 +59,40 @@ export const Playground: Story = {
 				orientation={orientation}
 				showScrollbar={showScrollbar}
 				size={size}
-				style={styles.surface}
-				contentStyle={styles.padding}>
-				{orientation === "horizontal" ? (
-					<div {...stylex.props(styles.horizontalList)}>
-						{milestones.map((item) => (
-							<div key={item.label} {...stylex.props(styles.milestone)}>
-								<span>{item.label}</span>
-								<Text color="muted" render={<span />} size="1">
-									{item.date}
-								</Text>
-							</div>
-						))}
-					</div>
-				) : orientation === "both" ? (
-					<div {...stylex.props(styles.board)}>
-						{Array.from({ length: 48 }, (_, index) => (
-							<div key={index} {...stylex.props(styles.boardItem)}>
-								{index + 1}
-							</div>
-						))}
-					</div>
-				) : (
-					<div {...stylex.props(styles.list)}>
-						{items.map((item) => (
-							<div key={item.label} {...stylex.props(styles.listItem)}>
-								<span>{item.label}</span>
-								<Text color="muted" render={<span />} size="1">
-									{item.status}
-								</Text>
-							</div>
-						))}
-					</div>
-				)}
+				xstyle={styles.surface}>
+				<div {...stylex.props(x.padding(tokens["--space-3"]))}>
+					{orientation === "horizontal" ? (
+						<div {...stylex.props(styles.horizontalList)}>
+							{milestones.map((item) => (
+								<div key={item.label} {...stylex.props(styles.milestone)}>
+									<span>{item.label}</span>
+									<Text color="muted" render={<span />} size="1">
+										{item.date}
+									</Text>
+								</div>
+							))}
+						</div>
+					) : orientation === "both" ? (
+						<div {...stylex.props(styles.board)}>
+							{Array.from({ length: 48 }, (_, index) => (
+								<div key={index} {...stylex.props(styles.boardItem)}>
+									{index + 1}
+								</div>
+							))}
+						</div>
+					) : (
+						<div {...stylex.props(styles.list)}>
+							{items.map((item) => (
+								<div key={item.label} {...stylex.props(styles.listItem)}>
+									<span>{item.label}</span>
+									<Text color="muted" render={<span />} size="1">
+										{item.status}
+									</Text>
+								</div>
+							))}
+						</div>
+					)}
+				</div>
 			</ScrollArea>
 		</Box>
 	),
@@ -112,17 +108,19 @@ export const Orientations: Story = {
 				<Text color="muted" size="1">
 					Vertical
 				</Text>
-				<Box style={styles.verticalFrame}>
-					<ScrollArea label="Recent prototypes" style={styles.surface} contentStyle={styles.padding}>
-						<div {...stylex.props(styles.list)}>
-							{items.map((item) => (
-								<div key={item.label} {...stylex.props(styles.listItem)}>
-									<span>{item.label}</span>
-									<Text color="muted" render={<span />} size="1">
-										{item.status}
-									</Text>
-								</div>
-							))}
+				<Box xstyle={styles.verticalFrame}>
+					<ScrollArea label="Recent prototypes" xstyle={styles.surface}>
+						<div {...stylex.props(x.padding(tokens["--space-3"]))}>
+							<div {...stylex.props(styles.list)}>
+								{items.map((item) => (
+									<div key={item.label} {...stylex.props(styles.listItem)}>
+										<span>{item.label}</span>
+										<Text color="muted" render={<span />} size="1">
+											{item.status}
+										</Text>
+									</div>
+								))}
+							</div>
 						</div>
 					</ScrollArea>
 				</Box>
@@ -131,21 +129,22 @@ export const Orientations: Story = {
 				<Text color="muted" size="1">
 					Horizontal
 				</Text>
-				<Box style={styles.horizontalFrame}>
+				<Box xstyle={styles.horizontalFrame}>
 					<ScrollArea
 						label="Project milestones"
 						orientation="horizontal"
-						style={styles.surface}
-						contentStyle={styles.padding}>
-						<div {...stylex.props(styles.horizontalList)}>
-							{milestones.map((item) => (
-								<div key={item.label} {...stylex.props(styles.milestone)}>
-									<span>{item.label}</span>
-									<Text color="muted" render={<span />} size="1">
-										{item.date}
-									</Text>
-								</div>
-							))}
+						xstyle={styles.surface}>
+						<div {...stylex.props(x.padding(tokens["--space-3"]))}>
+							<div {...stylex.props(styles.horizontalList)}>
+								{milestones.map((item) => (
+									<div key={item.label} {...stylex.props(styles.milestone)}>
+										<span>{item.label}</span>
+										<Text color="muted" render={<span />} size="1">
+											{item.date}
+										</Text>
+									</div>
+								))}
+							</div>
 						</div>
 					</ScrollArea>
 				</Box>
@@ -154,14 +153,16 @@ export const Orientations: Story = {
 				<Text color="muted" size="1">
 					Both axes
 				</Text>
-				<Box style={styles.bothFrame}>
-					<ScrollArea label="Planning board" orientation="both" style={styles.surface} contentStyle={styles.padding}>
-						<div {...stylex.props(styles.board)}>
-							{Array.from({ length: 48 }, (_, index) => (
-								<div key={index} {...stylex.props(styles.boardItem)}>
-									{index + 1}
-								</div>
-							))}
+				<Box xstyle={styles.bothFrame}>
+					<ScrollArea label="Planning board" orientation="both" xstyle={styles.surface}>
+						<div {...stylex.props(x.padding(tokens["--space-3"]))}>
+							<div {...stylex.props(styles.board)}>
+								{Array.from({ length: 48 }, (_, index) => (
+									<div key={index} {...stylex.props(styles.boardItem)}>
+										{index + 1}
+									</div>
+								))}
+							</div>
 						</div>
 					</ScrollArea>
 				</Box>
@@ -191,27 +192,28 @@ export const Options: Story = {
 				<Text color="muted" size="1">
 					Scrollbar visibility
 				</Text>
-				<Grid gap={6} style={styles.behaviorExamples}>
+				<Grid gap={6} xstyle={styles.behaviorExamples}>
 					{scrollbarVisibilityModes.map((mode) => (
 						<Stack gap={2} key={mode.value}>
 							<Text color="muted" size="1">
 								{mode.label}
 							</Text>
-							<Box style={styles.visibilityFrame}>
+							<Box xstyle={styles.visibilityFrame}>
 								<ScrollArea
 									label={`${mode.label} scrollbar visibility`}
 									showScrollbar={mode.value}
-									style={styles.surface}
-									contentStyle={styles.padding}>
-									<div {...stylex.props(styles.list)}>
-										{items.slice(0, 8).map((item) => (
-											<div key={item.label} {...stylex.props(styles.listItem)}>
-												<span>{item.label}</span>
-												<Text color="muted" render={<span />} size="1">
-													{item.status}
-												</Text>
-											</div>
-										))}
+									xstyle={styles.surface}>
+									<div {...stylex.props(x.padding(tokens["--space-3"]))}>
+										<div {...stylex.props(styles.list)}>
+											{items.slice(0, 8).map((item) => (
+												<div key={item.label} {...stylex.props(styles.listItem)}>
+													<span>{item.label}</span>
+													<Text color="muted" render={<span />} size="1">
+														{item.status}
+													</Text>
+												</div>
+											))}
+										</div>
 									</div>
 								</ScrollArea>
 							</Box>
@@ -224,27 +226,28 @@ export const Options: Story = {
 				<Text color="muted" size="1">
 					Edge fade
 				</Text>
-				<Grid gap={6} style={styles.behaviorExamples}>
+				<Grid gap={6} xstyle={styles.behaviorExamples}>
 					{fadeModes.map((mode) => (
 						<Stack gap={2} key={mode.label}>
 							<Text color="muted" size="1">
 								{mode.label}
 							</Text>
-							<Box style={styles.fadeFrame}>
+							<Box xstyle={styles.fadeFrame}>
 								<ScrollArea
 									label={mode.label}
 									disableFade={mode.disableFade}
-									style={styles.surface}
-									contentStyle={styles.padding}>
-									<div {...stylex.props(styles.list)}>
-										{items.map((item) => (
-											<div key={item.label} {...stylex.props(styles.listItem)}>
-												<span>{item.label}</span>
-												<Text color="muted" render={<span />} size="1">
-													{item.status}
-												</Text>
-											</div>
-										))}
+									xstyle={styles.surface}>
+									<div {...stylex.props(x.padding(tokens["--space-3"]))}>
+										<div {...stylex.props(styles.list)}>
+											{items.map((item) => (
+												<div key={item.label} {...stylex.props(styles.listItem)}>
+													<span>{item.label}</span>
+													<Text color="muted" render={<span />} size="1">
+														{item.status}
+													</Text>
+												</div>
+											))}
+										</div>
 									</div>
 								</ScrollArea>
 							</Box>
@@ -295,9 +298,6 @@ const styles = stylex.create({
 	surface: {
 		borderRadius: tokens["--radius-md"],
 		backgroundColor: tokens["--color-gray-a1"],
-	},
-	padding: {
-		padding: tokens["--space-3"],
 	},
 	list: {
 		gap: tokens["--space-2"],

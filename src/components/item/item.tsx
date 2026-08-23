@@ -1,10 +1,11 @@
 import { useRender } from "@base-ui/react/use-render";
 import * as stylex from "@stylexjs/stylex";
-import type { StyleXStyles } from "@stylexjs/stylex";
 import type { ReactNode } from "react";
 import { media } from "@/styles/constants.stylex";
 import { typescaleStyles, textStyles } from "@/components/text/text.stylex";
 import { focusRing } from "@/styles/recipes/focus";
+import { mergeStyle, type BaseStyleProps } from "@/styles/props/base";
+import { extractMarginProps, type MarginProps } from "@/styles/props/spacing.stylex";
 import { tokens } from "@/theme/tokens.stylex";
 import { attrJoin } from "@/utils/attr-join";
 
@@ -19,25 +20,28 @@ export type ItemDescriptionLayout = "stack" | "inline" | "inline-wrap";
 export type ItemAlign = "start" | "center" | "end" | "baseline";
 export type ItemVariant = "default" | "embedded";
 
-export type ItemProps = Omit<useRender.ComponentProps<"div">, "children" | "className" | "render" | "style"> & {
-	align?: ItemAlign;
-	className?: string;
-	/** Supporting text beside or beneath the label. */
-	description?: ReactNode;
-	/** Placement of `description` relative to `label`. Defaults to `stack`. */
-	descriptionLayout?: ItemDescriptionLayout;
-	/** Trailing visual such as a badge, kbd, icon, or short text. */
-	endSlot?: ReactNode;
-	/** Primary text for the row. */
-	label: ReactNode;
-	render?: useRender.RenderProp;
-	/** Leading visual such as an icon, indicator, or avatar. */
-	startSlot?: ReactNode;
-	/** StyleX overrides, applied after the component's own styles. */
-	style?: StyleXStyles;
-	/** `embedded` removes padding and inherits colors when another component owns the row chrome and state. */
-	variant?: ItemVariant;
-};
+export type ItemProps = Omit<
+	useRender.ComponentProps<"div">,
+	"children" | "className" | "render" | "style" | keyof MarginProps
+> &
+	MarginProps &
+	BaseStyleProps & {
+		align?: ItemAlign;
+		className?: string;
+		/** Supporting text beside or beneath the label. */
+		description?: ReactNode;
+		/** Placement of `description` relative to `label`. Defaults to `stack`. */
+		descriptionLayout?: ItemDescriptionLayout;
+		/** Trailing visual such as a badge, kbd, icon, or short text. */
+		endSlot?: ReactNode;
+		/** Primary text for the row. */
+		label: ReactNode;
+		render?: useRender.RenderProp;
+		/** Leading visual such as an icon, indicator, or avatar. */
+		startSlot?: ReactNode;
+		/** `embedded` removes padding and inherits colors when another component owns the row chrome and state. */
+		variant?: ItemVariant;
+	};
 
 export function Item({
 	ref,
@@ -50,12 +54,20 @@ export function Item({
 	render,
 	startSlot,
 	style,
+	xstyle,
 	variant = "default",
 	...props
 }: ItemProps) {
+	const { marginStyles, rest } = extractMarginProps(props);
 	const hasDescription =
 		description !== undefined && description !== null && description !== false && description !== "";
-	const sx = stylex.props(itemParts.root, itemVariantStyles[variant], focusRing.offset, style);
+	const sx = stylex.props(
+		itemParts.root,
+		itemVariantStyles[variant],
+		focusRing.offset,
+		...marginStyles,
+		xstyle,
+	);
 
 	return useRender<{ align: ItemAlign }, HTMLElement>({
 		defaultTagName: "div",
@@ -63,9 +75,9 @@ export function Item({
 		render,
 		state: { align },
 		props: {
-			...props,
+			...rest,
 			className: attrJoin(sx.className, className),
-			style: sx.style,
+			style: mergeStyle(sx.style, style),
 			children: (
 				<>
 					{startSlot ? (

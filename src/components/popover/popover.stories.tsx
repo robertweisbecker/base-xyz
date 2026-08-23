@@ -52,7 +52,7 @@ function PopoverViewportDemo() {
 
 export const Playground: Story = {
 	render: ({ _side, _align, _showArrow, _showClose }) => (
-		<Box display="grid" style={storyParts.stage}>
+		<Box display="grid" xstyle={storyParts.stage}>
 			<Popover.Root>
 				<Popover.Trigger render={<Button variant="secondary" />}>Open {_side}</Popover.Trigger>
 				<Popover.Popup
@@ -86,14 +86,14 @@ export const Positioning: Story = {
 		controls: { disable: true },
 	},
 	render: () => (
-		<Grid gap={4} style={storyParts.positioningGrid}>
+		<Grid gap={4} xstyle={storyParts.positioningGrid}>
 			{positioningPlacements.map(({ side, align }) => (
-				<Box display="flex" key={`${side}-${align}`} style={storyParts.positioningCell}>
+				<Box display="flex" key={`${side}-${align}`} xstyle={storyParts.positioningCell}>
 					<Popover.Root>
 						<Popover.Trigger render={<Button size="sm" variant="secondary" />}>
 							{`${side[0].toUpperCase()}${side.slice(1)} · ${align}`}
 						</Popover.Trigger>
-						<Popover.Popup positionerProps={{ side, align }} style={storyParts.narrowPopup}>
+						<Popover.Popup positionerProps={{ side, align }} xstyle={storyParts.narrowPopup}>
 							<PopoverViewportDemo />
 						</Popover.Popup>
 					</Popover.Root>
@@ -148,9 +148,9 @@ export const SharedTriggers: Story = {
 				{({ payload }) => (
 					<Popover.Popup
 						arrowProps={_showArrow ? {} : undefined}
-						positionerProps={{ side: _side, align: _align, style: popupMotionStyles.movingPositioner }}
+						positionerProps={{ side: _side, align: _align, xstyle: popupMotionStyles.movingPositioner }}
 						showClose={_showClose}
-						style={popupMotionStyles.movingPopup}>
+						xstyle={popupMotionStyles.movingPopup}>
 						<Popover.Viewport>
 							<Popover.Title>{payload?.title}</Popover.Title>
 							<Popover.Description>{payload?.description}</Popover.Description>

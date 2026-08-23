@@ -28,6 +28,8 @@ const GHOST_UNSELECTED_NOT_LAST = `${GHOST}:not(:last-child):not(${TOGGLE_PRESSE
 const GROUP_FIRST = ":first-child:not(:last-child)";
 /** Last in a group with a sibling. `:only-child` is also `:first-child`, so it stays center. */
 const GROUP_LAST = ":last-child:not(:first-child)";
+// SAFETY: Computed when() keys lose contextual typing, so preserve the radius literal once.
+const ZERO_RADIUS = 0 as const;
 
 export const toggleGroupStyles = stylex.create({
 	root: {
@@ -50,6 +52,70 @@ export const toggleGroupStyles = stylex.create({
 
 export const toggleJoinStyles = stylex.create({
 	root: {
+		borderEndEndRadius: {
+			// eslint-disable-next-line @stylexjs/valid-styles -- nested when() conditions; the compiler supports this, the lint rule does not.
+			[stylex.when.ancestor("[data-join][data-orientation=horizontal]", toggleGroupMarker)]: {
+				[GHOST_NEXT_SELECTED]: ZERO_RADIUS,
+				[GHOST_UNSELECTED_NOT_LAST]: ZERO_RADIUS,
+				[NOT_GHOST_NOT_LAST]: ZERO_RADIUS,
+				default: null,
+			},
+			// eslint-disable-next-line @stylexjs/valid-styles -- nested when() conditions; the compiler supports this, the lint rule does not.
+			[stylex.when.ancestor("[data-join][data-orientation=vertical]", toggleGroupMarker)]: {
+				[GHOST_NEXT_SELECTED]: ZERO_RADIUS,
+				[GHOST_UNSELECTED_NOT_LAST]: ZERO_RADIUS,
+				[NOT_GHOST_NOT_LAST]: ZERO_RADIUS,
+				default: null,
+			},
+		},
+		borderEndStartRadius: {
+			// eslint-disable-next-line @stylexjs/valid-styles -- nested when() conditions; the compiler supports this, the lint rule does not.
+			[stylex.when.ancestor("[data-join][data-orientation=horizontal]", toggleGroupMarker)]: {
+				[GHOST_PREV_SELECTED]: ZERO_RADIUS,
+				[GHOST_UNSELECTED_NOT_FIRST]: ZERO_RADIUS,
+				[NOT_GHOST_NOT_FIRST]: ZERO_RADIUS,
+				default: null,
+			},
+			// eslint-disable-next-line @stylexjs/valid-styles -- nested when() conditions; the compiler supports this, the lint rule does not.
+			[stylex.when.ancestor("[data-join][data-orientation=vertical]", toggleGroupMarker)]: {
+				[GHOST_NEXT_SELECTED]: ZERO_RADIUS,
+				[GHOST_UNSELECTED_NOT_LAST]: ZERO_RADIUS,
+				[NOT_GHOST_NOT_LAST]: ZERO_RADIUS,
+				default: null,
+			},
+		},
+		borderStartEndRadius: {
+			// eslint-disable-next-line @stylexjs/valid-styles -- nested when() conditions; the compiler supports this, the lint rule does not.
+			[stylex.when.ancestor("[data-join][data-orientation=horizontal]", toggleGroupMarker)]: {
+				[GHOST_NEXT_SELECTED]: ZERO_RADIUS,
+				[GHOST_UNSELECTED_NOT_LAST]: ZERO_RADIUS,
+				[NOT_GHOST_NOT_LAST]: ZERO_RADIUS,
+				default: null,
+			},
+			// eslint-disable-next-line @stylexjs/valid-styles -- nested when() conditions; the compiler supports this, the lint rule does not.
+			[stylex.when.ancestor("[data-join][data-orientation=vertical]", toggleGroupMarker)]: {
+				[GHOST_PREV_SELECTED]: ZERO_RADIUS,
+				[GHOST_UNSELECTED_NOT_FIRST]: ZERO_RADIUS,
+				[NOT_GHOST_NOT_FIRST]: ZERO_RADIUS,
+				default: null,
+			},
+		},
+		borderStartStartRadius: {
+			// eslint-disable-next-line @stylexjs/valid-styles -- nested when() conditions; the compiler supports this, the lint rule does not.
+			[stylex.when.ancestor("[data-join][data-orientation=horizontal]", toggleGroupMarker)]: {
+				[GHOST_PREV_SELECTED]: ZERO_RADIUS,
+				[GHOST_UNSELECTED_NOT_FIRST]: ZERO_RADIUS,
+				[NOT_GHOST_NOT_FIRST]: ZERO_RADIUS,
+				default: null,
+			},
+			// eslint-disable-next-line @stylexjs/valid-styles -- nested when() conditions; the compiler supports this, the lint rule does not.
+			[stylex.when.ancestor("[data-join][data-orientation=vertical]", toggleGroupMarker)]: {
+				[GHOST_PREV_SELECTED]: ZERO_RADIUS,
+				[GHOST_UNSELECTED_NOT_FIRST]: ZERO_RADIUS,
+				[NOT_GHOST_NOT_FIRST]: ZERO_RADIUS,
+				default: null,
+			},
+		},
 		transformOrigin: {
 			// eslint-disable-next-line @stylexjs/valid-styles -- nested when() conditions; the compiler supports this, the lint rule does not.
 			[stylex.when.ancestor("[data-orientation=horizontal]", toggleGroupMarker)]: {
@@ -61,70 +127,6 @@ export const toggleJoinStyles = stylex.create({
 			[stylex.when.ancestor("[data-orientation=vertical]", toggleGroupMarker)]: {
 				[GROUP_FIRST]: "center bottom",
 				[GROUP_LAST]: "center top",
-				default: null,
-			},
-		},
-		borderEndEndRadius: {
-			// eslint-disable-next-line @stylexjs/valid-styles -- nested when() conditions; the compiler supports this, the lint rule does not.
-			[stylex.when.ancestor("[data-join][data-orientation=horizontal]", toggleGroupMarker)]: {
-				[NOT_GHOST_NOT_LAST]: 0,
-				[GHOST_NEXT_SELECTED]: 0,
-				[GHOST_UNSELECTED_NOT_LAST]: 0,
-				default: null,
-			},
-			// eslint-disable-next-line @stylexjs/valid-styles -- nested when() conditions; the compiler supports this, the lint rule does not.
-			[stylex.when.ancestor("[data-join][data-orientation=vertical]", toggleGroupMarker)]: {
-				[NOT_GHOST_NOT_LAST]: 0,
-				[GHOST_NEXT_SELECTED]: 0,
-				[GHOST_UNSELECTED_NOT_LAST]: 0,
-				default: null,
-			},
-		},
-		borderEndStartRadius: {
-			// eslint-disable-next-line @stylexjs/valid-styles -- nested when() conditions; the compiler supports this, the lint rule does not.
-			[stylex.when.ancestor("[data-join][data-orientation=horizontal]", toggleGroupMarker)]: {
-				[NOT_GHOST_NOT_FIRST]: 0,
-				[GHOST_PREV_SELECTED]: 0,
-				[GHOST_UNSELECTED_NOT_FIRST]: 0,
-				default: null,
-			},
-			// eslint-disable-next-line @stylexjs/valid-styles -- nested when() conditions; the compiler supports this, the lint rule does not.
-			[stylex.when.ancestor("[data-join][data-orientation=vertical]", toggleGroupMarker)]: {
-				[NOT_GHOST_NOT_LAST]: 0,
-				[GHOST_NEXT_SELECTED]: 0,
-				[GHOST_UNSELECTED_NOT_LAST]: 0,
-				default: null,
-			},
-		},
-		borderStartEndRadius: {
-			// eslint-disable-next-line @stylexjs/valid-styles -- nested when() conditions; the compiler supports this, the lint rule does not.
-			[stylex.when.ancestor("[data-join][data-orientation=horizontal]", toggleGroupMarker)]: {
-				[NOT_GHOST_NOT_LAST]: 0,
-				[GHOST_NEXT_SELECTED]: 0,
-				[GHOST_UNSELECTED_NOT_LAST]: 0,
-				default: null,
-			},
-			// eslint-disable-next-line @stylexjs/valid-styles -- nested when() conditions; the compiler supports this, the lint rule does not.
-			[stylex.when.ancestor("[data-join][data-orientation=vertical]", toggleGroupMarker)]: {
-				[NOT_GHOST_NOT_FIRST]: 0,
-				[GHOST_PREV_SELECTED]: 0,
-				[GHOST_UNSELECTED_NOT_FIRST]: 0,
-				default: null,
-			},
-		},
-		borderStartStartRadius: {
-			// eslint-disable-next-line @stylexjs/valid-styles -- nested when() conditions; the compiler supports this, the lint rule does not.
-			[stylex.when.ancestor("[data-join][data-orientation=horizontal]", toggleGroupMarker)]: {
-				[NOT_GHOST_NOT_FIRST]: 0,
-				[GHOST_PREV_SELECTED]: 0,
-				[GHOST_UNSELECTED_NOT_FIRST]: 0,
-				default: null,
-			},
-			// eslint-disable-next-line @stylexjs/valid-styles -- nested when() conditions; the compiler supports this, the lint rule does not.
-			[stylex.when.ancestor("[data-join][data-orientation=vertical]", toggleGroupMarker)]: {
-				[NOT_GHOST_NOT_FIRST]: 0,
-				[GHOST_PREV_SELECTED]: 0,
-				[GHOST_UNSELECTED_NOT_FIRST]: 0,
 				default: null,
 			},
 		},

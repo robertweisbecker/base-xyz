@@ -1,7 +1,6 @@
 import { Tabs as BaseTabs } from "@base-ui/react/tabs";
 import { useMergedRefs } from "@base-ui/utils/useMergedRefs";
 import * as stylex from "@stylexjs/stylex";
-import type { StyleXStyles } from "@stylexjs/stylex";
 import {
 	createContext,
 	type ComponentPropsWithRef,
@@ -14,6 +13,8 @@ import {
 import type { ButtonSize } from "@/components/button/button";
 import { typescaleStyles, fontWeightStyles } from "@/components/text/text.stylex";
 import { focusRing } from "@/styles/recipes/focus";
+import { mergeStyle, type BaseStyleProps } from "@/styles/props/base";
+import { extractMarginProps, type MarginProps } from "@/styles/props/spacing.stylex";
 import { tokens } from "@/theme/tokens.stylex";
 import { attrJoin } from "@/utils/attr-join";
 
@@ -26,12 +27,16 @@ type TabsContextValue = {
 
 const TabsContext = createContext<TabsContextValue | null>(null);
 
-export type TabsRootProps = Omit<BaseTabs.Root.Props, "className" | "style"> & {
+type TabsPartStyleProps = BaseStyleProps & {
 	className?: string;
-	size?: TabsSize;
-	/** StyleX overrides, applied after the component's own styles. */
-	style?: StyleXStyles;
 };
+
+export type TabsRootProps = Omit<BaseTabs.Root.Props, "className" | "style" | keyof MarginProps> &
+	MarginProps &
+	BaseStyleProps & {
+		className?: string;
+		size?: TabsSize;
+	};
 
 export function Root({
 	ref,
@@ -40,9 +45,16 @@ export function Root({
 	orientation = "horizontal",
 	size: tabsSize = "md",
 	style,
+	xstyle,
 	...props
 }: TabsRootProps) {
-	const sx = stylex.props(tabsParts.root, rootOrientationStyles[orientation], style);
+	const { marginStyles, rest } = extractMarginProps(props);
+	const sx = stylex.props(
+		tabsParts.root,
+		rootOrientationStyles[orientation],
+		marginStyles,
+		xstyle,
+	);
 	const contextValue = useMemo(() => ({ orientation, size: tabsSize }), [orientation, tabsSize]);
 
 	return (
@@ -52,26 +64,22 @@ export function Root({
 				orientation={orientation}
 				data-size={tabsSize}
 				className={attrJoin(sx.className, className)}
-				style={sx.style}
-				{...props}>
+				style={mergeStyle(sx.style, style)}
+				{...rest}>
 				{children}
 			</BaseTabs.Root>
 		</TabsContext>
 	);
 }
 
-export type TabsListProps = Omit<BaseTabs.List.Props, "className" | "style"> & {
-	className?: string;
-	/** StyleX overrides, applied after the component's own styles. */
-	style?: StyleXStyles;
-};
+export type TabsListProps = Omit<BaseTabs.List.Props, "className" | "style"> & TabsPartStyleProps;
 
-export function List({ ref, children, className, style, ...props }: TabsListProps) {
+export function List({ ref, children, className, style, xstyle, ...props }: TabsListProps) {
 	const { orientation, size: tabsSize } = useTabsContext();
 	const listRef = useRef<HTMLDivElement | null>(null);
 	const indicatorRef = useRef<HTMLSpanElement | null>(null);
 	const mergedRef = useMergedRefs(ref, listRef);
-	const sx = stylex.props(tabsParts.list, listOrientationStyles[orientation], tabsRadiusStyles[tabsSize], style);
+	const sx = stylex.props(tabsParts.list, listOrientationStyles[orientation], tabsRadiusStyles[tabsSize], xstyle);
 	const indicatorSx = stylex.props(tabsParts.indicator);
 
 	useEffect(() => {
@@ -103,25 +111,27 @@ export function List({ ref, children, className, style, ...props }: TabsListProp
 	}, []);
 
 	return (
-		<BaseTabs.List ref={mergedRef} className={attrJoin(sx.className, className)} style={sx.style} {...props}>
+		<BaseTabs.List
+			ref={mergedRef}
+			className={attrJoin(sx.className, className)}
+			style={mergeStyle(sx.style, style)}
+			{...props}>
 			{children}
 			<BaseTabs.Indicator ref={indicatorRef} className={indicatorSx.className} style={indicatorSx.style} />
 		</BaseTabs.List>
 	);
 }
 
-export type TabsTabProps = Omit<BaseTabs.Tab.Props, "children" | "className" | "style"> & {
-	children: ReactNode;
-	className?: string;
-	/** Visual content positioned before the label. */
-	startSlot?: ReactNode;
-	/** Visual content positioned after the label. */
-	endSlot?: ReactNode;
-	/** StyleX overrides, applied after the component's own styles. */
-	style?: StyleXStyles;
-};
+export type TabsTabProps = Omit<BaseTabs.Tab.Props, "children" | "className" | "style"> &
+	TabsPartStyleProps & {
+		children: ReactNode;
+		/** Visual content positioned before the label. */
+		startSlot?: ReactNode;
+		/** Visual content positioned after the label. */
+		endSlot?: ReactNode;
+	};
 
-export function Tab({ ref, children, className, endSlot, startSlot, style, type = "button", ...props }: TabsTabProps) {
+export function Tab({ ref, children, className, endSlot, startSlot, style, xstyle, type = "button", ...props }: TabsTabProps) {
 	const { orientation, size: tabsSize } = useTabsContext();
 	const sx = stylex.props(
 		focusRing.offset,
@@ -130,7 +140,7 @@ export function Tab({ ref, children, className, endSlot, startSlot, style, type 
 		tabTextSizeStyles[tabsSize],
 		tabOrientationStyles[orientation],
 		tabSizeStyles[tabsSize],
-		style,
+		xstyle,
 	);
 
 	return (
@@ -138,7 +148,7 @@ export function Tab({ ref, children, className, endSlot, startSlot, style, type 
 			ref={ref}
 			type={type}
 			className={attrJoin(sx.className, className)}
-			style={sx.style}
+			style={mergeStyle(sx.style, style)}
 			{...props}>
 			{renderSlot(startSlot, "start", tabsSize)}
 			{children}
@@ -147,28 +157,34 @@ export function Tab({ ref, children, className, endSlot, startSlot, style, type 
 	);
 }
 
-type TabsContentElementProps = Omit<ComponentPropsWithRef<"div">, "className" | "style"> & {
-	className?: string;
-	/** StyleX overrides, applied after the component's own styles. */
-	style?: StyleXStyles;
-};
+type TabsContentElementProps = Omit<ComponentPropsWithRef<"div">, "className" | "style"> & TabsPartStyleProps;
 
 export type TabsContentProps = TabsContentElementProps;
 
-export function Content({ ref, className, style, ...props }: TabsContentProps) {
-	const sx = stylex.props(tabsParts.content, style);
-	return <div ref={ref} {...props} className={attrJoin(sx.className, className)} style={sx.style} />;
+export function Content({ ref, className, style, xstyle, ...props }: TabsContentProps) {
+	const sx = stylex.props(tabsParts.content, xstyle);
+	return (
+		<div
+			ref={ref}
+			{...props}
+			className={attrJoin(sx.className, className)}
+			style={mergeStyle(sx.style, style)}
+		/>
+	);
 }
 
-export type TabsPanelProps = Omit<BaseTabs.Panel.Props, "className" | "style"> & {
-	className?: string;
-	/** StyleX overrides, applied after the component's own styles. */
-	style?: StyleXStyles;
-};
+export type TabsPanelProps = Omit<BaseTabs.Panel.Props, "className" | "style"> & TabsPartStyleProps;
 
-export function Panel({ ref, className, style, ...props }: TabsPanelProps) {
-	const sx = stylex.props(tabsParts.panel, focusRing.inset, style);
-	return <BaseTabs.Panel ref={ref} className={attrJoin(sx.className, className)} style={sx.style} {...props} />;
+export function Panel({ ref, className, style, xstyle, ...props }: TabsPanelProps) {
+	const sx = stylex.props(tabsParts.panel, focusRing.inset, xstyle);
+	return (
+		<BaseTabs.Panel
+			ref={ref}
+			className={attrJoin(sx.className, className)}
+			style={mergeStyle(sx.style, style)}
+			{...props}
+		/>
+	);
 }
 
 function useTabsContext() {

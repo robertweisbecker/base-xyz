@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
+import x from "@stylexjs/atoms";
 import { Icon } from "@/components/icons";
 import * as stylex from "@stylexjs/stylex";
 import type { ReactNode } from "react";
@@ -255,6 +256,7 @@ const meta = {
 		showExpandColumn: { table: { disable: true } },
 		style: { table: { disable: true } },
 		toolbarEndSlot: { table: { disable: true } },
+		xstyle: { table: { disable: true } },
 	},
 } satisfies Meta<typeof DataTable>;
 
@@ -270,7 +272,7 @@ export const Composition: Story = {
 		controls: { disable: true },
 	},
 	render: () => (
-		<Stack gap={5} style={storyParts.composition}>
+		<Stack gap={5} xstyle={storyParts.composition}>
 			<PageHeader
 				breadcrumbs={
 					<Breadcrumbs.Root size="sm">
@@ -348,7 +350,7 @@ function DeploymentCommandPalette() {
 		<CommandPalette.Root
 			shortcut
 			trigger={
-				<CommandPalette.Trigger size="sm" pe={2}>
+				<CommandPalette.Trigger size="sm" xstyle={x.paddingInlineEnd(tokens["--space-2"])}>
 					Actions
 				</CommandPalette.Trigger>
 			}

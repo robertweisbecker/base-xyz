@@ -32,7 +32,7 @@ export const Positioning: Story = {
 	args: { bg: undefined, p: undefined, radius: undefined, shadow: undefined },
 	parameters: { controls: { disable: true } },
 	render: () => (
-		<Box height="12rem" position="relative" style={styles.frame}>
+		<Box height="12rem" position="relative" xstyle={styles.frame}>
 			<Box bg="bgAccent" insetEnd={2} insetStart={-2} insetTop={4} p={3} position="absolute" radius="lg">
 				Logical insets
 			</Box>
@@ -44,7 +44,7 @@ export const Polymorphic: Story = {
 	args: { bg: undefined, p: undefined, radius: undefined, shadow: undefined },
 	parameters: { controls: { disable: true } },
 	render: () => (
-		<Box render={<section aria-labelledby="box-heading" />} p={4} style={styles.frame}>
+		<Box render={<section aria-labelledby="box-heading" />} p={4} xstyle={styles.frame}>
 			<Heading id="box-heading" render={<h2 />} size="4">
 				Rendered as a section
 			</Heading>
@@ -60,10 +60,10 @@ export const CustomWidthAndPrecedence: Story = {
 			<Box data-testid="custom-width" bg="surfaceSubtle" p={2} width="calc(100% - 2rem)">
 				Custom CSS width
 			</Box>
-			<Box data-testid="style-wins" bg="surfaceSubtle" p={2} style={styles.precedenceWidth} width="full">
+			<Box data-testid="style-wins" bg="surfaceSubtle" p={2} xstyle={styles.precedenceWidth} width="full">
 				Final style wins
 			</Box>
-			<Box data-testid="mixed-spacing" m={1} mx={2} style={styles.itemOutline}>
+			<Box data-testid="mixed-spacing" m={1} mx={2} xstyle={styles.itemOutline}>
 				Axis spacing wins
 			</Box>
 		</Box>

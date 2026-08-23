@@ -1,6 +1,6 @@
 # ADR 0001: Token-backed theme props and layout primitives
 
-- Status: Accepted
+- Status: Superseded by [ADR 0010](./0010-static-style-prop-maps-tiered-surfaces-and-xstyle.md)
 - Date: 2026-08-01
 
 ## Context

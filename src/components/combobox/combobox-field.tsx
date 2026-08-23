@@ -5,10 +5,9 @@ import { PlusIcon } from "@phosphor-icons/react/dist/csr/Plus";
 import { XCircleIcon } from "@phosphor-icons/react/dist/csr/XCircle";
 import { XIcon } from "@phosphor-icons/react/dist/csr/X";
 import * as stylex from "@stylexjs/stylex";
-import type { StyleXStyles } from "@stylexjs/stylex";
 import { createContext, useContext, type ComponentProps, type ReactNode, type RefObject } from "react";
-import { fieldControlSizes, fieldStyles, fieldTextStyles, fieldThemeProps } from "@/components/field/field.stylex";
-import type { FieldSize, FieldThemeProps } from "@/components/field/field.types";
+import { fieldControlSizes, fieldStyles, fieldTextStyles } from "@/components/field/field.stylex";
+import type { FieldSize } from "@/components/field/field.types";
 import { Icon } from "@/components/icons";
 import { menuItemSizeStyles, menuItemStyles, menuItemVariantStyles } from "@/components/menu/menu-item.stylex";
 import type { MenuItemVariant } from "@/components/menu/menu.types";
@@ -16,7 +15,8 @@ import { popupMotionStyles, popupPositionerStyles } from "@/components/popover/p
 import { Tooltip } from "@/components/tooltip/tooltip";
 import { focusRing } from "@/styles/recipes/focus";
 import { pressable } from "@/styles/recipes/transitions";
-import { resolveThemeProps } from "@/theme/theme-props";
+import { mergeStyle, type BaseStyleProps } from "@/styles/props/base";
+import { extractMarginProps, type MarginProps } from "@/styles/props/spacing.stylex";
 import { attrJoin } from "@/utils/attr-join";
 import {
 	comboboxActionSizeVariants,
@@ -28,10 +28,8 @@ import {
 	inputVariants,
 } from "./combobox.stylex";
 
-type StyledProps<T> = Omit<T, "className" | "style"> & {
+type StyledProps<T> = Omit<T, "className" | "style"> & BaseStyleProps & {
 	className?: string;
-	/** StyleX overrides, applied after the component's own styles. */
-	style?: StyleXStyles;
 };
 
 type ComboboxMultipleMode = boolean | undefined;
@@ -47,14 +45,17 @@ const ComboboxChipsContext = createContext(false);
 
 export type ComboboxRootProps<Value, Multiple extends ComboboxMultipleMode = false> = Omit<
 	BaseCombobox.Root.Props<Value, Multiple>,
-	"className" | "color" | "size" | "style" | keyof FieldThemeProps
+	| "className"
+	| "color"
+	| "size"
+	| "style"
+	| keyof MarginProps
 > &
-	FieldThemeProps & {
+	MarginProps &
+	BaseStyleProps & {
 		className?: string;
 		invalid?: boolean;
 		size?: FieldSize;
-		/** StyleX overrides, applied after the component's own styles. */
-		style?: StyleXStyles;
 	};
 
 export function Root<Value, Multiple extends ComboboxMultipleMode = false>({
@@ -66,19 +67,24 @@ export function Root<Value, Multiple extends ComboboxMultipleMode = false>({
 	readOnly = false,
 	size = "md",
 	style,
+	xstyle,
 	...props
 }: ComboboxRootProps<Value, Multiple>) {
-	const { restProps, styles } = resolveThemeProps(props, fieldThemeProps);
-	const sx = stylex.props(fieldStyles.root, ...styles, style);
+	const { marginStyles, rest } = extractMarginProps(props);
+	const sx = stylex.props(
+		fieldStyles.root,
+		marginStyles,
+		xstyle,
+	);
 
 	return (
 		<Field.Root
 			disabled={disabled}
 			invalid={invalid}
 			className={attrJoin(sx.className, className)}
-			style={sx.style}>
+			style={mergeStyle(sx.style, style)}>
 			<ComboboxContext.Provider value={{ multiple: multiple === true, readOnly, size }}>
-				<BaseCombobox.Root disabled={disabled} multiple={multiple} readOnly={readOnly} {...restProps}>
+				<BaseCombobox.Root disabled={disabled} multiple={multiple} readOnly={readOnly} {...rest}>
 					{children}
 				</BaseCombobox.Root>
 			</ComboboxContext.Provider>
@@ -88,14 +94,14 @@ export function Root<Value, Multiple extends ComboboxMultipleMode = false>({
 
 export type ComboboxLabelProps = StyledProps<Field.Label.Props>;
 
-export function Label({ ref, className, style, ...props }: ComboboxLabelProps) {
-	const sx = stylex.props(fieldStyles.label, style);
+export function Label({ ref, className, style, xstyle, ...props }: ComboboxLabelProps) {
+	const sx = stylex.props(fieldStyles.label, xstyle);
 
 	return (
 		<Field.Label
 			ref={ref}
 			className={attrJoin(sx.className, className)}
-			style={sx.style}
+			style={mergeStyle(sx.style, style)}
 			{...props}
 		/>
 	);
@@ -107,7 +113,15 @@ export type ComboboxInputGroupProps = StyledProps<BaseCombobox.InputGroup.Props>
 	variant?: ComboboxInputGroupVariant;
 };
 
-export function InputGroup({ ref, children, className, style, variant = "input", ...props }: ComboboxInputGroupProps) {
+export function InputGroup({
+	ref,
+	children,
+	className,
+	style,
+	xstyle,
+	variant = "input",
+	...props
+}: ComboboxInputGroupProps) {
 	const { multiple, size } = useContext(ComboboxContext);
 	const withChips = variant === "chips";
 	const sx = stylex.props(
@@ -120,7 +134,7 @@ export function InputGroup({ ref, children, className, style, variant = "input",
 		withChips && inputGroupVariants.withChips,
 		multiple && inputGroupVariants.multiple,
 		comboboxMarker,
-		style,
+		xstyle,
 	);
 
 	return (
@@ -128,7 +142,7 @@ export function InputGroup({ ref, children, className, style, variant = "input",
 			<BaseCombobox.InputGroup
 				ref={ref}
 				className={attrJoin(sx.className, className)}
-				style={sx.style}
+				style={mergeStyle(sx.style, style)}
 				{...props}>
 				{children}
 				<Actions />
@@ -139,7 +153,7 @@ export function InputGroup({ ref, children, className, style, variant = "input",
 
 export type ComboboxInputProps = StyledProps<BaseCombobox.Input.Props>;
 
-export function Input({ ref, className, style, ...props }: ComboboxInputProps) {
+export function Input({ ref, className, style, xstyle, ...props }: ComboboxInputProps) {
 	const { readOnly, size } = useContext(ComboboxContext);
 	const withinChips = useContext(ComboboxChipsContext);
 	const sx = stylex.props(
@@ -150,14 +164,14 @@ export function Input({ ref, className, style, ...props }: ComboboxInputProps) {
 		comboboxInputSizeVariants[size],
 		withinChips && inputVariants.withChips,
 		readOnly && comboboxParts.inputReadOnly,
-		style,
+		xstyle,
 	);
 
 	return (
 		<BaseCombobox.Input
 			ref={ref}
 			className={attrJoin(sx.className, className)}
-			style={sx.style}
+			style={mergeStyle(sx.style, style)}
 			{...props}
 		/>
 	);
@@ -176,7 +190,7 @@ function Actions() {
 
 type ComboboxClearProps = StyledProps<BaseCombobox.Clear.Props>;
 
-function Clear({ ref, "aria-label": ariaLabel, children, className, style, ...props }: ComboboxClearProps) {
+function Clear({ ref, "aria-label": ariaLabel, children, className, style, xstyle, ...props }: ComboboxClearProps) {
 	const { size } = useContext(ComboboxContext);
 	const hasVisibleLabel = children != null;
 	const sx = stylex.props(
@@ -184,7 +198,7 @@ function Clear({ ref, "aria-label": ariaLabel, children, className, style, ...pr
 		hasVisibleLabel ? comboboxParts.textAction : comboboxActionSizeVariants[size],
 		focusRing.offset,
 		pressable.transition,
-		style,
+		xstyle,
 	);
 
 	return (
@@ -192,7 +206,7 @@ function Clear({ ref, "aria-label": ariaLabel, children, className, style, ...pr
 			ref={ref}
 			aria-label={ariaLabel ?? (children == null ? "Clear selection" : undefined)}
 			className={attrJoin(sx.className, className)}
-			style={sx.style}
+			style={mergeStyle(sx.style, style)}
 			{...props}>
 			{children ?? <XCircleIcon aria-hidden size="1.25em" weight="fill" />}
 		</BaseCombobox.Clear>
@@ -201,14 +215,14 @@ function Clear({ ref, "aria-label": ariaLabel, children, className, style, ...pr
 
 type ComboboxTriggerProps = StyledProps<BaseCombobox.Trigger.Props>;
 
-function Trigger({ ref, "aria-label": ariaLabel, children, className, style, ...props }: ComboboxTriggerProps) {
+function Trigger({ ref, "aria-label": ariaLabel, children, className, style, xstyle, ...props }: ComboboxTriggerProps) {
 	const { size } = useContext(ComboboxContext);
 	const sx = stylex.props(
 		comboboxParts.action,
 		comboboxActionSizeVariants[size],
 		focusRing.offset,
 		pressable.transition,
-		style,
+		xstyle,
 	);
 
 	return (
@@ -216,7 +230,7 @@ function Trigger({ ref, "aria-label": ariaLabel, children, className, style, ...
 			ref={ref}
 			aria-label={ariaLabel ?? (children == null ? "Show options" : undefined)}
 			className={attrJoin(sx.className, className)}
-			style={sx.style}
+			style={mergeStyle(sx.style, style)}
 			{...props}>
 			{children ?? <CaretDownIcon aria-hidden size="1em" weight="bold" />}
 		</BaseCombobox.Trigger>
@@ -227,15 +241,15 @@ export const Value = BaseCombobox.Value;
 
 export type ComboboxChipsProps = StyledProps<BaseCombobox.Chips.Props>;
 
-export function Chips({ ref, children, className, style, ...props }: ComboboxChipsProps) {
-	const sx = stylex.props(comboboxParts.chips, style);
+export function Chips({ ref, children, className, style, xstyle, ...props }: ComboboxChipsProps) {
+	const sx = stylex.props(comboboxParts.chips, xstyle);
 
 	return (
 		<ComboboxChipsContext.Provider value>
 			<BaseCombobox.Chips
 				ref={ref}
 				className={attrJoin(sx.className, className)}
-				style={sx.style}
+				style={mergeStyle(sx.style, style)}
 				{...props}>
 				{children}
 			</BaseCombobox.Chips>
@@ -250,14 +264,14 @@ export type ComboboxChipProps = StyledProps<BaseCombobox.Chip.Props> & {
 	endSlot?: ReactNode;
 };
 
-export function Chip({ children, className, endSlot, ref, startSlot, style, ...props }: ComboboxChipProps) {
-	const sx = stylex.props(comboboxParts.chip, comboboxMarker, style);
+export function Chip({ children, className, endSlot, ref, startSlot, style, xstyle, ...props }: ComboboxChipProps) {
+	const sx = stylex.props(comboboxParts.chip, comboboxMarker, xstyle);
 
 	return (
 		<BaseCombobox.Chip
 			ref={ref}
 			className={attrJoin(sx.className, className)}
-			style={sx.style}
+			style={mergeStyle(sx.style, style)}
 			{...props}>
 			{startSlot != null ? (
 				<span aria-hidden {...stylex.props(comboboxParts.chipSlot)}>
@@ -279,6 +293,7 @@ export function ChipRemove({
 	children,
 	className,
 	style,
+	xstyle,
 	...props
 }: ComboboxChipRemoveProps) {
 	const sx = stylex.props(
@@ -286,7 +301,7 @@ export function ChipRemove({
 		comboboxParts.chipRemove,
 		focusRing.offset,
 		pressable.transition,
-		style,
+		xstyle,
 	);
 
 	return (
@@ -295,7 +310,7 @@ export function ChipRemove({
 			aria-label={ariaLabel ?? (children == null && ariaLabelledBy == null ? "Remove selection" : undefined)}
 			aria-labelledby={ariaLabelledBy}
 			className={attrJoin(sx.className, className)}
-			style={sx.style}
+			style={mergeStyle(sx.style, style)}
 			{...props}>
 			{children ?? <XIcon aria-hidden size={12} weight="bold" />}
 		</BaseCombobox.ChipRemove>
@@ -304,25 +319,22 @@ export function ChipRemove({
 
 type TooltipTriggerProps = ComponentProps<typeof Tooltip.Trigger>;
 
-export type ComboboxChipOverflowProps = Omit<TooltipTriggerProps, "children" | "className" | "style"> & {
+export type ComboboxChipOverflowProps = Omit<TooltipTriggerProps, "children"> & {
 	anchor: RefObject<Element | null>;
 	children: ReactNode;
-	className?: string;
 	label: ReactNode;
-	/** StyleX overrides, applied after the component's own styles. */
-	style?: StyleXStyles;
 };
 
-export function ChipOverflow({ anchor, children, className, label, ref, style, ...props }: ComboboxChipOverflowProps) {
-	const sx = stylex.props(comboboxParts.chipOverflow, style);
-
+export function ChipOverflow({
+	anchor,
+	children,
+	label,
+	xstyle,
+	...props
+}: ComboboxChipOverflowProps) {
 	return (
 		<Tooltip.Root>
-			<Tooltip.Trigger
-				ref={ref}
-				className={attrJoin(sx.className, className)}
-				style={sx.style}
-				{...props}>
+			<Tooltip.Trigger xstyle={[comboboxParts.chipOverflow, xstyle]} {...props}>
 				{label}
 			</Tooltip.Trigger>
 			<Tooltip.Popup positionerProps={{ anchor, align: "start", side: "bottom", sideOffset: 0 }}>
@@ -339,17 +351,27 @@ export type ComboboxPopupProps = StyledProps<BaseCombobox.Popup.Props> & {
 	positionerProps?: ComboboxPositionerProps;
 };
 
-export function Popup({ ref, children, className, portalProps, positionerProps, style, ...props }: ComboboxPopupProps) {
+export function Popup({
+	ref,
+	children,
+	className,
+	portalProps,
+	positionerProps,
+	style,
+	xstyle,
+	...props
+}: ComboboxPopupProps) {
 	const {
 		align = "center",
 		className: positionerClassName,
 		side = "bottom",
 		sideOffset = 6,
 		style: positionerStyle,
+		xstyle: positionerXstyle,
 		...otherPositionerProps
 	} = positionerProps ?? {};
-	const sx = stylex.props(comboboxParts.panelSurface, comboboxParts.popup, popupMotionStyles.anchoredPopup, style);
-	const positionerSx = stylex.props(popupPositionerStyles, positionerStyle);
+	const sx = stylex.props(comboboxParts.panelSurface, comboboxParts.popup, popupMotionStyles.anchoredPopup, xstyle);
+	const positionerSx = stylex.props(popupPositionerStyles, positionerXstyle);
 
 	return (
 		<BaseCombobox.Portal {...portalProps}>
@@ -358,12 +380,12 @@ export function Popup({ ref, children, className, portalProps, positionerProps, 
 				side={side}
 				sideOffset={sideOffset}
 				className={attrJoin(positionerSx.className, positionerClassName)}
-				style={positionerSx.style}
+				style={mergeStyle(positionerSx.style, positionerStyle)}
 				{...otherPositionerProps}>
 				<BaseCombobox.Popup
 					ref={ref}
 					className={attrJoin(sx.className, className)}
-					style={sx.style}
+					style={mergeStyle(sx.style, style)}
 					{...props}>
 					{children}
 				</BaseCombobox.Popup>
@@ -374,14 +396,14 @@ export function Popup({ ref, children, className, portalProps, positionerProps, 
 
 export type ComboboxListProps = StyledProps<BaseCombobox.List.Props>;
 
-export function List({ ref, className, style, ...props }: ComboboxListProps) {
-	const sx = stylex.props(comboboxParts.list, style);
+export function List({ ref, className, style, xstyle, ...props }: ComboboxListProps) {
+	const sx = stylex.props(comboboxParts.list, xstyle);
 
 	return (
 		<BaseCombobox.List
 			ref={ref}
 			className={attrJoin(sx.className, className)}
-			style={sx.style}
+			style={mergeStyle(sx.style, style)}
 			{...props}
 		/>
 	);
@@ -396,21 +418,30 @@ export type ComboboxItemProps = Omit<StyledProps<BaseCombobox.Item.Props>, "chil
 	variant?: ComboboxItemVariant;
 };
 
-export function Item({ ref, children, className, creatable = false, style, variant = "default", ...props }: ComboboxItemProps) {
+export function Item({
+	ref,
+	children,
+	className,
+	creatable = false,
+	style,
+	xstyle,
+	variant = "default",
+	...props
+}: ComboboxItemProps) {
 	const { size } = useContext(ComboboxContext);
 	const sx = stylex.props(
 		menuItemStyles.item,
 		menuItemSizeStyles[size],
 		menuItemVariantStyles[variant],
 		focusRing.inset,
-		style,
+		xstyle,
 	);
 
 	return (
 		<BaseCombobox.Item
 			ref={ref}
 			className={attrJoin(sx.className, className)}
-			style={sx.style}
+			style={mergeStyle(sx.style, style)}
 			{...props}>
 			{creatable ? (
 				<span aria-hidden {...stylex.props(menuItemStyles.indicator, comboboxParts.creatableIndicator)}>
@@ -428,14 +459,14 @@ export function Item({ ref, children, className, creatable = false, style, varia
 
 export type ComboboxEmptyProps = StyledProps<BaseCombobox.Empty.Props>;
 
-export function Empty({ ref, className, style, ...props }: ComboboxEmptyProps) {
-	const sx = stylex.props(comboboxParts.empty, style);
+export function Empty({ ref, className, style, xstyle, ...props }: ComboboxEmptyProps) {
+	const sx = stylex.props(comboboxParts.empty, xstyle);
 
 	return (
 		<BaseCombobox.Empty
 			ref={ref}
 			className={attrJoin(sx.className, className)}
-			style={sx.style}
+			style={mergeStyle(sx.style, style)}
 			{...props}
 		/>
 	);

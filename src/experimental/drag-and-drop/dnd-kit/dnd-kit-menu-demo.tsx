@@ -181,7 +181,7 @@ function SortableMenu({
 				ref={ref}
 				data-drop-target={isDropTarget || undefined}
 				positionerProps={{ side: "bottom", align: "start" }}
-				style={demoStyles.sortableMenuPopup}>
+				xstyle={demoStyles.sortableMenuPopup}>
 				<Menu.Group>
 					<Menu.GroupLabel>{label}</Menu.GroupLabel>
 					{items.length === 0 ? <EmptyMenuGroup label={label} /> : null}
@@ -196,7 +196,7 @@ function SortableMenu({
 
 function EmptyMenuGroup({ label }: { label: string }) {
 	return (
-		<Menu.Item disabled closeOnClick={false} style={demoStyles.emptyMenuItem}>
+		<Menu.Item disabled closeOnClick={false} xstyle={demoStyles.emptyMenuItem}>
 			Add {label.toLowerCase()}
 		</Menu.Item>
 	);
@@ -223,7 +223,7 @@ function SortableMenuItem({ item, index, groupId }: { item: MenuAction; index: n
 			closeOnClick={false}
 			data-dragging={isDragging || undefined}
 			data-drop-target={isDropTarget || undefined}
-			style={demoStyles.sortableMenuItem}>
+			xstyle={demoStyles.sortableMenuItem}>
 			<Menu.ItemIcon>
 				<DotsSixVerticalIcon weight="bold" />
 			</Menu.ItemIcon>

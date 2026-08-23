@@ -1,6 +1,5 @@
 import { Popover as BasePopover } from "@base-ui/react/popover";
 import * as stylex from "@stylexjs/stylex";
-import type { StyleXStyles } from "@stylexjs/stylex";
 import { type ComponentProps } from "react";
 import { textStyles, fontWeightStyles } from "@/components/text/text.stylex";
 import {
@@ -12,12 +11,10 @@ import {
 import { popupVars } from "@/components/popover/popover-vars.stylex";
 import { tokens } from "@/theme/tokens.stylex";
 import { CloseButton as CloseButtonControl } from "@/components/button/close-button";
+import { mergeStyle, type BaseStyleProps } from "@/styles/props/base";
 import { attrJoin } from "@/utils/attr-join";
 
-type StyledProps<T> = Omit<T, "className" | "style"> & {
-	className?: string;
-	style?: StyleXStyles;
-};
+type StyledProps<T> = Omit<T, "className" | "style" | "xstyle"> & BaseStyleProps & { className?: string };
 
 export type PopoverBackdropProps = StyledProps<BasePopover.Backdrop.Props>;
 export type PopoverPositionerProps = StyledProps<BasePopover.Positioner.Props>;
@@ -31,15 +28,15 @@ export type PopoverPopupProps = StyledProps<BasePopover.Popup.Props> & {
 	showClose?: boolean;
 };
 
-function Positioner({ ref, className, style, sideOffset = 8, ...props }: PopoverPositionerProps) {
-	const { className: sxClassName, style: sxStyle } = stylex.props(popupPositionerStyles, style);
+function Positioner({ ref, className, style, xstyle, sideOffset = 8, ...props }: PopoverPositionerProps) {
+	const { className: sxClassName, style: sxStyle } = stylex.props(popupPositionerStyles, xstyle);
 
 	return (
 		<BasePopover.Positioner
 			ref={ref}
 			sideOffset={sideOffset}
 			className={attrJoin(sxClassName, className)}
-			style={sxStyle}
+			style={mergeStyle(sxStyle, style)}
 			{...props}
 		/>
 	);
@@ -54,6 +51,7 @@ export function Popup({
 	portalProps,
 	positionerProps,
 	style,
+	xstyle,
 	showClose = true,
 	...props
 }: PopoverPopupProps) {
@@ -61,7 +59,7 @@ export function Popup({
 		popoverParts.panelSurface,
 		popoverParts.popup,
 		popupMotionStyles.anchoredPopup,
-		style,
+		xstyle,
 	);
 
 	return (
@@ -71,7 +69,7 @@ export function Popup({
 				<BasePopover.Popup
 					ref={ref}
 					className={attrJoin(sxClassName, className)}
-					style={sxStyle}
+					style={mergeStyle(sxStyle, style)}
 					{...props}>
 					{arrowProps ? <Arrow {...arrowProps} /> : null}
 					{children}
@@ -82,66 +80,66 @@ export function Popup({
 	);
 }
 
-export function Viewport({ ref, className, style, ...props }: PopoverViewportProps) {
-	const { className: sxClassName, style: sxStyle } = stylex.props(popoverParts.viewport, popupViewportStyles, style);
+export function Viewport({ ref, className, style, xstyle, ...props }: PopoverViewportProps) {
+	const { className: sxClassName, style: sxStyle } = stylex.props(popoverParts.viewport, popupViewportStyles, xstyle);
 
 	return (
 		<BasePopover.Viewport
 			ref={ref}
 			className={attrJoin(sxClassName, "xyz-popup-viewport", className)}
-			style={sxStyle}
+			style={mergeStyle(sxStyle, style)}
 			{...props}
 		/>
 	);
 }
 
-function Backdrop({ ref, className, style, ...props }: PopoverBackdropProps) {
-	const { className: sxClassName, style: sxStyle } = stylex.props(style);
+function Backdrop({ ref, className, style, xstyle, ...props }: PopoverBackdropProps) {
+	const { className: sxClassName, style: sxStyle } = stylex.props(xstyle);
 
 	return (
 		<BasePopover.Backdrop
 			ref={ref}
 			className={attrJoin(sxClassName, className) || undefined}
-			style={sxStyle}
+			style={mergeStyle(sxStyle, style)}
 			{...props}
 		/>
 	);
 }
 
-function Arrow({ ref, className, style, ...props }: PopoverArrowProps) {
-	const { className: sxClassName, style: sxStyle } = stylex.props(popupArrowStyles, style);
+function Arrow({ ref, className, style, xstyle, ...props }: PopoverArrowProps) {
+	const { className: sxClassName, style: sxStyle } = stylex.props(popupArrowStyles, xstyle);
 
 	return (
 		<BasePopover.Arrow
 			ref={ref}
 			className={attrJoin(sxClassName, className)}
-			style={sxStyle}
+			style={mergeStyle(sxStyle, style)}
 			{...props}
 		/>
 	);
 }
 
-export function Title({ ref, className, style, ...props }: StyledProps<BasePopover.Title.Props>) {
-	const { className: sxClassName, style: sxStyle } = stylex.props(popoverText.title, style);
+export function Title({ ref, className, style, xstyle, ...props }: StyledProps<BasePopover.Title.Props>) {
+	const { className: sxClassName, style: sxStyle } = stylex.props(popoverText.title, xstyle);
 
 	return (
 		<BasePopover.Title
 			ref={ref}
 			className={attrJoin(sxClassName, className)}
-			style={sxStyle}
+			style={mergeStyle(sxStyle, style)}
 			{...props}
 		/>
 	);
 }
 
-export function Description({ ref, className, style, ...props }: StyledProps<BasePopover.Description.Props>) {
-	const { className: sxClassName, style: sxStyle } = stylex.props(popoverText.description, style);
+export function Description({ ref, className, style, xstyle, ...props }: StyledProps<BasePopover.Description.Props>) {
+	const { className: sxClassName, style: sxStyle } = stylex.props(popoverText.description, xstyle);
 
 	return (
 		<BasePopover.Description
 			ref={ref}
 			className={attrJoin(sxClassName, className)}
-			style={sxStyle}
+			style={mergeStyle(sxStyle, style)}
 			{...props}
 		/>
 	);
@@ -153,14 +151,14 @@ export type PopoverCloseButtonProps = Omit<PopoverCloseProps, "aria-label" | "ch
 };
 
 /** Unstyled close primitive for custom buttons and footer actions. */
-export function Close({ ref, className, style, ...props }: PopoverCloseProps) {
-	const { className: sxClassName, style: sxStyle } = stylex.props(style);
+export function Close({ ref, className, style, xstyle, ...props }: PopoverCloseProps) {
+	const { className: sxClassName, style: sxStyle } = stylex.props(xstyle);
 
 	return (
 		<BasePopover.Close
 			ref={ref}
 			className={attrJoin(sxClassName, className) || undefined}
-			style={sxStyle}
+			style={mergeStyle(sxStyle, style)}
 			{...props}
 		/>
 	);
@@ -171,7 +169,7 @@ export function CloseButton({
 	ref,
 	"aria-label": ariaLabel = "Close",
 	className,
-	style,
+	xstyle,
 	...props
 }: PopoverCloseButtonProps) {
 	return (
@@ -180,16 +178,16 @@ export function CloseButton({
 			aria-label={ariaLabel}
 			className={className}
 			nativeButton
-			render={<CloseButtonControl label={ariaLabel} style={[popoverParts.closeButton, style]} />}
+			render={<CloseButtonControl label={ariaLabel} xstyle={[popoverParts.closeButton, xstyle]} />}
 			{...props}
 		/>
 	);
 }
 
-export function Footer({ className, style, ...props }: StyledProps<ComponentProps<"div">>) {
-	const { className: sxClassName, style: sxStyle } = stylex.props(popoverParts.footer, style);
+export function Footer({ className, style, xstyle, ...props }: StyledProps<ComponentProps<"div">>) {
+	const { className: sxClassName, style: sxStyle } = stylex.props(popoverParts.footer, xstyle);
 
-	return <div className={attrJoin(sxClassName, className)} style={sxStyle} {...props} />;
+	return <div className={attrJoin(sxClassName, className)} style={mergeStyle(sxStyle, style)} {...props} />;
 }
 
 export const Root = BasePopover.Root;

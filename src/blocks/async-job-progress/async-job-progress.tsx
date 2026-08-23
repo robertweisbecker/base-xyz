@@ -2,11 +2,11 @@ import { CheckIcon } from "@phosphor-icons/react/dist/csr/Check";
 import { ClockIcon } from "@phosphor-icons/react/dist/csr/Clock";
 import { WarningIcon } from "@phosphor-icons/react/dist/csr/Warning";
 import * as stylex from "@stylexjs/stylex";
-import type { StyleXStyles } from "@stylexjs/stylex";
 import { createContext, type ComponentProps, createElement, useContext, useId } from "react";
 import { Badge, Loader, Progress as ProgressPrimitive } from "@/components";
 import type { BadgeHue } from "@/components";
 import { tokens } from "@/theme/tokens.stylex";
+import { mergeStyle, type BaseStyleProps } from "@/styles/props/base";
 import { attrJoin } from "@/utils/attr-join";
 
 export type AsyncJobStatus = "queued" | "running" | "complete" | "error";
@@ -21,10 +21,7 @@ type AsyncJobProgressContextValue = {
 
 const AsyncJobProgressContext = createContext<AsyncJobProgressContextValue | null>(null);
 
-type StyledProps<T> = Omit<T, "style"> & {
-	/** StyleX overrides, applied after the component's own styles. */
-	style?: StyleXStyles;
-};
+type StyledProps<T> = Omit<T, "style" | "xstyle"> & BaseStyleProps;
 
 export type AsyncJobProgressRootProps = StyledProps<ComponentProps<"section">> & {
 	status: AsyncJobStatus;
@@ -51,57 +48,57 @@ const statusPresentation = {
 	error: { badgeLabel: "Failed", hue: "error" },
 } satisfies Record<AsyncJobStatus, { badgeLabel: string; hue: BadgeHue }>;
 
-export function Root({ status, value, valueText, className, style, ...props }: AsyncJobProgressRootProps) {
+export function Root({ status, value, valueText, className, style, xstyle, ...props }: AsyncJobProgressRootProps) {
 	const titleId = useId();
 	const progressValue = getProgressValue(status, value);
-	const sx = stylex.props(parts.root, style);
+	const sx = stylex.props(parts.root, xstyle);
 
 	return (
 		<AsyncJobProgressContext.Provider value={{ status, titleId, value: progressValue, valueText }}>
-			<section className={attrJoin(sx.className, className)} style={sx.style} {...props} />
+			<section className={attrJoin(sx.className, className)} style={mergeStyle(sx.style, style)} {...props} />
 		</AsyncJobProgressContext.Provider>
 	);
 }
 
-export function Header({ className, style, ...props }: AsyncJobProgressHeaderProps) {
-	const sx = stylex.props(parts.header, style);
-	return <div className={attrJoin(sx.className, className)} style={sx.style} {...props} />;
+export function Header({ className, style, xstyle, ...props }: AsyncJobProgressHeaderProps) {
+	const sx = stylex.props(parts.header, xstyle);
+	return <div className={attrJoin(sx.className, className)} style={mergeStyle(sx.style, style)} {...props} />;
 }
 
-export function Heading({ className, style, ...props }: AsyncJobProgressHeadingProps) {
-	const sx = stylex.props(parts.heading, style);
-	return <div className={attrJoin(sx.className, className)} style={sx.style} {...props} />;
+export function Heading({ className, style, xstyle, ...props }: AsyncJobProgressHeadingProps) {
+	const sx = stylex.props(parts.heading, xstyle);
+	return <div className={attrJoin(sx.className, className)} style={mergeStyle(sx.style, style)} {...props} />;
 }
 
-export function Title({ level = 3, id, className, style, ...props }: AsyncJobProgressTitleProps) {
+export function Title({ level = 3, id, className, style, xstyle, ...props }: AsyncJobProgressTitleProps) {
 	const context = useAsyncJobProgressContext("Title");
-	const sx = stylex.props(parts.title, style);
+	const sx = stylex.props(parts.title, xstyle);
 
 	return createElement(`h${level}`, {
 		...props,
 		id: id ?? context.titleId,
 		className: attrJoin(sx.className, className),
-		style: sx.style,
+		style: mergeStyle(sx.style, style),
 	});
 }
 
-export function Description({ className, style, ...props }: AsyncJobProgressDescriptionProps) {
-	const sx = stylex.props(parts.description, style);
-	return <p className={attrJoin(sx.className, className)} style={sx.style} {...props} />;
+export function Description({ className, style, xstyle, ...props }: AsyncJobProgressDescriptionProps) {
+	const sx = stylex.props(parts.description, xstyle);
+	return <p className={attrJoin(sx.className, className)} style={mergeStyle(sx.style, style)} {...props} />;
 }
 
-export function Status({ className, style, ...props }: AsyncJobProgressStatusProps) {
+export function Status({ className, style, xstyle, ...props }: AsyncJobProgressStatusProps) {
 	const { status } = useAsyncJobProgressContext("Status");
 	const presentation = statusPresentation[status];
 	const statusIcon = renderStatusIcon(status);
-	const sx = stylex.props(parts.status, style);
+	const sx = stylex.props(parts.status, xstyle);
 
 	return (
 		<span
 			role="status"
 			aria-atomic="true"
 			className={attrJoin(sx.className, className)}
-			style={sx.style}
+			style={mergeStyle(sx.style, style)}
 			{...props}>
 			<Badge hue={presentation.hue} size="sm" startSlot={statusIcon}>
 				{presentation.badgeLabel}
@@ -116,7 +113,7 @@ export function Progress(props: AsyncJobProgressProgressProps) {
 
 	return (
 		<ProgressPrimitive.Root aria-labelledby={titleId} aria-valuetext={ariaValueText} value={value} {...props}>
-			<ProgressPrimitive.Value style={parts.progressValue}>
+			<ProgressPrimitive.Value {...stylex.props(parts.progressValue)}>
 				{(formattedValue, currentValue) =>
 					valueText ??
 					(status === "queued"
@@ -129,15 +126,15 @@ export function Progress(props: AsyncJobProgressProgressProps) {
 				}
 			</ProgressPrimitive.Value>
 			<ProgressPrimitive.Track>
-				<ProgressPrimitive.Indicator style={indicatorStatus[status]} />
+				<ProgressPrimitive.Indicator {...stylex.props(indicatorStatus[status])} />
 			</ProgressPrimitive.Track>
 		</ProgressPrimitive.Root>
 	);
 }
 
-export function Actions({ className, style, ...props }: AsyncJobProgressActionsProps) {
-	const sx = stylex.props(parts.actions, style);
-	return <div className={attrJoin(sx.className, className)} style={sx.style} {...props} />;
+export function Actions({ className, style, xstyle, ...props }: AsyncJobProgressActionsProps) {
+	const sx = stylex.props(parts.actions, xstyle);
+	return <div className={attrJoin(sx.className, className)} style={mergeStyle(sx.style, style)} {...props} />;
 }
 
 function useAsyncJobProgressContext(part: string) {

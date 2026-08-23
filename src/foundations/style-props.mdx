@@ -1,0 +1,155 @@
+import { Meta } from "@storybook/addon-docs/blocks";
+
+<Meta title="Design system/Style props" />
+
+# Style props
+
+The style contract follows [ADR 0011](../../docs/adr/0011-layout-primitives-common-margins-and-stylex-overrides.md): broad layout is an explicit primitive choice, common margins belong to eligible normal-flow component roots, and one-off StyleX composition goes through `xstyle`.
+
+## Three surfaces
+
+| Surface | What it exposes | Use it for |
+| --- | --- | --- |
+| `Box`, `Stack`, `Grid` | Token-aware display, spacing, sizing, position, child layout, surfaces, typography, and flow as appropriate | Page and component composition where the caller owns layout |
+| Eligible semantic root | Scalar `m`, `mx`, `my`, `mt`, `mb`, `ms`, `me` plus `xstyle`, native `style`, and `className` | Parent-owned external spacing around a stable normal-flow node |
+| Positioned/controller surface | Component or Base UI geometry props; no common margins by default | Dialogs, portals, popups, positioners, collision-managed surfaces, and controller roots |
+
+Not every component receives margins. An eligible compound root does not confer them on its parts. `Card.Root` has margins, for example, while `Card.Header`, `Card.Content`, `Card.Footer`, `Card.Title`, and `Card.Description` do not.
+
+## Common margins
+
+Margin props are logical and scalar:
+
+| Prop | Logical edges |
+| --- | --- |
+| `m` | all |
+| `mx` | inline start and end |
+| `my` | block start and end |
+| `mt`, `mb` | block start, block end |
+| `ms`, `me` | inline start, inline end |
+
+Edge precedence is `side ?? axis ?? all`. Every spacing prop uses the same `SpaceValue`: the explicit steps `0, 0.5, 1, 1.5, 2, 3, 3.5, 4, 5, 6, 7, 8, 9, 10, 12, 16`, their negative forms except negative zero, or a CSS string such as `"auto"`, `"1rem"`, `"var(--local-gap)"`, or `"calc(...)"`. The resolver is uniform; property-specific validity belongs to CSS, which ignores invalid declarations.
+
+```tsx
+<Button mt={3} mx={2}>Save changes</Button>
+<Badge ms="auto">Current</Badge>
+<Text mb="calc(1rem + 1vw)">Fluid spacing</Text>
+<Text mb={4}>Account details</Text>
+```
+
+Numeric values resolve through the existing independently themeable step variables. A private build-time unit calculates their default values; it is not a runtime theme contract.
+
+```tsx
+// m={4} consumes tokens["--space-4"] rather than a literal rem value.
+<Button m={4}>Token-derived margin</Button>
+```
+
+A theme can override one existing step for a subtree, and the matching numeric margin follows it:
+
+```tsx
+const spacious = stylex.createTheme(tokens, {
+  "--space-4": "2rem",
+});
+
+<div {...stylex.props(spacious)}>
+  <Button m={4}>Uses 2rem margins here</Button>
+</div>
+```
+
+Field components apply margins to the wrapper containing the label, control, description, and error—not to the input or trigger itself.
+
+## Component-owned internals
+
+Padding, dimensions, gaps, and optical alignment inside a semantic component stay controlled by its own API. `Card` is the canonical example: `size` owns its internal padding, while the root's margins remain caller-owned.
+
+```tsx
+<Card.Root size="lg" mt={4}>
+  <Card.Header>
+    <Card.Title>Billing</Card.Title>
+  </Card.Header>
+  <Card.Content>Card padding comes from size="lg".</Card.Content>
+</Card.Root>
+```
+
+When a composition needs broad layout vocabulary, use `Box`, `Stack`, or `Grid` instead of growing the semantic component into a partial Box.
+
+```tsx
+<Stack gap={4} p={4}>
+  <Grid columns={12} gap={3}>
+    <Box columnSpan={8} bg="surface" radius="md" />
+    <Box columnSpan={4} />
+  </Grid>
+</Stack>
+```
+
+## StyleX overrides
+
+`xstyle?: StyleXStyles` accepts styles from both `stylex.create` and `@stylexjs/atoms`. They are the same component contract, so arrays, conditionals, and ternaries compose directly.
+
+```tsx
+import x from "@stylexjs/atoms";
+import * as stylex from "@stylexjs/stylex";
+
+const styles = stylex.create({
+  submit: { marginBlockStart: tokens["--space-2"] },
+});
+
+<Button
+  xstyle={[
+    styles.submit,
+    x.width["100%"],
+    submitting && x.opacity["0.5"],
+  ]}
+>
+  Sign in
+</Button>
+```
+
+Use static Atoms for compact one-off declarations. Use `stylex.create` for named, responsive, selector-based, or shared styles. Do not add an Atom-only component prop or call dynamic Atoms when a static Atom or created style expresses the value.
+
+The precedence contract is:
+
+```text
+component base / variant / state
+  < named margin props
+  < xstyle
+  < native inline style
+```
+
+`className` remains available for plain CSS and third-party interoperability, but class order is not a deterministic StyleX override mechanism.
+
+## Responsive composition
+
+Named margins do not accept responsive objects. Keep every breakpoint value for one property in a predeclared created style and pass it through `xstyle`.
+
+```tsx
+const styles = stylex.create({
+  feature: {
+    gridColumn: {
+      default: "span 12 / span 12",
+      [breakpoints.md]: "span 6 / span 6",
+    },
+  },
+});
+
+<Grid columns={12}>
+  <Card.Root xstyle={styles.feature}>Responsive span</Card.Root>
+</Grid>
+```
+
+Prefer fluid flex/grid behavior when it is sufficient. Promote a repeated responsive set into a named recipe or component variant rather than creating a runtime responsive resolver.
+
+## Positioned surfaces
+
+Dialogs and popups do not need normal-flow margin overrides. Their viewport, positioner, offset, alignment, and collision behavior already own geometry. Configure that owner directly:
+
+```tsx
+<Popover.Root>
+  <Popover.Trigger render={<Button>Details</Button>} />
+  <Popover.Popup positionerProps={{ sideOffset: 8 }}>
+    Positioned by Base UI, not by margins.
+  </Popover.Popup>
+</Popover.Root>
+```
+
+For an absolutely positioned Badge or another genuine one-off, use a predeclared `xstyle` set. A generic placement prop is intentionally outside the contract.

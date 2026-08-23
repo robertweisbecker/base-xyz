@@ -1,73 +1,67 @@
 import { ScrollArea as BaseScrollArea } from "@base-ui/react/scroll-area";
 import * as stylex from "@stylexjs/stylex";
-import type { StyleXStyles } from "@stylexjs/stylex";
 import type { ReactNode, Ref } from "react";
+import { mergeStyle, type BaseStyleProps } from "@/styles/props/base";
+import { extractMarginProps, type MarginProps } from "@/styles/props/spacing.stylex";
 import { tokens } from "@/theme/tokens.stylex";
 import { attrJoin } from "@/utils/attr-join";
 
-export type ScrollAreaProps = Omit<BaseScrollArea.Root.Props, "children" | "className" | "style"> & {
-	children: ReactNode;
-	label?: string;
-	className?: string;
-	/** StyleX overrides, applied after the component's own styles. */
-	style?: StyleXStyles;
-	viewportClassName?: string;
-	viewportRef?: Ref<HTMLDivElement>;
-	/** StyleX overrides, applied after the component's own styles. */
-	viewportStyle?: StyleXStyles;
-	/** Removes the viewport edge fade mask. @default false */
-	disableFade?: boolean;
-	contentClassName?: string;
-	/** StyleX overrides, applied after the component's own styles. */
-	contentStyle?: StyleXStyles;
-	scrollbarClassName?: string;
-	/** StyleX overrides, applied after the component's own styles. */
-	scrollbarStyle?: StyleXStyles;
-	orientation?: "vertical" | "horizontal" | "both";
-	/** Controls when the scrollbar is visible. @default "hover" */
-	showScrollbar?: "always" | "scroll" | "hover";
-	size?: "fill" | "content";
-};
+export type ScrollAreaProps = Omit<
+	BaseScrollArea.Root.Props,
+	"children" | "className" | "style" | "xstyle" | keyof MarginProps
+> &
+	MarginProps &
+	BaseStyleProps & {
+		children: ReactNode;
+		label?: string;
+		className?: string;
+		viewportRef?: Ref<HTMLDivElement>;
+		/** Removes the viewport edge fade mask. @default false */
+		disableFade?: boolean;
+		orientation?: "vertical" | "horizontal" | "both";
+		/** Controls when the scrollbar is visible. @default "hover" */
+		showScrollbar?: "always" | "scroll" | "hover";
+		size?: "fill" | "content";
+	};
 
 export function ScrollArea({
 	children,
 	label,
 	className,
 	style,
-	viewportClassName,
+	xstyle,
 	viewportRef,
-	viewportStyle,
 	disableFade = false,
-	contentClassName,
-	contentStyle,
-	scrollbarClassName,
-	scrollbarStyle,
 	orientation = "vertical",
 	showScrollbar = "hover",
 	size = "fill",
 	...props
 }: ScrollAreaProps) {
-	const rootSx = stylex.props(parts.root, sizeVariants[size], style);
-	const viewportSx = stylex.props(parts.viewport, !disableFade && parts.fade, viewportStyle);
-	const contentSx = stylex.props(parts.content, contentStyle);
+	const { marginStyles, rest } = extractMarginProps(props);
+	const rootSx = stylex.props(
+		parts.root,
+		sizeVariants[size],
+		marginStyles,
+		xstyle,
+	);
+	const viewportSx = stylex.props(parts.viewport, !disableFade && parts.fade);
+	const contentSx = stylex.props(parts.content);
 	const verticalScrollbarSx = stylex.props(
 		parts.scrollbar,
 		scrollbarVisibilities[showScrollbar],
 		scrollbarOrientations.vertical,
-		scrollbarStyle,
 	);
 	const horizontalScrollbarSx = stylex.props(
 		parts.scrollbar,
 		scrollbarVisibilities[showScrollbar],
 		scrollbarOrientations.horizontal,
-		scrollbarStyle,
 	);
 
 	return (
 		<BaseScrollArea.Root
 			className={attrJoin(rootSx.className, className)}
-			style={rootSx.style}
-			{...props}>
+			style={mergeStyle(rootSx.style, style)}
+			{...rest}>
 			<BaseScrollArea.Viewport
 				ref={viewportRef}
 				aria-label={label}
@@ -76,9 +70,9 @@ export function ScrollArea({
 					overflowX: orientation !== "vertical" && state.hasOverflowX ? "scroll" : "hidden",
 					overflowY: orientation !== "horizontal" && state.hasOverflowY ? "scroll" : "hidden",
 				})}
-				className={attrJoin(viewportSx.className, viewportClassName)}>
+				className={viewportSx.className}>
 				<BaseScrollArea.Content
-					className={attrJoin(contentSx.className, contentClassName) || undefined}
+					className={contentSx.className}
 					style={contentSx.style}>
 					{children}
 				</BaseScrollArea.Content>
@@ -86,7 +80,7 @@ export function ScrollArea({
 			{orientation !== "horizontal" ? (
 				<BaseScrollArea.Scrollbar
 					orientation="vertical"
-					className={attrJoin(verticalScrollbarSx.className, scrollbarClassName)}
+					className={verticalScrollbarSx.className}
 					style={verticalScrollbarSx.style}>
 					<BaseScrollArea.Thumb {...stylex.props(parts.thumb, thumbOrientationVariants.vertical)} />
 				</BaseScrollArea.Scrollbar>
@@ -94,7 +88,7 @@ export function ScrollArea({
 			{orientation !== "vertical" ? (
 				<BaseScrollArea.Scrollbar
 					orientation="horizontal"
-					className={attrJoin(horizontalScrollbarSx.className, scrollbarClassName)}
+					className={horizontalScrollbarSx.className}
 					style={horizontalScrollbarSx.style}>
 					<BaseScrollArea.Thumb {...stylex.props(parts.thumb, thumbOrientationVariants.horizontal)} />
 				</BaseScrollArea.Scrollbar>
@@ -110,9 +104,11 @@ const parts = stylex.create({
 		position: "relative",
 	},
 	viewport: {
-		overscrollBehaviorX: "contain",
+		minBlockSize: 0,
 		scrollbarWidth: "none",
 		height: "100%",
+		maxHeight: "inherit",
+		overscrollBehaviorX: "contain",
 		width: "100%",
 	},
 	content: {
@@ -123,18 +119,6 @@ const parts = stylex.create({
 		overscrollBehaviorX: "contain",
 	},
 	fade: {
-		// "--scroll-area-mask-x-end": {
-		// 	"[data-overflow-x-end]": tokens["--space-10"],
-		// },
-		// "--scroll-area-mask-x-start": {
-		// 	"[data-overflow-x-start]": tokens["--space-10"],
-		// },
-		// "--scroll-area-mask-y-end": {
-		// 	"[data-overflow-y-end]": tokens["--space-10"],
-		// },
-		// "--scroll-area-mask-y-start": {
-		// 	"[data-overflow-y-start]": tokens["--space-10"],
-		// },
 		maskComposite: "intersect",
 		maskImage:
 			"linear-gradient(to right, transparent 0, black min(40px, var(--scroll-area-overflow-x-start)), black calc(100% - min(40px, var(--scroll-area-overflow-x-end, 40px))), transparent 100%), linear-gradient(to bottom, transparent 0, black min(40px, var(--scroll-area-overflow-y-start)), black calc(100% - min(40px, var(--scroll-area-overflow-y-end, 40px))), transparent 100%)",

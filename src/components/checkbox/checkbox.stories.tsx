@@ -243,7 +243,7 @@ function NestedParentCheckboxes() {
 			}}
 			allValues={mainPermissions}>
 			<Checkbox parent indeterminate={managementIsPartial} label="User permissions" />
-			<Stack gap={3} style={storyParts.permissionChildren}>
+			<Stack gap={3} xstyle={storyParts.permissionChildren}>
 				<Checkbox value="view-dashboard" label="View dashboard" />
 				<Checkbox value="access-reports" label="Access reports" />
 				<CheckboxGroup
@@ -260,7 +260,7 @@ function NestedParentCheckboxes() {
 					}}
 					allValues={userManagementPermissions}>
 					<Checkbox parent label="Manage users" />
-					<Stack gap={3} style={storyParts.permissionChildren}>
+					<Stack gap={3} xstyle={storyParts.permissionChildren}>
 						<Checkbox value="create-user" label="Create user" />
 						<Checkbox value="edit-user" label="Edit user" />
 						<Checkbox value="delete-user" label="Delete user" />

@@ -1,19 +1,20 @@
 import { ArrowUpRightIcon } from "@phosphor-icons/react/dist/csr/ArrowUpRight";
 import * as stylex from "@stylexjs/stylex";
-import type { StyleXStyles } from "@stylexjs/stylex";
 import { type ComponentProps } from "react";
+import { mergeStyle, type BaseStyleProps } from "@/styles/props/base";
+import { extractMarginProps, type MarginProps } from "@/styles/props/spacing.stylex";
 import { tokens } from "@/theme/tokens.stylex";
 import { focusRing } from "@/styles/recipes/focus";
 import { attrJoin } from "@/utils/attr-join";
 
 export type LinkColor = keyof typeof linkColors;
 
-export type LinkProps = Omit<ComponentProps<"a">, "style"> & {
-	external?: boolean;
-	color?: LinkColor;
-	/** StyleX overrides, applied after the component's own styles. */
-	style?: StyleXStyles;
-};
+export type LinkProps = Omit<ComponentProps<"a">, "style" | keyof MarginProps> &
+	MarginProps &
+	BaseStyleProps & {
+		external?: boolean;
+		color?: LinkColor;
+	};
 
 export function Link({
 	ref,
@@ -24,18 +25,26 @@ export function Link({
 	style,
 	target,
 	color = "accent",
+	xstyle,
 	...props
 }: LinkProps) {
-	const sx = stylex.props(linkStyles.root, linkColors[color], focusRing.offset, style);
+	const { marginStyles, rest } = extractMarginProps(props);
+	const sx = stylex.props(
+		linkStyles.root,
+		linkColors[color],
+		focusRing.offset,
+		...marginStyles,
+		xstyle,
+	);
 
 	return (
 		<a
 			ref={ref}
 			className={attrJoin(sx.className, "xyz-link", className)}
-			style={sx.style}
+			style={mergeStyle(sx.style, style)}
 			rel={external ? mergeRel(rel, "noopener noreferrer") : rel}
 			target={external ? "_blank" : target}
-			{...props}>
+			{...rest}>
 			{children}
 			{external ? <ArrowUpRightIcon aria-hidden size="1em" weight="regular" /> : null}
 		</a>

@@ -1,1 +1,1 @@
-export type { FieldSize, FieldThemeProps } from "./field.types";
+export type { FieldSize } from "./field.types";

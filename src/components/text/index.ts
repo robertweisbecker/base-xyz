@@ -1,6 +1,6 @@
 export * from "./text";
 export type {
-	TextThemeProps,
+	TextStyleProps,
 	TypographyColor,
 	TypographyFontFamily,
 	TypographyFontWeight,

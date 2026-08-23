@@ -133,7 +133,7 @@ function ReactAriaAccessibleCard({
 			meta="Article with nested action"
 			endSlot={
 				<>
-					<Button size="sm" variant="secondary" onClick={onNestedAction} style={demoStyles.nestedAction}>
+					<Button size="sm" variant="secondary" onClick={onNestedAction} xstyle={demoStyles.nestedAction}>
 						Count {count}
 					</Button>
 					<DemoHandle {...handleProps} ref={buttonRef} label={`Move ${TRANSFER_ITEM.label}`} />

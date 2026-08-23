@@ -1,18 +1,15 @@
 import { useRender } from "@base-ui/react/use-render";
 import * as stylex from "@stylexjs/stylex";
-import type { StyleXStyles } from "@stylexjs/stylex";
 import { createContext, useContext, useMemo, useRef, useState, type ComponentProps, type ReactNode } from "react";
 import { IconButton, type IconButtonProps } from "@/components/button/button";
 import { NavListPresentationProvider } from "@/components/nav-list/nav-list";
 import { ScrollArea } from "@/components/scroll-area/scroll-area";
 import { typescaleStyles, textStyles, fontWeightStyles } from "@/components/text/text.stylex";
 import { tokens } from "@/theme/tokens.stylex";
+import { mergeStyle, type BaseStyleProps } from "@/styles/props/base";
 import { attrJoin } from "@/utils/attr-join";
 
-type StyledProps<T> = Omit<T, "className" | "style"> & {
-	className?: string;
-	style?: StyleXStyles;
-};
+type StyledProps<T> = Omit<T, "className" | "style" | "xstyle"> & BaseStyleProps & { className?: string };
 
 export type SidebarCollapseMode = "icon" | "offcanvas";
 export type SidebarSide = "start" | "end";
@@ -83,7 +80,7 @@ export function Root({
 	return <SidebarContext.Provider value={value}>{children}</SidebarContext.Provider>;
 }
 
-export function Panel({ ref, children, className, style, render, ...props }: SidebarPanelProps) {
+export function Panel({ ref, children, className, style, xstyle, render, ...props }: SidebarPanelProps) {
 	const sidebar = useSidebarContext("Sidebar.Panel");
 	const collapsed = sidebar.collapsed;
 	const offcanvasHidden = collapsed && sidebar.collapseMode === "offcanvas";
@@ -93,7 +90,7 @@ export function Panel({ ref, children, className, style, render, ...props }: Sid
 		sidebar.side === "end" && sidebarParts.panelEnd,
 		iconCollapsed && sidebarParts.panelIconCollapsed,
 		offcanvasHidden && sidebarParts.panelOffcanvasCollapsed,
-		style,
+		xstyle,
 	);
 	const element = useRender<{}, HTMLElement>({
 		defaultTagName: "aside",
@@ -107,7 +104,7 @@ export function Panel({ ref, children, className, style, render, ...props }: Sid
 			"data-side": sidebar.side,
 			inert: offcanvasHidden ? true : undefined,
 			className: attrJoin(sx.className, className),
-			style: sx.style,
+			style: mergeStyle(sx.style, style),
 			children: (
 				<div {...stylex.props(sidebarParts.rail, iconCollapsed && sidebarParts.railIconCollapsed)}>
 					<div
@@ -126,39 +123,39 @@ export function Panel({ ref, children, className, style, render, ...props }: Sid
 	return element;
 }
 
-export function Content({ className, style, children, ...props }: SidebarContentProps) {
+export function Content({ className, style, xstyle, children, ...props }: SidebarContentProps) {
 	const sidebar = useSidebarContext("Sidebar.Content");
 	const iconCollapsed = sidebar.collapsed && sidebar.collapseMode === "icon";
 	const scrollRef = useRef<HTMLDivElement>(null);
-	const sx = stylex.props(sidebarParts.contentArea, style);
+	const sx = stylex.props(sidebarParts.contentArea, xstyle);
 
 	return (
 		<ScrollArea
 			{...props}
 			disableFade
-			label="Sidebar content"
-			className={attrJoin(sx.className, className)}
-			style={sx.style}
-			contentStyle={sidebarParts.scrollContent}
-			viewportRef={scrollRef}
-			viewportStyle={sidebarParts.scrollViewport}>
-			<NavListPresentationProvider
-				presentation={iconCollapsed ? "icon" : "expanded"}
-				popoverSide={sidebar.side === "start" ? "right" : "left"}
-				scrollMode="external"
-				scrollRef={scrollRef}>
-				{children}
-			</NavListPresentationProvider>
+				label="Sidebar content"
+				className={attrJoin(sx.className, className)}
+				style={mergeStyle(sx.style, style)}
+				viewportRef={scrollRef}>
+				<div {...stylex.props(sidebarParts.scrollContent)}>
+					<NavListPresentationProvider
+						presentation={iconCollapsed ? "icon" : "expanded"}
+						popoverSide={sidebar.side === "start" ? "right" : "left"}
+						scrollMode="external"
+						scrollRef={scrollRef}>
+						{children}
+					</NavListPresentationProvider>
+				</div>
 		</ScrollArea>
 	);
 }
 
-export function Header({ startSlot, endSlot, children, className, style, ...props }: SidebarHeaderProps) {
+export function Header({ startSlot, endSlot, children, className, style, xstyle, ...props }: SidebarHeaderProps) {
 	const sidebar = useSidebarContext("Sidebar.Header");
 	const iconCollapsed = sidebar.collapsed && sidebar.collapseMode === "icon";
 	const hasStartSlot = startSlot !== null && startSlot !== undefined && startSlot !== false;
 	const hasEndSlot = endSlot !== null && endSlot !== undefined && endSlot !== false;
-	const sx = stylex.props(sidebarParts.header, iconCollapsed && sidebarParts.headerRailCollapsed, style);
+	const sx = stylex.props(sidebarParts.header, iconCollapsed && sidebarParts.headerRailCollapsed, xstyle);
 
 	return (
 		<div
@@ -166,7 +163,7 @@ export function Header({ startSlot, endSlot, children, className, style, ...prop
 			className={attrJoin(sx.className, className)}
 			data-collapsed={iconCollapsed ? "" : undefined}
 			data-side={sidebar.side}
-			style={sx.style}>
+			style={mergeStyle(sx.style, style)}>
 			{hasStartSlot ? <span {...stylex.props(sidebarParts.headerStartSlot)}>{startSlot}</span> : null}
 			<div {...stylex.props(sidebarParts.headerContent, iconCollapsed && sidebarParts.headerContentIconCollapsed)}>
 				{children}
@@ -176,28 +173,28 @@ export function Header({ startSlot, endSlot, children, className, style, ...prop
 	);
 }
 
-export function Footer({ className, style, ...props }: SidebarFooterProps) {
-	const sx = stylex.props(sidebarParts.footer, style);
+export function Footer({ className, style, xstyle, ...props }: SidebarFooterProps) {
+	const sx = stylex.props(sidebarParts.footer, xstyle);
 
-	return <div className={attrJoin(sx.className, className)} style={sx.style} {...props} />;
+	return <div className={attrJoin(sx.className, className)} style={mergeStyle(sx.style, style)} {...props} />;
 }
 
-export function Title({ className, style, ...props }: SidebarTitleProps) {
+export function Title({ className, style, xstyle, ...props }: SidebarTitleProps) {
 	const sx = stylex.props(
 		textStyles.body,
 		typescaleStyles["2"],
 		fontWeightStyles.medium,
 		sidebarParts.headerTitle,
-		style,
+		xstyle,
 	);
 
-	return <div className={attrJoin(sx.className, className)} style={sx.style} {...props} />;
+	return <div className={attrJoin(sx.className, className)} style={mergeStyle(sx.style, style)} {...props} />;
 }
 
-export function Description({ className, style, ...props }: SidebarDescriptionProps) {
-	const sx = stylex.props(textStyles.body, typescaleStyles["1"], sidebarParts.headerDescription, style);
+export function Description({ className, style, xstyle, ...props }: SidebarDescriptionProps) {
+	const sx = stylex.props(textStyles.body, typescaleStyles["1"], sidebarParts.headerDescription, xstyle);
 
-	return <div className={attrJoin(sx.className, className)} style={sx.style} {...props} />;
+	return <div className={attrJoin(sx.className, className)} style={mergeStyle(sx.style, style)} {...props} />;
 }
 
 export function Trigger({
@@ -206,7 +203,7 @@ export function Trigger({
 	variant = "ghost",
 	tooltip = false,
 	onClick,
-	style,
+	xstyle,
 	...props
 }: SidebarTriggerProps) {
 	const sidebar = useSidebarContext("Sidebar.Trigger");
@@ -225,7 +222,7 @@ export function Trigger({
 					sidebar.setCollapsed(!sidebar.collapsed);
 				}
 			}}
-			style={style}
+			xstyle={xstyle}
 		/>
 	);
 }
@@ -329,9 +326,6 @@ const sidebarParts = stylex.create({
 	contentIconCollapsed: {
 		paddingInline: tokens["--space-2"],
 		inlineSize: tokens["--size-sidebar-rail"],
-	},
-	scrollViewport: {
-		minBlockSize: 0,
 	},
 	scrollContent: {
 		gap: "1px",

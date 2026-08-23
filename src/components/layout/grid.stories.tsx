@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
+import x from "@stylexjs/atoms";
 import * as stylex from "@stylexjs/stylex";
 import { breakpoints } from "@/styles/constants.stylex";
 import { tokens } from "@/theme/tokens.stylex";
@@ -16,11 +17,14 @@ const meta = {
 		gap: { control: "select", options: [0, 1, 2, 3, 4, 5, 6, 8] },
 		justify: { control: "select", options: ["start", "center", "end", "stretch"] },
 	},
+	parameters: {
+		controls: { include: ["align", "columns", "flow", "gap", "justify"] },
+	},
 	render: (args) => (
 		<Grid {...args}>
-			<Box columnSpan={2} p={3} style={styles.item}>Spans two columns</Box>
-			<Box p={3} style={styles.item}>One column</Box>
-			<Box columnSpan="full" p={3} style={styles.item}>Full row</Box>
+			<Box columnSpan={2} p={3} xstyle={styles.item}>Spans two columns</Box>
+			<Box p={3} xstyle={styles.item}>One column</Box>
+			<Box columnSpan="full" p={3} xstyle={styles.item}>Full row</Box>
 		</Grid>
 	),
 } satisfies Meta<typeof Grid>;
@@ -35,10 +39,12 @@ export const ResponsiveSpanStyle: Story = {
 	parameters: { controls: { disable: true } },
 	render: (args) => (
 		<Grid {...args}>
-			<Card.Root style={styles.responsiveSpan}>
+			<Card.Root xstyle={styles.responsiveSpan}>
 				<Card.Content><Card.Title>Predeclared responsive span</Card.Title></Card.Content>
 			</Card.Root>
-			<Card.Root columnSpan={6}><Card.Content>Scalar six-column span</Card.Content></Card.Root>
+			<Card.Root xstyle={x.gridColumn["span 6 / span 6"]}>
+				<Card.Content>Atom six-column span</Card.Content>
+			</Card.Root>
 		</Grid>
 	),
 };

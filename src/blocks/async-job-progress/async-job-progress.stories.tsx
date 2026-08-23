@@ -39,7 +39,7 @@ function JobHeader({
 
 function Details({ label, children }: { label: string; children: React.ReactNode }) {
 	return (
-		<Collapsible.Root style={storyParts.disclosure}>
+		<Collapsible.Root xstyle={storyParts.disclosure}>
 			<Collapsible.Trigger size="sm" variant="link">
 				{label}
 				<Collapsible.Icon />

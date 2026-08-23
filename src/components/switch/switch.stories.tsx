@@ -46,7 +46,7 @@ const meta = {
 	},
 	decorators: [
 		(Story) => (
-			<Box style={styles.frame}>
+			<Box xstyle={styles.frame}>
 				<Story />
 			</Box>
 		),

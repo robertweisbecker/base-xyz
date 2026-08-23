@@ -13,7 +13,6 @@ import type {
 import { Dialog as BaseDialog } from "@base-ui/react/dialog";
 import { MagnifyingGlassIcon } from "@phosphor-icons/react/dist/csr/MagnifyingGlass";
 import * as stylex from "@stylexjs/stylex";
-import type { StyleXStyles } from "@stylexjs/stylex";
 import {
 	createContext,
 	useCallback,
@@ -38,12 +37,9 @@ import { VisuallyHidden } from "@/components/visually-hidden/visually-hidden";
 import { tokens } from "@/theme/tokens.stylex";
 import { SmileyMeltingIcon } from "@phosphor-icons/react";
 import { attrJoin } from "@/utils/attr-join";
+import { mergeStyle, type BaseStyleProps } from "@/styles/props/base";
 
-type StyledProps<T> = Omit<T, "className" | "style"> & {
-	className?: string;
-	/** StyleX overrides, applied after the component's own styles. */
-	style?: StyleXStyles;
-};
+type StyledProps<T> = Omit<T, "className" | "style" | "xstyle"> & BaseStyleProps & { className?: string };
 
 type CommandPaletteContextValue = {
 	closeOnSelect: boolean;
@@ -97,34 +93,31 @@ function unregisterShortcut(registration: ShortcutRegistration) {
 }
 
 function useCommandPaletteShortcut(shortcut: boolean, inline: boolean, toggle: () => void) {
-	const registrationRef = useRef<ShortcutRegistration | null>(null);
 	const toggleRef = useRef(toggle);
-
-	toggleRef.current = toggle;
-	if (registrationRef.current === null) {
-		registrationRef.current = {
-			enabled: shortcut && !inline,
-			invoke: () => toggleRef.current(),
-		};
-	} else {
-		registrationRef.current.enabled = shortcut && !inline;
-	}
+	const [registration] = useState<ShortcutRegistration>(() => ({
+		enabled: false,
+		invoke: () => toggleRef.current(),
+	}));
 
 	useEffect(() => {
-		const registration = registrationRef.current;
-		if (!registration) {
-			return;
-		}
+		toggleRef.current = toggle;
+	}, [toggle]);
 
+	useEffect(() => {
+		registration.enabled = shortcut && !inline;
+	}, [inline, registration, shortcut]);
+
+	useEffect(() => {
 		registerShortcut(registration);
 		return () => unregisterShortcut(registration);
-	}, []);
+	}, [registration]);
 }
 
 export type CommandPaletteRootProps<ItemValue> = Omit<
 	AutocompleteRootProps<ItemValue>,
 	"children" | "inline" | "keepHighlight" | "onOpenChange" | "open"
-> & {
+> &
+	BaseStyleProps & {
 	children: ReactNode;
 	className?: string;
 	closeOnSelect?: boolean;
@@ -135,8 +128,6 @@ export type CommandPaletteRootProps<ItemValue> = Omit<
 	open?: boolean;
 	shortcut?: boolean;
 	trigger?: ReactElement;
-	/** StyleX overrides for the palette panel, applied after the component's own styles. */
-	style?: StyleXStyles;
 };
 
 export type CommandPaletteTriggerProps = Omit<ButtonProps, "children"> & {
@@ -151,11 +142,7 @@ export type CommandPaletteInputProps = Omit<StyledProps<AutocompleteInputProps>,
 	startSlot?: ReactNode;
 };
 
-export type CommandPaletteListProps = StyledProps<AutocompleteListProps> & {
-	areaStyle?: StyleXStyles;
-	contentStyle?: StyleXStyles;
-	viewportStyle?: StyleXStyles;
-};
+export type CommandPaletteListProps = StyledProps<AutocompleteListProps>;
 
 export type CommandPaletteGroupProps = StyledProps<AutocompleteGroupProps>;
 export type CommandPaletteGroupLabelProps = StyledProps<AutocompleteGroupLabelProps>;
@@ -184,6 +171,7 @@ export function Root<ItemValue = unknown>({
 	open,
 	shortcut = false,
 	style,
+	xstyle,
 	trigger,
 	...props
 }: CommandPaletteRootProps<ItemValue>) {
@@ -208,7 +196,7 @@ export function Root<ItemValue = unknown>({
 		inline,
 		setOpen,
 	};
-	const panelSx = stylex.props(commandPaletteParts.panel, inline && commandPaletteParts.inlinePanel, style);
+	const panelSx = stylex.props(commandPaletteParts.panel, inline && commandPaletteParts.inlinePanel, xstyle);
 	// SAFETY: Base UI's grouped-items overload loses ItemValue through the rest spread; the root only forwards these props.
 	const rootProps = props as AutocompleteRootProps<unknown>;
 	const panel = (
@@ -223,7 +211,7 @@ export function Root<ItemValue = unknown>({
 					aria-label={label}
 					role={inline ? "group" : undefined}
 					className={attrJoin(panelSx.className, className)}
-					style={panelSx.style}>
+					style={mergeStyle(panelSx.style, style)}>
 					{children}
 				</div>
 			</CommandPaletteContext.Provider>
@@ -269,10 +257,11 @@ export function Input({
 	placeholder = "Search commands…",
 	startSlot = <MagnifyingGlassIcon weight="bold" aria-hidden />,
 	style,
+	xstyle,
 	...props
 }: CommandPaletteInputProps) {
 	const context = useCommandPaletteContext();
-	const inputGroupSx = stylex.props(commandPaletteParts.inputGroup, style);
+	const inputGroupSx = stylex.props(commandPaletteParts.inputGroup, xstyle);
 
 	function handleKeyDown(event: KeyboardEvent<HTMLInputElement>) {
 		onKeyDown?.(event);
@@ -287,7 +276,7 @@ export function Input({
 	return (
 		<Autocomplete.InputGroup
 			className={attrJoin(inputGroupSx.className, className)}
-			style={inputGroupSx.style}>
+			style={mergeStyle(inputGroupSx.style, style)}>
 			{startSlot ? (
 				<span aria-hidden {...stylex.props(commandPaletteParts.inputSlot)}>
 					{startSlot}
@@ -317,49 +306,45 @@ export function List({
 	children,
 	className,
 	style,
-	areaStyle,
-	contentStyle,
-	viewportStyle,
+	xstyle,
 	...props
 }: CommandPaletteListProps) {
-	const sx = stylex.props(commandPaletteParts.list, style);
+	const sx = stylex.props(commandPaletteParts.list, commandPaletteParts.listContent, xstyle);
 
 	return (
 		<ScrollArea
 			label="Command results"
 			disableFade
 			showScrollbar="scroll"
-			style={[commandPaletteParts.listArea, areaStyle]}
-			viewportStyle={[commandPaletteParts.listViewport, viewportStyle]}
-			contentStyle={[commandPaletteParts.listContent, contentStyle]}>
-			<Autocomplete.List className={attrJoin(sx.className, className)} style={sx.style} {...props}>
+			{...stylex.props(commandPaletteParts.listArea)}>
+			<Autocomplete.List className={attrJoin(sx.className, className)} style={mergeStyle(sx.style, style)} {...props}>
 				{children}
 			</Autocomplete.List>
 		</ScrollArea>
 	);
 }
 
-export function Group({ ref, className, style, ...props }: CommandPaletteGroupProps) {
-	const sx = stylex.props(commandPaletteParts.group, style);
+export function Group({ ref, className, style, xstyle, ...props }: CommandPaletteGroupProps) {
+	const sx = stylex.props(commandPaletteParts.group, xstyle);
 
 	return (
 		<Autocomplete.Group
 			ref={ref}
 			className={attrJoin(sx.className, className)}
-			style={sx.style}
+			style={mergeStyle(sx.style, style)}
 			{...props}
 		/>
 	);
 }
 
-export function GroupLabel({ ref, className, style, ...props }: CommandPaletteGroupLabelProps) {
-	const sx = stylex.props(commandPaletteParts.groupLabel, style);
+export function GroupLabel({ ref, className, style, xstyle, ...props }: CommandPaletteGroupLabelProps) {
+	const sx = stylex.props(commandPaletteParts.groupLabel, xstyle);
 
 	return (
 		<Autocomplete.GroupLabel
 			ref={ref}
 			className={attrJoin(sx.className, className)}
-			style={sx.style}
+			style={mergeStyle(sx.style, style)}
 			{...props}
 		/>
 	);
@@ -380,6 +365,7 @@ export function Item({
 	shortcut,
 	startSlot,
 	style,
+	xstyle,
 	...props
 }: CommandPaletteItemProps) {
 	const context = useCommandPaletteContext();
@@ -389,14 +375,14 @@ export function Item({
 		menuItemSizeStyles.md,
 		menuItemVariantStyles.default,
 		commandPaletteParts.item,
-		style,
+		xstyle,
 	);
 
 	return (
 		<Autocomplete.Item
 			ref={ref}
 			className={attrJoin(sx.className, className)}
-			style={sx.style}
+			style={mergeStyle(sx.style, style)}
 			onClick={(event) => {
 				onClick?.(event);
 				if (!event.defaultPrevented && shouldCloseOnSelect) {
@@ -431,29 +417,30 @@ export function Empty({
 	),
 	className,
 	style,
+	xstyle,
 	...props
 }: CommandPaletteEmptyProps) {
-	const sx = stylex.props(commandPaletteParts.empty, style);
+	const sx = stylex.props(commandPaletteParts.empty, xstyle);
 
 	return (
 		<Autocomplete.Empty
 			ref={ref}
 			className={attrJoin(sx.className, className)}
-			style={sx.style}
+			style={mergeStyle(sx.style, style)}
 			{...props}>
 			{children}
 		</Autocomplete.Empty>
 	);
 }
 
-export function Loading({ ref, children = "Loading…", className, style, ...props }: CommandPaletteLoadingProps) {
-	const sx = stylex.props(commandPaletteParts.loading, style);
+export function Loading({ ref, children = "Loading…", className, style, xstyle, ...props }: CommandPaletteLoadingProps) {
+	const sx = stylex.props(commandPaletteParts.loading, xstyle);
 
 	return (
 		<Autocomplete.Status
 			ref={ref}
 			className={attrJoin(sx.className, className)}
-			style={sx.style}
+			style={mergeStyle(sx.style, style)}
 			{...props}>
 			<Loader aria-hidden />
 			{children}
@@ -461,10 +448,10 @@ export function Loading({ ref, children = "Loading…", className, style, ...pro
 	);
 }
 
-export function Footer({ className, style, ...props }: CommandPaletteFooterProps) {
-	const sx = stylex.props(commandPaletteParts.footer, style);
+export function Footer({ className, style, xstyle, ...props }: CommandPaletteFooterProps) {
+	const sx = stylex.props(commandPaletteParts.footer, xstyle);
 
-	return <div className={attrJoin(sx.className, className)} style={sx.style} {...props} />;
+	return <div className={attrJoin(sx.className, className)} style={mergeStyle(sx.style, style)} {...props} />;
 }
 
 function useCommandPaletteContext() {
@@ -552,9 +539,6 @@ const commandPaletteParts = stylex.create({
 	},
 	listArea: {
 		maxHeight: "min(420px, 52dvh)",
-	},
-	listViewport: {
-		maxHeight: "inherit",
 	},
 	listContent: {
 		padding: tokens["--space-1"],

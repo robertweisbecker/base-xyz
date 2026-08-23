@@ -1,6 +1,7 @@
 import { ArrowRightIcon } from "@phosphor-icons/react/dist/csr/ArrowRight";
 import { PlusIcon } from "@phosphor-icons/react/dist/csr/Plus";
 import type { Meta, StoryObj } from "@storybook/react-vite";
+import x from "@stylexjs/atoms";
 import * as stylex from "@stylexjs/stylex";
 import { useState } from "react";
 import { Stack } from "@/components/layout/layout";
@@ -65,11 +66,8 @@ type Story = StoryObj<typeof meta>;
 export const Playground: Story = {};
 
 export const FullWidth: Story = {
-	args: {
-		children: "Continue",
-		width: "full",
-	},
 	parameters: { controls: { disable: true } },
+	render: () => <Button xstyle={x.width["100%"]}>Continue</Button>,
 };
 
 const sizes = ["xs", "sm", "md", "lg"] as const;

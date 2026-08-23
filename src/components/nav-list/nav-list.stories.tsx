@@ -48,7 +48,7 @@ const icons = {
 
 export const Playground: Story = {
 	render: ({ size, current, disabled, _icon }) => (
-		<Box height="28rem" p={3} radius="lg" style={storyParts.frame} width="18rem">
+		<Box height="28rem" p={3} radius="lg" xstyle={storyParts.frame} width="18rem">
 			<NavList.Root aria-label="Project navigation" size={size}>
 				<NavList.Section label="Project">
 					<NavList.Item
@@ -79,7 +79,7 @@ export const Playground: Story = {
 export const Examples: Story = {
 	parameters: { controls: { disable: true } },
 	render: () => (
-		<Box p={3} radius="lg" style={storyParts.frame} width="18rem">
+		<Box p={3} radius="lg" xstyle={storyParts.frame} width="18rem">
 			<NavList.Root aria-label="Workspace navigation">
 				<NavList.Section label="Main">
 					<NavList.Item label="Overview" href="#overview" icon={<HouseIcon weight="duotone" />} current="page" />
@@ -107,7 +107,7 @@ export const Examples: Story = {
 export const Collapsible: Story = {
 	parameters: { controls: { disable: true } },
 	render: () => (
-		<Box p={3} radius="lg" style={storyParts.frame} width="18rem">
+		<Box p={3} radius="lg" xstyle={storyParts.frame} width="18rem">
 			<NavList.Root aria-label="Build navigation">
 				<NavList.Section label="Build">
 					<NavList.CollapsibleGroup defaultOpen>
@@ -155,7 +155,7 @@ export const CollapsedChildPopovers: Story = {
 	name: "Collapsed child popovers",
 	parameters: { controls: { disable: true } },
 	render: () => (
-		<Box height="24rem" p={3} radius="lg" style={[storyParts.frame, storyParts.sidebarRail]}>
+		<Box height="24rem" p={3} radius="lg" xstyle={[storyParts.frame, storyParts.sidebarRail]}>
 			<NavList.NavListPresentationProvider presentation="icon">
 				<NavList.Root aria-label="Collapsed project navigation">
 					<NavList.Section label="Project" visuallyHideLabel>
@@ -179,7 +179,7 @@ function DrilldownExample() {
 	const [value, setValue] = useState("account");
 
 	return (
-		<Box height="28rem" p={3} radius="lg" style={storyParts.frame} width="18rem">
+		<Box height="28rem" p={3} radius="lg" xstyle={storyParts.frame} width="18rem">
 			<NavList.Root aria-label="Account navigation">
 				<NavList.Drilldown value={value} defaultValue="account" onValueChange={setValue}>
 					<NavList.DrilldownPanel value="account" label="Account navigation">

@@ -1,38 +1,94 @@
 # Style ownership
 
-StyleX modules are organized by how a value composes, not by how often a name
-appears.
+StyleX modules are organized by ownership and composition boundaries. The
+durable contract is [ADR 0011](../../docs/adr/0011-layout-primitives-common-margins-and-stylex-overrides.md).
 
-- `src/theme/tokens.stylex.ts` is the single source for themeable color, spacing, size,
-  radius, shadow, typography, and motion values.
-- `src/theme/theme-props.types.ts` owns public token-backed value and capability
-  contracts, and `theme-props.ts` owns their StyleX-independent key,
-  extraction, and composition logic. These domain helpers do not belong in a
-  generic `utils` directory.
-- Theme props are scalar. Keep responsive values for one CSS property together
-  in a predeclared StyleX style, or promote a repeated set to a named recipe.
-- `src/theme/theme-props-spacing.stylex.ts`, `src/theme/theme-props-layout.stylex.ts`, and
-  `src/theme/theme-props-surface.stylex.ts` bind those contracts to explicit StyleX
-  functions. Import the narrow binding directly so unused compiler families can
-  be removed from a consumer bundle.
-- `constants.stylex.ts` contains only fixed global selectors, environmental
-  media-query conditions, and layer order.
-  These compile inline rather than creating themeable CSS variables.
-- Component-owned `*.stylex.ts` files are canonical style APIs. Borrowers
-  import from the component they intentionally resemble: Select and Combobox
-  import Menu item styles, for example.
-- `recipes/*.ts` is reserved for ownerless interaction primitives with several
-  real consumers. Component geometry and one-off variants remain beside the
-  component.
-- Text owns the reusable type styles. Compose `textStyles`,
-  `typescaleStyles`, `fontFamilyStyles`, and `fontWeightStyles` instead of
-  hand-rolling font-size/line-height/letter-spacing triples.
-- `textColorStyles` only implements the `Text` and `Heading` color prop.
-  Other owners set colors with semantic tokens directly.
+- `src/theme/tokens.stylex.ts` is the stable interface for themeable color,
+  spacing, size, radius, shadow, typography, and motion values. A private
+  `SPACE_UNIT_REM` calculates the default spacing scale; every public
+  `--space-*` variable remains independently themeable.
+- `Box`, `Stack`, and `Grid` are the broad token-aware layout gateway. The maps
+  and resolvers in `src/styles/props/` for padding, gaps, sizing, position,
+  child layout, surfaces, typography, flex, and grid are implementation details
+  of that gateway.
+- `spacing.stylex.ts` also owns the small public scalar margin vocabulary and
+  `extractMarginProps`. An eligible normal-flow component root calls that
+  adapter once, places the returned margin styles immediately before `xstyle`,
+  and spreads only the returned remainder to its native or Base UI host.
+- Semantic components own their padding, dimensions, visual treatment, and
+  internal alignment through base styles and variants. Compound parts do not
+  inherit their root's common-margin contract.
+- `ScrollArea` exposes margins and the shared override channels only on its
+  outer root. Its viewport, content, and scrollbar do not expose separate style
+  props; consumers style content they own through a child or wrapper.
+- Controllers, portals, positioners, popups, and collision-managed surfaces do
+  not receive margins. Their geometry belongs to modal or Base UI positioning
+  props such as `sideOffset` and `alignOffset`.
+- `xstyle` accepts StyleX Atoms and `stylex.create` styles through the same
+  `StyleXStyles` contract. It is merged after named margins. Native `style` is
+  merged after StyleX-produced inline values; `className` remains an interop
+  hatch without a promised StyleX precedence relationship.
+- Stories use Atoms for compact one-off consumer adjustments. Components spread
+  the complete `stylex.props(...)` result when applying fixed internal StyleX to
+  another recipient; they use a nested `xstyle` only to forward or merge a
+  caller's public `xstyle`.
+- Responsive values stay together in a predeclared `stylex.create` style passed
+  through `xstyle`; named margin values remain scalar.
+- Do not add universal `data-component` or `data-slot` markers. Preserve only
+  component-specific `data-*` attributes with an owned behavior or selector.
+- `constants.stylex.ts` contains fixed global selectors, environmental media
+  conditions, and layer order. Component-owned `*.stylex.ts` modules and
+  `recipes/*.ts` retain the ownership boundaries described below.
 
-Import the shared `tokens` binding and StyleX constants directly by their named
-export. Do not re-export them through a barrel or import a `.stylex.ts` module
-as a namespace; the compiler needs to statically resolve the direct binding.
+Import token, constant, and style-map bindings directly from their owning
+module. There is intentionally no style-prop barrel.
+
+## Style-prop modules
+
+| Module | Contract | Ownership |
+| --- | --- | --- |
+| `spacing.stylex.ts` | `SpaceValue`, spacing prop groups, edge resolution, `extractMarginProps` | Common margins plus broad-gateway spacing |
+| `sizing.stylex.ts` | `SizingProps` and dimension resolvers | Broad gateway only |
+| `position.stylex.ts` | `PositionProps`, spacing-backed/CSS-value insets, open `zIndex` | Broad gateway only |
+| `child-layout.stylex.ts` | Self-alignment and flex/grid child claims | Broad gateway only |
+| `flex.stylex.ts` | Display and Stack flow | Broad gateway only |
+| `grid.stylex.ts` | Grid flow and spans | Broad gateway only |
+| `surface.stylex.ts` | Semantic background, color, radius, shadow, border | Broad gateway only |
+| `typography.stylex.ts` | Generic typography maps | Broad gateway; Text/Heading select only their semantic subset |
+| `base.ts` | `BaseStyleProps`, `mergeStyle` | Shared `style`/`xstyle` contract and native-style precedence |
+
+`SpaceStep` is an explicit finite numeric union. Numeric margin, padding, gap,
+and inset values map to stable spacing tokens; negative values subtract the
+corresponding token. All four spacing surfaces use `SpaceValue` and accept CSS
+strings directly. Property-specific validity belongs to CSS. Edge precedence
+is `side ?? axis ?? all`.
+
+### Eligible component pattern
+
+Reference implementations: `src/components/button/button.tsx` and the field
+wrapper in `src/components/text-field/text-field.tsx`.
+
+```tsx
+export type ButtonProps = Omit<BaseButton.Props, "className" | "style" | keyof MarginProps> &
+	MarginProps &
+	BaseStyleProps;
+
+export function Button({ className, style, xstyle, ...props }: ButtonProps) {
+	const { marginStyles, rest } = extractMarginProps(props);
+	const sx = stylex.props(buttonParts.root, marginStyles, xstyle);
+
+	return (
+		<BaseButton
+			className={attrJoin(sx.className, className)}
+			style={mergeStyle(sx.style, style)}
+			{...rest}
+		/>
+	);
+}
+```
+
+`Box`, `Stack`, and `Grid` use their own explicit private splitter for the broad
+prop surface. Do not recreate a repository-wide key registry or DOM denylist.
 
 ### Naming
 
@@ -99,13 +155,13 @@ Popup composites render their children directly. Opt into Base UI's content
 swapping and detached-trigger movement only where they are actually needed:
 
 ```tsx
-<Popover.Popup positionerProps={{ style: popupMotionStyles.movingPositioner }} style={popupMotionStyles.movingPopup}>
+<Popover.Popup positionerProps={{ xstyle: popupMotionStyles.movingPositioner }} xstyle={popupMotionStyles.movingPopup}>
 	<Popover.Viewport>{content}</Popover.Viewport>
 </Popover.Popup>
 ```
 
-Compose as `stylex.props(<component parts>, <shared behavior>, style)` so the
-caller's `style` always comes last.
+Compose as `stylex.props(<component parts>, <shared behavior>, xstyle)` so the
+caller's `xstyle` always comes last.
 
 ### List item composition
 
@@ -233,20 +289,26 @@ const styles = stylex.create({
 
 ## Customizing components
 
-Design-system components accept a typed `style?: StyleXStyles` prop and apply
-it as the last argument to `stylex.props`, so caller styles win
-deterministically. Prefer it over `className` for styling; `className` remains
-only for third-party interop.
+Styled component roots accept native `style?: CSSProperties` and StyleX
+`xstyle?: StyleXStyles`. `xstyle` is merged last inside `stylex.props`, so
+caller StyleX wins over component styles and named margins. Native `style` is
+merged after generated inline values. `className` remains only for third-party
+interop; it cannot carry StyleX overrides reliably.
 
 ```tsx
 import * as stylex from "@stylexjs/stylex";
+import x from "@stylexjs/atoms";
 import { Button } from "@/components";
 
 const styles = stylex.create({
 	wide: { paddingInline: "2rem" },
 });
 
-<Button style={styles.wide}>Save</Button>;
+<Button
+	xstyle={[styles.wide, x.width["100%"], pending && x.opacity["0.5"]]}
+>
+	Save
+</Button>;
 ```
 
 ### Component markers

@@ -1,10 +1,15 @@
 # Design-system glossary
 
-- **Theme prop** — A typed, token-backed scalar layout prop compiled through StyleX, such as `gap={3}`, `ms="auto"`, or `width="full"`. Other libraries often call this pattern a system prop or style prop.
-- **Style prop** — The unrestricted `style?: StyleXStyles` escape hatch. It is composed last and therefore wins over component defaults, variants, and theme props.
-- **Layout primitive** — `Box`, `Stack`, or `Grid`; a product-agnostic composition root with the broadest theme-prop contract. Only these primitives expose shared `color` and `bg` props.
-- **Responsive style set** — A predeclared StyleX style that keeps every breakpoint value for a CSS property together. Pass it through `style`; theme props themselves remain scalar.
-- **Field wrapper** — The public root around a label, control, description, and error. Layout theme props style this wrapper only; they never alter the inner control chrome.
+- **Layout primitive / broad layout gateway** — `Box`, `Stack`, or `Grid`; an explicit composition root with the token-aware display, spacing, sizing, position, child-layout, surface, and typography vocabulary appropriate to that primitive.
+- **Normal-flow component root** — One stable public HTML node that normally participates in caller-owned document flow. Eligible roots may expose the common scalar margin props `m`, `mx`, `my`, `mt`, `mb`, `ms`, and `me`.
+- **Positioned surface** — A modal, portal, positioner, popup, toast region, or anchored/collision-managed surface whose geometry belongs to its component or Base UI offset/alignment props. It does not receive common margins by default.
+- **Internal layout** — Arrangement of a component's own contents: padding, gap, dimensions, and flow. Semantic components own this through base styles, size props, and variants rather than generic style props.
+- **Field wrapper** — The public root around a label, control, description, and error. Common margins style this wrapper only; they never alter the inner control chrome.
+- **Build-time spacing unit** — The private `SPACE_UNIT_REM` constant used to calculate unchanged default spacing values. Public `--space-*` variables remain stable and independently themeable.
+- **Scalar spacing contract** — `SpaceValue` is shared by margin, padding, gap, and inset props. Numeric values resolve through the explicit spacing scale, while CSS strings pass through; named props do not accept responsive objects.
+- **xstyle** — The StyleX override hatch. It accepts both StyleX Atoms and `stylex.create` styles, including arrays and conditional entries, and is merged after component styles and named margins.
+- **style** — Native inline style (`style?: CSSProperties`). It is merged after StyleX-produced inline values and therefore wins for the same property.
+- **Responsive StyleX set** — A predeclared `stylex.create` style that keeps every breakpoint value for a CSS property together and is passed through `xstyle`.
 - **Table** — A manually composed, presentation-only compound component for semantic tabular structure and its canonical visual treatment. It owns no dataset-derived behavior such as filtering, sorting, visibility, or expansion.
 - **Data table** — A stateful, data-driven component that derives rows and columns from data and composes `Table` for presentation. It owns filtering, sorting, visibility, selection, expansion, and row actions.
 - **Action cell** — A compact table header or data cell reserved for a direct interactive control, such as a disclosure button or row-action menu trigger. Checkbox cells are specialized action cells that own the design-system Checkbox composition.

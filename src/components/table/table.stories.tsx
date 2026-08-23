@@ -122,7 +122,7 @@ export const Overflow: Story = {
 						<Table.Container>
 							<Table.Content
 								caption={<VisuallyHidden>Recent deployments with horizontal scrolling</VisuallyHidden>}
-								style={storyParts.wideTable}>
+								xstyle={storyParts.wideTable}>
 								<Table.Header>
 									<Table.Row>
 										<Table.HeaderCell>URL</Table.HeaderCell>

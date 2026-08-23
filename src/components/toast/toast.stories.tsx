@@ -93,7 +93,7 @@ export const AnchoredVariants: Story = {
 	render: ({ _side, _align, _limit, _timeout }) => (
 		<Toast.AnchoredProvider limit={_limit} timeout={_timeout}>
 			<Tooltip.Provider>
-				<Grid gap={6} style={storyStyles.anchoredVariants} width="min(1100px, calc(100vw - 48px))">
+				<Grid gap={6} xstyle={storyStyles.anchoredVariants} width="min(1100px, calc(100vw - 48px))">
 					<DefaultAnchoredExample _side={_side} _align={_align} />
 					<TooltipAnchoredExample _side={_side} _align={_align} />
 					<PopoverAnchoredExample _side={_side} _align={_align} />
@@ -327,7 +327,7 @@ function EditingProgressGauge({ complete = false, value }: { complete?: boolean;
 			fillColor="currentColor"
 			showValue={false}
 			size={16}
-			style={storyStyles.progressGauge}
+			xstyle={storyStyles.progressGauge}
 			trackColor="color-mix(in srgb, currentColor 25%, transparent)"
 			value={value}>
 			{complete ? <Icon.Checkmark height={10} strokeWidth={3} width={10} /> : null}

@@ -68,7 +68,7 @@ export const Examples: Story = {
 			<Separator />
 
 			<StorySection title="States">
-				<Grid gap={8} maxWidth="56rem" style={storyParts.statesGrid}>
+				<Grid gap={8} maxWidth="56rem" xstyle={storyParts.statesGrid}>
 					<State title="Empty">
 						<PasswordExample label="Password" placeholder="Enter your password" />
 					</State>

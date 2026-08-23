@@ -1,6 +1,5 @@
 import { Dialog as BaseDialog } from "@base-ui/react/dialog";
 import * as stylex from "@stylexjs/stylex";
-import type { StyleXStyles } from "@stylexjs/stylex";
 import { type ComponentProps } from "react";
 import {
 	modalBackdropStyles,
@@ -10,12 +9,10 @@ import {
 } from "@/components/dialog/dialog.stylex";
 import { tokens } from "@/theme/tokens.stylex";
 import { CloseButton as CloseButtonControl } from "@/components/button/close-button";
+import { mergeStyle, type BaseStyleProps } from "@/styles/props/base";
 import { attrJoin } from "@/utils/attr-join";
 
-type StyledProps<T> = Omit<T, "className" | "style"> & {
-	className?: string;
-	style?: StyleXStyles;
-};
+type StyledProps<T> = Omit<T, "className" | "style" | "xstyle"> & BaseStyleProps & { className?: string };
 
 export type DialogScrollBehavior = "popup" | "inside" | "outside";
 
@@ -38,31 +35,31 @@ type InternalDialogViewportProps = DialogViewportProps & {
 	scrollBehavior?: DialogScrollBehavior;
 };
 
-function Backdrop({ ref, className, style, ...props }: DialogBackdropProps) {
-	const { className: sxClassName, style: sxStyle } = stylex.props(modalBackdropStyles, style);
+function Backdrop({ ref, className, style, xstyle, ...props }: DialogBackdropProps) {
+	const { className: sxClassName, style: sxStyle } = stylex.props(modalBackdropStyles, xstyle);
 
 	return (
 		<BaseDialog.Backdrop
 			ref={ref}
 			className={attrJoin(sxClassName, className)}
-			style={sxStyle}
+			style={mergeStyle(sxStyle, style)}
 			{...props}
 		/>
 	);
 }
 
-function Viewport({ ref, className, style, scrollBehavior = "popup", ...props }: InternalDialogViewportProps) {
+function Viewport({ ref, className, style, xstyle, scrollBehavior = "popup", ...props }: InternalDialogViewportProps) {
 	const { className: sxClassName, style: sxStyle } = stylex.props(
 		modalViewportStyles,
 		scrollBehavior === "outside" && dialogParts.outsideScrollViewport,
-		style,
+		xstyle,
 	);
 
 	return (
 		<BaseDialog.Viewport
 			ref={ref}
 			className={attrJoin(sxClassName, className)}
-			style={sxStyle}
+			style={mergeStyle(sxStyle, style)}
 			{...props}
 		/>
 	);
@@ -77,6 +74,7 @@ export function Popup({
 	scrollBehavior = "popup",
 	showClose = true,
 	style,
+	xstyle,
 	viewportProps,
 	...props
 }: DialogPopupProps) {
@@ -84,7 +82,7 @@ export function Popup({
 		modalPopupStyles,
 		dialogParts.popup,
 		dialogScrollBehavior[scrollBehavior],
-		style,
+		xstyle,
 	);
 
 	return (
@@ -94,7 +92,7 @@ export function Popup({
 				<BaseDialog.Popup
 					ref={ref}
 					className={attrJoin(sxClassName, className)}
-					style={sxStyle}
+					style={mergeStyle(sxStyle, style)}
 					{...props}>
 					{children}
 					{showClose && <CloseButton />}
@@ -104,59 +102,59 @@ export function Popup({
 	);
 }
 
-export function Title({ ref, className, style, ...props }: StyledProps<BaseDialog.Title.Props>) {
-	const { className: sxClassName, style: sxStyle } = stylex.props(modalTextStyles.title, style);
+export function Title({ ref, className, style, xstyle, ...props }: StyledProps<BaseDialog.Title.Props>) {
+	const { className: sxClassName, style: sxStyle } = stylex.props(modalTextStyles.title, xstyle);
 
 	return (
 		<BaseDialog.Title
 			ref={ref}
 			className={attrJoin(sxClassName, className)}
-			style={sxStyle}
+			style={mergeStyle(sxStyle, style)}
 			{...props}
 		/>
 	);
 }
 
-export function Description({ ref, className, style, ...props }: StyledProps<BaseDialog.Description.Props>) {
-	const { className: sxClassName, style: sxStyle } = stylex.props(modalTextStyles.description, style);
+export function Description({ ref, className, style, xstyle, ...props }: StyledProps<BaseDialog.Description.Props>) {
+	const { className: sxClassName, style: sxStyle } = stylex.props(modalTextStyles.description, xstyle);
 
 	return (
 		<BaseDialog.Description
 			ref={ref}
 			className={attrJoin(sxClassName, className)}
-			style={sxStyle}
+			style={mergeStyle(sxStyle, style)}
 			{...props}
 		/>
 	);
 }
 
-export function Header({ className, style, ...props }: StyledProps<ComponentProps<"div">>) {
-	const { className: sxClassName, style: sxStyle } = stylex.props(dialogParts.header, style);
+export function Header({ className, style, xstyle, ...props }: StyledProps<ComponentProps<"div">>) {
+	const { className: sxClassName, style: sxStyle } = stylex.props(dialogParts.header, xstyle);
 
-	return <div className={attrJoin(sxClassName, className)} style={sxStyle} {...props} />;
+	return <div className={attrJoin(sxClassName, className)} style={mergeStyle(sxStyle, style)} {...props} />;
 }
 
-export function Body({ className, style, ...props }: StyledProps<ComponentProps<"div">>) {
-	const { className: sxClassName, style: sxStyle } = stylex.props(modalTextStyles.body, dialogParts.body, style);
+export function Body({ className, style, xstyle, ...props }: StyledProps<ComponentProps<"div">>) {
+	const { className: sxClassName, style: sxStyle } = stylex.props(modalTextStyles.body, dialogParts.body, xstyle);
 
-	return <div className={attrJoin(sxClassName, className)} style={sxStyle} {...props} />;
+	return <div className={attrJoin(sxClassName, className)} style={mergeStyle(sxStyle, style)} {...props} />;
 }
 
-export function Footer({ className, style, ...props }: StyledProps<ComponentProps<"div">>) {
-	const { className: sxClassName, style: sxStyle } = stylex.props(modalTextStyles.footer, dialogParts.footer, style);
+export function Footer({ className, style, xstyle, ...props }: StyledProps<ComponentProps<"div">>) {
+	const { className: sxClassName, style: sxStyle } = stylex.props(modalTextStyles.footer, dialogParts.footer, xstyle);
 
-	return <div className={attrJoin(sxClassName, className)} style={sxStyle} {...props} />;
+	return <div className={attrJoin(sxClassName, className)} style={mergeStyle(sxStyle, style)} {...props} />;
 }
 
 /** Unstyled close primitive for custom buttons and footer actions. */
-export function Close({ ref, className, style, ...props }: DialogCloseProps) {
-	const { className: sxClassName, style: sxStyle } = stylex.props(style);
+export function Close({ ref, className, style, xstyle, ...props }: DialogCloseProps) {
+	const { className: sxClassName, style: sxStyle } = stylex.props(xstyle);
 
 	return (
 		<BaseDialog.Close
 			ref={ref}
 			className={attrJoin(sxClassName, className) || undefined}
-			style={sxStyle}
+			style={mergeStyle(sxStyle, style)}
 			{...props}
 		/>
 	);
@@ -167,7 +165,7 @@ export function CloseButton({
 	ref,
 	"aria-label": ariaLabel = "Close",
 	className,
-	style,
+	xstyle,
 	...props
 }: DialogCloseButtonProps) {
 	return (
@@ -176,7 +174,7 @@ export function CloseButton({
 			aria-label={ariaLabel}
 			className={className}
 			nativeButton
-			render={<CloseButtonControl size="md" label={ariaLabel} style={[dialogParts.closeButton, style]} />}
+			render={<CloseButtonControl size="md" label={ariaLabel} xstyle={[dialogParts.closeButton, xstyle]} />}
 			{...props}
 		/>
 	);

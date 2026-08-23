@@ -3,8 +3,8 @@ import { CaretRightIcon } from "@phosphor-icons/react/dist/csr/CaretRight";
 import { SlidersHorizontalIcon } from "@phosphor-icons/react/dist/csr/SlidersHorizontal";
 import { Icon } from "@/components/icons";
 import { MagnifyingGlassIcon } from "@phosphor-icons/react/dist/csr/MagnifyingGlass";
+import { Toggle } from "@/components/toggle/toggle";
 import * as stylex from "@stylexjs/stylex";
-import type { StyleXStyles } from "@stylexjs/stylex";
 import {
 	columnFilteringFeature,
 	columnVisibilityFeature,
@@ -38,9 +38,10 @@ import { Button, IconButton } from "@/components/button/button";
 import { InputGroup } from "@/components/input-group/input-group";
 import { Menu } from "@/components/menu/menu";
 import { Table } from "@/components/table/table";
-import { Toggle } from "@/components/toggle/toggle";
 import { typescaleStyles } from "@/components/text/text.stylex";
 import { VisuallyHidden } from "@/components/visually-hidden/visually-hidden";
+import type { BaseStyleProps } from "@/styles/props/base";
+import type { MarginProps } from "@/styles/props/spacing.stylex";
 import { tokens } from "@/theme/tokens.stylex";
 import {
 	ArrowsDownUpIcon,
@@ -105,8 +106,10 @@ export type DataTableFilter = {
 
 export type DataTableProps<TData extends RowData, TValue = unknown> = Omit<
 	ComponentProps<"div">,
-	"children" | "style"
-> & {
+	"children" | "style" | "xstyle" | keyof MarginProps
+> &
+	MarginProps &
+	BaseStyleProps & {
 	columns: Array<DataTableColumnDef<TData, TValue>>;
 	data: TData[];
 	emptyLabel?: ReactNode;
@@ -122,8 +125,6 @@ export type DataTableProps<TData extends RowData, TValue = unknown> = Omit<
 	rowSelection?: boolean;
 	showExpandColumn?: boolean;
 	toolbarEndSlot?: ReactNode;
-	/** StyleX overrides, applied after the component's own styles. */
-	style?: StyleXStyles;
 };
 
 export function DataTable<TData extends RowData, TValue = unknown>({
@@ -143,6 +144,7 @@ export function DataTable<TData extends RowData, TValue = unknown>({
 	rowSelection = true,
 	showExpandColumn = true,
 	style,
+	xstyle,
 	toolbarEndSlot,
 	...props
 }: DataTableProps<TData, TValue>) {
@@ -271,9 +273,14 @@ export function DataTable<TData extends RowData, TValue = unknown>({
 	const filteredCount = table.getFilteredRowModel().rows.length;
 
 	return (
-		<Table.Root className={className} style={style} {...props}>
+		<Table.Root
+			className={className}
+			style={style}
+			xstyle={xstyle}
+			// Delegated: Table.Root owns margin resolution; do not resolve locally.
+			{...props}>
 			<div {...stylex.props(dataTableParts.toolbar)}>
-				<InputGroup.Root style={dataTableParts.filter}>
+				<InputGroup.Root {...stylex.props(dataTableParts.filter)}>
 					<InputGroup.Addon>
 						<MagnifyingGlassIcon aria-hidden size="1em" weight="bold" />
 					</InputGroup.Addon>
@@ -387,10 +394,10 @@ export function DataTable<TData extends RowData, TValue = unknown>({
 										})}
 									</Table.Row>
 									{renderExpandedRow && row.getIsExpanded() ? (
-										<Table.Row key={`${row.id}-expanded`} style={dataTableParts.expandedRow}>
+										<Table.Row key={`${row.id}-expanded`} {...stylex.props(dataTableParts.expandedRow)}>
 											<Table.Cell
 												colSpan={Math.max(1, row.getVisibleCells().length)}
-												style={dataTableParts.expandedCell}>
+												{...stylex.props(dataTableParts.expandedCell)}>
 												{renderExpandedRow(row)}
 											</Table.Cell>
 										</Table.Row>
@@ -503,7 +510,7 @@ function ColumnFilterMenu<TData extends RowData>({
 								<Menu.TriggerIcon />
 							)
 						}
-						style={dataTableParts.filterTrigger}>
+						{...stylex.props(dataTableParts.filterTrigger)}>
 						<span {...stylex.props(dataTableParts.filterTriggerLabel)}>{filter.label}</span>
 					</Button>
 				}

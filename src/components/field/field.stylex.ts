@@ -2,16 +2,6 @@ import * as stylex from "@stylexjs/stylex";
 import type { FieldSize } from "@/components/field/field.types";
 import { textStyles, fontWeightStyles } from "@/components/text/text.stylex";
 import { breakpoints, media } from "@/styles/constants.stylex";
-import { composeThemeProps } from "@/theme/theme-props";
-import {
-	childLayoutThemeProps,
-	displayThemeProps,
-	positioningThemeProps,
-	sizingThemeProps,
-	verticalFlexThemeProps,
-} from "@/theme/theme-props-layout.stylex";
-import { spacingThemeProps } from "@/theme/theme-props-spacing.stylex";
-import { radiusThemeProps, shadowThemeProps } from "@/theme/theme-props-surface.stylex";
 import { tokens } from "@/theme/tokens.stylex";
 
 /** Marker for label elements associated with form controls. */
@@ -22,17 +12,6 @@ export const fieldMarker = stylex.defineMarker();
 
 const INTERACTIVE_CONTROL_HOVER =
 	':hover:not(:focus-within):not([aria-invalid="true"]):not([data-active]):not([data-disabled]):not([data-invalid]):not([data-panel-open]):not([data-popup-open]):not([data-pressed]):not([data-readonly]):not([readonly])';
-
-export const fieldThemeProps = composeThemeProps(
-	spacingThemeProps,
-	sizingThemeProps,
-	positioningThemeProps,
-	childLayoutThemeProps,
-	radiusThemeProps,
-	shadowThemeProps,
-	verticalFlexThemeProps,
-	displayThemeProps,
-);
 
 /**
  * Canonical styles for the Field component family.

@@ -1,5 +1,7 @@
 import * as stylex from "@stylexjs/stylex";
 
+const SPACE_UNIT_REM = 0.25;
+
 /**
  * Public design-token interface.
  *
@@ -202,21 +204,21 @@ export const tokens = stylex.defineVars({
 	"--radius-full": "9999rem",
 
 	"--space-0": "0",
-	"--space-0-5": "0.125rem",
-	"--space-1": "0.25rem",
-	"--space-1-5": "0.375rem",
-	"--space-2": "0.5rem",
-	"--space-3": "0.75rem",
-	"--space-3-5": "0.875rem",
-	"--space-4": "1rem",
-	"--space-5": "1.25rem",
-	"--space-6": "1.5rem",
-	"--space-7": "1.75rem",
-	"--space-8": "2rem",
-	"--space-9": "2.25rem",
-	"--space-10": "2.5rem",
-	"--space-12": "3rem",
-	"--space-16": "4rem",
+	"--space-0-5": `${SPACE_UNIT_REM * 0.5}rem`,
+	"--space-1": `${SPACE_UNIT_REM * 1}rem`,
+	"--space-1-5": `${SPACE_UNIT_REM * 1.5}rem`,
+	"--space-2": `${SPACE_UNIT_REM * 2}rem`,
+	"--space-3": `${SPACE_UNIT_REM * 3}rem`,
+	"--space-3-5": `${SPACE_UNIT_REM * 3.5}rem`,
+	"--space-4": `${SPACE_UNIT_REM * 4}rem`,
+	"--space-5": `${SPACE_UNIT_REM * 5}rem`,
+	"--space-6": `${SPACE_UNIT_REM * 6}rem`,
+	"--space-7": `${SPACE_UNIT_REM * 7}rem`,
+	"--space-8": `${SPACE_UNIT_REM * 8}rem`,
+	"--space-9": `${SPACE_UNIT_REM * 9}rem`,
+	"--space-10": `${SPACE_UNIT_REM * 10}rem`,
+	"--space-12": `${SPACE_UNIT_REM * 12}rem`,
+	"--space-16": `${SPACE_UNIT_REM * 16}rem`,
 
 	"--size-full": "100%",
 	"--size-container-xs": "20rem",
@@ -290,6 +292,17 @@ export const tokens = stylex.defineVars({
 	"--font-size-7": "1.75rem",
 	"--font-size-8": "2.1875rem",
 	"--font-size-9": "3.75rem",
+	// Intentional parallel scale used by the TypographyProps contract and its tests.
+	// Keep these committed even while they mirror --font-size-1..9; the named scale may diverge independently.
+	"--text-xs": "0.75rem",
+	"--text-sm": "0.875rem",
+	"--text-md": "1rem",
+	"--text-lg": "1.125rem",
+	"--text-xl": "1.25rem",
+	"--text-2xl": "1.5rem",
+	"--text-3xl": "1.75rem",
+	"--text-4xl": "2.1875rem",
+	"--text-5xl": "3.75rem",
 	"--line-height-1": "1rem",
 	"--line-height-2": "1.25rem",
 	"--line-height-3": "1.5rem",

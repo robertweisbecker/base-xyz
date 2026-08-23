@@ -152,7 +152,7 @@ export const SelectionModes: Story = {
 		controls: { disable: true },
 	},
 	render: () => (
-		<Grid gap={6} style={storyParts.fieldGrid}>
+		<Grid gap={6} xstyle={storyParts.fieldGrid}>
 			<Select.Root<string> defaultValue="React" items={frameworkItems}>
 				<Select.Label>Single selection</Select.Label>
 				<Select.Trigger />
@@ -202,7 +202,7 @@ export const States: Story = {
 		controls: { disable: true },
 	},
 	render: () => (
-		<Grid gap={8} style={storyParts.stateGrid}>
+		<Grid gap={8} xstyle={storyParts.stateGrid}>
 			<SelectState label="Empty">
 				<Select.Root<string> items={frameworkItems}>
 					<Select.Label>Framework</Select.Label>
@@ -462,7 +462,7 @@ export const UserSelection: Story = {
 			itemToStringValue={(user) => user.id}
 			items={userSelectItems}>
 			<Select.Label>Assignee</Select.Label>
-			<Select.Trigger placeholder="Select a person" style={storyParts.userSelect}>
+			<Select.Trigger placeholder="Select a person" xstyle={storyParts.userSelect}>
 				{(user: UserOption | null) =>
 					user ? (
 						<Item
@@ -471,7 +471,7 @@ export const UserSelection: Story = {
 							description={user.email}
 							render={<span />}
 							startSlot={<Avatar initials={user.initials} shape="rounded" size={8} />}
-							style={storyParts.userValueItem}
+							xstyle={storyParts.userValueItem}
 							variant="embedded"
 						/>
 					) : (
@@ -488,7 +488,7 @@ export const UserSelection: Story = {
 								description={user.email}
 								label={user.name}
 								startSlot={<Avatar initials={user.initials} shape="rounded" size={8} />}
-								style={storyParts.userOptionItem}
+								xstyle={storyParts.userOptionItem}
 								variant="embedded"
 							/>
 						</Select.Item>
@@ -505,7 +505,7 @@ export const InlineWithBackdrop: Story = {
 		controls: { disable: true },
 	},
 	render: () => (
-		<Stack gap={6} style={storyParts.inlineUseCase}>
+		<Stack gap={6} xstyle={storyParts.inlineUseCase}>
 			<Text color="muted" size="1">
 				Campaign brief
 			</Text>
@@ -536,7 +536,7 @@ function AdLibSelect({
 	placeholder?: string;
 }) {
 	return (
-		<Select.Root<string> style={storyParts.adLibSelect} defaultValue={defaultValue} items={items}>
+		<Select.Root<string> xstyle={storyParts.adLibSelect} defaultValue={defaultValue} items={items}>
 			<Select.Trigger aria-label={label} placeholder={placeholder} variant="inline" />
 			<Select.Popup backdrop>
 				<Select.List>

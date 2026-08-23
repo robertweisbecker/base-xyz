@@ -1,16 +1,7 @@
 import * as stylex from "@stylexjs/stylex";
-import type { StyleXStyles } from "@stylexjs/stylex";
 import type { ComponentProps, ReactNode } from "react";
-import { composeThemeProps, resolveThemeProps, type ThemePropsOf } from "@/theme/theme-props";
-import {
-	childLayoutThemeProps,
-	displayThemeProps,
-	positioningThemeProps,
-	sizingThemeProps,
-	verticalFlexThemeProps,
-} from "@/theme/theme-props-layout.stylex";
-import { spacingThemeProps } from "@/theme/theme-props-spacing.stylex";
-import { radiusThemeProps, shadowThemeProps } from "@/theme/theme-props-surface.stylex";
+import { mergeStyle, type BaseStyleProps } from "@/styles/props/base";
+import { extractMarginProps, type MarginProps } from "@/styles/props/spacing.stylex";
 import { tokens } from "@/theme/tokens.stylex";
 import { Heading } from "@/components/heading/heading";
 import { Text } from "@/components/text/text";
@@ -18,23 +9,13 @@ import { attrJoin } from "@/utils/attr-join";
 
 export type EmptyStateSize = "sm" | "md" | "lg";
 export type EmptyStateHeadingLevel = "h1" | "h2" | "h3" | "h4" | "h5" | "h6";
-const emptyStateThemeProps = composeThemeProps(
-	spacingThemeProps,
-	sizingThemeProps,
-	positioningThemeProps,
-	childLayoutThemeProps,
-	radiusThemeProps,
-	shadowThemeProps,
-	verticalFlexThemeProps,
-	displayThemeProps,
-);
-export type EmptyStateThemeProps = ThemePropsOf<typeof emptyStateThemeProps>;
 
 export type EmptyStateProps = Omit<
 	ComponentProps<"div">,
-	"children" | "color" | "height" | "style" | "title" | "width" | keyof EmptyStateThemeProps
+	"children" | "color" | "height" | "style" | "title" | "width" | "xstyle" | keyof MarginProps
 > &
-	EmptyStateThemeProps & {
+	MarginProps &
+	BaseStyleProps & {
 		/** Actions or other supporting content rendered below the description. */
 		children?: ReactNode;
 		description?: ReactNode;
@@ -42,8 +23,6 @@ export type EmptyStateProps = Omit<
 		headingLevel?: EmptyStateHeadingLevel;
 		icon?: ReactNode;
 		size?: EmptyStateSize;
-		/** StyleX overrides, applied after the component's own styles. */
-		style?: StyleXStyles;
 		title: ReactNode;
 	};
 
@@ -55,22 +34,31 @@ export function EmptyState({
 	icon,
 	size = "md",
 	style,
+	xstyle,
 	title,
 	...props
 }: EmptyStateProps) {
-	const { restProps, styles } = resolveThemeProps(props, emptyStateThemeProps);
-	const rootSx = stylex.props(emptyStateStyles.root, rootSizeStyles[size], ...styles, style);
+	const { marginStyles, rest } = extractMarginProps(props);
+	const rootSx = stylex.props(
+		emptyStateStyles.root,
+		rootSizeStyles[size],
+		...marginStyles,
+		xstyle,
+	);
 	const Title = headingLevel;
 
 	return (
-		<div className={attrJoin(rootSx.className, className)} style={rootSx.style} {...restProps}>
+		<div
+			className={attrJoin(rootSx.className, className)}
+			style={mergeStyle(rootSx.style, style)}
+			{...rest}>
 			{icon ? <div {...stylex.props(emptyStateStyles.icon, iconSizeStyles[size])}>{icon}</div> : null}
 			<div {...stylex.props(emptyStateStyles.message)}>
 				<Heading
 					textAlign="center"
 					render={<Title />}
 					size={size === "sm" ? "2" : size === "md" ? "4" : "5"}
-					style={emptyStateStyles.title}>
+					{...stylex.props(emptyStateStyles.title)}>
 					{title}
 				</Heading>
 				{description ? (
@@ -79,7 +67,7 @@ export function EmptyState({
 						color="muted"
 						render={<p />}
 						size={size === "sm" ? "1" : size === "md" ? "2" : "3"}
-						style={emptyStateStyles.description}
+						{...stylex.props(emptyStateStyles.description)}
 						mt={size === "sm" ? 1 : size === "md" ? 2 : 3}
 						wrap="pretty">
 						{description}

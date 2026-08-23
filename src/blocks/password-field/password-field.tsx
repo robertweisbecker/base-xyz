@@ -2,19 +2,18 @@ import { Field } from "@base-ui/react/field";
 import { EyeIcon } from "@phosphor-icons/react/dist/csr/Eye";
 import { EyeSlashIcon } from "@phosphor-icons/react/dist/csr/EyeSlash";
 import * as stylex from "@stylexjs/stylex";
-import type { StyleXStyles } from "@stylexjs/stylex";
 import { createContext, type ComponentProps, useContext, useState } from "react";
 import { fieldStyles } from "@/components/field/field.stylex";
 import { InputGroup, Meter as MeterPrimitive, Toggle } from "@/components";
 import type { ToggleIconButtonProps } from "@/components";
 import { iconSwapTransition } from "@/styles/recipes/transitions";
+import { mergeStyle, type BaseStyleProps } from "@/styles/props/base";
 import { tokens } from "@/theme/tokens.stylex";
 import { attrJoin } from "@/utils/attr-join";
 
-type StyledProps<T> = Omit<T, "className" | "style"> & {
+type StyledProps<T> = Omit<T, "className" | "style" | "xstyle"> &
+	BaseStyleProps & {
 	className?: string;
-	/** StyleX overrides, applied after the component's own styles. */
-	style?: StyleXStyles;
 };
 
 type PasswordFieldContextValue = {
@@ -65,6 +64,7 @@ export function Root({
 	onVisibleChange,
 	className,
 	style,
+	xstyle,
 	...props
 }: PasswordFieldRootProps) {
 	const [uncontrolledValue, setUncontrolledValue] = useState(defaultValue);
@@ -88,7 +88,7 @@ export function Root({
 		onVisibleChange?.(nextVisible);
 	}
 
-	const rootSx = stylex.props(fieldStyles.root, style);
+	const rootSx = stylex.props(fieldStyles.root, xstyle);
 
 	return (
 		<PasswordFieldContext.Provider
@@ -98,14 +98,18 @@ export function Root({
 				setValue,
 				setVisible,
 			}}>
-			<Field.Root className={attrJoin(rootSx.className, className)} style={rootSx.style} {...props} />
+			<Field.Root
+				className={attrJoin(rootSx.className, className)}
+				style={mergeStyle(rootSx.style, style)}
+				{...props}
+			/>
 		</PasswordFieldContext.Provider>
 	);
 }
 
-export function Label({ className, style, ...props }: PasswordFieldLabelProps) {
-	const sx = stylex.props(fieldStyles.label, style);
-	return <Field.Label className={attrJoin(sx.className, className)} style={sx.style} {...props} />;
+export function Label({ className, style, xstyle, ...props }: PasswordFieldLabelProps) {
+	const sx = stylex.props(fieldStyles.label, xstyle);
+	return <Field.Label className={attrJoin(sx.className, className)} style={mergeStyle(sx.style, style)} {...props} />;
 }
 
 export function Control({ className, ...props }: PasswordFieldControlProps) {
@@ -183,14 +187,23 @@ export function VisibilityToggle({
 	);
 }
 
-export function Description({ className, style, ...props }: PasswordFieldDescriptionProps) {
-	const sx = stylex.props(fieldStyles.description, style);
-	return <Field.Description className={attrJoin(sx.className, className)} style={sx.style} {...props} />;
+export function Description({ className, style, xstyle, ...props }: PasswordFieldDescriptionProps) {
+	const sx = stylex.props(fieldStyles.description, xstyle);
+	return (
+		<Field.Description className={attrJoin(sx.className, className)} style={mergeStyle(sx.style, style)} {...props} />
+	);
 }
 
-export function Error({ className, match = true, style, ...props }: PasswordFieldErrorProps) {
-	const sx = stylex.props(fieldStyles.error, style);
-	return <Field.Error className={attrJoin(sx.className, className)} match={match} style={sx.style} {...props} />;
+export function Error({ className, match = true, style, xstyle, ...props }: PasswordFieldErrorProps) {
+	const sx = stylex.props(fieldStyles.error, xstyle);
+	return (
+		<Field.Error
+			className={attrJoin(sx.className, className)}
+			match={match}
+			style={mergeStyle(sx.style, style)}
+			{...props}
+		/>
+	);
 }
 
 export function Meter({
@@ -199,6 +212,7 @@ export function Meter({
 	getStrengthLabel = getDefaultStrengthLabel,
 	"aria-valuetext": ariaValueText,
 	style,
+	xstyle,
 	...props
 }: PasswordFieldMeterProps) {
 	const { value } = usePasswordFieldContext("Meter");
@@ -215,7 +229,8 @@ export function Meter({
 			min={0}
 			value={score}
 			{...props}
-			style={[parts.meter, style]}>
+			style={style}
+			xstyle={[parts.meter, xstyle]}>
 			<MeterPrimitive.Track>
 				<MeterPrimitive.Indicator />
 			</MeterPrimitive.Track>

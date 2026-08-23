@@ -1,14 +1,17 @@
 import * as stylex from "@stylexjs/stylex";
-import type { StyleXStyles } from "@stylexjs/stylex";
-import type { ComponentProps } from "react";
+import { type ComponentProps } from "react";
 import { media } from "@/styles/constants.stylex";
+import { mergeStyle, type BaseStyleProps } from "@/styles/props/base";
+import { extractMarginProps, type MarginProps } from "@/styles/props/spacing.stylex";
 import { tokens } from "@/theme/tokens.stylex";
 import { attrJoin } from "@/utils/attr-join";
 
-export type LoaderProps = Omit<ComponentProps<"svg">, "children" | "height" | "style" | "width"> & {
-	/** StyleX overrides, applied after the component's own styles. */
-	style?: StyleXStyles;
-};
+export type LoaderProps = Omit<
+	ComponentProps<"svg">,
+	"children" | "height" | "style" | "width" | keyof MarginProps
+> &
+	MarginProps &
+	BaseStyleProps;
 
 export function Loader({
 	"aria-hidden": ariaHidden,
@@ -17,10 +20,12 @@ export function Loader({
 	focusable = "false",
 	role,
 	style,
+	xstyle,
 	...props
 }: LoaderProps) {
+	const { marginStyles, rest } = extractMarginProps(props);
 	const isDecorative = ariaHidden === true || ariaHidden === "true" || (ariaHidden == null && ariaLabel == null);
-	const sx = stylex.props(loaderParts.root, style);
+	const sx = stylex.props(loaderParts.root, ...marginStyles, xstyle);
 
 	return (
 		<svg
@@ -29,9 +34,9 @@ export function Loader({
 			className={attrJoin(sx.className, className)}
 			focusable={focusable}
 			role={role ?? (isDecorative ? undefined : "progressbar")}
-			style={sx.style}
+			style={mergeStyle(sx.style, style)}
 			viewBox="0 0 24 24"
-			{...props}>
+			{...rest}>
 			<circle {...stylex.props(loaderParts.track)} cx="12" cy="12" r="9" />
 			<circle {...stylex.props(loaderParts.indicator)} cx="12" cy="12" pathLength="100" r="9" />
 		</svg>

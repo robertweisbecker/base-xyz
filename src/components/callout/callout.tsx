@@ -1,9 +1,8 @@
 import * as stylex from "@stylexjs/stylex";
-import type { StyleXStyles } from "@stylexjs/stylex";
 import type { ComponentProps, ReactNode } from "react";
-import { positioningThemeProps } from "@/theme/theme-props-layout.stylex";
+import { mergeStyle, type BaseStyleProps } from "@/styles/props/base";
+import { extractMarginProps, type MarginProps } from "@/styles/props/spacing.stylex";
 import { tokens } from "@/theme/tokens.stylex";
-import { resolveThemeProps, type ThemePropsOf } from "@/theme/theme-props";
 import { Heading } from "@/components/heading/heading";
 import { Text } from "@/components/text/text";
 import { VisuallyHidden } from "@/components/visually-hidden/visually-hidden";
@@ -11,13 +10,13 @@ import { attrJoin } from "@/utils/attr-join";
 
 export type CalloutHue = "accent" | "error" | "warning" | "success" | "neutral";
 export type CalloutVariant = "default" | "banner";
-export type CalloutThemeProps = ThemePropsOf<typeof positioningThemeProps>;
 
 export type CalloutProps = Omit<
 	ComponentProps<"div">,
-	"children" | "color" | "role" | "style" | "title" | keyof CalloutThemeProps
+	"children" | "color" | "role" | "style" | "title" | "xstyle" | keyof MarginProps
 > &
-	CalloutThemeProps & {
+	MarginProps &
+	BaseStyleProps & {
 		/** Renders the callout as an assertive ARIA alert. */
 		alert?: boolean;
 		/** Optional trailing action, such as a button or link. */
@@ -26,8 +25,6 @@ export type CalloutProps = Omit<
 		/** Decorative leading visual. */
 		icon?: ReactNode;
 		hue?: CalloutHue;
-		/** StyleX overrides, applied after the component's own styles. */
-		style?: StyleXStyles;
 		/** Visible h2 content. A semantic fallback is rendered when omitted. */
 		title?: ReactNode;
 		variant?: CalloutVariant;
@@ -42,21 +39,28 @@ export function Callout({
 	hue = "accent",
 	icon,
 	style,
+	xstyle,
 	title,
 	variant = "default",
 	...props
 }: CalloutProps) {
-	const { restProps, styles } = resolveThemeProps(props, positioningThemeProps);
-	const sx = stylex.props(calloutParts.root, calloutHueStyles[hue], calloutVariantStyles[variant], ...styles, style);
+	const { marginStyles, rest } = extractMarginProps(props);
+	const sx = stylex.props(
+		calloutParts.root,
+		calloutHueStyles[hue],
+		calloutVariantStyles[variant],
+		...marginStyles,
+		xstyle,
+	);
 	const hasVisibleTitle = title !== undefined && title !== null && title !== false && title !== "";
 
 	return (
 		<div
 			ref={ref}
-			{...restProps}
 			className={attrJoin(sx.className, className)}
 			role={alert ? "alert" : undefined}
-			style={sx.style}>
+			style={mergeStyle(sx.style, style)}
+			{...rest}>
 			<div {...stylex.props(calloutParts.body, calloutBodyVariantStyles[variant])}>
 				{icon ? (
 					<div
@@ -67,7 +71,7 @@ export function Callout({
 				) : null}
 				<div {...stylex.props(calloutParts.content, calloutContentVariantStyles[variant])}>
 					{hasVisibleTitle ? (
-						<Heading size="2" style={calloutParts.title} wrap="pretty" fontWeight="medium">
+						<Heading size="2" {...stylex.props(calloutParts.title)} wrap="pretty" fontWeight="medium">
 							{title}
 						</Heading>
 					) : (
@@ -76,7 +80,7 @@ export function Callout({
 					<Text
 						render={<p />}
 						size={variant === "banner" ? "1" : "2"}
-						style={calloutParts.description}
+						{...stylex.props(calloutParts.description)}
 						wrap="pretty"
 						truncate={variant === "banner" ? true : undefined}>
 						{description}

@@ -48,7 +48,7 @@ const meta = {
 	},
 	decorators: [
 		(Story) => (
-			<Box style={storyStyles.frame}>
+			<Box xstyle={storyStyles.frame}>
 				<Story />
 			</Box>
 		),
@@ -68,7 +68,7 @@ export const Sizes: Story = {
 		<Stack gap={4}>
 			{sizeOptions.map((size) => (
 				<Stack key={size} align="baseline" gap={4} orientation="horizontal">
-					<Text color="muted" fontFamily="mono" size="1" style={storyStyles.specimenLabel}>
+					<Text color="muted" fontFamily="mono" size="1" xstyle={storyStyles.specimenLabel}>
 						{size}
 					</Text>
 					<Heading truncate size={size}>

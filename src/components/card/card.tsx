@@ -1,18 +1,7 @@
 import * as stylex from "@stylexjs/stylex";
-import type { StyleXStyles } from "@stylexjs/stylex";
 import type { ComponentProps } from "react";
-import { composeThemeProps, resolveThemeProps, type ThemePropsOf } from "@/theme/theme-props";
-import {
-	childLayoutThemeProps,
-	displayThemeProps,
-	horizontalFlexThemeProps,
-	positioningThemeProps,
-	sizingThemeProps,
-	verticalFlexThemeProps,
-} from "@/theme/theme-props-layout.stylex";
-import { spacingThemeProps } from "@/theme/theme-props-spacing.stylex";
-import { radiusThemeProps, shadowThemeProps } from "@/theme/theme-props-surface.stylex";
-import type { RadiusValue } from "@/theme/theme-props.types";
+import { mergeStyle, type BaseStyleProps } from "@/styles/props/base";
+import { extractMarginProps, type MarginProps } from "@/styles/props/spacing.stylex";
 import { tokens } from "@/theme/tokens.stylex";
 
 import { Heading, type HeadingProps } from "@/components/heading/heading";
@@ -20,65 +9,53 @@ import { Text, type TextProps } from "@/components/text/text";
 import { cardVars } from "./card-vars.stylex";
 import { attrJoin } from "@/utils/attr-join";
 
-type StyledProps<T, ThemeProps = {}> = Omit<
-	T,
-	"align" | "className" | "color" | "height" | "style" | "width" | keyof ThemeProps
-> &
-	ThemeProps & {
+type StyledPartProps<T> = Omit<T, "className" | "style" | "xstyle"> &
+	BaseStyleProps & {
 		className?: string;
-		/** StyleX overrides, applied after the component's own styles. */
-		style?: StyleXStyles;
 	};
 
 export type CardVariant = "elevated" | "outline";
 export type CardSize = keyof typeof cardSizeVariants;
-export type CardRadius = RadiusValue;
 
-const cardThemeProps = composeThemeProps(
-	spacingThemeProps,
-	sizingThemeProps,
-	positioningThemeProps,
-	childLayoutThemeProps,
-	radiusThemeProps,
-	shadowThemeProps,
-	verticalFlexThemeProps,
-	displayThemeProps,
-);
-const cardHeaderThemeProps = composeThemeProps(spacingThemeProps, verticalFlexThemeProps);
-const cardFooterThemeProps = composeThemeProps(spacingThemeProps, horizontalFlexThemeProps);
-const cardContentThemeProps = composeThemeProps(
-	spacingThemeProps,
-	sizingThemeProps,
-	positioningThemeProps,
-	childLayoutThemeProps,
-);
-export type CardThemeProps = ThemePropsOf<typeof cardThemeProps>;
-type CardHeaderThemeProps = ThemePropsOf<typeof cardHeaderThemeProps>;
-type CardFooterThemeProps = ThemePropsOf<typeof cardFooterThemeProps>;
-type CardContentThemeProps = ThemePropsOf<typeof cardContentThemeProps>;
-
-export type CardRootProps = StyledProps<ComponentProps<"div">, CardThemeProps> & {
+export type CardRootProps = Omit<StyledPartProps<ComponentProps<"div">>, keyof MarginProps> & MarginProps & {
 	size?: CardSize;
 	variant?: CardVariant;
 };
-export type CardHeaderProps = StyledProps<ComponentProps<"div">, CardHeaderThemeProps>;
-export type CardFooterProps = StyledProps<ComponentProps<"div">, CardFooterThemeProps>;
-export type CardContentProps = StyledProps<ComponentProps<"div">, CardContentThemeProps>;
-export type CardTitleProps = HeadingProps;
-export type CardDescriptionProps = TextProps;
+export type CardHeaderProps = StyledPartProps<ComponentProps<"div">>;
+export type CardFooterProps = StyledPartProps<ComponentProps<"div">>;
+export type CardContentProps = StyledPartProps<ComponentProps<"div">>;
+export type CardTitleProps = Omit<HeadingProps, keyof MarginProps>;
+export type CardDescriptionProps = Omit<TextProps, keyof MarginProps>;
 
-export function Root({ className, radius = "lg", size = "md", style, variant = "elevated", ...props }: CardRootProps) {
-	const { restProps, styles } = resolveThemeProps({ ...props, radius }, cardThemeProps);
-	const sx = stylex.props(cardParts.root, cardSizeVariants[size], cardVariants[variant], ...styles, style);
+export function Root({ className, size = "md", style, xstyle, variant = "elevated", ...props }: CardRootProps) {
+	const { marginStyles, rest } = extractMarginProps(props);
+	const sx = stylex.props(
+		cardParts.root,
+		cardSizeVariants[size],
+		cardVariants[variant],
+		...marginStyles,
+		xstyle,
+	);
 
-	return <div className={attrJoin(sx.className, className)} style={sx.style} {...restProps} />;
+	return (
+		<div
+			className={attrJoin(sx.className, className)}
+			style={mergeStyle(sx.style, style)}
+			{...rest}
+		/>
+	);
 }
 
-export function Header({ className, style, ...props }: CardHeaderProps) {
-	const { restProps, styles } = resolveThemeProps(props, cardHeaderThemeProps);
-	const sx = stylex.props(cardParts.header, ...styles, style);
+export function Header({ className, style, xstyle, ...props }: CardHeaderProps) {
+	const sx = stylex.props(cardParts.header, xstyle);
 
-	return <div className={attrJoin(sx.className, className)} style={sx.style} {...restProps} />;
+	return (
+		<div
+			className={attrJoin(sx.className, className)}
+			style={mergeStyle(sx.style, style)}
+			{...props}
+		/>
+	);
 }
 
 export function Title(props: CardTitleProps) {
@@ -89,18 +66,28 @@ export function Description(props: CardDescriptionProps) {
 	return <Text size="2" color="muted" {...props} />;
 }
 
-export function Content({ className, style, ...props }: CardContentProps) {
-	const { restProps, styles } = resolveThemeProps(props, cardContentThemeProps);
-	const sx = stylex.props(cardParts.content, ...styles, style);
+export function Content({ className, style, xstyle, ...props }: CardContentProps) {
+	const sx = stylex.props(cardParts.content, xstyle);
 
-	return <div className={attrJoin(sx.className, className)} style={sx.style} {...restProps} />;
+	return (
+		<div
+			className={attrJoin(sx.className, className)}
+			style={mergeStyle(sx.style, style)}
+			{...props}
+		/>
+	);
 }
 
-export function Footer({ className, style, ...props }: CardFooterProps) {
-	const { restProps, styles } = resolveThemeProps(props, cardFooterThemeProps);
-	const sx = stylex.props(cardParts.footer, ...styles, style);
+export function Footer({ className, style, xstyle, ...props }: CardFooterProps) {
+	const sx = stylex.props(cardParts.footer, xstyle);
 
-	return <div className={attrJoin(sx.className, className)} style={sx.style} {...restProps} />;
+	return (
+		<div
+			className={attrJoin(sx.className, className)}
+			style={mergeStyle(sx.style, style)}
+			{...props}
+		/>
+	);
 }
 
 const cardParts = stylex.create({
@@ -111,6 +98,7 @@ const cardParts = stylex.create({
 		display: "flex",
 		flexDirection: "column",
 		isolation: "isolate",
+		borderRadius: tokens["--radius-lg"],
 	},
 	header: {
 		gap: cardVars.headerGap,

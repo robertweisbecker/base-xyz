@@ -3,6 +3,7 @@ import { InfoIcon } from "@phosphor-icons/react/dist/csr/Info";
 import { WarningCircleIcon } from "@phosphor-icons/react/dist/csr/WarningCircle";
 import { WarningIcon } from "@phosphor-icons/react/dist/csr/Warning";
 import type { Meta, StoryObj } from "@storybook/react-vite";
+import x from "@stylexjs/atoms";
 import * as stylex from "@stylexjs/stylex";
 import type { ReactNode } from "react";
 import { Button } from "@/components/button/button";
@@ -36,15 +37,6 @@ const actionOptions = {
 	),
 };
 
-const positionOptions = {
-	None: undefined,
-	Static: "static",
-	Relative: "relative",
-	Absolute: "absolute",
-	Fixed: "fixed",
-	Sticky: "sticky",
-};
-
 const meta = {
 	title: "Components/Callout",
 	component: Callout,
@@ -54,7 +46,6 @@ const meta = {
 		description: "A new version is ready to install.",
 		hue: "accent",
 		icon: <InfoIcon aria-hidden weight="duotone" />,
-		position: undefined,
 		title: "Update available",
 		variant: "default",
 	},
@@ -75,37 +66,15 @@ const meta = {
 			mapping: iconOptions,
 			options: Object.keys(iconOptions),
 		},
-		position: {
-			control: "select",
-			mapping: positionOptions,
-			options: Object.keys(positionOptions),
-		},
-		insetTop: { control: "number" },
-		insetStart: { control: "number" },
-		insetEnd: { control: "number" },
 		title: { control: "text" },
 		variant: {
 			control: "inline-radio",
 			options: ["default", "banner"],
 		},
-		zIndex: { control: "number" },
 	},
 	parameters: {
 		controls: {
-			include: [
-				"title",
-				"description",
-				"icon",
-				"action",
-				"hue",
-				"variant",
-				"alert",
-				"position",
-				"insetTop",
-				"insetStart",
-				"insetEnd",
-				"zIndex",
-			],
+			include: ["title", "description", "icon", "action", "hue", "variant", "alert"],
 		},
 	},
 	decorators: [
@@ -234,28 +203,38 @@ export const Positioning: Story = {
 				</Text>
 				<ScrollArea
 					disableFade
-					contentStyle={storyStyles.absoluteStageContent}
 					label="Absolute banner example"
 					showScrollbar="always"
-					style={storyStyles.positioningStage}>
-					<Callout
-						action={<CloseButton label="Dismiss workspace notice" />}
-						description="This banner is anchored to the top of its containing surface."
-						insetEnd={0}
-						insetStart={0}
-						insetTop={0}
-						position="absolute"
-						title="Workspace notice"
-						variant="banner"
-						zIndex={1}
-					/>
-					<Stack gap={3} style={storyStyles.log}>
-						{Array.from({ length: 8 }, (_, index) => (
-							<Text key={index} color="muted" size="2">
-								Positioned content row {index + 1}
-							</Text>
-						))}
-					</Stack>
+					xstyle={storyStyles.positioningStage}>
+					<div
+						{...stylex.props(
+							x.paddingInline(tokens["--space-4"]),
+							x.paddingBottom(tokens["--space-4"]),
+							x.paddingTop(tokens["--space-12"]),
+							x.minHeight("24rem"),
+						)}>
+						<Callout
+							action={<CloseButton label="Dismiss workspace notice" />}
+							description="This banner is anchored to the top of its containing surface."
+							title="Workspace notice"
+							variant="banner"
+							xstyle={[
+								x.insetInlineEnd._0,
+								x.insetInlineStart._0,
+								x.position.absolute,
+								x.top._0,
+								x.width["100%"],
+								x.zIndex._1,
+							]}
+						/>
+						<Stack gap={3} xstyle={storyStyles.log}>
+							{Array.from({ length: 8 }, (_, index) => (
+								<Text key={index} color="muted" size="2">
+									Positioned content row {index + 1}
+								</Text>
+							))}
+						</Stack>
+					</div>
 				</ScrollArea>
 			</Stack>
 			<Stack align="start" gap={2}>
@@ -264,28 +243,38 @@ export const Positioning: Story = {
 				</Text>
 				<ScrollArea
 					disableFade
-					contentStyle={storyStyles.stickyStageContent}
 					label="Sticky banner example"
 					showScrollbar="always"
-					style={storyStyles.positioningStage}>
-					<Text size="2">Deployment log</Text>
-					<Callout
-						action={<CloseButton label="Dismiss live updates" />}
-						description="New events will appear below."
-						hue="neutral"
-						insetTop={0}
-						position="sticky"
-						title="Live updates"
-						variant="banner"
-						zIndex={1}
-					/>
-					<Stack gap={3} style={storyStyles.log}>
-						{Array.from({ length: 8 }, (_, index) => (
-							<Text key={index} color="muted" size="2">
-								Event {index + 1}
-							</Text>
-						))}
-					</Stack>
+					xstyle={storyStyles.positioningStage}>
+					<div
+						{...stylex.props(
+							x.padding(tokens["--space-3"]),
+							x.gap(tokens["--space-3"]),
+							x.display.flex,
+							x.flexDirection.column,
+						)}>
+						<Text size="2">Deployment log</Text>
+						<Callout
+							action={<CloseButton label="Dismiss live updates" />}
+							description="New events will appear below."
+							hue="neutral"
+							title="Live updates"
+							variant="banner"
+							xstyle={[
+								x.position.sticky,
+								x.top._0,
+								x.width["100%"],
+								x.zIndex._1,
+							]}
+						/>
+						<Stack gap={3} xstyle={storyStyles.log}>
+							{Array.from({ length: 8 }, (_, index) => (
+								<Text key={index} color="muted" size="2">
+									Event {index + 1}
+								</Text>
+							))}
+						</Stack>
+					</div>
 				</ScrollArea>
 			</Stack>
 		</Stack>
@@ -298,18 +287,6 @@ const storyStyles = stylex.create({
 		borderStyle: "solid",
 		borderWidth: "1px",
 		height: "13rem",
-	},
-	absoluteStageContent: {
-		paddingInline: tokens["--space-4"],
-		paddingBlockEnd: tokens["--space-4"],
-		paddingBlockStart: tokens["--space-12"],
-		minHeight: "24rem",
-	},
-	stickyStageContent: {
-		padding: tokens["--space-3"],
-		gap: tokens["--space-3"],
-		display: "flex",
-		flexDirection: "column",
 	},
 	log: {
 		minHeight: "18rem",

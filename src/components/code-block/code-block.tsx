@@ -1,26 +1,44 @@
 import * as stylex from "@stylexjs/stylex";
-import type { StyleXStyles } from "@stylexjs/stylex";
-import { type ComponentProps } from "react";
+import type { ComponentProps } from "react";
+import type { BaseStyleProps } from "@/styles/props/base";
+import type { MarginProps } from "@/styles/props/spacing.stylex";
 import { tokens } from "@/theme/tokens.stylex";
 
 import { ScrollArea } from "@/components/scroll-area/scroll-area";
 
-export type CodeBlockProps = Omit<ComponentProps<"pre">, "className" | "style"> & {
-	className?: string;
-	/** StyleX overrides, applied after the component's own styles. */
-	style?: StyleXStyles;
-};
+export type CodeBlockProps = Omit<ComponentProps<"pre">, "className" | "style" | keyof MarginProps> &
+	MarginProps &
+	BaseStyleProps & {
+		className?: string;
+	};
 
-export function CodeBlock({ ref, children, className, style, ...props }: CodeBlockProps) {
+export function CodeBlock({
+	ref,
+	children,
+	className,
+	style,
+	xstyle,
+	m,
+	mx,
+	my,
+	mt,
+	mb,
+	ms,
+	me,
+	...preProps
+}: CodeBlockProps) {
+	const marginProps = { m, mx, my, mt, mb, ms, me };
+
 	return (
 		<ScrollArea
 			className={className}
 			label="Code block"
+			{...marginProps}
 			orientation="horizontal"
 			size="content"
-			style={[styles.root, style]}
-			contentStyle={styles.content}>
-			<pre ref={ref} {...stylex.props(styles.pre)} {...props}>
+			style={style}
+			xstyle={[styles.root, xstyle]}>
+			<pre ref={ref} {...stylex.props(styles.pre)} {...preProps}>
 				<code>{children}</code>
 			</pre>
 		</ScrollArea>
@@ -34,10 +52,6 @@ const styles = stylex.create({
 		maxWidth: "100%",
 		width: "100%",
 	},
-	content: {
-		minWidth: "100%",
-		width: "max-content",
-	},
 	pre: {
 		margin: 0,
 		padding: tokens["--space-2"],
@@ -48,5 +62,6 @@ const styles = stylex.create({
 		lineHeight: tokens["--line-height-2"],
 		whiteSpace: "pre",
 		minWidth: "100%",
+		width: "max-content",
 	},
 });

@@ -48,8 +48,8 @@ export type ModelSelectorRootProps = MenuRootProps & {
 
 type MenuTriggerProps = ComponentProps<typeof Menu.Trigger>;
 
-export type ModelSelectorTriggerProps = Omit<MenuTriggerProps, "style"> &
-	Pick<ButtonProps, "className" | "shape" | "size" | "style" | "variant"> & {
+export type ModelSelectorTriggerProps = Omit<MenuTriggerProps, "style" | "xstyle"> &
+	Pick<ButtonProps, "className" | "shape" | "size" | "style" | "xstyle" | "variant"> & {
 		showEffort?: boolean;
 	};
 export type ModelSelectorPopupProps = Omit<ComponentProps<typeof Menu.Popup>, "children">;
@@ -143,6 +143,7 @@ export function Trigger({
 	showEffort = true,
 	size,
 	style,
+	xstyle,
 	variant,
 	...props
 }: ModelSelectorTriggerProps) {
@@ -164,6 +165,7 @@ export function Trigger({
 						size={size}
 						startSlot={triggerIcon}
 						style={style}
+						xstyle={xstyle}
 						variant={variant}
 					/>
 				)
@@ -184,13 +186,13 @@ export function Trigger({
 	);
 }
 
-export function Popup({ positionerProps, style, ...props }: ModelSelectorPopupProps) {
+export function Popup({ positionerProps, xstyle, ...props }: ModelSelectorPopupProps) {
 	const context = useModelSelectorContext("Popup");
 
 	return (
 		<Menu.Popup
 			positionerProps={{ align: "start", side: "top", ...positionerProps }}
-			style={[parts.popup, style]}
+			xstyle={[parts.popup, xstyle]}
 			{...props}>
 			<Menu.SubmenuRoot onOpenChange={(open) => open && context.latchSubmenu()}>
 				<SettingsTrigger label="Model" value={context.selectedModel.label} />
@@ -206,7 +208,7 @@ export function Popup({ positionerProps, style, ...props }: ModelSelectorPopupPr
 							fallbackAxisSide: "none",
 						},
 					}}
-					style={parts.popup}>
+					{...stylex.props(parts.popup)}>
 					<List
 						groups={context.groups}
 						value={context.value.model}
@@ -227,7 +229,7 @@ export function Popup({ positionerProps, style, ...props }: ModelSelectorPopupPr
 				onValueChange={(speed) => context.updateValue({ ...context.value, speed }, "speed")}
 			/>
 			<Menu.Separator />
-			<Menu.Item style={parts.resetItem} onClick={() => context.updateValue(context.defaultValue, "reset")}>
+			<Menu.Item {...stylex.props(parts.resetItem)} onClick={() => context.updateValue(context.defaultValue, "reset")}>
 				<span {...stylex.props(parts.resetLabel)}>Reset to default</span>
 				<ArrowCounterClockwiseIcon aria-hidden size="1em" weight="regular" {...stylex.props(parts.resetIcon)} />
 			</Menu.Item>
@@ -237,7 +239,7 @@ export function Popup({ positionerProps, style, ...props }: ModelSelectorPopupPr
 
 function SettingsTrigger({ label, value, valueIcon }: { label: ReactNode; value: ReactNode; valueIcon?: ReactNode }) {
 	return (
-		<Menu.SubmenuTrigger openOnHover delay={0} style={parts.settingsRow}>
+		<Menu.SubmenuTrigger openOnHover delay={0} {...stylex.props(parts.settingsRow)}>
 			<span {...stylex.props(parts.settingsLabel)}>{label}</span>
 			<span {...stylex.props(parts.settingsValue)}>
 				<span aria-hidden {...stylex.props(parts.icon)}>
@@ -309,7 +311,7 @@ export function List({ groups, value, onValueChange }: ModelSelectorListProps) {
 								key={option.value}
 								value={option.value}
 								disabled={option.disabled}
-								style={parts.modelItem}>
+								{...stylex.props(parts.modelItem)}>
 								{option.icon ? (
 									<span aria-hidden {...stylex.props(parts.modelIcon)}>
 										{option.icon}

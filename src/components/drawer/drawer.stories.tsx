@@ -130,7 +130,7 @@ function SnapPointsDrawer() {
 								</Stack>
 								<Stack gap={3}>
 									{Array.from({ length: 16 }, (_, index) => (
-										<Stack key={index} gap={1} style={storyParts.activityCard}>
+										<Stack key={index} gap={1} xstyle={storyParts.activityCard}>
 											<Text fontWeight="medium">Activity {index + 1}</Text>
 											<Text color="muted" size="1">
 												Project details were updated by a teammate.
@@ -140,7 +140,7 @@ function SnapPointsDrawer() {
 								</Stack>
 							</Drawer.Body>
 						</Drawer.Content>
-						<Drawer.Footer style={storyParts.snapPointFooter}>
+						<Drawer.Footer xstyle={storyParts.snapPointFooter}>
 							<Drawer.Close render={<Button variant="secondary" />}>Close</Drawer.Close>
 						</Drawer.Footer>
 					</Drawer.Popup>
@@ -205,7 +205,7 @@ export const DetachedTriggers: Story = {
 				{({ payload }) =>
 					payload ? (
 						<Drawer.Portal>
-							<Drawer.Viewport style={storyParts.detachedViewport}>
+							<Drawer.Viewport xstyle={storyParts.detachedViewport}>
 								<Drawer.Popup>
 									<Drawer.Handle />
 									<Drawer.Content key={payload.title}>

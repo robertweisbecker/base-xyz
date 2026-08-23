@@ -103,7 +103,7 @@ function DndKitBoardColumn({ columnId, label, items }: { columnId: DemoColumnId;
 							icon={<KanbanIcon weight="duotone" />}
 							title="No items"
 							description="Move completed tasks here."
-							style={demoStyles.empty}
+							xstyle={demoStyles.empty}
 						/>
 					</li>
 				) : null}

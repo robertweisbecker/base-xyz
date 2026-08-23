@@ -1,11 +1,10 @@
 import { Switch as BaseSwitch } from "@base-ui/react/switch";
 import * as stylex from "@stylexjs/stylex";
-import type { StyleXStyles } from "@stylexjs/stylex";
 import { useId } from "react";
 import { media } from "@/styles/constants.stylex";
-import { resolveThemeProps } from "@/theme/theme-props";
-import type { FieldThemeProps } from "@/components/field/field.types";
-import { fieldStyles, fieldThemeProps, labelMarker } from "@/components/field/field.stylex";
+import { mergeStyle, type BaseStyleProps } from "@/styles/props/base";
+import { extractMarginProps, type MarginProps } from "@/styles/props/spacing.stylex";
+import { fieldStyles, labelMarker } from "@/components/field/field.stylex";
 import { focusRing } from "@/styles/recipes/focus";
 import { tokens } from "@/theme/tokens.stylex";
 import { VisuallyHidden } from "@/components/visually-hidden/visually-hidden";
@@ -16,16 +15,15 @@ export type SwitchSize = "sm" | "md" | "lg";
 const ENABLED_HOVER = ":hover:not([data-disabled],[data-readonly])";
 const ENABLED_ACTIVE = ":active:not([data-disabled],[data-readonly])";
 
-export type SwitchProps = Omit<BaseSwitch.Root.Props, "className" | "color" | "style" | keyof FieldThemeProps> &
-	FieldThemeProps & {
+export type SwitchProps = Omit<BaseSwitch.Root.Props, "className" | "color" | "style" | keyof MarginProps> &
+	MarginProps &
+	BaseStyleProps & {
 		label: string;
 		description?: string;
 		/** Hides the label visually while keeping it available to assistive tech. */
 		visuallyHideLabel?: boolean;
 		size?: SwitchSize;
 		className?: string;
-		/** StyleX overrides, applied after the component's own styles. */
-		style?: StyleXStyles;
 	};
 
 export function Switch({
@@ -34,6 +32,7 @@ export function Switch({
 	visuallyHideLabel = false,
 	className,
 	style,
+	xstyle,
 	size = "md",
 	disabled,
 	readOnly,
@@ -42,12 +41,16 @@ export function Switch({
 	"aria-describedby": ariaDescribedBy,
 	...props
 }: SwitchProps) {
-	const { restProps, styles } = resolveThemeProps(props, fieldThemeProps);
 	const generatedId = useId();
 	const id = providedId ?? generatedId;
 	const descriptionId = description ? `${generatedId}-description` : undefined;
+	const { marginStyles, rest } = extractMarginProps(props);
 
-	const rootSx = stylex.props(switchParts.root, ...styles, style);
+	const rootSx = stylex.props(
+		switchParts.root,
+		marginStyles,
+		xstyle,
+	);
 	const labelContent = (
 		<>
 			{label}
@@ -60,7 +63,7 @@ export function Switch({
 	);
 
 	return (
-		<div className={attrJoin(rootSx.className, className)} style={rootSx.style}>
+		<div className={attrJoin(rootSx.className, className)} style={mergeStyle(rootSx.style, style)}>
 			<label
 				htmlFor={id}
 				data-disabled={disabled ? "" : undefined}
@@ -87,7 +90,7 @@ export function Switch({
 					nativeButton
 					render={<button type="button" />}
 					{...stylex.props(switchParts.track, sizeVariants[size], focusRing.offset)}
-					{...restProps}>
+					{...rest}>
 					<BaseSwitch.Thumb {...stylex.props(switchParts.thumb)} />
 				</BaseSwitch.Root>
 			</label>

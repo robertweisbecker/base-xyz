@@ -194,7 +194,7 @@ function ComposerDemo({ clearOnSubmit, defaultValue, disabled }: ComposerDemoPro
 							}
 							setFeedback(`Speed changed to ${value.speed}.`);
 						}}>
-						<ModelSelector.Trigger variant="neutral" size="sm" shape="pill" style={storyParts.modelTrigger} />
+						<ModelSelector.Trigger variant="neutral" size="sm" shape="pill" xstyle={storyParts.modelTrigger} />
 						<ModelSelector.Popup />
 					</ModelSelector.Root>
 				</ComposerSurface>

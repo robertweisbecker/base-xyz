@@ -44,7 +44,7 @@ export function ContextPopover({ size = "md", total, usage, variant = "ghost" }:
 					trackColor="color-mix(in srgb, currentColor 25%, transparent)"
 					showValue={false}
 					size={size === "lg" ? 20 : 16}
-					style={contextPopoverParts.gauge}
+					{...stylex.props(contextPopoverParts.gauge)}
 					value={ratio * 100}
 				/>
 			</Popover.Trigger>
@@ -52,7 +52,7 @@ export function ContextPopover({ size = "md", total, usage, variant = "ghost" }:
 			<Popover.Popup
 				positionerProps={{ align: "center", side: "top" }}
 				showClose={false}
-				style={contextPopoverParts.popup}>
+				{...stylex.props(contextPopoverParts.popup)}>
 				<Popover.Title>Context usage</Popover.Title>
 				<Meter.Root
 					aria-valuetext={`${tokenFraction}, ${percentageText}`}

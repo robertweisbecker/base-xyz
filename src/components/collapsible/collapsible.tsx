@@ -1,47 +1,59 @@
 import { Collapsible as BaseCollapsible } from "@base-ui/react/collapsible";
 import { CaretDownIcon } from "@phosphor-icons/react/dist/csr/CaretDown";
 import * as stylex from "@stylexjs/stylex";
-import type { StyleXStyles } from "@stylexjs/stylex";
 import type { ComponentProps } from "react";
 import { media } from "@/styles/constants.stylex";
 import { tokens } from "@/theme/tokens.stylex";
 import { focusRing } from "@/styles/recipes/focus";
-
 import type { ButtonShape, ButtonSize } from "@/components/button/button";
+import { mergeStyle, type BaseStyleProps } from "@/styles/props/base";
+import { extractMarginProps, type MarginProps } from "@/styles/props/spacing.stylex";
 import { attrJoin } from "@/utils/attr-join";
 
 const HOVER_WHEN_INACTIVE = ":hover:not([data-disabled]):not([data-panel-open])";
 
-type StyledProps<T> = Omit<T, "className" | "style"> & {
+type PartStyleProps = BaseStyleProps & {
 	className?: string;
-	style?: StyleXStyles;
 };
 
-export type CollapsibleRootProps = StyledProps<BaseCollapsible.Root.Props>;
+export type CollapsibleRootProps = Omit<BaseCollapsible.Root.Props, "className" | "style" | keyof MarginProps> &
+	MarginProps &
+	BaseStyleProps & {
+		className?: string;
+	};
+
 export type CollapsibleTriggerSize = ButtonSize;
 export type CollapsibleTriggerShape = Extract<ButtonShape, "default" | "square">;
 export type CollapsibleTriggerVariant = "default" | "link";
 
-export type CollapsibleTriggerProps = StyledProps<BaseCollapsible.Trigger.Props> & {
-	size?: CollapsibleTriggerSize;
-	shape?: CollapsibleTriggerShape;
-	variant?: CollapsibleTriggerVariant;
-};
-export type CollapsiblePanelProps = StyledProps<BaseCollapsible.Panel.Props>;
-export type CollapsibleContentProps = StyledProps<ComponentProps<"div">>;
-export type CollapsibleIconProps = StyledProps<ComponentProps<"span">> & {
-	side?: "start" | "end";
-};
+export type CollapsibleTriggerProps = Omit<BaseCollapsible.Trigger.Props, "className" | "style"> &
+	PartStyleProps & {
+		size?: CollapsibleTriggerSize;
+		shape?: CollapsibleTriggerShape;
+		variant?: CollapsibleTriggerVariant;
+	};
 
-export function Root({ ref, className, style, ...props }: CollapsibleRootProps) {
-	const { className: sxClassName, style: sxStyle } = stylex.props(collapsibleParts.root, style);
+export type CollapsiblePanelProps = Omit<BaseCollapsible.Panel.Props, "className" | "style"> & PartStyleProps;
+export type CollapsibleContentProps = Omit<ComponentProps<"div">, "className" | "style"> & PartStyleProps;
+export type CollapsibleIconProps = Omit<ComponentProps<"span">, "className" | "style"> &
+	PartStyleProps & {
+		side?: "start" | "end";
+	};
+
+export function Root({ ref, className, style, xstyle, ...props }: CollapsibleRootProps) {
+	const { marginStyles, rest } = extractMarginProps(props);
+	const sx = stylex.props(
+		collapsibleParts.root,
+		marginStyles,
+		xstyle,
+	);
 
 	return (
 		<BaseCollapsible.Root
 			ref={ref}
-			className={attrJoin(sxClassName, className)}
-			style={sxStyle}
-			{...props}
+			className={attrJoin(sx.className, className)}
+			style={mergeStyle(sx.style, style)}
+			{...rest}
 		/>
 	);
 }
@@ -50,6 +62,7 @@ export function Trigger({
 	ref,
 	className,
 	style,
+	xstyle,
 	render,
 	shape = "default",
 	size = "md",
@@ -57,14 +70,14 @@ export function Trigger({
 	variant = "default",
 	...props
 }: CollapsibleTriggerProps) {
-	const { className: sxClassName, style: sxStyle } = stylex.props(
+	const sx = stylex.props(
 		collapsibleParts.trigger,
 		triggerSizes[size],
 		triggerShapes[shape],
 		variant === "link" && triggerVariants.link,
 		focusRing.offset,
 		stylex.defaultMarker(),
-		style,
+		xstyle,
 	);
 
 	return (
@@ -72,45 +85,52 @@ export function Trigger({
 			ref={ref}
 			render={render}
 			type={type}
-			className={attrJoin(sxClassName, className)}
-			style={sxStyle}
+			className={attrJoin(sx.className, className)}
+			style={mergeStyle(sx.style, style)}
 			{...props}
 		/>
 	);
 }
 
-export function Panel({ ref, className, style, ...props }: CollapsiblePanelProps) {
-	const { className: sxClassName, style: sxStyle } = stylex.props(collapsibleParts.panel, style);
+export function Panel({ ref, className, style, xstyle, ...props }: CollapsiblePanelProps) {
+	const sx = stylex.props(collapsibleParts.panel, xstyle);
 
 	return (
 		<BaseCollapsible.Panel
 			ref={ref}
-			className={attrJoin(sxClassName, className)}
-			style={sxStyle}
+			className={attrJoin(sx.className, className)}
+			style={mergeStyle(sx.style, style)}
 			{...props}
 		/>
 	);
 }
 
-export function Content({ ref, className, style, ...props }: CollapsibleContentProps) {
-	const { className: sxClassName, style: sxStyle } = stylex.props(collapsibleParts.content, style);
+export function Content({ ref, className, style, xstyle, ...props }: CollapsibleContentProps) {
+	const sx = stylex.props(collapsibleParts.content, xstyle);
 
-	return <div ref={ref} className={attrJoin(sxClassName, className)} style={sxStyle} {...props} />;
+	return (
+		<div
+			ref={ref}
+			className={attrJoin(sx.className, className)}
+			style={mergeStyle(sx.style, style)}
+			{...props}
+		/>
+	);
 }
 
-export function Icon({ ref, children, className, style, side = "end", ...props }: CollapsibleIconProps) {
-	const { className: sxClassName, style: sxStyle } = stylex.props(
+export function Icon({ ref, children, className, style, xstyle, side = "end", ...props }: CollapsibleIconProps) {
+	const sx = stylex.props(
 		collapsibleParts.icon,
 		side === "start" ? collapsibleParts.iconAtStart : collapsibleParts.iconAtEnd,
-		style,
+		xstyle,
 	);
 
 	return (
 		<span
 			ref={ref}
 			aria-hidden
-			className={attrJoin(sxClassName, className)}
-			style={sxStyle}
+			className={attrJoin(sx.className, className)}
+			style={mergeStyle(sx.style, style)}
 			{...props}>
 			{children ?? <CaretDownIcon size="1em" weight="regular" />}
 		</span>
@@ -285,5 +305,9 @@ const triggerVariants = stylex.create({
 });
 
 export const Collapsible = {
-	Root, Trigger, Panel, Content, Icon,
+	Root,
+	Trigger,
+	Panel,
+	Content,
+	Icon,
 } as const;

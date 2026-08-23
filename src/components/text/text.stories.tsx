@@ -93,7 +93,7 @@ export const Sizes: Story = {
 	render: () => (
 		<Stack gap={3}>
 			{sizeOptions.map((size) => (
-				<Grid key={size} align="baseline" gap={4} style={storyStyles.specimen}>
+				<Grid key={size} align="baseline" gap={4} xstyle={storyStyles.specimen}>
 					<Text size="1" color="muted" fontFamily="mono">
 						{size}
 					</Text>
@@ -109,7 +109,7 @@ export const Styles: Story = {
 		controls: { disable: true },
 	},
 	render: () => (
-		<Grid gap={3} style={storyStyles.styleGrid}>
+		<Grid gap={3} xstyle={storyStyles.styleGrid}>
 			{(["sans", "serif", "mono"] as const).flatMap((fontFamily) =>
 				(["regular", "medium", "semibold", "bold"] as const).map((fontWeight) => (
 					<Text key={`${fontFamily}-${fontWeight}`} fontFamily={fontFamily} fontWeight={fontWeight} size="3">

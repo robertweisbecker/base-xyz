@@ -6,9 +6,9 @@ import * as stylex from "@stylexjs/stylex";
 import type { StyleXStyles } from "@stylexjs/stylex";
 import { createContext, useContext, useId, type ReactNode } from "react";
 import { media } from "@/styles/constants.stylex";
-import { resolveThemeProps } from "@/theme/theme-props";
-import type { FieldThemeProps } from "@/components/field/field.types";
-import { fieldChoiceGroupStyles, fieldStyles, fieldThemeProps, labelMarker } from "@/components/field/field.stylex";
+import { mergeStyle, type BaseStyleProps } from "@/styles/props/base";
+import { extractMarginProps, type MarginProps } from "@/styles/props/spacing.stylex";
+import { fieldChoiceGroupStyles, fieldStyles, labelMarker } from "@/components/field/field.stylex";
 import { textStyles } from "@/components/text/text.stylex";
 import { focusRing } from "@/styles/recipes/focus";
 import { pressable } from "@/styles/recipes/transitions";
@@ -24,9 +24,10 @@ const ENABLED_ACTIVE = ":active:not([data-disabled],[data-readonly])";
 
 export type CheckboxProps = Omit<
 	BaseCheckbox.Root.Props,
-	"children" | "className" | "color" | "style" | keyof FieldThemeProps
+	"children" | "className" | "color" | "style" | keyof MarginProps
 > &
-	FieldThemeProps & {
+	MarginProps &
+	BaseStyleProps & {
 		label: ReactNode;
 		description?: ReactNode;
 		/** Hides the label visually while keeping it available to assistive tech. */
@@ -34,15 +35,17 @@ export type CheckboxProps = Omit<
 		invalid?: boolean;
 		size?: CheckboxSize;
 		className?: string;
-		/** StyleX overrides, applied after the component's own styles. */
-		style?: StyleXStyles;
 	};
 
 export type CheckboxGroupProps = Omit<
 	BaseCheckboxGroup.Props,
-	"className" | "color" | "style" | keyof FieldThemeProps
+	| "className"
+	| "color"
+	| "style"
+	| keyof MarginProps
 > &
-	FieldThemeProps & {
+	MarginProps &
+	BaseStyleProps & {
 		label?: ReactNode;
 		description?: ReactNode;
 		name?: string;
@@ -50,8 +53,6 @@ export type CheckboxGroupProps = Omit<
 		inline?: boolean;
 		size?: CheckboxSize;
 		className?: string;
-		/** StyleX overrides, applied after the component's own styles. */
-		style?: StyleXStyles;
 	};
 
 const CheckboxGroupFieldContext = createContext<{
@@ -67,6 +68,7 @@ export function Checkbox({
 	visuallyHideLabel = false,
 	className,
 	style,
+	xstyle,
 	disabled,
 	invalid,
 	readOnly,
@@ -76,7 +78,7 @@ export function Checkbox({
 	"aria-describedby": ariaDescribedBy,
 	...props
 }: CheckboxProps) {
-	const { restProps, styles } = resolveThemeProps(props, fieldThemeProps);
+	const { marginStyles, rest } = extractMarginProps(props);
 	const groupContext = useContext(CheckboxGroupFieldContext);
 	const isDisabled = Boolean(disabled || groupContext.disabled);
 	const resolvedSize = size ?? groupContext.size ?? "md";
@@ -114,7 +116,7 @@ export function Checkbox({
 						focusRing.offset,
 						pressable.transition,
 					)}
-					{...restProps}>
+					{...rest}>
 					<BaseCheckbox.Indicator
 						{...stylex.props(checkboxParts.indicator, checkboxParts.indicatorTransition)}
 						render={(indicatorProps, state) => (
@@ -147,8 +149,13 @@ export function Checkbox({
 			) : null}
 		</>
 	);
-	const containerSx = stylex.props(checkboxParts.item, ...styles, style);
+	const containerSx = stylex.props(
+		checkboxParts.item,
+		marginStyles,
+		xstyle,
+	);
 	const containerClassName = attrJoin(containerSx.className, className);
+	const containerStyle = mergeStyle(containerSx.style, style);
 
 	return groupContext.inGroup ? (
 		<Field.Item
@@ -156,7 +163,7 @@ export function Checkbox({
 			data-invalid={invalid ? "" : undefined}
 			data-readonly={readOnly ? "" : undefined}
 			className={containerClassName}
-			style={containerSx.style}>
+			style={containerStyle}>
 			{content}
 		</Field.Item>
 	) : (
@@ -165,7 +172,7 @@ export function Checkbox({
 			invalid={invalid}
 			data-readonly={readOnly ? "" : undefined}
 			className={containerClassName}
-			style={containerSx.style}>
+			style={containerStyle}>
 			{content}
 		</Field.Root>
 	);
@@ -178,6 +185,7 @@ export function CheckboxGroup({
 	children,
 	className,
 	style,
+	xstyle,
 	disabled,
 	inline = false,
 	size,
@@ -185,13 +193,17 @@ export function CheckboxGroup({
 	name,
 	...props
 }: CheckboxGroupProps) {
-	const { restProps, styles } = resolveThemeProps(props, fieldThemeProps);
+	const { marginStyles, rest } = extractMarginProps(props);
 	const parentGroupContext = useContext(CheckboxGroupFieldContext);
 	const isDisabled = Boolean(disabled || parentGroupContext.disabled);
 	const resolvedSize = size ?? parentGroupContext.size ?? "md";
 	const generatedId = useId();
 	const descriptionId = description ? `${generatedId}-description` : undefined;
-	const groupSx = stylex.props(checkboxParts.group, ...styles, style);
+	const groupSx = stylex.props(
+		checkboxParts.group,
+		marginStyles,
+		xstyle,
+	);
 
 	return (
 		<Field.Root
@@ -205,13 +217,13 @@ export function CheckboxGroup({
 							ref={ref}
 							disabled={isDisabled}
 							aria-describedby={attrJoin(ariaDescribedBy, descriptionId) || undefined}
-							{...restProps}
+							{...rest}
 						/>
 					}
 				/>
 			}
 			className={attrJoin(groupSx.className, className)}
-			style={groupSx.style}>
+			style={mergeStyle(groupSx.style, style)}>
 			{label ? (
 				<Fieldset.Legend {...stylex.props(fieldStyles.groupLabel, checkboxParts.legend)}>{label}</Fieldset.Legend>
 			) : null}

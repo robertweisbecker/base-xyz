@@ -75,7 +75,7 @@ export const Resizing: Story = {
 		controls: { disable: true },
 	},
 	render: () => (
-		<Grid gap={8} maxWidth="900px" style={styles.responsiveGrid}>
+		<Grid gap={8} maxWidth="900px" xstyle={styles.responsiveGrid}>
 			<StateSpecimen label="Rows only">
 				<Textarea
 					label="Project update"
@@ -118,7 +118,7 @@ export const States: Story = {
 		controls: { disable: true },
 	},
 	render: () => (
-		<Grid gap={8} maxWidth="900px" style={styles.responsiveGrid}>
+		<Grid gap={8} maxWidth="900px" xstyle={styles.responsiveGrid}>
 			<StateSpecimen label="Default">
 				<Textarea label="Project update" placeholder="What changed?" />
 			</StateSpecimen>

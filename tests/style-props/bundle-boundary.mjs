@@ -2,13 +2,13 @@ import { gzipSync } from "node:zlib";
 import { build } from "vite";
 
 const virtualEntry = {
-	name: "theme-props-bundle-boundary",
+	name: "style-props-bundle-boundary",
 	resolveId(id) {
-		return id === "virtual:theme-props-entry" ? "\0virtual:theme-props-entry" : undefined;
+		return id === "virtual:style-props-entry" ? "\0virtual:style-props-entry" : undefined;
 	},
 	load(id) {
-		if (id !== "\0virtual:theme-props-entry") return undefined;
-		return 'import { marginThemeProps } from "/src/theme/theme-props-spacing.stylex.ts"; console.log(marginThemeProps);';
+		if (id !== "\0virtual:style-props-entry") return undefined;
+		return 'import { Kbd } from "/src/components/index.ts"; console.log(Kbd);';
 	},
 };
 
@@ -18,7 +18,7 @@ const result = await build({
 	build: {
 		write: false,
 		minify: "esbuild",
-		rollupOptions: { input: "virtual:theme-props-entry" },
+		rollupOptions: { input: "virtual:style-props-entry" },
 	},
 });
 const outputs = Array.isArray(result) ? result.flatMap((item) => item.output) : result.output;

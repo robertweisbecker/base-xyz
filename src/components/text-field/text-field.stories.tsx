@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
+import x from "@stylexjs/atoms";
 import * as stylex from "@stylexjs/stylex";
 import type { ReactNode } from "react";
 import { Code } from "@/components/code/code";
@@ -8,6 +9,7 @@ import { NumberField } from "@/components/number-field/number-field";
 import { Select } from "@/components/select/select";
 import { Text } from "@/components/text/text";
 import { Textarea } from "@/components/textarea/textarea";
+import { tokens } from "@/theme/tokens.stylex";
 import { TextField } from "./text-field";
 
 const meta = {
@@ -70,11 +72,10 @@ export const Playground: Story = {
 };
 
 export const WrapperLayout: Story = {
-	args: {
-		gap: 3,
-		orientation: "horizontal",
-	},
 	parameters: { controls: { disable: true } },
+	render: (args) => (
+		<TextField {...args} xstyle={[x.display.flex, x.flexDirection.row, x.gap(tokens["--space-3"])]} />
+	),
 };
 
 export const States: Story = {
@@ -82,7 +83,7 @@ export const States: Story = {
 		controls: { disable: true },
 	},
 	render: () => (
-		<Grid gap={8} maxWidth="800px" style={styles.stateGrid}>
+		<Grid gap={8} maxWidth="800px" xstyle={styles.stateGrid}>
 			<StateSpecimen label="Default">
 				<TextField label="Workspace name" placeholder="e.g. Acme Studio" />
 			</StateSpecimen>
@@ -127,7 +128,7 @@ export const FieldFamilyParity: Story = {
 		controls: { disable: true },
 	},
 	render: () => (
-		<Box pb={2} style={styles.familyOverflow}>
+		<Box pb={2} xstyle={styles.familyOverflow}>
 			<style>{`
 				[data-field-family-control] > * > :first-child {
 					clip: rect(0 0 0 0);
@@ -139,7 +140,7 @@ export const FieldFamilyParity: Story = {
 					width: 1px;
 				}
 			`}</style>
-			<Grid align="start" gap={6} style={styles.familyGrid}>
+			<Grid align="start" gap={6} xstyle={styles.familyGrid}>
 				<span aria-hidden />
 				{FIELD_SIZES.map((size) => (
 					<Text key={size} fontWeight="semibold" size="2" textAlign="center" wrap="nowrap">

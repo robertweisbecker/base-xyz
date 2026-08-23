@@ -1,16 +1,13 @@
 import { Meter as BaseMeter } from "@base-ui/react/meter";
 import * as stylex from "@stylexjs/stylex";
-import type { StyleXStyles } from "@stylexjs/stylex";
 import { textStyles } from "@/components/text/text.stylex";
+import { mergeStyle, type BaseStyleProps } from "@/styles/props/base";
+import { extractMarginProps, type MarginProps } from "@/styles/props/spacing.stylex";
 import { createContext, useContext, type CSSProperties } from "react";
 import { tokens } from "@/theme/tokens.stylex";
 import { attrJoin } from "@/utils/attr-join";
 
-type StyledProps<T> = Omit<T, "className" | "style"> & {
-	className?: string;
-	/** StyleX overrides, applied after the component's own styles. */
-	style?: StyleXStyles;
-};
+type PartProps<T> = Omit<T, "className" | "style" | "xstyle"> & BaseStyleProps & { className?: string };
 
 type MeterStyle = CSSProperties & {
 	"--_meter-indicator-color"?: string;
@@ -19,22 +16,24 @@ type MeterStyle = CSSProperties & {
 
 export type MeterVariant = "bar" | "segmented";
 
-export type RootProps = Omit<StyledProps<BaseMeter.Root.Props>, "color"> & {
-	/** The lower boundary of the middle range. */
-	low?: number;
-	/** The upper boundary of the middle range. */
-	high?: number;
-	/** A value in the range considered most desirable. */
-	optimum?: number;
-	/** Overrides the indicator color, including colors derived from semantic thresholds. */
-	color?: string;
-	/** The visual treatment of the meter. */
-	variant?: MeterVariant;
-};
-export type LabelProps = StyledProps<BaseMeter.Label.Props>;
-export type ValueProps = StyledProps<BaseMeter.Value.Props>;
-export type TrackProps = StyledProps<BaseMeter.Track.Props>;
-export type IndicatorProps = StyledProps<BaseMeter.Indicator.Props>;
+export type RootProps = Omit<BaseMeter.Root.Props, "className" | "style" | "xstyle" | "color" | keyof MarginProps> &
+	MarginProps &
+	PartProps<BaseMeter.Root.Props> & {
+		/** The lower boundary of the middle range. */
+		low?: number;
+		/** The upper boundary of the middle range. */
+		high?: number;
+		/** A value in the range considered most desirable. */
+		optimum?: number;
+		/** Overrides the indicator color, including colors derived from semantic thresholds. */
+		color?: string;
+		/** The visual treatment of the meter. */
+		variant?: MeterVariant;
+	};
+export type LabelProps = PartProps<BaseMeter.Label.Props>;
+export type ValueProps = PartProps<BaseMeter.Value.Props>;
+export type TrackProps = PartProps<BaseMeter.Track.Props>;
+export type IndicatorProps = PartProps<BaseMeter.Indicator.Props>;
 
 type MeterState = "optimum" | "suboptimum" | "critical";
 
@@ -65,17 +64,24 @@ export function Root({
 	min = 0,
 	optimum,
 	style,
+	xstyle,
 	value,
 	variant = "bar",
 	...props
 }: RootProps) {
+	const { marginStyles, rest } = extractMarginProps(props);
 	const meterValues = resolveMeterValues({ high, low, max, min, optimum, value });
 	const hasSemanticThresholds = [low, high, optimum].some(isValidMeterNumber);
 	const meterState = hasSemanticThresholds ? getMeterState(meterValues) : undefined;
 	const resolvedIndicatorColor = indicatorColor ?? (meterState ? meterStateColors[meterState] : undefined);
-	const sx = stylex.props(meterParts.root, variant === "segmented" && meterParts.segmentedRoot, style);
+	const sx = stylex.props(
+		meterParts.root,
+		variant === "segmented" && meterParts.segmentedRoot,
+		marginStyles,
+		xstyle,
+	);
 	const meterStyle: MeterStyle = {
-		...sx.style,
+		...mergeStyle(sx.style, style),
 		...(resolvedIndicatorColor && {
 			"--_meter-indicator-color": resolvedIndicatorColor,
 		}),
@@ -94,7 +100,7 @@ export function Root({
 				min={meterValues.minimumValue}
 				style={meterStyle}
 				value={meterValues.actualValue}
-				{...props}
+				{...rest}
 			/>
 		</MeterVariantContext.Provider>
 	);
@@ -171,67 +177,67 @@ function getMeterRegion(value: number, low: number, high: number) {
 	return "middle";
 }
 
-export function Label({ ref, className, style, ...props }: LabelProps) {
+export function Label({ ref, className, style, xstyle, ...props }: LabelProps) {
 	const variant = useContext(MeterVariantContext);
 	const sx = stylex.props(
 		textStyles.supporting,
 		meterParts.label,
 		variant === "segmented" && meterParts.segmentedLabel,
-		style,
+		xstyle,
 	);
 
 	return (
 		<BaseMeter.Label
 			ref={ref}
 			className={attrJoin(sx.className, className)}
-			style={sx.style}
+			style={mergeStyle(sx.style, style)}
 			{...props}
 		/>
 	);
 }
 
-export function Value({ ref, className, style, ...props }: ValueProps) {
+export function Value({ ref, className, style, xstyle, ...props }: ValueProps) {
 	const variant = useContext(MeterVariantContext);
 	const sx = stylex.props(
 		textStyles.supporting,
 		meterParts.value,
 		variant === "segmented" && meterParts.segmentedValue,
-		style,
+		xstyle,
 	);
 
 	return (
 		<BaseMeter.Value
 			ref={ref}
 			className={attrJoin(sx.className, className)}
-			style={sx.style}
+			style={mergeStyle(sx.style, style)}
 			{...props}
 		/>
 	);
 }
 
-export function Track({ ref, className, style, ...props }: TrackProps) {
+export function Track({ ref, className, style, xstyle, ...props }: TrackProps) {
 	const variant = useContext(MeterVariantContext);
-	const sx = stylex.props(meterParts.track, variant === "segmented" && meterParts.segmentedTrack, style);
+	const sx = stylex.props(meterParts.track, variant === "segmented" && meterParts.segmentedTrack, xstyle);
 
 	return (
 		<BaseMeter.Track
 			ref={ref}
 			className={attrJoin(sx.className, className)}
-			style={sx.style}
+			style={mergeStyle(sx.style, style)}
 			{...props}
 		/>
 	);
 }
 
-export function Indicator({ ref, className, style, ...props }: IndicatorProps) {
+export function Indicator({ ref, className, style, xstyle, ...props }: IndicatorProps) {
 	const variant = useContext(MeterVariantContext);
-	const sx = stylex.props(meterParts.indicator, variant === "segmented" && meterParts.segmentedIndicator, style);
+	const sx = stylex.props(meterParts.indicator, variant === "segmented" && meterParts.segmentedIndicator, xstyle);
 
 	return (
 		<BaseMeter.Indicator
 			ref={ref}
 			className={attrJoin(sx.className, className)}
-			style={sx.style}
+			style={mergeStyle(sx.style, style)}
 			{...props}
 		/>
 	);
@@ -311,5 +317,9 @@ const meterParts = stylex.create({
 });
 
 export const Meter = {
-	Root, Label, Value, Track, Indicator,
+	Root,
+	Label,
+	Value,
+	Track,
+	Indicator,
 } as const;

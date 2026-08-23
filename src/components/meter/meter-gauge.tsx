@@ -1,7 +1,8 @@
 import { Meter as BaseMeter } from "@base-ui/react/meter";
 import * as stylex from "@stylexjs/stylex";
-import type { StyleXStyles } from "@stylexjs/stylex";
 import type { ReactNode } from "react";
+import { mergeStyle, type BaseStyleProps } from "@/styles/props/base";
+import { extractMarginProps, type MarginProps } from "@/styles/props/spacing.stylex";
 import { textStyles } from "@/components/text/text.stylex";
 import { tokens } from "@/theme/tokens.stylex";
 import { attrJoin } from "@/utils/attr-join";
@@ -19,8 +20,10 @@ export type MeterGaugeArc = "primary" | "equal";
 
 export type MeterGaugeProps = Omit<
 	BaseMeter.Root.Props,
-	"children" | "className" | "max" | "min" | "style" | "value"
-> & {
+	"children" | "className" | "max" | "min" | "style" | "value" | keyof MarginProps
+> &
+	MarginProps &
+	BaseStyleProps & {
 	/** Controls how the gap is distributed between the primary and secondary arcs. */
 	arc?: MeterGaugeArc;
 	/** Replaces the value at the center of the gauge. */
@@ -35,8 +38,6 @@ export type MeterGaugeProps = Omit<
 	/** Whether to show the numeric value when custom children are not provided. */
 	showValue?: boolean;
 	size?: MeterGaugeSize;
-	/** StyleX overrides, applied after the component's own styles. */
-	style?: StyleXStyles;
 	value: number;
 };
 
@@ -55,9 +56,11 @@ export function MeterGauge({
 	showValue = true,
 	size = 32,
 	style,
+	xstyle,
 	value,
-	...rootProps
+	...props
 }: MeterGaugeProps) {
+	const { marginStyles, rest } = extractMarginProps(props);
 	const config = gaugeSizes[size];
 	const percentage = clamp(value);
 	const gap = percentage === 0 || percentage === 100 ? 0 : config.gap;
@@ -71,15 +74,19 @@ export function MeterGauge({
 	const secondaryLength = secondaryPercentage * (circumference / 100);
 	const primaryRotation = -90 + gap * equalOffset * 3.6;
 	const secondaryRotation = 270 - gap * (1 - equalOffset) * 3.6;
-	const sx = stylex.props(meterGaugeParts.root, style);
+	const sx = stylex.props(
+		meterGaugeParts.root,
+		marginStyles,
+		xstyle,
+	);
 
 	return (
 		<BaseMeter.Root
-			{...rootProps}
+			{...rest}
 			className={attrJoin(sx.className, className)}
 			max={100}
 			min={0}
-			style={sx.style}
+			style={mergeStyle(sx.style, style)}
 			value={percentage}>
 			{label != null ? (
 				<BaseMeter.Label {...stylex.props(textStyles.supporting, meterGaugeParts.label)}>{label}</BaseMeter.Label>

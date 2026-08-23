@@ -100,9 +100,9 @@ export const Composition: Story = {
 
 function AccountMenu() {
 	return (
-		<Menu.Popup positionerProps={{ align: "end" }} style={storyStyles.accountMenu}>
+		<Menu.Popup positionerProps={{ align: "end" }} xstyle={storyStyles.accountMenu}>
 			<Menu.Group>
-				<Menu.GroupLabel style={storyStyles.accountIdentity}>
+				<Menu.GroupLabel xstyle={storyStyles.accountIdentity}>
 					<Avatar image={image} size={6} />
 					<Stack>
 						<Text fontWeight="medium" size="2">

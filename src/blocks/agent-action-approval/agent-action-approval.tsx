@@ -1,14 +1,11 @@
 import * as stylex from "@stylexjs/stylex";
-import type { StyleXStyles } from "@stylexjs/stylex";
 import { createContext, type ComponentProps, useContext, useId } from "react";
 import { Card } from "@/components";
 import { tokens } from "@/theme/tokens.stylex";
+import { mergeStyle, type BaseStyleProps } from "@/styles/props/base";
 import { attrJoin } from "@/utils/attr-join";
 
-type StyledProps<T> = Omit<T, "style"> & {
-	/** StyleX overrides, applied after the component's own styles. */
-	style?: StyleXStyles;
-};
+type StyledProps<T> = Omit<T, "style" | "xstyle"> & BaseStyleProps;
 
 type DivProps = StyledProps<ComponentProps<"div">>;
 
@@ -38,7 +35,7 @@ export type AgentActionApprovalActionsProps = DivProps;
 export function Root({
 	"aria-labelledby": ariaLabelledBy,
 	role = "group",
-	style,
+	xstyle,
 	variant = "outline",
 	...props
 }: AgentActionApprovalRootProps) {
@@ -49,7 +46,7 @@ export function Root({
 			<Card.Root
 				aria-labelledby={ariaLabelledBy ?? titleId}
 				role={role}
-				style={[parts.root, style]}
+				xstyle={[parts.root, xstyle]}
 				variant={variant}
 				{...props}
 			/>
@@ -57,76 +54,76 @@ export function Root({
 	);
 }
 
-export function Header({ style, ...props }: AgentActionApprovalHeaderProps) {
-	return <Card.Header style={[parts.header, style]} {...props} />;
+export function Header({ xstyle, ...props }: AgentActionApprovalHeaderProps) {
+	return <Card.Header xstyle={[parts.header, xstyle]} {...props} />;
 }
 
-export function Title({ id, style, ...props }: AgentActionApprovalTitleProps) {
+export function Title({ id, xstyle, ...props }: AgentActionApprovalTitleProps) {
 	const context = useContext(AgentActionApprovalContext);
 
-	return <Card.Title id={id ?? context?.titleId} style={[parts.title, style]} {...props} />;
+	return <Card.Title id={id ?? context?.titleId} xstyle={[parts.title, xstyle]} {...props} />;
 }
 
-export function Description({ style, ...props }: AgentActionApprovalDescriptionProps) {
-	return <Card.Description style={[parts.description, style]} {...props} />;
+export function Description({ xstyle, ...props }: AgentActionApprovalDescriptionProps) {
+	return <Card.Description xstyle={[parts.description, xstyle]} {...props} />;
 }
 
-export function Content({ style, ...props }: AgentActionApprovalContentProps) {
-	return <Card.Content style={[parts.content, style]} {...props} />;
+export function Content({ xstyle, ...props }: AgentActionApprovalContentProps) {
+	return <Card.Content xstyle={[parts.content, xstyle]} {...props} />;
 }
 
-export function Summary({ className, style, ...props }: AgentActionApprovalSummaryProps) {
-	const sx = stylex.props(parts.summary, style);
-	return <div className={attrJoin(sx.className, className)} style={sx.style} {...props} />;
+export function Summary({ className, style, xstyle, ...props }: AgentActionApprovalSummaryProps) {
+	const sx = stylex.props(parts.summary, xstyle);
+	return <div className={attrJoin(sx.className, className)} style={mergeStyle(sx.style, style)} {...props} />;
 }
 
-export function Icon({ className, style, ...props }: AgentActionApprovalIconProps) {
-	const sx = stylex.props(parts.icon, style);
-	return <div className={attrJoin(sx.className, className)} style={sx.style} {...props} />;
+export function Icon({ className, style, xstyle, ...props }: AgentActionApprovalIconProps) {
+	const sx = stylex.props(parts.icon, xstyle);
+	return <div className={attrJoin(sx.className, className)} style={mergeStyle(sx.style, style)} {...props} />;
 }
 
-export function SummaryContent({ className, style, ...props }: AgentActionApprovalSummaryContentProps) {
-	const sx = stylex.props(parts.summaryContent, style);
-	return <div className={attrJoin(sx.className, className)} style={sx.style} {...props} />;
+export function SummaryContent({ className, style, xstyle, ...props }: AgentActionApprovalSummaryContentProps) {
+	const sx = stylex.props(parts.summaryContent, xstyle);
+	return <div className={attrJoin(sx.className, className)} style={mergeStyle(sx.style, style)} {...props} />;
 }
 
-export function Action({ className, style, ...props }: AgentActionApprovalActionProps) {
-	const sx = stylex.props(parts.action, style);
-	return <div className={attrJoin(sx.className, className)} style={sx.style} {...props} />;
+export function Action({ className, style, xstyle, ...props }: AgentActionApprovalActionProps) {
+	const sx = stylex.props(parts.action, xstyle);
+	return <div className={attrJoin(sx.className, className)} style={mergeStyle(sx.style, style)} {...props} />;
 }
 
-export function ActionDescription({ className, style, ...props }: AgentActionApprovalActionDescriptionProps) {
-	const sx = stylex.props(parts.actionDescription, style);
-	return <div className={attrJoin(sx.className, className)} style={sx.style} {...props} />;
+export function ActionDescription({ className, style, xstyle, ...props }: AgentActionApprovalActionDescriptionProps) {
+	const sx = stylex.props(parts.actionDescription, xstyle);
+	return <div className={attrJoin(sx.className, className)} style={mergeStyle(sx.style, style)} {...props} />;
 }
 
-export function Details({ className, style, ...props }: AgentActionApprovalDetailsProps) {
-	const sx = stylex.props(parts.details, style);
-	return <dl className={attrJoin(sx.className, className)} style={sx.style} {...props} />;
+export function Details({ className, style, xstyle, ...props }: AgentActionApprovalDetailsProps) {
+	const sx = stylex.props(parts.details, xstyle);
+	return <dl className={attrJoin(sx.className, className)} style={mergeStyle(sx.style, style)} {...props} />;
 }
 
-export function Detail({ className, style, ...props }: AgentActionApprovalDetailProps) {
-	const sx = stylex.props(parts.detail, style);
-	return <div className={attrJoin(sx.className, className)} style={sx.style} {...props} />;
+export function Detail({ className, style, xstyle, ...props }: AgentActionApprovalDetailProps) {
+	const sx = stylex.props(parts.detail, xstyle);
+	return <div className={attrJoin(sx.className, className)} style={mergeStyle(sx.style, style)} {...props} />;
 }
 
-export function DetailLabel({ className, style, ...props }: AgentActionApprovalDetailLabelProps) {
-	const sx = stylex.props(parts.detailLabel, style);
-	return <dt className={attrJoin(sx.className, className)} style={sx.style} {...props} />;
+export function DetailLabel({ className, style, xstyle, ...props }: AgentActionApprovalDetailLabelProps) {
+	const sx = stylex.props(parts.detailLabel, xstyle);
+	return <dt className={attrJoin(sx.className, className)} style={mergeStyle(sx.style, style)} {...props} />;
 }
 
-export function DetailValue({ className, style, ...props }: AgentActionApprovalDetailValueProps) {
-	const sx = stylex.props(parts.detailValue, style);
-	return <dd className={attrJoin(sx.className, className)} style={sx.style} {...props} />;
+export function DetailValue({ className, style, xstyle, ...props }: AgentActionApprovalDetailValueProps) {
+	const sx = stylex.props(parts.detailValue, xstyle);
+	return <dd className={attrJoin(sx.className, className)} style={mergeStyle(sx.style, style)} {...props} />;
 }
 
-export function Footer({ style, ...props }: AgentActionApprovalFooterProps) {
-	return <Card.Footer style={[parts.footer, style]} {...props} />;
+export function Footer({ xstyle, ...props }: AgentActionApprovalFooterProps) {
+	return <Card.Footer xstyle={[parts.footer, xstyle]} {...props} />;
 }
 
-export function Actions({ className, style, ...props }: AgentActionApprovalActionsProps) {
-	const sx = stylex.props(parts.actions, style);
-	return <div className={attrJoin(sx.className, className)} style={sx.style} {...props} />;
+export function Actions({ className, style, xstyle, ...props }: AgentActionApprovalActionsProps) {
+	const sx = stylex.props(parts.actions, xstyle);
+	return <div className={attrJoin(sx.className, className)} style={mergeStyle(sx.style, style)} {...props} />;
 }
 
 const parts = stylex.create({

@@ -1,4 +1,5 @@
-import type { MarginProps, TextAlignProps } from "@/theme/theme-props.types";
+import type { MarginProps } from "@/styles/props/spacing.stylex";
+import type { TypographyProps } from "@/styles/props/typography.stylex";
 
 export type TypographySize = "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9";
 export type TypographyFontFamily = "sans" | "serif" | "mono";
@@ -17,9 +18,9 @@ export type TypographyWrap = "wrap" | "nowrap" | "pretty" | "balance" | "truncat
 export type TextType = "body" | "large" | "label" | "code" | "supporting" | "display";
 export type HeadingLevel = "1" | "2" | "3" | "4" | "5" | "6";
 
-export type TextThemeProps = MarginProps & TextAlignProps;
+export type TextStyleProps = MarginProps & Pick<TypographyProps, "fontFamily" | "fontWeight" | "textAlign">;
 
-export type TypographyStyleProps = TextThemeProps & {
+export type TypographyStyleProps = TextStyleProps & {
 	color?: TypographyColor;
 	fontFamily?: TypographyFontFamily;
 	fontWeight?: TypographyFontWeight;

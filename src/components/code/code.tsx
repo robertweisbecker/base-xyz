@@ -1,19 +1,32 @@
 import * as stylex from "@stylexjs/stylex";
-import type { StyleXStyles } from "@stylexjs/stylex";
 import { type ComponentProps } from "react";
+import { mergeStyle, type BaseStyleProps } from "@/styles/props/base";
+import { extractMarginProps, type MarginProps } from "@/styles/props/spacing.stylex";
 import { tokens } from "@/theme/tokens.stylex";
 import { attrJoin } from "@/utils/attr-join";
 
+export type CodeProps = Omit<ComponentProps<"code">, "className" | "style" | keyof MarginProps> &
+	MarginProps &
+	BaseStyleProps & {
+		className?: string;
+	};
 
-export type CodeProps = Omit<ComponentProps<"code">, "className" | "style"> & {
-	className?: string;
-	/** StyleX overrides, applied after the component's own styles. */
-	style?: StyleXStyles;
-};
+export function Code({ ref, className, style, xstyle, ...props }: CodeProps) {
+	const { marginStyles, rest } = extractMarginProps(props);
+	const sx = stylex.props(
+		styles.root,
+		...marginStyles,
+		xstyle,
+	);
 
-export function Code({ ref, className, style, ...props }: CodeProps) {
-	const sx = stylex.props(styles.root, style);
-	return <code ref={ref} className={attrJoin(sx.className, className)} style={sx.style} {...props} />;
+	return (
+		<code
+			ref={ref}
+			className={attrJoin(sx.className, className)}
+			style={mergeStyle(sx.style, style)}
+			{...rest}
+		/>
+	);
 }
 
 const styles = stylex.create({

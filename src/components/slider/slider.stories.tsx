@@ -82,7 +82,7 @@ const meta = {
 	},
 	decorators: [
 		(Story) => (
-			<Box style={styles.frame}>
+			<Box xstyle={styles.frame}>
 				<Story />
 			</Box>
 		),
@@ -259,7 +259,7 @@ export const Controlled: Story = {
 export const Orientations: Story = {
 	parameters: { controls: { disable: true } },
 	render: () => (
-		<Grid gap={12} style={styles.orientationGrid}>
+		<Grid gap={12} xstyle={styles.orientationGrid}>
 			<Stack gap={3}>
 				<Text color="muted" size="1">
 					Horizontal
@@ -278,7 +278,7 @@ export const Orientations: Story = {
 				<Text color="muted" size="1">
 					Vertical
 				</Text>
-				<Slider.Root defaultValue={40} orientation="vertical" step={10} style={styles.verticalRoot}>
+				<Slider.Root defaultValue={40} orientation="vertical" step={10} xstyle={styles.verticalRoot}>
 					<Slider.Header>
 						<Slider.Label>Vertical value</Slider.Label>
 						<Slider.Value />
@@ -370,7 +370,7 @@ function ControlledExamples() {
 					<Slider.Header>
 						<Slider.Label>Opacity</Slider.Label>
 					</Slider.Header>
-					<Slider.Row style={styles.controlledNumberRow}>
+					<Slider.Row xstyle={styles.controlledNumberRow}>
 						<Slider.Control markers={{ every: 2 }}>
 							<Slider.Thumb />
 						</Slider.Control>

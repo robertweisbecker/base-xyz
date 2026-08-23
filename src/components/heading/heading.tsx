@@ -1,29 +1,33 @@
 import { useRender } from "@base-ui/react/use-render";
 import * as stylex from "@stylexjs/stylex";
-import type { StyleXStyles } from "@stylexjs/stylex";
-import { resolveThemeProps } from "@/theme/theme-props";
+import { mergeStyle, type BaseStyleProps } from "@/styles/props/base";
+import { extractMarginProps, type MarginProps } from "@/styles/props/spacing.stylex";
+import { resolveTypography, type TypographyProps } from "@/styles/props/typography.stylex";
 import {
 	textColorStyles,
-	fontFamilyStyles,
 	typescaleStyles,
 	textBaseStyles,
 	textTruncationStyles,
-	fontWeightStyles,
 	textWrapStyles,
-	textThemeProps,
 } from "@/components/text/text.stylex";
-import type { TypographyStyleProps } from "@/components/text/text.types";
+import type { TypographyColor, TypographyFontFamily, TypographyFontWeight, TypographySize, TypographyWrap } from "@/components/text/text.types";
 import { attrJoin } from "@/utils/attr-join";
 
 export type HeadingProps = Omit<
 	useRender.ComponentProps<"h2">,
-	"align" | "className" | "color" | "render" | "style" | keyof TypographyStyleProps
+	"className" | "color" | "render" | "style" | "xstyle" | keyof MarginProps | keyof TypographyProps
 > &
-	TypographyStyleProps & {
+	MarginProps &
+	BaseStyleProps & {
 		className?: string;
+		color?: TypographyColor;
+		fontFamily?: TypographyFontFamily;
+		fontWeight?: TypographyFontWeight;
+		textAlign?: TypographyProps["textAlign"];
 		render?: useRender.RenderProp;
-		/** StyleX overrides, applied after the component's own styles. */
-		style?: StyleXStyles;
+		size?: TypographySize;
+		truncate?: boolean;
+		wrap?: TypographyWrap;
 	};
 
 export function Heading({
@@ -32,24 +36,25 @@ export function Heading({
 	color = "default",
 	fontFamily = "sans",
 	fontWeight = "semibold",
+	textAlign,
 	render,
 	size = "5",
 	style,
+	xstyle,
 	truncate = false,
 	wrap = "balance",
 	...props
 }: HeadingProps) {
-	const { restProps, styles } = resolveThemeProps(props, textThemeProps);
+	const { marginStyles, rest } = extractMarginProps(props);
 	const sx = stylex.props(
 		textBaseStyles.root,
-		fontFamilyStyles[fontFamily],
 		typescaleStyles[size],
-		fontWeightStyles[fontWeight],
 		textColorStyles[color],
 		textWrapStyles[wrap],
 		truncate && textTruncationStyles.truncate,
-		...styles,
-		style,
+		...resolveTypography({ fontFamily, fontWeight, textAlign }),
+		...marginStyles,
+		xstyle,
 	);
 
 	return useRender<{}, HTMLElement>({
@@ -57,9 +62,9 @@ export function Heading({
 		render,
 		ref,
 		props: {
-			...restProps,
+			...rest,
 			className: attrJoin(sx.className, className),
-			style: sx.style,
+			style: mergeStyle(sx.style, style),
 		},
 	});
 }

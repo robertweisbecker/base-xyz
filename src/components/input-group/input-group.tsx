@@ -2,7 +2,6 @@ import { Field } from "@base-ui/react/field";
 import { Input as BaseInput } from "@base-ui/react/input";
 import { useMergedRefs } from "@base-ui/utils/useMergedRefs";
 import * as stylex from "@stylexjs/stylex";
-import type { StyleXStyles } from "@stylexjs/stylex";
 import { type ComponentProps } from "react";
 import { media } from "@/styles/constants.stylex";
 import { fieldStyles, fieldControlSizes, fieldTextStyles } from "@/components/field/field.stylex";
@@ -11,67 +10,59 @@ import { focusRing } from "@/styles/recipes/focus";
 import { tokens } from "@/theme/tokens.stylex";
 import { useTextareaAutoResize } from "@/hooks/use-textarea-auto-resize";
 import { attrJoin } from "@/utils/attr-join";
+import { mergeStyle, type BaseStyleProps } from "@/styles/props/base";
+import { extractMarginProps, type MarginProps } from "@/styles/props/spacing.stylex";
 
 /** Disabled chrome follows a nested input/textarea, not addon action buttons. */
 const GROUP_HAS_DISABLED = ":has(:is(input, textarea):is([data-disabled], :disabled))";
 
 const GROUP_HOVER = `:hover:not(:focus-within):not(:has([aria-invalid="true"])):not(${GROUP_HAS_DISABLED}):not(:has([data-invalid])):not(:has([readonly]))`;
 
-export type InputGroupRootProps = Omit<ComponentProps<"div">, "className" | "style"> & {
+type InputGroupStyledProps<T> = Omit<T, "className" | "style"> & BaseStyleProps & {
 	className?: string;
-	/** StyleX overrides, applied after the component's own styles. */
-	style?: StyleXStyles;
-	size?: FieldSize;
-	variant?: InputGroupVariant;
 };
+
+export type InputGroupRootProps = Omit<ComponentProps<"div">, "className" | "style" | keyof MarginProps> &
+	MarginProps &
+	InputGroupStyledProps<ComponentProps<"div">> & {
+		size?: FieldSize;
+		variant?: InputGroupVariant;
+	};
 
 export type InputGroupVariant = "standard" | "elevated" | "subtle";
 /** Inline Addon placement relative to the control. Default `start`. */
 export type InputGroupAddonPosition = "start" | "end";
 
-export type InputGroupInputProps = Omit<BaseInput.Props, "className" | "style"> & {
-	className?: string;
-	/** StyleX overrides, applied after the component's own styles. */
-	style?: StyleXStyles;
-};
+export type InputGroupInputProps = InputGroupStyledProps<BaseInput.Props>;
 
-export type InputGroupTextareaProps = Omit<ComponentProps<"textarea">, "className" | "style"> & {
-	className?: string;
-	/** StyleX overrides, applied after the component's own styles. */
-	style?: StyleXStyles;
+export type InputGroupTextareaProps = InputGroupStyledProps<ComponentProps<"textarea">> & {
 	/** Enables content-based resizing with this minimum row count; defaults to `rows`. */
 	minRows?: number;
 	/** Enables content-based resizing with this maximum row count; content beyond this scrolls. */
 	maxRows?: number;
 };
 
-export type InputGroupAddonProps = Omit<ComponentProps<"span">, "className" | "style"> & {
-	className?: string;
-	/** StyleX overrides, applied after the component's own styles. */
-	style?: StyleXStyles;
+export type InputGroupAddonProps = InputGroupStyledProps<ComponentProps<"span">> & {
 	/** Inline placement relative to the control. Default `start`. */
 	position?: InputGroupAddonPosition;
 };
 
-export type InputGroupActionsProps = Omit<ComponentProps<"div">, "className" | "style"> & {
-	className?: string;
-	/** StyleX overrides, applied after the component's own styles. */
-	style?: StyleXStyles;
-};
+export type InputGroupActionsProps = InputGroupStyledProps<ComponentProps<"div">>;
 
-export type InputGroupHeaderProps = Omit<ComponentProps<"div">, "className" | "style"> & {
-	className?: string;
-	/** StyleX overrides, applied after the component's own styles. */
-	style?: StyleXStyles;
-};
+export type InputGroupHeaderProps = InputGroupStyledProps<ComponentProps<"div">>;
 
-export type InputGroupFooterProps = Omit<ComponentProps<"div">, "className" | "style"> & {
-	className?: string;
-	/** StyleX overrides, applied after the component's own styles. */
-	style?: StyleXStyles;
-};
+export type InputGroupFooterProps = InputGroupStyledProps<ComponentProps<"div">>;
 
-export function Root({ ref, className, style, size = "md", variant = "standard", ...props }: InputGroupRootProps) {
+export function Root({
+	ref,
+	className,
+	style,
+	xstyle,
+	size = "md",
+	variant = "standard",
+	...props
+}: InputGroupRootProps) {
+	const { marginStyles, rest } = extractMarginProps(props);
 	const sx = stylex.props(
 		fieldStyles.inputBase,
 		inputGroupParts.root,
@@ -80,26 +71,32 @@ export function Root({ ref, className, style, size = "md", variant = "standard",
 		fieldTextStyles[size],
 		inputGroupSizes[size],
 		variant !== "standard" && inputGroupVariants[variant],
-		style,
+		marginStyles,
+		xstyle,
 	);
 
 	return (
 		<div
-			{...props}
+			{...rest}
 			ref={ref}
 			data-variant={variant}
 			data-size={size}
 			className={attrJoin(sx.className, className)}
-			style={sx.style}
+			style={mergeStyle(sx.style, style)}
 		/>
 	);
 }
 
-export function Input({ ref, className, style, ...props }: InputGroupInputProps) {
-	const sx = stylex.props(fieldStyles.inputUnstyled, inputGroupParts.input, style);
+export function Input({ ref, className, style, xstyle, ...props }: InputGroupInputProps) {
+	const sx = stylex.props(fieldStyles.inputUnstyled, inputGroupParts.input, xstyle);
 
 	return (
-		<BaseInput ref={ref} className={attrJoin(sx.className, className)} style={sx.style} {...props} />
+		<BaseInput
+			ref={ref}
+			className={attrJoin(sx.className, className)}
+			style={mergeStyle(sx.style, style)}
+			{...props}
+		/>
 	);
 }
 
@@ -107,6 +104,7 @@ export function Textarea({
 	ref,
 	className,
 	style,
+	xstyle,
 	rows = 1,
 	disabled,
 	minRows,
@@ -115,7 +113,7 @@ export function Textarea({
 	value,
 	...props
 }: InputGroupTextareaProps) {
-	const sx = stylex.props(fieldStyles.inputUnstyled, inputGroupParts.input, inputGroupParts.textarea, style);
+	const sx = stylex.props(fieldStyles.inputUnstyled, inputGroupParts.input, inputGroupParts.textarea, xstyle);
 	const autoResizeEnabled = minRows !== undefined || maxRows !== undefined;
 	const autoResizeState = useTextareaAutoResize({
 		enabled: autoResizeEnabled,
@@ -136,7 +134,7 @@ export function Textarea({
 			value={value}
 			{...(disabled && { "data-disabled": true })}
 			className={attrJoin(sx.className, className)}
-			style={sx.style}
+			style={mergeStyle(sx.style, style)}
 			{...props}
 		/>
 	);
@@ -144,15 +142,15 @@ export function Textarea({
 	return <Field.Control render={control} disabled={disabled} />;
 }
 
-export function Addon({ ref, className, style, onClick, position = "start", ...props }: InputGroupAddonProps) {
-	const sx = stylex.props(inputGroupParts.addon, inputGroupAddonPositions[position], style);
+export function Addon({ ref, className, style, xstyle, onClick, position = "start", ...props }: InputGroupAddonProps) {
+	const sx = stylex.props(inputGroupParts.addon, inputGroupAddonPositions[position], xstyle);
 
 	return (
 		<span
 			ref={ref}
 			data-position={position}
 			className={attrJoin(sx.className, "xyz-input-group-addon", className)}
-			style={sx.style}
+			style={mergeStyle(sx.style, style)}
 			onClick={(event) => {
 				onClick?.(event);
 				if (event.defaultPrevented || isInteractiveTarget(event.target)) return;
@@ -173,35 +171,37 @@ function isInteractiveTarget(target: EventTarget) {
 	);
 }
 
-export function Actions({ ref, className, style, ...props }: InputGroupActionsProps) {
-	const sx = stylex.props(inputGroupParts.actions, style);
+export function Actions({ ref, className, style, xstyle, ...props }: InputGroupActionsProps) {
+	const sx = stylex.props(inputGroupParts.actions, xstyle);
 
-	return <div ref={ref} className={attrJoin(sx.className, className)} style={sx.style} {...props} />;
+	return (
+		<div ref={ref} className={attrJoin(sx.className, className)} style={mergeStyle(sx.style, style)} {...props} />
+	);
 }
 
-export function Header({ ref, className, style, ...props }: InputGroupHeaderProps) {
-	const sx = stylex.props(inputGroupParts.header, style);
+export function Header({ ref, className, style, xstyle, ...props }: InputGroupHeaderProps) {
+	const sx = stylex.props(inputGroupParts.header, xstyle);
 
 	return (
 		<div
 			ref={ref}
 			data-slot="header"
 			className={attrJoin(sx.className, className)}
-			style={sx.style}
+			style={mergeStyle(sx.style, style)}
 			{...props}
 		/>
 	);
 }
 
-export function Footer({ ref, className, style, ...props }: InputGroupFooterProps) {
-	const sx = stylex.props(inputGroupParts.footer, style);
+export function Footer({ ref, className, style, xstyle, ...props }: InputGroupFooterProps) {
+	const sx = stylex.props(inputGroupParts.footer, xstyle);
 
 	return (
 		<div
 			ref={ref}
 			data-slot="footer"
 			className={attrJoin(sx.className, className)}
-			style={sx.style}
+			style={mergeStyle(sx.style, style)}
 			{...props}
 		/>
 	);

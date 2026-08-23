@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
+import x from "@stylexjs/atoms";
 import * as stylex from "@stylexjs/stylex";
 import { useEffect, useState } from "react";
 import { Button } from "@/components/button/button";
@@ -38,7 +39,7 @@ function SimulatedProgress() {
 					<Progress.Indicator />
 				</Progress.Track>
 			</Progress.Root>
-			<Button onClick={() => setValue(null)} size="sm" variant="secondary" width="fit-content">
+			<Button onClick={() => setValue(null)} size="sm" variant="secondary" xstyle={x.width["fit-content"]}>
 				Restart
 			</Button>
 		</Stack>
@@ -66,7 +67,7 @@ const meta = {
 	},
 	decorators: [
 		(Story) => (
-			<Box style={storyStyles.frame}>
+			<Box xstyle={storyStyles.frame}>
 				<Story />
 			</Box>
 		),

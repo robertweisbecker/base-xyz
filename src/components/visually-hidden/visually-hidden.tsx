@@ -1,17 +1,16 @@
 import { useRender } from "@base-ui/react/use-render";
 import * as stylex from "@stylexjs/stylex";
-import type { StyleXStyles } from "@stylexjs/stylex";
+import { mergeStyle, type BaseStyleProps } from "@/styles/props/base";
 import { attrJoin } from "@/utils/attr-join";
 
-export type VisuallyHiddenProps = Omit<useRender.ComponentProps<"span">, "className" | "render" | "style"> & {
-	className?: string;
-	render?: useRender.RenderProp;
-	/** StyleX overrides, applied after the component's own styles. */
-	style?: StyleXStyles;
-};
+export type VisuallyHiddenProps = Omit<useRender.ComponentProps<"span">, "className" | "render" | "style"> &
+	BaseStyleProps & {
+		className?: string;
+		render?: useRender.RenderProp;
+	};
 
-export function VisuallyHidden({ ref, className, render, style, ...props }: VisuallyHiddenProps) {
-	const sx = stylex.props(styles.root, style);
+export function VisuallyHidden({ ref, className, render, style, xstyle, ...props }: VisuallyHiddenProps) {
+	const sx = stylex.props(styles.root, xstyle);
 
 	return useRender<{}, HTMLElement>({
 		defaultTagName: "span",
@@ -20,7 +19,7 @@ export function VisuallyHidden({ ref, className, render, style, ...props }: Visu
 		props: {
 			...props,
 			className: attrJoin(sx.className, className),
-			style: sx.style,
+			style: mergeStyle(sx.style, style),
 		},
 	});
 }

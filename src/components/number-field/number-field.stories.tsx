@@ -123,7 +123,7 @@ export const States: Story = {
 		controls: { disable: true },
 	},
 	render: () => (
-		<Grid columns={2} gap={8} maxWidth="700px" style={styles.stateGrid}>
+		<Grid columns={2} gap={8} maxWidth="700px" xstyle={styles.stateGrid}>
 			<StateSpecimen label="Empty">
 				<NumberField label="Seats" min={1} max={100} />
 			</StateSpecimen>

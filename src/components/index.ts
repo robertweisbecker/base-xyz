@@ -10,7 +10,6 @@ export {
 	type ButtonProps,
 	type ButtonShape,
 	type ButtonSize,
-	type ButtonThemeProps,
 	type ButtonVariant,
 	IconButton,
 	type IconButtonProps,
@@ -20,7 +19,6 @@ export {
 	Callout,
 	type CalloutHue,
 	type CalloutProps,
-	type CalloutThemeProps,
 	type CalloutVariant,
 } from "./callout/callout";
 export { Code, type CodeProps } from "./code/code";
@@ -41,7 +39,6 @@ export {
 	type EmptyStateHeadingLevel,
 	type EmptyStateProps,
 	type EmptyStateSize,
-	type EmptyStateThemeProps,
 } from "./empty-state/empty-state";
 export { Heading, type HeadingProps } from "./heading/heading";
 export { Icon, type IconProps } from "./icons";
@@ -51,13 +48,13 @@ export { Kbd, KbdGroup, type KbdProps } from "./kbd/kbd";
 export {
 	Box,
 	type BoxProps,
-	type BoxThemeProps,
+	type BoxStyleProps,
 	Grid,
 	type GridProps,
-	type GridThemeProps,
+	type GridStyleProps,
 	Stack,
 	type StackProps,
-	type StackThemeProps,
+	type StackStyleProps,
 } from "./layout/layout";
 export { Collapsible } from "./collapsible/collapsible";
 export { InputGroup } from "./input-group/input-group";
@@ -70,7 +67,7 @@ export {
 } from "./meter/meter-gauge";
 export { NavList } from "./nav-list/nav-list";
 export { Progress } from "./progress/progress";
-export { Separator, type SeparatorProps, type SeparatorThemeProps } from "./separator/separator";
+export { Separator, type SeparatorProps } from "./separator/separator";
 export { Sidebar } from "./sidebar/sidebar";
 export { Slider } from "./slider/slider";
 export { Table } from "./table/table";
@@ -82,7 +79,6 @@ export {
 	type BadgeProps,
 	type BadgeShape,
 	type BadgeSize,
-	type BadgeThemeProps,
 	type BadgeVariant,
 } from "./badge/badge";
 export { AlertDialog } from "./alert-dialog/alert-dialog";
@@ -92,10 +88,8 @@ export {
 	type CardDescriptionProps,
 	type CardFooterProps,
 	type CardHeaderProps,
-	type CardRadius,
 	type CardRootProps,
 	type CardSize,
-	type CardThemeProps,
 	type CardTitleProps,
 	type CardVariant,
 } from "./card/card";
@@ -128,7 +122,7 @@ export { Text, type TextProps } from "./text/text";
 export { TextField, type TextFieldProps } from "./text-field/text-field";
 export { Textarea, type TextareaProps } from "./textarea/textarea";
 export { NumberField, type NumberFieldInputWidth, type NumberFieldProps } from "./number-field/number-field";
-export type { FieldSize, FieldThemeProps } from "@/components/field/field.types";
+export type { FieldSize } from "@/components/field/field.types";
 export {
 	Toggle,
 	ToggleGroup,
@@ -148,48 +142,8 @@ export type {
 	TypographyFontFamily,
 	TypographyFontWeight,
 	TypographySize,
-	TextThemeProps,
+	TextStyleProps,
 	TypographyWrap,
 } from "@/components/text/text.types";
-export type {
-	AlignValue,
-	ChildLayoutProps,
-	ContainerSize,
-	CssDimensionString,
-	CssLengthUnit,
-	DimensionValue,
-	DisplayProps,
-	DisplayValue,
-	FlexProps,
-	GapProps,
-	GapValue,
-	GridFlow,
-	GridColumns,
-	GridLayoutProps,
-	GridSpan,
-	JustifyValue,
-	MarginProps,
-	MarginValue,
-	MaxDimensionValue,
-	NegativeSpaceStep,
-	OffsetValue,
-	Orientation,
-	PaddingProps,
-	PaddingValue,
-	PositioningProps,
-	PositionValue,
-	RadiusThemeProps,
-	RadiusValue,
-	SemanticColor,
-	ShadowThemeProps,
-	ShadowValue,
-	SizeKeyword,
-	SizingProps,
-	SpaceStep,
-	SpacingProps,
-	SurfaceThemeProps,
-	TextAlignProps,
-	WidthFraction,
-	WidthValue,
-	WrapValue,
-} from "@/theme/theme-props.types";
+export type { BaseStyleProps } from "@/styles/props/base";
+export type { MarginProps, SpaceStep, SpaceValue } from "@/styles/props/spacing.stylex";

@@ -109,7 +109,7 @@ export const Sizes: Story = {
 export const Orientations: Story = {
 	parameters: { controls: { disable: true } },
 	render: () => (
-		<Grid gap={8} style={storyStyles.orientationGrid}>
+		<Grid gap={8} xstyle={storyStyles.orientationGrid}>
 			<Stack gap={2} minWidth={0}>
 				<Text color="muted" size="1">
 					Horizontal

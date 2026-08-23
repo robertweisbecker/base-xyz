@@ -1,15 +1,12 @@
 import { Drawer as BaseDrawer } from "@base-ui/react/drawer";
 import * as stylex from "@stylexjs/stylex";
-import type { StyleXStyles } from "@stylexjs/stylex";
 import type { ComponentProps } from "react";
 import { tokens } from "@/theme/tokens.stylex";
 import { modalChromeStyles, modalTextStyles } from "@/components/dialog/dialog.stylex";
+import { mergeStyle, type BaseStyleProps } from "@/styles/props/base";
 import { attrJoin } from "@/utils/attr-join";
 
-type StyledProps<T> = Omit<T, "className" | "style"> & {
-	className?: string;
-	style?: StyleXStyles;
-};
+type StyledProps<T> = Omit<T, "className" | "style" | "xstyle"> & BaseStyleProps & { className?: string };
 
 type DrawerPopupProps = StyledProps<BaseDrawer.Popup.Props> & {
 	layout?: "default" | "snap-points";
@@ -19,127 +16,127 @@ type DrawerContentProps = StyledProps<BaseDrawer.Content.Props> & {
 	scrollable?: boolean;
 };
 
-export function Backdrop({ ref, className, style, ...props }: StyledProps<BaseDrawer.Backdrop.Props>) {
+export function Backdrop({ ref, className, style, xstyle, ...props }: StyledProps<BaseDrawer.Backdrop.Props>) {
 	const { className: sxClassName, style: sxStyle } = stylex.props(
 		modalChromeStyles.backdrop,
 		modalChromeStyles.modalBackdropLayer,
 		drawerParts.backdrop,
-		style,
+		xstyle,
 	);
 
 	return (
 		<BaseDrawer.Backdrop
 			ref={ref}
 			className={attrJoin(sxClassName, className)}
-			style={sxStyle}
+			style={mergeStyle(sxStyle, style)}
 			{...props}
 		/>
 	);
 }
 
-export function Viewport({ ref, className, style, ...props }: StyledProps<BaseDrawer.Viewport.Props>) {
+export function Viewport({ ref, className, style, xstyle, ...props }: StyledProps<BaseDrawer.Viewport.Props>) {
 	const { className: sxClassName, style: sxStyle } = stylex.props(
 		modalChromeStyles.viewport,
 		modalChromeStyles.modalLayer,
 		drawerParts.viewport,
-		style,
+		xstyle,
 	);
 
 	return (
 		<BaseDrawer.Viewport
 			ref={ref}
 			className={attrJoin(sxClassName, className)}
-			style={sxStyle}
+			style={mergeStyle(sxStyle, style)}
 			{...props}
 		/>
 	);
 }
 
-export function Popup({ ref, className, style, layout = "default", ...props }: DrawerPopupProps) {
+export function Popup({ ref, className, style, xstyle, layout = "default", ...props }: DrawerPopupProps) {
 	const { className: sxClassName, style: sxStyle } = stylex.props(
 		modalChromeStyles.surface,
 		drawerParts.popup,
 		layout === "snap-points" && drawerParts.snapPointPopup,
 		stylex.defaultMarker(),
-		style,
+		xstyle,
 	);
 
 	return (
 		<BaseDrawer.Popup
 			ref={ref}
 			className={attrJoin(sxClassName, className)}
-			style={sxStyle}
+			style={mergeStyle(sxStyle, style)}
 			{...props}
 		/>
 	);
 }
 
-export function Content({ ref, className, style, scrollable = false, ...props }: DrawerContentProps) {
+export function Content({ ref, className, style, xstyle, scrollable = false, ...props }: DrawerContentProps) {
 	const { className: sxClassName, style: sxStyle } = stylex.props(
 		drawerParts.content,
 		scrollable && drawerParts.scrollableContent,
-		style,
+		xstyle,
 	);
 
 	return (
 		<BaseDrawer.Content
 			ref={ref}
 			className={attrJoin(sxClassName, className)}
-			style={sxStyle}
+			style={mergeStyle(sxStyle, style)}
 			{...props}
 		/>
 	);
 }
 
-export function Title({ ref, className, style, ...props }: StyledProps<BaseDrawer.Title.Props>) {
-	const { className: sxClassName, style: sxStyle } = stylex.props(modalTextStyles.title, style);
+export function Title({ ref, className, style, xstyle, ...props }: StyledProps<BaseDrawer.Title.Props>) {
+	const { className: sxClassName, style: sxStyle } = stylex.props(modalTextStyles.title, xstyle);
 
 	return (
 		<BaseDrawer.Title
 			ref={ref}
 			className={attrJoin(sxClassName, className)}
-			style={sxStyle}
+			style={mergeStyle(sxStyle, style)}
 			{...props}
 		/>
 	);
 }
 
-export function Description({ ref, className, style, ...props }: StyledProps<BaseDrawer.Description.Props>) {
-	const { className: sxClassName, style: sxStyle } = stylex.props(modalTextStyles.description, style);
+export function Description({ ref, className, style, xstyle, ...props }: StyledProps<BaseDrawer.Description.Props>) {
+	const { className: sxClassName, style: sxStyle } = stylex.props(modalTextStyles.description, xstyle);
 
 	return (
 		<BaseDrawer.Description
 			ref={ref}
 			className={attrJoin(sxClassName, className)}
-			style={sxStyle}
+			style={mergeStyle(sxStyle, style)}
 			{...props}
 		/>
 	);
 }
 
-export function Handle({ className, style, ...props }: StyledProps<ComponentProps<"div">>) {
-	const { className: sxClassName, style: sxStyle } = stylex.props(drawerParts.handle, style);
+export function Handle({ className, style, xstyle, ...props }: StyledProps<ComponentProps<"div">>) {
+	const { className: sxClassName, style: sxStyle } = stylex.props(drawerParts.handle, xstyle);
 
-	return <div aria-hidden className={attrJoin(sxClassName, className)} style={sxStyle} {...props} />;
+	return <div aria-hidden className={attrJoin(sxClassName, className)} style={mergeStyle(sxStyle, style)} {...props} />;
 }
 
-export function Header({ className, style, ...props }: StyledProps<ComponentProps<"div">>) {
-	const { className: sxClassName, style: sxStyle } = stylex.props(drawerParts.header, style);
+export function Header({ className, style, xstyle, ...props }: StyledProps<ComponentProps<"div">>) {
+	const { className: sxClassName, style: sxStyle } = stylex.props(drawerParts.header, xstyle);
 
-	return <div className={attrJoin(sxClassName, className)} style={sxStyle} {...props} />;
+	return <div className={attrJoin(sxClassName, className)} style={mergeStyle(sxStyle, style)} {...props} />;
 }
 
-export function Body({ className, style, ...props }: StyledProps<ComponentProps<"div">>) {
-	const { className: sxClassName, style: sxStyle } = stylex.props(modalTextStyles.body, drawerParts.body, style);
+export function Body({ className, style, xstyle, ...props }: StyledProps<ComponentProps<"div">>) {
+	const { className: sxClassName, style: sxStyle } = stylex.props(modalTextStyles.body, drawerParts.body, xstyle);
 
-	return <div className={attrJoin(sxClassName, className)} style={sxStyle} {...props} />;
+	return <div className={attrJoin(sxClassName, className)} style={mergeStyle(sxStyle, style)} {...props} />;
 }
 
-export function Footer({ className, style, ...props }: StyledProps<ComponentProps<"div">>) {
-	const { className: sxClassName, style: sxStyle } = stylex.props(modalTextStyles.footer, drawerParts.footer, style);
+export function Footer({ className, style, xstyle, ...props }: StyledProps<ComponentProps<"div">>) {
+	const { className: sxClassName, style: sxStyle } = stylex.props(modalTextStyles.footer, drawerParts.footer, xstyle);
 
 	return (
-		<div data-slot="footer" className={attrJoin(sxClassName, className)} style={sxStyle} {...props} />
+		<div data-slot="footer" className={attrJoin(sxClassName, className)} style={mergeStyle(sxStyle, style)} {...props} />
 	);
 }
 

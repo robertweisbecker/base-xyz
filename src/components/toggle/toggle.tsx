@@ -1,9 +1,7 @@
 import { Toggle as BaseToggle } from "@base-ui/react/toggle";
 import { ToggleGroup as BaseToggleGroup } from "@base-ui/react/toggle-group";
 import * as stylex from "@stylexjs/stylex";
-import type { StyleXStyles } from "@stylexjs/stylex";
 import type { ReactNode } from "react";
-import { extractThemeProps } from "@/theme/theme-props";
 import {
 	Button,
 	IconButton,
@@ -12,20 +10,28 @@ import {
 	type ButtonVariant,
 	type IconButtonProps,
 } from "@/components/button/button";
-import { buttonThemeProps, type ButtonThemeProps } from "@/components/button/button-theme-props";
+import { mergeStyle, type BaseStyleProps } from "@/styles/props/base";
+import { extractMarginProps, type MarginProps } from "@/styles/props/spacing.stylex";
 import { attrJoin } from "@/utils/attr-join";
 import { toggleGroupMarker, toggleGroupStyles, toggleJoinStyles, toggleMarker } from "./toggle.stylex";
 
 type ToggleBaseProps = Omit<
 	BaseToggle.Props,
-	"children" | "className" | "color" | "height" | "nativeButton" | "render" | "style" | "width" | keyof ButtonThemeProps
+	| "children"
+	| "className"
+	| "color"
+	| "height"
+	| "nativeButton"
+	| "render"
+	| "style"
+	| "width"
+	| keyof MarginProps
 > &
-	ButtonThemeProps & {
+	MarginProps &
+	BaseStyleProps & {
 		className?: string;
 		/** Visual content that replaces `startSlot` or `icon` while the toggle is pressed. */
 		pressedIcon?: ReactNode;
-		/** StyleX overrides, applied after the component's own styles. */
-		style?: StyleXStyles;
 		variant?: ButtonVariant;
 		size?: ButtonSize;
 	};
@@ -57,28 +63,26 @@ export type ToggleIconButtonProps = ToggleBaseProps & {
 
 export type ToggleProps = ToggleButtonProps | ToggleIconButtonProps;
 
-export type ToggleGroupProps = Omit<BaseToggleGroup.Props, "className" | "style"> & {
-	className?: string;
-	/**
-	 * Collapse group gap and inner radii so adjacent toggles share edges.
-	 * Ghost selected toggles restore their radius except on edges shared with another selected toggle.
-	 * Other variants stay fully joined when selected.
-	 */
-	join?: boolean;
-	/** StyleX overrides, applied after the component's own styles. */
-	style?: StyleXStyles;
-};
+export type ToggleGroupProps = Omit<BaseToggleGroup.Props, "className" | "style" | keyof MarginProps> &
+	MarginProps &
+	BaseStyleProps & {
+		className?: string;
+		/**
+		 * Collapse group gap and inner radii so adjacent toggles share edges.
+		 * Ghost selected toggles restore their radius except on edges shared with another selected toggle.
+		 * Other variants stay fully joined when selected.
+		 */
+		join?: boolean;
+	};
 
 export type ToggleVariant = ButtonVariant;
 export type ToggleSize = ButtonSize;
 export type ToggleShape = ButtonShape;
 
+const toggleStyleProps = stylex.props(toggleMarker, toggleJoinStyles.root);
+
 function resolvePressedSlot(pressed: boolean, resting: ReactNode, pressedIcon: ReactNode | undefined) {
 	return pressed && pressedIcon !== undefined ? pressedIcon : resting;
-}
-
-function toggleClassName(className: string | undefined) {
-	return attrJoin(stylex.props(toggleMarker, toggleJoinStyles.root).className, className);
 }
 
 export function Toggle(props: ToggleProps) {
@@ -98,28 +102,35 @@ function ToggleAsButton({
 	size = "md",
 	startSlot,
 	style,
+	xstyle,
 	variant = "ghost",
+	m,
+	mx,
+	my,
+	mt,
+	mb,
+	ms,
+	me,
 	...props
 }: ToggleButtonProps) {
-	const { restProps, themeProps } = extractThemeProps(props, buttonThemeProps);
-
 	return (
 		<BaseToggle
 			ref={ref}
+			{...props}
 			render={(renderProps, state) => (
 				<Button
 					{...renderProps}
-					className={toggleClassName(className)}
+					className={attrJoin(toggleStyleProps.className, className)}
 					shape={shape}
 					size={size}
 					startSlot={resolvePressedSlot(state.pressed, startSlot, pressedIcon)}
-					style={style}
-					variant={variant}
-					{...themeProps}>
+					style={mergeStyle(toggleStyleProps.style, style)}
+					xstyle={xstyle}
+					{...{ m, mx, my, mt, mb, ms, me }}
+					variant={variant}>
 					{children}
 				</Button>
 			)}
-			{...restProps}
 		/>
 	);
 }
@@ -133,15 +144,22 @@ function ToggleAsIconButton({
 	shape = "square",
 	size = "md",
 	style,
+	xstyle,
 	tooltip,
 	variant = "ghost",
+	m,
+	mx,
+	my,
+	mt,
+	mb,
+	ms,
+	me,
 	...props
 }: ToggleIconButtonProps) {
-	const { restProps, themeProps } = extractThemeProps(props, buttonThemeProps);
-
 	return (
 		<BaseToggle
 			ref={ref}
+			{...props}
 			render={(renderProps, state) => {
 				const { children: _children, ...iconButtonProps } = renderProps;
 				void _children;
@@ -149,19 +167,19 @@ function ToggleAsIconButton({
 				return (
 					<IconButton
 						{...iconButtonProps}
-						className={toggleClassName(className)}
+						className={attrJoin(toggleStyleProps.className, className)}
 						icon={resolvePressedSlot(state.pressed, icon, pressedIcon)}
 						label={label}
 						shape={shape}
 						size={size}
-						style={style}
+						style={mergeStyle(toggleStyleProps.style, style)}
+						xstyle={xstyle}
+						{...{ m, mx, my, mt, mb, ms, me }}
 						tooltip={tooltip}
 						variant={variant}
-						{...themeProps}
 					/>
 				);
 			}}
-			{...restProps}
 		/>
 	);
 }
@@ -172,18 +190,25 @@ export function ToggleGroup({
 	join = false,
 	orientation = "horizontal",
 	style,
+	xstyle,
 	...props
 }: ToggleGroupProps) {
-	const sx = stylex.props(toggleGroupMarker, toggleGroupStyles.root, style);
+	const { marginStyles, rest } = extractMarginProps(props);
+	const sx = stylex.props(
+		toggleGroupMarker,
+		toggleGroupStyles.root,
+		marginStyles,
+		xstyle,
+	);
 
 	return (
 		<BaseToggleGroup
-			{...props}
+			{...rest}
 			ref={ref}
 			orientation={orientation}
 			data-join={join ? "" : undefined}
 			className={attrJoin(sx.className, className)}
-			style={sx.style}
+			style={mergeStyle(sx.style, style)}
 		/>
 	);
 }

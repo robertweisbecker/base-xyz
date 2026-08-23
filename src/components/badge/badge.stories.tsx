@@ -1,6 +1,7 @@
 import { CheckCircleIcon } from "@phosphor-icons/react/dist/csr/CheckCircle";
 import { WarningIcon } from "@phosphor-icons/react/dist/csr/Warning";
 import type { Meta, StoryObj } from "@storybook/react-vite";
+import x from "@stylexjs/atoms";
 import * as stylex from "@stylexjs/stylex";
 import { Heading } from "@/components/heading/heading";
 import { Stack } from "@/components/layout/layout";
@@ -151,7 +152,7 @@ export const Options: Story = {
 				<Text size="1" color="muted">
 					Width
 				</Text>
-				<Badge data-testid="full-width-badge" width="full">
+				<Badge data-testid="full-width-badge" xstyle={[x.maxWidth.none, x.width["100%"]]}>
 					Full-width badge
 				</Badge>
 			</Stack>
@@ -199,8 +200,8 @@ export const TruncationTooltip: Story = {
 		controls: { disable: true },
 	},
 	render: () => (
-		<Stack align="start" gap={3} style={storyStyles.truncationFrame}>
-			<Stack align="center" gap={2} orientation="horizontal" style={storyStyles.truncationRow}>
+		<Stack align="start" gap={3} xstyle={storyStyles.truncationFrame}>
+			<Stack align="center" gap={2} orientation="horizontal" xstyle={storyStyles.truncationRow}>
 				<Text size="1" color="muted">
 					Status
 				</Text>

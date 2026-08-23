@@ -10,17 +10,23 @@ import { iconSwapTransition } from "@/styles/recipes/transitions";
 import { tokens } from "@/theme/tokens.stylex";
 
 type GoalToolbarProps = {
-	active: boolean;
-	description: string;
+	defaultActive: boolean;
+	defaultDescription: string;
 	onActiveChange?: (active: boolean) => void;
 };
 
-export function GoalToolbar({ active, description, onActiveChange }: GoalToolbarProps) {
-	const [currentActive, setCurrentActive] = useState(active);
-	const [currentDescription, setCurrentDescription] = useState(description);
-	const [draftDescription, setDraftDescription] = useState(description);
+export function GoalToolbar({ defaultActive, defaultDescription, onActiveChange }: GoalToolbarProps) {
+	const [currentActive, setCurrentActive] = useState(defaultActive);
+	const [currentDescription, setCurrentDescription] = useState(defaultDescription);
+	const [draftDescription, setDraftDescription] = useState(defaultDescription);
 	const [editOpen, setEditOpen] = useState(false);
 	const [detailsOpen, setDetailsOpen] = useState(false);
+
+	function handleActiveToggle() {
+		const nextActive = !currentActive;
+		setCurrentActive(nextActive);
+		onActiveChange?.(nextActive);
+	}
 
 	function handleEditOpenChange(nextOpen: boolean) {
 		if (nextOpen) {
@@ -38,8 +44,8 @@ export function GoalToolbar({ active, description, onActiveChange }: GoalToolbar
 	return (
 		<Tooltip.Provider>
 			<Dialog.Root open={editOpen} onOpenChange={handleEditOpenChange}>
-				<Collapsible.Root open={detailsOpen} onOpenChange={setDetailsOpen} style={parts.root}>
-					<Toolbar.Root aria-label="Goal status" variant="unstyled" style={parts.summary}>
+				<Collapsible.Root open={detailsOpen} onOpenChange={setDetailsOpen} {...stylex.props(parts.root)}>
+					<Toolbar.Root aria-label="Goal status" variant="unstyled" {...stylex.props(parts.summary)}>
 						<span {...stylex.props(parts.statusLabel)}>
 							<span aria-hidden {...stylex.props(parts.statusIcon)}>
 								<TargetIcon size={16} weight="regular" />
@@ -51,11 +57,11 @@ export function GoalToolbar({ active, description, onActiveChange }: GoalToolbar
 							{currentDescription}
 						</span>
 						<span {...stylex.props(parts.elapsed)}>12m 24s</span>
-						<Toolbar.Group aria-label="Goal actions" style={parts.actions}>
+						<Toolbar.Group aria-label="Goal actions" {...stylex.props(parts.actions)}>
 							<IconButton
 								icon={<PencilSimpleIcon aria-hidden weight="regular" />}
 								label="Edit goal"
-								render={<Dialog.Trigger render={<Toolbar.Button style={parts.wideAction} />} />}
+								render={<Dialog.Trigger render={<Toolbar.Button {...stylex.props(parts.wideAction)} />} />}
 								nativeButton
 								variant="ghost"
 							/>
@@ -81,13 +87,7 @@ export function GoalToolbar({ active, description, onActiveChange }: GoalToolbar
 								}
 								label={currentActive ? "Pause goal" : "Resume goal"}
 								nativeButton
-								onClick={() =>
-									setCurrentActive((isActive) => {
-										const nextActive = !isActive;
-										onActiveChange?.(nextActive);
-										return nextActive;
-									})
-								}
+								onClick={handleActiveToggle}
 								render={<Toolbar.Button />}
 								variant="ghost"
 							/>
@@ -95,7 +95,7 @@ export function GoalToolbar({ active, description, onActiveChange }: GoalToolbar
 								icon={<TrashIcon aria-hidden weight="regular" />}
 								label="Delete goal"
 								nativeButton
-								render={<Toolbar.Button style={parts.wideAction} />}
+								render={<Toolbar.Button {...stylex.props(parts.wideAction)} />}
 								variant="ghost"
 							/>
 							<IconButton
@@ -108,21 +108,19 @@ export function GoalToolbar({ active, description, onActiveChange }: GoalToolbar
 						</Toolbar.Group>
 					</Toolbar.Root>
 					<Collapsible.Panel>
-						<Collapsible.Content style={parts.details}>
+						<Collapsible.Content {...stylex.props(parts.details)}>
 							<ScrollArea
 								label="Goal description"
 								size="content"
-								style={parts.descriptionScroll}
-								viewportStyle={parts.descriptionScrollViewport}
-								contentStyle={parts.descriptionScrollContent}>
-								{currentDescription}
+								{...stylex.props(parts.descriptionScroll, parts.descriptionScrollMaxHeight)}>
+								<div {...stylex.props(parts.descriptionScrollContent)}>{currentDescription}</div>
 							</ScrollArea>
 							<Toolbar.Root aria-label="Additional goal actions" variant="unstyled">
 								<Toolbar.Group>
-									<Dialog.Trigger render={<Toolbar.Button style={parts.compactAction} />}>
+									<Dialog.Trigger render={<Toolbar.Button {...stylex.props(parts.compactAction)} />}>
 										<PencilSimpleIcon aria-hidden size={16} weight="regular" /> Edit
 									</Dialog.Trigger>
-									<Toolbar.Button style={parts.compactAction}>
+									<Toolbar.Button {...stylex.props(parts.compactAction)}>
 										<TrashIcon aria-hidden size={16} weight="regular" /> Delete
 									</Toolbar.Button>
 								</Toolbar.Group>
@@ -238,7 +236,7 @@ const parts = stylex.create({
 		minWidth: 0,
 		width: "100%",
 	},
-	descriptionScrollViewport: {
+	descriptionScrollMaxHeight: {
 		maxHeight: "8lh",
 	},
 	descriptionScrollContent: {

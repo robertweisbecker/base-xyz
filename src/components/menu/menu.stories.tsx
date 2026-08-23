@@ -139,7 +139,7 @@ export const ItemVariants: Story = {
 	render: () => (
 		<Menu.Root defaultOpen>
 			<Menu.Trigger render={<Button endSlot={<Menu.TriggerIcon />} variant="neutral" />}>Item variants</Menu.Trigger>
-			<Menu.Popup positionerProps={{ align: "start" }} style={storyStyles.itemVariantsMenu}>
+			<Menu.Popup positionerProps={{ align: "start" }} xstyle={storyStyles.itemVariantsMenu}>
 				<Menu.Group>
 					<Menu.GroupLabel>Actions</Menu.GroupLabel>
 					<Menu.Item>
@@ -275,9 +275,9 @@ export const Positioning: Story = {
 		controls: { disable: true },
 	},
 	render: () => (
-		<Grid columns={2} gap={4} style={storyStyles.positioningGrid}>
+		<Grid columns={2} gap={4} xstyle={storyStyles.positioningGrid}>
 			{positioningPlacements.map(({ _side, _align }) => (
-				<Stack align="center" justify="center" key={`${_side}-${_align}`} style={storyStyles.positioningCell}>
+				<Stack align="center" justify="center" key={`${_side}-${_align}`} xstyle={storyStyles.positioningCell}>
 					<PositionedMenu _side={_side} _align={_align} />
 				</Stack>
 			))}
@@ -503,7 +503,7 @@ export const CollapsibleGroup: Story = {
 	render: () => (
 		<Menu.Root>
 			<Menu.Trigger render={<Button endSlot={<Menu.TriggerIcon />} variant="neutral" />}>Account</Menu.Trigger>
-			<Menu.Popup positionerProps={{ align: "start" }} style={storyStyles.accountMenu}>
+			<Menu.Popup positionerProps={{ align: "start" }} xstyle={storyStyles.accountMenu}>
 				<Menu.Item>
 					<Menu.ItemIcon>
 						<CreditCardIcon size={16} weight="duotone" />

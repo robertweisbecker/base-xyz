@@ -243,7 +243,7 @@ export const Variants: Story = {
 	render: () => (
 		<Stack gap={5}>
 			{variants.map((variant) => (
-				<Grid key={variant} align="center" gap={3} style={styles.variantRow}>
+				<Grid key={variant} align="center" gap={3} xstyle={styles.variantRow}>
 					<Text color="muted" size="1">
 						{variant}
 					</Text>
@@ -267,7 +267,7 @@ export const SizesAndIcons: Story = {
 	render: () => (
 		<Stack gap={5}>
 			{(["xs", "sm", "md", "lg"] as const).map((size) => (
-				<Grid key={size} align="center" gap={3} style={styles.variantRow}>
+				<Grid key={size} align="center" gap={3} xstyle={styles.variantRow}>
 					<Text color="muted" size="1">
 						{size === "xs" ? "Extra small" : size === "sm" ? "Small" : size === "md" ? "Medium" : "Large"}
 					</Text>
@@ -364,7 +364,7 @@ export const Groups: Story = {
 				</Heading>
 				<Stack gap={5}>
 					{variants.map((variant) => (
-						<Grid key={variant} align="center" gap={3} style={styles.variantRow}>
+						<Grid key={variant} align="center" gap={3} xstyle={styles.variantRow}>
 							<Text color="muted" size="1">
 								{variant}
 							</Text>
@@ -381,7 +381,7 @@ export const Groups: Story = {
 				</Heading>
 				<Stack gap={5}>
 					{variants.map((variant) => (
-						<Grid key={variant} align="center" gap={3} style={styles.variantRow}>
+						<Grid key={variant} align="center" gap={3} xstyle={styles.variantRow}>
 							<Text color="muted" size="1">
 								{variant}
 							</Text>

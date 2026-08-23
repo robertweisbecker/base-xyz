@@ -4,12 +4,12 @@ import { ArrowsHorizontalIcon } from "@phosphor-icons/react/dist/csr/ArrowsHoriz
 import { MinusIcon } from "@phosphor-icons/react/dist/csr/Minus";
 import { PlusIcon } from "@phosphor-icons/react/dist/csr/Plus";
 import * as stylex from "@stylexjs/stylex";
-import type { StyleXStyles } from "@stylexjs/stylex";
 import { useId, type CSSProperties } from "react";
 import { media } from "@/styles/constants.stylex";
-import { resolveThemeProps } from "@/theme/theme-props";
-import type { FieldSize, FieldThemeProps } from "@/components/field/field.types";
-import { fieldStyles, fieldTextStyles, fieldThemeProps } from "@/components/field/field.stylex";
+import type { FieldSize } from "@/components/field/field.types";
+import { fieldStyles, fieldTextStyles } from "@/components/field/field.stylex";
+import { mergeStyle, type BaseStyleProps } from "@/styles/props/base";
+import { extractMarginProps, type MarginProps } from "@/styles/props/spacing.stylex";
 import { focusRing } from "@/styles/recipes/focus";
 import { pressable } from "@/styles/recipes/transitions";
 import { tokens } from "@/theme/tokens.stylex";
@@ -23,15 +23,19 @@ const INPUT_HOVER =
 
 export type NumberFieldProps = Omit<
 	BaseNumberField.Root.Props,
-	"children" | "className" | "color" | "id" | "style" | keyof FieldThemeProps
+	| "children"
+	| "className"
+	| "color"
+	| "id"
+	| "style"
+	| keyof MarginProps
 > &
-	FieldThemeProps & {
+	MarginProps &
+	BaseStyleProps & {
 		label: string;
 		description?: string;
 		error?: string;
 		className?: string;
-		/** StyleX overrides, applied after the component's own styles. */
-		style?: StyleXStyles;
 		id?: string;
 		/**
 		 * Width of the nested input. Use `"fill"` to occupy the available inline
@@ -52,6 +56,7 @@ export function NumberField({
 	error,
 	className,
 	style,
+	xstyle,
 	id: providedId,
 	decrementLabel = "Decrease value",
 	incrementLabel = "Increase value",
@@ -63,22 +68,27 @@ export function NumberField({
 	inputWidth = "5ch",
 	...props
 }: NumberFieldProps) {
-	const { restProps, styles } = resolveThemeProps(props, fieldThemeProps);
+	const { marginStyles, rest } = extractMarginProps(props);
 	const generatedId = useId();
 	const id = providedId ?? generatedId;
 	const descriptionId = description ? `${id}-description` : undefined;
 	const errorId = error ? `${id}-error` : undefined;
-	const rootSx = stylex.props(fieldStyles.root, numberFieldParts.root, ...styles, style);
+	const rootSx = stylex.props(
+		fieldStyles.root,
+		numberFieldParts.root,
+		marginStyles,
+		xstyle,
+	);
 
 	return (
 		<Field.Root
 			className={attrJoin(rootSx.className, className)}
-			style={rootSx.style}
+			style={mergeStyle(rootSx.style, style)}
 			disabled={disabled}
 			invalid={Boolean(error)}
 			name={name}
 			render={
-				<BaseNumberField.Root id={id} disabled={disabled} readOnly={readOnly} required={required} {...restProps} />
+				<BaseNumberField.Root id={id} disabled={disabled} readOnly={readOnly} required={required} {...rest} />
 			}>
 			<BaseNumberField.ScrubArea {...stylex.props(numberFieldParts.scrubArea)}>
 				<Field.Label htmlFor={id} {...stylex.props(fieldStyles.label, numberFieldParts.label)}>

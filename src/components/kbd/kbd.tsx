@@ -1,50 +1,60 @@
 import type * as React from "react";
 import * as stylex from "@stylexjs/stylex";
-import type { StyleXStyles } from "@stylexjs/stylex";
-import { resolveThemeProps } from "@/theme/theme-props";
-import { marginThemeProps } from "@/theme/theme-props-spacing.stylex";
-import type { MarginProps } from "@/theme/theme-props.types";
+import { mergeStyle, type BaseStyleProps } from "@/styles/props/base";
+import { extractMarginProps, type MarginProps } from "@/styles/props/spacing.stylex";
 import { tokens } from "@/theme/tokens.stylex";
 import { attrJoin } from "@/utils/attr-join";
 
 type KbdSize = "sm" | "md";
 type KbdVariant = "default" | "inverse" | "outline" | "plain";
 
-type StyledProps<T> = Omit<T, "className" | "style"> & {
-	className?: string;
-	/** StyleX overrides, applied after the component's own styles. */
-	style?: StyleXStyles;
-};
-
-export type KbdProps = Omit<StyledProps<React.ComponentProps<"kbd">>, keyof MarginProps> &
-	MarginProps & {
+export type KbdProps = Omit<
+	React.ComponentProps<"kbd">,
+	"className" | "style" | keyof MarginProps
+> &
+	MarginProps &
+	BaseStyleProps & {
+		className?: string;
 		size?: KbdSize;
 		variant?: KbdVariant;
 	};
 
-export function Kbd({ className, style, size = "md", variant = "default", ...props }: KbdProps): React.ReactElement {
-	const { restProps, styles } = resolveThemeProps(props, marginThemeProps);
-	const sx = stylex.props(kbdStyles.key, kbdSizes[size], kbdVariants[variant], ...styles, style);
+export function Kbd({ className, style, xstyle, size = "md", variant = "default", ...props }: KbdProps): React.ReactElement {
+	const { marginStyles, rest } = extractMarginProps(props);
+	const sx = stylex.props(
+		kbdStyles.key,
+		kbdSizes[size],
+		kbdVariants[variant],
+		...marginStyles,
+		xstyle,
+	);
 
 	return (
 		<kbd
 			data-component="kbd"
 			className={attrJoin(sx.className, className)}
-			style={sx.style}
-			{...restProps}
+			style={mergeStyle(sx.style, style)}
+			{...rest}
 		/>
 	);
 }
 
-export function KbdGroup({ className, style, ...props }: StyledProps<React.ComponentProps<"kbd">>): React.ReactElement {
-	const sx = stylex.props(kbdStyles.group, style);
+export type KbdGroupProps = Omit<React.ComponentProps<"kbd">, "className" | "style" | keyof MarginProps> &
+	MarginProps &
+	BaseStyleProps & {
+		className?: string;
+	};
+
+export function KbdGroup({ className, style, xstyle, ...props }: KbdGroupProps): React.ReactElement {
+	const { marginStyles, rest } = extractMarginProps(props);
+	const sx = stylex.props(kbdStyles.group, ...marginStyles, xstyle);
 
 	return (
 		<kbd
 			data-component="kbd-group"
 			className={attrJoin(sx.className, className)}
-			style={sx.style}
-			{...props}
+			style={mergeStyle(sx.style, style)}
+			{...rest}
 		/>
 	);
 }

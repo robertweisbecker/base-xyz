@@ -1,9 +1,8 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import * as stylex from "@stylexjs/stylex";
-import { tokens } from "@/theme/tokens.stylex";
+import x from "@stylexjs/atoms";
 import { Stack } from "@/components/layout/layout";
 import { Text } from "@/components/text/text";
-import { InfoTip } from "./info-tip";
+import { InfoTip, type InfoTipProps } from "./info-tip";
 
 const sizes = ["xs", "sm", "md", "lg"] as const;
 
@@ -14,7 +13,7 @@ const meta = {
 		content: "This setting applies to everyone in the workspace.",
 		help: false,
 		size: "sm",
-	},
+	} satisfies Partial<InfoTipProps>,
 	argTypes: {
 		content: { control: "text" },
 		help: { control: "boolean" },
@@ -48,7 +47,7 @@ export const Examples: Story = {
 				{ help: true, label: "Help" },
 			].map((option) => (
 				<Stack key={option.label} align="center" gap={4} orientation="horizontal">
-					<Text color="muted" size="1" style={styles.label}>
+					<Text color="muted" size="1" xstyle={x.minWidth("5rem")}>
 						{option.label}
 					</Text>
 					<Stack align="center" gap={3} wrap="wrap">
@@ -64,7 +63,7 @@ export const Examples: Story = {
 				</Stack>
 			))}
 			<Stack align="center" gap={4} orientation="horizontal">
-				<Text color="muted" size="1" style={styles.label}>
+				<Text color="muted" size="1" xstyle={x.minWidth("5rem")}>
 					Rich content
 				</Text>
 				<InfoTip
@@ -80,9 +79,3 @@ export const Examples: Story = {
 		</Stack>
 	),
 };
-
-const styles = stylex.create({
-	label: {
-		minWidth: "5rem",
-	},
-});
