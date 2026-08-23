@@ -1,0 +1,15 @@
+# Papercuts
+
+Shared, committed log of grievances, tooling friction, and workaround needs encountered by agents working in this repository. Append one dated bullet per papercut: what hurt, where (file/tool), and the workaround taken. Recurring entries are candidates for a real fix (lint rule, script, ADR, or upstream issue).
+
+## Entries
+
+- 2026-08-20 — `@stylexjs/valid-shorthands` rejects multi-value shorthands, forcing grid span maps in `src/styles/props/grid.stylex.ts` into `gridColumnStart`/`gridColumnEnd` longhand pairs; `xstyle={{ gridColumn: "…" }}` overrides may not beat the longhands. (Phase 1 worker)
+- 2026-08-20 — Computed `stylex.when.ancestor(...)` keys break contextual typing in `stylex.create`, so numeric literals widen and can need `as const`/SAFETY casts (`src/components/toggle/toggle.stylex.ts`); the `@stylexjs/valid-styles` lint rule also rejects nested `when()` conditions the compiler supports, requiring per-line disables. (Build-error fixer)
+- 2026-08-20 — `stylex.create` map keys are strings, so numeric negative steps (`-1`) cannot be map keys; public numeric API requires a hand-maintained `NegativeSpaceStep` union plus a string-key conversion helper in `src/styles/props/spacing.stylex.ts`. (Phase 2 worker)
+- 2026-08-20 — Concurrent workers running `tsc`/builds saturate the machine; a single `tsc -p tsconfig.app.json --noEmit` took ~22 minutes under load. Stagger validation-heavy work. (Audit worker)
+- 2026-08-20 — Props types extending `HTMLAttributes`-derived component props silently inherit React's RDFa `content?: string`, which intersects with a component-level `content: ReactNode` and rejects JSX elements (`src/components/info-tip/info-tip.tsx`). Omit collision-prone HTML attribute names (`content`, `color`, and similar) before redeclaring. (Build-error fixer)
+- 2026-08-20 — `anti-slop/no-known-value-widening` rejects an exhaustive `Record<keyof UniversalStyleProps, true>` annotation on `stylePropKeyRecord` in `src/styles/props/base.ts`; `as const satisfies Record<...>` keeps inference and the missing-key compile check. (Phase 4 worker)
+- 2026-08-20 — Playwright against `vite preview` of `storybook-static` can miss story iframe content on the first parallel wave (`fixture-ready` / trigger buttons not found, 5s timeout) even though later tests of the same stories pass. Retry the failed specs serially (`--workers=1`) before changing code; AGENTS.md already notes Storybook's transient missing-story behavior. (Phase 4 worker)
+- 2026-08-20 — `omitStyleProps` strips `rowSpan` (and `width`/`height`/`border`) from every DOM spread. Native `td`/`th`/`table` attributes share those names, so calling it on Table compound parts silently drops spanning. Only use `omitStyleProps` on roots that actually consume style-prop groups. (`src/components/table/table.tsx`)
+- 2026-08-20 — Playwright browser binaries are not available in the default sandbox cache (`browserType.launch: Executable doesn't exist`); run `npx playwright test` with full permissions outside the sandbox, or install browsers first. (Pre-commit polish worker)

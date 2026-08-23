@@ -32,9 +32,10 @@
 
 ## Styles
 
-- Before authoring or reviewing StyleX, read the vendored official [StyleX authoring guide](.agents/resources/stylex-authoring.md), [ADR 0003](docs/adr/0003-stylex-ownership-and-application.md), and `src/styles/README.md`; repository-specific ownership and interop decisions remain authoritative.
+- Before authoring or reviewing StyleX, read the vendored official [StyleX authoring guide](.agents/resources/stylex-authoring.md), [ADR 0003](docs/adr/0003-stylex-ownership-and-application.md), [ADR 0011](docs/adr/0011-layout-primitives-common-margins-and-stylex-overrides.md), and `src/styles/README.md`; repository-specific ownership and interop decisions remain authoritative.
 - Tokens are stable API: never remove them or replace usages with literals unless explicitly asked. Themeable values live in `tokens.stylex.ts`; fixed globals in `constants.stylex.ts`.
 - Use the ADR's explicit `stylex.props(...)` boundary for native JSX; do not add global JSX augmentation, transform shims, or line suppressions for lowercase intrinsic `sx`.
+- Before changing style-prop surfaces or the `style`/`xstyle` split, read [ADR 0011](docs/adr/0011-layout-primitives-common-margins-and-stylex-overrides.md). `Box`, `Stack`, and `Grid` are the broad token-aware layout gateway. Add scalar `MarginProps` only to eligible normal-flow roots, resolve them once with `extractMarginProps`, and keep positioned/controller surfaces and internal compound parts outside that contract. `style` is native inline style; StyleX Atoms and created styles share `xstyle`, merged last inside `stylex.props(...)`.
 
 ## Components and accessibility
 
@@ -52,8 +53,9 @@
 - Keep `README.md` as project orientation and an index into authoritative references; do not maintain a duplicate component inventory there.
 - Keep `CONTEXT.md` as the concise repository glossary.
 - Keep this file limited to executable agent rules. Record durable architectural choices and rationale in the next numbered file under `docs/adr/`, then link it from the README and the relevant rule here.
-- Update an existing ADR when clarifying the same decision. Add a new ADR only for a distinct decision or when superseding an earlier one; never silently rewrite historical status or rationale.
+- Update an existing ADR when clarifying the same decision. Add a new ADR only for a distinct decision or when superseding an earlier one; never silently rewrite historical status or rationale. When an ADR is superseded, set its status line to point at the successor and move the file to `docs/adr/archive/`, updating inbound links; numbering is never reused.
 - Keep `plans/` as an active backlog only. After a plan is DONE or REJECTED, distill any durable outcome into an ADR, glossary, or implementation guide, then remove the inactive plan and its status history. Git history is the archive; do not keep execution transcripts in the public tree.
+- Record grievances, tooling friction, and workaround needs in `.agents/PAPERCUTS.md` (committed) as you encounter them: one dated bullet per papercut with file/tool context and the workaround taken. Do not silently absorb repeated friction.
 
 ## Validation
 
