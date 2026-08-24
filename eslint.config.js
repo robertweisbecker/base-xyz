@@ -4,6 +4,9 @@ import tsParser from "@typescript-eslint/parser";
 // StyleX-specific linting only; general linting stays with oxlint.
 export default [
 	{
+		ignores: ["src/routeTree.gen.ts"],
+	},
+	{
 		files: ["src/**/*.{ts,tsx}"],
 		languageOptions: {
 			parser: tsParser,

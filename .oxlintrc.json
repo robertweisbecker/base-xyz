@@ -13,6 +13,7 @@
     ".roo/**",
     ".windsurf/**",
     ".worktrees/**",
+    "src/routeTree.gen.ts",
     "tools/oxlint/anti-slop/**"
   ],
   "jsPlugins": [

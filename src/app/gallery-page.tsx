@@ -1,4 +1,4 @@
-import { useLayoutEffect, useState, type ReactNode } from "react";
+import { type ReactNode } from "react";
 import * as stylex from "@stylexjs/stylex";
 import {
 	AgentActionApproval,
@@ -13,17 +13,14 @@ import {
 	PromptComposer,
 	StreamingResponse,
 	WorkflowProgress,
-} from "./blocks";
+} from "@/blocks";
 import { BlueprintIcon } from "@phosphor-icons/react/dist/csr/Blueprint";
 import { CopyIcon } from "@phosphor-icons/react/dist/csr/Copy";
 import { FolderOpenIcon } from "@phosphor-icons/react/dist/csr/FolderOpen";
 import { GithubLogoIcon } from "@phosphor-icons/react/dist/csr/GithubLogo";
 import { InfoIcon } from "@phosphor-icons/react/dist/csr/Info";
 import { MagnifyingGlassIcon } from "@phosphor-icons/react/dist/csr/MagnifyingGlass";
-import { StairsIcon } from "@phosphor-icons/react/dist/csr/Stairs";
-import { MoonIcon } from "@phosphor-icons/react/dist/csr/Moon";
 import { PlusIcon } from "@phosphor-icons/react/dist/csr/Plus";
-import { SunIcon } from "@phosphor-icons/react/dist/csr/Sun";
 import { XIcon } from "@phosphor-icons/react/dist/csr/X";
 import {
 	AlertDialog,
@@ -77,19 +74,16 @@ import {
 	Toolbar,
 	Tooltip,
 	VisuallyHidden,
-} from "./components";
+} from "@/components";
 import {
 	exampleDefaultValue,
 	exampleEffortOptions,
 	exampleModelGroups,
 	exampleSpeedOptions,
-} from "./blocks/model-selector/model-selector.examples";
-import { breakpoints, zIndex } from "@/styles/constants.stylex";
+} from "@/blocks/model-selector/model-selector.examples";
+import { breakpoints } from "@/styles/constants.stylex";
 import { tokens } from "@/theme/tokens.stylex";
 
-import { textStyles } from "@/components/text/text.stylex";
-import { parseModeFromSearchParams, parseThemeFromSearchParams, syncAppThemeUrl } from "./theme/app-theme-url";
-import { ThemeProvider, useTheme, type ResolvedThemeMode, type ThemeMode, type ThemeName } from "./theme";
 import {
 	ArrowRightIcon,
 	FileSearchIcon,
@@ -119,15 +113,6 @@ const galleryDeploymentColumns: Array<DataTableColumnDef<GalleryDeployment>> = [
 	{ accessorKey: "status", header: "Status" },
 	{ accessorKey: "updated", header: "Updated" },
 ];
-const themeIconSize = 18;
-const themeModeStorageKey = "base-stylex-theme";
-const themeBrandStorageKey = "base-stylex-theme-brand";
-
-const themeBrandItems: { label: string; value: ThemeName }[] = [
-	{ label: "Base", value: "default" },
-	{ label: "MP", value: "mp" },
-];
-
 function getComponentCells(): GalleryCell[] {
 	return [
 		{
@@ -1085,106 +1070,6 @@ function ToastList() {
 	));
 }
 
-function App() {
-	const [mode, setMode] = useState<ThemeMode>(getInitialThemeMode);
-	const [theme, setTheme] = useState<ThemeName>(getInitialThemeBrand);
-
-	useLayoutEffect(() => {
-		localStorage.setItem(themeModeStorageKey, mode);
-	}, [mode]);
-
-	useLayoutEffect(() => {
-		localStorage.setItem(themeBrandStorageKey, theme);
-	}, [theme]);
-
-	const handleModeChange = (nextMode: ThemeMode) => {
-		setMode(nextMode);
-		syncAppThemeUrl(theme, nextMode);
-	};
-
-	const handleThemeChange = (nextTheme: ThemeName) => {
-		setTheme(nextTheme);
-		syncAppThemeUrl(nextTheme, mode);
-	};
-
-	return (
-		<ThemeProvider mode={mode} theme={theme} render={<div id="top" />} style={styles.app}>
-			<AppContent onModeChange={handleModeChange} onThemeChange={handleThemeChange} theme={theme} />
-		</ThemeProvider>
-	);
-}
-
-function AppContent({
-	onModeChange,
-	onThemeChange,
-	theme,
-}: {
-	onModeChange: (mode: ThemeMode) => void;
-	onThemeChange: (theme: ThemeName) => void;
-	theme: ThemeName;
-}) {
-	const { resolvedMode } = useTheme();
-	const nextMode: ResolvedThemeMode = resolvedMode === "light" ? "dark" : "light";
-
-	return (
-		<>
-			<header {...stylex.props(styles.header)}>
-				<a href="#top" {...stylex.props(textStyles.supporting, styles.brand)}>
-					<span {...stylex.props(styles.brandMark)}>
-						<StairsIcon aria-hidden size={16} weight="duotone" />
-					</span>
-					<span>BaseX</span>
-				</a>
-				<div {...stylex.props(styles.headerMeta)}>
-					<Link href="#components" xstyle={styles.headerNavLink}>
-						components
-					</Link>{" "}
-					<Link href="#blocks" xstyle={styles.headerNavLink}>
-						blocks
-					</Link>
-					<Separator orientation="vertical" />
-					<Select.Root<ThemeName>
-						size="sm"
-						value={theme}
-						items={themeBrandItems}
-						onValueChange={(value) => {
-							if (value) onThemeChange(value);
-						}}>
-						<Select.Trigger aria-label="Theme" variant="inline" />
-						<Select.Popup>
-							<Select.List>
-								{themeBrandItems.map((item) => (
-									<Select.Item key={item.value} value={item.value}>
-										{item.label}
-									</Select.Item>
-								))}
-							</Select.List>
-						</Select.Popup>
-					</Select.Root>
-					<IconButton
-						icon={
-							<span {...stylex.props(styles.themeIcon)}>
-								{resolvedMode === "light" ? (
-									<MoonIcon aria-hidden size={themeIconSize} weight="duotone" />
-								) : (
-									<SunIcon aria-hidden size={themeIconSize} weight="duotone" />
-								)}
-							</span>
-						}
-						label={`Switch to ${nextMode} mode`}
-						variant="ghost"
-						shape="circle"
-						size="sm"
-						onClick={() => onModeChange(nextMode)}
-					/>
-				</div>
-			</header>
-
-			<GalleryGrid />
-		</>
-	);
-}
-
 /** Specimen grids used by the demo app and the Storybook Gallery story. */
 export function GalleryGrid() {
 	return (
@@ -1193,22 +1078,6 @@ export function GalleryGrid() {
 			<GallerySection title="Blocks" cells={getBlockCells()} variant="blocks" />
 		</main>
 	);
-}
-
-function getInitialThemeMode(): ThemeMode {
-	if (typeof window === "undefined") return "system";
-	const fromUrl = parseModeFromSearchParams(new URLSearchParams(window.location.search));
-	if (fromUrl !== undefined) return fromUrl;
-	const storedMode = localStorage.getItem(themeModeStorageKey);
-	return storedMode === "light" || storedMode === "dark" || storedMode === "system" ? storedMode : "system";
-}
-
-function getInitialThemeBrand(): ThemeName {
-	if (typeof window === "undefined") return "default";
-	const fromUrl = parseThemeFromSearchParams(new URLSearchParams(window.location.search));
-	if (fromUrl !== undefined) return fromUrl;
-	const storedTheme = localStorage.getItem(themeBrandStorageKey);
-	return storedTheme === "default" || storedTheme === "mp" ? storedTheme : "default";
 }
 
 function GallerySection({
@@ -1253,56 +1122,6 @@ function GallerySection({
 }
 
 const styles = stylex.create({
-	app: {
-		backgroundColor: tokens["--canvas"],
-		color: tokens["--fg"],
-		minHeight: "100svh",
-	},
-	header: {
-		paddingInline: tokens["--space-4"],
-		alignItems: "center",
-		backgroundImage: `linear-gradient(to bottom, ${tokens["--canvas"]}, transparent)`,
-		display: "flex",
-		justifyContent: "space-between",
-		position: "sticky",
-		zIndex: zIndex.sticky,
-		height: "48px",
-		top: 0,
-	},
-	brand: {
-		gap: tokens["--space-2"],
-		textDecoration: "none",
-		alignItems: "center",
-		color: tokens["--fg"],
-		display: "inline-flex",
-	},
-	brandMark: {
-		borderRadius: tokens["--radius-xs"],
-		outline: `1px solid ${tokens["--canvas"]}`,
-		alignItems: "center",
-		aspectRatio: 1,
-		backgroundColor: tokens["--border"],
-		color: tokens["--fg-muted"],
-		display: "inline-flex",
-		justifyContent: "center",
-		height: "20px",
-	},
-	headerMeta: {
-		gap: tokens["--space-3"],
-		alignItems: "center",
-		display: "flex",
-	},
-	headerNavLink: {
-		fontSize: tokens["--font-size-1"],
-	},
-	themeIcon: {
-		alignItems: "center",
-		display: "inline-flex",
-		justifyContent: "center",
-		lineHeight: 0,
-		height: `${themeIconSize}px`,
-		width: `${themeIconSize}px`,
-	},
 	section: {
 		width: "100%",
 	},
@@ -1488,5 +1307,3 @@ const styles = stylex.create({
 		width: "100%",
 	},
 });
-
-export default App;

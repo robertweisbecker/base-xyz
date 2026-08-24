@@ -2,6 +2,7 @@ import { defineConfig } from 'vite'
 import type { PluginOption } from 'vite'
 import react from '@vitejs/plugin-react'
 import { unplugin as stylex } from '@stylexjs/unplugin'
+import { tanstackRouter } from '@tanstack/router-plugin/vite'
 import { fileURLToPath, URL } from 'node:url'
 
 const stylexConstantsPath = fileURLToPath(
@@ -40,6 +41,10 @@ export default defineConfig({
   },
   plugins: [
     preloadStylexConstants(),
+    tanstackRouter({
+      target: 'react',
+      autoCodeSplitting: true,
+    }),
     stylex.vite({
       aliases: {
         '@/*': '/ROOT/src/*',
