@@ -11,6 +11,16 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as ExperimentsRouteImport } from './routes/experiments'
+import { Route as ExperimentsIndexRouteImport } from './routes/experiments.index'
+import { Route as ExperimentsBlocksRouteImport } from './routes/experiments.blocks'
+import { Route as ExperimentsComponentsRouteImport } from './routes/experiments.components'
+import { Route as ExperimentsBlocksIndexRouteImport } from './routes/experiments.blocks.index'
+import { Route as ExperimentsBlocksAgentBlocksRouteImport } from './routes/experiments.blocks.agent-blocks'
+import { Route as ExperimentsBlocksUtilitiesRouteImport } from './routes/experiments.blocks.utilities'
+import { Route as ExperimentsComponentsIndexRouteImport } from './routes/experiments.components.index'
+import { Route as ExperimentsComponentsInputsRouteImport } from './routes/experiments.components.inputs'
+import { Route as ExperimentsComponentsPopupsRouteImport } from './routes/experiments.components.popups'
+import { Route as ExperimentsComponentsTablesRouteImport } from './routes/experiments.components.tables'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -22,31 +32,148 @@ const ExperimentsRoute = ExperimentsRouteImport.update({
   path: '/experiments',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ExperimentsIndexRoute = ExperimentsIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => ExperimentsRoute,
+} as any)
+const ExperimentsBlocksRoute = ExperimentsBlocksRouteImport.update({
+  id: '/blocks',
+  path: '/blocks',
+  getParentRoute: () => ExperimentsRoute,
+} as any)
+const ExperimentsComponentsRoute = ExperimentsComponentsRouteImport.update({
+  id: '/components',
+  path: '/components',
+  getParentRoute: () => ExperimentsRoute,
+} as any)
+const ExperimentsBlocksIndexRoute = ExperimentsBlocksIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => ExperimentsBlocksRoute,
+} as any)
+const ExperimentsBlocksAgentBlocksRoute =
+  ExperimentsBlocksAgentBlocksRouteImport.update({
+    id: '/agent-blocks',
+    path: '/agent-blocks',
+    getParentRoute: () => ExperimentsBlocksRoute,
+  } as any)
+const ExperimentsBlocksUtilitiesRoute =
+  ExperimentsBlocksUtilitiesRouteImport.update({
+    id: '/utilities',
+    path: '/utilities',
+    getParentRoute: () => ExperimentsBlocksRoute,
+  } as any)
+const ExperimentsComponentsIndexRoute =
+  ExperimentsComponentsIndexRouteImport.update({
+    id: '/',
+    path: '/',
+    getParentRoute: () => ExperimentsComponentsRoute,
+  } as any)
+const ExperimentsComponentsInputsRoute =
+  ExperimentsComponentsInputsRouteImport.update({
+    id: '/inputs',
+    path: '/inputs',
+    getParentRoute: () => ExperimentsComponentsRoute,
+  } as any)
+const ExperimentsComponentsPopupsRoute =
+  ExperimentsComponentsPopupsRouteImport.update({
+    id: '/popups',
+    path: '/popups',
+    getParentRoute: () => ExperimentsComponentsRoute,
+  } as any)
+const ExperimentsComponentsTablesRoute =
+  ExperimentsComponentsTablesRouteImport.update({
+    id: '/tables',
+    path: '/tables',
+    getParentRoute: () => ExperimentsComponentsRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/experiments': typeof ExperimentsRoute
+  '/experiments': typeof ExperimentsRouteWithChildren
+  '/experiments/blocks': typeof ExperimentsBlocksRouteWithChildren
+  '/experiments/components': typeof ExperimentsComponentsRouteWithChildren
+  '/experiments/': typeof ExperimentsIndexRoute
+  '/experiments/blocks/agent-blocks': typeof ExperimentsBlocksAgentBlocksRoute
+  '/experiments/blocks/utilities': typeof ExperimentsBlocksUtilitiesRoute
+  '/experiments/components/inputs': typeof ExperimentsComponentsInputsRoute
+  '/experiments/components/popups': typeof ExperimentsComponentsPopupsRoute
+  '/experiments/components/tables': typeof ExperimentsComponentsTablesRoute
+  '/experiments/blocks/': typeof ExperimentsBlocksIndexRoute
+  '/experiments/components/': typeof ExperimentsComponentsIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/experiments': typeof ExperimentsRoute
+  '/experiments': typeof ExperimentsIndexRoute
+  '/experiments/blocks/agent-blocks': typeof ExperimentsBlocksAgentBlocksRoute
+  '/experiments/blocks/utilities': typeof ExperimentsBlocksUtilitiesRoute
+  '/experiments/components/inputs': typeof ExperimentsComponentsInputsRoute
+  '/experiments/components/popups': typeof ExperimentsComponentsPopupsRoute
+  '/experiments/components/tables': typeof ExperimentsComponentsTablesRoute
+  '/experiments/blocks': typeof ExperimentsBlocksIndexRoute
+  '/experiments/components': typeof ExperimentsComponentsIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
-  '/experiments': typeof ExperimentsRoute
+  '/experiments': typeof ExperimentsRouteWithChildren
+  '/experiments/blocks': typeof ExperimentsBlocksRouteWithChildren
+  '/experiments/components': typeof ExperimentsComponentsRouteWithChildren
+  '/experiments/': typeof ExperimentsIndexRoute
+  '/experiments/blocks/agent-blocks': typeof ExperimentsBlocksAgentBlocksRoute
+  '/experiments/blocks/utilities': typeof ExperimentsBlocksUtilitiesRoute
+  '/experiments/components/inputs': typeof ExperimentsComponentsInputsRoute
+  '/experiments/components/popups': typeof ExperimentsComponentsPopupsRoute
+  '/experiments/components/tables': typeof ExperimentsComponentsTablesRoute
+  '/experiments/blocks/': typeof ExperimentsBlocksIndexRoute
+  '/experiments/components/': typeof ExperimentsComponentsIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/experiments'
+  fullPaths:
+    | '/'
+    | '/experiments'
+    | '/experiments/blocks'
+    | '/experiments/components'
+    | '/experiments/'
+    | '/experiments/blocks/agent-blocks'
+    | '/experiments/blocks/utilities'
+    | '/experiments/components/inputs'
+    | '/experiments/components/popups'
+    | '/experiments/components/tables'
+    | '/experiments/blocks/'
+    | '/experiments/components/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/experiments'
-  id: '__root__' | '/' | '/experiments'
+  to:
+    | '/'
+    | '/experiments'
+    | '/experiments/blocks/agent-blocks'
+    | '/experiments/blocks/utilities'
+    | '/experiments/components/inputs'
+    | '/experiments/components/popups'
+    | '/experiments/components/tables'
+    | '/experiments/blocks'
+    | '/experiments/components'
+  id:
+    | '__root__'
+    | '/'
+    | '/experiments'
+    | '/experiments/blocks'
+    | '/experiments/components'
+    | '/experiments/'
+    | '/experiments/blocks/agent-blocks'
+    | '/experiments/blocks/utilities'
+    | '/experiments/components/inputs'
+    | '/experiments/components/popups'
+    | '/experiments/components/tables'
+    | '/experiments/blocks/'
+    | '/experiments/components/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  ExperimentsRoute: typeof ExperimentsRoute
+  ExperimentsRoute: typeof ExperimentsRouteWithChildren
 }
 
 declare module '@tanstack/react-router' {
@@ -65,12 +192,132 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ExperimentsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/experiments/': {
+      id: '/experiments/'
+      path: '/'
+      fullPath: '/experiments/'
+      preLoaderRoute: typeof ExperimentsIndexRouteImport
+      parentRoute: typeof ExperimentsRoute
+    }
+    '/experiments/blocks': {
+      id: '/experiments/blocks'
+      path: '/blocks'
+      fullPath: '/experiments/blocks'
+      preLoaderRoute: typeof ExperimentsBlocksRouteImport
+      parentRoute: typeof ExperimentsRoute
+    }
+    '/experiments/components': {
+      id: '/experiments/components'
+      path: '/components'
+      fullPath: '/experiments/components'
+      preLoaderRoute: typeof ExperimentsComponentsRouteImport
+      parentRoute: typeof ExperimentsRoute
+    }
+    '/experiments/blocks/': {
+      id: '/experiments/blocks/'
+      path: '/'
+      fullPath: '/experiments/blocks/'
+      preLoaderRoute: typeof ExperimentsBlocksIndexRouteImport
+      parentRoute: typeof ExperimentsBlocksRoute
+    }
+    '/experiments/blocks/agent-blocks': {
+      id: '/experiments/blocks/agent-blocks'
+      path: '/agent-blocks'
+      fullPath: '/experiments/blocks/agent-blocks'
+      preLoaderRoute: typeof ExperimentsBlocksAgentBlocksRouteImport
+      parentRoute: typeof ExperimentsBlocksRoute
+    }
+    '/experiments/blocks/utilities': {
+      id: '/experiments/blocks/utilities'
+      path: '/utilities'
+      fullPath: '/experiments/blocks/utilities'
+      preLoaderRoute: typeof ExperimentsBlocksUtilitiesRouteImport
+      parentRoute: typeof ExperimentsBlocksRoute
+    }
+    '/experiments/components/': {
+      id: '/experiments/components/'
+      path: '/'
+      fullPath: '/experiments/components/'
+      preLoaderRoute: typeof ExperimentsComponentsIndexRouteImport
+      parentRoute: typeof ExperimentsComponentsRoute
+    }
+    '/experiments/components/inputs': {
+      id: '/experiments/components/inputs'
+      path: '/inputs'
+      fullPath: '/experiments/components/inputs'
+      preLoaderRoute: typeof ExperimentsComponentsInputsRouteImport
+      parentRoute: typeof ExperimentsComponentsRoute
+    }
+    '/experiments/components/popups': {
+      id: '/experiments/components/popups'
+      path: '/popups'
+      fullPath: '/experiments/components/popups'
+      preLoaderRoute: typeof ExperimentsComponentsPopupsRouteImport
+      parentRoute: typeof ExperimentsComponentsRoute
+    }
+    '/experiments/components/tables': {
+      id: '/experiments/components/tables'
+      path: '/tables'
+      fullPath: '/experiments/components/tables'
+      preLoaderRoute: typeof ExperimentsComponentsTablesRouteImport
+      parentRoute: typeof ExperimentsComponentsRoute
+    }
   }
 }
 
+interface ExperimentsBlocksRouteChildren {
+  ExperimentsBlocksAgentBlocksRoute: typeof ExperimentsBlocksAgentBlocksRoute
+  ExperimentsBlocksUtilitiesRoute: typeof ExperimentsBlocksUtilitiesRoute
+  ExperimentsBlocksIndexRoute: typeof ExperimentsBlocksIndexRoute
+}
+
+const ExperimentsBlocksRouteChildren: ExperimentsBlocksRouteChildren = {
+  ExperimentsBlocksAgentBlocksRoute: ExperimentsBlocksAgentBlocksRoute,
+  ExperimentsBlocksUtilitiesRoute: ExperimentsBlocksUtilitiesRoute,
+  ExperimentsBlocksIndexRoute: ExperimentsBlocksIndexRoute,
+}
+
+const ExperimentsBlocksRouteWithChildren =
+  ExperimentsBlocksRoute._addFileChildren(ExperimentsBlocksRouteChildren)
+
+interface ExperimentsComponentsRouteChildren {
+  ExperimentsComponentsInputsRoute: typeof ExperimentsComponentsInputsRoute
+  ExperimentsComponentsPopupsRoute: typeof ExperimentsComponentsPopupsRoute
+  ExperimentsComponentsTablesRoute: typeof ExperimentsComponentsTablesRoute
+  ExperimentsComponentsIndexRoute: typeof ExperimentsComponentsIndexRoute
+}
+
+const ExperimentsComponentsRouteChildren: ExperimentsComponentsRouteChildren = {
+  ExperimentsComponentsInputsRoute: ExperimentsComponentsInputsRoute,
+  ExperimentsComponentsPopupsRoute: ExperimentsComponentsPopupsRoute,
+  ExperimentsComponentsTablesRoute: ExperimentsComponentsTablesRoute,
+  ExperimentsComponentsIndexRoute: ExperimentsComponentsIndexRoute,
+}
+
+const ExperimentsComponentsRouteWithChildren =
+  ExperimentsComponentsRoute._addFileChildren(
+    ExperimentsComponentsRouteChildren,
+  )
+
+interface ExperimentsRouteChildren {
+  ExperimentsBlocksRoute: typeof ExperimentsBlocksRouteWithChildren
+  ExperimentsComponentsRoute: typeof ExperimentsComponentsRouteWithChildren
+  ExperimentsIndexRoute: typeof ExperimentsIndexRoute
+}
+
+const ExperimentsRouteChildren: ExperimentsRouteChildren = {
+  ExperimentsBlocksRoute: ExperimentsBlocksRouteWithChildren,
+  ExperimentsComponentsRoute: ExperimentsComponentsRouteWithChildren,
+  ExperimentsIndexRoute: ExperimentsIndexRoute,
+}
+
+const ExperimentsRouteWithChildren = ExperimentsRoute._addFileChildren(
+  ExperimentsRouteChildren,
+)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  ExperimentsRoute: ExperimentsRoute,
+  ExperimentsRoute: ExperimentsRouteWithChildren,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

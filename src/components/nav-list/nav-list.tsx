@@ -44,6 +44,7 @@ export type NavListRootProps = Omit<ComponentProps<"nav">, "className" | "style"
 
 export type NavListSize = "sm" | "md";
 export type NavListCurrent = "page" | "location";
+export type NavListIndentLevel = 0 | 1;
 
 export type NavListSectionProps = BaseStyleProps & {
 	label: string;
@@ -65,6 +66,7 @@ export type NavListItemProps = BaseStyleProps & {
 	render?: useRender.RenderProp;
 	current?: NavListCurrent | false;
 	active?: boolean;
+	indentLevel?: NavListIndentLevel;
 	disabled?: boolean;
 	tooltip?: string | false;
 	"aria-label"?: string;
@@ -247,6 +249,7 @@ function Row({
 	render,
 	current,
 	active,
+	indentLevel = 0,
 	disabled = false,
 	tooltip,
 	"aria-label": ariaLabel,
@@ -373,7 +376,11 @@ function Row({
 		return rowWithTooltip;
 	}
 
-	return <li {...stylex.props(navListParts.listItem)}>{rowWithTooltip}</li>;
+	return (
+		<li {...stylex.props(navListParts.listItem, !isIconMode && indentLevel === 1 && navListParts.indentedListItem)}>
+			{rowWithTooltip}
+		</li>
+	);
 }
 
 export type CollapsibleGroupProps = BaseStyleProps & {
@@ -1001,6 +1008,14 @@ const navListParts = stylex.create({
 	},
 	listItem: {
 		minWidth: 0,
+	},
+	indentedListItem: {
+		borderInlineStartColor: tokens["--border"],
+		borderInlineStartStyle: "solid",
+		borderInlineStartWidth: tokens["--border-width"],
+		boxSizing: "border-box",
+		marginInlineStart: tokens["--space-4"],
+		paddingInlineStart: tokens["--space-1-5"],
 	},
 	row: {
 		[menuItemVars.columns]: `${tokens["--space-4"]} minmax(0, 1fr) auto`,
