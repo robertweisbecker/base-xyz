@@ -1,8 +1,10 @@
 import type { ComponentProps } from "react";
 
-export type IconProps = ComponentProps<"svg">;
+export type IconProps = Omit<ComponentProps<"svg">, "size"> & {
+	size?: number | string;
+};
 
-function Checkmark(props: IconProps) {
+function Checkmark({ size, ...props }: IconProps) {
 	return (
 		<svg
 			fill="none"
@@ -11,8 +13,8 @@ function Checkmark(props: IconProps) {
 			stroke="currentColor"
 			aria-hidden
 			focusable="false"
-			width={16}
-			height={16}
+			width={size ?? 16}
+			height={size ?? 16}
 			data-slot="icon"
 			data-glyph="indicator"
 			{...props}>
@@ -21,9 +23,9 @@ function Checkmark(props: IconProps) {
 	);
 }
 
-function ChevronDown(props: IconProps) {
+function ChevronDown({ size, ...props }: IconProps) {
 	return (
-		<svg viewBox="0 0 16 16" fill="currentColor" width={16} height={16} {...props}>
+		<svg viewBox="0 0 16 16" fill="currentColor" width={size ?? 16} height={size ?? 16} {...props}>
 			<path
 				d="M4 6L8 10L12 6"
 				fill="none"
@@ -36,15 +38,15 @@ function ChevronDown(props: IconProps) {
 	);
 }
 
-function Caret(props: IconProps) {
+function Caret({ size, ...props }: IconProps) {
 	return (
-		<svg width="16" height="16" viewBox="0 0 16 16" fill="none" {...props}>
+		<svg width={size ?? 16} height={size ?? 16} viewBox="0 0 16 16" fill="none" {...props}>
 			<path d="M8 11L4 7H12L8 11Z" fill="currentColor" />
 		</svg>
 	);
 }
 
-function More(props: IconProps) {
+function More({ size, ...props }: IconProps) {
 	return (
 		<svg
 			fill="none"
@@ -53,8 +55,8 @@ function More(props: IconProps) {
 			stroke="currentColor"
 			aria-hidden
 			focusable="false"
-			width={16}
-			height={16}
+			width={size ?? 16}
+			height={size ?? 16}
 			data-slot="icon"
 			data-glyph="more"
 			{...props}>
@@ -65,7 +67,7 @@ function More(props: IconProps) {
 	);
 }
 
-function Minus(props: IconProps) {
+function Minus({ size, ...props }: IconProps) {
 	return (
 		<svg
 			viewBox="0 0 24 24"
@@ -74,8 +76,8 @@ function Minus(props: IconProps) {
 			stroke="currentColor"
 			aria-hidden
 			focusable="false"
-			width={16}
-			height={16}
+			width={size ?? 16}
+			height={size ?? 16}
 			data-slot="icon"
 			data-glyph="indicator"
 			{...props}>
@@ -84,7 +86,7 @@ function Minus(props: IconProps) {
 	);
 }
 
-function Circle(props: IconProps) {
+function Circle({ size, ...props }: IconProps) {
 	return (
 		<svg
 			viewBox="0 0 24 24"
@@ -93,8 +95,8 @@ function Circle(props: IconProps) {
 			stroke="currentColor"
 			aria-hidden
 			focusable="false"
-			width={16}
-			height={16}
+			width={size ?? 16}
+			height={size ?? 16}
 			data-slot="icon"
 			data-glyph="circular"
 			{...props}>
@@ -103,7 +105,7 @@ function Circle(props: IconProps) {
 	);
 }
 
-function Dot(props: IconProps) {
+function Dot({ size, ...props }: IconProps) {
 	return (
 		<svg
 			viewBox="0 0 24 24"
@@ -111,8 +113,8 @@ function Dot(props: IconProps) {
 			strokeWidth={2}
 			aria-hidden
 			focusable="false"
-			width={16}
-			height={16}
+			width={size ?? 16}
+			height={size ?? 16}
 			data-slot="icon"
 			data-glyph="circular"
 			{...props}>
@@ -121,7 +123,7 @@ function Dot(props: IconProps) {
 	);
 }
 
-function Square(props: IconProps) {
+function Square({ size, ...props }: IconProps) {
 	return (
 		<svg
 			viewBox="0 0 24 24"
@@ -130,8 +132,8 @@ function Square(props: IconProps) {
 			stroke="currentColor"
 			aria-hidden
 			focusable="false"
-			width={16}
-			height={16}
+			width={size ?? 16}
+			height={size ?? 16}
 			data-slot="icon"
 			{...props}>
 			<rect width="16" height="16" x="4" y="4" rx="2" />
@@ -139,7 +141,7 @@ function Square(props: IconProps) {
 	);
 }
 
-function Triangle(props: IconProps) {
+function Triangle({ size, ...props }: IconProps) {
 	return (
 		<svg
 			viewBox="0 0 24 24"
@@ -148,8 +150,8 @@ function Triangle(props: IconProps) {
 			stroke="currentColor"
 			aria-hidden
 			focusable="false"
-			width={16}
-			height={16}
+			width={size ?? 16}
+			height={size ?? 16}
 			data-slot="icon"
 			data-glyph="triangle"
 			{...props}>
@@ -158,7 +160,7 @@ function Triangle(props: IconProps) {
 	);
 }
 
-function Diamond(props: IconProps) {
+function Diamond({ size, ...props }: IconProps) {
 	return (
 		<svg
 			viewBox="0 0 24 24"
@@ -167,8 +169,8 @@ function Diamond(props: IconProps) {
 			stroke="currentColor"
 			aria-hidden
 			focusable="false"
-			width={16}
-			height={16}
+			width={size ?? 16}
+			height={size ?? 16}
 			data-slot="icon"
 			data-glyph="diamond"
 			{...props}>
@@ -177,9 +179,9 @@ function Diamond(props: IconProps) {
 	);
 }
 
-function GithubLogo(props: IconProps) {
+function GithubLogo({ size, ...props }: IconProps) {
 	return (
-		<svg viewBox="0 0 16 16" height="16" width="16" data-slot="icon" data-glyph="circle" {...props}>
+		<svg viewBox="0 0 16 16" height={size ?? 16} width={size ?? 16} data-slot="icon" data-glyph="circle" {...props}>
 			<g>
 				<path
 					fill="currentColor"
@@ -191,15 +193,15 @@ function GithubLogo(props: IconProps) {
 	);
 }
 
-function Slash(props: IconProps) {
+function Slash({ size, ...props }: IconProps) {
 	return (
 		<svg
 			fill="none"
 			viewBox="0 0 24 24"
 			strokeWidth={2}
 			stroke="currentColor"
-			width={16}
-			height={16}
+			width={size ?? 16}
+			height={size ?? 16}
 			data-slot="icon"
 			data-glyph="line"
 			{...props}>
@@ -208,7 +210,7 @@ function Slash(props: IconProps) {
 	);
 }
 
-function Star(props: IconProps) {
+function Star({ size, ...props }: IconProps) {
 	return (
 		<svg
 			xmlns="http://www.w3.org/2000/svg"
@@ -216,8 +218,8 @@ function Star(props: IconProps) {
 			viewBox="0 0 24 24"
 			strokeWidth={1.5}
 			stroke="currentColor"
-			width={16}
-			height={16}
+			width={size ?? 16}
+			height={size ?? 16}
 			aria-hidden
 			focusable="false"
 			data-slot="icon"
@@ -232,14 +234,14 @@ function Star(props: IconProps) {
 	);
 }
 
-function StarFilled(props: IconProps) {
+function StarFilled({ size, ...props }: IconProps) {
 	return (
 		<svg
 			xmlns="http://www.w3.org/2000/svg"
 			viewBox="0 0 24 24"
 			fill="currentColor"
-			width={16}
-			height={16}
+			width={size ?? 16}
+			height={size ?? 16}
 			aria-hidden
 			focusable="false"
 			data-slot="icon"

@@ -1,12 +1,11 @@
-import { CheckIcon } from "@phosphor-icons/react/dist/csr/Check";
 import { ClockIcon } from "@phosphor-icons/react/dist/csr/Clock";
 import { WarningIcon } from "@phosphor-icons/react/dist/csr/Warning";
 import * as stylex from "@stylexjs/stylex";
 import { createContext, type ComponentProps, createElement, useContext, useId } from "react";
-import { Badge, Loader, Progress as ProgressPrimitive } from "@/components";
-import type { BadgeHue } from "@/components";
+import { Badge, type BadgeHue, Icon, Loader, Progress as ProgressComponent } from "@/components";
 import { tokens } from "@/theme/tokens.stylex";
 import { mergeStyle, type BaseStyleProps } from "@/styles/props/base";
+import type { MarginProps } from "@/styles/props/spacing.stylex";
 import { attrJoin } from "@/utils/attr-join";
 
 export type AsyncJobStatus = "queued" | "running" | "complete" | "error";
@@ -36,15 +35,15 @@ export type AsyncJobProgressTitleProps = StyledProps<ComponentProps<"h3">> & {
 export type AsyncJobProgressDescriptionProps = StyledProps<ComponentProps<"p">>;
 export type AsyncJobProgressStatusProps = StyledProps<ComponentProps<"span">>;
 export type AsyncJobProgressProgressProps = Omit<
-	ComponentProps<typeof ProgressPrimitive.Root>,
-	"value" | "aria-labelledby" | "aria-valuetext"
+	ComponentProps<typeof ProgressComponent.Root>,
+	"value" | "aria-labelledby" | "aria-valuetext" | keyof MarginProps
 >;
 export type AsyncJobProgressActionsProps = StyledProps<ComponentProps<"div">>;
 
 const statusPresentation = {
 	queued: { badgeLabel: "Queued", hue: "neutral" },
 	running: { badgeLabel: "Running", hue: "accent" },
-	complete: { badgeLabel: "Complete", hue: "neutral" },
+	complete: { badgeLabel: "Complete", hue: "success" },
 	error: { badgeLabel: "Failed", hue: "error" },
 } satisfies Record<AsyncJobStatus, { badgeLabel: string; hue: BadgeHue }>;
 
@@ -100,7 +99,7 @@ export function Status({ className, style, xstyle, ...props }: AsyncJobProgressS
 			className={attrJoin(sx.className, className)}
 			style={mergeStyle(sx.style, style)}
 			{...props}>
-			<Badge hue={presentation.hue} size="sm" startSlot={statusIcon}>
+			<Badge hue={presentation.hue} startSlot={statusIcon}>
 				{presentation.badgeLabel}
 			</Badge>
 		</span>
@@ -112,23 +111,23 @@ export function Progress(props: AsyncJobProgressProgressProps) {
 	const ariaValueText = valueText ?? getAriaValueText(status, value);
 
 	return (
-		<ProgressPrimitive.Root aria-labelledby={titleId} aria-valuetext={ariaValueText} value={value} {...props}>
-			<ProgressPrimitive.Value {...stylex.props(parts.progressValue)}>
+		<ProgressComponent.Root aria-labelledby={titleId} aria-valuetext={ariaValueText} value={value} {...props}>
+			<ProgressComponent.Value xstyle={parts.progressValue}>
 				{(formattedValue, currentValue) =>
 					valueText ??
 					(status === "queued"
-						? "Waiting"
+						? "Waiting…"
 						: status === "error" && value === 0
 							? "Failed"
 							: currentValue === null
 								? "In progress"
 								: formattedValue)
 				}
-			</ProgressPrimitive.Value>
-			<ProgressPrimitive.Track>
-				<ProgressPrimitive.Indicator {...stylex.props(indicatorStatus[status])} />
-			</ProgressPrimitive.Track>
-		</ProgressPrimitive.Root>
+			</ProgressComponent.Value>
+			<ProgressComponent.Track>
+				<ProgressComponent.Indicator xstyle={indicatorStatus[status]} />
+			</ProgressComponent.Track>
+		</ProgressComponent.Root>
 	);
 }
 
@@ -179,13 +178,13 @@ function getAriaValueText(status: AsyncJobStatus, value: number | null) {
 function renderStatusIcon(status: AsyncJobStatus) {
 	switch (status) {
 		case "queued":
-			return <ClockIcon aria-hidden weight="bold" />;
+			return <ClockIcon aria-hidden weight="bold" size={12} />;
 		case "running":
-			return <Loader aria-hidden />;
+			return <Loader aria-hidden size="10px" />;
 		case "complete":
-			return <CheckIcon aria-hidden weight="bold" />;
+			return <Icon.Checkmark aria-hidden size={12} />;
 		case "error":
-			return <WarningIcon aria-hidden weight="fill" />;
+			return <WarningIcon aria-hidden weight="fill" size={12} />;
 	}
 }
 
@@ -197,6 +196,11 @@ const parts = stylex.create({
 		flexDirection: "column",
 		maxWidth: "36rem",
 		width: "100%",
+		borderRadius: tokens["--radius-md"],
+		borderWidth: 1,
+		borderStyle: "solid",
+		borderColor: tokens["--border"],
+		padding: tokens["--space-3"],
 	},
 	header: {
 		gap: tokens["--space-4"],
@@ -205,7 +209,7 @@ const parts = stylex.create({
 		justifyContent: "space-between",
 	},
 	heading: {
-		gap: tokens["--space-1"],
+		gap: tokens["--space-0-5"],
 		display: "flex",
 		flexDirection: "column",
 		minWidth: 0,
@@ -213,18 +217,18 @@ const parts = stylex.create({
 	title: {
 		margin: 0,
 		color: tokens["--fg"],
-		fontSize: tokens["--font-size-3"],
+		fontSize: tokens["--font-size-2"],
 		fontWeight: tokens["--font-weight-semibold"],
-		letterSpacing: tokens["--letter-spacing-3"],
-		lineHeight: tokens["--line-height-3"],
+		letterSpacing: tokens["--letter-spacing-2"],
+		lineHeight: tokens["--line-height-2"],
 		textWrap: "balance",
 	},
 	description: {
 		margin: 0,
 		color: tokens["--fg-muted"],
-		fontSize: tokens["--font-size-2"],
-		letterSpacing: tokens["--letter-spacing-2"],
-		lineHeight: tokens["--line-height-2"],
+		fontSize: tokens["--font-size-1"],
+		letterSpacing: tokens["--letter-spacing-1"],
+		lineHeight: tokens["--line-height-1"],
 	},
 	status: { display: "inline-flex", flexShrink: 0 },
 	progressValue: { gridColumn: "2" },

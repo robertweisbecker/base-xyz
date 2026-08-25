@@ -1,5 +1,7 @@
 import { CopyIcon } from "@phosphor-icons/react/dist/csr/Copy";
 import { GitPullRequestIcon } from "@phosphor-icons/react/dist/csr/GitPullRequest";
+import { LinkSimpleIcon } from "@phosphor-icons/react/dist/csr/LinkSimple";
+import { MicrophoneIcon } from "@phosphor-icons/react/dist/csr/Microphone";
 import { ThumbsUpIcon } from "@phosphor-icons/react/dist/csr/ThumbsUp";
 import { ThumbsDownIcon } from "@phosphor-icons/react/dist/csr/ThumbsDown";
 import * as stylex from "@stylexjs/stylex";
@@ -13,11 +15,27 @@ import {
 	PromptComposer,
 	StreamingResponse,
 } from "@/blocks";
-import { Badge, Button, Code, Grid, Link, Stack, Text, Toolbar } from "@/components";
+import {
+	Badge,
+	Button,
+	Code,
+	Grid,
+	Link,
+	Menu,
+	Separator,
+	Stack,
+	Text,
+	Toggle,
+	ToggleGroup,
+	Toolbar,
+} from "@/components";
 import { breakpoints } from "@/styles/constants.stylex";
 import { tokens } from "@/theme/tokens.stylex";
 import { experimentLayoutVars } from "./experiment-layout.stylex";
 import { ExperimentPage, ExperimentSection } from "./experiment-page";
+import { ArrowClockwiseIcon } from "@phosphor-icons/react/dist/ssr/ArrowClockwise";
+import { CaretRightIcon, XCircleIcon } from "@phosphor-icons/react";
+import { ImagesSquareIcon } from "@phosphor-icons/react/dist/ssr";
 
 const agentModelGroups = [
 	{
@@ -61,7 +79,7 @@ const agentBlockSections = [
 	{
 		id: "context-popover",
 		title: "Context Popover",
-		description: "Compact context pressure that reveals exact token usage on demand.",
+		description: "Composes Popover, MeterGauge, and Meter to show token usage on demand.",
 		Example: ContextPopoverExample,
 	},
 	{
@@ -214,19 +232,31 @@ function AsyncJobProgressExample({ description, id, title }: AgentBlockExamplePr
 			<AsyncJobProgress.Root status={status} value={value}>
 				<AsyncJobProgress.Header>
 					<AsyncJobProgress.Heading>
-						<AsyncJobProgress.Title>Build the component search index</AsyncJobProgress.Title>
+						<AsyncJobProgress.Title>
+							Build the component search index <AsyncJobProgress.Status />
+						</AsyncJobProgress.Title>
 						<AsyncJobProgress.Description>
 							Generating embeddings for stories, usage guidance, and API references.
 						</AsyncJobProgress.Description>
 					</AsyncJobProgress.Heading>
-					<AsyncJobProgress.Status />
+					<AsyncJobProgress.Actions>
+						<Button
+							size="xs"
+							variant="ghost"
+							endSlot={
+								status === "error" ? (
+									<ArrowClockwiseIcon aria-hidden />
+								) : status === "running" || status === "queued" ? (
+									<XCircleIcon aria-hidden weight="fill" />
+								) : (
+									<CaretRightIcon aria-hidden />
+								)
+							}>
+							{status === "error" ? "Retry" : status === "complete" ? "View" : "Cancel"}
+						</Button>
+					</AsyncJobProgress.Actions>
 				</AsyncJobProgress.Header>
 				<AsyncJobProgress.Progress />
-				<AsyncJobProgress.Actions>
-					<Button size="sm" variant="neutral">
-						{status === "error" ? "Retry indexing" : status === "complete" ? "View index" : "Cancel indexing"}
-					</Button>
-				</AsyncJobProgress.Actions>
 			</AsyncJobProgress.Root>
 		</ExperimentSection>
 	);
@@ -238,17 +268,17 @@ function ContextPopoverExample({ description, id, title }: AgentBlockExampleProp
 	return (
 		<ExperimentSection description={description} id={id} title={title}>
 			<StateControls
-				label="Context pressure"
+				label="Usage"
 				onValueChange={setUsage}
 				options={[
 					{ label: "Low", value: 32_000 },
 					{ label: "Medium", value: 71_420 },
-					{ label: "High", value: 121_600 },
+					{ label: "High", value: 110_600 },
 				]}
 				value={usage}
 			/>
 			<Stack align="start" gap={2}>
-				<ContextPopover total={128_000} usage={usage} variant="secondary" />
+				<ContextPopover total={128_000} usage={usage} variant="ghost" />
 				<Text color="muted" size="1">
 					Open the gauge to inspect the bounded token count and percentage.
 				</Text>
@@ -312,9 +342,45 @@ function PromptComposerExample({ description, id, title }: AgentBlockExampleProp
 						<PromptComposer.Input placeholder="Ask about the current goal…" />
 						<PromptComposer.Footer>
 							<PromptComposer.Options>
-								<ContextPopover total={128_000} usage={71_420} variant="neutral" />
+								<Menu.Root>
+									<PromptComposer.AddTrigger />
+									<PromptComposer.AddPopup>
+										<Menu.Group>
+											<Menu.GroupLabel>Attach</Menu.GroupLabel>
+											<Menu.Item onClick={() => setFeedback("File picker requested")}>
+												<Menu.ItemIcon>
+													<ImagesSquareIcon aria-hidden />
+												</Menu.ItemIcon>
+												<PromptComposer.AddItemContent>Upload files</PromptComposer.AddItemContent>
+											</Menu.Item>
+											<Menu.Item onClick={() => setFeedback("Link attachment requested")}>
+												<Menu.ItemIcon>
+													<LinkSimpleIcon aria-hidden />
+												</Menu.ItemIcon>
+												<PromptComposer.AddItemContent>Add from URL</PromptComposer.AddItemContent>
+											</Menu.Item>
+										</Menu.Group>
+									</PromptComposer.AddPopup>
+								</Menu.Root>
+								<Separator orientation="vertical" mx={2} my={2} />
+								<ContextPopover total={128_000} usage={71_420} variant="ghost" />
+								<ModelSelector.Root
+									defaultValue={agentDefaultModel}
+									effortOptions={agentEffortOptions}
+									groups={agentModelGroups}
+									onValueChange={() => setFeedback("Model settings updated")}
+									speedOptions={agentSpeedOptions}>
+									<ModelSelector.Trigger shape="pill" variant="ghost" />
+									<ModelSelector.Popup />
+								</ModelSelector.Root>
 							</PromptComposer.Options>
 							<PromptComposer.Actions>
+								<Toggle
+									icon={<MicrophoneIcon aria-hidden />}
+									label="Use microphone"
+									onPressedChange={(pressed) => setFeedback(pressed ? "Microphone enabled" : "Microphone disabled")}
+									shape="circle"
+								/>
 								<PromptComposer.Submit />
 							</PromptComposer.Actions>
 						</PromptComposer.Footer>
@@ -396,23 +462,31 @@ function StateControls<Value extends number | string>({
 	options: readonly { label: string; value: Value }[];
 	value: Value;
 }) {
+	const selectedValue = String(value);
+
+	function handleValueChange(nextValues: string[]) {
+		const nextValue = nextValues[0];
+		if (nextValue === undefined) return;
+		const nextOption = options.find((option) => String(option.value) === nextValue);
+		if (nextOption) onValueChange(nextOption.value);
+	}
+
 	return (
 		<Stack gap={2}>
 			<Text color="muted" size="1">
 				{label}
 			</Text>
-			<Stack aria-label={label} gap={2} orientation="horizontal" role="group" wrap="wrap">
+			<ToggleGroup
+				aria-label={label}
+				onValueChange={handleValueChange}
+				value={[selectedValue]}
+				xstyle={styles.stateControls}>
 				{options.map((option) => (
-					<Button
-						key={String(option.value)}
-						aria-pressed={option.value === value}
-						onClick={() => onValueChange(option.value)}
-						size="sm"
-						variant={"secondary"}>
+					<Toggle key={String(option.value)} size="sm" value={String(option.value)} variant="secondary">
 						{option.label}
-					</Button>
+					</Toggle>
 				))}
-			</Stack>
+			</ToggleGroup>
 		</Stack>
 	);
 }
@@ -435,6 +509,9 @@ const styles = stylex.create({
 			[breakpoints.lg]: "1",
 		},
 		minWidth: 0,
+	},
+	stateControls: {
+		flexWrap: "wrap",
 	},
 	tableOfContents: {
 		borderBlockEndColor: {

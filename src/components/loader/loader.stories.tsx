@@ -23,10 +23,11 @@ const meta = {
 			control: { type: "range", min: 8, max: 64, step: 1 },
 			name: "fontSize",
 		},
+		size: { control: "text" },
 	},
 	parameters: {
 		controls: {
-			include: ["aria-label", "_fontSize", "_color"],
+			include: ["aria-label", "size", "_fontSize", "_color"],
 		},
 	},
 } satisfies Meta<LoaderStoryArgs>;

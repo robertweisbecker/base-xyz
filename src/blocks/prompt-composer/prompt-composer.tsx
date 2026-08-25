@@ -13,7 +13,7 @@ import {
 	useRef,
 	useState,
 } from "react";
-import { Button, IconButton, InputGroup, Menu } from "@/components";
+import { Button, IconButton, InputGroup, Kbd, Menu } from "@/components";
 import type { ButtonProps } from "@/components";
 import { useScrollFade } from "@/hooks/use-scroll-fade";
 import { mergeStyle, type BaseStyleProps } from "@/styles/props/base";
@@ -207,7 +207,7 @@ export function Submit({
 		return (
 			<IconButton
 				{...buttonProps}
-				icon={<ArrowUpIcon aria-hidden weight="bold" />}
+				icon={<ArrowUpIcon aria-hidden />}
 				label={ariaLabel}
 				shape={shape === "circle" ? "circle" : "square"}
 			/>
@@ -258,10 +258,17 @@ export function AddTrigger({ children, render, ...props }: PromptComposerAddTrig
 				render ?? (
 					<IconButton
 						disabled={disabled}
-						icon={<PlusIcon aria-hidden weight="bold" />}
-						label="Add"
+						icon={<PlusIcon aria-hidden />}
+						label="Add files and more"
+						tooltip={
+							<>
+								Add files and more
+								<Kbd variant="inverse" size="sm" ms={1}>
+									@
+								</Kbd>
+							</>
+						}
 						shape="circle"
-						tooltip={false}
 						variant="ghost"
 						size="md"
 					/>
@@ -309,7 +316,7 @@ function usePromptComposerContext(part: string) {
 
 const parts = stylex.create({
 	root: {
-		gap: tokens["--space-2"],
+		gap: tokens["--space-0"],
 		color: tokens["--fg"],
 		display: "flex",
 		flexDirection: "column",
@@ -325,7 +332,7 @@ const parts = stylex.create({
 		"--_input-padding": tokens["--space-4"],
 		borderRadius: "2.5rem",
 		gap: 0,
-		minHeight: 0,
+		minHeight: null,
 	},
 	/** Fade size + expand-on-focus; both are composer behavior, not InputGroup. */
 	input: {

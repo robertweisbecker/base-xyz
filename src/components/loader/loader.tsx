@@ -8,14 +8,17 @@ import { attrJoin } from "@/utils/attr-join";
 
 export type LoaderProps = Omit<
 	ComponentProps<"svg">,
-	"children" | "height" | "style" | "width" | keyof MarginProps
+	"children" | "height" | "size" | "style" | "width" | keyof MarginProps
 > &
 	MarginProps &
-	BaseStyleProps;
+	BaseStyleProps & {
+		size?: number | string;
+	};
 
 export function Loader({
 	"aria-hidden": ariaHidden,
 	"aria-label": ariaLabel,
+	size,
 	className,
 	focusable = "false",
 	role,
@@ -25,7 +28,7 @@ export function Loader({
 }: LoaderProps) {
 	const { marginStyles, rest } = extractMarginProps(props);
 	const isDecorative = ariaHidden === true || ariaHidden === "true" || (ariaHidden == null && ariaLabel == null);
-	const sx = stylex.props(loaderParts.root, ...marginStyles, xstyle);
+	const sx = stylex.props(loaderParts.root, size !== undefined && loaderDynamicStyles.size(size), ...marginStyles, xstyle);
 
 	return (
 		<svg
@@ -60,6 +63,15 @@ const changeArcLength = stylex.keyframes({
 		strokeDasharray: "14 86",
 		strokeDashoffset: -100,
 	},
+});
+
+const loaderDynamicStyles = stylex.create({
+	size: (size: number | string) => ({
+		height: size,
+		minHeight: size,
+		minWidth: size,
+		width: size,
+	}),
 });
 
 const loaderParts = stylex.create({

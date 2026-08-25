@@ -46,11 +46,7 @@ export function Switch({
 	const descriptionId = description ? `${generatedId}-description` : undefined;
 	const { marginStyles, rest } = extractMarginProps(props);
 
-	const rootSx = stylex.props(
-		switchParts.root,
-		marginStyles,
-		xstyle,
-	);
+	const rootSx = stylex.props(switchParts.root, marginStyles, xstyle);
 	const labelContent = (
 		<>
 			{label}
@@ -202,7 +198,7 @@ const switchParts = stylex.create({
 		flexShrink: 0,
 		justifyContent: "center",
 		transform: {
-			"[data-checked]": "translateX(calc(var(--_switch-track-height) / 2))",
+			"[data-checked]": "translateX(calc(var(--_switch-track-height) / 2 + 0.25px))",
 			default: "translateX(0)",
 		},
 		transitionDuration: tokens["--motion-duration-short"],

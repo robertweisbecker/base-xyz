@@ -49,7 +49,7 @@ export type InputGroupAddonProps = InputGroupStyledProps<ComponentProps<"span">>
 };
 
 export type InputGroupActionsProps = InputGroupStyledProps<ComponentProps<"div">> & {
-	/** Inline placement relative to the control. Default `start`. */
+	/** Inline placement relative to the control. Default `end`. */
 	position?: InputGroupAddonPosition;
 };
 
@@ -281,6 +281,8 @@ const inputGroupParts = stylex.create({
 		alignItems: "center",
 		display: "flex",
 		flexShrink: 0,
+		minWidth: 0,
+		cursor: null,
 	},
 	header: {
 		gap: tokens["--space-2"],
@@ -296,7 +298,8 @@ const inputGroupParts = stylex.create({
 	},
 	footer: {
 		gap: tokens["--space-2"],
-		paddingInline: "var(--_input-padding)",
+		paddingInlineStart: "var(--_input-group-padding)",
+		paddingInlineEnd: "var(--_input-padding)",
 		alignItems: "center",
 		display: "flex",
 		flexBasis: "100%",

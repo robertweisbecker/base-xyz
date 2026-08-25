@@ -232,7 +232,7 @@ const popoverParts = stylex.create({
 });
 
 const popoverTextParts = stylex.create({
-	title: { marginTop: 0 },
+	title: { marginTop: -1 },
 	description: { margin: 0, color: tokens["--fg-muted"] },
 });
 

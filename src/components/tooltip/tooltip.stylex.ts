@@ -13,7 +13,7 @@ const styles = stylex.create({
 		paddingBlock: tokens["--space-1"],
 		paddingInline: tokens["--space-1-5"],
 		backgroundColor: popupVars.background,
-		boxShadow: tokens["--shadow-md"],
+		boxShadow: `0 0 0 1px ${tokens["--fg"]}, ${tokens["--shadow-md"]}`,
 		color: popupVars.foreground,
 		hyphens: "auto",
 		textAlign: "center",

@@ -60,19 +60,19 @@ function getBreadcrumbs(pathname: string, search: string) {
 	return pathBreadcrumbs;
 }
 
-const breadcrumbLabels = {
-	"agent-blocks": "Agent Blocks",
-	blocks: "Blocks",
-	components: "Components",
-	experiments: "Experiments",
-	inputs: "Inputs",
-	popups: "Popups",
-	tables: "Tables",
-	utilities: "Utilities",
-} as const;
+const breadcrumbLabels = new Map([
+	["agent-blocks", "Agent Blocks"],
+	["blocks", "Blocks"],
+	["components", "Components"],
+	["experiments", "Experiments"],
+	["inputs", "Inputs"],
+	["popups", "Popups"],
+	["tables", "Tables"],
+	["utilities", "Utilities"],
+]);
 
 function getBreadcrumbLabel(segment: string) {
-	return segment in breadcrumbLabels ? breadcrumbLabels[segment as keyof typeof breadcrumbLabels] : segment;
+	return breadcrumbLabels.get(segment) ?? segment;
 }
 
 export function ExperimentSection({

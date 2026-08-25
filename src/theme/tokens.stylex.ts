@@ -257,7 +257,7 @@ export const tokens = stylex.defineVars({
 	"--motion-ease-smooth-out": "cubic-bezier(0.22, 1, 0.36, 1)",
 
 	"--shadow-color-1": "light-dark(var(--color-black-a1), var(--color-black-a3))",
-	"--shadow-color-2": "light-dark(var(--color-black-a3), var(--color-black-a5))",
+	"--shadow-color-2": "light-dark(var(--color-black-a3), var(--color-black-a4))",
 	"--shadow-color-outer-ring": "light-dark(var(--color-black-a2), var(--color-black-a5))",
 
 	"--shadow-ring-inset":
@@ -265,7 +265,7 @@ export const tokens = stylex.defineVars({
 	"--shadow-ring":
 		"inset 0 1px light-dark(transparent, rgb(255 255 255 / 5%)), inset 0 0 0 1px light-dark(transparent, var(--color-gray-a1)), 0 0 0 1px light-dark(var(--color-gray-a1), transparent), 0 0 0 0.5px light-dark(transparent, rgb(0 0 0 / 40%))",
 	"--shadow-inset":
-		"var(--shadow-ring-inset),  0 0px 0 .5px light-dark(var(--color-black-a1), var(--color-white-a1)), inset 0 3px 2px -1.5px var(--shadow-color-2), inset 0 1px 3px 1px var(--shadow-color-outer-ring)",
+		"var(--shadow-ring-inset),  0 0 0 .5px var(--shadow-color-outer-ring), inset 0 3px 2px -1.5px var(--shadow-color-1), inset 0 1px 3px 1px var(--shadow-color-2)",
 	"--shadow-xs":
 		"0 2px 2px -1px light-dark(var(--color-black-a1), var(--color-black-a4)), 0 1px var(--color-black-a1), 0 -1px var(--color-white-a3), 0 0 0 1px var(--color-gray-a1)",
 	"--shadow-xs-2":

@@ -74,12 +74,7 @@ export function Root({
 	const hasSemanticThresholds = [low, high, optimum].some(isValidMeterNumber);
 	const meterState = hasSemanticThresholds ? getMeterState(meterValues) : undefined;
 	const resolvedIndicatorColor = indicatorColor ?? (meterState ? meterStateColors[meterState] : undefined);
-	const sx = stylex.props(
-		meterParts.root,
-		variant === "segmented" && meterParts.segmentedRoot,
-		marginStyles,
-		xstyle,
-	);
+	const sx = stylex.props(meterParts.root, variant === "segmented" && meterParts.segmentedRoot, marginStyles, xstyle);
 	const meterStyle: MeterStyle = {
 		...mergeStyle(sx.style, style),
 		...(resolvedIndicatorColor && {
@@ -305,7 +300,7 @@ const meterParts = stylex.create({
 		backgroundColor: `var(--_meter-indicator-color, ${tokens["--color-gray-p1"]})`,
 		borderEndStartRadius: "inherit",
 		borderStartStartRadius: "inherit",
-		boxShadow: tokens["--shadow-sm"],
+		// boxShadow: tokens["--shadow-sm"],
 		transitionDuration: tokens["--motion-duration-medium"],
 		transitionProperty: "width, background-color",
 		transitionTimingFunction: tokens["--motion-ease-smooth-out"],

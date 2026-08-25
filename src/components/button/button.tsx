@@ -388,16 +388,13 @@ export type ButtonProps = Omit<BaseButton.Props, "className" | "color" | "style"
 		loadingText?: string;
 	};
 
-export type IconButtonProps = Omit<
-	ButtonProps,
-	"children" | "endSlot" | "loadingText" | "shape" | "startSlot"
-> & {
+export type IconButtonProps = Omit<ButtonProps, "children" | "endSlot" | "loadingText" | "shape" | "startSlot"> & {
 	icon: ReactNode;
 	/** Visible tooltip text and the fallback accessible name. */
 	label: string;
 	shape?: Extract<ButtonShape, "circle" | "square">;
 	/** Visible tooltip text. Defaults to `label`; use `false` to disable it. */
-	tooltip?: string | false;
+	tooltip?: ReactNode | false;
 	/** Whether the tooltip should be closed when the button is clicked. */
 	closeTooltipOnClick?: boolean;
 };

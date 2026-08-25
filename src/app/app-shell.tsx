@@ -1,4 +1,4 @@
-import { Link as RouterLink, Outlet } from "@tanstack/react-router";
+import { Link as RouterLink, Outlet, useNavigate, useSearch } from "@tanstack/react-router";
 import { MoonIcon } from "@phosphor-icons/react/dist/csr/Moon";
 import { StairsIcon } from "@phosphor-icons/react/dist/csr/Stairs";
 import { SunIcon } from "@phosphor-icons/react/dist/csr/Sun";
@@ -6,9 +6,8 @@ import * as stylex from "@stylexjs/stylex";
 import { useLayoutEffect, useState } from "react";
 import { IconButton, Select, Separator } from "@/components";
 import { textStyles } from "@/components/text/text.stylex";
-import { zIndex } from "@/styles/constants.stylex";
+import { media, zIndex } from "@/styles/constants.stylex";
 import { focusRing } from "@/styles/recipes/focus";
-import { parseModeFromSearchParams, parseThemeFromSearchParams, syncAppThemeUrl } from "@/theme/app-theme-url";
 import { ThemeProvider, useTheme, type ResolvedThemeMode, type ThemeMode, type ThemeName } from "@/theme";
 import { tokens } from "@/theme/tokens.stylex";
 
@@ -22,25 +21,44 @@ const themeBrandItems: { label: string; value: ThemeName }[] = [
 ];
 
 export function AppShell() {
-	const [mode, setMode] = useState<ThemeMode>(getInitialThemeMode);
-	const [theme, setTheme] = useState<ThemeName>(getInitialThemeBrand);
+	const navigate = useNavigate();
+	const search = useSearch({ from: "__root__" });
+	const [preferredMode, setPreferredMode] = useState<ThemeMode>(getStoredThemeMode);
+	const [preferredTheme, setPreferredTheme] = useState<ThemeName>(getStoredThemeBrand);
+	const mode = search.mode ?? preferredMode;
+	const theme = search.theme ?? preferredTheme;
 
 	useLayoutEffect(() => {
+		if (search.mode) setPreferredMode(search.mode);
 		localStorage.setItem(themeModeStorageKey, mode);
-	}, [mode]);
+	}, [mode, search.mode]);
 
 	useLayoutEffect(() => {
+		if (search.theme) setPreferredTheme(search.theme);
 		localStorage.setItem(themeBrandStorageKey, theme);
-	}, [theme]);
+	}, [search.theme, theme]);
+
+	function updateThemeSearch(nextTheme: ThemeName, nextMode: ThemeMode) {
+		void navigate({
+			replace: true,
+			resetScroll: false,
+			to: ".",
+			search: (previous) => ({
+				...previous,
+				mode: nextMode === "system" ? undefined : nextMode,
+				theme: nextTheme === "default" ? undefined : nextTheme,
+			}),
+		});
+	}
 
 	const handleModeChange = (nextMode: ThemeMode) => {
-		setMode(nextMode);
-		syncAppThemeUrl(theme, nextMode);
+		setPreferredMode(nextMode);
+		updateThemeSearch(theme, nextMode);
 	};
 
 	const handleThemeChange = (nextTheme: ThemeName) => {
-		setTheme(nextTheme);
-		syncAppThemeUrl(nextTheme, mode);
+		setPreferredTheme(nextTheme);
+		updateThemeSearch(nextTheme, mode);
 	};
 
 	return (
@@ -127,18 +145,14 @@ function AppHeader({
 	);
 }
 
-function getInitialThemeMode(): ThemeMode {
+function getStoredThemeMode(): ThemeMode {
 	if (typeof window === "undefined") return "system";
-	const fromUrl = parseModeFromSearchParams(new URLSearchParams(window.location.search));
-	if (fromUrl !== undefined) return fromUrl;
 	const storedMode = localStorage.getItem(themeModeStorageKey);
 	return storedMode === "light" || storedMode === "dark" || storedMode === "system" ? storedMode : "system";
 }
 
-function getInitialThemeBrand(): ThemeName {
+function getStoredThemeBrand(): ThemeName {
 	if (typeof window === "undefined") return "default";
-	const fromUrl = parseThemeFromSearchParams(new URLSearchParams(window.location.search));
-	if (fromUrl !== undefined) return fromUrl;
 	const storedTheme = localStorage.getItem(themeBrandStorageKey);
 	return storedTheme === "default" || storedTheme === "mp" ? storedTheme : "default";
 }
@@ -197,7 +211,10 @@ const styles = stylex.create({
 		color: {
 			"[aria-current='page']": tokens["--fg"],
 			default: tokens["--fg-muted"],
-			":hover": tokens["--fg"],
+			":hover": {
+				default: null,
+				[media.canHover]: tokens["--fg"],
+			},
 		},
 		fontSize: tokens["--font-size-1"],
 	},

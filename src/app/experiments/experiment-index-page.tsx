@@ -22,8 +22,8 @@ export function ExperimentIndexPage({
 				{items.map((item) => (
 					<Card.Root
 						key={item.to}
-						{...stylex.props(styles.link, focusRing.offset)}
-						render={<RouterLink to={item.to} search={true} />}>
+						render={<RouterLink to={item.to} search={true} />}
+						xstyle={[styles.link, focusRing.offset]}>
 						<Card.Header>
 							<span {...stylex.props(styles.icon)}>{item.icon}</span>
 							<Card.Title render={<h2 />}>{item.label}</Card.Title>
@@ -51,6 +51,7 @@ const styles = stylex.create({
 		backgroundColor: {
 			default: tokens["--surface"],
 			":hover": {
+				default: null,
 				[media.canHover]: tokens["--surface-subtle"],
 			},
 		},

@@ -34,7 +34,7 @@ export type WorkflowProgressStatusProps = Omit<BadgeProps, "children" | "endSlot
 	startSlot?: ReactNode;
 };
 
-const statusPresentation = {
+const statusVariants = {
 	queued: { label: "Queued", hue: "neutral" },
 	running: { label: "Running", hue: "accent" },
 	complete: { label: "Complete", hue: "success" },
@@ -109,20 +109,12 @@ export function Meta({ className, style, xstyle, ...props }: WorkflowProgressMet
 	return <span className={attrJoin(sx.className, className)} style={mergeStyle(sx.style, style)} {...props} />;
 }
 
-export function Status({
-	children,
-	endSlot,
-	hue,
-	icon,
-	size = "sm",
-	startSlot,
-	...props
-}: WorkflowProgressStatusProps) {
+export function Status({ children, endSlot, icon, size = "sm", startSlot, ...props }: WorkflowProgressStatusProps) {
 	const status = useWorkflowProgressStatus("Status");
-	const presentation = statusPresentation[status];
+	const variant = statusVariants[status];
 	return (
-		<Badge endSlot={endSlot} hue={hue ?? presentation.hue} size={size} startSlot={startSlot ?? icon} {...props}>
-			{children ?? presentation.label}
+		<Badge endSlot={endSlot} hue={variant.hue} size={size} startSlot={startSlot ?? icon} {...props}>
+			{children ?? variant.label}
 		</Badge>
 	);
 }

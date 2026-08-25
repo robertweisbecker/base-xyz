@@ -156,6 +156,22 @@ test("supports grouped child routes and identifies the current experiment", asyn
 	await expect(page.getByRole("link", { name: "Popups" })).toHaveAttribute("aria-current", "page");
 });
 
+test("resets scroll for new routes and restores it through browser history", async ({ page }) => {
+	await page.goto("/experiments/blocks/agent-blocks");
+
+	await page.evaluate(() => window.scrollTo(0, document.documentElement.scrollHeight));
+	await expect.poll(() => page.evaluate(() => window.scrollY)).toBeGreaterThan(500);
+	const previousScrollPosition = await page.evaluate(() => window.scrollY);
+
+	await page.getByRole("link", { name: "Inputs" }).click();
+	await expect(page.getByRole("heading", { name: "Inputs", level: 1 })).toBeVisible();
+	await expect.poll(() => page.evaluate(() => window.scrollY)).toBe(0);
+
+	await page.goBack();
+	await expect(page.getByRole("heading", { name: "Agent Blocks", level: 1 })).toBeVisible();
+	await expect.poll(() => page.evaluate(() => window.scrollY)).toBe(previousScrollPosition);
+});
+
 test("provides a Blocks index with cards for each subpage", async ({ page }) => {
 	await page.goto("/experiments/blocks?theme=mp&mode=dark");
 
@@ -198,14 +214,76 @@ test("provides a Blocks index with cards for each subpage", async ({ page }) => 
 		"Streaming Response",
 	]);
 	await expect(page.getByRole("textbox", { name: "Message" })).toBeVisible();
-	await expect(page.getByRole("button", { name: /5\.6 Sol/ })).toBeVisible();
+	await expect(
+		page.locator("#model-selector").locator("xpath=ancestor::section").getByRole("button", { name: /5\.6 Sol/ }),
+	).toBeVisible();
 	const firstAgentHeading = page.getByRole("heading", { name: "Agent Action Approval", level: 2 });
 	await expect(firstAgentHeading).toHaveAttribute("id", "agent-action-approval");
 	expect(await firstAgentHeading.evaluate((element) => getComputedStyle(element).scrollMarginBlockStart)).not.toBe("0px");
 	await expect(page.getByText("Allow this action?")).toBeVisible();
 	await expect(page.getByText("Build the component search index")).toBeVisible();
 	await expect(page.getByRole("article", { name: "Component audit response" })).toBeVisible();
-	await page.getByRole("group", { name: "Job state" }).getByRole("button", { name: "Error" }).click();
+	const promptComposerSection = page.locator("#prompt-composer").locator("xpath=ancestor::section");
+	const promptComposerAdd = promptComposerSection.getByRole("button", { name: "Add" });
+	const contextPreview = promptComposerSection.getByRole("button", { name: /Context usage:/ });
+	const promptModelTrigger = promptComposerSection.getByRole("button", { name: /Choose model, current/ });
+	const microphoneToggle = promptComposerSection.getByRole("button", { name: "Use microphone" });
+	const sendButton = promptComposerSection.getByRole("button", { name: "Send message" });
+	await expect(promptComposerAdd).toBeVisible();
+	await expect(promptComposerSection.getByRole("separator")).toHaveAttribute("aria-orientation", "vertical");
+	await expect(contextPreview).toBeVisible();
+	await expect(promptModelTrigger).toBeVisible();
+	await expect(microphoneToggle).toHaveAttribute("aria-pressed", "false");
+	await expect(sendButton).toBeVisible();
+	await microphoneToggle.click();
+	await expect(microphoneToggle).toHaveAttribute("aria-pressed", "true");
+	await promptComposerAdd.click();
+	const attachmentMenu = page.getByRole("menu");
+	await expect(attachmentMenu.getByRole("menuitem", { name: "Upload files" })).toBeVisible();
+	await expect(attachmentMenu.getByRole("menuitem", { name: "Add from URL" })).toBeVisible();
+	await page.keyboard.press("Escape");
+	await expect(attachmentMenu).toBeHidden();
+	await promptModelTrigger.click();
+	const effortMenuItem = page.getByRole("menuitem", { name: "Effort" });
+	await effortMenuItem.focus();
+	await page.keyboard.press("ArrowRight");
+	const lowEffortOption = page.getByRole("menuitemradio", { name: "Low" });
+	await expect(lowEffortOption).toBeVisible();
+	await lowEffortOption.focus();
+	await page.keyboard.press("Enter");
+	await expect(promptModelTrigger).toContainText("Low");
+	await page.keyboard.press("Escape");
+	await page.keyboard.press("Escape");
+	await expect(promptModelTrigger).toHaveAttribute("aria-expanded", "false");
+
+	const footerControlPositions = await Promise.all(
+		[promptComposerAdd, contextPreview, promptModelTrigger, microphoneToggle, sendButton].map(async (control) => {
+			const box = await control.boundingBox();
+			return box?.x ?? 0;
+		}),
+	);
+	expect(footerControlPositions).toEqual([...footerControlPositions].sort((a, b) => a - b));
+
+	await page.setViewportSize({ width: 390, height: 844 });
+	const promptComposerSurface = promptComposerSection.getByRole("textbox", { name: "Message" }).locator("..");
+	expect(await promptComposerSurface.evaluate((surface) => surface.scrollWidth)).toBeLessThanOrEqual(
+		await promptComposerSurface.evaluate((surface) => surface.clientWidth),
+	);
+	const asyncJobSection = page.locator("#async-job-progress").locator("xpath=ancestor::section");
+	const jobStateControls = page.getByRole("group", { name: "Job state" });
+	const runningState = jobStateControls.getByRole("button", { name: "Running" });
+	await expect(runningState).toHaveAttribute("aria-pressed", "true");
+	await runningState.focus();
+	await runningState.press("ArrowRight");
+	await expect(jobStateControls.getByRole("button", { name: "Complete" })).toBeFocused();
+	const jobProgress = asyncJobSection.getByRole("progressbar");
+	expect(await jobProgress.evaluate((element) => getComputedStyle(element).display)).toBe("grid");
+	const runningLoader = asyncJobSection.locator('svg[viewBox="0 0 24 24"]');
+	await expect(runningLoader).toHaveCSS("width", "10px");
+	await expect(runningLoader).toHaveCSS("height", "10px");
+	await jobStateControls.getByRole("button", { name: "Error" }).click();
+	await expect(runningState).toHaveAttribute("aria-pressed", "false");
+	await expect(jobStateControls.getByRole("button", { name: "Error" })).toHaveAttribute("aria-pressed", "true");
 	await expect(page.locator("#async-job-progress").locator("xpath=ancestor::section").getByRole("status")).toContainText(
 		"Failed",
 	);
@@ -480,7 +558,7 @@ async function popupStackingLevel(locator: Locator) {
 }
 
 test("preserves theme URL state changed after the router initializes", async ({ page }) => {
-	await page.goto("/");
+	await page.goto("/experiments/components/inputs");
 
 	await page.getByRole("combobox", { name: "Theme" }).click();
 	await page.getByRole("option", { name: "MP" }).click();
@@ -490,6 +568,39 @@ test("preserves theme URL state changed after the router initializes", async ({ 
 	expect(searchBeforeNavigation).toContain("theme=mp");
 	expect(searchBeforeNavigation).toMatch(/mode=(dark|light)/);
 
-	await page.getByRole("link", { name: "Experiments" }).click();
+	const experimentsBreadcrumb = page
+		.getByRole("navigation", { name: "Breadcrumbs" })
+		.getByRole("link", { name: "Experiments" });
+	await expect(experimentsBreadcrumb).toHaveAttribute("href", `/experiments${searchBeforeNavigation}`);
+	await experimentsBreadcrumb.click();
 	await expect(page).toHaveURL(new RegExp(`/experiments${searchBeforeNavigation.replaceAll("?", "\\?")}$`));
+
+	const preservedMode = new URL(page.url()).searchParams.get("mode");
+	await page.evaluate(() => {
+		window.history.pushState(null, "", "/experiments?theme=default&mode=light");
+		window.dispatchEvent(new PopStateEvent("popstate", { state: window.history.state }));
+	});
+	await expect(page.locator("html")).toHaveAttribute("data-theme", "default");
+	await expect(page.locator("html")).toHaveAttribute("data-mode", "light");
+
+	await page.goBack();
+	await expect(page.locator("html")).toHaveAttribute("data-theme", "mp");
+	await expect(page.locator("html")).toHaveAttribute("data-mode", preservedMode ?? "system");
+});
+
+test("uses the latest explicit theme when history returns to a queryless route", async ({ page }) => {
+	await page.goto("/experiments");
+	await expect(page.locator("html")).toHaveAttribute("data-theme", "default");
+
+	await page.evaluate(() => {
+		window.history.pushState(null, "", "/experiments?theme=mp&mode=dark");
+		window.dispatchEvent(new PopStateEvent("popstate", { state: window.history.state }));
+	});
+	await expect(page.locator("html")).toHaveAttribute("data-theme", "mp");
+	await expect(page.locator("html")).toHaveAttribute("data-mode", "dark");
+
+	await page.goBack();
+	await expect(page).toHaveURL(/\/experiments$/);
+	await expect(page.locator("html")).toHaveAttribute("data-theme", "mp");
+	await expect(page.locator("html")).toHaveAttribute("data-mode", "dark");
 });

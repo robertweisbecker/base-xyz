@@ -33,13 +33,14 @@ const badgeParts = stylex.create({
 	slot: {
 		alignItems: "center",
 		color: "currentColor",
-		display: "inline-flex",
+		display: "grid",
 		flexShrink: 0,
-		justifyContent: "center",
+		placeContent: "center",
 		lineHeight: 0,
 		pointerEvents: "none",
 		height: "1em",
 		width: "1em",
+		fontSize: "1em",
 	},
 	label: {
 		overflow: "hidden",
