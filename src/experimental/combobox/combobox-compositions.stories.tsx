@@ -163,7 +163,7 @@ function PopupContent({ label }: { label: string }) {
 								placeholder={`Filter ${label}…`}
 								{...stylex.props(
 									fieldStyles.inputUnstyled,
-									fieldStyles.inputStandard,
+									fieldStyles.inputDefault,
 									fieldTextStyles.md,
 									styles.popupInput,
 								)}

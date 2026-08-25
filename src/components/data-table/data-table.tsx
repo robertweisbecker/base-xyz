@@ -110,22 +110,22 @@ export type DataTableProps<TData extends RowData, TValue = unknown> = Omit<
 > &
 	MarginProps &
 	BaseStyleProps & {
-	columns: Array<DataTableColumnDef<TData, TValue>>;
-	data: TData[];
-	emptyLabel?: ReactNode;
-	filterColumnId?: string;
-	filters?: DataTableFilter[];
-	filterPlaceholder?: string;
-	getColumnLabel?: (column: DataTableColumn<TData>) => ReactNode;
-	getRowActions?: (row: DataTableRow<TData>) => Array<DataTableRowAction<TData>>;
-	getRowCanExpand?: (row: DataTableRow<TData>) => boolean;
-	getRowId?: (originalRow: TData, index: number, parent?: DataTableRow<TData>) => string;
-	initialColumnVisibility?: ColumnVisibilityState;
-	renderExpandedRow?: (row: DataTableRow<TData>) => ReactNode;
-	rowSelection?: boolean;
-	showExpandColumn?: boolean;
-	toolbarEndSlot?: ReactNode;
-};
+		columns: Array<DataTableColumnDef<TData, TValue>>;
+		data: TData[];
+		emptyLabel?: ReactNode;
+		filterColumnId?: string;
+		filters?: DataTableFilter[];
+		filterPlaceholder?: string;
+		getColumnLabel?: (column: DataTableColumn<TData>) => ReactNode;
+		getRowActions?: (row: DataTableRow<TData>) => Array<DataTableRowAction<TData>>;
+		getRowCanExpand?: (row: DataTableRow<TData>) => boolean;
+		getRowId?: (originalRow: TData, index: number, parent?: DataTableRow<TData>) => string;
+		initialColumnVisibility?: ColumnVisibilityState;
+		renderExpandedRow?: (row: DataTableRow<TData>) => ReactNode;
+		rowSelection?: boolean;
+		showExpandColumn?: boolean;
+		toolbarEndSlot?: ReactNode;
+	};
 
 export function DataTable<TData extends RowData, TValue = unknown>({
 	className,
@@ -182,7 +182,7 @@ export function DataTable<TData extends RowData, TValue = unknown>({
 					const allExpanded = table.getIsAllRowsExpanded();
 					return (
 						<Toggle
-							variant="ghost"
+							variant="plain"
 							size="xs"
 							pressed={allExpanded}
 							disabled={!table.getCanSomeRowsExpand()}
@@ -196,10 +196,11 @@ export function DataTable<TData extends RowData, TValue = unknown>({
 				cell: ({ row }) =>
 					row.getCanExpand() ? (
 						<Toggle
-							variant="ghost"
+							variant="plain"
 							size="xs"
 							pressed={row.getIsExpanded()}
-							label={`${row.getIsExpanded() ? "Collapse" : "Expand"} row ${row.index + 1}`}
+							aria-label={`${row.getIsExpanded() ? "Collapse" : "Expand"} row ${row.index + 1}`}
+							label={`${row.getIsExpanded() ? "Collapse" : "Expand"}`}
 							onPressedChange={row.getToggleExpandedHandler()}
 							icon={<CaretRightIcon aria-hidden />}
 							pressedIcon={<CaretDownIcon aria-hidden />}
@@ -280,6 +281,7 @@ export function DataTable<TData extends RowData, TValue = unknown>({
 			// Delegated: Table.Root owns margin resolution; do not resolve locally.
 			{...props}>
 			<div {...stylex.props(dataTableParts.toolbar)}>
+				<ColumnVisibilityMenu tableColumns={table.getAllLeafColumns()} getColumnLabel={getColumnLabel} />
 				<InputGroup.Root {...stylex.props(dataTableParts.filter)}>
 					<InputGroup.Addon>
 						<MagnifyingGlassIcon aria-hidden size="1em" weight="bold" />
@@ -304,7 +306,6 @@ export function DataTable<TData extends RowData, TValue = unknown>({
 						return column ? <ColumnFilterMenu key={filter.columnId} column={column} filter={filter} /> : null;
 					})}
 					{toolbarEndSlot}
-					<ColumnVisibilityMenu tableColumns={table.getAllLeafColumns()} getColumnLabel={getColumnLabel} />
 				</div>
 			</div>
 

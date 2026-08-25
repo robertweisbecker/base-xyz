@@ -6,6 +6,7 @@ import * as stylex from "@stylexjs/stylex";
 import { useLayoutEffect, useState } from "react";
 import { IconButton, Select, Separator } from "@/components";
 import { textStyles } from "@/components/text/text.stylex";
+import { Text } from "@/components/text";
 import { zIndex } from "@/styles/constants.stylex";
 import { focusRing } from "@/styles/recipes/focus";
 import { parseModeFromSearchParams, parseThemeFromSearchParams, syncAppThemeUrl } from "@/theme/app-theme-url";
@@ -88,24 +89,26 @@ function AppHeader({
 					</RouterLink>
 				</nav>
 				<Separator orientation="vertical" />
-				<Select.Root<ThemeName>
-					size="sm"
-					value={theme}
-					items={themeBrandItems}
-					onValueChange={(value) => {
-						if (value) onThemeChange(value);
-					}}>
-					<Select.Trigger aria-label="Theme" variant="inline" />
-					<Select.Popup>
-						<Select.List>
-							{themeBrandItems.map((item) => (
-								<Select.Item key={item.value} value={item.value}>
-									{item.label}
-								</Select.Item>
-							))}
-						</Select.List>
-					</Select.Popup>
-				</Select.Root>
+				<Text size={"1"} render={<span />}>
+					<Select.Root<ThemeName>
+						size="sm"
+						value={theme}
+						items={themeBrandItems}
+						onValueChange={(value) => {
+							if (value) onThemeChange(value);
+						}}>
+						<Select.Trigger aria-label="Theme" variant="inline" />
+						<Select.Popup>
+							<Select.List>
+								{themeBrandItems.map((item) => (
+									<Select.Item key={item.value} value={item.value}>
+										{item.label}
+									</Select.Item>
+								))}
+							</Select.List>
+						</Select.Popup>
+					</Select.Root>
+				</Text>
 				<IconButton
 					icon={
 						<span {...stylex.props(styles.themeIcon)}>
@@ -152,12 +155,16 @@ const styles = stylex.create({
 	header: {
 		paddingInline: tokens["--space-4"],
 		alignItems: "center",
-		backgroundImage: `linear-gradient(to bottom, ${tokens["--canvas"]}, transparent)`,
+		// backgroundImage: `linear-gradient(to bottom, ${tokens["--canvas"]}, transparent)`,
+		backgroundColor: tokens["--surface"],
+		borderBottomWidth: tokens["--border-width"],
+		borderBottomStyle: "solid",
+		borderBottomColor: tokens["--border"],
 		display: "flex",
 		justifyContent: "space-between",
 		position: "sticky",
 		zIndex: zIndex.sticky,
-		height: "48px",
+		height: tokens["--size-navbar-height"],
 		top: 0,
 	},
 	brand: {

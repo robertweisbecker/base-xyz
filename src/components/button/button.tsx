@@ -397,6 +397,8 @@ export type IconButtonProps = Omit<
 	shape?: Extract<ButtonShape, "circle" | "square">;
 	/** Visible tooltip text. Defaults to `label`; use `false` to disable it. */
 	tooltip?: string | false;
+	/** Whether the tooltip should be closed when the button is clicked. */
+	closeTooltipOnClick?: boolean;
 };
 
 type ButtonRootProps = ButtonProps & {
@@ -407,7 +409,14 @@ export function Button(props: ButtonProps) {
 	return <ButtonRoot {...props} />;
 }
 
-export function IconButton({ icon, label, shape = "square", tooltip = label, ...props }: IconButtonProps) {
+export function IconButton({
+	icon,
+	label,
+	closeTooltipOnClick = true,
+	shape = "square",
+	tooltip = label,
+	...props
+}: IconButtonProps) {
 	const button = <ButtonRoot {...props} aria-label={label} iconOnly shape={shape} startSlot={icon} />;
 
 	if (tooltip === false) {
@@ -416,7 +425,7 @@ export function IconButton({ icon, label, shape = "square", tooltip = label, ...
 
 	return (
 		<Tooltip.Root>
-			<Tooltip.Trigger render={button} />
+			<Tooltip.Trigger render={button} closeOnClick={closeTooltipOnClick} />
 			<Tooltip.Popup>{tooltip}</Tooltip.Popup>
 		</Tooltip.Root>
 	);

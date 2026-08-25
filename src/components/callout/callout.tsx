@@ -71,13 +71,14 @@ export function Callout({
 				) : null}
 				<div {...stylex.props(calloutParts.content, calloutContentVariantStyles[variant])}>
 					{hasVisibleTitle ? (
-						<Heading size="2" {...stylex.props(calloutParts.title)} wrap="pretty" fontWeight="medium">
+						<Heading color="inherit" size="2" {...stylex.props(calloutParts.title)} wrap="pretty" fontWeight="medium">
 							{title}
 						</Heading>
-					) : (
-						<VisuallyHidden render={<h2 />}>{alert ? "Alert" : "Information"}</VisuallyHidden>
-					)}
+					) : alert ? (
+						<VisuallyHidden render={<h2 />}>Alert</VisuallyHidden>
+					) : null}
 					<Text
+						color="inherit"
 						render={<p />}
 						size={variant === "banner" ? "1" : "2"}
 						{...stylex.props(calloutParts.description)}

@@ -1,5 +1,7 @@
 import { CopyIcon } from "@phosphor-icons/react/dist/csr/Copy";
 import { GitPullRequestIcon } from "@phosphor-icons/react/dist/csr/GitPullRequest";
+import { ThumbsUpIcon } from "@phosphor-icons/react/dist/csr/ThumbsUp";
+import { ThumbsDownIcon } from "@phosphor-icons/react/dist/csr/ThumbsDown";
 import * as stylex from "@stylexjs/stylex";
 import { useState, type ReactNode } from "react";
 import {
@@ -360,8 +362,14 @@ function StreamingResponseExample({ description, id, title }: AgentBlockExampleP
 					{content}
 				</StreamingResponse.Content>
 				<StreamingResponse.Actions>
+					<Toolbar.Button aria-label="Approve response">
+						<ThumbsUpIcon aria-hidden />
+					</Toolbar.Button>
+					<Toolbar.Button aria-label="Reject response">
+						<ThumbsDownIcon aria-hidden />
+					</Toolbar.Button>
 					<Toolbar.Button aria-label="Copy response">
-						<CopyIcon aria-hidden weight="bold" />
+						<CopyIcon aria-hidden />
 					</Toolbar.Button>
 				</StreamingResponse.Actions>
 			</StreamingResponse.Root>
@@ -400,7 +408,7 @@ function StateControls<Value extends number | string>({
 						aria-pressed={option.value === value}
 						onClick={() => onValueChange(option.value)}
 						size="sm"
-						variant={option.value === value ? "secondary" : "neutral"}>
+						variant={"secondary"}>
 						{option.label}
 					</Button>
 				))}

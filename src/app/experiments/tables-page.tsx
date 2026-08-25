@@ -1,4 +1,15 @@
-import { Avatar, Badge, Button, DataTable, Stack, Table, Text, VisuallyHidden, type DataTableColumnDef, type DataTableFilter } from "@/components";
+import {
+	Avatar,
+	Badge,
+	Button,
+	DataTable,
+	Stack,
+	Table,
+	Text,
+	VisuallyHidden,
+	type DataTableColumnDef,
+	type DataTableFilter,
+} from "@/components";
 import { ExperimentPage, ExperimentSection } from "./experiment-page";
 
 type Deployment = {
@@ -11,17 +22,49 @@ type Deployment = {
 };
 
 const deployments: Deployment[] = [
-	{ environment: "Production", id: "dep_3gt9m", owner: "Maya Chen", status: "Deployed", updated: "2 min ago", url: "app.example.com" },
-	{ environment: "Preview", id: "dep_8b21x", owner: "Ari Patel", status: "Building", updated: "12 min ago", url: "feature-auth.example.com" },
-	{ environment: "Staging", id: "dep_4yf72", owner: "Sam Rivera", status: "Failed", updated: "24 min ago", url: "staging.example.com" },
-	{ environment: "Preview", id: "dep_9km30", owner: "Noah Kim", status: "Deployed", updated: "41 min ago", url: "checkout-copy.example.com" },
+	{
+		environment: "Production",
+		id: "dep_3gt9m",
+		owner: "Maya Chen",
+		status: "Deployed",
+		updated: "2 min ago",
+		url: "app.example.com",
+	},
+	{
+		environment: "Preview",
+		id: "dep_8b21x",
+		owner: "Ari Patel",
+		status: "Building",
+		updated: "12 min ago",
+		url: "feature-auth.example.com",
+	},
+	{
+		environment: "Staging",
+		id: "dep_4yf72",
+		owner: "Sam Rivera",
+		status: "Failed",
+		updated: "24 min ago",
+		url: "staging.example.com",
+	},
+	{
+		environment: "Preview",
+		id: "dep_9km30",
+		owner: "Noah Kim",
+		status: "Deployed",
+		updated: "41 min ago",
+		url: "checkout-copy.example.com",
+	},
 ];
 
 const columns: Array<DataTableColumnDef<Deployment>> = [
 	{
 		accessorKey: "url",
 		header: "URL",
-		cell: ({ row }) => <Text render={<span />} fontWeight="medium" size="2">{row.original.url}</Text>,
+		cell: ({ row }) => (
+			<Text render={<span />} fontWeight="medium" size="2">
+				{row.original.url}
+			</Text>
+		),
 	},
 	{
 		accessorKey: "status",
@@ -38,7 +81,9 @@ const columns: Array<DataTableColumnDef<Deployment>> = [
 		cell: ({ row }) => (
 			<Stack align="center" gap={2} orientation="horizontal" wrap="nowrap">
 				<Avatar name={row.original.owner} size={5} />
-				<Text color="muted" render={<span />} size="2">{row.original.owner}</Text>
+				<Text color="muted" render={<span />} size="2">
+					{row.original.owner}
+				</Text>
 			</Stack>
 		),
 	},
@@ -46,7 +91,11 @@ const columns: Array<DataTableColumnDef<Deployment>> = [
 		accessorKey: "updated",
 		header: "Updated",
 		numeric: true,
-		cell: ({ row }) => <Text color="muted" render={<span />} size="1">{row.original.updated}</Text>,
+		cell: ({ row }) => (
+			<Text color="muted" render={<span />} size="1">
+				{row.original.updated}
+			</Text>
+		),
 	},
 ];
 
@@ -85,7 +134,7 @@ export function TablesPage() {
 					getRowId={(deployment) => deployment.id}
 					rowSelection
 					showExpandColumn={false}
-					toolbarEndSlot={<Button size="sm">Create deployment</Button>}
+					toolbarEndSlot={<Button>Create deployment</Button>}
 				/>
 			</ExperimentSection>
 
@@ -107,13 +156,21 @@ export function TablesPage() {
 								<Table.Row>
 									<Table.Cell>8bc21ea</Table.Cell>
 									<Table.Cell>codex/experiment-routes</Table.Cell>
-									<Table.Cell><Badge hue="accent" variant="subtle">Running</Badge></Table.Cell>
+									<Table.Cell>
+										<Badge hue="accent" variant="subtle">
+											Running
+										</Badge>
+									</Table.Cell>
 									<Table.Cell numeric>1m 42s</Table.Cell>
 								</Table.Row>
 								<Table.Row>
 									<Table.Cell>3gt9m11</Table.Cell>
 									<Table.Cell>main</Table.Cell>
-									<Table.Cell><Badge hue="neutral" variant="subtle">Queued</Badge></Table.Cell>
+									<Table.Cell>
+										<Badge hue="neutral" variant="subtle">
+											Queued
+										</Badge>
+									</Table.Cell>
 									<Table.Cell numeric>—</Table.Cell>
 								</Table.Row>
 							</Table.Body>
@@ -127,5 +184,9 @@ export function TablesPage() {
 
 function DeploymentStatus({ status }: { status: Deployment["status"] }) {
 	const hue = status === "Deployed" ? "success" : status === "Failed" ? "error" : "warning";
-	return <Badge hue={hue} size="sm" variant="subtle">{status}</Badge>;
+	return (
+		<Badge hue={hue} size="sm" variant="subtle">
+			{status}
+		</Badge>
+	);
 }

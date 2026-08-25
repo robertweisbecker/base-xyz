@@ -17,15 +17,7 @@ import { toggleGroupMarker, toggleGroupStyles, toggleJoinStyles, toggleMarker } 
 
 type ToggleBaseProps = Omit<
 	BaseToggle.Props,
-	| "children"
-	| "className"
-	| "color"
-	| "height"
-	| "nativeButton"
-	| "render"
-	| "style"
-	| "width"
-	| keyof MarginProps
+	"children" | "className" | "color" | "height" | "nativeButton" | "render" | "style" | "width" | keyof MarginProps
 > &
 	MarginProps &
 	BaseStyleProps & {
@@ -166,6 +158,7 @@ function ToggleAsIconButton({
 
 				return (
 					<IconButton
+						closeTooltipOnClick={false}
 						{...iconButtonProps}
 						className={attrJoin(toggleStyleProps.className, className)}
 						icon={resolvePressedSlot(state.pressed, icon, pressedIcon)}
@@ -194,12 +187,7 @@ export function ToggleGroup({
 	...props
 }: ToggleGroupProps) {
 	const { marginStyles, rest } = extractMarginProps(props);
-	const sx = stylex.props(
-		toggleGroupMarker,
-		toggleGroupStyles.root,
-		marginStyles,
-		xstyle,
-	);
+	const sx = stylex.props(toggleGroupMarker, toggleGroupStyles.root, marginStyles, xstyle);
 
 	return (
 		<BaseToggleGroup

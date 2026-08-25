@@ -27,7 +27,7 @@ export const tokens = stylex.defineVars({
 	"--color-black-a5": "oklch(0 0 0 / 0.60)",
 	"--color-black-a6": "oklch(0 0 0 / 0.80)",
 
-	"--color-gray-s1": "light-dark(oklch(99% 0 0deg), oklch(20% 0 0deg))",
+	"--color-gray-s1": "light-dark(oklch(98.75% 0 0deg), oklch(20% 0 0deg))",
 	"--color-gray-s2": "light-dark(oklch(97.5% 0 0deg), oklch(21% 0 0deg))",
 	"--color-gray-s3": "light-dark(oklch(96% 0 0deg), oklch(24% 0 0deg))",
 
@@ -122,6 +122,8 @@ export const tokens = stylex.defineVars({
 	"--canvas": "light-dark(var(--color-gray-s2), #050506)",
 	"--bg-inset": "var(--color-gray-s3)",
 	"--surface": "var(--color-gray-s1)",
+	"--surface-accent": "var(--color-accent-s1)",
+	"--surface-accent-hover": "var(--color-accent-s2)",
 	"--page": "light-dark(var(--color-white), var(--color-gray-s1))",
 	"--panel": "light-dark(var(--color-white), var(--color-gray-s2))",
 	"--elevated": "light-dark(var(--color-white), var(--color-gray-s3))",
@@ -238,6 +240,7 @@ export const tokens = stylex.defineVars({
 	"--size-control-lg": "2.5rem",
 	"--size-indicator-sm": "1rem",
 	"--size-indicator-md": "1.125rem",
+	"--size-navbar-height": "3rem",
 	"--size-sidebar": "16rem",
 	"--size-sidebar-rail": "3.5rem",
 

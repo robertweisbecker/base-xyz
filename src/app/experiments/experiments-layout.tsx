@@ -1,14 +1,10 @@
 import { Link as RouterLink, Outlet, useRouterState } from "@tanstack/react-router";
-import { BrowserIcon } from "@phosphor-icons/react/dist/csr/Browser";
 import * as stylex from "@stylexjs/stylex";
 import { useState, type ReactNode } from "react";
 import { NavList, Sidebar, type NavListIndentLevel } from "@/components";
 import { breakpoints } from "@/styles/constants.stylex";
 import { tokens } from "@/theme/tokens.stylex";
-import {
-	experimentNavigationGroups,
-	type ExperimentNavigationPath,
-} from "./experiment-navigation";
+import { experimentNavigationGroups, type ExperimentNavigationPath } from "./experiment-navigation";
 
 export function ExperimentsLayout() {
 	const [collapsed, setCollapsed] = useState(false);
@@ -18,11 +14,8 @@ export function ExperimentsLayout() {
 		<Sidebar.Root collapsed={collapsed} onCollapsedChange={setCollapsed}>
 			<div {...stylex.props(styles.shell, collapsed && styles.shellCollapsed)}>
 				<Sidebar.Panel xstyle={[styles.sidebar, !collapsed && styles.sidebarExpanded]}>
-					<Sidebar.Header
-						endSlot={<Sidebar.Trigger />}
-						startSlot={<BrowserIcon aria-hidden size={20} weight="duotone" />}>
+					<Sidebar.Header endSlot={<Sidebar.Trigger />}>
 						<Sidebar.Title>Experiments</Sidebar.Title>
-						<Sidebar.Description>Integration playground</Sidebar.Description>
 					</Sidebar.Header>
 					<Sidebar.Content>
 						<NavList.Root aria-label="Experiments">
@@ -88,7 +81,7 @@ const styles = stylex.create({
 			default: "minmax(0, 1fr)",
 			[breakpoints.md]: `${tokens["--size-sidebar"]} minmax(0, 1fr)`,
 		},
-		minHeight: "calc(100svh - 48px)",
+		minHeight: `calc(100svh - ${tokens["--size-navbar-height"]})`,
 	},
 	shellCollapsed: {
 		gridTemplateColumns: {
@@ -99,7 +92,7 @@ const styles = stylex.create({
 	sidebar: {
 		blockSize: {
 			default: "auto",
-			[breakpoints.md]: "calc(100svh - 48px)",
+			[breakpoints.md]: `calc(100svh - ${tokens["--size-navbar-height"]})`,
 		},
 		position: {
 			default: "static",
@@ -107,7 +100,7 @@ const styles = stylex.create({
 		},
 		top: {
 			default: "auto",
-			[breakpoints.md]: "48px",
+			[breakpoints.md]: tokens["--size-navbar-height"],
 		},
 	},
 	sidebarExpanded: {

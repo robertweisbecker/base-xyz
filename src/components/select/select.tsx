@@ -49,11 +49,7 @@ export function Root<Value, Multiple extends SelectMultiple = false>({
 	...props
 }: SelectRootProps<Value, Multiple>) {
 	const { marginStyles, rest } = extractMarginProps(props);
-	const sx = stylex.props(
-		selectParts.root,
-		marginStyles,
-		xstyle,
-	);
+	const sx = stylex.props(selectParts.root, marginStyles, xstyle);
 
 	return (
 		<Field.Root
@@ -107,6 +103,7 @@ export function Trigger({
 	const size = useContext(SelectSizeContext);
 	const sx = stylex.props(
 		fieldControlStyles[size],
+		selectSizeVariants[size],
 		selectParts.trigger,
 		variant === "inline" && selectParts.inlineTrigger,
 		focusRing.inset,
@@ -315,7 +312,7 @@ const selectParts = stylex.create({
 		overscrollBehavior: "contain",
 	},
 	root: {
-		gap: tokens["--space-2"],
+		gap: tokens["--space-1"],
 		display: "flex",
 		flexDirection: "column",
 		minWidth: 0,
@@ -344,6 +341,8 @@ const selectParts = stylex.create({
 		width: "auto",
 	},
 	inlineTrigger: {
+		fontSize: "inherit",
+		lineHeight: "inherit",
 		borderColor: {
 			"[data-invalid]": tokens["--bg-error-primary"],
 			default: "transparent",
@@ -358,9 +357,9 @@ const selectParts = stylex.create({
 		backgroundColor: {
 			// eslint-disable-next-line @stylexjs/valid-styles -- the compiler supports chained pseudo-class conditions; the lint rule is stricter than the compiler.
 			[HOVER_WHEN_INACTIVE]: {
-				[media.canHover]: tokens["--surface-subtle"],
+				[media.canHover]: tokens["--surface-accent-hover"],
 			},
-			"[data-popup-open]": tokens["--bg-accent"],
+			"[data-popup-open]": tokens["--surface-accent"],
 			default: "transparent",
 			":active": tokens["--bg-accent"],
 		},
@@ -370,18 +369,18 @@ const selectParts = stylex.create({
 			default: tokens["--fg-accent"],
 		},
 		columnGap: "2px",
-		fontWeight: {
-			"[data-placeholder]": tokens["--font-weight-regular"],
-			default: tokens["--font-weight-medium"],
-		},
+		// fontWeight: {
+		// 	"[data-placeholder]": tokens["--font-weight-regular"],
+		// 	default: tokens["--font-weight-medium"],
+		// },
 		marginBlockEnd: "-1px",
 		marginBlockStart: "-1px",
 		paddingInlineEnd: "2px",
 		paddingInlineStart: "2px",
-		textDecorationColor: tokens["--fg-subtle"],
-		textDecorationStyle: "dotted",
-		textDecorationThickness: "2px",
-		textUnderlineOffset: "4px",
+		// textDecorationColor: tokens["--fg-subtle"],
+		// textDecorationStyle: "dotted",
+		// textDecorationThickness: "2px",
+		// textUnderlineOffset: "4px",
 		height: "auto",
 		minHeight: 0,
 		minWidth: 0,
@@ -513,6 +512,21 @@ const selectParts = stylex.create({
 		backdropFilter: "blur(8px)",
 		backgroundColor: "rgb(0 0 0 / 16%)",
 		position: "fixed",
+	},
+});
+
+const selectSizeVariants = stylex.create({
+	sm: {
+		fontSize: tokens["--font-size-1"],
+		lineHeight: tokens["--line-height-1"],
+	},
+	md: {
+		fontSize: tokens["--font-size-2"],
+		lineHeight: tokens["--line-height-2"],
+	},
+	lg: {
+		fontSize: tokens["--font-size-3"],
+		lineHeight: tokens["--line-height-3"],
 	},
 });
 

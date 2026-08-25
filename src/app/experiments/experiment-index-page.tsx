@@ -18,21 +18,20 @@ export function ExperimentIndexPage({
 }) {
 	return (
 		<ExperimentPage description={description} title={title}>
-			<Grid gap={4} xstyle={styles.grid}>
+			<Grid gap={4} columns={3}>
 				{items.map((item) => (
-					<RouterLink
+					<Card.Root
 						key={item.to}
-						to={item.to}
-						search={true}
-						{...stylex.props(styles.link, focusRing.offset)}>
-						<Card.Root variant="outline" xstyle={styles.card}>
-							<Card.Header>
-								<span {...stylex.props(styles.icon)}>{item.icon}</span>
-								<Card.Title render={<h2 />}>{item.label}</Card.Title>
-								<Card.Description>{item.description}</Card.Description>
-							</Card.Header>
-						</Card.Root>
-					</RouterLink>
+						{...stylex.props(styles.link, focusRing.offset)}
+						render={<RouterLink to={item.to} search={true} />}>
+						<Card.Header>
+							<span {...stylex.props(styles.icon)}>{item.icon}</span>
+							<Card.Title render={<h2 />}>{item.label}</Card.Title>
+						</Card.Header>
+						<Card.Content>
+							<Card.Description>{item.description}</Card.Description>
+						</Card.Content>
+					</Card.Root>
 				))}
 			</Grid>
 		</ExperimentPage>
@@ -40,9 +39,9 @@ export function ExperimentIndexPage({
 }
 
 const styles = stylex.create({
-	grid: {
-		gridTemplateColumns: "repeat(auto-fit, minmax(min(16rem, 100%), 1fr))",
-	},
+	// grid: {
+	// 	gridTemplateColumns: "repeat(auto-fit, minmax(min(16rem, 100%), 1fr))",
+	// },
 	link: {
 		borderRadius: tokens["--radius-lg"],
 		textDecoration: "none",
@@ -54,12 +53,8 @@ const styles = stylex.create({
 		},
 		color: "inherit",
 	},
-	card: {
-		backgroundColor: "transparent",
-		height: "100%",
-	},
 	icon: {
-		borderRadius: tokens["--radius-md"],
+		borderRadius: tokens["--radius-sm"],
 		alignItems: "center",
 		backgroundColor: tokens["--surface-subtle"],
 		color: tokens["--fg-muted"],
@@ -67,5 +62,6 @@ const styles = stylex.create({
 		justifyContent: "center",
 		height: tokens["--space-8"],
 		width: tokens["--space-8"],
+		marginBlock: tokens["--space-2"],
 	},
 });

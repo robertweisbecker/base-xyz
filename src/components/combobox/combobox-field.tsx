@@ -28,9 +28,10 @@ import {
 	inputVariants,
 } from "./combobox.stylex";
 
-type StyledProps<T> = Omit<T, "className" | "style"> & BaseStyleProps & {
-	className?: string;
-};
+type StyledProps<T> = Omit<T, "className" | "style"> &
+	BaseStyleProps & {
+		className?: string;
+	};
 
 type ComboboxMultipleMode = boolean | undefined;
 
@@ -45,11 +46,7 @@ const ComboboxChipsContext = createContext(false);
 
 export type ComboboxRootProps<Value, Multiple extends ComboboxMultipleMode = false> = Omit<
 	BaseCombobox.Root.Props<Value, Multiple>,
-	| "className"
-	| "color"
-	| "size"
-	| "style"
-	| keyof MarginProps
+	"className" | "color" | "size" | "style" | keyof MarginProps
 > &
 	MarginProps &
 	BaseStyleProps & {
@@ -71,11 +68,7 @@ export function Root<Value, Multiple extends ComboboxMultipleMode = false>({
 	...props
 }: ComboboxRootProps<Value, Multiple>) {
 	const { marginStyles, rest } = extractMarginProps(props);
-	const sx = stylex.props(
-		fieldStyles.root,
-		marginStyles,
-		xstyle,
-	);
+	const sx = stylex.props(fieldStyles.root, marginStyles, xstyle);
 
 	return (
 		<Field.Root
@@ -125,7 +118,7 @@ export function InputGroup({
 	const { multiple, size } = useContext(ComboboxContext);
 	const withChips = variant === "chips";
 	const sx = stylex.props(
-		fieldStyles.inputBase,
+		fieldStyles.input,
 		fieldTextStyles[size],
 		comboboxParts.inputGroup,
 		fieldControlSizes[size],
@@ -158,7 +151,7 @@ export function Input({ ref, className, style, xstyle, ...props }: ComboboxInput
 	const withinChips = useContext(ComboboxChipsContext);
 	const sx = stylex.props(
 		fieldStyles.inputUnstyled,
-		fieldStyles.inputStandard,
+		fieldStyles.inputDefault,
 		fieldTextStyles[size],
 		comboboxParts.input,
 		comboboxInputSizeVariants[size],
@@ -325,13 +318,7 @@ export type ComboboxChipOverflowProps = Omit<TooltipTriggerProps, "children"> & 
 	label: ReactNode;
 };
 
-export function ChipOverflow({
-	anchor,
-	children,
-	label,
-	xstyle,
-	...props
-}: ComboboxChipOverflowProps) {
+export function ChipOverflow({ anchor, children, label, xstyle, ...props }: ComboboxChipOverflowProps) {
 	return (
 		<Tooltip.Root>
 			<Tooltip.Trigger xstyle={[comboboxParts.chipOverflow, xstyle]} {...props}>

@@ -34,7 +34,7 @@ export const textColorStyles = stylex.create({
 	warning: { color: tokens["--fg-warning"] },
 	inverse: { color: tokens["--fg-inverse"] },
 	"inverse-muted": { color: tokens["--fg-inverse-muted"] },
-	inherit: { color: "inherit" },
+	inherit: { color: "currentColor" },
 });
 
 export const typescaleStyles = stylex.create({

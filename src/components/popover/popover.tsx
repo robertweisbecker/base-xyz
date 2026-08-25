@@ -198,7 +198,7 @@ const popoverParts = stylex.create({
 		[popupVars.background]: tokens["--panel"],
 		[popupVars.border]: tokens["--border"],
 		[popupVars.foreground]: tokens["--fg"],
-		borderRadius: tokens["--radius-md"],
+		borderRadius: tokens["--radius-lg"],
 		backgroundColor: popupVars.background,
 		boxShadow: tokens["--shadow-md"],
 		color: popupVars.foreground,
@@ -211,7 +211,7 @@ const popoverParts = stylex.create({
 		display: "flex",
 		flexDirection: "column",
 		position: "relative",
-		maxWidth: "min(calc(100vw - 32px), 28rem)",
+		maxWidth: "min(calc(100vw - 32px), 20rem)",
 	},
 	viewport: {
 		gap: tokens["--space-2"],

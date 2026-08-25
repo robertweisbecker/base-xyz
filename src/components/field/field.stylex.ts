@@ -75,7 +75,7 @@ const parts = stylex.create({
 		color: tokens["--fg-error"],
 		marginInlineStart: tokens["--space-1"],
 	},
-	inputBase: {
+	input: {
 		borderColor: {
 			// eslint-disable-next-line @stylexjs/valid-styles -- the compiler supports chained pseudo-class conditions; the lint rule is stricter than the compiler.
 			[INTERACTIVE_CONTROL_HOVER]: {
@@ -125,7 +125,7 @@ const parts = stylex.create({
 			color: tokens["--fg-muted"],
 		},
 	},
-	inputStandard: {
+	inputDefault: {
 		cursor: {
 			"[data-disabled]": "not-allowed",
 			"[data-readonly]": "default",
@@ -133,7 +133,7 @@ const parts = stylex.create({
 			default: "text", // necessary since this style gets applied to InputGroup (a div) too
 		},
 		"::placeholder": {
-			opacity: 0.72,
+			color: tokens["--fg-placeholder"],
 		},
 	},
 });
@@ -146,9 +146,9 @@ export const fieldStyles = {
 	description: [textStyles.supporting, parts.description],
 	error: [textStyles.supporting, parts.error],
 	requiredIndicator: parts.requiredIndicator,
-	inputBase: parts.inputBase,
+	input: parts.input,
 	inputUnstyled: parts.inputUnstyled,
-	inputStandard: parts.inputStandard,
+	inputDefault: parts.inputDefault,
 } as const;
 
 /** Shared row/column layout for CheckboxGroup and RadioGroup. */
@@ -239,25 +239,25 @@ export const fieldTextStyles = {
 /** Apply to a text input (`input`, `textarea`): surface, text cursor, sizing. */
 export const fieldInputStyles = {
 	sm: [
-		fieldStyles.inputBase,
+		fieldStyles.input,
 		fieldStyles.inputUnstyled,
-		fieldStyles.inputStandard,
+		fieldStyles.inputDefault,
 		fieldTextStyles.sm,
 		fieldControlSizes.sm,
 		fieldPaddingSizes.sm,
 	],
 	md: [
-		fieldStyles.inputBase,
+		fieldStyles.input,
 		fieldStyles.inputUnstyled,
-		fieldStyles.inputStandard,
+		fieldStyles.inputDefault,
 		fieldTextStyles.md,
 		fieldControlSizes.md,
 		fieldPaddingSizes.md,
 	],
 	lg: [
-		fieldStyles.inputBase,
+		fieldStyles.input,
 		fieldStyles.inputUnstyled,
-		fieldStyles.inputStandard,
+		fieldStyles.inputDefault,
 		fieldTextStyles.lg,
 		fieldControlSizes.lg,
 		fieldPaddingSizes.lg,
@@ -266,25 +266,7 @@ export const fieldInputStyles = {
 
 /** Apply to a button-like field trigger (select, combobox): surface and sizing without the text cursor. */
 export const fieldControlStyles = {
-	sm: [
-		fieldStyles.inputBase,
-		fieldStyles.inputUnstyled,
-		fieldTextStyles.sm,
-		fieldControlSizes.sm,
-		fieldPaddingSizes.sm,
-	],
-	md: [
-		fieldStyles.inputBase,
-		fieldStyles.inputUnstyled,
-		fieldTextStyles.md,
-		fieldControlSizes.md,
-		fieldPaddingSizes.md,
-	],
-	lg: [
-		fieldStyles.inputBase,
-		fieldStyles.inputUnstyled,
-		fieldTextStyles.lg,
-		fieldControlSizes.lg,
-		fieldPaddingSizes.lg,
-	],
+	sm: [fieldStyles.input, fieldStyles.inputUnstyled, fieldTextStyles.sm, fieldControlSizes.sm, fieldPaddingSizes.sm],
+	md: [fieldStyles.input, fieldStyles.inputUnstyled, fieldTextStyles.md, fieldControlSizes.md, fieldPaddingSizes.md],
+	lg: [fieldStyles.input, fieldStyles.inputUnstyled, fieldTextStyles.lg, fieldControlSizes.lg, fieldPaddingSizes.lg],
 } as const satisfies Record<FieldSize, unknown>;

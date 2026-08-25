@@ -2,7 +2,7 @@ import { Collapsible as BaseCollapsible } from "@base-ui/react/collapsible";
 import { useRender } from "@base-ui/react/use-render";
 import { media } from "@/styles/constants.stylex";
 import { Collapsible } from "@/components/collapsible/collapsible";
-import { ArrowLeftIcon, ArrowRightIcon, BrowserIcon } from "@phosphor-icons/react";
+import { ArrowLeftIcon, ArrowRightIcon, FileIcon } from "@phosphor-icons/react";
 import * as stylex from "@stylexjs/stylex";
 import type { StyleXStyles } from "@stylexjs/stylex";
 import {
@@ -120,16 +120,7 @@ export function NavListPresentationProvider({
 	return <NavListPresentationContext.Provider value={value}>{children}</NavListPresentationContext.Provider>;
 }
 
-export function Root({
-	ref,
-	className,
-	style,
-	xstyle,
-	children,
-	size = "md",
-	onNavigate,
-	...props
-}: NavListRootProps) {
+export function Root({ ref, className, style, xstyle, children, size = "md", onNavigate, ...props }: NavListRootProps) {
 	const localScrollRef = useRef<HTMLDivElement>(null);
 	const { presentation, scrollMode, scrollRef: externalScrollRef } = useContext(NavListPresentationContext);
 	const context = useMemo(() => ({ size, onNavigate }), [onNavigate, size]);
@@ -268,7 +259,7 @@ function Row({
 	const size = navList?.size ?? "md";
 	const isIconMode = presentation === "icon";
 	const showTooltip = isIconMode && (tooltip ?? label) !== false;
-	const visualIcon = icon || startSlot || <BrowserIcon weight="duotone" />;
+	const visualIcon = icon || startSlot || <FileIcon weight="duotone" />;
 	const backIcon = disclosure === "back";
 	const resolvedEndSlot = endSlot ?? badge;
 	const resolvedAriaLabel = isIconMode ? (ariaLabel ?? label) : ariaLabel;

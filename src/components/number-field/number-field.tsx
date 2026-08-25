@@ -23,12 +23,7 @@ const INPUT_HOVER =
 
 export type NumberFieldProps = Omit<
 	BaseNumberField.Root.Props,
-	| "children"
-	| "className"
-	| "color"
-	| "id"
-	| "style"
-	| keyof MarginProps
+	"children" | "className" | "color" | "id" | "style" | keyof MarginProps
 > &
 	MarginProps &
 	BaseStyleProps & {
@@ -73,12 +68,7 @@ export function NumberField({
 	const id = providedId ?? generatedId;
 	const descriptionId = description ? `${id}-description` : undefined;
 	const errorId = error ? `${id}-error` : undefined;
-	const rootSx = stylex.props(
-		fieldStyles.root,
-		numberFieldParts.root,
-		marginStyles,
-		xstyle,
-	);
+	const rootSx = stylex.props(fieldStyles.root, numberFieldParts.root, marginStyles, xstyle);
 
 	return (
 		<Field.Root
@@ -87,9 +77,7 @@ export function NumberField({
 			disabled={disabled}
 			invalid={Boolean(error)}
 			name={name}
-			render={
-				<BaseNumberField.Root id={id} disabled={disabled} readOnly={readOnly} required={required} {...rest} />
-			}>
+			render={<BaseNumberField.Root id={id} disabled={disabled} readOnly={readOnly} required={required} {...rest} />}>
 			<BaseNumberField.ScrubArea {...stylex.props(numberFieldParts.scrubArea)}>
 				<Field.Label htmlFor={id} {...stylex.props(fieldStyles.label, numberFieldParts.label)}>
 					{label}
@@ -121,7 +109,7 @@ export function NumberField({
 					aria-invalid={Boolean(error)}
 					{...stylex.props(
 						fieldStyles.inputUnstyled,
-						fieldStyles.inputStandard,
+						fieldStyles.inputDefault,
 						fieldTextStyles[fieldSize],
 						numberFieldParts.input,
 						numberFieldInputPaddingSizes.default,

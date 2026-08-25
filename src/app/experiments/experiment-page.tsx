@@ -1,10 +1,7 @@
 import { useRouterState } from "@tanstack/react-router";
-import * as stylex from "@stylexjs/stylex";
 import { Fragment, type ReactNode } from "react";
 import { PageHeader } from "@/blocks";
 import { Breadcrumbs, Heading, Stack, Text } from "@/components";
-import { tokens } from "@/theme/tokens.stylex";
-import { experimentLayoutVars } from "./experiment-layout.stylex";
 
 export function ExperimentPage({
 	children,
@@ -90,31 +87,28 @@ export function ExperimentSection({
 	title: string;
 }) {
 	return (
-		<section id={id} {...stylex.props(styles.section)}>
-			<Stack gap={5}>
-				<Stack gap={1}>
-					<Heading size="3">{title}</Heading>
-					{description ? (
-						<Text color="muted" size="2" wrap="pretty">
-							{description}
-						</Text>
-					) : null}
-				</Stack>
+		<Stack gap={5} render={<section />} id={id}>
+			<Stack gap={1}>
+				<Heading size="3" render={<h2 />}>
+					{title}
+				</Heading>
+				{description ? (
+					<Text size="1" color="muted" wrap="pretty">
+						{description}
+					</Text>
+				) : null}
+			</Stack>
+			<Stack
+				bg="surfaceSubtle"
+				orientation="vertical"
+				gap={5}
+				radius="md"
+				render={<div />}
+				borderWidth="sm"
+				borderColor="border"
+				p={5}>
 				{children}
 			</Stack>
-		</section>
+		</Stack>
 	);
 }
-
-const styles = stylex.create({
-	section: {
-		padding: tokens["--space-5"],
-		borderColor: tokens["--border"],
-		borderRadius: tokens["--radius-md"],
-		borderStyle: "solid",
-		borderWidth: tokens["--border-width"],
-		backgroundColor: tokens["--surface"],
-		scrollMarginBlockStart: experimentLayoutVars["--anchor-offset"],
-		minWidth: 0,
-	},
-});
