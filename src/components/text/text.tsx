@@ -11,7 +11,13 @@ import {
 	textTabularStyles,
 	textWrapStyles,
 } from "./text.stylex";
-import type { TypographyColor, TypographyFontFamily, TypographyFontWeight, TypographySize, TypographyWrap } from "./text.types";
+import type {
+	TypographyColor,
+	TypographyFontFamily,
+	TypographyFontWeight,
+	TypographySize,
+	TypographyWrap,
+} from "./text.types";
 import { attrJoin } from "@/utils/attr-join";
 
 export type TextProps = Omit<

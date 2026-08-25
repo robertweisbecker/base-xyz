@@ -2,7 +2,7 @@ import { Collapsible as BaseCollapsible } from "@base-ui/react/collapsible";
 import { useRender } from "@base-ui/react/use-render";
 import { media } from "@/styles/constants.stylex";
 import { Collapsible } from "@/components/collapsible/collapsible";
-import { ArrowLeftIcon, ArrowRightIcon, BrowserIcon } from "@phosphor-icons/react";
+import { ArrowLeftIcon, ArrowRightIcon, FileIcon } from "@phosphor-icons/react";
 import * as stylex from "@stylexjs/stylex";
 import type { StyleXStyles } from "@stylexjs/stylex";
 import {
@@ -44,6 +44,7 @@ export type NavListRootProps = Omit<ComponentProps<"nav">, "className" | "style"
 
 export type NavListSize = "sm" | "md";
 export type NavListCurrent = "page" | "location";
+export type NavListIndentLevel = 0 | 1;
 
 export type NavListSectionProps = BaseStyleProps & {
 	label: string;
@@ -65,6 +66,7 @@ export type NavListItemProps = BaseStyleProps & {
 	render?: useRender.RenderProp;
 	current?: NavListCurrent | false;
 	active?: boolean;
+	indentLevel?: NavListIndentLevel;
 	disabled?: boolean;
 	tooltip?: string | false;
 	"aria-label"?: string;
@@ -118,16 +120,7 @@ export function NavListPresentationProvider({
 	return <NavListPresentationContext.Provider value={value}>{children}</NavListPresentationContext.Provider>;
 }
 
-export function Root({
-	ref,
-	className,
-	style,
-	xstyle,
-	children,
-	size = "md",
-	onNavigate,
-	...props
-}: NavListRootProps) {
+export function Root({ ref, className, style, xstyle, children, size = "md", onNavigate, ...props }: NavListRootProps) {
 	const localScrollRef = useRef<HTMLDivElement>(null);
 	const { presentation, scrollMode, scrollRef: externalScrollRef } = useContext(NavListPresentationContext);
 	const context = useMemo(() => ({ size, onNavigate }), [onNavigate, size]);
@@ -247,6 +240,7 @@ function Row({
 	render,
 	current,
 	active,
+	indentLevel = 0,
 	disabled = false,
 	tooltip,
 	"aria-label": ariaLabel,
@@ -265,7 +259,7 @@ function Row({
 	const size = navList?.size ?? "md";
 	const isIconMode = presentation === "icon";
 	const showTooltip = isIconMode && (tooltip ?? label) !== false;
-	const visualIcon = icon || startSlot || <BrowserIcon weight="duotone" />;
+	const visualIcon = icon || startSlot || <FileIcon weight="duotone" />;
 	const backIcon = disclosure === "back";
 	const resolvedEndSlot = endSlot ?? badge;
 	const resolvedAriaLabel = isIconMode ? (ariaLabel ?? label) : ariaLabel;
@@ -373,7 +367,11 @@ function Row({
 		return rowWithTooltip;
 	}
 
-	return <li {...stylex.props(navListParts.listItem)}>{rowWithTooltip}</li>;
+	return (
+		<li {...stylex.props(navListParts.listItem, !isIconMode && indentLevel === 1 && navListParts.indentedListItem)}>
+			{rowWithTooltip}
+		</li>
+	);
 }
 
 export type CollapsibleGroupProps = BaseStyleProps & {
@@ -1001,6 +999,14 @@ const navListParts = stylex.create({
 	},
 	listItem: {
 		minWidth: 0,
+	},
+	indentedListItem: {
+		borderInlineStartColor: tokens["--border"],
+		borderInlineStartStyle: "solid",
+		borderInlineStartWidth: tokens["--border-width"],
+		boxSizing: "border-box",
+		marginInlineStart: tokens["--space-4"],
+		paddingInlineStart: tokens["--space-1-5"],
 	},
 	row: {
 		[menuItemVars.columns]: `${tokens["--space-4"]} minmax(0, 1fr) auto`,

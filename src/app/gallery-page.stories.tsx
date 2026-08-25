@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { GalleryGrid } from "./App";
+import { GalleryGrid } from "./gallery-page";
 
 const meta = {
 	title: "Gallery/App",

@@ -18,9 +18,10 @@ const GROUP_HAS_DISABLED = ":has(:is(input, textarea):is([data-disabled], :disab
 
 const GROUP_HOVER = `:hover:not(:focus-within):not(:has([aria-invalid="true"])):not(${GROUP_HAS_DISABLED}):not(:has([data-invalid])):not(:has([readonly]))`;
 
-type InputGroupStyledProps<T> = Omit<T, "className" | "style"> & BaseStyleProps & {
-	className?: string;
-};
+type InputGroupStyledProps<T> = Omit<T, "className" | "style"> &
+	BaseStyleProps & {
+		className?: string;
+	};
 
 export type InputGroupRootProps = Omit<ComponentProps<"div">, "className" | "style" | keyof MarginProps> &
 	MarginProps &
@@ -47,7 +48,10 @@ export type InputGroupAddonProps = InputGroupStyledProps<ComponentProps<"span">>
 	position?: InputGroupAddonPosition;
 };
 
-export type InputGroupActionsProps = InputGroupStyledProps<ComponentProps<"div">>;
+export type InputGroupActionsProps = InputGroupStyledProps<ComponentProps<"div">> & {
+	/** Inline placement relative to the control. Default `end`. */
+	position?: InputGroupAddonPosition;
+};
 
 export type InputGroupHeaderProps = InputGroupStyledProps<ComponentProps<"div">>;
 
@@ -64,7 +68,7 @@ export function Root({
 }: InputGroupRootProps) {
 	const { marginStyles, rest } = extractMarginProps(props);
 	const sx = stylex.props(
-		fieldStyles.inputBase,
+		fieldStyles.input,
 		inputGroupParts.root,
 		focusRing.within,
 		fieldControlSizes[size],
@@ -91,12 +95,7 @@ export function Input({ ref, className, style, xstyle, ...props }: InputGroupInp
 	const sx = stylex.props(fieldStyles.inputUnstyled, inputGroupParts.input, xstyle);
 
 	return (
-		<BaseInput
-			ref={ref}
-			className={attrJoin(sx.className, className)}
-			style={mergeStyle(sx.style, style)}
-			{...props}
-		/>
+		<BaseInput ref={ref} className={attrJoin(sx.className, className)} style={mergeStyle(sx.style, style)} {...props} />
 	);
 }
 
@@ -171,12 +170,10 @@ function isInteractiveTarget(target: EventTarget) {
 	);
 }
 
-export function Actions({ ref, className, style, xstyle, ...props }: InputGroupActionsProps) {
-	const sx = stylex.props(inputGroupParts.actions, xstyle);
+export function Actions({ ref, className, style, xstyle, position = "end", ...props }: InputGroupActionsProps) {
+	const sx = stylex.props(inputGroupParts.addon, inputGroupAddonPositions[position], inputGroupParts.actions, xstyle);
 
-	return (
-		<div ref={ref} className={attrJoin(sx.className, className)} style={mergeStyle(sx.style, style)} {...props} />
-	);
+	return <div ref={ref} className={attrJoin(sx.className, className)} style={mergeStyle(sx.style, style)} {...props} />;
 }
 
 export function Header({ ref, className, style, xstyle, ...props }: InputGroupHeaderProps) {
@@ -222,7 +219,7 @@ const inputGroupParts = stylex.create({
 		overflow: "hidden",
 		alignItems: "center",
 		backgroundColor: {
-			// Match field `inputBase` disabled: transparent surface + root opacity.
+			// Match field `input` disabled: transparent surface + root opacity.
 			[GROUP_HAS_DISABLED]: "transparent",
 			default: tokens["--surface"],
 		},
@@ -284,6 +281,8 @@ const inputGroupParts = stylex.create({
 		alignItems: "center",
 		display: "flex",
 		flexShrink: 0,
+		minWidth: 0,
+		cursor: null,
 	},
 	header: {
 		gap: tokens["--space-2"],
@@ -299,7 +298,8 @@ const inputGroupParts = stylex.create({
 	},
 	footer: {
 		gap: tokens["--space-2"],
-		paddingInline: "var(--_input-padding)",
+		paddingInlineStart: "var(--_input-group-padding)",
+		paddingInlineEnd: "var(--_input-padding)",
 		alignItems: "center",
 		display: "flex",
 		flexBasis: "100%",
@@ -360,9 +360,12 @@ const inputGroupSizes = stylex.create({
 		"--_input-group-icon-size": "0.875rem",
 		"--_input-group-padding": tokens["--space-1"],
 		"--_input-padding": tokens["--space-1"],
-		paddingBlock: tokens["--space-1"],
+		paddingBlock: tokens["--space-0"],
 		paddingInline: tokens["--space-1"],
-		height: "auto",
+		height: {
+			":has(textarea)": "auto",
+			default: tokens["--size-control-sm"],
+		},
 		minHeight: tokens["--size-control-sm"],
 	},
 	md: {

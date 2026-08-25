@@ -22,6 +22,7 @@ const meta = {
 	title: "Components/Button/Icon button",
 	component: IconButton,
 	args: {
+		closeTooltipOnClick: true,
 		disabled: false,
 		icon: iconOptions.Add,
 		label: "Add item",
@@ -32,6 +33,7 @@ const meta = {
 		variant: "neutral",
 	},
 	argTypes: {
+		closeTooltipOnClick: { control: "boolean" },
 		disabled: { control: "boolean" },
 		icon: {
 			control: "select",
@@ -50,7 +52,17 @@ const meta = {
 	},
 	parameters: {
 		controls: {
-			include: ["icon", "label", "variant", "size", "shape", "tooltip", "disabled", "loading"],
+			include: [
+				"icon",
+				"label",
+				"variant",
+				"size",
+				"shape",
+				"tooltip",
+				"closeTooltipOnClick",
+				"disabled",
+				"loading",
+			],
 		},
 	},
 } satisfies Meta<typeof IconButton>;

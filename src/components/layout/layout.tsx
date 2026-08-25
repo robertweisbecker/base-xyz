@@ -4,12 +4,7 @@ import type { StyleXStyles } from "@stylexjs/stylex";
 import type { Ref } from "react";
 import { mergeStyle, type BaseStyleProps } from "@/styles/props/base";
 import { resolveChildLayout, type ChildLayoutProps } from "@/styles/props/child-layout.stylex";
-import {
-	displayStyles,
-	resolveFlexLayout,
-	type DisplayProps,
-	type FlexLayoutProps,
-} from "@/styles/props/flex.stylex";
+import { displayStyles, resolveFlexLayout, type DisplayProps, type FlexLayoutProps } from "@/styles/props/flex.stylex";
 import { resolveGridLayout, type GridLayoutProps } from "@/styles/props/grid.stylex";
 import { resolvePosition, type PositionProps } from "@/styles/props/position.stylex";
 import { resolveSizing, type SizingProps } from "@/styles/props/sizing.stylex";
@@ -89,7 +84,9 @@ function splitBoxStyleProps<T extends BoxStylePropsWithoutMargin>(props: T) {
 		color,
 		radius,
 		shadow,
-		border,
+		borderColor,
+		borderWidth,
+		borderStyle,
 		fontFamily,
 		fontSize,
 		fontWeight,
@@ -135,7 +132,9 @@ function splitBoxStyleProps<T extends BoxStylePropsWithoutMargin>(props: T) {
 			color,
 			radius,
 			shadow,
-			border,
+			borderColor,
+			borderWidth,
+			borderStyle,
 			fontFamily,
 			fontSize,
 			fontWeight,
@@ -157,14 +156,7 @@ function resolveBoxStyles(props: BoxStylePropsWithoutMargin): StyleXStyles[] {
 	];
 }
 
-export function Box({
-	className,
-	ref,
-	render,
-	style,
-	xstyle,
-	...props
-}: BoxProps) {
+export function Box({ className, ref, render, style, xstyle, ...props }: BoxProps) {
 	const { marginStyles, rest: propsWithoutMargin } = extractMarginProps(props);
 	const { styleProps, rest } = splitBoxStyleProps(propsWithoutMargin);
 	const sx = stylex.props(

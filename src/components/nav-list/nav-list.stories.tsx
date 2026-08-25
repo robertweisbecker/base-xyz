@@ -12,12 +12,13 @@ import { Drawer } from "@/components/drawer/drawer";
 import { Box } from "@/components/layout";
 import { Separator } from "@/components/separator/separator";
 import { tokens } from "@/theme/tokens.stylex";
-import { NavList, type NavListSize } from "./nav-list";
+import { NavList, type NavListIndentLevel, type NavListSize } from "./nav-list";
 
 type StoryArgs = {
 	size: NavListSize;
 	current: "overview" | "deployments" | "members";
 	disabled: boolean;
+	indentLevel: NavListIndentLevel;
 	_icon: "House" | "Cube" | "None";
 };
 
@@ -27,12 +28,14 @@ const meta = {
 		size: "md",
 		current: "overview",
 		disabled: false,
+		indentLevel: 0,
 		_icon: "House",
 	},
 	argTypes: {
 		size: { control: "select", options: ["sm", "md"] },
 		current: { control: "select", options: ["overview", "deployments", "members"] },
 		disabled: { control: "boolean" },
+		indentLevel: { control: "inline-radio", options: [0, 1] },
 		_icon: { control: "select", options: ["House", "Cube", "None"] },
 	},
 } satisfies Meta<StoryArgs>;
@@ -47,7 +50,7 @@ const icons = {
 } as const;
 
 export const Playground: Story = {
-	render: ({ size, current, disabled, _icon }) => (
+	render: ({ size, current, disabled, indentLevel, _icon }) => (
 		<Box height="28rem" p={3} radius="lg" xstyle={storyParts.frame} width="18rem">
 			<NavList.Root aria-label="Project navigation" size={size}>
 				<NavList.Section label="Project">
@@ -61,6 +64,7 @@ export const Playground: Story = {
 						label="Deployments"
 						href="#deployments"
 						icon={<CubeIcon weight="duotone" />}
+						indentLevel={indentLevel}
 						current={current === "deployments" ? "page" : false}
 						badge={<Badge size="sm">12</Badge>}
 					/>
@@ -83,12 +87,14 @@ export const Examples: Story = {
 			<NavList.Root aria-label="Workspace navigation">
 				<NavList.Section label="Main">
 					<NavList.Item label="Overview" href="#overview" icon={<HouseIcon weight="duotone" />} current="page" />
+					<NavList.Item label="Deploy" href="#deploy" icon={<CubeIcon weight="duotone" />} />
 					<NavList.Item
 						label="Deployments"
 						href="#deployments"
-						icon={<CubeIcon weight="duotone" />}
+						indentLevel={1}
 						badge={<Badge size="sm">4</Badge>}
 					/>
+					<NavList.Item label="Workers" href="#workers" indentLevel={1} />
 					<NavList.Item label="Current location" href="#location" current="location" />
 					<NavList.Item label="Disabled link" href="#disabled" disabled />
 				</NavList.Section>

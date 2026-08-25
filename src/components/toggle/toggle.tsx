@@ -17,15 +17,7 @@ import { toggleGroupMarker, toggleGroupStyles, toggleJoinStyles, toggleMarker } 
 
 type ToggleBaseProps = Omit<
 	BaseToggle.Props,
-	| "children"
-	| "className"
-	| "color"
-	| "height"
-	| "nativeButton"
-	| "render"
-	| "style"
-	| "width"
-	| keyof MarginProps
+	"children" | "className" | "color" | "height" | "nativeButton" | "render" | "style" | "width" | keyof MarginProps
 > &
 	MarginProps &
 	BaseStyleProps & {
@@ -48,12 +40,12 @@ export type ToggleButtonProps = ToggleBaseProps & {
 	shape?: ButtonShape;
 };
 
-/** Icon-only toggle rendered as `IconButton` — square control sizing and required accessible `label`. */
+/** Icon-only toggle rendered as `IconButton` with square control sizing. */
 export type ToggleIconButtonProps = ToggleBaseProps & {
 	children?: never;
 	/** Icon shown in the icon-only configuration. */
 	icon: ReactNode;
-	/** Accessible name for the icon-only configuration. */
+	/** Visible tooltip text and the fallback accessible name. */
 	label: string;
 	startSlot?: never;
 	shape?: Extract<ButtonShape, "circle" | "square">;
@@ -166,6 +158,7 @@ function ToggleAsIconButton({
 
 				return (
 					<IconButton
+						closeTooltipOnClick={false}
 						{...iconButtonProps}
 						className={attrJoin(toggleStyleProps.className, className)}
 						icon={resolvePressedSlot(state.pressed, icon, pressedIcon)}
@@ -194,12 +187,7 @@ export function ToggleGroup({
 	...props
 }: ToggleGroupProps) {
 	const { marginStyles, rest } = extractMarginProps(props);
-	const sx = stylex.props(
-		toggleGroupMarker,
-		toggleGroupStyles.root,
-		marginStyles,
-		xstyle,
-	);
+	const sx = stylex.props(toggleGroupMarker, toggleGroupStyles.root, marginStyles, xstyle);
 
 	return (
 		<BaseToggleGroup

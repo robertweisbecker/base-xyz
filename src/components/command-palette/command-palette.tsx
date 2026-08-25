@@ -118,17 +118,17 @@ export type CommandPaletteRootProps<ItemValue> = Omit<
 	"children" | "inline" | "keepHighlight" | "onOpenChange" | "open"
 > &
 	BaseStyleProps & {
-	children: ReactNode;
-	className?: string;
-	closeOnSelect?: boolean;
-	defaultOpen?: boolean;
-	inline?: boolean;
-	label?: string;
-	onOpenChange?: (open: boolean) => void;
-	open?: boolean;
-	shortcut?: boolean;
-	trigger?: ReactElement;
-};
+		children: ReactNode;
+		className?: string;
+		closeOnSelect?: boolean;
+		defaultOpen?: boolean;
+		inline?: boolean;
+		label?: string;
+		onOpenChange?: (open: boolean) => void;
+		open?: boolean;
+		shortcut?: boolean;
+		trigger?: ReactElement;
+	};
 
 export type CommandPaletteTriggerProps = Omit<ButtonProps, "children"> & {
 	children?: ReactNode;
@@ -302,13 +302,7 @@ export function Input({
 	);
 }
 
-export function List({
-	children,
-	className,
-	style,
-	xstyle,
-	...props
-}: CommandPaletteListProps) {
+export function List({ children, className, style, xstyle, ...props }: CommandPaletteListProps) {
 	const sx = stylex.props(commandPaletteParts.list, commandPaletteParts.listContent, xstyle);
 
 	return (
@@ -433,7 +427,14 @@ export function Empty({
 	);
 }
 
-export function Loading({ ref, children = "Loading…", className, style, xstyle, ...props }: CommandPaletteLoadingProps) {
+export function Loading({
+	ref,
+	children = "Loading…",
+	className,
+	style,
+	xstyle,
+	...props
+}: CommandPaletteLoadingProps) {
 	const sx = stylex.props(commandPaletteParts.loading, xstyle);
 
 	return (
@@ -472,7 +473,7 @@ const commandPaletteParts = stylex.create({
 	},
 	popup: {
 		padding: 0,
-		borderRadius: tokens["--radius-xl"],
+		borderRadius: tokens["--radius-lg"],
 		overflow: "hidden",
 		backgroundColor: tokens["--panel"],
 		boxShadow: {

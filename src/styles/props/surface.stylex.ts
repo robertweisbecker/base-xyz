@@ -127,37 +127,56 @@ export const boxShadowStyles = stylex.create({
 
 export type ShadowValue = keyof typeof boxShadowStyles;
 
-export const borderStyles = stylex.create({
+export const borderColorStyles = stylex.create({
 	border: {
 		borderColor: tokens["--border"],
 		borderStyle: "solid",
-		borderWidth: "1px",
+		borderWidth: 1,
 	},
 	borderInput: {
 		borderColor: tokens["--border-input"],
 		borderStyle: "solid",
-		borderWidth: "1px",
+		borderWidth: 1,
 	},
 	borderInputHover: {
 		borderColor: tokens["--border-input-hover"],
 		borderStyle: "solid",
-		borderWidth: "1px",
+		borderWidth: 1,
 	},
 	borderDisabled: {
 		borderColor: tokens["--border-disabled"],
 		borderStyle: "solid",
-		borderWidth: "1px",
+		borderWidth: 1,
 	},
 });
 
-export type BorderValue = keyof typeof borderStyles;
+export const borderStyleStyles = stylex.create({
+	solid: { borderStyle: "solid", borderWidth: 1 },
+	dashed: { borderStyle: "dashed", borderWidth: 1 },
+	dotted: { borderStyle: "dotted", borderWidth: 1 },
+	double: { borderStyle: "double", borderWidth: 1 },
+	groove: { borderStyle: "groove", borderWidth: 1 },
+	ridge: { borderStyle: "ridge", borderWidth: 1 },
+	inset: { borderStyle: "inset", borderWidth: 1 },
+	outset: { borderStyle: "outset", borderWidth: 1 },
+});
+
+const dynamicBorderStyles = stylex.create({
+	width: (borderWidth: number | string) => ({ borderWidth }),
+});
+
+export type BorderColorValue = keyof typeof borderColorStyles;
+export type BorderWidthValue = number | string;
+export type BorderStyleValue = "solid" | "dashed" | "dotted" | "double" | "groove" | "ridge" | "inset" | "outset";
 
 export type SurfaceProps = {
 	bg?: SemanticColor;
 	color?: SemanticColor;
 	radius?: RadiusValue;
 	shadow?: ShadowValue;
-	border?: BorderValue;
+	borderColor?: BorderColorValue;
+	borderWidth?: BorderWidthValue;
+	borderStyle?: BorderStyleValue;
 };
 
 export function resolveSurface(props: SurfaceProps): StyleXStyles[] {
@@ -166,6 +185,8 @@ export function resolveSurface(props: SurfaceProps): StyleXStyles[] {
 	if (props.bg !== undefined) styles.push(backgroundColorStyles[props.bg]);
 	if (props.radius !== undefined) styles.push(borderRadiusStyles[props.radius]);
 	if (props.shadow !== undefined) styles.push(boxShadowStyles[props.shadow]);
-	if (props.border !== undefined) styles.push(borderStyles[props.border]);
+	if (props.borderColor !== undefined) styles.push(borderColorStyles[props.borderColor]);
+	if (props.borderStyle !== undefined) styles.push(borderStyleStyles[props.borderStyle]);
+	if (props.borderWidth !== undefined) styles.push(dynamicBorderStyles.width(props.borderWidth));
 	return styles;
 }

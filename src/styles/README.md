@@ -45,17 +45,17 @@ module. There is intentionally no style-prop barrel.
 
 ## Style-prop modules
 
-| Module | Contract | Ownership |
-| --- | --- | --- |
-| `spacing.stylex.ts` | `SpaceValue`, spacing prop groups, edge resolution, `extractMarginProps` | Common margins plus broad-gateway spacing |
-| `sizing.stylex.ts` | `SizingProps` and dimension resolvers | Broad gateway only |
-| `position.stylex.ts` | `PositionProps`, spacing-backed/CSS-value insets, open `zIndex` | Broad gateway only |
-| `child-layout.stylex.ts` | Self-alignment and flex/grid child claims | Broad gateway only |
-| `flex.stylex.ts` | Display and Stack flow | Broad gateway only |
-| `grid.stylex.ts` | Grid flow and spans | Broad gateway only |
-| `surface.stylex.ts` | Semantic background, color, radius, shadow, border | Broad gateway only |
-| `typography.stylex.ts` | Generic typography maps | Broad gateway; Text/Heading select only their semantic subset |
-| `base.ts` | `BaseStyleProps`, `mergeStyle` | Shared `style`/`xstyle` contract and native-style precedence |
+| Module                   | Contract                                                                 | Ownership                                                     |
+| ------------------------ | ------------------------------------------------------------------------ | ------------------------------------------------------------- |
+| `spacing.stylex.ts`      | `SpaceValue`, spacing prop groups, edge resolution, `extractMarginProps` | Common margins plus broad-gateway spacing                     |
+| `sizing.stylex.ts`       | `SizingProps` and dimension resolvers                                    | Broad gateway only                                            |
+| `position.stylex.ts`     | `PositionProps`, spacing-backed/CSS-value insets, open `zIndex`          | Broad gateway only                                            |
+| `child-layout.stylex.ts` | Self-alignment and flex/grid child claims                                | Broad gateway only                                            |
+| `flex.stylex.ts`         | Display and Stack flow                                                   | Broad gateway only                                            |
+| `grid.stylex.ts`         | Grid flow and spans                                                      | Broad gateway only                                            |
+| `surface.stylex.ts`      | Semantic background, color, radius, shadow, border                       | Broad gateway only                                            |
+| `typography.stylex.ts`   | Generic typography maps                                                  | Broad gateway; Text/Heading select only their semantic subset |
+| `base.ts`                | `BaseStyleProps`, `mergeStyle`                                           | Shared `style`/`xstyle` contract and native-style precedence  |
 
 `SpaceStep` is an explicit finite numeric union. Numeric margin, padding, gap,
 and inset values map to stable spacing tokens; negative values subtract the
@@ -77,13 +77,7 @@ export function Button({ className, style, xstyle, ...props }: ButtonProps) {
 	const { marginStyles, rest } = extractMarginProps(props);
 	const sx = stylex.props(buttonParts.root, marginStyles, xstyle);
 
-	return (
-		<BaseButton
-			className={attrJoin(sx.className, className)}
-			style={mergeStyle(sx.style, style)}
-			{...rest}
-		/>
-	);
+	return <BaseButton className={attrJoin(sx.className, className)} style={mergeStyle(sx.style, style)} {...rest} />;
 }
 ```
 
@@ -200,7 +194,7 @@ stylex.props(fieldInputStyles.md, focusRing.inset); // text field
 stylex.props(fieldControlStyles.md, selectParts.trigger, focusRing.inset); // select trigger
 ```
 
-Use granular exports (`fieldStyles.inputBase`, `fieldTextStyles`, …) only when
+Use granular exports (`fieldStyles.input`, `fieldTextStyles`, …) only when
 the control shape is irregular (number field, input group, combobox with chips).
 
 ### Modal composition
@@ -304,11 +298,7 @@ const styles = stylex.create({
 	wide: { paddingInline: "2rem" },
 });
 
-<Button
-	xstyle={[styles.wide, x.width["100%"], pending && x.opacity["0.5"]]}
->
-	Save
-</Button>;
+<Button xstyle={[styles.wide, x.width["100%"], pending && x.opacity["0.5"]]}>Save</Button>;
 ```
 
 ### Component markers
@@ -317,14 +307,14 @@ Named component markers expose intentional `stylex.when` boundaries. Import
 them directly from their owning `.stylex.ts` module; they are not default
 markers and are not re-exported through component barrels.
 
-| Marker         | Owner                                      | Applied to                                                                 |
-| -------------- | ------------------------------------------ | -------------------------------------------------------------------------- |
-| `buttonMarker` | `components/button/button.stylex.ts`       | Button, IconButton, and shared Button-root controls                        |
-| `fieldMarker`  | `components/field/field.stylex.ts`         | Field roots observed by descendant form-control styles                     |
-| `itemMarker`   | `components/menu/menu-item.stylex.ts`      | Menu rows and components composing the canonical row, including Select, Combobox, and Autocomplete items |
-| `labelMarker`  | `components/field/field.stylex.ts`         | Label elements associated with form controls                              |
-| `toggleMarker` | `components/toggle/toggle.stylex.ts`       | Toggle controls observed by joined-group sibling and ancestor rules       |
-| `toggleGroupMarker` | `components/toggle/toggle.stylex.ts`  | ToggleGroup roots that opt into join radius and stacking                  |
+| Marker              | Owner                                 | Applied to                                                                                               |
+| ------------------- | ------------------------------------- | -------------------------------------------------------------------------------------------------------- |
+| `buttonMarker`      | `components/button/button.stylex.ts`  | Button, IconButton, and shared Button-root controls                                                      |
+| `fieldMarker`       | `components/field/field.stylex.ts`    | Field roots observed by descendant form-control styles                                                   |
+| `itemMarker`        | `components/menu/menu-item.stylex.ts` | Menu rows and components composing the canonical row, including Select, Combobox, and Autocomplete items |
+| `labelMarker`       | `components/field/field.stylex.ts`    | Label elements associated with form controls                                                             |
+| `toggleMarker`      | `components/toggle/toggle.stylex.ts`  | Toggle controls observed by joined-group sibling and ancestor rules                                      |
+| `toggleGroupMarker` | `components/toggle/toggle.stylex.ts`  | ToggleGroup roots that opt into join radius and stacking                                                 |
 
 ```tsx
 import * as stylex from "@stylexjs/stylex";

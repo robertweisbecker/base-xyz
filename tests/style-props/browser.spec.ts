@@ -55,6 +55,18 @@ test("margin, padding, gap, and inset props accept CSS values", async ({ page })
 	await expect(page.getByTestId("css-inset")).toHaveCSS("top", "11px");
 });
 
+test("border styles provide a default width while borderWidth remains the final override", async ({ page }) => {
+	await openFixture(page);
+
+	const defaultBorder = page.getByTestId("border-style-default");
+	await expect(defaultBorder).toHaveCSS("border-top-style", "dashed");
+	await expect(defaultBorder).toHaveCSS("border-top-width", "1px");
+
+	const overriddenBorder = page.getByTestId("border-width-override");
+	await expect(overriddenBorder).toHaveCSS("border-top-style", "dashed");
+	await expect(overriddenBorder).toHaveCSS("border-top-width", "5px");
+});
+
 test("theme overrides, xstyle, and native style follow the declared precedence", async ({ page }) => {
 	await openFixture(page);
 
