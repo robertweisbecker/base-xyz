@@ -9,6 +9,7 @@ import { Button } from "@/components/button/button";
 import { Card, type CardSize, type CardVariant } from "./card";
 
 const sizes = ["sm", "md", "lg"] as const;
+const variants = ["elevated", "outline", "muted"] as const;
 
 const meta = {
 	title: "Components/Card",
@@ -20,7 +21,7 @@ const meta = {
 	argTypes: {
 		variant: {
 			control: "inline-radio",
-			options: ["elevated", "outline"],
+			options: variants,
 		},
 		size: {
 			control: "inline-radio",
@@ -75,7 +76,7 @@ export const Variants: Story = {
 	},
 	render: () => (
 		<Grid align="start" gap={4} xstyle={styles.cards}>
-			{(["elevated", "outline"] as const).map((variant) => (
+			{variants.map((variant) => (
 				<Stack align="start" gap={2} key={variant}>
 					<Text size="1" color="muted">
 						{variant}

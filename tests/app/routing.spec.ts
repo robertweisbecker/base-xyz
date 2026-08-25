@@ -1,9 +1,17 @@
-import { expect, test, type Locator } from "@playwright/test";
+import { expect, test, type Locator, type Page } from "@playwright/test";
+
+const consoleErrorsByPage = new WeakMap<Page, string[]>();
 
 test.beforeEach(({ page }) => {
+	const consoleErrors: string[] = [];
+	consoleErrorsByPage.set(page, consoleErrors);
 	page.on("console", (message) => {
-		if (message.type() === "error") throw new Error(`Browser console error: ${message.text()}`);
+		if (message.type() === "error") consoleErrors.push(message.text());
 	});
+});
+
+test.afterEach(({ page }) => {
+	expect(consoleErrorsByPage.get(page)).toEqual([]);
 });
 
 test("keeps the component Gallery at the landing page", async ({ page }) => {
@@ -20,6 +28,7 @@ test("supports direct navigation to a separate experiments page", async ({ page 
 
 	await expect(page).toHaveURL(/\/experiments\?theme=mp&mode=dark$/);
 	await expect(page.getByRole("heading", { name: "Experiments", level: 1 })).toBeVisible();
+	expect(await page.getByRole("combobox", { name: "Theme" }).evaluate((element) => element.closest("span"))).toBeNull();
 	await expect(page.getByRole("link", { name: "Experiments" })).toHaveAttribute("aria-current", "page");
 	await expect(page.getByRole("navigation", { name: "Experiments" })).toBeVisible();
 	await expect(page.getByRole("group", { name: "Blocks" })).toBeVisible();
@@ -179,7 +188,7 @@ test("provides a Blocks index with cards for each subpage", async ({ page }) => 
 	const tableOfContentsBox = await onThisPage.boundingBox();
 	const firstExampleBox = await page.locator("#agent-action-approval").boundingBox();
 	expect(tableOfContentsBox?.x).toBeGreaterThan(firstExampleBox?.x ?? 0);
-	await expect(page.locator("main section[id] > div > h2")).toHaveText([
+	await expect(page.locator("main section > div > h2[id]")).toHaveText([
 		"Agent Action Approval",
 		"Async Job Progress",
 		"Context Popover",
@@ -190,13 +199,20 @@ test("provides a Blocks index with cards for each subpage", async ({ page }) => 
 	]);
 	await expect(page.getByRole("textbox", { name: "Message" })).toBeVisible();
 	await expect(page.getByRole("button", { name: /5\.6 Sol/ })).toBeVisible();
+	const firstAgentHeading = page.getByRole("heading", { name: "Agent Action Approval", level: 2 });
+	await expect(firstAgentHeading).toHaveAttribute("id", "agent-action-approval");
+	expect(await firstAgentHeading.evaluate((element) => getComputedStyle(element).scrollMarginBlockStart)).not.toBe("0px");
 	await expect(page.getByText("Allow this action?")).toBeVisible();
 	await expect(page.getByText("Build the component search index")).toBeVisible();
 	await expect(page.getByRole("article", { name: "Component audit response" })).toBeVisible();
 	await page.getByRole("group", { name: "Job state" }).getByRole("button", { name: "Error" }).click();
-	await expect(page.locator("#async-job-progress").getByRole("status")).toContainText("Failed");
+	await expect(page.locator("#async-job-progress").locator("xpath=ancestor::section").getByRole("status")).toContainText(
+		"Failed",
+	);
 	await page.getByRole("group", { name: "Response state" }).getByRole("button", { name: "Error" }).click();
-	await expect(page.locator("#streaming-response").getByRole("status")).toContainText("Response failed");
+	await expect(page.locator("#streaming-response").locator("xpath=ancestor::section").getByRole("status")).toContainText(
+		"Response failed",
+	);
 });
 
 test("provides a Components index with cards for each subpage", async ({ page }) => {
@@ -207,6 +223,26 @@ test("provides a Components index with cards for each subpage", async ({ page })
 	await expect(page.getByRole("main").getByRole("link", { name: /Inputs/ })).toBeVisible();
 	await expect(page.getByRole("main").getByRole("link", { name: /Popups/ })).toBeVisible();
 	await expect(page.getByRole("main").getByRole("link", { name: /Tables/ })).toBeVisible();
+});
+
+test("stacks experiment index cards in a single mobile column", async ({ page }) => {
+	await page.setViewportSize({ width: 390, height: 844 });
+	await page.goto("/experiments/components");
+
+	const cards = page.locator("[data-experiment-index-grid]").getByRole("link");
+	const cardBoxes = await cards.evaluateAll((elements) =>
+		elements.map((element) => {
+			const { x, y, width } = element.getBoundingClientRect();
+			return { x, y, width };
+		}),
+	);
+
+	expect(cardBoxes).toHaveLength(3);
+	expect(cardBoxes[1]?.x).toBe(cardBoxes[0]?.x);
+	expect(cardBoxes[2]?.x).toBe(cardBoxes[0]?.x);
+	expect(cardBoxes[1]?.y).toBeGreaterThan(cardBoxes[0]?.y ?? 0);
+	expect(cardBoxes[2]?.y).toBeGreaterThan(cardBoxes[1]?.y ?? 0);
+	expect(cardBoxes[0]?.width).toBeGreaterThan(300);
 });
 
 test("provides plain popup triggers with representative content and behaviors", async ({ page }) => {

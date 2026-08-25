@@ -15,7 +15,7 @@ type StyledPartProps<T> = Omit<T, "className" | "style" | "xstyle"> &
 		className?: string;
 	};
 
-export type CardVariant = "elevated" | "outline";
+export type CardVariant = "elevated" | "muted" | "outline";
 export type CardSize = keyof typeof cardSizeVariants;
 
 export type CardRootProps = Omit<StyledPartProps<useRender.ComponentProps<"div">>, "render" | keyof MarginProps> &

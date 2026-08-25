@@ -6,7 +6,6 @@ import * as stylex from "@stylexjs/stylex";
 import { useLayoutEffect, useState } from "react";
 import { IconButton, Select, Separator } from "@/components";
 import { textStyles } from "@/components/text/text.stylex";
-import { Text } from "@/components/text";
 import { zIndex } from "@/styles/constants.stylex";
 import { focusRing } from "@/styles/recipes/focus";
 import { parseModeFromSearchParams, parseThemeFromSearchParams, syncAppThemeUrl } from "@/theme/app-theme-url";
@@ -89,26 +88,24 @@ function AppHeader({
 					</RouterLink>
 				</nav>
 				<Separator orientation="vertical" />
-				<Text size={"1"} render={<span />}>
-					<Select.Root<ThemeName>
-						size="sm"
-						value={theme}
-						items={themeBrandItems}
-						onValueChange={(value) => {
-							if (value) onThemeChange(value);
-						}}>
-						<Select.Trigger aria-label="Theme" variant="inline" />
-						<Select.Popup>
-							<Select.List>
-								{themeBrandItems.map((item) => (
-									<Select.Item key={item.value} value={item.value}>
-										{item.label}
-									</Select.Item>
-								))}
-							</Select.List>
-						</Select.Popup>
-					</Select.Root>
-				</Text>
+				<Select.Root<ThemeName>
+					size="sm"
+					value={theme}
+					items={themeBrandItems}
+					onValueChange={(value) => {
+						if (value) onThemeChange(value);
+					}}>
+					<Select.Trigger aria-label="Theme" variant="inline" />
+					<Select.Popup>
+						<Select.List>
+							{themeBrandItems.map((item) => (
+								<Select.Item key={item.value} value={item.value}>
+									{item.label}
+								</Select.Item>
+							))}
+						</Select.List>
+					</Select.Popup>
+				</Select.Root>
 				<IconButton
 					icon={
 						<span {...stylex.props(styles.themeIcon)}>

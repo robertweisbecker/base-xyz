@@ -25,7 +25,7 @@ export type CalloutProps = Omit<
 		/** Decorative leading visual. */
 		icon?: ReactNode;
 		hue?: CalloutHue;
-		/** Visible h2 content. A semantic fallback is rendered when omitted. */
+		/** Visible h2 content. Alerts render a semantic fallback heading when omitted. */
 		title?: ReactNode;
 		variant?: CalloutVariant;
 	};

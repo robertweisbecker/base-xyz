@@ -20,6 +20,7 @@ export const textBaseStyles = stylex.create({
 	root: {
 		margin: 0,
 		boxSizing: "border-box",
+		scrollMarginBlockStart: "1lh",
 	},
 });
 

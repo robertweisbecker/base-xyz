@@ -1,7 +1,7 @@
 import { Link as RouterLink } from "@tanstack/react-router";
 import * as stylex from "@stylexjs/stylex";
 import { Card, Grid } from "@/components";
-import { media } from "@/styles/constants.stylex";
+import { breakpoints, media } from "@/styles/constants.stylex";
 import { focusRing } from "@/styles/recipes/focus";
 import { tokens } from "@/theme/tokens.stylex";
 import { ExperimentPage } from "./experiment-page";
@@ -18,7 +18,7 @@ export function ExperimentIndexPage({
 }) {
 	return (
 		<ExperimentPage description={description} title={title}>
-			<Grid gap={4} columns={3}>
+			<Grid data-experiment-index-grid gap={4} xstyle={styles.grid}>
 				{items.map((item) => (
 					<Card.Root
 						key={item.to}
@@ -39,9 +39,12 @@ export function ExperimentIndexPage({
 }
 
 const styles = stylex.create({
-	// grid: {
-	// 	gridTemplateColumns: "repeat(auto-fit, minmax(min(16rem, 100%), 1fr))",
-	// },
+	grid: {
+		gridTemplateColumns: {
+			default: "minmax(0, 1fr)",
+			[breakpoints.md]: "repeat(3, minmax(0, 1fr))",
+		},
+	},
 	link: {
 		borderRadius: tokens["--radius-lg"],
 		textDecoration: "none",

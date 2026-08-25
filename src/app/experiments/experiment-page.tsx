@@ -87,9 +87,9 @@ export function ExperimentSection({
 	title: string;
 }) {
 	return (
-		<Stack gap={5} render={<section />} id={id}>
+		<Stack aria-labelledby={id} gap={5} render={<section />}>
 			<Stack gap={1}>
-				<Heading size="3" render={<h2 />}>
+				<Heading id={id} size="3" render={<h2 />}>
 					{title}
 				</Heading>
 				{description ? (
@@ -104,7 +104,6 @@ export function ExperimentSection({
 				gap={5}
 				radius="md"
 				render={<div />}
-				borderWidth="sm"
 				borderColor="border"
 				p={5}>
 				{children}

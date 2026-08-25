@@ -40,12 +40,12 @@ export type ToggleButtonProps = ToggleBaseProps & {
 	shape?: ButtonShape;
 };
 
-/** Icon-only toggle rendered as `IconButton` — square control sizing and required accessible `label`. */
+/** Icon-only toggle rendered as `IconButton` with square control sizing. */
 export type ToggleIconButtonProps = ToggleBaseProps & {
 	children?: never;
 	/** Icon shown in the icon-only configuration. */
 	icon: ReactNode;
-	/** Accessible name for the icon-only configuration. */
+	/** Visible tooltip text and the fallback accessible name. */
 	label: string;
 	startSlot?: never;
 	shape?: Extract<ButtonShape, "circle" | "square">;

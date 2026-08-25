@@ -390,9 +390,10 @@ export type ButtonProps = Omit<BaseButton.Props, "className" | "color" | "style"
 
 export type IconButtonProps = Omit<
 	ButtonProps,
-	"aria-label" | "children" | "endSlot" | "loadingText" | "shape" | "startSlot"
+	"children" | "endSlot" | "loadingText" | "shape" | "startSlot"
 > & {
 	icon: ReactNode;
+	/** Visible tooltip text and the fallback accessible name. */
 	label: string;
 	shape?: Extract<ButtonShape, "circle" | "square">;
 	/** Visible tooltip text. Defaults to `label`; use `false` to disable it. */
@@ -412,12 +413,13 @@ export function Button(props: ButtonProps) {
 export function IconButton({
 	icon,
 	label,
+	"aria-label": ariaLabel,
 	closeTooltipOnClick = true,
 	shape = "square",
 	tooltip = label,
 	...props
 }: IconButtonProps) {
-	const button = <ButtonRoot {...props} aria-label={label} iconOnly shape={shape} startSlot={icon} />;
+	const button = <ButtonRoot {...props} aria-label={ariaLabel ?? label} iconOnly shape={shape} startSlot={icon} />;
 
 	if (tooltip === false) {
 		return button;
