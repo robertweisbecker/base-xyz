@@ -34,7 +34,7 @@ export const Examples: Story = {
 						<Breadcrumbs.Current>base-stylex-lab</Breadcrumbs.Current>
 					</Breadcrumbs.Root>
 				}
-				metadata={
+				titleAddon={
 					<Badge hue="neutral" startSlot={<LockIcon aria-hidden weight="fill" />}>
 						Private
 					</Badge>
@@ -49,7 +49,7 @@ export const Examples: Story = {
 						</Button>
 					</>
 				}
-				navigation={
+				navSlot={
 					<Tabs.Root defaultValue="code" size="sm">
 						<Tabs.List aria-label="Repository sections">
 							<Tabs.Tab value="code">Code</Tabs.Tab>
@@ -79,7 +79,7 @@ export const Examples: Story = {
 						New pull request
 					</Button>
 				}
-				navigation={
+				navSlot={
 					<Tabs.Root defaultValue="open" size="sm">
 						<Tabs.List aria-label="Pull request states">
 							<Tabs.Tab value="open">Open</Tabs.Tab>

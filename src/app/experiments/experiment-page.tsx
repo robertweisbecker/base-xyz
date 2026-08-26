@@ -19,12 +19,12 @@ export function ExperimentPage({
 		<Stack gap={8} pb={10}>
 			<PageHeader
 				breadcrumbs={
-					<Breadcrumbs.Root size="sm">
+					<Breadcrumbs.Root>
 						{breadcrumbs.map((breadcrumb, index) => {
 							const current = index === breadcrumbs.length - 1;
 
 							return (
-								<Fragment key={breadcrumb.href}>
+								<Fragment key={JSON.stringify(breadcrumb.label)}>
 									{current ? (
 										<Breadcrumbs.Current>{breadcrumb.label}</Breadcrumbs.Current>
 									) : (
@@ -87,9 +87,9 @@ export function ExperimentSection({
 	title: string;
 }) {
 	return (
-		<Stack aria-labelledby={id} gap={5} render={<section />}>
+		<Stack aria-labelledby={id} gap={5} render={<section />} my={5}>
 			<Stack gap={1}>
-				<Heading id={id} size="3" render={<h2 />}>
+				<Heading id={id} size="6" render={<h2 />}>
 					{title}
 				</Heading>
 				{description ? (
@@ -98,14 +98,7 @@ export function ExperimentSection({
 					</Text>
 				) : null}
 			</Stack>
-			<Stack
-				bg="surfaceSubtle"
-				orientation="vertical"
-				gap={5}
-				radius="md"
-				render={<div />}
-				borderColor="border"
-				p={5}>
+			<Stack bg="grayA1" orientation="vertical" gap={5} radius="md" render={<div />} p={5}>
 				{children}
 			</Stack>
 		</Stack>

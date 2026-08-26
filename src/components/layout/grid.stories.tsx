@@ -16,9 +16,14 @@ const meta = {
 		flow: { control: "select", options: ["row", "column", "dense", "row dense", "column dense"] },
 		gap: { control: "select", options: [0, 1, 2, 3, 4, 5, 6, 8] },
 		justify: { control: "select", options: ["start", "center", "end", "stretch"] },
+		placeContent: {
+			control: "select",
+			options: ["start", "center", "end", "stretch", "space-between", "space-around", "space-evenly"],
+		},
+		placeItems: { control: "select", options: ["start", "center", "end", "stretch", "baseline"] },
 	},
 	parameters: {
-		controls: { include: ["align", "columns", "flow", "gap", "justify"] },
+		controls: { include: ["align", "columns", "flow", "gap", "justify", "placeContent", "placeItems"] },
 	},
 	render: (args) => (
 		<Grid {...args}>

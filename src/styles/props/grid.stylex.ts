@@ -74,19 +74,45 @@ export type GridSpan = keyof typeof gridColumnSpanStyles;
 
 export type JustifyItemsValue = keyof typeof justifyItemsStyles;
 
+export const placeContentStyles = stylex.create({
+	start: { placeContent: "start" },
+	center: { placeContent: "center" },
+	end: { placeContent: "end" },
+	stretch: { placeContent: "stretch" },
+	"space-between": { placeContent: "space-between" },
+	"space-around": { placeContent: "space-around" },
+	"space-evenly": { placeContent: "space-evenly" },
+});
+
+export type PlaceContentValue = keyof typeof placeContentStyles;
+
+export const placeItemsStyles = stylex.create({
+	start: { placeItems: "start" },
+	center: { placeItems: "center" },
+	end: { placeItems: "end" },
+	stretch: { placeItems: "stretch" },
+	baseline: { placeItems: "baseline" },
+});
+
+export type PlaceItemsValue = keyof typeof placeItemsStyles;
+
 export type GridLayoutProps = GapProps & {
 	columns?: GridColumns;
 	flow?: GridFlow;
 	align?: AlignValue;
 	justify?: JustifyItemsValue;
+	placeContent?: PlaceContentValue;
+	placeItems?: PlaceItemsValue;
 };
 
 export function resolveGridLayout(
-	props: Pick<GridLayoutProps, "columns" | "flow" | "align" | "justify">,
+	props: Pick<GridLayoutProps, "columns" | "flow" | "align" | "justify" | "placeContent" | "placeItems">,
 ): StyleXStyles[] {
 	const styles: StyleXStyles[] = [];
 	if (props.columns !== undefined) styles.push(gridTemplateColumnsStyles[props.columns]);
 	if (props.flow !== undefined) styles.push(gridAutoFlowStyles[props.flow]);
+	if (props.placeContent !== undefined) styles.push(placeContentStyles[props.placeContent]);
+	if (props.placeItems !== undefined) styles.push(placeItemsStyles[props.placeItems]);
 	if (props.align !== undefined) styles.push(alignItemsStyles[props.align]);
 	if (props.justify !== undefined) styles.push(justifyItemsStyles[props.justify]);
 	return styles;

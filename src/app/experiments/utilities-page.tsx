@@ -1,8 +1,9 @@
 import { GitForkIcon } from "@phosphor-icons/react/dist/csr/GitFork";
-import { LinkIcon } from "@phosphor-icons/react/dist/csr/Link";
 import { LockIcon } from "@phosphor-icons/react/dist/csr/Lock";
+import { RocketLaunchIcon } from "@phosphor-icons/react/dist/csr/RocketLaunch";
 import { ConfirmationDialog, CopyButton, PageHeader, PasswordField, WorkflowProgress } from "@/blocks";
-import { Badge, Button, Stack, Text } from "@/components";
+import { Badge, Box, Button, Icon, Stack, Tabs, Text } from "@/components";
+import { tokens } from "@/theme/tokens.stylex";
 import { ExperimentPage, ExperimentSection } from "./experiment-page";
 
 const passwordRequirements = [/.{12,}/, /[0-9]/, /[a-z]/, /[A-Z]/] as const;
@@ -52,18 +53,32 @@ export function UtilitiesPage() {
 				title="PageHeader">
 				<PageHeader
 					actions={
-						<Button size="sm" startSlot={<GitForkIcon aria-hidden weight="bold" />} variant="neutral">
-							Fork
+						<Button startSlot={<GitForkIcon aria-hidden />} variant="secondary">
+							Action
 						</Button>
 					}
 					description="React primitives and workflow blocks composed with Base UI and StyleX."
 					headingLevel={3}
-					metadata={
+					title="base-xyz"
+					startSlot={
+						<Box bg="elevated" height={8} placeContent="center" radius="md" width={8} shadow="sm" display="grid">
+							<Icon.StarFilled />
+						</Box>
+					}
+					navSlot={
+						<Tabs.Root>
+							<Tabs.List>
+								<Tabs.Tab value="overview">Overview</Tabs.Tab>
+								<Tabs.Tab value="settings">Settings</Tabs.Tab>
+							</Tabs.List>
+						</Tabs.Root>
+					}
+					endSlot={<Button variant="neutral">End slot</Button>}
+					titleAddon={
 						<Badge hue="neutral" startSlot={<LockIcon aria-hidden weight="fill" />}>
 							Private
 						</Badge>
 					}
-					title="base-stylex-lab"
 				/>
 			</ExperimentSection>
 
@@ -72,22 +87,23 @@ export function UtilitiesPage() {
 				title="Confirmation Dialog">
 				<Stack align="start">
 					<ConfirmationDialog.Root
-						trigger={<Button>Promote to production</Button>}
+						trigger={<Button>Confirm deploy</Button>}
 						successToast={{
 							title: "Deployment promoted",
 							description: "checkout-a11y.example.com is now serving production traffic.",
 						}}>
 						<ConfirmationDialog.Header>
-							<ConfirmationDialog.Visual>
-								<LinkIcon aria-hidden size={18} weight="duotone" />
+							<ConfirmationDialog.Visual color="accent" bg="accent" size={12} radius="full">
+								<RocketLaunchIcon aria-hidden size={24} weight="duotone" />
 							</ConfirmationDialog.Visual>
-							<ConfirmationDialog.Title>Promote this deployment?</ConfirmationDialog.Title>
+							<ConfirmationDialog.Title>Deploy branch</ConfirmationDialog.Title>
 							<ConfirmationDialog.Description>
-								Production traffic will move to the selected preview immediately.
+								Replacing a live deployment requires administrator approval. Confirm below.
 							</ConfirmationDialog.Description>
 						</ConfirmationDialog.Header>
 						<ConfirmationDialog.Body>
-							The current production deployment remains available for rollback from the deployment history.
+							Production traffic will move to the selected preview immediately. The current production deployment
+							remains available for rollback from the deployment history.
 						</ConfirmationDialog.Body>
 						<ConfirmationDialog.Footer>
 							<ConfirmationDialog.Actions>

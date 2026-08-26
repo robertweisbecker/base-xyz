@@ -345,8 +345,16 @@ function DepthAndMotionSection() {
 				<div {...stylex.props(styles.shadowGrid)}>
 					{[
 						{ name: 'tokens["--shadow-sm"]', usage: "Raised controls and compact cards", style: styles.shadowSmall },
-						{ name: 'tokens["--shadow-md"]', usage: "Menus, popovers, and floating panels", style: styles.shadowMedium },
-						{ name: 'tokens["--shadow-lg"]', usage: "Prominent previews and large overlays", style: styles.shadowLarge },
+						{
+							name: 'tokens["--shadow-md"]',
+							usage: "Menus, popovers, and floating panels",
+							style: styles.shadowMedium,
+						},
+						{
+							name: 'tokens["--shadow-lg"]',
+							usage: "Prominent previews and large overlays",
+							style: styles.shadowLarge,
+						},
 					].map((specimen) => (
 						<ShadowSpecimen key={specimen.name} {...specimen} />
 					))}
@@ -645,10 +653,30 @@ function MotionSpecimens() {
 			</div>
 			<div {...stylex.props(styles.motionRows)}>
 				{[
-					{ name: 'tokens["--motion-duration-quick"]', value: "120ms", usage: "Pressed and hover feedback", style: styles.motionQuick },
-					{ name: 'tokens["--motion-duration-short"]', value: "180ms", usage: "Menus and compact popups", style: styles.motionShort },
-					{ name: 'tokens["--motion-duration-medium"]', value: "250ms", usage: "Standard state transitions", style: styles.motionMedium },
-					{ name: 'tokens["--motion-duration-content"]', value: "350ms", usage: "Content entering or changing", style: styles.motionContent },
+					{
+						name: 'tokens["--motion-duration-quick"]',
+						value: "120ms",
+						usage: "Pressed and hover feedback",
+						style: styles.motionQuick,
+					},
+					{
+						name: 'tokens["--motion-duration-short"]',
+						value: "180ms",
+						usage: "Menus and compact popups",
+						style: styles.motionShort,
+					},
+					{
+						name: 'tokens["--motion-duration-medium"]',
+						value: "250ms",
+						usage: "Standard state transitions",
+						style: styles.motionMedium,
+					},
+					{
+						name: 'tokens["--motion-duration-content"]',
+						value: "350ms",
+						usage: "Content entering or changing",
+						style: styles.motionContent,
+					},
 				].map((specimen) => (
 					<MotionRow key={specimen.name} active={isPlaying} {...specimen} />
 				))}
@@ -738,9 +766,9 @@ const radiusTokens = [
 const layerTokens = [
 	{ name: "zIndex.base", value: "0", usage: "Normal content" },
 	{ name: "zIndex.sticky", value: "100", usage: "Sticky navigation" },
-	{ name: "zIndex.modalBackdropStyles", value: "200", usage: "Modal scrim" },
+	{ name: "zIndex.modalBackdrop", value: "200", usage: "Modal scrim" },
 	{ name: "zIndex.modal", value: "300", usage: "Modal content" },
-	{ name: "zIndex.alertBackdropStyles", value: "400", usage: "Nested alert scrim" },
+	{ name: "zIndex.alertBackdrop", value: "400", usage: "Nested alert scrim" },
 	{ name: "zIndex.alert", value: "500", usage: "Nested confirmation" },
 	{ name: "zIndex.popup", value: "600", usage: "Menus and popovers" },
 	{ name: "zIndex.tooltip", value: "700", usage: "Transient labels" },

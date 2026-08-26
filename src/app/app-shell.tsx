@@ -11,7 +11,7 @@ import { focusRing } from "@/styles/recipes/focus";
 import { ThemeProvider, useTheme, type ResolvedThemeMode, type ThemeMode, type ThemeName } from "@/theme";
 import { tokens } from "@/theme/tokens.stylex";
 
-const themeIconSize = 18;
+const themeIconSize = 16;
 const themeModeStorageKey = "base-stylex-theme";
 const themeBrandStorageKey = "base-stylex-theme-brand";
 

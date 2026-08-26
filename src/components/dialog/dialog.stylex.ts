@@ -77,13 +77,13 @@ export const modalChromeStyles = stylex.create({
 		},
 	},
 	modalBackdropLayer: {
-		zIndex: zIndex.modalBackdropStyles,
+		zIndex: zIndex.modalBackdrop,
 	},
 	modalLayer: {
 		zIndex: zIndex.modal,
 	},
 	alertBackdropLayer: {
-		zIndex: zIndex.alertBackdropStyles,
+		zIndex: zIndex.alertBackdrop,
 	},
 	alertLayer: {
 		zIndex: zIndex.alert,

@@ -1,6 +1,6 @@
 import * as stylex from "@stylexjs/stylex";
 import { createElement, type ComponentProps, type ReactNode } from "react";
-import { Box, Stack, Text } from "@/components";
+import { Box, Heading, Stack, Text } from "@/components";
 import { mergeStyle, type BaseStyleProps } from "@/styles/props/base";
 import { tokens } from "@/theme/tokens.stylex";
 import { attrJoin } from "@/utils/attr-join";
@@ -9,16 +9,16 @@ export type PageHeaderHeadingLevel = 1 | 2 | 3 | 4 | 5 | 6;
 
 export type PageHeaderProps = Omit<ComponentProps<"section">, "style" | "title"> &
 	BaseStyleProps & {
-	actions?: ReactNode;
-	breadcrumbs?: ReactNode;
-	description?: ReactNode;
-	endSlot?: ReactNode;
-	headingLevel?: PageHeaderHeadingLevel;
-	metadata?: ReactNode;
-	navigation?: ReactNode;
-	startSlot?: ReactNode;
-	title: string;
-};
+		actions?: ReactNode;
+		breadcrumbs?: ReactNode;
+		description?: ReactNode;
+		endSlot?: ReactNode;
+		headingLevel?: PageHeaderHeadingLevel;
+		titleAddon?: ReactNode | string;
+		navSlot?: ReactNode;
+		startSlot?: ReactNode | string;
+		title: string;
+	};
 
 export function PageHeader({
 	actions,
@@ -27,9 +27,10 @@ export function PageHeader({
 	description,
 	endSlot,
 	headingLevel = 1,
-	metadata,
-	navigation,
+	titleAddon,
+	navSlot,
 	startSlot,
+
 	style,
 	title,
 	xstyle,
@@ -43,14 +44,14 @@ export function PageHeader({
 			<Stack gap={4}>
 				{breadcrumbs ? <Box {...stylex.props(parts.breadcrumbs)}>{breadcrumbs}</Box> : null}
 				<Box {...stylex.props(parts.content)}>
-					<Box {...stylex.props(parts.headingArea)}>
-						<Stack gap={1} {...stylex.props(parts.textArea)}>
+					<Box {...stylex.props(parts.headingWrapper)}>
+						<Stack gap={1} {...stylex.props(parts.textWrapper)}>
 							<Box {...stylex.props(parts.titleRow)}>
 								{startSlot}
-								{titleNode}
-								{metadata ? (
-									<Text color="muted" size="1" {...stylex.props(parts.metadata)}>
-										{metadata}
+								<Heading render={titleNode} size="7" />
+								{titleAddon ? (
+									<Text color="muted" size="6" {...stylex.props(parts.titleAddon)}>
+										{titleAddon}
 									</Text>
 								) : null}
 							</Box>
@@ -66,7 +67,7 @@ export function PageHeader({
 					</Box>
 					{actions ? <Box {...stylex.props(parts.actions)}>{actions}</Box> : null}
 				</Box>
-				{navigation ? <Box {...stylex.props(parts.navigation)}>{navigation}</Box> : null}
+				{navSlot ? <Box {...stylex.props(parts.navSlot)}>{navSlot}</Box> : null}
 			</Stack>
 		</section>
 	);
@@ -92,7 +93,7 @@ const parts = stylex.create({
 		justifyContent: "space-between",
 		minWidth: 0,
 	},
-	headingArea: {
+	headingWrapper: {
 		gap: tokens["--space-3"],
 		alignItems: "flex-start",
 		display: "flex",
@@ -101,14 +102,14 @@ const parts = stylex.create({
 		flexShrink: "1",
 		minWidth: 0,
 	},
-	textArea: {
+	textWrapper: {
 		flexBasis: "auto",
 		flexGrow: "1",
 		flexShrink: "1",
 		minWidth: 0,
 	},
 	titleRow: {
-		gap: tokens["--space-2"],
+		gap: tokens["--space-3"],
 		alignItems: "center",
 		display: "flex",
 		flexWrap: "wrap",
@@ -117,16 +118,16 @@ const parts = stylex.create({
 	title: {
 		margin: 0,
 		color: tokens["--fg"],
-		fontSize: tokens["--font-size-5"],
-		fontWeight: tokens["--font-weight-semibold"],
-		letterSpacing: tokens["--letter-spacing-5"],
-		lineHeight: tokens["--line-height-5"],
+		// fontSize: tokens["--font-size-5"],
+		// fontWeight: tokens["--font-weight-semibold"],
+		// letterSpacing: tokens["--letter-spacing-5"],
+		// lineHeight: tokens["--line-height-5"],
 		textWrap: "balance",
 	},
 	description: {
 		maxWidth: "52rem",
 	},
-	metadata: {
+	titleAddon: {
 		flexShrink: 0,
 	},
 	endSlot: {
@@ -145,7 +146,7 @@ const parts = stylex.create({
 		flexWrap: "wrap",
 		justifyContent: "flex-end",
 	},
-	navigation: {
+	navSlot: {
 		minWidth: 0,
 	},
 });

@@ -35,20 +35,19 @@ export type AvatarProps = Omit<BaseAvatar.Root.Props, "children" | "className" |
 	MarginProps &
 	BaseStyleProps & {
 		className?: string;
-	/** URL for the avatar image. */
-	image?: string;
-	/** Alternative text for the image when the avatar has no name. */
-	imageAlt?: string;
-	/** Custom fallback icon. Takes precedence over initials. */
-	icon?: ReactNode;
-	/** Explicit fallback initials. Name prop is used to derive them when omitted, if provided. Overrides icon, and string overrides auto-initials. */
-	initials?: string;
-	/** Full name used for derived initials, the accessible name, and a tooltip. */
-	name?: string;
-	/** Avatar dimension using the spacing scale. */
-	size?: AvatarSize | AvatarResponsiveSize;
-	shape?: AvatarShape;
-};
+		/** Image URL. */
+		image?: string;
+		/** Alt text when there is no name. */
+		imageAlt?: string;
+		/** Explicit icon, takes precedence over auto-initials. */
+		icon?: ReactNode;
+		/** Explicit initials to override icon and auto-initials. */
+		initials?: string;
+
+		name?: string;
+		size?: AvatarSize | AvatarResponsiveSize;
+		shape?: AvatarShape;
+	};
 
 export function Avatar({
 	ref,
@@ -123,7 +122,7 @@ function deriveInitials(name: string): string {
 	if (!name) return "";
 
 	const parts = name.split(" ");
-	if (parts.length === 1) return Array.from(parts[0]).slice(0, 2).join("").toLocaleUpperCase();
+	if (parts.length === 1) return Array.from(parts[0])[0]?.toLocaleUpperCase() ?? "";
 
 	return `${Array.from(parts[0])[0]}${Array.from(parts.at(-1) ?? "")[0] ?? ""}`.toLocaleUpperCase();
 }

@@ -10,8 +10,8 @@ import {
 	useRef,
 	useState,
 } from "react";
-import { Button, Dialog, ScrollArea, Toast } from "@/components";
-import type { ButtonProps } from "@/components";
+import { Box, Button, Dialog, ScrollArea, Toast } from "@/components";
+import type { BoxProps, ButtonProps } from "@/components";
 import { mergeStyle, type BaseStyleProps } from "@/styles/props/base";
 import { tokens } from "@/theme/tokens.stylex";
 import { attrJoin } from "@/utils/attr-join";
@@ -48,7 +48,7 @@ export type ConfirmationDialogProps = DialogRootProps & {
 type StyledProps<T> = Omit<T, "style" | "xstyle"> & BaseStyleProps;
 
 export type ConfirmationDialogHeaderProps = ComponentProps<typeof Dialog.Header>;
-export type ConfirmationDialogVisualProps = StyledProps<ComponentProps<"div">>;
+export type ConfirmationDialogVisualProps = BoxProps & { size?: number };
 export type ConfirmationDialogTitleProps = ComponentProps<typeof Dialog.Title>;
 export type ConfirmationDialogDescriptionProps = ComponentProps<typeof Dialog.Description>;
 
@@ -195,15 +195,22 @@ export function Header({ xstyle, ...props }: ConfirmationDialogHeaderProps) {
 	return <Dialog.Header xstyle={[confirmationDialogParts.header, xstyle]} {...props} />;
 }
 
-export function Visual({ className, style, xstyle, ...props }: ConfirmationDialogVisualProps) {
-	const sx = stylex.props(confirmationDialogParts.visual, xstyle);
-
+export function Visual({ xstyle, ...props }: ConfirmationDialogVisualProps) {
 	return (
-		<div
-			data-confirmation-dialog-visual
-			className={attrJoin(sx.className, className)}
-			style={mergeStyle(sx.style, style)}
+		<Box
+			align="center"
+			alignSelf="start"
+			bg={props.bg ?? "surfaceSubtle"}
+			color={props.color ?? "default"}
+			display="flex"
+			height={`calc(${props.size ?? 10} * ${tokens["--space-1"]})`}
+			justify="center"
+			mb={4}
+			radius="sm"
+			width={`calc(${props.size ?? 10} * ${tokens["--space-1"]})`}
 			{...props}
+			data-confirmation-dialog-visual
+			xstyle={xstyle}
 		/>
 	);
 }
@@ -211,7 +218,13 @@ export function Visual({ className, style, xstyle, ...props }: ConfirmationDialo
 export const Title = Dialog.Title;
 export const Description = Dialog.Description;
 
-export function Body({ children, label = "Confirmation details", className, style, xstyle }: ConfirmationDialogBodyProps) {
+export function Body({
+	children,
+	label = "Confirmation details",
+	className,
+	style,
+	xstyle,
+}: ConfirmationDialogBodyProps) {
 	return (
 		<ScrollArea
 			label={label}
@@ -284,18 +297,6 @@ const confirmationDialogParts = stylex.create({
 		flexShrink: 0,
 		paddingBlockStart: tokens["--space-5"],
 		textAlign: "start",
-	},
-	visual: {
-		borderRadius: tokens["--radius-sm"],
-		alignItems: "center",
-		alignSelf: "flex-start",
-		backgroundColor: tokens["--surface-subtle"],
-		color: tokens["--fg"],
-		display: "flex",
-		justifyContent: "center",
-		marginBlockEnd: tokens["--space-4"],
-		height: tokens["--space-10"],
-		width: tokens["--space-10"],
 	},
 	body: {
 		flexBasis: "auto",

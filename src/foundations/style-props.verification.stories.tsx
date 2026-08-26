@@ -132,7 +132,7 @@ export const ConsumerContract: Story = {
 			<Box data-testid="border-style-default" borderStyle="dashed">
 				Border style default
 			</Box>
-			<Box data-testid="border-width-override" borderColor="border" borderStyle="dashed" borderWidth={5}>
+			<Box data-testid="border-width-override" borderColor="default" borderStyle="dashed" borderWidth={5}>
 				Border width override
 			</Box>
 			<Button data-testid="xstyle-margin-wins" m={4} xstyle={styles.zeroMargins}>

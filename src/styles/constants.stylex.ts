@@ -50,9 +50,9 @@ export const breakpointRanges = stylex.defineConsts({
 export const zIndex = stylex.defineConsts({
 	base: "0",
 	sticky: "100",
-	modalBackdropStyles: "200",
+	modalBackdrop: "200",
 	modal: "300",
-	alertBackdropStyles: "400",
+	alertBackdrop: "400",
 	alert: "500",
 	popup: "600",
 	tooltip: "700",

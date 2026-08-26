@@ -240,20 +240,7 @@ function AsyncJobProgressExample({ description, id, title }: AgentBlockExamplePr
 						</AsyncJobProgress.Description>
 					</AsyncJobProgress.Heading>
 					<AsyncJobProgress.Actions>
-						<Button
-							size="xs"
-							variant="ghost"
-							endSlot={
-								status === "error" ? (
-									<ArrowClockwiseIcon aria-hidden />
-								) : status === "running" || status === "queued" ? (
-									<XCircleIcon aria-hidden weight="fill" />
-								) : (
-									<CaretRightIcon aria-hidden />
-								)
-							}>
-							{status === "error" ? "Retry" : status === "complete" ? "View" : "Cancel"}
-						</Button>
+						<AsyncJobProgress.ActionButton />
 					</AsyncJobProgress.Actions>
 				</AsyncJobProgress.Header>
 				<AsyncJobProgress.Progress />

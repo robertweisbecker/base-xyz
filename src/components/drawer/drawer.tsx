@@ -136,7 +136,12 @@ export function Footer({ className, style, xstyle, ...props }: StyledProps<Compo
 	const { className: sxClassName, style: sxStyle } = stylex.props(modalTextStyles.footer, drawerParts.footer, xstyle);
 
 	return (
-		<div data-slot="footer" className={attrJoin(sxClassName, className)} style={mergeStyle(sxStyle, style)} {...props} />
+		<div
+			data-slot="footer"
+			className={attrJoin(sxClassName, className)}
+			style={mergeStyle(sxStyle, style)}
+			{...props}
+		/>
 	);
 }
 
@@ -194,6 +199,7 @@ const drawerParts = stylex.create({
 			"[data-ending-style]": 0.9999,
 			default: 1,
 		},
+		position: "relative",
 		transform: {
 			"[data-ending-style]": "translateY(calc(100% - var(--_drawer-bleed) + 2px)) scale(1)",
 			"[data-starting-style]": "translateY(calc(100% - var(--_drawer-bleed) + 2px)) scale(1)",
@@ -241,11 +247,27 @@ const drawerParts = stylex.create({
 	},
 	snapPointPopup: {
 		"--_drawer-bleed": "0px",
-		height: `calc(100dvh - ${tokens["--space-4"]})`,
+		overscrollBehavior: "auto",
+		touchAction: "none",
+		transitionDuration: {
+			"[data-ending-style]": `calc(var(--drawer-swipe-strength) * ${DRAWER_RELEASE_DURATION})`,
+			"[data-swiping]": tokens["--motion-duration-long"],
+			default: tokens["--motion-duration-long"],
+		},
+		transitionProperty: {
+			"[data-nested-drawer-open]": "transform, height, opacity",
+			default: "transform, box-shadow",
+		},
+		zIndex: 1,
+		height: "auto",
 		marginBottom: 0,
 		maxHeight: `calc(100dvh - ${tokens["--space-4"]})`,
 		overflowY: "visible",
-		paddingBottom: 0,
+		paddingBottom: {
+			default: "max(0px, calc(var(--drawer-snap-point-offset, 0px) + var(--drawer-swipe-movement-y)))",
+			":has([data-slot='footer'])":
+				"max(0px, calc(var(--drawer-snap-point-offset, 0px) + var(--drawer-swipe-movement-y)))",
+		},
 		"::before": {
 			insetInline: 0,
 			backgroundColor: "inherit",
@@ -276,6 +298,7 @@ const drawerParts = stylex.create({
 		flexBasis: "auto",
 		flexGrow: "1",
 		flexShrink: "1",
+		touchAction: "auto",
 		minHeight: 0,
 		overflowY: "auto",
 	},
@@ -301,6 +324,8 @@ const drawerParts = stylex.create({
 		paddingInline: tokens["--space-5"],
 		paddingBlockEnd: tokens["--space-3"],
 		paddingBlockStart: tokens["--space-2"],
+		touchAction: "none",
+		userSelect: "none",
 		borderBottomColor: tokens["--border"],
 		borderBottomStyle: "solid",
 		borderBottomWidth: "0.5px",

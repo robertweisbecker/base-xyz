@@ -93,18 +93,18 @@ export const Playground: Story = {
 	),
 };
 
-const snapPoints: Array<string | number> = ["18rem", "30rem", 1];
-const snapPointOptions = [
-	{ label: "Compact", value: snapPoints[0] },
-	{ label: "Medium", value: snapPoints[1] },
-	{ label: "Full", value: snapPoints[2] },
-] as const;
+const TOP_MARGIN_REM = 1;
+const VISIBLE_SNAP_POINTS_REM = [30];
+
+function toViewportSnapPoint(heightRem: number) {
+	return `${heightRem + TOP_MARGIN_REM}rem`;
+}
+
+const snapPoints: Array<string | number> = [...VISIBLE_SNAP_POINTS_REM.map(toViewportSnapPoint), 1];
 
 function SnapPointsDrawer() {
-	const [snapPoint, setSnapPoint] = useState<string | number | null>(snapPoints[0]);
-
 	return (
-		<Drawer.Root snapPoints={snapPoints} snapPoint={snapPoint} onSnapPointChange={setSnapPoint} snapToSequentialPoints>
+		<Drawer.Root snapPoints={snapPoints}>
 			<Drawer.Trigger render={<Button />}>Open snap-point drawer</Drawer.Trigger>
 			<Drawer.Portal>
 				<Drawer.Backdrop />
@@ -113,21 +113,10 @@ function SnapPointsDrawer() {
 						<Drawer.Handle />
 						<Drawer.Header>
 							<Drawer.Title>Project activity</Drawer.Title>
-							<Drawer.Description>Drag between the compact, medium, and full-height snap points.</Drawer.Description>
+							<Drawer.Description>Drag between the compact and full-height snap points.</Drawer.Description>
 						</Drawer.Header>
 						<Drawer.Content scrollable role="region" aria-label="Project activity list">
 							<Drawer.Body>
-								<Stack gap={2} mb={5} wrap="wrap">
-									{snapPointOptions.map((option) => (
-										<Button
-											key={option.label}
-											size="sm"
-											variant={snapPoint === option.value ? "primary" : "neutral"}
-											onClick={() => setSnapPoint(option.value)}>
-											{option.label}
-										</Button>
-									))}
-								</Stack>
 								<Stack gap={3}>
 									{Array.from({ length: 16 }, (_, index) => (
 										<Stack key={index} gap={1} xstyle={storyParts.activityCard}>
@@ -215,7 +204,7 @@ export const DetachedTriggers: Story = {
 													<Drawer.Title>{payload.title}</Drawer.Title>
 													<Drawer.Description>{payload.description}</Drawer.Description>
 												</Stack>
-												<Drawer.Close render={<Button variant="ghost" />}>Done</Drawer.Close>
+												<Drawer.Close render={<Button variant="ghost" ms="auto" />}>Done</Drawer.Close>
 											</Stack>
 										</Drawer.Header>
 										<Drawer.Body>{payload.body}</Drawer.Body>

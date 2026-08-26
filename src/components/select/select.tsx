@@ -341,8 +341,6 @@ const selectParts = stylex.create({
 		width: "auto",
 	},
 	inlineTrigger: {
-		fontSize: "inherit",
-		lineHeight: "inherit",
 		borderColor: {
 			"[data-invalid]": tokens["--bg-error-primary"],
 			default: "transparent",

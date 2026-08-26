@@ -79,7 +79,7 @@ const styles = stylex.create({
 		display: "grid",
 		gridTemplateColumns: {
 			default: "minmax(0, 1fr)",
-			[breakpoints.md]: `${tokens["--size-sidebar"]} minmax(0, 1fr)`,
+			[breakpoints.md]: `${tokens["--size-sidebar"]} minmax(0, 1fr) ${tokens["--size-sidebar"]}`,
 		},
 		minHeight: `calc(100svh - ${tokens["--size-navbar-height"]})`,
 	},
@@ -112,7 +112,7 @@ const styles = stylex.create({
 	content: {
 		marginInline: "auto",
 		paddingInline: tokens["--space-4"],
-		maxWidth: "80rem",
+		maxWidth: tokens["--size-container-6xl"],
 		minWidth: 0,
 		width: "100%",
 	},

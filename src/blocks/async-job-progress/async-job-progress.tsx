@@ -2,11 +2,12 @@ import { ClockIcon } from "@phosphor-icons/react/dist/csr/Clock";
 import { WarningIcon } from "@phosphor-icons/react/dist/csr/Warning";
 import * as stylex from "@stylexjs/stylex";
 import { createContext, type ComponentProps, createElement, useContext, useId } from "react";
-import { Badge, type BadgeHue, Icon, Loader, Progress as ProgressComponent } from "@/components";
+import { Badge, type BadgeHue, Button, Icon, Loader, Progress as ProgressComponent } from "@/components";
 import { tokens } from "@/theme/tokens.stylex";
 import { mergeStyle, type BaseStyleProps } from "@/styles/props/base";
 import type { MarginProps } from "@/styles/props/spacing.stylex";
 import { attrJoin } from "@/utils/attr-join";
+import { ArrowClockwiseIcon, CaretRightIcon, TrashIcon, XCircleIcon } from "@phosphor-icons/react";
 
 export type AsyncJobStatus = "queued" | "running" | "complete" | "error";
 export type AsyncJobHeadingLevel = 2 | 3 | 4 | 5 | 6;
@@ -41,11 +42,38 @@ export type AsyncJobProgressProgressProps = Omit<
 export type AsyncJobProgressActionsProps = StyledProps<ComponentProps<"div">>;
 
 const statusPresentation = {
-	queued: { badgeLabel: "Queued", hue: "neutral" },
-	running: { badgeLabel: "Running", hue: "accent" },
-	complete: { badgeLabel: "Complete", hue: "success" },
-	error: { badgeLabel: "Failed", hue: "error" },
-} satisfies Record<AsyncJobStatus, { badgeLabel: string; hue: BadgeHue }>;
+	queued: {
+		badgeLabel: "Queued",
+		hue: "neutral",
+		statusLabel: "Waiting…",
+		buttonLabel: "Remove",
+		buttonIcon: <TrashIcon aria-hidden />,
+	},
+	running: {
+		badgeLabel: "Running",
+		hue: "accent",
+		statusLabel: "In progress",
+		buttonLabel: "Stop",
+		buttonIcon: <XCircleIcon aria-hidden weight="fill" />,
+	},
+	complete: {
+		badgeLabel: "Complete",
+		hue: "success",
+		statusLabel: "Complete",
+		buttonLabel: "View output",
+		buttonIcon: <CaretRightIcon aria-hidden />,
+	},
+	error: {
+		badgeLabel: "Failed",
+		hue: "error",
+		statusLabel: "Failed",
+		buttonLabel: "Retry",
+		buttonIcon: <ArrowClockwiseIcon aria-hidden />,
+	},
+} satisfies Record<
+	AsyncJobStatus,
+	{ badgeLabel: string; hue: BadgeHue; statusLabel: string; buttonLabel: string; buttonIcon: React.ReactNode }
+>;
 
 export function Root({ status, value, valueText, className, style, xstyle, ...props }: AsyncJobProgressRootProps) {
 	const titleId = useId();
@@ -134,6 +162,15 @@ export function Progress(props: AsyncJobProgressProgressProps) {
 export function Actions({ className, style, xstyle, ...props }: AsyncJobProgressActionsProps) {
 	const sx = stylex.props(parts.actions, xstyle);
 	return <div className={attrJoin(sx.className, className)} style={mergeStyle(sx.style, style)} {...props} />;
+}
+
+export function ActionButton({ variant = "ghost", size = "xs", ...props }: React.ComponentProps<typeof Button>) {
+	const { status } = useAsyncJobProgressContext("Status");
+	return (
+		<Button me={-1} variant={variant} size={size} endSlot={statusPresentation[status].buttonIcon} {...props}>
+			{statusPresentation[status].buttonLabel}
+		</Button>
+	);
 }
 
 function useAsyncJobProgressContext(part: string) {
@@ -258,4 +295,5 @@ export const AsyncJobProgress = {
 	Status,
 	Progress,
 	Actions,
+	ActionButton,
 } as const;

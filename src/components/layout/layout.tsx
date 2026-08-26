@@ -41,7 +41,7 @@ type LayoutElementProps = Omit<
 	render?: useRender.RenderProp;
 } & BaseStyleProps;
 
-export type BoxProps = LayoutElementProps & BoxStyleProps;
+export type BoxProps = LayoutElementProps & BoxStyleProps & FlexLayoutProps & GridLayoutProps;
 export type StackProps = LayoutElementProps & StackStyleProps;
 export type GridProps = LayoutElementProps & GridStyleProps;
 
@@ -156,12 +156,38 @@ function resolveBoxStyles(props: BoxStylePropsWithoutMargin): StyleXStyles[] {
 	];
 }
 
-export function Box({ className, ref, render, style, xstyle, ...props }: BoxProps) {
+export function Box({
+	className,
+	ref,
+	render,
+	style,
+	xstyle,
+	gap,
+	gapX,
+	gapY,
+	orientation,
+	reverse,
+	align,
+	justify,
+	wrap,
+	columns,
+	flow,
+	placeContent,
+	placeItems,
+	...props
+}: BoxProps) {
 	const { marginStyles, rest: propsWithoutMargin } = extractMarginProps(props);
 	const { styleProps, rest } = splitBoxStyleProps(propsWithoutMargin);
+	// `justify` is the intersection of the flex and grid vocabularies, so it is
+	// valid for whichever resolver the current display selects.
+	const isGrid = styleProps.display === "grid" || styleProps.display === "inline-grid";
 	const sx = stylex.props(
 		layoutBaseStyles.box,
 		styleProps.display !== undefined && displayStyles[styleProps.display],
+		...resolveGap({ gap, gapX, gapY }),
+		...(isGrid
+			? resolveGridLayout({ align, columns, flow, justify, placeContent, placeItems })
+			: resolveFlexLayout({ align, justify, orientation, reverse, wrap })),
 		...marginStyles,
 		...resolveBoxStyles(styleProps),
 		xstyle,
@@ -233,6 +259,8 @@ export function Grid({
 	flow,
 	align,
 	justify,
+	placeContent,
+	placeItems,
 	...props
 }: GridProps) {
 	const { marginStyles, rest: propsWithoutMargin } = extractMarginProps(props);
@@ -240,7 +268,7 @@ export function Grid({
 	const sx = stylex.props(
 		layoutBaseStyles.grid,
 		...resolveGap({ gap, gapX, gapY }),
-		...resolveGridLayout({ columns, flow, align, justify }),
+		...resolveGridLayout({ columns, flow, align, justify, placeContent, placeItems }),
 		styleProps.display !== undefined && displayStyles[styleProps.display],
 		...marginStyles,
 		...resolveBoxStyles(styleProps),

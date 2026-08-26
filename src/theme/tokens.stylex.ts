@@ -66,8 +66,8 @@ export const tokens = stylex.defineVars({
 	// Linear blue: oklch(0.74 0.15 249.88)
 
 	// "--color-accent-p1": "light-dark(hsl(214deg 98% 50%), #0169CC)",
-	"--color-accent-p1": "light-dark(#1470f4, oklch(74.544% 0.17 254))",
-	"--color-accent-p2": "light-dark(hsl(220deg 93% 47%), oklch(71.544% 0.21 256))",
+	"--color-accent-p1": "light-dark(#0088FF, #0091FF)",
+	"--color-accent-p2": "light-dark(#1470f4, #0169CC)",
 	"--color-accent-t1": "light-dark(oklch(53.072% 0.20334 262.925), oklch(69.483% 0.15223 255.815))",
 	"--color-accent-t2": "light-dark(oklch(28.072% 0.09716 262.82), oklch(87.811% 0.0624 249.313))",
 
@@ -128,6 +128,9 @@ export const tokens = stylex.defineVars({
 	"--panel": "light-dark(var(--color-white), var(--color-gray-s2))",
 	"--elevated": "light-dark(var(--color-white), var(--color-gray-s3))",
 	"--elevated-2": "color-mix(in srgb, var(--elevated), var(--fg) 5%)",
+	"--overlay": "light-dark(rgb(0 0 0 / 20%), rgb(0 0 0 / 48%))",
+	"--tooltip": "light-dark(var(--color-white), var(--color-gray-c2))",
+
 	"--inset": "color-mix(in srgb, var(--surface), black 5%)",
 	"--surface-subtle": "var(--color-gray-a1)",
 	"--surface-subtle-hover": "var(--color-gray-a2)",
@@ -149,8 +152,7 @@ export const tokens = stylex.defineVars({
 	"--fg-placeholder": "var(--color-gray-a4)",
 	"--fg-disabled": "var(--color-gray-a4)",
 	"--focus": "var(--color-accent-p2)",
-	"--overlay": "light-dark(rgb(0 0 0 / 20%), rgb(0 0 0 / 48%))",
-	"--tooltip": "light-dark(var(--color-white), var(--color-gray-c2))",
+
 	"--fill-track": "var(--color-gray-a2)",
 	"--fill-disabled": "var(--color-gray-a1)",
 
@@ -163,7 +165,7 @@ export const tokens = stylex.defineVars({
 	"--bg-accent": "var(--color-accent-c1)",
 	"--bg-accent-hover": "var(--color-accent-c2)",
 	"--bg-accent-active": "var(--color-accent-c3)",
-	"--fg-accent-contrast": "var(--color-accent-s1)",
+	"--fg-accent-contrast": "var(--color-white)",
 	"--fill-accent": "var(--color-accent-p1)",
 
 	// Success
@@ -258,7 +260,7 @@ export const tokens = stylex.defineVars({
 
 	"--shadow-color-1": "light-dark(var(--color-black-a1), var(--color-black-a3))",
 	"--shadow-color-2": "light-dark(var(--color-black-a3), var(--color-black-a4))",
-	"--shadow-color-outer-ring": "light-dark(var(--color-black-a2), var(--color-black-a5))",
+	"--shadow-color-outer-ring": "light-dark(var(--color-black-a1), var(--color-black-a3))",
 
 	"--shadow-ring-inset":
 		"inset 0 0 0 .5px light-dark(rgb(20 20 24 / 9%), rgb(255 255 255 / 10%)), inset 0 -.5px 0 light-dark(transparent, rgb(255 255 255 / 5%))",

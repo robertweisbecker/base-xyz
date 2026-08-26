@@ -14,8 +14,8 @@ const meta = {
 		shadow: "sm",
 	},
 	argTypes: {
-		bg: { control: "select", options: ["canvas", "surface", "surfaceSubtle", "bgElevated"] },
-		color: { control: "select", options: ["fg", "fgMuted", "fgAccent", "fgError"] },
+		bg: { control: "select", options: ["canvas", "surface", "surfaceSubtle", "elevated"] },
+		color: { control: "select", options: ["default", "muted", "accent", "error"] },
 		p: { control: "select", options: [0, 1, 2, 3, 4, 5, 6, 8] },
 		radius: { control: "select", options: ["xxs", "xs", "sm", "md", "lg", "xl", "full"] },
 		shadow: { control: "select", options: ["none", "sm", "md", "lg"] },
@@ -33,7 +33,7 @@ export const Positioning: Story = {
 	parameters: { controls: { disable: true } },
 	render: () => (
 		<Box height="12rem" position="relative" xstyle={styles.frame}>
-			<Box bg="bgAccent" insetEnd={2} insetStart={-2} insetTop={4} p={3} position="absolute" radius="lg">
+			<Box bg="accent" insetEnd={2} insetStart={-2} insetTop={4} p={3} position="absolute" radius="lg">
 				Logical insets
 			</Box>
 		</Box>
