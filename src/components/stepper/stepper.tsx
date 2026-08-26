@@ -888,17 +888,17 @@ const indicatorOrientationStyles = stylex.create({
 	horizontal: {
 		height: "var(--_stepper-connector-thickness)",
 		left: {
-			":dir(rtl)": "auto",
 			default: 0,
+			[stylex.when.ancestor("[dir='rtl']")]: "auto",
 		},
 		right: {
-			":dir(rtl)": 0,
 			default: "auto",
+			[stylex.when.ancestor("[dir='rtl']")]: 0,
 		},
 		top: "calc(var(--_stepper-marker-size) / 2 - var(--_stepper-connector-thickness) / 2)",
 		width: {
-			":dir(rtl)": "calc(var(--active-tab-right) + var(--_stepper-marker-size) / 2)",
 			default: "calc(var(--active-tab-left) + var(--_stepper-marker-size) / 2)",
+			[stylex.when.ancestor("[dir='rtl']")]: "calc(var(--active-tab-right) + var(--_stepper-marker-size) / 2)",
 		},
 	},
 	vertical: {

@@ -4,6 +4,8 @@ Shared, committed log of grievances, tooling friction, and workaround needs enco
 
 ## Entries
 
+- 2026-08-26 — StyleX compiles `:dir(rtl)` to `:lang(...)` RTL language lists instead of the CSS `:dir()` pseudo-class, so `dir="rtl"` without a matching `lang` never matches (`src/components/stepper/stepper.tsx` indicator). Use `stylex.when.ancestor("[dir='rtl']")` when the story or app sets direction via `dir`.
+
 - 2026-08-20 — `@stylexjs/valid-shorthands` rejects multi-value shorthands, forcing grid span maps in `src/styles/props/grid.stylex.ts` into `gridColumnStart`/`gridColumnEnd` longhand pairs; `xstyle={{ gridColumn: "…" }}` overrides may not beat the longhands. (Phase 1 worker)
 - 2026-08-20 — Computed `stylex.when.ancestor(...)` keys break contextual typing in `stylex.create`, so numeric literals widen and can need `as const`/SAFETY casts (`src/components/toggle/toggle.stylex.ts`); the `@stylexjs/valid-styles` lint rule also rejects nested `when()` conditions the compiler supports, requiring per-line disables. (Build-error fixer)
 - 2026-08-20 — `stylex.create` map keys are strings, so numeric negative steps (`-1`) cannot be map keys; public numeric API requires a hand-maintained `NegativeSpaceStep` union plus a string-key conversion helper in `src/styles/props/spacing.stylex.ts`. (Phase 2 worker)
