@@ -51,6 +51,11 @@ test("exposes tab semantics, names, and descriptions without marker text", async
 	await expect(panel).toBeVisible();
 	await expect(panel).toHaveAttribute("tabindex", "0");
 	await expect.poll(async () => markersAreOpaque(root)).toBe(true);
+
+	await page.goto("/iframe.html?id=gallery-app--gallery&viewMode=story");
+	const galleryStepper = page.getByRole("tablist", { name: "Account setup" });
+	await expect(galleryStepper).toBeVisible();
+	await expect(galleryStepper.getByRole("tab", { name: "Profile" })).not.toHaveAttribute("aria-describedby");
 });
 
 test("moves focus without selecting and activates with enter or space", async ({ page }) => {
@@ -168,6 +173,15 @@ test("does not skip locked steps and leaves canceled navigation in place", async
 	await page.keyboard.press("ArrowRight");
 	await page.keyboard.press("Enter");
 	await expect(profile).toHaveAttribute("aria-selected", "true");
+
+	await cancelRoot.getByRole("button", { name: "Allow navigation" }).click();
+	await cancelRoot.getByRole("button", { name: "Ignore navigation" }).click();
+	await cancelRoot.getByRole("button", { name: "Continue" }).click();
+	await expect(profile).toHaveAttribute("aria-selected", "true");
+	await cancelRoot.getByRole("button", { name: "Accept navigation" }).click();
+	await cancelRoot.getByRole("tab", { name: "Security" }).click();
+	await expect(cancelRoot.getByRole("tab", { name: "Security" })).toHaveAttribute("aria-selected", "true");
+	await expect(cancelRoot.getByRole("tab", { name: "Security" })).toBeFocused();
 });
 
 test("preserves mounted panel state and silently falls back when the domain changes", async ({ page }) => {
@@ -195,6 +209,16 @@ test("preserves mounted panel state and silently falls back when the domain chan
 	await expect(lastChange).toHaveText("Last change: none");
 	await domain.getByRole("button", { name: "Continue" }).click();
 	await expect(lastChange).toHaveText("Last change: billing");
+
+	await page.goto(navigationPath);
+	const reordered = page.getByTestId("domain-stepper");
+	await reordered.getByRole("button", { name: "Reverse step order" }).click();
+	await expect.poll(async () => {
+		const labels = await reordered.getByRole("tab").allInnerTexts();
+		return Boolean(labels[0]?.includes("Billing") && labels.at(-1)?.includes("Profile"));
+	}).toBe(true);
+	await reordered.getByRole("button", { name: "Continue" }).click();
+	await expect(reordered.getByTestId("domain-last-change")).toHaveText("Last change: profile");
 });
 
 test("lays out markers and connector fill in horizontal, vertical, and rtl", async ({ page }) => {
@@ -226,6 +250,12 @@ test("lays out markers and connector fill in horizontal, vertical, and rtl", asy
 	await horizontal.getByRole("tabpanel", { name: /Security/ }).getByRole("button", { name: "Continue" }).click();
 	const billing = horizontal.getByRole("tab", { name: "Billing" });
 	await expect.poll(async () => isInHorizontalView(horizontal.getByRole("tablist"), billing)).toBe(true);
+});
+
+test("keeps the document still when a stepper mounts below the viewport", async ({ page }) => {
+	await page.setViewportSize({ width: 1024, height: 360 });
+	await page.goto(navigationPath);
+	await expect.poll(async () => page.evaluate(() => window.scrollY)).toBe(0);
 });
 
 async function markerIsAboveTitle(tab: Locator) {

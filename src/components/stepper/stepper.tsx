@@ -58,6 +58,7 @@ type StepperStepContextValue = {
 	disabled: boolean;
 	index: number;
 	orientation: StepperOrientation;
+	registerDescription: () => () => void;
 	selected: boolean;
 	status: StepperStatus;
 	statusId: string;
@@ -105,6 +106,7 @@ export function Root({
 	const panelsRef = useRef(new Map<StepperValue, HTMLElement>());
 	const pendingPanelFocusRef = useRef<StepperValue | null>(null);
 	const [stepVersion, setStepVersion] = useState(0);
+	const [focusRequest, setFocusRequest] = useState(0);
 	const orderedSteps = useMemo(() => {
 		void stepVersion;
 		return sortStepRecords([...stepsRef.current.values()]);
@@ -183,30 +185,35 @@ export function Root({
 			}
 			pendingPanelFocusRef.current = target.value;
 			requestValue(target.value, event.nativeEvent, event.currentTarget);
+			setFocusRequest((request) => request + 1);
 		},
 		[effectiveValue, orderedSteps, requestValue],
 	);
 
 	useLayoutEffect(() => {
+		const sorted = sortStepRecords([...stepsRef.current.values()]);
+		const currentKey = orderedSteps.map((step) => step.value).join("\0");
+		const nextKey = sorted.map((step) => step.value).join("\0");
+		if (currentKey !== nextKey) {
+			publishSteps();
+		}
+	});
+
+	useLayoutEffect(() => {
 		if (effectiveValue == null) {
+			pendingPanelFocusRef.current = null;
 			return;
 		}
 		const activeNode = stepsRef.current.get(effectiveValue)?.node;
 		if (activeNode != null) {
-			activeNode.scrollIntoView({
-				block: "nearest",
-				inline: "nearest",
-				behavior: prefersReducedMotion() ? "auto" : "smooth",
-			});
+			scrollStepIntoList(activeNode);
 		}
-		if (pendingPanelFocusRef.current == null) {
-			return;
-		}
-		if (pendingPanelFocusRef.current === effectiveValue) {
+		const pending = pendingPanelFocusRef.current;
+		pendingPanelFocusRef.current = null;
+		if (pending != null && pending === effectiveValue) {
 			panelsRef.current.get(effectiveValue)?.focus();
 		}
-		pendingPanelFocusRef.current = null;
-	}, [effectiveValue]);
+	}, [effectiveValue, focusRequest]);
 
 	const contextValue = useMemo<StepperRootContextValue>(
 		() => ({
@@ -295,7 +302,12 @@ export function Step({
 	const currentIndex = orderedSteps.findIndex((step) => step.value === effectiveValue);
 	const connector = isLast || index < 0 ? undefined : index < currentIndex ? "filled" : "track";
 	const statusLabel = getStatusLabel(status);
-	const describedBy = attrJoin(descriptionId, statusLabel ? statusId : undefined);
+	const [hasDescription, setHasDescription] = useState(false);
+	const registerDescription = useCallback(() => {
+		setHasDescription(true);
+		return () => setHasDescription(false);
+	}, []);
+	const describedBy = attrJoin(hasDescription ? descriptionId : undefined, statusLabel ? statusId : undefined);
 
 	useLayoutEffect(() => {
 		return registerStep({ disabled, node: stepRef.current, value });
@@ -307,12 +319,13 @@ export function Step({
 			disabled,
 			index,
 			orientation: effectiveOrientation,
+			registerDescription,
 			selected,
 			status,
 			statusId,
 			titleId,
 		}),
-		[descriptionId, disabled, effectiveOrientation, index, selected, status, statusId, titleId],
+		[descriptionId, disabled, effectiveOrientation, index, registerDescription, selected, status, statusId, titleId],
 	);
 	const sx = stylex.props(
 		focusRing.offset,
@@ -329,7 +342,7 @@ export function Step({
 		<StepperStepContext value={stepContext}>
 			<BaseTabs.Tab
 				ref={mergedRef}
-				aria-describedby={describedBy}
+				aria-describedby={describedBy || undefined}
 				aria-labelledby={titleId}
 				className={attrJoin(sx.className, className)}
 				data-status={status}
@@ -417,13 +430,15 @@ export type StepperDescriptionProps = Omit<ComponentPropsWithRef<"span">, "class
 	StepperPartStyleProps;
 
 export function Description({ className, style, xstyle, ...props }: StepperDescriptionProps) {
-	const { descriptionId, disabled } = useStepperStepContext();
+	const { descriptionId, disabled, registerDescription } = useStepperStepContext();
 	const sx = stylex.props(
 		textStyles.supporting,
 		stepperParts.description,
 		disabled && descriptionStateStyles.disabled,
 		xstyle,
 	);
+
+	useLayoutEffect(() => registerDescription(), [registerDescription]);
 
 	return (
 		<span
@@ -574,6 +589,35 @@ function getServerMdViewport() {
 
 function prefersReducedMotion() {
 	return typeof window !== "undefined" && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+}
+
+function scrollStepIntoList(step: HTMLElement) {
+	const list = step.closest("[data-stepper-list]");
+	if (!(list instanceof HTMLElement)) {
+		return;
+	}
+	const listRect = list.getBoundingClientRect();
+	const stepRect = step.getBoundingClientRect();
+	let deltaInline = 0;
+	let deltaBlock = 0;
+	if (stepRect.left < listRect.left) {
+		deltaInline = stepRect.left - listRect.left;
+	} else if (stepRect.right > listRect.right) {
+		deltaInline = stepRect.right - listRect.right;
+	}
+	if (stepRect.top < listRect.top) {
+		deltaBlock = stepRect.top - listRect.top;
+	} else if (stepRect.bottom > listRect.bottom) {
+		deltaBlock = stepRect.bottom - listRect.bottom;
+	}
+	if (deltaInline === 0 && deltaBlock === 0) {
+		return;
+	}
+	list.scrollBy({
+		behavior: prefersReducedMotion() ? "auto" : "smooth",
+		left: deltaInline,
+		top: deltaBlock,
+	});
 }
 
 function sortStepRecords(records: StepRecord[]) {
