@@ -15,6 +15,7 @@ import {
 	type MouseEvent as ReactMouseEvent,
 } from "react";
 import { Button, type ButtonProps } from "@/components/button/button";
+import { ScrollArea } from "@/components/scroll-area/scroll-area";
 import { fontWeightStyles, textStyles } from "@/components/text/text.stylex";
 import { VisuallyHidden } from "@/components/visually-hidden/visually-hidden";
 import { media } from "@/styles/constants.stylex";
@@ -204,10 +205,6 @@ export function Root({
 			pendingPanelFocusRef.current = null;
 			return;
 		}
-		const activeNode = stepsRef.current.get(effectiveValue)?.node;
-		if (activeNode != null) {
-			scrollStepIntoList(activeNode);
-		}
 		const pending = pendingPanelFocusRef.current;
 		pendingPanelFocusRef.current = null;
 		if (pending != null && pending === effectiveValue) {
@@ -247,27 +244,57 @@ export function Root({
 	);
 }
 
-export type StepperListProps = Omit<BaseTabs.List.Props, "activateOnFocus" | "className" | "loopFocus" | "style"> &
+export type StepperListProps = Omit<
+	BaseTabs.List.Props,
+	"activateOnFocus" | "className" | "loopFocus" | "render" | "style"
+> &
 	StepperPartStyleProps;
 
-export function List({ className, style, xstyle, ...props }: StepperListProps) {
-	const { effectiveOrientation } = useStepperRootContext();
-	const sx = stylex.props(
-		stepperParts.list,
-		listOrientationStyles[effectiveOrientation],
-		xstyle,
+export function List({ children, className, style, xstyle, ...props }: StepperListProps) {
+	const { effectiveOrientation, effectiveValue } = useStepperRootContext();
+	const viewportRef = useRef<HTMLDivElement>(null);
+	const railSx = stylex.props(stepperParts.rail, railOrientationStyles[effectiveOrientation], xstyle);
+	const listSx = stylex.props(stepperParts.list, listOrientationStyles[effectiveOrientation]);
+	const indicatorSx = stylex.props(
+		stepperParts.indicator,
+		indicatorOrientationStyles[effectiveOrientation],
 	);
 
+	useLayoutEffect(() => {
+		const viewport = viewportRef.current;
+		if (viewport == null) {
+			return;
+		}
+		const active = viewport.querySelector<HTMLElement>("[data-active]");
+		if (active != null) {
+			scrollChildIntoViewport(active, viewport);
+		}
+	}, [effectiveValue]);
+
 	return (
-		<BaseTabs.List
-			activateOnFocus={false}
-			className={attrJoin(sx.className, className)}
-			data-stepper-list=""
-			loopFocus={false}
-			style={mergeStyle(sx.style, style)}
-			{...props}
-			aria-orientation={effectiveOrientation}
-		/>
+		<ScrollArea
+			className={attrJoin(railSx.className, className)}
+			data-stepper-rail=""
+			disableFade
+			orientation={effectiveOrientation}
+			size="content"
+			style={mergeStyle(railSx.style, style)}
+			viewportRef={viewportRef}>
+			<BaseTabs.List
+				activateOnFocus={false}
+				className={listSx.className}
+				loopFocus={false}
+				style={listSx.style}
+				{...props}
+				aria-orientation={effectiveOrientation}>
+				{children}
+				<BaseTabs.Indicator
+					className={indicatorSx.className}
+					data-stepper-indicator=""
+					style={indicatorSx.style}
+				/>
+			</BaseTabs.List>
+		</ScrollArea>
 	);
 }
 
@@ -299,8 +326,6 @@ export function Step({
 	const index = orderedSteps.findIndex((step) => step.value === value);
 	const selected = effectiveValue === value;
 	const isLast = index >= 0 && index === orderedSteps.length - 1;
-	const currentIndex = orderedSteps.findIndex((step) => step.value === effectiveValue);
-	const connector = isLast || index < 0 ? undefined : index < currentIndex ? "filled" : "track";
 	const statusLabel = getStatusLabel(status);
 	const [hasDescription, setHasDescription] = useState(false);
 	const registerDescription = useCallback(() => {
@@ -331,10 +356,9 @@ export function Step({
 		focusRing.offset,
 		stepperParts.step,
 		stepOrientationStyles[effectiveOrientation],
-		connector != null && stepBreathingStyles[effectiveOrientation],
-		connector === "filled" && stepperParts.connectorFilled,
-		effectiveOrientation === "horizontal" && connector != null && stepperParts.connectorHorizontal,
-		effectiveOrientation === "vertical" && connector != null && stepperParts.connectorVertical,
+		!isLast && stepBreathingStyles[effectiveOrientation],
+		!isLast && effectiveOrientation === "horizontal" && stepperParts.connectorHorizontal,
+		!isLast && effectiveOrientation === "vertical" && stepperParts.connectorVertical,
 		xstyle,
 	);
 
@@ -346,7 +370,7 @@ export function Step({
 				aria-labelledby={titleId}
 				className={attrJoin(sx.className, className)}
 				data-status={status}
-				data-stepper-connector={connector}
+				data-stepper-track={isLast ? undefined : ""}
 				disabled={disabled}
 				style={mergeStyle(sx.style, style)}
 				type={type}
@@ -591,29 +615,25 @@ function prefersReducedMotion() {
 	return typeof window !== "undefined" && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 }
 
-function scrollStepIntoList(step: HTMLElement) {
-	const list = step.closest("[data-stepper-list]");
-	if (!(list instanceof HTMLElement)) {
-		return;
-	}
-	const listRect = list.getBoundingClientRect();
-	const stepRect = step.getBoundingClientRect();
+function scrollChildIntoViewport(child: HTMLElement, viewport: HTMLElement) {
+	const viewportRect = viewport.getBoundingClientRect();
+	const childRect = child.getBoundingClientRect();
 	let deltaInline = 0;
 	let deltaBlock = 0;
-	if (stepRect.left < listRect.left) {
-		deltaInline = stepRect.left - listRect.left;
-	} else if (stepRect.right > listRect.right) {
-		deltaInline = stepRect.right - listRect.right;
+	if (childRect.left < viewportRect.left) {
+		deltaInline = childRect.left - viewportRect.left;
+	} else if (childRect.right > viewportRect.right) {
+		deltaInline = childRect.right - viewportRect.right;
 	}
-	if (stepRect.top < listRect.top) {
-		deltaBlock = stepRect.top - listRect.top;
-	} else if (stepRect.bottom > listRect.bottom) {
-		deltaBlock = stepRect.bottom - listRect.bottom;
+	if (childRect.top < viewportRect.top) {
+		deltaBlock = childRect.top - viewportRect.top;
+	} else if (childRect.bottom > viewportRect.bottom) {
+		deltaBlock = childRect.bottom - viewportRect.bottom;
 	}
 	if (deltaInline === 0 && deltaBlock === 0) {
 		return;
 	}
-	list.scrollBy({
+	viewport.scrollBy({
 		behavior: prefersReducedMotion() ? "auto" : "smooth",
 		left: deltaInline,
 		top: deltaBlock,
@@ -671,11 +691,14 @@ function createCancelableChangeDetails(event: Event, trigger?: Element): Stepper
 
 const stepperParts = stylex.create({
 	root: {
-		"--_stepper-connector-fill": tokens["--fill-track"],
 		"--_stepper-connector-thickness": "0.125rem",
 		"--_stepper-marker-size": tokens["--size-control-md"],
 		boxSizing: "border-box",
 		display: "grid",
+		minWidth: 0,
+		width: "100%",
+	},
+	rail: {
 		minWidth: 0,
 		width: "100%",
 	},
@@ -686,7 +709,8 @@ const stepperParts = stylex.create({
 		boxSizing: "border-box",
 		display: "flex",
 		isolation: "isolate",
-		minWidth: 0,
+		position: "relative",
+		minWidth: "100%",
 	},
 	step: {
 		margin: 0,
@@ -708,30 +732,21 @@ const stepperParts = stylex.create({
 			"[data-disabled]": "none",
 			default: "auto",
 		},
-		isolation: "isolate",
 		position: "relative",
 		textAlign: "start",
 		userSelect: "none",
-	},
-	connectorFilled: {
-		"--_stepper-connector-fill": tokens["--fill-accent"],
+		zIndex: 1,
 	},
 	connectorHorizontal: {
 		"::after": {
 			borderRadius: tokens["--radius-full"],
-			backgroundColor: "var(--_stepper-connector-fill)",
+			backgroundColor: tokens["--fill-track"],
 			content: '""',
 			insetBlockStart: "calc(var(--_stepper-marker-size) / 2 - var(--_stepper-connector-thickness) / 2)",
 			insetInlineStart: "calc(var(--_stepper-marker-size) / 2)",
 			pointerEvents: "none",
 			position: "absolute",
-			transitionDuration: {
-				default: tokens["--motion-duration-medium"],
-				[media.reducedMotion]: "0ms",
-			},
-			transitionProperty: "background-color",
-			transitionTimingFunction: tokens["--motion-ease-smooth-out"],
-			zIndex: -1,
+			zIndex: 0,
 			height: "var(--_stepper-connector-thickness)",
 			width: "100%",
 		},
@@ -739,22 +754,29 @@ const stepperParts = stylex.create({
 	connectorVertical: {
 		"::after": {
 			borderRadius: tokens["--radius-full"],
-			backgroundColor: "var(--_stepper-connector-fill)",
+			backgroundColor: tokens["--fill-track"],
 			content: '""',
 			insetBlockStart: "calc(var(--_stepper-marker-size) / 2)",
 			insetInlineStart: "calc(var(--_stepper-marker-size) / 2 - var(--_stepper-connector-thickness) / 2)",
 			pointerEvents: "none",
 			position: "absolute",
-			transitionDuration: {
-				default: tokens["--motion-duration-medium"],
-				[media.reducedMotion]: "0ms",
-			},
-			transitionProperty: "background-color",
-			transitionTimingFunction: tokens["--motion-ease-smooth-out"],
-			zIndex: -1,
+			zIndex: 0,
 			height: "100%",
 			width: "var(--_stepper-connector-thickness)",
 		},
+	},
+	indicator: {
+		borderRadius: tokens["--radius-full"],
+		backgroundColor: tokens["--fill-accent"],
+		pointerEvents: "none",
+		position: "absolute",
+		transitionDuration: {
+			default: tokens["--motion-duration-medium"],
+			[media.reducedMotion]: "0ms",
+		},
+		transitionProperty: "width, height",
+		transitionTimingFunction: tokens["--motion-ease-smooth-out"],
+		zIndex: 0,
 	},
 	marker: {
 		borderColor: tokens["--border-strong"],
@@ -834,26 +856,56 @@ const rootOrientationStyles = stylex.create({
 	},
 });
 
-const listOrientationStyles = stylex.create({
+const railOrientationStyles = stylex.create({
 	horizontal: {
 		gridColumn: "1",
-		alignItems: "flex-start",
 		alignSelf: "stretch",
-		flexDirection: "row",
-		flexWrap: "nowrap",
-		overflowX: "auto",
-		overflowY: "hidden",
+		minWidth: 0,
 	},
 	vertical: {
 		gridColumn: "1",
-		alignItems: "stretch",
 		alignSelf: "stretch",
-		flexDirection: "column",
 		gridRowEnd: "-1",
 		gridRowStart: "1",
+		minHeight: 0,
 		minWidth: "12rem",
-		overflowX: "hidden",
-		overflowY: "auto",
+	},
+});
+
+const listOrientationStyles = stylex.create({
+	horizontal: {
+		alignItems: "flex-start",
+		flexDirection: "row",
+		flexWrap: "nowrap",
+	},
+	vertical: {
+		alignItems: "stretch",
+		flexDirection: "column",
+	},
+});
+
+const indicatorOrientationStyles = stylex.create({
+	horizontal: {
+		height: "var(--_stepper-connector-thickness)",
+		left: {
+			":dir(rtl)": "auto",
+			default: 0,
+		},
+		right: {
+			":dir(rtl)": 0,
+			default: "auto",
+		},
+		top: "calc(var(--_stepper-marker-size) / 2 - var(--_stepper-connector-thickness) / 2)",
+		width: {
+			":dir(rtl)": "calc(var(--active-tab-right) + var(--_stepper-marker-size) / 2)",
+			default: "calc(var(--active-tab-left) + var(--_stepper-marker-size) / 2)",
+		},
+	},
+	vertical: {
+		height: "calc(var(--active-tab-top) + var(--_stepper-marker-size) / 2)",
+		left: "calc(var(--_stepper-marker-size) / 2 - var(--_stepper-connector-thickness) / 2)",
+		top: 0,
+		width: "var(--_stepper-connector-thickness)",
 	},
 });
 

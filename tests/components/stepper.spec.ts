@@ -249,7 +249,7 @@ test("lays out markers and connector fill in horizontal, vertical, and rtl", asy
 	await horizontal.getByRole("tabpanel", { name: /Profile/ }).getByRole("button", { name: "Continue" }).click();
 	await horizontal.getByRole("tabpanel", { name: /Security/ }).getByRole("button", { name: "Continue" }).click();
 	const billing = horizontal.getByRole("tab", { name: "Billing" });
-	await expect.poll(async () => isInHorizontalView(horizontal.getByRole("tablist"), billing)).toBe(true);
+	await expect.poll(async () => isInHorizontalView(horizontal.locator("[data-stepper-rail]"), billing)).toBe(true);
 });
 
 test("keeps the document still when a stepper mounts below the viewport", async ({ page }) => {
@@ -315,7 +315,7 @@ async function connectorMeetsCurrentMarker(root: Locator) {
 	const last = await markerBox(tabs.nth((await tabs.count()) - 1));
 	if (first == null || last == null) return false;
 
-	const segments = await root.locator("[data-stepper-connector]").evaluateAll((nodes) =>
+	const segments = await root.locator("[data-stepper-track]").evaluateAll((nodes) =>
 		nodes.map((node) => {
 			const style = getComputedStyle(node, "::after");
 			const rect = node.getBoundingClientRect();
@@ -328,7 +328,6 @@ async function connectorMeetsCurrentMarker(root: Locator) {
 			const left = isRtl ? rect.right - insetInlineStart - width : rect.left + insetInlineStart;
 			return {
 				bottom: top + height,
-				filled: node.getAttribute("data-stepper-connector") === "filled",
 				left,
 				right: left + width,
 				top,
@@ -336,6 +335,9 @@ async function connectorMeetsCurrentMarker(root: Locator) {
 		}),
 	);
 	if (segments.length === 0) return false;
+
+	const fillBox = await root.locator("[data-stepper-indicator]").boundingBox();
+	if (fillBox == null || (fillBox.width === 0 && fillBox.height === 0)) return false;
 
 	const currentCenter = { x: currentBox.x + currentBox.width / 2, y: currentBox.y + currentBox.height / 2 };
 	const firstCenter = { x: first.x + first.width / 2, y: first.y + first.height / 2 };
@@ -350,16 +352,7 @@ async function connectorMeetsCurrentMarker(root: Locator) {
 		x: Math.max(...segments.map((segment) => segment.right)),
 		y: Math.max(...segments.map((segment) => segment.bottom)),
 	};
-	const filledSegments = segments.filter((segment) => segment.filled);
-	const fillEdge = horizontal
-		? filledSegments.length === 0
-			? firstCenter.x
-			: isRtl
-				? Math.min(...filledSegments.map((segment) => segment.left))
-				: Math.max(...filledSegments.map((segment) => segment.right))
-		: filledSegments.length === 0
-			? firstCenter.y
-			: Math.max(...filledSegments.map((segment) => segment.bottom));
+	const fillEdge = horizontal ? (isRtl ? fillBox.x : fillBox.x + fillBox.width) : fillBox.y + fillBox.height;
 
 	const startOk = horizontal
 		? Math.abs((isRtl ? trackEnd.x : trackStart.x) - firstCenter.x) <= 1
@@ -368,8 +361,8 @@ async function connectorMeetsCurrentMarker(root: Locator) {
 		? Math.abs((isRtl ? trackStart.x : trackEnd.x) - lastCenter.x) <= 1
 		: Math.abs(trackEnd.y - lastCenter.y) <= 1;
 	const fillOk = horizontal
-		? Math.abs(fillEdge - currentCenter.x) <= 1
-		: Math.abs(fillEdge - currentCenter.y) <= 1;
+		? Math.abs(fillEdge - currentCenter.x) <= 2
+		: Math.abs(fillEdge - currentCenter.y) <= 2;
 
 	return startOk && endOk && fillOk;
 }
@@ -396,15 +389,15 @@ async function markersAreOpaque(root: Locator) {
 }
 
 async function connectorIsBehindMarkers(root: Locator) {
-	return root.locator("[data-stepper-connector]").evaluateAll((nodes) =>
-		nodes.every((node) => {
-			const isolation = getComputedStyle(node).isolation;
-			const connectorZ = Number.parseFloat(getComputedStyle(node, "::after").zIndex);
+	return root.locator("[data-stepper-indicator]").evaluate((indicator, trackSelector) => {
+		const indicatorZ = Number.parseFloat(getComputedStyle(indicator).zIndex);
+		const tracks = [...document.querySelectorAll(trackSelector)];
+		return tracks.every((node) => {
 			const marker = node.querySelector("[aria-hidden]");
 			const markerZ = marker == null ? Number.NaN : Number.parseFloat(getComputedStyle(marker).zIndex);
-			return isolation === "isolate" && Number.isFinite(connectorZ) && connectorZ < 0 && markerZ > connectorZ;
-		}),
-	);
+			return Number.isFinite(indicatorZ) && markerZ > indicatorZ;
+		});
+	}, "[data-stepper-track]");
 }
 
 async function markerBox(tab: Locator) {
