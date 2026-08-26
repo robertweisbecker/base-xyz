@@ -114,6 +114,7 @@ test("maps vertical arrow keys above the md breakpoint and horizontal keys below
 	await expect(profile).toBeFocused();
 
 	await page.setViewportSize({ width: 500, height: 800 });
+	await expect.poll(async () => list.getAttribute("data-orientation")).toBe("horizontal");
 	await expect(list).toHaveAttribute("aria-orientation", "horizontal");
 	await expect.poll(async () => markerIsAboveTitle(security)).toBe(true);
 	await expect.poll(async () => contentIsBelowList(root)).toBe(true);
@@ -283,51 +284,57 @@ async function connectorMeetsCurrentMarker(root: Locator) {
 		nodes.map((node) => {
 			const style = getComputedStyle(node, "::after");
 			const rect = node.getBoundingClientRect();
-			const left = rect.left + Number.parseFloat(style.left);
-			const top = rect.top + Number.parseFloat(style.top);
 			const width = Number.parseFloat(style.width);
 			const height = Number.parseFloat(style.height);
-			const filled = node.getAttribute("data-stepper-connector") === "filled";
-			return { filled, height, left, top, width };
+			const insetInlineStart = Number.parseFloat(style.insetInlineStart);
+			const insetBlockStart = Number.parseFloat(style.insetBlockStart);
+			const isRtl = getComputedStyle(node).direction === "rtl";
+			const top = rect.top + insetBlockStart;
+			const left = isRtl ? rect.right - insetInlineStart - width : rect.left + insetInlineStart;
+			return {
+				bottom: top + height,
+				filled: node.getAttribute("data-stepper-connector") === "filled",
+				left,
+				right: left + width,
+				top,
+			};
 		}),
 	);
 	if (segments.length === 0) return false;
-
-	const trackStart = segments.reduce(
-		(start, segment) => ({
-			x: Math.min(start.x, segment.left),
-			y: Math.min(start.y, segment.top),
-		}),
-		{ x: Number.POSITIVE_INFINITY, y: Number.POSITIVE_INFINITY },
-	);
-	const trackEnd = segments.reduce(
-		(end, segment) => ({
-			x: Math.max(end.x, segment.left + segment.width),
-			y: Math.max(end.y, segment.top + segment.height),
-		}),
-		{ x: Number.NEGATIVE_INFINITY, y: Number.NEGATIVE_INFINITY },
-	);
-	const filledSegments = segments.filter((segment) => segment.filled);
-	const fillEnd = filledSegments.reduce(
-		(end, segment) => ({
-			x: Math.max(end.x, segment.left + segment.width),
-			y: Math.max(end.y, segment.top + segment.height),
-		}),
-		{ x: Number.NEGATIVE_INFINITY, y: Number.NEGATIVE_INFINITY },
-	);
 
 	const currentCenter = { x: currentBox.x + currentBox.width / 2, y: currentBox.y + currentBox.height / 2 };
 	const firstCenter = { x: first.x + first.width / 2, y: first.y + first.height / 2 };
 	const lastCenter = { x: last.x + last.width / 2, y: last.y + last.height / 2 };
 	const horizontal = Math.abs(firstCenter.y - lastCenter.y) <= 4;
+	const isRtl = horizontal && firstCenter.x > lastCenter.x;
+	const trackStart = {
+		x: Math.min(...segments.map((segment) => segment.left)),
+		y: Math.min(...segments.map((segment) => segment.top)),
+	};
+	const trackEnd = {
+		x: Math.max(...segments.map((segment) => segment.right)),
+		y: Math.max(...segments.map((segment) => segment.bottom)),
+	};
+	const filledSegments = segments.filter((segment) => segment.filled);
+	const fillEdge = horizontal
+		? filledSegments.length === 0
+			? firstCenter.x
+			: isRtl
+				? Math.min(...filledSegments.map((segment) => segment.left))
+				: Math.max(...filledSegments.map((segment) => segment.right))
+		: filledSegments.length === 0
+			? firstCenter.y
+			: Math.max(...filledSegments.map((segment) => segment.bottom));
+
 	const startOk = horizontal
-		? Math.abs(trackStart.x - firstCenter.x) <= 1
+		? Math.abs((isRtl ? trackEnd.x : trackStart.x) - firstCenter.x) <= 1
 		: Math.abs(trackStart.y - firstCenter.y) <= 1;
-	const endOk = horizontal ? Math.abs(trackEnd.x - lastCenter.x) <= 1 : Math.abs(trackEnd.y - lastCenter.y) <= 1;
-	const fillBoundary = filledSegments.length === 0 ? firstCenter : fillEnd;
+	const endOk = horizontal
+		? Math.abs((isRtl ? trackStart.x : trackEnd.x) - lastCenter.x) <= 1
+		: Math.abs(trackEnd.y - lastCenter.y) <= 1;
 	const fillOk = horizontal
-		? Math.abs((filledSegments.length === 0 ? trackStart.x : fillBoundary.x) - currentCenter.x) <= 1
-		: Math.abs((filledSegments.length === 0 ? trackStart.y : fillBoundary.y) - currentCenter.y) <= 1;
+		? Math.abs(fillEdge - currentCenter.x) <= 1
+		: Math.abs(fillEdge - currentCenter.y) <= 1;
 
 	return startOk && endOk && fillOk;
 }

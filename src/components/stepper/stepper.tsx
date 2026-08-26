@@ -259,6 +259,7 @@ export function List({ className, style, xstyle, ...props }: StepperListProps) {
 			loopFocus={false}
 			style={mergeStyle(sx.style, style)}
 			{...props}
+			aria-orientation={effectiveOrientation}
 		/>
 	);
 }
