@@ -215,6 +215,7 @@ test("lays out markers and connector fill in horizontal, vertical, and rtl", asy
 	await expect.poll(async () => markersAreOpaque(horizontal)).toBe(true);
 	await expect.poll(async () => markersAreOpaque(vertical)).toBe(true);
 	await expect.poll(async () => markersAreOpaque(rtl)).toBe(true);
+	await expect.poll(async () => connectorIsBehindMarkers(vertical)).toBe(true);
 
 	await page.setViewportSize({ width: 360, height: 800 });
 	await expect.poll(async () => contentIsBelowList(vertical)).toBe(true);
@@ -362,6 +363,18 @@ async function markersAreOpaque(root: Locator) {
 				return color !== "transparent" && color !== "rgba(0, 0, 0, 0)";
 			}),
 		);
+}
+
+async function connectorIsBehindMarkers(root: Locator) {
+	return root.locator("[data-stepper-connector]").evaluateAll((nodes) =>
+		nodes.every((node) => {
+			const isolation = getComputedStyle(node).isolation;
+			const connectorZ = Number.parseFloat(getComputedStyle(node, "::after").zIndex);
+			const marker = node.querySelector("[aria-hidden]");
+			const markerZ = marker == null ? Number.NaN : Number.parseFloat(getComputedStyle(marker).zIndex);
+			return isolation === "isolate" && Number.isFinite(connectorZ) && connectorZ < 0 && markerZ > connectorZ;
+		}),
+	);
 }
 
 async function markerBox(tab: Locator) {
