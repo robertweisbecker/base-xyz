@@ -8,7 +8,7 @@ starting, honor its STOP conditions, and update its row when done.
 
 | Plan                                                           | Title                                                           | Priority | Effort | Depends on | Status |
 | -------------------------------------------------------------- | --------------------------------------------------------------- | -------: | -----: | ---------- | ------ |
-| [001](./001-stepper-component.md)                              | Add an accessible responsive Stepper component                  |       P2 |      L | —          | TODO   |
+| [001](./001-stepper-component.md)                              | Add an accessible responsive Stepper component                  |       P2 |      L | —          | DONE   |
 | [Math expression input](./2026-08-18-math-expression-input.md) | Add a private math-expression evaluation seam and story harness |        — |      — | —          | TODO   |
 | [Table primitives](./table-primitives-plan.md)                 | Add agnostic table primitive components                         |        — |      — | —          | DONE   |
 
