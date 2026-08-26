@@ -54,7 +54,7 @@
 - Keep `CONTEXT.md` as the concise repository glossary.
 - Keep this file limited to executable agent rules. Record durable architectural choices and rationale in the next numbered file under `docs/adr/`, then link it from the README and the relevant rule here.
 - Update an existing ADR when clarifying the same decision. Add a new ADR only for a distinct decision or when superseding an earlier one; never silently rewrite historical status or rationale. When an ADR is superseded, set its status line to point at the successor and move the file to `docs/adr/archive/`, updating inbound links; numbering is never reused.
-- Keep `plans/` as an active backlog only. After a plan is DONE or REJECTED, distill any durable outcome into an ADR, glossary, or implementation guide, then remove the inactive plan and its status history. Git history is the archive; do not keep execution transcripts in the public tree.
+- Keep `docs/plans/` as the active implementation backlog; do not create a root-level `plans/` directory. After a plan is DONE or REJECTED, distill any durable outcome into an ADR, glossary, or implementation guide, then remove the inactive plan and its status history. Git history is the archive; do not keep execution transcripts in the public tree.
 - Record grievances, tooling friction, and workaround needs in `.agents/PAPERCUTS.md` (committed) as you encounter them: one dated bullet per papercut with file/tool context and the workaround taken. Do not silently absorb repeated friction.
 
 ## Validation

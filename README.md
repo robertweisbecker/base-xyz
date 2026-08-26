@@ -25,7 +25,9 @@ npm run dev
 
 ```text
 .storybook/                 Storybook config and global theme toolbar
-docs                        Planning / agent docs
+docs/
+  adr/                      Durable architectural decisions
+  plans/                    Active implementation backlog
 src/
   components/               Base UI-backed components and colocated stories
   blocks/                   Opinionated compositions for recurring use cases
