@@ -180,7 +180,10 @@ const drawerParts = stylex.create({
 	},
 	popup: {
 		"--_drawer-bleed": DRAWER_BLEED,
+		"--_drawer-footer-padding-bottom": "0px",
 		"--_drawer-peek": ".5rem",
+		"--_drawer-popup-padding-bottom":
+			"calc(1.5rem + env(safe-area-inset-bottom, 0px) + var(--_drawer-bleed))",
 		"--_drawer-stack-height":
 			"max(0px, calc(var(--drawer-frontmost-height, var(--drawer-height)) - var(--_drawer-bleed)))",
 		"--_drawer-stack-peek-offset":
@@ -231,8 +234,8 @@ const drawerParts = stylex.create({
 			default: "auto",
 		},
 		paddingBottom: {
-			default: "calc(1.5rem + env(safe-area-inset-bottom, 0px) + var(--_drawer-bleed))",
-			":has([data-slot='footer'])": 0,
+			default: "var(--_drawer-popup-padding-bottom)",
+			":has([data-slot='footer'])": "var(--_drawer-footer-padding-bottom)",
 		},
 		"::after": {
 			backgroundColor: {
@@ -247,6 +250,9 @@ const drawerParts = stylex.create({
 	},
 	snapPointPopup: {
 		"--_drawer-bleed": "0px",
+		"--_drawer-footer-padding-bottom": "var(--_drawer-popup-padding-bottom)",
+		"--_drawer-popup-padding-bottom":
+			"max(0px, calc(var(--drawer-snap-point-offset, 0px) + var(--drawer-swipe-movement-y)))",
 		overscrollBehavior: "auto",
 		touchAction: "none",
 		transitionDuration: {
@@ -263,11 +269,6 @@ const drawerParts = stylex.create({
 		marginBottom: 0,
 		maxHeight: `calc(100dvh - ${tokens["--space-4"]})`,
 		overflowY: "visible",
-		paddingBottom: {
-			default: "max(0px, calc(var(--drawer-snap-point-offset, 0px) + var(--drawer-swipe-movement-y)))",
-			":has([data-slot='footer'])":
-				"max(0px, calc(var(--drawer-snap-point-offset, 0px) + var(--drawer-swipe-movement-y)))",
-		},
 		"::before": {
 			insetInline: 0,
 			backgroundColor: "inherit",

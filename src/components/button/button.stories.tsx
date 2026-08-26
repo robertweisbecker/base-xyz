@@ -4,11 +4,15 @@ import type { Meta, StoryObj } from "@storybook/react-vite";
 import x from "@stylexjs/atoms";
 import * as stylex from "@stylexjs/stylex";
 import { useState } from "react";
+import { Callout } from "@/components/callout/callout";
 import { Stack } from "@/components/layout/layout";
+import { Link } from "@/components/link/link";
 import { Text } from "@/components/text/text";
 import { tokens } from "@/theme/tokens.stylex";
 
 import { Button } from "./button";
+import { WarningIcon } from "@phosphor-icons/react";
+import { Code } from "../code";
 
 const iconOptions = {
 	None: undefined,
@@ -68,6 +72,36 @@ export const Playground: Story = {};
 export const FullWidth: Story = {
 	parameters: { controls: { disable: true } },
 	render: () => <Button xstyle={x.width["100%"]}>Continue</Button>,
+};
+
+export const Rendering: Story = {
+	parameters: { controls: { disable: true } },
+	render: () => (
+		<Stack align="start" justify="start" gap={4}>
+			<Button nativeButton={false} render={<div />}>
+				Button as div (don't do this)
+			</Button>
+			<Callout
+				hue="neutral"
+				title="Rendering links"
+				icon={<WarningIcon aria-hidden />}
+				description={
+					<>
+						<Text>
+							Button's <Code>render</Code> prop preserves button semantics.
+							<br />
+							For navigation to a URL, use{" "}
+							<Link href="/?path=/story/components-link-link-button--playground" target="_top">
+								LinkButton
+							</Link>{" "}
+							instead.
+						</Text>
+					</>
+				}
+				xstyle={x.width["fit-content"]}
+			/>
+		</Stack>
+	),
 };
 
 const sizes = ["xs", "sm", "md", "lg"] as const;

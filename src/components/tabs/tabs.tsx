@@ -12,6 +12,7 @@ import {
 } from "react";
 import type { ButtonSize } from "@/components/button/button";
 import { typescaleStyles, fontWeightStyles } from "@/components/text/text.stylex";
+import { media } from "@/styles/constants.stylex";
 import { focusRing } from "@/styles/recipes/focus";
 import { mergeStyle, type BaseStyleProps } from "@/styles/props/base";
 import { extractMarginProps, type MarginProps } from "@/styles/props/spacing.stylex";
@@ -19,10 +20,12 @@ import { tokens } from "@/theme/tokens.stylex";
 import { attrJoin } from "@/utils/attr-join";
 
 export type TabsSize = Extract<ButtonSize, "sm" | "md" | "lg">;
+export type TabsVariant = "default" | "underline";
 
 type TabsContextValue = {
 	orientation: BaseTabs.Root.Orientation;
 	size: TabsSize;
+	variant: TabsVariant;
 };
 
 const TabsContext = createContext<TabsContextValue | null>(null);
@@ -36,6 +39,7 @@ export type TabsRootProps = Omit<BaseTabs.Root.Props, "className" | "style" | ke
 	BaseStyleProps & {
 		className?: string;
 		size?: TabsSize;
+		variant?: TabsVariant;
 	};
 
 export function Root({
@@ -45,6 +49,7 @@ export function Root({
 	orientation = "horizontal",
 	size: tabsSize = "md",
 	style,
+	variant = "default",
 	xstyle,
 	...props
 }: TabsRootProps) {
@@ -55,7 +60,10 @@ export function Root({
 		marginStyles,
 		xstyle,
 	);
-	const contextValue = useMemo(() => ({ orientation, size: tabsSize }), [orientation, tabsSize]);
+	const contextValue = useMemo(
+		() => ({ orientation, size: tabsSize, variant }),
+		[orientation, tabsSize, variant],
+	);
 
 	return (
 		<TabsContext value={contextValue}>
@@ -75,12 +83,23 @@ export function Root({
 export type TabsListProps = Omit<BaseTabs.List.Props, "className" | "style"> & TabsPartStyleProps;
 
 export function List({ ref, children, className, style, xstyle, ...props }: TabsListProps) {
-	const { orientation, size: tabsSize } = useTabsContext();
+	const { orientation, size: tabsSize, variant } = useTabsContext();
 	const listRef = useRef<HTMLDivElement | null>(null);
 	const indicatorRef = useRef<HTMLSpanElement | null>(null);
 	const mergedRef = useMergedRefs(ref, listRef);
-	const sx = stylex.props(tabsParts.list, listOrientationStyles[orientation], tabsRadiusStyles[tabsSize], xstyle);
-	const indicatorSx = stylex.props(tabsParts.indicator);
+	const sx = stylex.props(
+		tabsParts.list,
+		listOrientationStyles[orientation],
+		tabsRadiusStyles[tabsSize],
+		variant === "underline" && underlineListStyles.base,
+		variant === "underline" && underlineListOrientationStyles[orientation],
+		xstyle,
+	);
+	const indicatorSx = stylex.props(
+		tabsParts.indicator,
+		variant === "underline" && underlineIndicatorStyles.base,
+		variant === "underline" && underlineIndicatorOrientationStyles[orientation],
+	);
 
 	useEffect(() => {
 		const listElement = listRef.current;
@@ -117,7 +136,11 @@ export function List({ ref, children, className, style, xstyle, ...props }: Tabs
 			style={mergeStyle(sx.style, style)}
 			{...props}>
 			{children}
-			<BaseTabs.Indicator ref={indicatorRef} className={indicatorSx.className} style={indicatorSx.style} />
+			<BaseTabs.Indicator
+				ref={indicatorRef}
+				className={indicatorSx.className}
+				style={indicatorSx.style}
+			/>
 		</BaseTabs.List>
 	);
 }
@@ -132,7 +155,7 @@ export type TabsTabProps = Omit<BaseTabs.Tab.Props, "children" | "className" | "
 	};
 
 export function Tab({ ref, children, className, endSlot, startSlot, style, xstyle, type = "button", ...props }: TabsTabProps) {
-	const { orientation, size: tabsSize } = useTabsContext();
+	const { orientation, size: tabsSize, variant } = useTabsContext();
 	const sx = stylex.props(
 		focusRing.offset,
 		tabsParts.tab,
@@ -140,6 +163,7 @@ export function Tab({ ref, children, className, endSlot, startSlot, style, xstyl
 		tabTextSizeStyles[tabsSize],
 		tabOrientationStyles[orientation],
 		tabSizeStyles[tabsSize],
+		variant === "underline" && underlineTabStyles.root,
 		xstyle,
 	);
 
@@ -242,13 +266,12 @@ const tabsParts = stylex.create({
 		cornerShape: "superellipse(1.3)",
 		backgroundColor: tokens["--elevated"],
 		boxShadow: tokens["--shadow-sm"],
-		insetBlockStart: 0,
-		insetInlineStart: 0,
 		pointerEvents: "none",
 		position: "absolute",
 		transitionDuration: {
 			"[data-snap]": "0ms",
 			default: tokens["--motion-duration-medium"],
+			[media.reducedMotion]: "0ms",
 		},
 		transitionProperty: "translate, width, height",
 		transitionTimingFunction: tokens["--motion-ease-smooth-out"],
@@ -256,6 +279,8 @@ const tabsParts = stylex.create({
 		willChange: "translate, width, height",
 		zIndex: 0,
 		height: "var(--active-tab-height)",
+		left: 0,
+		top: 0,
 		width: "var(--active-tab-width)",
 	},
 	tab: {
@@ -331,6 +356,75 @@ const tabsParts = stylex.create({
 		outlineStyle: "solid",
 		outlineWidth: 0,
 		minWidth: 0,
+	},
+});
+
+const underlineListStyles = stylex.create({
+	base: {
+		padding: 0,
+		borderRadius: 0,
+		backgroundColor: "transparent",
+		outlineStyle: "none",
+		outlineWidth: 0,
+	},
+});
+
+const underlineListOrientationStyles = stylex.create({
+	horizontal: {
+		alignSelf: "stretch",
+		borderBottomColor: tokens["--border"],
+		borderBottomStyle: "solid",
+		borderBottomWidth: tokens["--border-width"],
+		paddingBottom: tokens["--space-1"],
+		width: "100%",
+	},
+	vertical: {
+		borderRightColor: tokens["--border"],
+		borderRightStyle: "solid",
+		borderRightWidth: tokens["--border-width"],
+		paddingRight: tokens["--space-1"],
+	},
+});
+
+const underlineIndicatorStyles = stylex.create({
+	base: {
+		borderRadius: 0,
+		backgroundColor: tokens["--fill-accent"],
+		boxShadow: "none",
+	},
+});
+
+const underlineIndicatorOrientationStyles = stylex.create({
+	horizontal: {
+		translate: "var(--active-tab-left) 0",
+		bottom: `calc(0px - ${tokens["--border-width"]})`,
+		height: "2px",
+		left: 0,
+		right: "auto",
+		top: "auto",
+		width: "var(--active-tab-width)",
+	},
+	vertical: {
+		translate: "0 var(--active-tab-top)",
+		bottom: "auto",
+		height: "var(--active-tab-height)",
+		left: "auto",
+		right: `calc(0px - ${tokens["--border-width"]})`,
+		top: 0,
+		width: "2px",
+	},
+});
+
+const underlineTabStyles = stylex.create({
+	root: {
+		backgroundColor: {
+			default: "transparent",
+			":hover": {
+				[media.canHover]: tokens["--surface-subtle-hover"],
+			},
+			":active": tokens["--surface-subtle-active"],
+		},
+		transitionProperty: "background-color, color",
 	},
 });
 

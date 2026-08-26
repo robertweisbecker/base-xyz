@@ -195,7 +195,7 @@ export function Header({ xstyle, ...props }: ConfirmationDialogHeaderProps) {
 	return <Dialog.Header xstyle={[confirmationDialogParts.header, xstyle]} {...props} />;
 }
 
-export function Visual({ xstyle, ...props }: ConfirmationDialogVisualProps) {
+export function Visual({ size, xstyle, ...props }: ConfirmationDialogVisualProps) {
 	return (
 		<Box
 			align="center"
@@ -203,11 +203,11 @@ export function Visual({ xstyle, ...props }: ConfirmationDialogVisualProps) {
 			bg={props.bg ?? "surfaceSubtle"}
 			color={props.color ?? "default"}
 			display="flex"
-			height={`calc(${props.size ?? 10} * ${tokens["--space-1"]})`}
+			height={`calc(${size ?? 10} * ${tokens["--space-1"]})`}
 			justify="center"
 			mb={4}
 			radius="sm"
-			width={`calc(${props.size ?? 10} * ${tokens["--space-1"]})`}
+			width={`calc(${size ?? 10} * ${tokens["--space-1"]})`}
 			{...props}
 			data-confirmation-dialog-visual
 			xstyle={xstyle}

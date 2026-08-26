@@ -119,8 +119,8 @@ export const tokens = stylex.defineVars({
 	"--color-lime-t1": "light-dark(hsl(91deg 64% 38.75%), hsl(91deg 72% 56%))",
 
 	// Surface
-	"--canvas": "light-dark(var(--color-gray-s2), #050506)",
-	"--bg-inset": "var(--color-gray-s3)",
+	"--canvas": "light-dark(var(--color-gray-s3), #050506)",
+	"--bg-inset": "var(--color-gray-s2)",
 	"--surface": "var(--color-gray-s1)",
 	"--surface-accent": "var(--color-accent-s1)",
 	"--surface-accent-hover": "var(--color-accent-s2)",

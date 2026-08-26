@@ -5,7 +5,7 @@ import * as stylex from "@stylexjs/stylex";
 import type { ReactNode } from "react";
 import { Box, Grid, Stack } from "@/components/layout/layout";
 import { Text } from "@/components/text/text";
-import { Tabs, type TabsSize } from "./tabs";
+import { Tabs, type TabsSize, type TabsVariant } from "./tabs";
 
 const iconOptions = {
 	None: undefined,
@@ -21,6 +21,7 @@ type TabsPlaygroundArgs = {
 	orientation: "horizontal" | "vertical";
 	size: TabsSize;
 	startSlot: ReactNode;
+	variant: TabsVariant;
 };
 
 type ExampleTabsProps = Partial<TabsPlaygroundArgs>;
@@ -36,6 +37,7 @@ const meta = {
 		orientation: "horizontal",
 		size: "md",
 		startSlot: <FolderSimpleIcon aria-hidden weight="duotone" />,
+		variant: "default",
 	},
 	argTypes: {
 		activateOnFocus: { control: "boolean" },
@@ -62,10 +64,14 @@ const meta = {
 			mapping: iconOptions,
 			options: Object.keys(iconOptions),
 		},
+		variant: {
+			control: "inline-radio",
+			options: ["default", "underline"],
+		},
 	},
 	parameters: {
 		controls: {
-			include: ["activateOnFocus", "defaultValue", "disabled", "endSlot", "orientation", "size", "startSlot"],
+			include: ["activateOnFocus", "defaultValue", "disabled", "endSlot", "orientation", "size", "startSlot", "variant"],
 		},
 	},
 	decorators: [
@@ -82,6 +88,26 @@ type Story = StoryObj<TabsPlaygroundArgs>;
 
 export const Playground: Story = {
 	render: (args) => <ExampleTabs {...args} />,
+};
+
+export const Variants: Story = {
+	parameters: { controls: { disable: true } },
+	render: () => (
+		<Stack gap={6}>
+			<Stack gap={2} minWidth={0}>
+				<Text color="muted" size="1">
+					Default
+				</Text>
+				<ExampleTabs />
+			</Stack>
+			<Stack gap={2} minWidth={0}>
+				<Text color="muted" size="1">
+					Underline
+				</Text>
+				<ExampleTabs variant="underline" />
+			</Stack>
+		</Stack>
+	),
 };
 
 export const Sizes: Story = {
@@ -110,17 +136,17 @@ export const Orientations: Story = {
 	parameters: { controls: { disable: true } },
 	render: () => (
 		<Grid gap={8} xstyle={storyStyles.orientationGrid}>
-			<Stack gap={2} minWidth={0}>
+			<Stack data-testid="horizontal-underline-tabs" gap={2} minWidth={0}>
 				<Text color="muted" size="1">
 					Horizontal
 				</Text>
-				<ExampleTabs />
+				<ExampleTabs variant="underline" />
 			</Stack>
-			<Stack gap={2} minWidth={0}>
+			<Stack data-testid="vertical-underline-tabs" gap={2} minWidth={0}>
 				<Text color="muted" size="1">
 					Vertical
 				</Text>
-				<ExampleTabs orientation="vertical" />
+				<ExampleTabs orientation="vertical" variant="underline" />
 			</Stack>
 		</Grid>
 	),
@@ -153,13 +179,15 @@ function ExampleTabs({
 	orientation = "horizontal",
 	size = "md",
 	startSlot,
+	variant = "default",
 }: ExampleTabsProps) {
 	return (
 		<Tabs.Root
-			key={`${defaultValue}-${orientation}-${size}`}
+			key={`${defaultValue}-${orientation}-${size}-${variant}`}
 			defaultValue={defaultValue}
 			orientation={orientation}
-			size={size}>
+			size={size}
+			variant={variant}>
 			<Tabs.List activateOnFocus={activateOnFocus}>
 				<Tabs.Tab endSlot={endSlot} startSlot={startSlot} value="overview">
 					Overview

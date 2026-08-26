@@ -40,10 +40,12 @@ export type CollapsibleGroupProps = StyledProps<BaseCollapsible.Root.Props>;
 export type CollapsibleGroupTriggerProps = Omit<MenuItemProps, "closeOnClick" | "nativeButton" | "render" | "variant">;
 export type CollapsibleGroupPanelProps = StyledProps<BaseCollapsible.Panel.Props>;
 
-export function Root<Payload = unknown>({ children, size = "md", ...props }: MenuRootProps<Payload>) {
+export function Root<Payload = unknown>({ modal = false, children, size = "md", ...props }: MenuRootProps<Payload>) {
 	return (
 		<MenuSizeContext.Provider value={size}>
-			<BaseMenu.Root {...props}>{children}</BaseMenu.Root>
+			<BaseMenu.Root modal={modal} {...props}>
+				{children}
+			</BaseMenu.Root>
 		</MenuSizeContext.Provider>
 	);
 }
@@ -91,7 +93,16 @@ function Positioner({
 	);
 }
 
-export function Popup({ ref, children, className, portalProps, positionerProps, style, xstyle, ...props }: MenuPopupProps) {
+export function Popup({
+	ref,
+	children,
+	className,
+	portalProps,
+	positionerProps,
+	style,
+	xstyle,
+	...props
+}: MenuPopupProps) {
 	const { className: sxClassName, style: sxStyle } = stylex.props(
 		menuParts.panelSurface,
 		menuParts.popup,
@@ -165,7 +176,14 @@ export function LinkItem({ ref, className, style, xstyle, ...props }: StyledProp
 	);
 }
 
-export function CheckboxItem({ ref, children, className, style, xstyle, ...props }: StyledProps<BaseMenu.CheckboxItem.Props>) {
+export function CheckboxItem({
+	ref,
+	children,
+	className,
+	style,
+	xstyle,
+	...props
+}: StyledProps<BaseMenu.CheckboxItem.Props>) {
 	const sizeStyle = useMenuItemSizeStyle();
 	const { className: sxClassName, style: sxStyle } = stylex.props(
 		menuItemStyles.item,
@@ -188,7 +206,14 @@ export function CheckboxItem({ ref, children, className, style, xstyle, ...props
 	);
 }
 
-export function SwitchItem({ ref, children, className, style, xstyle, ...props }: StyledProps<BaseMenu.CheckboxItem.Props>) {
+export function SwitchItem({
+	ref,
+	children,
+	className,
+	style,
+	xstyle,
+	...props
+}: StyledProps<BaseMenu.CheckboxItem.Props>) {
 	const sizeStyle = useMenuItemSizeStyle();
 	const { className: sxClassName, style: sxStyle } = stylex.props(
 		menuItemStyles.item,
@@ -217,7 +242,14 @@ export function SwitchItem({ ref, children, className, style, xstyle, ...props }
 	);
 }
 
-export function RadioItem({ ref, children, className, style, xstyle, ...props }: StyledProps<BaseMenu.RadioItem.Props>) {
+export function RadioItem({
+	ref,
+	children,
+	className,
+	style,
+	xstyle,
+	...props
+}: StyledProps<BaseMenu.RadioItem.Props>) {
 	const sizeStyle = useMenuItemSizeStyle();
 	const { className: sxClassName, style: sxStyle } = stylex.props(
 		menuItemStyles.item,
@@ -282,7 +314,14 @@ export function CollapsibleGroup({ ref, className, style, xstyle, ...props }: Co
 	);
 }
 
-export function CollapsibleGroupTrigger({ ref, children, className, style, xstyle, ...props }: CollapsibleGroupTriggerProps) {
+export function CollapsibleGroupTrigger({
+	ref,
+	children,
+	className,
+	style,
+	xstyle,
+	...props
+}: CollapsibleGroupTriggerProps) {
 	const sizeStyle = useMenuItemSizeStyle();
 	const { className: sxClassName, style: sxStyle } = stylex.props(
 		menuItemStyles.item,
@@ -382,7 +421,7 @@ export function ItemIcon({ children }: { children: ReactNode }) {
 	);
 }
 
-export function TriggerIcon({ ref, children, className, style, xstyle, ...props }: MenuTriggerIconProps) {
+export function TriggerIcon({ ref, children: _children, className, style, xstyle, ...props }: MenuTriggerIconProps) {
 	const { className: sxClassName, style: sxStyle } = stylex.props(menuParts.triggerIcon, xstyle);
 
 	return (

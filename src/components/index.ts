@@ -71,7 +71,7 @@ export { Separator, type SeparatorProps } from "./separator/separator";
 export { Sidebar } from "./sidebar/sidebar";
 export { Slider } from "./slider/slider";
 export { Table } from "./table/table";
-export { Tabs } from "./tabs/tabs";
+export { Tabs, type TabsSize, type TabsVariant } from "./tabs/tabs";
 export { Toolbar } from "./toolbar/toolbar";
 export {
 	Badge,
@@ -109,7 +109,9 @@ export {
 export { Dialog } from "./dialog/dialog";
 export { Drawer } from "./drawer/drawer";
 export { Link, type LinkProps, type LinkColor } from "./link/link";
+export { LinkButton, type LinkButtonProps } from "./link/link-button";
 export { LinkPreview } from "./link-preview/link-preview";
+export { List, type ListItemProps, type ListRootProps } from "./list";
 export { Loader, type LoaderProps } from "./loader/loader";
 export { Menu } from "./menu/menu";
 export { Popover } from "./popover/popover";

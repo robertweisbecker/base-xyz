@@ -9,7 +9,7 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
-    "lint": "oxlint && npm run lint:stylex",
+    "lint": "oxlint --ignore-pattern '.worktrees/**' && npm run lint:stylex",
     "lint:stylex": "eslint src",
     "test:style-props": "npm run build-storybook && playwright test tests/style-props && npm run test:style-props:bundle",
     "test:style-props:bundle": "node tests/style-props/bundle-boundary.mjs",

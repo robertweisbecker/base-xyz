@@ -255,7 +255,7 @@ export function Input({
 	label = "Search commands",
 	onKeyDown,
 	placeholder = "Search commands…",
-	startSlot = <MagnifyingGlassIcon weight="bold" aria-hidden />,
+	startSlot = <MagnifyingGlassIcon aria-hidden />,
 	style,
 	xstyle,
 	...props

@@ -1,4 +1,3 @@
-import { ArrowUpRightIcon } from "@phosphor-icons/react/dist/csr/ArrowUpRight";
 import * as stylex from "@stylexjs/stylex";
 import { type ComponentProps } from "react";
 import { mergeStyle, type BaseStyleProps } from "@/styles/props/base";
@@ -6,6 +5,7 @@ import { extractMarginProps, type MarginProps } from "@/styles/props/spacing.sty
 import { tokens } from "@/theme/tokens.stylex";
 import { focusRing } from "@/styles/recipes/focus";
 import { attrJoin } from "@/utils/attr-join";
+import { externalLinkIndicator, resolveExternalLinkProps } from "./link-utils";
 
 export type LinkColor = keyof typeof linkColors;
 
@@ -28,6 +28,7 @@ export function Link({
 	xstyle,
 	...props
 }: LinkProps) {
+	const resolvedLinkProps = resolveExternalLinkProps({ external, rel, target });
 	const { marginStyles, rest } = extractMarginProps(props);
 	const sx = stylex.props(
 		linkStyles.root,
@@ -42,17 +43,13 @@ export function Link({
 			ref={ref}
 			className={attrJoin(sx.className, "xyz-link", className)}
 			style={mergeStyle(sx.style, style)}
-			rel={external ? mergeRel(rel, "noopener noreferrer") : rel}
-			target={external ? "_blank" : target}
+			rel={resolvedLinkProps.rel}
+			target={resolvedLinkProps.target}
 			{...rest}>
 			{children}
-			{external ? <ArrowUpRightIcon aria-hidden size="1em" weight="regular" /> : null}
+			{external ? externalLinkIndicator : null}
 		</a>
 	);
-}
-
-function mergeRel(rel: string | undefined, requiredRel: string) {
-	return Array.from(new Set(`${rel ?? ""} ${requiredRel}`.trim().split(/\s+/))).join(" ");
 }
 
 const linkStyles = stylex.create({

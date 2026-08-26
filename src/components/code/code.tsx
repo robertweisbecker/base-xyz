@@ -13,20 +13,9 @@ export type CodeProps = Omit<ComponentProps<"code">, "className" | "style" | key
 
 export function Code({ ref, className, style, xstyle, ...props }: CodeProps) {
 	const { marginStyles, rest } = extractMarginProps(props);
-	const sx = stylex.props(
-		styles.root,
-		...marginStyles,
-		xstyle,
-	);
+	const sx = stylex.props(styles.root, ...marginStyles, xstyle);
 
-	return (
-		<code
-			ref={ref}
-			className={attrJoin(sx.className, className)}
-			style={mergeStyle(sx.style, style)}
-			{...rest}
-		/>
-	);
+	return <code ref={ref} className={attrJoin(sx.className, className)} style={mergeStyle(sx.style, style)} {...rest} />;
 }
 
 const styles = stylex.create({
@@ -36,14 +25,13 @@ const styles = stylex.create({
 		paddingBlock: "0.125lh",
 		paddingInline: "0.45em",
 		backgroundColor: tokens["--bg-inset"],
-		color: tokens["--fg-muted"],
+		color: tokens["--fg"],
 		display: "inline",
 		fontFamily: tokens["--font-family-mono"],
 		fontSize: "0.875em",
 		fontWeight: tokens["--font-weight-regular"],
 		lineHeight: "1em",
 		outlineColor: "color-mix(in srgb, currentColor 10%, transparent)",
-		outlineOffset: "-0.0625rem",
 		outlineStyle: "solid",
 		outlineWidth: "0.0625rem",
 		verticalAlign: "baseline",

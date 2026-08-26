@@ -165,7 +165,7 @@ export function Actions({ className, style, xstyle, ...props }: AsyncJobProgress
 }
 
 export function ActionButton({ variant = "ghost", size = "xs", ...props }: React.ComponentProps<typeof Button>) {
-	const { status } = useAsyncJobProgressContext("Status");
+	const { status } = useAsyncJobProgressContext("ActionButton");
 	return (
 		<Button me={-1} variant={variant} size={size} endSlot={statusPresentation[status].buttonIcon} {...props}>
 			{statusPresentation[status].buttonLabel}

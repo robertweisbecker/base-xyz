@@ -126,6 +126,7 @@ const calloutParts = stylex.create({
 	content: {
 		display: "flex",
 		flexGrow: 1,
+		gap: tokens["--space-1"],
 		minWidth: 0,
 	},
 	title: {
@@ -220,7 +221,7 @@ const calloutHueStyles = stylex.create({
 		color: tokens["--color-success-t2"],
 	},
 	neutral: {
-		backgroundColor: tokens["--color-gray-c1"],
+		backgroundColor: tokens["--surface-subtle"],
 		color: tokens["--color-gray-t3"],
 	},
 });
