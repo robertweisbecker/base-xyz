@@ -50,6 +50,7 @@ test("exposes tab semantics, names, and descriptions without marker text", async
 	const panel = root.getByRole("tabpanel", { name: "Review" });
 	await expect(panel).toBeVisible();
 	await expect(panel).toHaveAttribute("tabindex", "0");
+	await expect.poll(async () => markersAreOpaque(root)).toBe(true);
 });
 
 test("moves focus without selecting and activates with enter or space", async ({ page }) => {
@@ -211,6 +212,9 @@ test("lays out markers and connector fill in horizontal, vertical, and rtl", asy
 
 	const rtl = page.getByTestId("rtl-stepper");
 	await expect.poll(async () => connectorMeetsCurrentMarker(rtl)).toBe(true);
+	await expect.poll(async () => markersAreOpaque(horizontal)).toBe(true);
+	await expect.poll(async () => markersAreOpaque(vertical)).toBe(true);
+	await expect.poll(async () => markersAreOpaque(rtl)).toBe(true);
 
 	await page.setViewportSize({ width: 360, height: 800 });
 	await expect.poll(async () => contentIsBelowList(vertical)).toBe(true);
@@ -337,6 +341,27 @@ async function connectorMeetsCurrentMarker(root: Locator) {
 		: Math.abs(fillEdge - currentCenter.y) <= 1;
 
 	return startOk && endOk && fillOk;
+}
+
+async function markersAreOpaque(root: Locator) {
+	return root
+		.getByRole("tab")
+		.locator("[aria-hidden]")
+		.evaluateAll((nodes) =>
+			nodes.every((node) => {
+				const color = getComputedStyle(node).backgroundColor;
+				const slashAlpha = color.split("/")[1];
+				if (slashAlpha != null) {
+					const alpha = Number.parseFloat(slashAlpha);
+					return Number.isFinite(alpha) ? alpha >= 0.99 : true;
+				}
+				if (color.startsWith("rgba(")) {
+					const parts = color.slice(5, -1).split(",");
+					return parts.length < 4 || Number.parseFloat(parts[3] ?? "1") >= 0.99;
+				}
+				return color !== "transparent" && color !== "rgba(0, 0, 0, 0)";
+			}),
+		);
 }
 
 async function markerBox(tab: Locator) {

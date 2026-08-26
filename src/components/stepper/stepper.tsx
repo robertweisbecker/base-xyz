@@ -718,7 +718,7 @@ const stepperParts = stylex.create({
 		borderWidth: tokens["--border-width"],
 		flex: "none",
 		alignItems: "center",
-		backgroundColor: tokens["--surface-subtle"],
+		backgroundColor: tokens["--elevated"],
 		boxSizing: "border-box",
 		color: tokens["--fg-muted"],
 		display: "inline-flex",
@@ -729,7 +729,7 @@ const stepperParts = stylex.create({
 		lineHeight: tokens["--line-height-2"],
 		position: "relative",
 		transitionDuration: tokens["--motion-duration-medium"],
-		transitionProperty: "background-color, border-color, box-shadow, color",
+		transitionProperty: "background-color, background-image, border-color, box-shadow, color",
 		transitionTimingFunction: tokens["--motion-ease-smooth-out"],
 		zIndex: 1,
 		height: "var(--_stepper-marker-size)",
@@ -863,17 +863,17 @@ const contentOrientationStyles = stylex.create({
 const markerToneStyles = stylex.create({
 	completed: {
 		borderColor: tokens["--bg-success-primary"],
-		backgroundColor: tokens["--bg-success-primary"],
+		backgroundImage: `linear-gradient(${tokens["--bg-success-primary"]}, ${tokens["--bg-success-primary"]})`,
 		color: tokens["--fg-success-contrast"],
 	},
 	invalid: {
 		borderColor: tokens["--bg-error-primary"],
-		backgroundColor: tokens["--bg-error-primary"],
+		backgroundImage: `linear-gradient(${tokens["--bg-error-primary"]}, ${tokens["--bg-error-primary"]})`,
 		color: tokens["--fg-error-contrast"],
 	},
 	currentIncomplete: {
 		borderColor: tokens["--bg-primary"],
-		backgroundColor: tokens["--bg-primary"],
+		backgroundImage: `linear-gradient(${tokens["--bg-primary"]}, ${tokens["--bg-primary"]})`,
 		color: tokens["--fg-accent-contrast"],
 	},
 	current: {
@@ -881,7 +881,8 @@ const markerToneStyles = stylex.create({
 	},
 	disabled: {
 		borderColor: tokens["--border-disabled"],
-		backgroundColor: tokens["--bg-disabled"],
+		backgroundColor: tokens["--surface"],
+		backgroundImage: "none",
 		boxShadow: "none",
 		color: tokens["--fg-disabled"],
 	},
