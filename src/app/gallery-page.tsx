@@ -62,6 +62,7 @@ import {
 	Separator,
 	Slider,
 	Stack,
+	Stepper,
 	Switch,
 	Table,
 	Tabs,
@@ -574,6 +575,38 @@ function getComponentCells(): GalleryCell[] {
 						</Slider.Control>
 					</Slider.Row>
 				</Slider.Root>
+			),
+		},
+		{
+			title: "Stepper",
+			content: (
+				<Stepper.Root defaultValue="profile">
+					<Stepper.List aria-label="Account setup">
+						<Stepper.Step value="profile">
+							<Stepper.Marker />
+							<Stepper.Heading>
+								<Stepper.Title>Profile</Stepper.Title>
+							</Stepper.Heading>
+						</Stepper.Step>
+						<Stepper.Step value="security">
+							<Stepper.Marker />
+							<Stepper.Heading>
+								<Stepper.Title>Security</Stepper.Title>
+							</Stepper.Heading>
+						</Stepper.Step>
+						<Stepper.Step value="review">
+							<Stepper.Marker />
+							<Stepper.Heading>
+								<Stepper.Title>Review</Stepper.Title>
+							</Stepper.Heading>
+						</Stepper.Step>
+					</Stepper.List>
+					<Stepper.Content>
+						<Stepper.Panel value="profile">Add your personal details.</Stepper.Panel>
+						<Stepper.Panel value="security">Choose authentication options.</Stepper.Panel>
+						<Stepper.Panel value="review">Confirm the account setup.</Stepper.Panel>
+					</Stepper.Content>
+				</Stepper.Root>
 			),
 		},
 		{

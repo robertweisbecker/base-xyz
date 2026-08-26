@@ -3,7 +3,6 @@ import { LockIcon } from "@phosphor-icons/react/dist/csr/Lock";
 import { RocketLaunchIcon } from "@phosphor-icons/react/dist/csr/RocketLaunch";
 import { ConfirmationDialog, CopyButton, PageHeader, PasswordField, WorkflowProgress } from "@/blocks";
 import { Badge, Box, Button, Icon, Stack, Tabs, Text } from "@/components";
-import { tokens } from "@/theme/tokens.stylex";
 import { ExperimentPage, ExperimentSection } from "./experiment-page";
 
 const passwordRequirements = [/.{12,}/, /[0-9]/, /[a-z]/, /[A-Z]/] as const;

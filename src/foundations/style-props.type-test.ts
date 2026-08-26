@@ -20,6 +20,17 @@ import type { PopoverPopupProps } from "@/components/popover/popover";
 import type { MenuItemProps } from "@/components/menu/menu";
 import type { SelectPopupProps, SelectRootProps } from "@/components/select/select";
 import type { TabsListProps } from "@/components/tabs/tabs";
+import type {
+	StepperContentProps,
+	StepperDescriptionProps,
+	StepperHeadingProps,
+	StepperListProps,
+	StepperMarkerProps,
+	StepperPanelProps,
+	StepperRootProps,
+	StepperStepProps,
+	StepperTitleProps,
+} from "@/components/stepper/stepper";
 import type { TextFieldProps } from "@/components/text-field/text-field";
 import type { TextProps } from "@/components/text/text";
 import type { TextareaProps } from "@/components/textarea/textarea";
@@ -133,6 +144,43 @@ export type StyledSurfaceEscapeHatchContract = [
 	Expect<HasKey<TabsListProps, "xstyle">>,
 	Expect<HasKey<WorkflowProgressTitleProps, "style">>,
 	Expect<HasKey<WorkflowProgressTitleProps, "xstyle">>,
+];
+
+export type StepperContract = [
+	Expect<HasKey<StepperRootProps, "m">>,
+	Expect<HasKey<StepperRootProps, "ms">>,
+	Expect<HasKey<StepperRootProps, "style">>,
+	Expect<HasKey<StepperRootProps, "xstyle">>,
+	Expect<Not<HasKey<StepperRootProps, "width">>>,
+	Expect<Not<HasKey<StepperRootProps, "position">>>,
+	Expect<Not<HasKey<StepperRootProps, "p">>>,
+	Expect<HasKey<StepperListProps, "style">>,
+	Expect<HasKey<StepperListProps, "xstyle">>,
+	Expect<Not<HasKey<StepperListProps, "m">>>,
+	Expect<HasKey<StepperStepProps, "style">>,
+	Expect<HasKey<StepperStepProps, "xstyle">>,
+	Expect<Not<HasKey<StepperStepProps, "m">>>,
+	Expect<HasKey<StepperMarkerProps, "style">>,
+	Expect<HasKey<StepperMarkerProps, "xstyle">>,
+	Expect<Not<HasKey<StepperMarkerProps, "m">>>,
+	Expect<HasKey<StepperHeadingProps, "style">>,
+	Expect<HasKey<StepperHeadingProps, "xstyle">>,
+	Expect<Not<HasKey<StepperHeadingProps, "m">>>,
+	Expect<HasKey<StepperTitleProps, "style">>,
+	Expect<HasKey<StepperTitleProps, "xstyle">>,
+	Expect<Not<HasKey<StepperTitleProps, "m">>>,
+	Expect<HasKey<StepperDescriptionProps, "style">>,
+	Expect<HasKey<StepperDescriptionProps, "xstyle">>,
+	Expect<Not<HasKey<StepperDescriptionProps, "m">>>,
+	Expect<HasKey<StepperContentProps, "style">>,
+	Expect<HasKey<StepperContentProps, "xstyle">>,
+	Expect<Not<HasKey<StepperContentProps, "m">>>,
+	Expect<HasKey<StepperPanelProps, "style">>,
+	Expect<HasKey<StepperPanelProps, "xstyle">>,
+	Expect<Not<HasKey<StepperPanelProps, "m">>>,
+	Expect<Not<HasKey<StepperListProps, "width">>>,
+	Expect<Not<HasKey<StepperStepProps, "position">>>,
+	Expect<Not<HasKey<StepperContentProps, "p">>>,
 ];
 
 export type SpacingValueContract = [

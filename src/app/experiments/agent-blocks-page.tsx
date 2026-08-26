@@ -33,8 +33,6 @@ import { breakpoints } from "@/styles/constants.stylex";
 import { tokens } from "@/theme/tokens.stylex";
 import { experimentLayoutVars } from "./experiment-layout.stylex";
 import { ExperimentPage, ExperimentSection } from "./experiment-page";
-import { ArrowClockwiseIcon } from "@phosphor-icons/react/dist/ssr/ArrowClockwise";
-import { CaretRightIcon, XCircleIcon } from "@phosphor-icons/react";
 import { ImagesSquareIcon } from "@phosphor-icons/react/dist/ssr";
 
 const agentModelGroups = [
