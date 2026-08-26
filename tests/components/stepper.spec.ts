@@ -221,8 +221,8 @@ test("lays out markers and connector fill in horizontal, vertical, and rtl", asy
 
 	const tabs = horizontal.getByRole("tab");
 	await expect.poll(async () => doesNotWrap(tabs)).toBe(true);
-	await horizontal.getByRole("button", { name: "Continue" }).click();
-	await horizontal.getByRole("button", { name: "Continue" }).click();
+	await horizontal.getByRole("tabpanel", { name: /Profile/ }).getByRole("button", { name: "Continue" }).click();
+	await horizontal.getByRole("tabpanel", { name: /Security/ }).getByRole("button", { name: "Continue" }).click();
 	const billing = horizontal.getByRole("tab", { name: "Billing" });
 	await expect.poll(async () => isInHorizontalView(horizontal.getByRole("tablist"), billing)).toBe(true);
 });
