@@ -16,8 +16,7 @@ import {
 	type MouseEvent as ReactMouseEvent,
 } from "react";
 import { Button, type ButtonProps } from "@/components/button/button";
-import { ScrollArea } from "@/components/scroll-area/scroll-area";
-import { fontWeightStyles, textStyles } from "@/components/text/text.stylex";
+import { fontWeightStyles, textStyles, textTruncationStyles } from "@/components/text/text.stylex";
 import { VisuallyHidden } from "@/components/visually-hidden/visually-hidden";
 import { media } from "@/styles/constants.stylex";
 import { mergeStyle, type BaseStyleProps } from "@/styles/props/base";
@@ -221,55 +220,37 @@ export type StepperListProps = Omit<
 	StepperPartStyleProps;
 
 export function List({ children, className, style, xstyle, ...props }: StepperListProps) {
-	const { effectiveOrientation, effectiveValue } = useStepperRootContext();
-	const viewportRef = useRef<HTMLDivElement>(null);
-	const railSx = stylex.props(stepperParts.rail, railOrientationStyles[effectiveOrientation], xstyle);
-	const listSx = stylex.props(stepperParts.list, listOrientationStyles[effectiveOrientation]);
+	const { effectiveOrientation } = useStepperRootContext();
+	const sx = stylex.props(
+		stepperParts.list,
+		listOrientationStyles[effectiveOrientation],
+		xstyle,
+	);
 	const indicatorSx = stylex.props(
 		stepperParts.indicator,
 		indicatorOrientationStyles[effectiveOrientation],
 	);
 
-	useLayoutEffect(() => {
-		const viewport = viewportRef.current;
-		if (viewport == null) {
-			return;
-		}
-		const active = viewport.querySelector<HTMLElement>("[data-active]");
-		if (active != null) {
-			scrollChildIntoViewport(active, viewport);
-		}
-	}, [effectiveValue]);
-
 	return (
-		<ScrollArea
-			className={attrJoin(railSx.className, className)}
-			data-stepper-rail=""
-			disableFade
-			orientation={effectiveOrientation}
-			size="content"
-			style={mergeStyle(railSx.style, style)}
-			viewportRef={viewportRef}>
-			<BaseTabs.List
-				activateOnFocus={false}
-				className={listSx.className}
-				loopFocus={false}
-				style={listSx.style}
-				{...props}
-				aria-orientation={effectiveOrientation}>
-				{children}
-				<BaseTabs.Indicator
-					className={indicatorSx.className}
-					data-stepper-indicator=""
-					style={(state) =>
-						mergeStyle(
-							indicatorSx.style,
-							indicatorFillStyle(state.activeTabPosition, effectiveOrientation),
-						)
-					}
-				/>
-			</BaseTabs.List>
-		</ScrollArea>
+		<BaseTabs.List
+			activateOnFocus={false}
+			className={attrJoin(sx.className, className)}
+			loopFocus={false}
+			style={mergeStyle(sx.style, style)}
+			{...props}
+			aria-orientation={effectiveOrientation}>
+			{children}
+			<BaseTabs.Indicator
+				className={indicatorSx.className}
+				data-stepper-indicator=""
+				style={(state) =>
+					mergeStyle(
+						indicatorSx.style,
+						indicatorFillStyle(state.activeTabPosition, effectiveOrientation),
+					)
+				}
+			/>
+		</BaseTabs.List>
 	);
 }
 
@@ -413,6 +394,7 @@ export function Title({ className, style, xstyle, ...props }: StepperTitleProps)
 	const sx = stylex.props(
 		textStyles.label,
 		fontWeightStyles.medium,
+		textTruncationStyles.truncate,
 		stepperParts.title,
 		selected && titleStateStyles.selected,
 		disabled && titleStateStyles.disabled,
@@ -436,6 +418,7 @@ export function Description({ className, style, xstyle, ...props }: StepperDescr
 	const { descriptionId, disabled, registerDescription } = useStepperStepContext();
 	const sx = stylex.props(
 		textStyles.supporting,
+		textTruncationStyles.truncate,
 		stepperParts.description,
 		disabled && descriptionStateStyles.disabled,
 		xstyle,
@@ -567,35 +550,6 @@ function getServerMdViewport() {
 	return false;
 }
 
-function prefersReducedMotion() {
-	return typeof window !== "undefined" && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-}
-
-function scrollChildIntoViewport(child: HTMLElement, viewport: HTMLElement) {
-	const viewportRect = viewport.getBoundingClientRect();
-	const childRect = child.getBoundingClientRect();
-	let deltaInline = 0;
-	let deltaBlock = 0;
-	if (childRect.left < viewportRect.left) {
-		deltaInline = childRect.left - viewportRect.left;
-	} else if (childRect.right > viewportRect.right) {
-		deltaInline = childRect.right - viewportRect.right;
-	}
-	if (childRect.top < viewportRect.top) {
-		deltaBlock = childRect.top - viewportRect.top;
-	} else if (childRect.bottom > viewportRect.bottom) {
-		deltaBlock = childRect.bottom - viewportRect.bottom;
-	}
-	if (deltaInline === 0 && deltaBlock === 0) {
-		return;
-	}
-	viewport.scrollBy({
-		behavior: prefersReducedMotion() ? "auto" : "smooth",
-		left: deltaInline,
-		top: deltaBlock,
-	});
-}
-
 function sortStepRecords(records: StepRecord[]) {
 	return [...records].sort((left, right) => {
 		if (left.node === right.node) {
@@ -682,10 +636,6 @@ const stepperParts = stylex.create({
 		minWidth: 0,
 		width: "100%",
 	},
-	rail: {
-		minWidth: 0,
-		width: "100%",
-	},
 	list: {
 		gap: 0,
 		paddingBlock: tokens["--space-2"],
@@ -693,8 +643,9 @@ const stepperParts = stylex.create({
 		boxSizing: "border-box",
 		display: "flex",
 		isolation: "isolate",
+		minWidth: 0,
 		position: "relative",
-		minWidth: "100%",
+		width: "100%",
 	},
 	step: {
 		margin: 0,
@@ -801,11 +752,11 @@ const stepperParts = stylex.create({
 				[media.canHover]: tokens["--fg"],
 			},
 		},
-		overflowWrap: "anywhere",
+		minWidth: 0,
 	},
 	description: {
 		color: tokens["--fg-subtle"],
-		overflowWrap: "anywhere",
+		minWidth: 0,
 	},
 	content: {
 		display: "grid",
@@ -840,31 +791,24 @@ const rootOrientationStyles = stylex.create({
 	},
 });
 
-const railOrientationStyles = stylex.create({
+const listOrientationStyles = stylex.create({
 	horizontal: {
-		gridColumn: "1",
+		alignItems: "flex-start",
 		alignSelf: "stretch",
+		flexDirection: "row",
+		flexWrap: "nowrap",
+		gridColumn: "1",
 		minWidth: 0,
 	},
 	vertical: {
-		gridColumn: "1",
+		alignItems: "stretch",
 		alignSelf: "stretch",
+		flexDirection: "column",
+		gridColumn: "1",
 		gridRowEnd: "-1",
 		gridRowStart: "1",
 		minHeight: 0,
 		minWidth: "12rem",
-	},
-});
-
-const listOrientationStyles = stylex.create({
-	horizontal: {
-		alignItems: "flex-start",
-		flexDirection: "row",
-		flexWrap: "nowrap",
-	},
-	vertical: {
-		alignItems: "stretch",
-		flexDirection: "column",
 	},
 });
 
@@ -882,12 +826,12 @@ const indicatorOrientationStyles = stylex.create({
 
 const stepOrientationStyles = stylex.create({
 	horizontal: {
-		flexBasis: "8rem",
+		flexBasis: 0,
 		flexGrow: 1,
-		flexShrink: 0,
+		flexShrink: 1,
 		gridTemplateColumns: "minmax(0, 1fr)",
 		justifyItems: "start",
-		minWidth: "8rem",
+		minWidth: 0,
 	},
 	vertical: {
 		alignItems: "start",

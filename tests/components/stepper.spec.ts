@@ -238,16 +238,6 @@ test("lays out markers and connector fill in horizontal and vertical", async ({ 
 
 	const tabs = horizontal.getByRole("tab");
 	await expect.poll(async () => doesNotWrap(tabs)).toBe(true);
-	await horizontal.getByRole("tabpanel", { name: /Profile/ }).getByRole("button", { name: "Continue" }).click();
-	await horizontal.getByRole("tabpanel", { name: /Security/ }).getByRole("button", { name: "Continue" }).click();
-	const billing = horizontal.getByRole("tab", { name: "Billing" });
-	await expect.poll(async () => isInHorizontalView(horizontal.locator("[data-stepper-rail]"), billing)).toBe(true);
-});
-
-test("keeps the document still when a stepper mounts below the viewport", async ({ page }) => {
-	await page.setViewportSize({ width: 1024, height: 360 });
-	await page.goto(navigationPath);
-	await expect.poll(async () => page.evaluate(() => window.scrollY)).toBe(0);
 });
 
 async function markerIsAboveTitle(tab: Locator) {
@@ -289,12 +279,6 @@ async function doesNotWrap(tabs: Locator) {
 	const last = await tabs.nth(count - 1).boundingBox();
 	if (first == null || last == null) return false;
 	return Math.abs(first.y - last.y) <= 8;
-}
-
-async function isInHorizontalView(list: Locator, tab: Locator) {
-	const [listBox, tabBox] = await Promise.all([list.boundingBox(), tab.boundingBox()]);
-	if (listBox == null || tabBox == null) return false;
-	return tabBox.x >= listBox.x - 1 && tabBox.x + tabBox.width <= listBox.x + listBox.width + 1;
 }
 
 async function connectorMeetsCurrentMarker(root: Locator) {

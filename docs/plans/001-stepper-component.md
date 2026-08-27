@@ -64,8 +64,8 @@ reinterpretation during implementation:
 - A requested vertical Stepper becomes the normal horizontal rail-above-panel
   layout below the repository's `md` breakpoint (48rem). Its ARIA orientation
   and arrow-key mapping must change with the visual layout.
-- Horizontal rails do not wrap. They scroll inline when the steps do not fit,
-  and the active step is brought into view.
+- Horizontal rails do not wrap. Steps share the available width and truncate
+  titles and descriptions when they do not fit.
 - Use manual activation and `loopFocus={false}`: arrow keys move focus without
   changing panels; Enter or Space activates the focused step; arrow focus stops
   at the first and last step.
@@ -319,8 +319,8 @@ Contract details:
   union; do not invent an implicit first-step public contract. Root supports
   `orientation`, MarginProps, and BaseStyleProps.
 - `List` wraps `BaseTabs.List`, fixes `activateOnFocus={false}` and
-  `loopFocus={false}`, accepts an accessible label, and owns overflow plus the
-  connector presentation. Omit `activateOnFocus` and `loopFocus` from the public
+  `loopFocus={false}`, accepts an accessible label, and owns connector
+  presentation. Omit `activateOnFocus` and `loopFocus` from the public
   List props so callers cannot opt back into automatic activation or wrapping.
 - `Step` wraps `BaseTabs.Tab`; requires `value: string`; accepts
   `status?: StepperStatus` (default `"incomplete"`) and `disabled`; uses a native
@@ -463,10 +463,10 @@ domain change invokes the public callback.
    Root and use the same context value for every StyleX orientation branch.
 3. Horizontal layout:
    - Root stacks List above Content.
-   - List is a single non-wrapping inline scroller with accessible focus rings
-     unobscured by overflow.
-   - Each Step gets the same readable minimum inline basis and places Marker,
-     Title, then Description vertically.
+   - List is a single non-wrapping row. Steps share the available width and
+     Title/Description truncate.
+   - Each Step shares remaining inline space equally and places Marker, Title,
+     then Description vertically.
 4. Vertical layout:
    - Root uses a rail/content grid.
    - Steps stack in the rail; Marker is in the first column and Heading in the
@@ -496,10 +496,6 @@ domain change invokes the public callback.
 7. `Marker` renders the registered one-based index only when children are null
    or boolean. Keep the wrapper `aria-hidden`; do not clone or resize consumer
    icons outside the marker's owned font-size box.
-8. On every effective value change, bring the active Step into the List's inline
-   viewport using `scrollIntoView({ inline: "nearest", block: "nearest" })`.
-   Smooth scrolling may be used only outside `prefers-reduced-motion`; reduced
-   motion must use immediate scrolling and remove connector transitions.
 
 **Verify**:
 
@@ -626,8 +622,7 @@ attributes only for connector geometry that has no semantic locator:
 5. **Layout and connector**
    - Horizontal marker is above its Title; vertical marker is left of its Title.
    - Desktop vertical Content is beside List; mobile Content is below List.
-   - A narrow horizontal viewport scrolls rather than wraps, and paging brings
-     the active Step into view.
+   - A narrow horizontal viewport keeps one row; titles and descriptions truncate.
    - Connector begins at the first marker center, ends at the last marker center,
      and the filled/neutral boundary is within 1 CSS pixel of the active marker
      center in horizontal and vertical examples.
@@ -670,7 +665,8 @@ Then run `npm run storybook` and manually verify after optimization finishes:
   uneven description lengths.
 - Requested vertical becomes horizontal below 48rem without a mismatch between
   visible direction and keyboard direction.
-- Long horizontal steps scroll and the active step enters view.
+- Long horizontal titles and descriptions truncate instead of wrapping or
+  scrolling the rail.
 - Light/dark and both repository themes retain readable inactive, current,
   completed, invalid, disabled, track, and fill contrast.
 
@@ -687,7 +683,7 @@ source, per repository guidance.
 - The new spec must cover semantics, exact accessible name/description,
   keyboard selection, responsive orientation, locked-step behavior,
   order-aware paging, focus transfer, panel mounting, dynamic-domain fallback,
-  horizontal overflow, connector geometry, and console state.
+  connector geometry, and console state.
 - Storybook stories are intentional executable fixtures. Do not create a second
   private test-only component implementation.
 - Focused verification:
