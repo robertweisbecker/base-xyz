@@ -20,16 +20,17 @@ import type { PopoverPopupProps } from "@/components/popover/popover";
 import type { MenuItemProps } from "@/components/menu/menu";
 import type { SelectPopupProps, SelectRootProps } from "@/components/select/select";
 import type { TabsListProps } from "@/components/tabs/tabs";
-import type {
-	StepperContentProps,
-	StepperDescriptionProps,
-	StepperHeadingProps,
-	StepperListProps,
-	StepperMarkerProps,
-	StepperPanelProps,
-	StepperRootProps,
-	StepperStepProps,
-	StepperTitleProps,
+import {
+	Stepper,
+	type StepperContentProps,
+	type StepperDescriptionProps,
+	type StepperHeadingProps,
+	type StepperListProps,
+	type StepperMarkerProps,
+	type StepperPanelProps,
+	type StepperRootProps,
+	type StepperStepProps,
+	type StepperTitleProps,
 } from "@/components/stepper/stepper";
 import type { TextFieldProps } from "@/components/text-field/text-field";
 import type { TextProps } from "@/components/text/text";
@@ -147,10 +148,14 @@ export type StyledSurfaceEscapeHatchContract = [
 ];
 
 export type StepperContract = [
+	Expect<Not<HasKey<typeof Stepper, "Previous">>>,
+	Expect<Not<HasKey<typeof Stepper, "Next">>>,
 	Expect<HasKey<StepperRootProps, "m">>,
 	Expect<HasKey<StepperRootProps, "ms">>,
 	Expect<HasKey<StepperRootProps, "style">>,
 	Expect<HasKey<StepperRootProps, "xstyle">>,
+	Expect<Accepts<StepperRootProps["defaultValue"], null>>,
+	Expect<Accepts<StepperRootProps["value"], null>>,
 	Expect<Not<HasKey<StepperRootProps, "width">>>,
 	Expect<Not<HasKey<StepperRootProps, "position">>>,
 	Expect<Not<HasKey<StepperRootProps, "p">>>,

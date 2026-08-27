@@ -583,19 +583,19 @@ function getComponentCells(): GalleryCell[] {
 				<Stepper.Root defaultValue="profile">
 					<Stepper.List aria-label="Account setup">
 						<Stepper.Step value="profile">
-							<Stepper.Marker />
+							<Stepper.Marker>1</Stepper.Marker>
 							<Stepper.Heading>
 								<Stepper.Title>Profile</Stepper.Title>
 							</Stepper.Heading>
 						</Stepper.Step>
 						<Stepper.Step value="security">
-							<Stepper.Marker />
+							<Stepper.Marker>2</Stepper.Marker>
 							<Stepper.Heading>
 								<Stepper.Title>Security</Stepper.Title>
 							</Stepper.Heading>
 						</Stepper.Step>
 						<Stepper.Step value="review">
-							<Stepper.Marker />
+							<Stepper.Marker>3</Stepper.Marker>
 							<Stepper.Heading>
 								<Stepper.Title>Review</Stepper.Title>
 							</Stepper.Heading>
