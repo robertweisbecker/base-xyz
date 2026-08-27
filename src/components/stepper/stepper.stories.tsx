@@ -104,15 +104,16 @@ export const Playground: Story = {
 				/>
 			</Stepper.List>
 			<Stepper.Content>
-				<AccountPanel actions value="profile">
+				<AccountPanel value="profile">
 					Enter the name and contact details that should appear on the account.
 				</AccountPanel>
-				<AccountPanel actions value="security">
+				<AccountPanel value="security">
 					Select a password and a second factor before continuing.
 				</AccountPanel>
-				<AccountPanel actions value="billing">
+				<AccountPanel value="billing">
 					Choose how this workspace will be billed.
 				</AccountPanel>
+				<StepperPager />
 			</Stepper.Content>
 		</Stepper.Root>
 	),
@@ -160,11 +161,12 @@ export const States: Story = {
 					<AccountStep description="Unlocks after billing is complete." disabled title="Finish" value="finish" />
 				</Stepper.List>
 				<Stepper.Content>
-					<AccountPanel actions value="account">Account details are complete.</AccountPanel>
-					<AccountPanel actions value="review">Review the submitted profile before continuing.</AccountPanel>
-					<AccountPanel actions value="billing">Billing is still incomplete.</AccountPanel>
-					<AccountPanel actions value="documents">Upload the missing identity document.</AccountPanel>
-					<AccountPanel actions value="finish">This step stays locked until billing is complete.</AccountPanel>
+					<AccountPanel value="account">Account details are complete.</AccountPanel>
+					<AccountPanel value="review">Review the submitted profile before continuing.</AccountPanel>
+					<AccountPanel value="billing">Billing is still incomplete.</AccountPanel>
+					<AccountPanel value="documents">Upload the missing identity document.</AccountPanel>
+					<AccountPanel value="finish">This step stays locked until billing is complete.</AccountPanel>
+					<StepperPager />
 				</Stepper.Content>
 			</Stepper.Root>
 		</Stack>
@@ -179,18 +181,11 @@ export const Navigation: Story = {
 function NavigationExamples() {
 	return (
 		<Stack gap={8}>
-			<Stack data-testid="panel-actions-stepper" gap={2} minWidth={0}>
+			<Stack data-testid="pager-stepper" gap={2} minWidth={0}>
 				<Text color="muted" size="1">
-					Previous and next inside panels
+					Previous and next
 				</Text>
 				<ExampleStepper defaultValue="profile" />
-			</Stack>
-			<Separator />
-			<Stack data-testid="shared-actions-stepper" gap={2} minWidth={0}>
-				<Text color="muted" size="1">
-					Shared actions after content
-				</Text>
-				<SharedActionsStepper />
 			</Stack>
 			<Separator />
 			<Stack data-testid="mounted-panel-stepper" gap={2} minWidth={0}>
@@ -232,7 +227,7 @@ function ExampleStepper({
 				<AccountStep description="Add a payment method for the workspace." title="Billing" value="billing" />
 			</Stepper.List>
 			<Stepper.Content>
-				<AccountPanel actions value="profile">
+				<AccountPanel value="profile">
 					<Stack gap={3}>
 						<Text>
 							Use the legal name and email that should appear on invoices. Vertical examples keep this copy long enough
@@ -243,40 +238,20 @@ function ExampleStepper({
 						</Text>
 					</Stack>
 				</AccountPanel>
-				<AccountPanel actions value="security">
+				<AccountPanel value="security">
 					<Stack gap={3}>
 						<Text>Choose a password and a second factor. Recovery codes are shown after authentication is saved.</Text>
 						<Text>A locked later step cannot be opened until the consumer unlocks it.</Text>
 					</Stack>
 				</AccountPanel>
-				<AccountPanel actions value="billing">
+				<AccountPanel value="billing">
 					<Stack gap={3}>
 						<Text>Add a card or invoice contact. This is the last adjacent step, so Next stays disabled here.</Text>
 						<Text>Billing details stay local to this panel.</Text>
 					</Stack>
 				</AccountPanel>
+				<StepperPager />
 			</Stepper.Content>
-		</Stepper.Root>
-	);
-}
-
-function SharedActionsStepper() {
-	return (
-		<Stepper.Root defaultValue="profile">
-			<Stepper.List aria-label="Shared action progress">
-				<AccountStep description="Add your personal details." title="Profile" value="profile" />
-				<AccountStep description="Choose authentication options." title="Security" value="security" />
-				<AccountStep description="Add a payment method." title="Billing" value="billing" />
-			</Stepper.List>
-			<Stepper.Content>
-				<AccountPanel value="profile">Profile details for the account owner.</AccountPanel>
-				<AccountPanel value="security">Authentication options for this workspace.</AccountPanel>
-				<AccountPanel value="billing">Billing contact and payment method.</AccountPanel>
-			</Stepper.Content>
-			<Stack orientation="horizontal" gap={2}>
-				<Stepper.Previous>Back</Stepper.Previous>
-				<Stepper.Next>Continue</Stepper.Next>
-			</Stack>
 		</Stepper.Root>
 	);
 }
@@ -289,18 +264,13 @@ function MountedPanelStepper() {
 				<AccountStep description="Unmounts when inactive." title="Resetting" value="resetting" />
 			</Stepper.List>
 			<Stepper.Content>
-				<AccountPanel actions value="kept">
+				<AccountPanel value="kept">
 					<TextField label="Display name" />
 				</AccountPanel>
 				<Stepper.Panel keepMounted={false} value="resetting">
-					<Stack gap={4}>
-						<TextField label="Temporary note" />
-						<Stack orientation="horizontal" gap={2}>
-							<Stepper.Previous>Back</Stepper.Previous>
-							<Stepper.Next>Continue</Stepper.Next>
-						</Stack>
-					</Stack>
+					<TextField label="Temporary note" />
 				</Stepper.Panel>
+				<StepperPager />
 			</Stepper.Content>
 		</Stepper.Root>
 	);
@@ -345,15 +315,16 @@ function CancelableStepper() {
 					<AccountStep description="Add a payment method." title="Billing" value="billing" />
 				</Stepper.List>
 				<Stepper.Content>
-					<AccountPanel actions value="profile">
+					<AccountPanel value="profile">
 						Profile stays selected when navigation is blocked.
 					</AccountPanel>
-					<AccountPanel actions value="security">
+					<AccountPanel value="security">
 						Security is only reached when navigation is allowed.
 					</AccountPanel>
-					<AccountPanel actions value="billing">
+					<AccountPanel value="billing">
 						Billing is the last step.
 					</AccountPanel>
+					<StepperPager />
 				</Stepper.Content>
 			</Stepper.Root>
 		</Stack>
@@ -423,17 +394,18 @@ function DomainStepper() {
 					})}
 				</Stepper.List>
 				<Stepper.Content>
-					<AccountPanel actions value="profile">
+					<AccountPanel value="profile">
 						Profile remains available as the silent fallback.
 					</AccountPanel>
 					{includeReview ? (
-						<AccountPanel actions value="review">
+						<AccountPanel value="review">
 							Review stays selected when it becomes disabled.
 						</AccountPanel>
 					) : null}
-					<AccountPanel actions value="billing">
+					<AccountPanel value="billing">
 						Billing is the last remaining adjacent step.
 					</AccountPanel>
+					<StepperPager />
 				</Stepper.Content>
 			</Stepper.Root>
 		</Stack>
@@ -467,25 +439,24 @@ function AccountStep({
 }
 
 function AccountPanel({
-	actions = false,
 	children,
 	value,
 }: {
-	actions?: boolean;
 	children: ReactNode;
 	value: string;
 }) {
 	return (
 		<Stepper.Panel value={value}>
-			<Stack gap={4}>
-				{typeof children === "string" ? <Text>{children}</Text> : children}
-				{actions ? (
-					<Stack orientation="horizontal" gap={2}>
-						<Stepper.Previous>Back</Stepper.Previous>
-						<Stepper.Next>Continue</Stepper.Next>
-					</Stack>
-				) : null}
-			</Stack>
+			{typeof children === "string" ? <Text>{children}</Text> : children}
 		</Stepper.Panel>
+	);
+}
+
+function StepperPager() {
+	return (
+		<Stack gap={2} mt={4} orientation="horizontal">
+			<Stepper.Previous>Back</Stepper.Previous>
+			<Stepper.Next>Continue</Stepper.Next>
+		</Stack>
 	);
 }

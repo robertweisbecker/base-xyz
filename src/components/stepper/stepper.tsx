@@ -13,7 +13,6 @@ import {
 	useSyncExternalStore,
 	type ComponentPropsWithRef,
 	type CSSProperties,
-	type MouseEvent as ReactMouseEvent,
 } from "react";
 import { Button, type ButtonProps } from "@/components/button/button";
 import { fontWeightStyles, textStyles, textTruncationStyles } from "@/components/text/text.stylex";
@@ -37,20 +36,20 @@ type StepperPartStyleProps = BaseStyleProps & {
 	className?: string;
 };
 
-type StepRecord = {
+type DeclaredStep = {
 	disabled: boolean;
-	node: HTMLElement;
 	value: StepperValue;
 };
 
 type StepperChangeEventDetails = BaseTabs.Root.ChangeEventDetails;
 
 type StepperRootContextValue = {
+	commitValue: (next: StepperValue, details: StepperChangeEventDetails) => void;
+	declaredSteps: readonly DeclaredStep[];
 	effectiveOrientation: StepperOrientation;
 	effectiveValue: StepperValue | null;
-	goToAdjacent: (delta: -1 | 1, event: ReactMouseEvent<HTMLElement>) => void;
-	orderedSteps: readonly StepRecord[];
-	registerStep: (record: StepRecord) => () => void;
+	queuePanelFocus: (value: StepperValue | null) => void;
+	replaceSteps: (next: DeclaredStep[]) => void;
 };
 
 type StepperStepContextValue = {
@@ -99,49 +98,19 @@ export function Root({
 	const mergedRef = useMergedRefs(ref, rootRef);
 	const isControlled = valueProp !== undefined;
 	const [uncontrolledValue, setUncontrolledValue] = useState(defaultValue);
+	const [declaredSteps, setDeclaredSteps] = useState<readonly DeclaredStep[]>([]);
+	const [pendingFocusValue, setPendingFocusValue] = useState<StepperValue | null>(null);
 	const requestedValue = isControlled ? valueProp : uncontrolledValue;
 	const isMdViewport = useIsMdViewport();
 	const effectiveOrientation: StepperOrientation =
 		orientation === "vertical" && isMdViewport ? "vertical" : "horizontal";
-	const stepsRef = useRef(new Map<StepperValue, StepRecord>());
-	const [orderedSteps, setOrderedSteps] = useState<readonly StepRecord[]>([]);
-	const [pendingFocusValue, setPendingFocusValue] = useState<StepperValue | null>(null);
-	const effectiveValue = useMemo(() => {
-		if (orderedSteps.length === 0) {
-			return null;
-		}
-		if (requestedValue != null && orderedSteps.some((step) => step.value === requestedValue)) {
-			return requestedValue;
-		}
-		return orderedSteps[0]?.value ?? null;
-	}, [orderedSteps, requestedValue]);
-	const publishSteps = useCallback(() => {
-		const next = sortStepRecords([...stepsRef.current.values()]);
-		setOrderedSteps((current) => (sameStepSequence(current, next) ? current : next));
-	}, []);
-	const registerStep = useCallback(
-		(record: StepRecord) => {
-			const existing = stepsRef.current.get(record.value);
-			if (import.meta.env.DEV && existing != null && existing.node !== record.node) {
-				console.error(`Stepper received duplicate step value "${record.value}".`);
-			}
-			stepsRef.current.set(record.value, record);
-			publishSteps();
-			return () => {
-				const current = stepsRef.current.get(record.value);
-				if (current?.node === record.node) {
-					stepsRef.current.delete(record.value);
-					publishSteps();
-				}
-			};
-		},
-		[publishSteps],
-	);
-	const handleValueChange = useCallback(
-		(next: BaseTabs.Tab.Value, details: StepperChangeEventDetails) => {
-			if (details.reason !== "none" || typeof next !== "string") {
-				return;
-			}
+	const effectiveValue =
+		requestedValue != null &&
+		(declaredSteps.length === 0 || declaredSteps.some((step) => step.value === requestedValue))
+			? requestedValue
+			: (declaredSteps[0]?.value ?? requestedValue ?? null);
+	const commitValue = useCallback(
+		(next: StepperValue, details: StepperChangeEventDetails) => {
 			onValueChange?.(next, details);
 			if (details.isCanceled) {
 				return;
@@ -152,23 +121,21 @@ export function Root({
 		},
 		[isControlled, onValueChange],
 	);
-	const goToAdjacent = useCallback(
-		(delta: -1 | 1, event: ReactMouseEvent<HTMLElement>) => {
-			const currentIndex = orderedSteps.findIndex((step) => step.value === effectiveValue);
-			const target = currentIndex < 0 ? undefined : orderedSteps[currentIndex + delta];
-			if (target == null || target.disabled) {
+	const handleValueChange = useCallback(
+		(next: BaseTabs.Tab.Value, details: StepperChangeEventDetails) => {
+			if (details.reason !== "none" || typeof next !== "string") {
 				return;
 			}
-			const details = createCancelableChangeDetails(event.nativeEvent, event.currentTarget);
-			handleValueChange(target.value, details);
-			setPendingFocusValue(details.isCanceled ? null : target.value);
+			commitValue(next, details);
 		},
-		[effectiveValue, handleValueChange, orderedSteps],
+		[commitValue],
 	);
-
-	useLayoutEffect(() => {
-		publishSteps();
-	});
+	const replaceSteps = useCallback((next: DeclaredStep[]) => {
+		setDeclaredSteps((current) => (sameDeclaredSteps(current, next) ? current : next));
+	}, []);
+	const queuePanelFocus = useCallback((value: StepperValue | null) => {
+		setPendingFocusValue(value);
+	}, []);
 
 	useLayoutEffect(() => {
 		if (pendingFocusValue == null) {
@@ -183,13 +150,14 @@ export function Root({
 
 	const contextValue = useMemo<StepperRootContextValue>(
 		() => ({
+			commitValue,
+			declaredSteps,
 			effectiveOrientation,
 			effectiveValue,
-			goToAdjacent,
-			orderedSteps,
-			registerStep,
+			queuePanelFocus,
+			replaceSteps,
 		}),
-		[effectiveOrientation, effectiveValue, goToAdjacent, orderedSteps, registerStep],
+		[commitValue, declaredSteps, effectiveOrientation, effectiveValue, queuePanelFocus, replaceSteps],
 	);
 	const sx = stylex.props(
 		stepperParts.root,
@@ -219,8 +187,10 @@ export type StepperListProps = Omit<
 > &
 	StepperPartStyleProps;
 
-export function List({ children, className, style, xstyle, ...props }: StepperListProps) {
-	const { effectiveOrientation } = useStepperRootContext();
+export function List({ ref, children, className, style, xstyle, ...props }: StepperListProps) {
+	const { effectiveOrientation, replaceSteps } = useStepperRootContext();
+	const listRef = useRef<HTMLDivElement | null>(null);
+	const mergedRef = useMergedRefs(ref, listRef);
 	const sx = stylex.props(
 		stepperParts.list,
 		listOrientationStyles[effectiveOrientation],
@@ -231,6 +201,10 @@ export function List({ children, className, style, xstyle, ...props }: StepperLi
 		indicatorOrientationStyles[effectiveOrientation],
 	);
 
+	useLayoutEffect(() => {
+		replaceSteps(readDeclaredSteps(listRef.current));
+	});
+
 	return (
 		<BaseTabs.List
 			activateOnFocus={false}
@@ -238,7 +212,8 @@ export function List({ children, className, style, xstyle, ...props }: StepperLi
 			loopFocus={false}
 			style={mergeStyle(sx.style, style)}
 			{...props}
-			aria-orientation={effectiveOrientation}>
+			aria-orientation={effectiveOrientation}
+			ref={mergedRef}>
 			{children}
 			<BaseTabs.Indicator
 				className={indicatorSx.className}
@@ -272,16 +247,14 @@ export function Step({
 	xstyle,
 	...props
 }: StepperStepProps) {
-	const { effectiveOrientation, effectiveValue, orderedSteps, registerStep } = useStepperRootContext();
+	const { declaredSteps, effectiveOrientation, effectiveValue } = useStepperRootContext();
 	const instanceId = useId();
 	const titleId = `${instanceId}-title`;
 	const descriptionId = `${instanceId}-description`;
 	const statusId = `${instanceId}-status`;
-	const stepRef = useRef<HTMLElement | null>(null);
-	const mergedRef = useMergedRefs(ref, stepRef);
-	const index = orderedSteps.findIndex((step) => step.value === value);
+	const index = declaredSteps.findIndex((step) => step.value === value);
 	const selected = effectiveValue === value;
-	const isLast = index >= 0 && index === orderedSteps.length - 1;
+	const isLast = index >= 0 && index === declaredSteps.length - 1;
 	const statusLabel = getStatusLabel(status);
 	const [hasDescription, setHasDescription] = useState(false);
 	const registerDescription = useCallback(() => {
@@ -289,14 +262,6 @@ export function Step({
 		return () => setHasDescription(false);
 	}, []);
 	const describedBy = attrJoin(hasDescription ? descriptionId : undefined, statusLabel ? statusId : undefined);
-
-	useLayoutEffect(() => {
-		const node = stepRef.current;
-		if (node == null) {
-			return;
-		}
-		return registerStep({ disabled, node, value });
-	}, [disabled, registerStep, value]);
 
 	const stepContext = useMemo<StepperStepContextValue>(
 		() => ({
@@ -325,12 +290,13 @@ export function Step({
 	return (
 		<StepperStepContext value={stepContext}>
 			<BaseTabs.Tab
-				ref={mergedRef}
+				ref={ref}
 				aria-describedby={describedBy || undefined}
 				aria-labelledby={titleId}
 				className={attrJoin(sx.className, className)}
 				data-status={status}
 				data-stepper-track={isLast ? undefined : ""}
+				data-stepper-value={value}
 				disabled={disabled}
 				style={mergeStyle(sx.style, style)}
 				type={type}
@@ -493,9 +459,9 @@ function AdjacentButton({
 	onClick,
 	...props
 }: ButtonProps & { delta: -1 | 1 }) {
-	const { effectiveValue, goToAdjacent, orderedSteps } = useStepperRootContext();
-	const currentIndex = orderedSteps.findIndex((step) => step.value === effectiveValue);
-	const target = currentIndex < 0 ? undefined : orderedSteps[currentIndex + delta];
+	const { commitValue, declaredSteps, effectiveValue, queuePanelFocus } = useStepperRootContext();
+	const currentIndex = declaredSteps.findIndex((step) => step.value === effectiveValue);
+	const target = currentIndex < 0 ? undefined : declaredSteps[currentIndex + delta];
 	const adjacencyDisabled = target == null || target.disabled;
 
 	return (
@@ -503,10 +469,12 @@ function AdjacentButton({
 			disabled={Boolean(disabled) || adjacencyDisabled}
 			onClick={(event) => {
 				onClick?.(event);
-				if (event.defaultPrevented) {
+				if (event.defaultPrevented || target == null || target.disabled) {
 					return;
 				}
-				goToAdjacent(delta, event);
+				const details = createCancelableChangeDetails(event.nativeEvent, event.currentTarget);
+				commitValue(target.value, details);
+				queuePanelFocus(details.isCanceled ? null : target.value);
 			}}
 			{...props}
 		/>
@@ -550,29 +518,34 @@ function getServerMdViewport() {
 	return false;
 }
 
-function sortStepRecords(records: StepRecord[]) {
-	return [...records].sort((left, right) => {
-		if (left.node === right.node) {
-			return 0;
+function readDeclaredSteps(list: HTMLElement | null): DeclaredStep[] {
+	if (list == null) {
+		return [];
+	}
+	const tabs = [...list.querySelectorAll<HTMLElement>('[role="tab"]')];
+	if (import.meta.env.DEV) {
+		const seen = new Set<string>();
+		for (const tab of tabs) {
+			const value = tab.dataset.stepperValue ?? "";
+			if (value !== "" && seen.has(value)) {
+				console.error(`Stepper received duplicate step value "${value}".`);
+			}
+			seen.add(value);
 		}
-		const position = left.node.compareDocumentPosition(right.node);
-		if (position & Node.DOCUMENT_POSITION_FOLLOWING) {
-			return -1;
-		}
-		if (position & Node.DOCUMENT_POSITION_PRECEDING) {
-			return 1;
-		}
-		return 0;
-	});
+	}
+	return tabs.map((tab) => ({
+		disabled: tab.hasAttribute("data-disabled"),
+		value: tab.dataset.stepperValue ?? "",
+	}));
 }
 
-function sameStepSequence(current: readonly StepRecord[], next: readonly StepRecord[]) {
+function sameDeclaredSteps(current: readonly DeclaredStep[], next: readonly DeclaredStep[]) {
 	if (current.length !== next.length) {
 		return false;
 	}
 	return current.every((step, index) => {
 		const other = next[index];
-		return other != null && step.value === other.value && step.disabled === other.disabled && step.node === other.node;
+		return other != null && step.value === other.value && step.disabled === other.disabled;
 	});
 }
 

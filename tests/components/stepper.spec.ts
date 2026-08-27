@@ -134,7 +134,7 @@ test("maps vertical arrow keys above the md breakpoint and horizontal keys below
 test("pages to adjacent steps, respects locks, and focuses accepted panels", async ({ page }) => {
 	await page.goto(navigationPath);
 
-	const root = page.getByTestId("panel-actions-stepper");
+	const root = page.getByTestId("pager-stepper");
 	const panel = root.getByRole("tabpanel");
 	const back = root.getByRole("button", { name: "Back" });
 	const next = root.getByRole("button", { name: "Continue" });
@@ -153,7 +153,7 @@ test("does not skip locked steps and leaves canceled navigation in place", async
 	const states = page.getByTestId("states-stepper");
 	await states.getByRole("tab", { name: "Documents" }).click();
 	await expect(states.getByRole("tab", { name: "Documents" })).toHaveAttribute("aria-selected", "true");
-	await expect(states.getByRole("tabpanel", { name: "Documents" }).getByRole("button", { name: "Continue" })).toBeDisabled();
+	await expect(states.getByRole("button", { name: "Continue" })).toBeDisabled();
 	await expect(states.getByRole("tab", { name: "Finish" })).toBeDisabled();
 
 	await page.goto(navigationPath);
