@@ -152,7 +152,8 @@ test("does not skip locked steps and leaves canceled navigation in place", async
 	await page.goto(statesPath);
 	const states = page.getByTestId("states-stepper");
 	await states.getByRole("tab", { name: "Documents" }).click();
-	await expect(states.getByRole("button", { name: "Continue" })).toBeDisabled();
+	await expect(states.getByRole("tab", { name: "Documents" })).toHaveAttribute("aria-selected", "true");
+	await expect(states.getByRole("tabpanel", { name: "Documents" }).getByRole("button", { name: "Continue" })).toBeDisabled();
 	await expect(states.getByRole("tab", { name: "Finish" })).toBeDisabled();
 
 	await page.goto(navigationPath);
