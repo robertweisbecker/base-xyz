@@ -3,7 +3,8 @@ import { media } from "@/styles/constants.stylex";
 import { popupVars } from "@/components/popover/popover-vars.stylex";
 import { tokens } from "@/theme/tokens.stylex";
 
-const HOVER_WHEN_INACTIVE = ":hover:not([data-disabled]):not([data-popup-open]):not([data-pressed])";
+const HOVER_WHEN_INACTIVE =
+	":hover:not([data-disabled]):not([data-popup-open]):not([data-pressed])";
 
 export const comboboxMarker = stylex.defineMarker();
 
@@ -23,7 +24,8 @@ export const comboboxParts = stylex.create({
 			"[data-readonly]": tokens["--border"],
 			default: tokens["--border-input"],
 			":focus-within:not([data-disabled]):not([data-readonly])": tokens["--focus"],
-			":hover:not(:focus-within):not([data-disabled]):not([data-readonly])": tokens["--border-input-hover"],
+			":hover:not(:focus-within):not([data-disabled]):not([data-readonly])":
+				tokens["--border-input-hover"],
 		},
 		alignItems: "center",
 		display: "flex",

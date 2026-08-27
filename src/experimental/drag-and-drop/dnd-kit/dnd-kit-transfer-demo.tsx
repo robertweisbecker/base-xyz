@@ -66,13 +66,16 @@ export function DndKitTransferDemo() {
 				setIsRejected(false);
 				setStatus("dnd-kit drag started.");
 			}}
-			onDragEnd={handleDragEnd}>
+			onDragEnd={handleDragEnd}
+		>
 			<DemoPanel
 				title="dnd-kit 0.5"
 				description="The provider owns the drag session, and draggable IDs, types, and data drive validation."
 				instructions={
 					<DemoInstructions>
-						<li {...stylex.props(demoStyles.instructionItem)}>Focus the handle and press Space or Enter to start.</li>
+						<li {...stylex.props(demoStyles.instructionItem)}>
+							Focus the handle and press Space or Enter to start.
+						</li>
 						<li {...stylex.props(demoStyles.instructionItem)}>
 							Use arrow keys to reach a target, then press Space or Enter to drop.
 						</li>
@@ -82,7 +85,8 @@ export function DndKitTransferDemo() {
 					</DemoInstructions>
 				}
 				status={status}
-				onReset={reset}>
+				onReset={reset}
+			>
 				<div {...stylex.props(demoStyles.transferGrid)}>
 					<div {...stylex.props(demoStyles.sourceTray)} aria-label="Source tray">
 						{location === "source" ? (
@@ -101,9 +105,14 @@ export function DndKitTransferDemo() {
 						id={TRANSFER_DESTINATIONS.planning.id}
 						label={TRANSFER_DESTINATIONS.planning.label}
 						description="Accepts tasks."
-						accept={TASK_TYPE}>
+						accept={TASK_TYPE}
+					>
 						{location === "planning" ? (
-							<DemoCard label={TRANSFER_ITEM.label} meta="Dropped task" startSlot={<span aria-hidden />} />
+							<DemoCard
+								label={TRANSFER_ITEM.label}
+								meta="Dropped task"
+								startSlot={<span aria-hidden />}
+							/>
 						) : null}
 					</DndKitTransferDropZone>
 					<DndKitTransferDropZone
@@ -177,7 +186,8 @@ function DndKitTransferDropZone({
 				if (isDragging && accept !== TASK_TYPE) onInvalidHoverChange?.(true);
 			}}
 			onPointerLeave={() => onInvalidHoverChange?.(false)}
-			{...stylex.props(demoStyles.dropZone, focusRing.within)}>
+			{...stylex.props(demoStyles.dropZone, focusRing.within)}
+		>
 			<DemoDropZone label={label} description={description} isInvalid={isInvalid}>
 				{children}
 			</DemoDropZone>

@@ -22,7 +22,13 @@ export const Canvas: Story = {
 				<Card.Header>
 					<Stack orientation="horizontal" align="start" justify="space-between" gap={2}>
 						<Card.Title>Sandbox</Card.Title>
-						<IconButton icon={<Icon.Diamond />} label="Card actions" variant="ghost" size="sm" onClick={() => {}} />
+						<IconButton
+							icon={<Icon.Diamond />}
+							label="Card actions"
+							variant="ghost"
+							size="sm"
+							onClick={() => {}}
+						/>
 					</Stack>
 				</Card.Header>
 				<Separator />

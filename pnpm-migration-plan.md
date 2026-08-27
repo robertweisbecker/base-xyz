@@ -103,7 +103,7 @@ The resulting field should contain an exact version, for example:
 
 ```json
 {
-  "packageManager": "pnpm@11.x.x"
+	"packageManager": "pnpm@11.x.x"
 }
 ```
 

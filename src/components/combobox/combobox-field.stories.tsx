@@ -103,9 +103,24 @@ export const States: Story = {
 	parameters: { controls: { disable: true } },
 	render: () => (
 		<Stack gap={6}>
-			<SingleCombobox disabled items={frameworks} label="Disabled" placeholder="Filter frameworks…" />
-			<SingleCombobox readOnly items={frameworks} label="Read only" placeholder="Filter frameworks…" />
-			<SingleCombobox required items={frameworks} label="Required" placeholder="Filter frameworks…" />
+			<SingleCombobox
+				disabled
+				items={frameworks}
+				label="Disabled"
+				placeholder="Filter frameworks…"
+			/>
+			<SingleCombobox
+				readOnly
+				items={frameworks}
+				label="Read only"
+				placeholder="Filter frameworks…"
+			/>
+			<SingleCombobox
+				required
+				items={frameworks}
+				label="Required"
+				placeholder="Filter frameworks…"
+			/>
 			<SingleCombobox invalid items={frameworks} label="Invalid" placeholder="Filter frameworks…" />
 			<SingleCombobox items={[]} label="Empty" placeholder="Filter frameworks…" />
 		</Stack>
@@ -117,7 +132,12 @@ export const Sizes: Story = {
 	render: () => (
 		<Stack gap={6} maxWidth="420px">
 			<SingleCombobox label="Small" items={frameworks} placeholder="Choose a framework" size="sm" />
-			<SingleCombobox label="Medium" items={frameworks} placeholder="Choose a framework" size="md" />
+			<SingleCombobox
+				label="Medium"
+				items={frameworks}
+				placeholder="Choose a framework"
+				size="md"
+			/>
 			<SingleCombobox label="Large" items={frameworks} placeholder="Choose a framework" size="lg" />
 		</Stack>
 	),
@@ -212,12 +232,14 @@ export const UserSelection: Story = {
 				<Combobox.Chip
 					aria-label={`${user.name} ${user.email}`}
 					startSlot={<Avatar aria-hidden initials={user.initials} size={5} shape="rounded" />}
-					endSlot={<Combobox.ChipRemove aria-label={`Remove ${user.name}`} />}>
+					endSlot={<Combobox.ChipRemove aria-label={`Remove ${user.name}`} />}
+				>
 					<Text
 						render={<span />}
 						size="1"
 						truncate
-						xstyle={[x.display.block, x.maxWidth("9rem"), x.minWidth._0]}>
+						xstyle={[x.display.block, x.maxWidth("9rem"), x.minWidth._0]}
+					>
 						{user.name}
 					</Text>
 				</Combobox.Chip>
@@ -239,7 +261,10 @@ export const ChipPlacementOptions: Story = {
 	parameters: { controls: { disable: true } },
 	render: () => (
 		<Stack gap={8}>
-			<ExampleSection title="Inside" description="Selected values share the control with the filter input.">
+			<ExampleSection
+				title="Inside"
+				description="Selected values share the control with the filter input."
+			>
 				<MultipleCombobox
 					label="Programming languages"
 					items={languages}
@@ -250,7 +275,10 @@ export const ChipPlacementOptions: Story = {
 					chipPlacement="inside"
 				/>
 			</ExampleSection>
-			<ExampleSection title="Outside" description="Selected values sit above a dedicated filter input.">
+			<ExampleSection
+				title="Outside"
+				description="Selected values sit above a dedicated filter input."
+			>
 				<MultipleCombobox
 					label="Programming languages"
 					items={languages}
@@ -273,7 +301,10 @@ export const LimitedChips: Story = {
 	parameters: { controls: { disable: true } },
 	render: () => (
 		<Stack gap={8}>
-			<ExampleSection title="Fixed limit" description="The configured limit remains applied while the input is focused.">
+			<ExampleSection
+				title="Fixed limit"
+				description="The configured limit remains applied while the input is focused."
+			>
 				<MultipleCombobox
 					label="Programming languages"
 					items={languages}
@@ -284,7 +315,8 @@ export const LimitedChips: Story = {
 			</ExampleSection>
 			<ExampleSection
 				title="Expand on input focus"
-				description="Focus the chip/input composite to reveal every selected value; leave it to restore the limit.">
+				description="Focus the chip/input composite to reveal every selected value; leave it to restore the limit."
+			>
 				<MultipleCombobox
 					label="Programming languages"
 					items={languages}
@@ -296,7 +328,8 @@ export const LimitedChips: Story = {
 			</ExampleSection>
 			<ExampleSection
 				title="Always expanded"
-				description="All selected values remain visible even when a limit is configured.">
+				description="All selected values remain visible even when a limit is configured."
+			>
 				<MultipleCombobox
 					label="Programming languages"
 					items={languages}
@@ -314,7 +347,10 @@ export const ChipLimitExamples: Story = {
 	parameters: { controls: { disable: true } },
 	render: () => (
 		<Stack gap={8}>
-			<ExampleSection title="No limit" description="Omitting the limit renders every selected value.">
+			<ExampleSection
+				title="No limit"
+				description="Omitting the limit renders every selected value."
+			>
 				<MultipleCombobox
 					label="Programming languages"
 					items={languages}
@@ -324,7 +360,8 @@ export const ChipLimitExamples: Story = {
 			</ExampleSection>
 			<ExampleSection
 				title="Zero visible chips"
-				description="Only the overflow count is shown, and the filter input remains available.">
+				description="Only the overflow count is shown, and the filter input remains available."
+			>
 				<MultipleCombobox
 					label="Programming languages"
 					items={languages}
@@ -333,7 +370,10 @@ export const ChipLimitExamples: Story = {
 					maxVisibleChips={0}
 				/>
 			</ExampleSection>
-			<ExampleSection title="One visible chip" description="The first selection is followed by the remaining count.">
+			<ExampleSection
+				title="One visible chip"
+				description="The first selection is followed by the remaining count."
+			>
 				<MultipleCombobox
 					label="Programming languages"
 					items={languages}
@@ -344,7 +384,8 @@ export const ChipLimitExamples: Story = {
 			</ExampleSection>
 			<ExampleSection
 				title="Exact count"
-				description="No overflow indicator appears when the selection count matches the limit.">
+				description="No overflow indicator appears when the selection count matches the limit."
+			>
 				<MultipleCombobox
 					label="Programming languages"
 					items={languages}
@@ -397,7 +438,10 @@ function SingleCombobox<Value>({
 	);
 }
 
-type MultipleComboboxProps<Value> = Omit<ComboboxRootProps<Value, true>, "children" | "items" | "multiple"> & {
+type MultipleComboboxProps<Value> = Omit<
+	ComboboxRootProps<Value, true>,
+	"children" | "items" | "multiple"
+> & {
 	chipPlacement?: "inside" | "outside";
 	creatableItem?: Value;
 	expandChips?: "input-focus" | "always";
@@ -454,7 +498,10 @@ function MultipleCombobox<Value>({
 							{(value: Value[]) => (
 								<>
 									{renderValues(value)}
-									<Combobox.Input {...inputProps} placeholder={value.length > 0 ? "" : placeholder} />
+									<Combobox.Input
+										{...inputProps}
+										placeholder={value.length > 0 ? "" : placeholder}
+									/>
 								</>
 							)}
 						</Combobox.Value>
@@ -463,7 +510,8 @@ function MultipleCombobox<Value>({
 			) : (
 				<Combobox.Chips
 					xstyle={[x.alignItems.stretch, x.flexDirection.column, x.gap(tokens["--space-2"])]}
-					{...focusProps}>
+					{...focusProps}
+				>
 					<Combobox.Value>
 						{(value: Value[]) => (
 							<>
@@ -492,7 +540,8 @@ function MultipleCombobox<Value>({
 							creatable={creatableItem !== undefined && item === creatableItem}
 							key={getItemKey(item, props)}
 							value={item}
-							variant={itemVariant}>
+							variant={itemVariant}
+						>
 							{renderItem?.(item) ?? getItemLabel(item, props)}
 						</Combobox.Item>
 					)}
@@ -522,7 +571,8 @@ function renderSelectedValues<Value>(
 						{renderChip?.(value) ?? (
 							<Combobox.Chip
 								aria-label={label}
-								endSlot={<Combobox.ChipRemove aria-label={`Remove ${label}`} />}>
+								endSlot={<Combobox.ChipRemove aria-label={`Remove ${label}`} />}
+							>
 								{label}
 							</Combobox.Chip>
 						)}
@@ -544,14 +594,23 @@ function CreatableTagsExample() {
 	const [selectedValues, setSelectedValues] = useState<string[]>([]);
 	const highlightedItemRef = useRef<string | undefined>(undefined);
 	const collator = useMemo(
-		() => new Intl.Collator(undefined, { sensitivity: "base", usage: "search", ignorePunctuation: true }),
+		() =>
+			new Intl.Collator(undefined, {
+				sensitivity: "base",
+				usage: "search",
+				ignorePunctuation: true,
+			}),
 		[],
 	);
 	const availableItems = useMemo(() => [...new Set([...apps, ...createdItems])], [createdItems]);
 	const trimmedInputValue = inputValue.trim();
-	const matchingItem = availableItems.find((item) => collator.compare(item, trimmedInputValue) === 0);
-	const creatableItem = trimmedInputValue !== "" && matchingItem === undefined ? trimmedInputValue : undefined;
-	const itemsForView = creatableItem === undefined ? availableItems : [...availableItems, creatableItem];
+	const matchingItem = availableItems.find(
+		(item) => collator.compare(item, trimmedInputValue) === 0,
+	);
+	const creatableItem =
+		trimmedInputValue !== "" && matchingItem === undefined ? trimmedInputValue : undefined;
+	const itemsForView =
+		creatableItem === undefined ? availableItems : [...availableItems, creatableItem];
 
 	function commitInputValue() {
 		const item = matchingItem ?? creatableItem;
@@ -593,7 +652,9 @@ function CreatableTagsExample() {
 				}}
 				onValueChange={(nextValue) => {
 					const selectedCreatableItem =
-						creatableItem !== undefined && nextValue.includes(creatableItem) && !selectedValues.includes(creatableItem);
+						creatableItem !== undefined &&
+						nextValue.includes(creatableItem) &&
+						!selectedValues.includes(creatableItem);
 					if (selectedCreatableItem) {
 						setCreatedItems((currentItems) => [...currentItems, creatableItem]);
 					}
@@ -603,7 +664,9 @@ function CreatableTagsExample() {
 				renderItem={(item) => (item === creatableItem ? `Create “${item}”` : item)}
 			/>
 			<Text aria-live="polite" color="muted" size="1">
-				{createdItems.length > 0 ? `Created: ${createdItems.join(", ")}` : "Type a new value and press Enter or comma."}
+				{createdItems.length > 0
+					? `Created: ${createdItems.join(", ")}`
+					: "Type a new value and press Enter or comma."}
 			</Text>
 		</Stack>
 	);
@@ -625,7 +688,15 @@ function ControlledMultipleExample() {
 	);
 }
 
-function ExampleSection({ children, description, title }: { children: ReactNode; description: string; title: string }) {
+function ExampleSection({
+	children,
+	description,
+	title,
+}: {
+	children: ReactNode;
+	description: string;
+	title: string;
+}) {
 	return (
 		<Stack align="start" gap={3}>
 			<Stack align="start" gap={1}>

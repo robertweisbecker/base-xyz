@@ -21,7 +21,13 @@ export function InfoTip({ content, help = false, size = "sm", ...props }: InfoTi
 				openOnHover
 				render={
 					<IconButton
-						icon={help ? <QuestionIcon aria-hidden weight="duotone" /> : <InfoIcon aria-hidden weight="duotone" />}
+						icon={
+							help ? (
+								<QuestionIcon aria-hidden weight="duotone" />
+							) : (
+								<InfoIcon aria-hidden weight="duotone" />
+							)
+						}
 						label={label}
 						shape="circle"
 						size={size}
@@ -32,7 +38,11 @@ export function InfoTip({ content, help = false, size = "sm", ...props }: InfoTi
 				}
 			/>
 			<Popover.Popup aria-label={label} showClose={false}>
-				{typeof content === "string" ? <Popover.Description>{content}</Popover.Description> : content}
+				{typeof content === "string" ? (
+					<Popover.Description>{content}</Popover.Description>
+				) : (
+					content
+				)}
 			</Popover.Popup>
 		</Popover.Root>
 	);

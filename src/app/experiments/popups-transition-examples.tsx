@@ -29,9 +29,21 @@ type SharedPopupPayload = {
 
 const sharedLinkPreview = createLinkPreviewHandle<SharedPopupPayload>();
 const sharedPreviewItems: Array<SharedPopupPayload & { label: string }> = [
-	{ label: "Dialog", title: "Dialog", description: "A focused surface for short, interruptive workflows." },
-	{ label: "Drawer", title: "Drawer", description: "A bottom sheet for contextual tasks and progressive disclosure." },
-	{ label: "Popover", title: "Popover", description: "An anchored surface for lightweight supporting content." },
+	{
+		label: "Dialog",
+		title: "Dialog",
+		description: "A focused surface for short, interruptive workflows.",
+	},
+	{
+		label: "Drawer",
+		title: "Drawer",
+		description: "A bottom sheet for contextual tasks and progressive disclosure.",
+	},
+	{
+		label: "Popover",
+		title: "Popover",
+		description: "An anchored surface for lightweight supporting content.",
+	},
 ];
 
 const sharedPopover = createPopoverHandle<SharedPopupPayload>();
@@ -42,7 +54,11 @@ const sharedPopoverItems: Array<SharedPopupPayload & { label: string }> = [
 		title: "Two mentions",
 		description: "Alex mentioned you in Design critique and Release planning.",
 	},
-	{ label: "Updates", title: "Product updates", description: "The component lab was updated a few seconds ago." },
+	{
+		label: "Updates",
+		title: "Product updates",
+		description: "The component lab was updated a few seconds ago.",
+	},
 ];
 
 export function SharedTransitionsExample() {
@@ -86,7 +102,8 @@ function SharedTooltipTransition() {
 							delay={0}
 							handle={sharedTooltip}
 							payload={content}
-							render={<Button size="sm" variant="secondary" />}>
+							render={<Button size="sm" variant="secondary" />}
+						>
 							{label}
 						</Tooltip.Trigger>
 					))}
@@ -99,7 +116,8 @@ function SharedTooltipTransition() {
 								className: "popup-transition-positioner-tooltip",
 								xstyle: popupMotionStyles.movingPositioner,
 							}}
-							xstyle={popupMotionStyles.movingPopup}>
+							xstyle={popupMotionStyles.movingPopup}
+						>
 							<Tooltip.Viewport>{payload}</Tooltip.Viewport>
 						</Tooltip.Popup>
 					)}
@@ -124,7 +142,8 @@ function SharedLinkPreviewTransition() {
 						handle={sharedLinkPreview}
 						payload={{ title, description }}
 						render={<Button size="sm" variant="secondary" />}
-						xstyle={styles.linkPreviewButton}>
+						xstyle={styles.linkPreviewButton}
+					>
 						{label}
 					</LinkPreview.Trigger>
 				))}
@@ -137,7 +156,8 @@ function SharedLinkPreviewTransition() {
 							className: "popup-transition-positioner-link-preview",
 							xstyle: popupMotionStyles.movingPositioner,
 						}}
-						xstyle={popupMotionStyles.movingPopup}>
+						xstyle={popupMotionStyles.movingPopup}
+					>
 						<LinkPreview.Viewport>
 							{payload ? (
 								<LinkPreview.Content>
@@ -165,7 +185,8 @@ function SharedPopoverTransition() {
 						key={label}
 						handle={sharedPopover}
 						payload={{ title, description }}
-						render={<Button size="sm" variant="secondary" />}>
+						render={<Button size="sm" variant="secondary" />}
+					>
 						{label}
 					</Popover.Trigger>
 				))}
@@ -178,7 +199,8 @@ function SharedPopoverTransition() {
 							className: "popup-transition-positioner-popover",
 							xstyle: popupMotionStyles.movingPositioner,
 						}}
-						xstyle={popupMotionStyles.movingPopup}>
+						xstyle={popupMotionStyles.movingPopup}
+					>
 						<Popover.Viewport>
 							<Popover.Title>{payload?.title}</Popover.Title>
 							<Popover.Description>{payload?.description}</Popover.Description>
@@ -248,7 +270,8 @@ function TooltipToAnchoredToastControl() {
 				ref={anchorRef}
 				closeOnClick={false}
 				delay={0}
-				render={<Button onClick={() => void showFeedback()} variant="neutral" />}>
+				render={<Button onClick={() => void showFeedback()} variant="neutral" />}
+			>
 				Tooltip to toast
 			</Tooltip.Trigger>
 			<Tooltip.Popup>Copy invite link</Tooltip.Popup>

@@ -6,7 +6,12 @@ export type CloseButtonProps = Omit<IconButtonProps, "icon" | "label" | "shape">
 };
 
 /** Shared circular X control used by overlay and dismiss surfaces. */
-export function CloseButton({ label = "Close", size = "xs", variant = "neutral", ...props }: CloseButtonProps) {
+export function CloseButton({
+	label = "Close",
+	size = "xs",
+	variant = "neutral",
+	...props
+}: CloseButtonProps) {
 	return (
 		<IconButton
 			icon={<XIcon aria-hidden weight="bold" size={12} stroke="currentColor" strokeWidth={4} />}

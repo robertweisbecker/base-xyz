@@ -11,10 +11,19 @@ import {
 	DropIndicator,
 	isTextDropItem,
 } from "react-aria-components";
-import type { DroppableCollectionInsertDropEvent, DroppableCollectionRootDropEvent } from "react-aria-components";
+import type {
+	DroppableCollectionInsertDropEvent,
+	DroppableCollectionRootDropEvent,
+} from "react-aria-components";
 import { EmptyState } from "@/components";
 import { focusRing } from "@/styles/recipes/focus";
-import { BOARD_COLUMNS, createInitialBoardItems, TASK_TYPE, type DemoBoardItem, type DemoColumnId } from "../demo-data";
+import {
+	BOARD_COLUMNS,
+	createInitialBoardItems,
+	TASK_TYPE,
+	type DemoBoardItem,
+	type DemoColumnId,
+} from "../demo-data";
 import { DemoCard, DemoInstructions, DemoPanel } from "../demo-parts";
 import { demoStyles } from "../drag-and-drop-demo.stylex";
 
@@ -29,7 +38,9 @@ function ReactAriaBoardDemoInner({ onReset }: { onReset: () => void }) {
 		initialItems: createInitialBoardItems(),
 		getKey: (item) => item.id,
 	});
-	const [status, setStatus] = useState("Ready. Use the drag handles to reorder tasks or move them between columns.");
+	const [status, setStatus] = useState(
+		"Ready. Use the drag handles to reorder tasks or move them between columns.",
+	);
 
 	return (
 		<DemoPanel
@@ -43,11 +54,14 @@ function ReactAriaBoardDemoInner({ onReset }: { onReset: () => void }) {
 					<li {...stylex.props(demoStyles.instructionItem)}>
 						Use arrow keys to choose an insertion point in the collection.
 					</li>
-					<li {...stylex.props(demoStyles.instructionItem)}>Press Enter to drop or Escape to cancel.</li>
+					<li {...stylex.props(demoStyles.instructionItem)}>
+						Press Enter to drop or Escape to cancel.
+					</li>
 				</DemoInstructions>
 			}
 			status={status}
-			onReset={onReset}>
+			onReset={onReset}
+		>
 			<div {...stylex.props(demoStyles.board)}>
 				{BOARD_COLUMNS.map((column) => (
 					<ReactAriaBoardColumn
@@ -153,7 +167,8 @@ function ReactAriaBoardColumn({
 						icon={<KanbanIcon weight="duotone" />}
 					/>
 				)}
-				className={stylex.props(demoStyles.list).className}>
+				className={stylex.props(demoStyles.list).className}
+			>
 				{(item) => (
 					<GridListItem id={item.id} textValue={item.label} value={item}>
 						<DemoCard
@@ -163,7 +178,8 @@ function ReactAriaBoardColumn({
 								<AriaButton
 									slot="drag"
 									aria-label={`Move ${item.label}`}
-									className={stylex.props(demoStyles.handle, focusRing.offset).className}>
+									className={stylex.props(demoStyles.handle, focusRing.offset).className}
+								>
 									<DotsSixVerticalIcon aria-hidden focusable="false" size={18} weight="bold" />
 								</AriaButton>
 							}
@@ -178,7 +194,9 @@ function ReactAriaBoardColumn({
 async function readReactAriaBoardItem(
 	event: DroppableCollectionInsertDropEvent | DroppableCollectionRootDropEvent,
 ): Promise<DemoBoardItem | null> {
-	const item = event.items.find((dropItem) => isTextDropItem(dropItem) && dropItem.types.has(TASK_TYPE));
+	const item = event.items.find(
+		(dropItem) => isTextDropItem(dropItem) && dropItem.types.has(TASK_TYPE),
+	);
 	if (!item || !isTextDropItem(item)) return null;
 	return parseBoardItem(await item.getText(TASK_TYPE));
 }

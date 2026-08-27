@@ -15,7 +15,10 @@ export type SwitchSize = "sm" | "md" | "lg";
 const ENABLED_HOVER = ":hover:not([data-disabled],[data-readonly])";
 const ENABLED_ACTIVE = ":active:not([data-disabled],[data-readonly])";
 
-export type SwitchProps = Omit<BaseSwitch.Root.Props, "className" | "color" | "style" | keyof MarginProps> &
+export type SwitchProps = Omit<
+	BaseSwitch.Root.Props,
+	"className" | "color" | "style" | keyof MarginProps
+> &
 	MarginProps &
 	BaseStyleProps & {
 		label: string;
@@ -64,7 +67,8 @@ export function Switch({
 				htmlFor={id}
 				data-disabled={disabled ? "" : undefined}
 				data-readonly={readOnly ? "" : undefined}
-				{...stylex.props(labelMarker, switchParts.labelRoot)}>
+				{...stylex.props(labelMarker, switchParts.labelRoot)}
+			>
 				{visuallyHideLabel ? (
 					<VisuallyHidden>{labelContent}</VisuallyHidden>
 				) : (
@@ -73,7 +77,8 @@ export function Switch({
 							fieldStyles.itemLabel,
 							disabled && switchParts.labelDisabled,
 							readOnly && switchParts.labelReadOnly,
-						)}>
+						)}
+					>
 						{labelContent}
 					</span>
 				)}
@@ -86,7 +91,8 @@ export function Switch({
 					nativeButton
 					render={<button type="button" />}
 					{...stylex.props(switchParts.track, sizeVariants[size], focusRing.offset)}
-					{...rest}>
+					{...rest}
+				>
 					<BaseSwitch.Thumb {...stylex.props(switchParts.thumb)} />
 				</BaseSwitch.Root>
 			</label>

@@ -10,9 +10,16 @@ import { toastMotion } from "./toast-motion.stylex";
 import { toastControlStyles, toastTextStyles } from "./toast-parts";
 import { attrJoin } from "@/utils/attr-join";
 
-type StyledProps<T> = Omit<T, "className" | "style" | "xstyle"> & BaseStyleProps & { className?: string };
+type StyledProps<T> = Omit<T, "className" | "style" | "xstyle"> &
+	BaseStyleProps & { className?: string };
 
-export function Viewport({ ref, className, style, xstyle, ...props }: StyledProps<BaseToast.Viewport.Props>) {
+export function Viewport({
+	ref,
+	className,
+	style,
+	xstyle,
+	...props
+}: StyledProps<BaseToast.Viewport.Props>) {
 	const { className: sxClassName, style: sxStyle } = stylex.props(toastParts.viewport, xstyle);
 
 	return (
@@ -25,7 +32,13 @@ export function Viewport({ ref, className, style, xstyle, ...props }: StyledProp
 	);
 }
 
-export function Root({ ref, className, style, xstyle, ...props }: StyledProps<BaseToast.Root.Props>) {
+export function Root({
+	ref,
+	className,
+	style,
+	xstyle,
+	...props
+}: StyledProps<BaseToast.Root.Props>) {
 	const { className: sxClassName, style: sxStyle } = stylex.props(toastParts.root, xstyle);
 
 	return (
@@ -38,7 +51,13 @@ export function Root({ ref, className, style, xstyle, ...props }: StyledProps<Ba
 	);
 }
 
-export function Content({ ref, className, style, xstyle, ...props }: StyledProps<BaseToast.Content.Props>) {
+export function Content({
+	ref,
+	className,
+	style,
+	xstyle,
+	...props
+}: StyledProps<BaseToast.Content.Props>) {
 	const { className: sxClassName, style: sxStyle } = stylex.props(toastParts.content, xstyle);
 
 	return (
@@ -51,7 +70,13 @@ export function Content({ ref, className, style, xstyle, ...props }: StyledProps
 	);
 }
 
-export function Title({ ref, className, style, xstyle, ...props }: StyledProps<BaseToast.Title.Props>) {
+export function Title({
+	ref,
+	className,
+	style,
+	xstyle,
+	...props
+}: StyledProps<BaseToast.Title.Props>) {
 	const { className: sxClassName, style: sxStyle } = stylex.props(toastTextStyles.title, xstyle);
 
 	return (
@@ -64,8 +89,17 @@ export function Title({ ref, className, style, xstyle, ...props }: StyledProps<B
 	);
 }
 
-export function Description({ ref, className, style, xstyle, ...props }: StyledProps<BaseToast.Description.Props>) {
-	const { className: sxClassName, style: sxStyle } = stylex.props(toastTextStyles.description, xstyle);
+export function Description({
+	ref,
+	className,
+	style,
+	xstyle,
+	...props
+}: StyledProps<BaseToast.Description.Props>) {
+	const { className: sxClassName, style: sxStyle } = stylex.props(
+		toastTextStyles.description,
+		xstyle,
+	);
 
 	return (
 		<BaseToast.Description
@@ -77,8 +111,17 @@ export function Description({ ref, className, style, xstyle, ...props }: StyledP
 	);
 }
 
-export function Action({ ref, className, style, xstyle, ...props }: StyledProps<BaseToast.Action.Props>) {
-	const { className: sxClassName, style: sxStyle } = stylex.props(toastControlStyles.action, xstyle);
+export function Action({
+	ref,
+	className,
+	style,
+	xstyle,
+	...props
+}: StyledProps<BaseToast.Action.Props>) {
+	const { className: sxClassName, style: sxStyle } = stylex.props(
+		toastControlStyles.action,
+		xstyle,
+	);
 
 	return (
 		<BaseToast.Action
@@ -90,7 +133,13 @@ export function Action({ ref, className, style, xstyle, ...props }: StyledProps<
 	);
 }
 
-export function Close({ ref, className, style, xstyle, ...props }: StyledProps<BaseToast.Close.Props>) {
+export function Close({
+	ref,
+	className,
+	style,
+	xstyle,
+	...props
+}: StyledProps<BaseToast.Close.Props>) {
 	const { className: sxClassName, style: sxStyle } = stylex.props(
 		toastControlStyles.close,
 		toastControlStyles.stackedClose,
@@ -111,7 +160,13 @@ export function Close({ ref, className, style, xstyle, ...props }: StyledProps<B
 export function Text({ className, style, xstyle, ...props }: StyledProps<ComponentProps<"div">>) {
 	const { className: sxClassName, style: sxStyle } = stylex.props(toastParts.text, xstyle);
 
-	return <div className={attrJoin(sxClassName, className)} style={mergeStyle(sxStyle, style)} {...props} />;
+	return (
+		<div
+			className={attrJoin(sxClassName, className)}
+			style={mergeStyle(sxStyle, style)}
+			{...props}
+		/>
+	);
 }
 
 export const Provider = BaseToast.Provider;
@@ -165,13 +220,16 @@ const toastParts = stylex.create({
 		position: "absolute",
 		transform: {
 			"[data-ending-style]": "translateY(150%)",
-			"[data-ending-style][data-swipe-direction='down']": "translateY(calc(var(--toast-swipe-movement-y) + 150%))",
+			"[data-ending-style][data-swipe-direction='down']":
+				"translateY(calc(var(--toast-swipe-movement-y) + 150%))",
 			"[data-ending-style][data-swipe-direction='left']":
 				"translateX(calc(var(--toast-swipe-movement-x) - 150%)) translateY(var(--toast-expanded-offset-y))",
 			"[data-ending-style][data-swipe-direction='right']":
 				"translateX(calc(var(--toast-swipe-movement-x) + 150%)) translateY(var(--toast-expanded-offset-y))",
-			"[data-ending-style][data-swipe-direction='up']": "translateY(calc(var(--toast-swipe-movement-y) - 150%))",
-			"[data-expanded]": "translateX(var(--toast-swipe-movement-x)) translateY(var(--toast-expanded-offset-y))",
+			"[data-ending-style][data-swipe-direction='up']":
+				"translateY(calc(var(--toast-swipe-movement-y) - 150%))",
+			"[data-expanded]":
+				"translateX(var(--toast-swipe-movement-x)) translateY(var(--toast-expanded-offset-y))",
 			"[data-starting-style]": "translateY(150%)",
 			default:
 				"translateX(var(--toast-swipe-movement-x)) translateY(calc(var(--toast-swipe-movement-y) - (var(--toast-index) * var(--toast-peek)) - (var(--toast-shrink) * var(--toast-stack-height)))) scale(var(--toast-scale))",

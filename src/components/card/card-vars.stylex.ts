@@ -1,7 +1,6 @@
 import * as stylex from "@stylexjs/stylex";
 import { tokens } from "@/theme/tokens.stylex";
 
-
 export const cardVars = stylex.defineVars({
 	contentFontSize: tokens["--font-size-2"],
 	contentLetterSpacing: tokens["--letter-spacing-2"],

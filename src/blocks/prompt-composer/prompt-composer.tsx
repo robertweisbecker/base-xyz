@@ -34,7 +34,9 @@ const PromptComposerContext = createContext<PromptComposerContextValue | null>(n
 
 type StyledProps<T> = Omit<T, "style" | "xstyle"> & BaseStyleProps;
 
-type FormProps = StyledProps<Omit<ComponentProps<typeof Form>, "className" | "onSubmit" | "onFormSubmit">> & {
+type FormProps = StyledProps<
+	Omit<ComponentProps<typeof Form>, "className" | "onSubmit" | "onFormSubmit">
+> & {
 	className?: string;
 };
 export type PromptComposerRootProps = FormProps & {
@@ -105,7 +107,8 @@ export function Root({
 				value: currentValue,
 				updateValue,
 				submit,
-			}}>
+			}}
+		>
 			<Form
 				className={attrJoin(sx.className, className)}
 				onFormSubmit={submit}
@@ -116,11 +119,24 @@ export function Root({
 	);
 }
 
-export function Surface({ ref: forwardedRef, variant = "elevated", xstyle, ...props }: PromptComposerSurfaceProps) {
+export function Surface({
+	ref: forwardedRef,
+	variant = "elevated",
+	xstyle,
+	...props
+}: PromptComposerSurfaceProps) {
 	const { surfaceRef } = usePromptComposerContext("Surface");
 	const mergedRef = useMergedRefs(forwardedRef, surfaceRef);
 
-	return <InputGroup.Root ref={mergedRef} size="lg" variant={variant} {...props} xstyle={[parts.inputGroup, xstyle]} />;
+	return (
+		<InputGroup.Root
+			ref={mergedRef}
+			size="lg"
+			variant={variant}
+			{...props}
+			xstyle={[parts.inputGroup, xstyle]}
+		/>
+	);
 }
 
 export function Input({
@@ -143,7 +159,12 @@ export function Input({
 
 	function handleKeyDown(event: KeyboardEvent<HTMLTextAreaElement>) {
 		onKeyDown?.(event);
-		if (!event.defaultPrevented && event.key === "Enter" && !event.shiftKey && !event.nativeEvent.isComposing) {
+		if (
+			!event.defaultPrevented &&
+			event.key === "Enter" &&
+			!event.shiftKey &&
+			!event.nativeEvent.isComposing
+		) {
 			event.preventDefault();
 			context.submit();
 		}
@@ -179,7 +200,13 @@ export const Footer = InputGroup.Footer;
 
 export function Options({ className, style, xstyle, ...props }: PromptComposerOptionsProps) {
 	const sx = stylex.props(parts.options, xstyle);
-	return <div className={attrJoin(sx.className, className)} style={mergeStyle(sx.style, style)} {...props} />;
+	return (
+		<div
+			className={attrJoin(sx.className, className)}
+			style={mergeStyle(sx.style, style)}
+			{...props}
+		/>
+	);
 }
 
 export const Actions = InputGroup.Actions;
@@ -244,7 +271,14 @@ export function Stop({
 	}
 
 	return (
-		<Button aria-label={ariaLabel} shape={shape} size={size} type={type} variant="primary" {...props}>
+		<Button
+			aria-label={ariaLabel}
+			shape={shape}
+			size={size}
+			type={type}
+			variant="primary"
+			{...props}
+		>
 			{children}
 		</Button>
 	);
@@ -274,7 +308,8 @@ export function AddTrigger({ children, render, ...props }: PromptComposerAddTrig
 					/>
 				)
 			}
-			{...props}>
+			{...props}
+		>
 			{children}
 		</Menu.Trigger>
 	);
@@ -296,14 +331,36 @@ export function AddPopup({ positionerProps, xstyle, ...props }: PromptComposerAd
 	);
 }
 
-export function AddItemContent({ className, style, xstyle, ...props }: PromptComposerAddItemContentProps) {
+export function AddItemContent({
+	className,
+	style,
+	xstyle,
+	...props
+}: PromptComposerAddItemContentProps) {
 	const sx = stylex.props(parts.addMenuCopy, xstyle);
-	return <span className={attrJoin(sx.className, className)} style={mergeStyle(sx.style, style)} {...props} />;
+	return (
+		<span
+			className={attrJoin(sx.className, className)}
+			style={mergeStyle(sx.style, style)}
+			{...props}
+		/>
+	);
 }
 
-export function AddItemDescription({ className, style, xstyle, ...props }: PromptComposerAddItemDescriptionProps) {
+export function AddItemDescription({
+	className,
+	style,
+	xstyle,
+	...props
+}: PromptComposerAddItemDescriptionProps) {
 	const sx = stylex.props(parts.addMenuDescription, xstyle);
-	return <span className={attrJoin(sx.className, className)} style={mergeStyle(sx.style, style)} {...props} />;
+	return (
+		<span
+			className={attrJoin(sx.className, className)}
+			style={mergeStyle(sx.style, style)}
+			{...props}
+		/>
+	);
 }
 
 function usePromptComposerContext(part: string) {

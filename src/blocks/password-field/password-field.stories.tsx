@@ -29,12 +29,17 @@ export const Examples: Story = {
 					<PasswordField.Root>
 						<PasswordField.Label>Password</PasswordField.Label>
 						<PasswordField.Control>
-							<PasswordField.Input autoComplete="current-password" placeholder="Enter your password" />
+							<PasswordField.Input
+								autoComplete="current-password"
+								placeholder="Enter your password"
+							/>
 							<PasswordField.Actions>
 								<PasswordField.VisibilityToggle />
 							</PasswordField.Actions>
 						</PasswordField.Control>
-						<PasswordField.Description>Enter the password for your account.</PasswordField.Description>
+						<PasswordField.Description>
+							Enter the password for your account.
+						</PasswordField.Description>
 					</PasswordField.Root>
 				</Box>
 			</StorySection>
@@ -127,7 +132,8 @@ function PasswordExample({
 		<PasswordField.Root
 			defaultValue={inputProps.defaultValue}
 			defaultVisible={inputProps.defaultVisible}
-			disabled={inputProps.disabled}>
+			disabled={inputProps.disabled}
+		>
 			<PasswordField.Label>{label}</PasswordField.Label>
 			<PasswordField.Control>
 				<PasswordField.Input
@@ -140,7 +146,9 @@ function PasswordExample({
 					<PasswordField.VisibilityToggle disabled={inputProps.disabled} />
 				</PasswordField.Actions>
 			</PasswordField.Control>
-			{inputProps.description ? <PasswordField.Description>{inputProps.description}</PasswordField.Description> : null}
+			{inputProps.description ? (
+				<PasswordField.Description>{inputProps.description}</PasswordField.Description>
+			) : null}
 		</PasswordField.Root>
 	);
 }
@@ -151,7 +159,12 @@ function ControlledExample() {
 
 	return (
 		<Box maxWidth="32rem">
-			<PasswordField.Root value={value} onValueChange={setValue} visible={visible} onVisibleChange={setVisible}>
+			<PasswordField.Root
+				value={value}
+				onValueChange={setValue}
+				visible={visible}
+				onVisibleChange={setVisible}
+			>
 				<PasswordField.Label>API password</PasswordField.Label>
 				<PasswordField.Control>
 					<PasswordField.Input />

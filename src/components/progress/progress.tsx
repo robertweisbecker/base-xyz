@@ -7,9 +7,13 @@ import { textStyles } from "@/components/text/text.stylex";
 import { tokens } from "@/theme/tokens.stylex";
 import { attrJoin } from "@/utils/attr-join";
 
-type PartProps<T> = Omit<T, "className" | "style" | "xstyle"> & BaseStyleProps & { className?: string };
+type PartProps<T> = Omit<T, "className" | "style" | "xstyle"> &
+	BaseStyleProps & { className?: string };
 
-export type RootProps = Omit<BaseProgress.Root.Props, "className" | "style" | "xstyle" | keyof MarginProps> &
+export type RootProps = Omit<
+	BaseProgress.Root.Props,
+	"className" | "style" | "xstyle" | keyof MarginProps
+> &
 	MarginProps &
 	PartProps<BaseProgress.Root.Props>;
 export type LabelProps = PartProps<BaseProgress.Label.Props>;
@@ -19,11 +23,7 @@ export type IndicatorProps = PartProps<BaseProgress.Indicator.Props>;
 
 export function Root({ ref, className, style, xstyle, ...props }: RootProps) {
 	const { marginStyles, rest } = extractMarginProps(props);
-	const sx = stylex.props(
-		progressParts.root,
-		marginStyles,
-		xstyle,
-	);
+	const sx = stylex.props(progressParts.root, marginStyles, xstyle);
 
 	return (
 		<BaseProgress.Root

@@ -37,17 +37,17 @@ This is an internal proof of concept for comparing accessible drag-and-drop prim
 
 ## Comparison Notes
 
-| Concern | React Aria | dnd-kit | Library documented | Locally verified |
-|---|---|---|---|---|
-| Root ownership | Hooks can operate without an explicit provider | `DragDropProvider` owns the session | Yes | Pending live pass |
-| Drag data | Multiple MIME/custom text formats | ID, type, and arbitrary data | Yes | Pending live pass |
-| Generic validation | `getDropOperation` returns move/cancel | Droppable `accept` type or predicate | Yes | Pending live pass |
-| Generic keyboard navigation | Focuses valid targets with Tab | Moves geometrically with arrow keys | Yes | Pending live pass |
-| Collection navigation | Arrow-key drop positions | Geometric keyboard sensor | Yes | Pending live pass |
-| Mobile screen readers | Documented double-tap/swipe flow | Not documented as equivalent target navigation | React Aria yes; dnd-kit no equivalent claim | Unverified on physical devices |
-| Sort feedback | Drop indicators and commit callbacks | Optimistic/live reflow | Yes | Pending live pass |
-| Touch tuning | Browser/library-managed | Configurable delay and tolerance | Yes | Pending live pass |
-| Composition | Hook props, component render prop, slots | Refs on arbitrary DOM | Yes | Pending live pass |
-| Future native files | Built into React Aria data model | Separate concern | Yes | Not tested in this POC |
+| Concern                     | React Aria                                     | dnd-kit                                        | Library documented                          | Locally verified               |
+| --------------------------- | ---------------------------------------------- | ---------------------------------------------- | ------------------------------------------- | ------------------------------ |
+| Root ownership              | Hooks can operate without an explicit provider | `DragDropProvider` owns the session            | Yes                                         | Pending live pass              |
+| Drag data                   | Multiple MIME/custom text formats              | ID, type, and arbitrary data                   | Yes                                         | Pending live pass              |
+| Generic validation          | `getDropOperation` returns move/cancel         | Droppable `accept` type or predicate           | Yes                                         | Pending live pass              |
+| Generic keyboard navigation | Focuses valid targets with Tab                 | Moves geometrically with arrow keys            | Yes                                         | Pending live pass              |
+| Collection navigation       | Arrow-key drop positions                       | Geometric keyboard sensor                      | Yes                                         | Pending live pass              |
+| Mobile screen readers       | Documented double-tap/swipe flow               | Not documented as equivalent target navigation | React Aria yes; dnd-kit no equivalent claim | Unverified on physical devices |
+| Sort feedback               | Drop indicators and commit callbacks           | Optimistic/live reflow                         | Yes                                         | Pending live pass              |
+| Touch tuning                | Browser/library-managed                        | Configurable delay and tolerance               | Yes                                         | Pending live pass              |
+| Composition                 | Hook props, component render prop, slots       | Refs on arbitrary DOM                          | Yes                                         | Pending live pass              |
+| Future native files         | Built into React Aria data model               | Separate concern                               | Yes                                         | Not tested in this POC         |
 
 Physical iOS VoiceOver and Android TalkBack checks should only be marked verified after testing on real devices. Desktop responsive emulation is not enough evidence for those rows.

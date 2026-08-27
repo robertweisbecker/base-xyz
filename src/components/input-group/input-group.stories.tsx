@@ -158,7 +158,12 @@ export const Alignments: Story = {
 					<InputGroup.Textarea placeholder="Ask a follow-up…" aria-label="Footer message" />
 					<InputGroup.Footer>
 						<InputGroup.Actions>
-							<IconButton icon={<PaperclipIcon aria-hidden />} label="Attach a file" variant="ghost" size="sm" />
+							<IconButton
+								icon={<PaperclipIcon aria-hidden />}
+								label="Attach a file"
+								variant="ghost"
+								size="sm"
+							/>
 						</InputGroup.Actions>
 						<InputGroup.Actions>
 							<IconButton icon={<ArrowUpIcon aria-hidden />} label="Send message" size="sm" />
@@ -230,7 +235,11 @@ export const States: Story = {
 			</State>
 			<State label="Read only, empty">
 				<InputGroup.Root>
-					<InputGroup.Input aria-label="Empty read only input" placeholder="Enter a value…" readOnly />
+					<InputGroup.Input
+						aria-label="Empty read only input"
+						placeholder="Enter a value…"
+						readOnly
+					/>
 				</InputGroup.Root>
 			</State>
 			<State label="Disabled">
@@ -240,12 +249,21 @@ export const States: Story = {
 			</State>
 			<State label="Disabled elevated">
 				<InputGroup.Root variant="elevated">
-					<InputGroup.Input aria-label="Disabled elevated input" defaultValue="Unavailable" disabled />
+					<InputGroup.Input
+						aria-label="Disabled elevated input"
+						defaultValue="Unavailable"
+						disabled
+					/>
 				</InputGroup.Root>
 			</State>
 			<State label="Disabled textarea">
 				<InputGroup.Root variant="elevated">
-					<InputGroup.Textarea aria-label="Disabled textarea" defaultValue="Unavailable" disabled rows={3} />
+					<InputGroup.Textarea
+						aria-label="Disabled textarea"
+						defaultValue="Unavailable"
+						disabled
+						rows={3}
+					/>
 				</InputGroup.Root>
 			</State>
 		</Grid>

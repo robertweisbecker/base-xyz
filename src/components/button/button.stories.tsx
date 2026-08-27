@@ -59,7 +59,17 @@ const meta = {
 	},
 	parameters: {
 		controls: {
-			include: ["children", "variant", "size", "shape", "startSlot", "endSlot", "disabled", "loading", "loadingText"],
+			include: [
+				"children",
+				"variant",
+				"size",
+				"shape",
+				"startSlot",
+				"endSlot",
+				"disabled",
+				"loading",
+				"loadingText",
+			],
 		},
 	},
 } satisfies Meta<typeof Button>;
@@ -119,10 +129,18 @@ export const SizesAndIcons: Story = {
 					</Text>
 					<Stack align="center" gap={3} orientation="horizontal" wrap="wrap">
 						<Button size={size}>Create project</Button>
-						<Button size={size} startSlot={<PlusIcon aria-hidden weight="bold" />} variant="secondary">
+						<Button
+							size={size}
+							startSlot={<PlusIcon aria-hidden weight="bold" />}
+							variant="secondary"
+						>
 							Create project
 						</Button>
-						<Button size={size} endSlot={<ArrowRightIcon aria-hidden weight="bold" />} variant="neutral">
+						<Button
+							size={size}
+							endSlot={<ArrowRightIcon aria-hidden weight="bold" />}
+							variant="neutral"
+						>
 							Continue
 						</Button>
 					</Stack>
@@ -191,7 +209,8 @@ function ButtonStates() {
 								loadingText="Creating…"
 								size="md"
 								startSlot={<PlusIcon aria-hidden weight="bold" />}
-								variant={variant}>
+								variant={variant}
+							>
 								Create project
 							</Button>
 						</StateSpecimen>

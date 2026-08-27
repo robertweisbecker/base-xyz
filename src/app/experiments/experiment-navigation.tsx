@@ -37,7 +37,8 @@ export const componentsNavigationGroup = {
 			to: "/experiments/components/inputs",
 		},
 		{
-			description: "Layered interactions for contextual details, menus, dialogs, and focused tasks.",
+			description:
+				"Layered interactions for contextual details, menus, dialogs, and focused tasks.",
 			icon: <PictureInPictureIcon weight="duotone" aria-hidden />,
 			label: "Popups",
 			to: "/experiments/components/popups",
@@ -51,8 +52,12 @@ export const componentsNavigationGroup = {
 	],
 } as const;
 
-export const experimentNavigationGroups = [blocksNavigationGroup, componentsNavigationGroup] as const;
+export const experimentNavigationGroups = [
+	blocksNavigationGroup,
+	componentsNavigationGroup,
+] as const;
 
 export type ExperimentNavigationGroup = (typeof experimentNavigationGroups)[number];
 export type ExperimentNavigationItem = ExperimentNavigationGroup["items"][number];
-export type ExperimentNavigationPath = ExperimentNavigationGroup["to"] | ExperimentNavigationItem["to"];
+export type ExperimentNavigationPath =
+	ExperimentNavigationGroup["to"] | ExperimentNavigationItem["to"];

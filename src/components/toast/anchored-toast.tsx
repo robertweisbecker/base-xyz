@@ -29,9 +29,16 @@ import { attrJoin } from "@/utils/attr-join";
 
 export type AnchoredToastObject = BaseToast.Root.ToastObject<AnchoredToastData>;
 
-type StyledProps<T> = Omit<T, "className" | "style" | "xstyle"> & BaseStyleProps & { className?: string };
+type StyledProps<T> = Omit<T, "className" | "style" | "xstyle"> &
+	BaseStyleProps & { className?: string };
 
-export function AnchoredViewport({ ref, className, style, xstyle, ...props }: StyledProps<BaseToast.Viewport.Props>) {
+export function AnchoredViewport({
+	ref,
+	className,
+	style,
+	xstyle,
+	...props
+}: StyledProps<BaseToast.Viewport.Props>) {
 	const sx = stylex.props(anchoredParts.viewport, xstyle);
 
 	return (
@@ -44,7 +51,13 @@ export function AnchoredViewport({ ref, className, style, xstyle, ...props }: St
 	);
 }
 
-export function AnchoredPositioner({ ref, className, style, xstyle, ...props }: StyledProps<BaseToast.Positioner.Props>) {
+export function AnchoredPositioner({
+	ref,
+	className,
+	style,
+	xstyle,
+	...props
+}: StyledProps<BaseToast.Positioner.Props>) {
 	// The positioner must snap to Base UI's first resolved coordinates.
 	// Entry/exit motion belongs to the toast root so it grows from the anchor.
 	const sx = stylex.props(anchoredParts.positioner, xstyle);
@@ -88,13 +101,18 @@ export function AnchoredToast({
 	const tone = data.tone ?? toneForStatus(status);
 	const dismissible = data.dismissible ?? variant === "default";
 	const defaultIcon = variant !== "tooltip" && (status !== "idle" || variant === "pill");
-	const customIcon = data.icon !== undefined && data.icon !== null && data.icon !== false && data.icon !== true;
+	const customIcon =
+		data.icon !== undefined && data.icon !== null && data.icon !== false && data.icon !== true;
 	const showGeneratedIcon = data.icon === true || (data.icon === undefined && defaultIcon);
 	const showIcon = customIcon || showGeneratedIcon;
 	const sideOffset = toast.positionerProps?.sideOffset ?? (variant === "tooltip" ? 4 : 8);
 	const updateKey = toast.updateKey ?? 0;
 	const pulseStyle =
-		updateKey === 0 ? null : updateKey % 2 === 0 ? anchoredMotion.renotifyEven : anchoredMotion.renotifyOdd;
+		updateKey === 0
+			? null
+			: updateKey % 2 === 0
+				? anchoredMotion.renotifyEven
+				: anchoredMotion.renotifyOdd;
 	const rootSx = stylex.props(
 		anchoredParts.root,
 		popupMotionStyles.anchoredPopup,
@@ -114,20 +132,23 @@ export function AnchoredToast({
 			sideOffset={sideOffset}
 			className={positionerClassName}
 			style={positionerStyle}
-			xstyle={positionerXstyle}>
+			xstyle={positionerXstyle}
+		>
 			<BaseToast.Root
 				toast={toast}
 				data-variant={variant}
 				data-tone={tone}
 				data-status={status}
 				className={attrJoin(rootSx.className, className)}
-				style={mergeStyle(rootSx.style, style)}>
+				style={mergeStyle(rootSx.style, style)}
+			>
 				<BaseToast.Content
 					{...stylex.props(
 						anchoredParts.content,
 						contentVariants[variant === "popover" ? "default" : variant],
 						variant === "pill" && anchoredParts.pillContent,
-					)}>
+					)}
+				>
 					{showIcon ? (
 						<span
 							aria-hidden
@@ -137,7 +158,8 @@ export function AnchoredToast({
 								variant === "tooltip" && anchoredParts.tooltipIcon,
 								variant === "pill" && anchoredParts.pillIcon,
 								variant === "pill" && pillIconToneVariants[tone],
-							)}>
+							)}
+						>
 							{customIcon
 								? data.icon
 								: statusIcon(status, variant === "tooltip" ? "1em" : variant === "pill" ? 16 : 18)}
@@ -148,7 +170,9 @@ export function AnchoredToast({
 							{toast.title ?? toast.description}
 						</BaseToast.Title>
 					) : (
-						<span {...stylex.props(anchoredParts.text, variant === "pill" && anchoredParts.pillText)}>
+						<span
+							{...stylex.props(anchoredParts.text, variant === "pill" && anchoredParts.pillText)}
+						>
 							{toast.title != null ? (
 								<BaseToast.Title {...stylex.props(variant === "pill" && anchoredParts.pillTitle)} />
 							) : null}
@@ -163,7 +187,9 @@ export function AnchoredToast({
 						</span>
 					)}
 					{variant !== "tooltip" && toast.actionProps != null ? (
-						<BaseToast.Action {...stylex.props(toastControlStyles.action, focusRing.offset, pressable.transition)} />
+						<BaseToast.Action
+							{...stylex.props(toastControlStyles.action, focusRing.offset, pressable.transition)}
+						/>
 					) : null}
 					{variant !== "tooltip" && dismissible ? (
 						<BaseToast.Close
@@ -173,7 +199,8 @@ export function AnchoredToast({
 								toastControlStyles.anchoredClose,
 								focusRing.offset,
 								pressable.transition,
-							)}>
+							)}
+						>
 							<XIcon aria-hidden size={14} weight="bold" />
 						</BaseToast.Close>
 					) : null}

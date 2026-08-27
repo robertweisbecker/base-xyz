@@ -45,7 +45,8 @@ export function Link({
 			style={mergeStyle(sx.style, style)}
 			rel={resolvedLinkProps.rel}
 			target={resolvedLinkProps.target}
-			{...rest}>
+			{...rest}
+		>
 			{children}
 			{external ? externalLinkIndicator : null}
 		</a>
@@ -80,14 +81,14 @@ const linkColors = stylex.create({
 	},
 	neutral: {
 		color: {
-			default: tokens["--fg-muted"],
-			":hover": tokens["--fg"],
+			default: tokens["--fg"],
+			":hover": tokens["--fg-muted"],
 		},
 	},
 	inherit: {
 		color: {
 			default: "currentColor",
-			":hover": tokens["--fg-accent"],
+			":hover": tokens["--fg"],
 		},
 	},
 });

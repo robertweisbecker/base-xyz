@@ -66,7 +66,16 @@ const meta = {
 	},
 	parameters: {
 		controls: {
-			include: ["children", "size", "fontFamily", "fontWeight", "color", "textAlign", "wrap", "truncate"],
+			include: [
+				"children",
+				"size",
+				"fontFamily",
+				"fontWeight",
+				"color",
+				"textAlign",
+				"wrap",
+				"truncate",
+			],
 		},
 	},
 	decorators: [
@@ -123,7 +132,12 @@ export const Styles: Story = {
 		<Grid gap={3} xstyle={storyStyles.styleGrid}>
 			{(["sans", "serif", "mono"] as const).flatMap((fontFamily) =>
 				(["regular", "medium", "semibold", "bold"] as const).map((fontWeight) => (
-					<Text key={`${fontFamily}-${fontWeight}`} fontFamily={fontFamily} fontWeight={fontWeight} size="3">
+					<Text
+						key={`${fontFamily}-${fontWeight}`}
+						fontFamily={fontFamily}
+						fontWeight={fontWeight}
+						size="3"
+					>
 						{fontFamily} · {fontWeight}
 					</Text>
 				)),
@@ -138,11 +152,13 @@ export const Colors: Story = {
 	},
 	render: () => (
 		<Stack gap={3}>
-			{(["default", "subtle", "muted", "accent", "error", "success", "warning"] as const).map((textColor) => (
-				<Text key={textColor} color={textColor} fontWeight="medium">
-					{textColor}
-				</Text>
-			))}
+			{(["default", "subtle", "muted", "accent", "error", "success", "warning"] as const).map(
+				(textColor) => (
+					<Text key={textColor} color={textColor} fontWeight="medium">
+						{textColor}
+					</Text>
+				),
+			)}
 		</Stack>
 	),
 };
@@ -168,7 +184,8 @@ export const Rendering: Story = {
 					Exported text styles
 				</Heading>
 				<Text size="2">
-					Use the exported StyleX compositions when another component needs the same typography without nesting Text.
+					Use the exported StyleX compositions when another component needs the same typography
+					without nesting Text.
 				</Text>
 				<span {...stylex.props(textStyles.body)}>Body styles on a span</span>
 				<CodeBlock>stylex.props(textStyles.body)</CodeBlock>

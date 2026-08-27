@@ -47,33 +47,49 @@ async function expectSelectedModel(page: Page, triggerName: string, modelLabel: 
 	await expect(trigger).toHaveAttribute("aria-expanded", "false");
 }
 
-test("invalid controlled model normalizes display, selection, and the next callback", async ({ page }) => {
+test("invalid controlled model normalizes display, selection, and the next callback", async ({
+	page,
+}) => {
 	await openStory(page);
 	await expect(page.getByTestId("controlled-status")).toHaveText("0||||");
 	await expectSelectedModel(page, "Controlled invalid model selector", "5.6 Sol");
 
-	await page.getByRole("button", { name: "Controlled invalid model selector", exact: true }).click();
+	await page
+		.getByRole("button", { name: "Controlled invalid model selector", exact: true })
+		.click();
 	const effort = await openSubmenu(page, "Effort", /^High$/);
 	await effort.focus();
 	await page.keyboard.press("Enter");
-	await expect(page.getByTestId("controlled-status")).toHaveText("1|gpt-5.6-sol|High|Default|effort");
+	await expect(page.getByTestId("controlled-status")).toHaveText(
+		"1|gpt-5.6-sol|High|Default|effort",
+	);
 });
 
-test("invalid uncontrolled default normalizes display, selection, and stored callback value", async ({ page }) => {
+test("invalid uncontrolled default normalizes display, selection, and stored callback value", async ({
+	page,
+}) => {
 	await openStory(page);
 	await expect(page.getByTestId("uncontrolled-status")).toHaveText("0||||");
 	await expectSelectedModel(page, "Uncontrolled invalid default selector", "5.6 Sol");
 
-	await page.getByRole("button", { name: "Uncontrolled invalid default selector", exact: true }).click();
+	await page
+		.getByRole("button", { name: "Uncontrolled invalid default selector", exact: true })
+		.click();
 	const speed = await openSubmenu(page, "Speed", /^Fast$/);
 	await speed.focus();
 	await page.keyboard.press("Enter");
-	await expect(page.getByTestId("uncontrolled-status")).toHaveText("1|gpt-5.6-sol|Medium|Fast|speed");
+	await expect(page.getByTestId("uncontrolled-status")).toHaveText(
+		"1|gpt-5.6-sol|Medium|Fast|speed",
+	);
 });
 
-test("dynamic model removal normalizes without a callback until the next user action", async ({ page }) => {
+test("dynamic model removal normalizes without a callback until the next user action", async ({
+	page,
+}) => {
 	await openStory(page);
-	await expect(page.getByRole("button", { name: "Dynamic model removal selector", exact: true })).toContainText("5.6 Terra");
+	await expect(
+		page.getByRole("button", { name: "Dynamic model removal selector", exact: true }),
+	).toContainText("5.6 Terra");
 	await page.getByRole("button", { name: "Remove selected model" }).click();
 	await expect(page.getByTestId("dynamic-status")).toHaveText("0||||");
 	await expectSelectedModel(page, "Dynamic model removal selector", "5.6 Sol");

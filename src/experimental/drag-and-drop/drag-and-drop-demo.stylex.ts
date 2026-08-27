@@ -2,7 +2,8 @@ import * as stylex from "@stylexjs/stylex";
 import { breakpoints } from "@/styles/constants.stylex";
 import { tokens } from "@/theme/tokens.stylex";
 
-const activeDropTarget = ":is([data-drop-target], [data-drop-target='true'], [data-drop-target=''])";
+const activeDropTarget =
+	":is([data-drop-target], [data-drop-target='true'], [data-drop-target=''])";
 const invalidTarget = ":is([data-invalid], [data-invalid='true'], [data-invalid=''])";
 
 export const demoStyles = stylex.create({
@@ -276,7 +277,8 @@ export const demoStyles = stylex.create({
 	sortableMenuPopup: {
 		outlineColor: {
 			default: "transparent",
-			":is([data-drop-target], [data-drop-target='true'], [data-drop-target=''])": tokens["--fg-muted"],
+			":is([data-drop-target], [data-drop-target='true'], [data-drop-target=''])":
+				tokens["--fg-muted"],
 		},
 		outlineOffset: "4px",
 		outlineStyle: "dashed",

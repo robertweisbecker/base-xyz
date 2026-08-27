@@ -98,7 +98,11 @@ export const Examples: Story = {
 						description="Permission is required before pushing changes."
 						endSlot={<ArrowRightIcon aria-hidden weight="bold" />}
 					/>
-					<Activity status="queued" title="Run verification" description="Typecheck, lint, and build Storybook." />
+					<Activity
+						status="queued"
+						title="Run verification"
+						description="Typecheck, lint, and build Storybook."
+					/>
 				</Timeline.Root>
 			</Example>
 
@@ -112,7 +116,9 @@ export const Examples: Story = {
 						title="Built Storybook"
 						description="The build stopped while compiling a story."
 						meta="12s"
-						details={"TypeError: Cannot read properties of undefined\nat WorkflowProgress.stories.tsx:42"}
+						details={
+							"TypeError: Cannot read properties of undefined\nat WorkflowProgress.stories.tsx:42"
+						}
 					/>
 				</Timeline.Root>
 			</Example>

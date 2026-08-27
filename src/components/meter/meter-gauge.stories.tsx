@@ -73,7 +73,12 @@ export const Examples: Story = {
 				<Text color="muted" size="1">
 					Custom content
 				</Text>
-				<MeterGauge aria-label="Quota available" fillColor={tokens["--fill-success"]} size={64} value={100}>
+				<MeterGauge
+					aria-label="Quota available"
+					fillColor={tokens["--fill-success"]}
+					size={64}
+					value={100}
+				>
 					<Icon.Checkmark width={"1.5em"} height={"1.5em"} />
 				</MeterGauge>
 			</Stack>

@@ -3,13 +3,23 @@ import * as stylex from "@stylexjs/stylex";
 import { mergeStyle, type BaseStyleProps } from "@/styles/props/base";
 import { attrJoin } from "@/utils/attr-join";
 
-export type VisuallyHiddenProps = Omit<useRender.ComponentProps<"span">, "className" | "render" | "style"> &
+export type VisuallyHiddenProps = Omit<
+	useRender.ComponentProps<"span">,
+	"className" | "render" | "style"
+> &
 	BaseStyleProps & {
 		className?: string;
 		render?: useRender.RenderProp;
 	};
 
-export function VisuallyHidden({ ref, className, render, style, xstyle, ...props }: VisuallyHiddenProps) {
+export function VisuallyHidden({
+	ref,
+	className,
+	render,
+	style,
+	xstyle,
+	...props
+}: VisuallyHiddenProps) {
 	const sx = stylex.props(styles.root, xstyle);
 
 	return useRender<{}, HTMLElement>({

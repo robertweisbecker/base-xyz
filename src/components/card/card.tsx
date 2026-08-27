@@ -18,7 +18,10 @@ type StyledPartProps<T> = Omit<T, "className" | "style" | "xstyle"> &
 export type CardVariant = "elevated" | "muted" | "outline";
 export type CardSize = keyof typeof cardSizeVariants;
 
-export type CardRootProps = Omit<StyledPartProps<useRender.ComponentProps<"div">>, "render" | keyof MarginProps> &
+export type CardRootProps = Omit<
+	StyledPartProps<useRender.ComponentProps<"div">>,
+	"render" | keyof MarginProps
+> &
 	MarginProps & {
 		render?: useRender.RenderProp;
 		size?: CardSize;
@@ -30,9 +33,24 @@ export type CardContentProps = StyledPartProps<ComponentProps<"div">>;
 export type CardTitleProps = Omit<HeadingProps, keyof MarginProps>;
 export type CardDescriptionProps = Omit<TextProps, keyof MarginProps>;
 
-export function Root({ className, ref, render, size = "md", style, xstyle, variant = "elevated", ...props }: CardRootProps) {
+export function Root({
+	className,
+	ref,
+	render,
+	size = "md",
+	style,
+	xstyle,
+	variant = "elevated",
+	...props
+}: CardRootProps) {
 	const { marginStyles, rest } = extractMarginProps(props);
-	const sx = stylex.props(cardParts.root, cardSizeVariants[size], cardVariants[variant], ...marginStyles, xstyle);
+	const sx = stylex.props(
+		cardParts.root,
+		cardSizeVariants[size],
+		cardVariants[variant],
+		...marginStyles,
+		xstyle,
+	);
 
 	return useRender<{}, HTMLElement>({
 		defaultTagName: "div",
@@ -49,7 +67,13 @@ export function Root({ className, ref, render, size = "md", style, xstyle, varia
 export function Header({ className, style, xstyle, ...props }: CardHeaderProps) {
 	const sx = stylex.props(cardParts.header, xstyle);
 
-	return <div className={attrJoin(sx.className, className)} style={mergeStyle(sx.style, style)} {...props} />;
+	return (
+		<div
+			className={attrJoin(sx.className, className)}
+			style={mergeStyle(sx.style, style)}
+			{...props}
+		/>
+	);
 }
 
 export function Title(props: CardTitleProps) {
@@ -63,33 +87,45 @@ export function Description(props: CardDescriptionProps) {
 export function Content({ className, style, xstyle, ...props }: CardContentProps) {
 	const sx = stylex.props(cardParts.content, xstyle);
 
-	return <div className={attrJoin(sx.className, className)} style={mergeStyle(sx.style, style)} {...props} />;
+	return (
+		<div
+			className={attrJoin(sx.className, className)}
+			style={mergeStyle(sx.style, style)}
+			{...props}
+		/>
+	);
 }
 
 export function Footer({ className, style, xstyle, ...props }: CardFooterProps) {
 	const sx = stylex.props(cardParts.footer, xstyle);
 
-	return <div className={attrJoin(sx.className, className)} style={mergeStyle(sx.style, style)} {...props} />;
+	return (
+		<div
+			className={attrJoin(sx.className, className)}
+			style={mergeStyle(sx.style, style)}
+			{...props}
+		/>
+	);
 }
 
 const cardParts = stylex.create({
 	root: {
+		borderRadius: tokens["--radius-lg"],
 		gap: tokens["--space-1"],
 		overflow: "hidden",
 		color: tokens["--fg"],
 		display: "flex",
 		flexDirection: "column",
 		isolation: "isolate",
-		borderRadius: tokens["--radius-lg"],
 	},
 	header: {
 		gap: cardVars.headerGap,
+		paddingInline: cardVars.headerPaddingInline,
 		display: "flex",
 		flexDirection: "column",
-		paddingInline: cardVars.headerPaddingInline,
-		paddingInlineEnd: cardVars.headerPaddingBlock,
 		paddingBlockEnd: `calc(${cardVars.headerPaddingBlock} / 1.5)`,
 		paddingBlockStart: cardVars.headerPaddingBlock,
+		paddingInlineEnd: cardVars.headerPaddingBlock,
 	},
 	content: {
 		paddingBlock: cardVars.contentPaddingBlock,

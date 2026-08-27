@@ -33,7 +33,15 @@ export const Positioning: Story = {
 	parameters: { controls: { disable: true } },
 	render: () => (
 		<Box height="12rem" position="relative" xstyle={styles.frame}>
-			<Box bg="accent" insetEnd={2} insetStart={-2} insetTop={4} p={3} position="absolute" radius="lg">
+			<Box
+				bg="accent"
+				insetEnd={2}
+				insetStart={-2}
+				insetTop={4}
+				p={3}
+				position="absolute"
+				radius="lg"
+			>
 				Logical insets
 			</Box>
 		</Box>
@@ -60,7 +68,13 @@ export const CustomWidthAndPrecedence: Story = {
 			<Box data-testid="custom-width" bg="surfaceSubtle" p={2} width="calc(100% - 2rem)">
 				Custom CSS width
 			</Box>
-			<Box data-testid="style-wins" bg="surfaceSubtle" p={2} xstyle={styles.precedenceWidth} width="full">
+			<Box
+				data-testid="style-wins"
+				bg="surfaceSubtle"
+				p={2}
+				xstyle={styles.precedenceWidth}
+				width="full"
+			>
 				Final style wins
 			</Box>
 			<Box data-testid="mixed-spacing" m={1} mx={2} xstyle={styles.itemOutline}>
@@ -71,7 +85,12 @@ export const CustomWidthAndPrecedence: Story = {
 };
 
 const styles = stylex.create({
-	frame: { borderColor: tokens["--border"], borderRadius: tokens["--radius-md"], borderStyle: "solid", borderWidth: 1 },
+	frame: {
+		borderColor: tokens["--border"],
+		borderRadius: tokens["--radius-md"],
+		borderStyle: "solid",
+		borderWidth: 1,
+	},
 	precedenceWidth: { width: "12rem" },
 	itemOutline: { borderColor: tokens["--border"], borderStyle: "solid", borderWidth: 1 },
 });

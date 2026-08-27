@@ -3,7 +3,11 @@ import { CodeBlock } from "@/components/code-block/code-block";
 import { Heading } from "@/components/heading/heading";
 import { Box, Stack } from "@/components/layout/layout";
 import { Separator } from "@/components/separator/separator";
-import { Collapsible, type CollapsibleTriggerSize, type CollapsibleTriggerVariant } from "./collapsible";
+import {
+	Collapsible,
+	type CollapsibleTriggerSize,
+	type CollapsibleTriggerVariant,
+} from "./collapsible";
 
 type StoryArgs = {
 	defaultOpen: boolean;
@@ -49,7 +53,8 @@ export const Playground: Story = {
 		<Collapsible.Root
 			key={`${defaultOpen}-${disabled}-${_hiddenUntilFound}-${_iconSide}-${_size}-${_variant}`}
 			defaultOpen={defaultOpen}
-			disabled={disabled}>
+			disabled={disabled}
+		>
 			<Collapsible.Trigger size={_size} variant={_variant}>
 				{_iconSide === "start" ? <Collapsible.Icon side="start" /> : null}
 				Deployment details

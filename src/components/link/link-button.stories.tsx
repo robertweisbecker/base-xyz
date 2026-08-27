@@ -85,7 +85,8 @@ export const Examples: Story = {
 					<LinkButton
 						external
 						href="https://base-ui.com/react/components/button#rendering-links-as-buttons"
-						variant="neutral">
+						variant="neutral"
+					>
 						Base UI guidance
 					</LinkButton>
 				</Stack>
@@ -98,7 +99,11 @@ export const Examples: Story = {
 					<LinkButton href="#previous" size="xs" variant="ghost">
 						Previous
 					</LinkButton>
-					<LinkButton href="#continue" endSlot={<ArrowRightIcon aria-hidden weight="bold" />} size="sm">
+					<LinkButton
+						href="#continue"
+						endSlot={<ArrowRightIcon aria-hidden weight="bold" />}
+						size="sm"
+					>
 						Continue
 					</LinkButton>
 					<LinkButton href="#invite" shape="pill" variant="subtle">

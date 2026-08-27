@@ -56,7 +56,10 @@ export const Examples: Story = {
 		<Stack gap={8}>
 			<State title="Queued">
 				<AsyncJobProgress.Root status="queued">
-					<JobHeader title="Export workspace data" description="The export will start when the current job finishes." />
+					<JobHeader
+						title="Export workspace data"
+						description="The export will start when the current job finishes."
+					/>
 					<AsyncJobProgress.Progress />
 					<AsyncJobProgress.Actions>
 						<Button size="sm" variant="neutral">
@@ -70,7 +73,10 @@ export const Examples: Story = {
 
 			<State title="Running with known progress">
 				<AsyncJobProgress.Root status="running" value={62}>
-					<JobHeader title="Export workspace data" description="Collecting files and preparing the archive." />
+					<JobHeader
+						title="Export workspace data"
+						description="Collecting files and preparing the archive."
+					/>
 					<AsyncJobProgress.Progress />
 					<Details label="Show export log">
 						<Text render={<span />}>Collected 148 of 240 files</Text>
@@ -89,7 +95,10 @@ export const Examples: Story = {
 
 			<State title="Running without a known value">
 				<AsyncJobProgress.Root status="running" value={null}>
-					<JobHeader title="Index knowledge base" description="Discovering documents before indexing begins." />
+					<JobHeader
+						title="Index knowledge base"
+						description="Discovering documents before indexing begins."
+					/>
 					<AsyncJobProgress.Progress />
 					<AsyncJobProgress.Actions>
 						<Button size="sm" variant="neutral">
@@ -103,7 +112,11 @@ export const Examples: Story = {
 
 			<State title="Complete">
 				<AsyncJobProgress.Root status="complete">
-					<JobHeader level={4} title="Export workspace data" description="The archive is ready to download." />
+					<JobHeader
+						level={4}
+						title="Export workspace data"
+						description="The archive is ready to download."
+					/>
 					<AsyncJobProgress.Progress />
 					<Details label="Show export summary">
 						<Text render={<span />}>Created workspace-export.zip</Text>
@@ -124,7 +137,13 @@ export const Examples: Story = {
 						description="The export stopped before the archive could be created."
 					/>
 					<AsyncJobProgress.Progress />
-					<Stack align="start" gap={3} justify="space-between" minWidth={0} orientation="horizontal">
+					<Stack
+						align="start"
+						gap={3}
+						justify="space-between"
+						minWidth={0}
+						orientation="horizontal"
+					>
 						<Details label="Show error details">
 							<Text render={<span />}>UploadError: Storage destination is unavailable</Text>
 							<Text render={<span />}>Last successful file: assets/research-notes.pdf</Text>

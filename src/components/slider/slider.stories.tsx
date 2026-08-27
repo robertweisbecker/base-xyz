@@ -94,13 +94,18 @@ type Story = StoryObj<PlaygroundArgs>;
 
 export const Playground: Story = {
 	render: ({ _label, _markers, _markerIncrement, _valuePlacement, ...args }) => (
-		<Slider.Root key={`${args.defaultValue}-${args.disabled}-${args.orientation}-${args.size}-${args.step}`} {...args}>
+		<Slider.Root
+			key={`${args.defaultValue}-${args.disabled}-${args.orientation}-${args.size}-${args.step}`}
+			{...args}
+		>
 			<Slider.Header>
 				<Slider.Label>{_label}</Slider.Label>
 				{_valuePlacement === "label" ? <Slider.Value>{renderPercent}</Slider.Value> : null}
 			</Slider.Header>
 			<Slider.Row>
-				<Slider.Control markers={_markers ? { every: getMarkerFactor(_markerIncrement, args.step) } : false}>
+				<Slider.Control
+					markers={_markers ? { every: getMarkerFactor(_markerIncrement, args.step) } : false}
+				>
 					<Slider.Thumb />
 				</Slider.Control>
 				{_valuePlacement === "slider" ? <Slider.Value>{renderPercent}</Slider.Value> : null}
@@ -278,7 +283,12 @@ export const Orientations: Story = {
 				<Text color="muted" size="1">
 					Vertical
 				</Text>
-				<Slider.Root defaultValue={40} orientation="vertical" step={10} xstyle={styles.verticalRoot}>
+				<Slider.Root
+					defaultValue={40}
+					orientation="vertical"
+					step={10}
+					xstyle={styles.verticalRoot}
+				>
 					<Slider.Header>
 						<Slider.Label>Vertical value</Slider.Label>
 						<Slider.Value />
@@ -344,7 +354,13 @@ export const States: Story = {
 	),
 };
 
-function BasicControl({ markers = false, markerEvery = 1 }: { markers?: boolean; markerEvery?: number }) {
+function BasicControl({
+	markers = false,
+	markerEvery = 1,
+}: {
+	markers?: boolean;
+	markerEvery?: number;
+}) {
 	return (
 		<Slider.Control markers={markers ? { every: markerEvery } : false}>
 			<Slider.Thumb />
@@ -366,7 +382,13 @@ function ControlledExamples() {
 				<Text color="muted" size="1">
 					Number input
 				</Text>
-				<Slider.Root max={max} min={min} onValueChange={setNumberValue} step={step} value={numberValue}>
+				<Slider.Root
+					max={max}
+					min={min}
+					onValueChange={setNumberValue}
+					step={step}
+					value={numberValue}
+				>
 					<Slider.Header>
 						<Slider.Label>Opacity</Slider.Label>
 					</Slider.Header>
@@ -392,7 +414,13 @@ function ControlledExamples() {
 				<Text color="muted" size="1">
 					Minimum and maximum presets
 				</Text>
-				<Slider.Root max={max} min={min} onValueChange={setPresetValue} step={step} value={presetValue}>
+				<Slider.Root
+					max={max}
+					min={min}
+					onValueChange={setPresetValue}
+					step={step}
+					value={presetValue}
+				>
 					<Slider.Header>
 						<Slider.Label>Volume</Slider.Label>
 						<Slider.Value>{renderPercent}</Slider.Value>
@@ -426,7 +454,13 @@ function ControlledExamples() {
 				<Text color="muted" size="1">
 					Increment buttons
 				</Text>
-				<Slider.Root max={max} min={min} onValueChange={setIncrementValue} step={step} value={incrementValue}>
+				<Slider.Root
+					max={max}
+					min={min}
+					onValueChange={setIncrementValue}
+					step={step}
+					value={incrementValue}
+				>
 					<Slider.Header>
 						<Slider.Label>Zoom</Slider.Label>
 						<Slider.Value>{renderPercent}</Slider.Value>

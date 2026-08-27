@@ -91,7 +91,8 @@ export function Status({ className, style, xstyle, ...props }: StreamingResponse
 			aria-live={isStreaming ? "polite" : "off"}
 			className={attrJoin(sx.className, className)}
 			style={mergeStyle(sx.style, style)}
-			{...props}>
+			{...props}
+		>
 			{renderStatusIcon(status)}
 			<span {...stylex.props(isStreaming && shimmerTextStyles.effect)}>{label}</span>
 		</div>
@@ -116,7 +117,8 @@ export function Content({
 			aria-busy={isStreaming}
 			className={attrJoin(sx.className, className)}
 			style={mergeStyle(sx.style, style)}
-			{...props}>
+			{...props}
+		>
 			{isStreaming ? (
 				<StreamingText onStreamingComplete={onStreamingComplete} streamKey={streamKey}>
 					{children}
@@ -134,7 +136,14 @@ export function Actions({
 	variant = "unstyled",
 	...props
 }: StreamingResponseActionsProps) {
-	return <ToolbarPrimitive.Root aria-label={ariaLabel} xstyle={[parts.toolbar, xstyle]} variant={variant} {...props} />;
+	return (
+		<ToolbarPrimitive.Root
+			aria-label={ariaLabel}
+			xstyle={[parts.toolbar, xstyle]}
+			variant={variant}
+			{...props}
+		/>
+	);
 }
 
 function useStreamingResponseContext(part: string) {
@@ -170,7 +179,13 @@ function StreamingText({
 	}
 
 	const streamIdentity = JSON.stringify([streamKey ?? null, text]);
-	return <ChunkedStreamingText key={streamIdentity} onStreamingComplete={onStreamingComplete} text={text} />;
+	return (
+		<ChunkedStreamingText
+			key={streamIdentity}
+			onStreamingComplete={onStreamingComplete}
+			text={text}
+		/>
+	);
 }
 
 function ChunkedStreamingText({
@@ -207,7 +222,11 @@ function ChunkedStreamingText({
 	return (
 		<span {...stylex.props(typingTextStyles.chunks)}>
 			{visibleChunks.map((chunk, index) => (
-				<span key={`${chunk}-${index}`} data-streaming-text-chunk="" {...stylex.props(typingTextStyles.chunk)}>
+				<span
+					key={`${chunk}-${index}`}
+					data-streaming-text-chunk=""
+					{...stylex.props(typingTextStyles.chunk)}
+				>
 					{chunk}
 				</span>
 			))}

@@ -16,7 +16,9 @@ type AccessibleLocation = "source" | "planning" | "release";
 export function ReactAriaAccessibilityDemo() {
 	const [location, setLocation] = useState<AccessibleLocation>("source");
 	const [count, setCount] = useState(0);
-	const [status, setStatus] = useState("Ready. The nested action should work without starting a drag.");
+	const [status, setStatus] = useState(
+		"Ready. The nested action should work without starting a drag.",
+	);
 
 	function reset() {
 		setLocation("source");
@@ -47,19 +49,21 @@ export function ReactAriaAccessibilityDemo() {
 			instructions={
 				<DemoInstructions>
 					<li {...stylex.props(demoStyles.instructionItem)}>
-						Keyboard: press Enter on the handle, Tab or Shift+Tab through valid targets, Enter to drop, Escape to
-						cancel.
+						Keyboard: press Enter on the handle, Tab or Shift+Tab through valid targets, Enter to
+						drop, Escape to cancel.
 					</li>
 					<li {...stylex.props(demoStyles.instructionItem)}>
 						Collection story: use arrow keys to choose board insertion positions.
 					</li>
 					<li {...stylex.props(demoStyles.instructionItem)}>
-						Touch screen reader: library documented as double-tap handle, swipe valid targets, double-tap to drop.
+						Touch screen reader: library documented as double-tap handle, swipe valid targets,
+						double-tap to drop.
 					</li>
 				</DemoInstructions>
 			}
 			status={`${status} Current location: ${getLocationLabel(location)}. Nested action count: ${count}.`}
-			onReset={reset}>
+			onReset={reset}
+		>
 			<div {...stylex.props(demoStyles.transferGrid)}>
 				<div {...stylex.props(demoStyles.sourceTray)} aria-label="Source tray">
 					{location === "source" ? (
@@ -79,7 +83,8 @@ export function ReactAriaAccessibilityDemo() {
 					onDrop={(label) => {
 						setLocation("planning");
 						setStatus(`Dropped ${label} into Planning queue.`);
-					}}>
+					}}
+				>
 					{location === "planning" ? card : null}
 				</ReactAriaAccessibleTarget>
 				<ReactAriaAccessibleTarget
@@ -87,7 +92,8 @@ export function ReactAriaAccessibilityDemo() {
 					onDrop={(label) => {
 						setLocation("release");
 						setStatus(`Dropped ${label} into Release queue.`);
-					}}>
+					}}
+				>
 					{location === "release" ? card : null}
 				</ReactAriaAccessibleTarget>
 			</div>
@@ -133,7 +139,12 @@ function ReactAriaAccessibleCard({
 			meta="Article with nested action"
 			endSlot={
 				<>
-					<Button size="sm" variant="secondary" onClick={onNestedAction} xstyle={demoStyles.nestedAction}>
+					<Button
+						size="sm"
+						variant="secondary"
+						onClick={onNestedAction}
+						xstyle={demoStyles.nestedAction}
+					>
 						Count {count}
 					</Button>
 					<DemoHandle {...handleProps} ref={buttonRef} label={`Move ${TRANSFER_ITEM.label}`} />
@@ -157,7 +168,9 @@ function ReactAriaAccessibleTarget({
 		ref,
 		getDropOperation: (types) => (types.has(TASK_TYPE) ? "move" : "cancel"),
 		onDrop: async (event) => {
-			const item = event.items.find((dropItem): dropItem is TextDropItem => isTextDropItem(dropItem));
+			const item = event.items.find((dropItem): dropItem is TextDropItem =>
+				isTextDropItem(dropItem),
+			);
 			if (!item || !item.types.has(TASK_TYPE)) return;
 			const label = parseDemoItemString(await item.getText(TASK_TYPE), "label");
 			if (label) onDrop(label);
@@ -171,7 +184,8 @@ function ReactAriaAccessibleTarget({
 			role="group"
 			aria-label={label}
 			data-drop-target={isDropTarget || undefined}
-			{...stylex.props(demoStyles.dropZone, focusRing.within)}>
+			{...stylex.props(demoStyles.dropZone, focusRing.within)}
+		>
 			<DemoDropZone label={label} description="Accepts this task.">
 				{children}
 			</DemoDropZone>

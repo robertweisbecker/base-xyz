@@ -13,7 +13,8 @@ export function DrawerExample() {
 			snapPoints={drawerSnapPoints}
 			snapPoint={snapPoint}
 			onSnapPointChange={setSnapPoint}
-			snapToSequentialPoints>
+			snapToSequentialPoints
+		>
 			<Drawer.Trigger render={<Button variant="neutral" />}>Drawer</Drawer.Trigger>
 			<Drawer.Portal>
 				<Drawer.Backdrop />
@@ -34,28 +35,32 @@ export function DrawerExample() {
 											aria-pressed={mode === "details"}
 											onClick={() => setMode("details")}
 											size="sm"
-											variant={mode === "details" ? "primary" : "secondary"}>
+											variant={mode === "details" ? "primary" : "secondary"}
+										>
 											Details
 										</Button>
 										<Button
 											aria-pressed={mode === "activity"}
 											onClick={() => setMode("activity")}
 											size="sm"
-											variant={mode === "activity" ? "primary" : "secondary"}>
+											variant={mode === "activity" ? "primary" : "secondary"}
+										>
 											Activity
 										</Button>
 										<Button
 											aria-pressed={snapPoint === drawerSnapPoints[0]}
 											onClick={() => setSnapPoint(drawerSnapPoints[0])}
 											size="sm"
-											variant="secondary">
+											variant="secondary"
+										>
 											Compact
 										</Button>
 										<Button
 											aria-pressed={snapPoint === drawerSnapPoints[2]}
 											onClick={() => setSnapPoint(drawerSnapPoints[2])}
 											size="sm"
-											variant="secondary">
+											variant="secondary"
+										>
 											Full height
 										</Button>
 									</Stack>
@@ -115,7 +120,9 @@ function NestedDrawer() {
 									The parent drawer should scale and remain visible behind this layer.
 								</Drawer.Description>
 							</Drawer.Header>
-							<Drawer.Body>Nested focus and swipe dismissal stay scoped to the frontmost drawer.</Drawer.Body>
+							<Drawer.Body>
+								Nested focus and swipe dismissal stay scoped to the frontmost drawer.
+							</Drawer.Body>
 							<Drawer.Footer>
 								<Drawer.Close render={<Button variant="secondary" />}>Back</Drawer.Close>
 							</Drawer.Footer>

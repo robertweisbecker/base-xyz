@@ -23,7 +23,15 @@ const iconOptions = {
 	"Bell slash": <BellSlashIcon aria-hidden weight="duotone" />,
 };
 
-const variants: ToggleVariant[] = ["primary", "subtle", "secondary", "neutral", "ghost", "plain", "error"];
+const variants: ToggleVariant[] = [
+	"primary",
+	"subtle",
+	"secondary",
+	"neutral",
+	"ghost",
+	"plain",
+	"error",
+];
 
 type TogglePlaygroundArgs = ToggleProps & {
 	_appearance: "button" | "iconButton";
@@ -63,7 +71,8 @@ function TogglePlaygroundPreview({
 				{...args}
 				pressedIcon={pressedIcon}
 				shape={shape}
-				startSlot={startSlot}>
+				startSlot={startSlot}
+			>
 				{children}
 			</Toggle>
 		);
@@ -87,7 +96,8 @@ function TogglePlaygroundPreview({
 					defaultValue={_multiple ? ["italic", "underline"] : ["center"]}
 					join={_join}
 					multiple={_multiple}
-					orientation={_orientation}>
+					orientation={_orientation}
+				>
 					{_multiple ? (
 						<FormattingToggles variant={args.variant} />
 					) : (
@@ -102,7 +112,12 @@ function TogglePlaygroundPreview({
 function AlignmentToggles({ variant }: { variant?: ToggleVariant }) {
 	return (
 		<>
-			<Toggle icon={<TextAlignLeftIcon aria-hidden weight="bold" />} label="Align left" value="left" variant={variant} />
+			<Toggle
+				icon={<TextAlignLeftIcon aria-hidden weight="bold" />}
+				label="Align left"
+				value="left"
+				variant={variant}
+			/>
 			<Toggle
 				icon={<TextAlignCenterIcon aria-hidden weight="bold" />}
 				label="Align center"
@@ -122,8 +137,18 @@ function AlignmentToggles({ variant }: { variant?: ToggleVariant }) {
 function FormattingToggles({ variant }: { variant?: ToggleVariant }) {
 	return (
 		<>
-			<Toggle icon={<TextBIcon aria-hidden weight="bold" />} label="Bold" value="bold" variant={variant} />
-			<Toggle icon={<TextItalicIcon aria-hidden weight="bold" />} label="Italic" value="italic" variant={variant} />
+			<Toggle
+				icon={<TextBIcon aria-hidden weight="bold" />}
+				label="Bold"
+				value="bold"
+				variant={variant}
+			/>
+			<Toggle
+				icon={<TextItalicIcon aria-hidden weight="bold" />}
+				label="Italic"
+				value="italic"
+				variant={variant}
+			/>
 			<Toggle
 				icon={<TextUnderlineIcon aria-hidden weight="bold" />}
 				label="Underline"
@@ -269,20 +294,28 @@ export const SizesAndIcons: Story = {
 			{(["xs", "sm", "md", "lg"] as const).map((size) => (
 				<Grid key={size} align="center" gap={3} xstyle={styles.variantRow}>
 					<Text color="muted" size="1">
-						{size === "xs" ? "Extra small" : size === "sm" ? "Small" : size === "md" ? "Medium" : "Large"}
+						{size === "xs"
+							? "Extra small"
+							: size === "sm"
+								? "Small"
+								: size === "md"
+									? "Medium"
+									: "Large"}
 					</Text>
 					<Stack align="center" gap={3} orientation="horizontal" wrap="wrap">
 						<Toggle
 							startSlot={<BellSlashIcon aria-hidden />}
 							pressedIcon={<BellIcon aria-hidden weight="duotone" />}
-							size={size}>
+							size={size}
+						>
 							Notifications
 						</Toggle>
 						<Toggle
 							defaultPressed
 							startSlot={<BellSlashIcon aria-hidden />}
 							pressedIcon={<BellIcon aria-hidden weight="duotone" />}
-							size={size}>
+							size={size}
+						>
 							Notifications
 						</Toggle>
 						<Toggle
@@ -389,7 +422,8 @@ export const Groups: Story = {
 								multiple
 								aria-label={`${variant} formatting`}
 								defaultValue={["italic", "underline"]}
-								join>
+								join
+							>
 								<FormattingToggles variant={variant} />
 							</ToggleGroup>
 						</Grid>
@@ -406,7 +440,8 @@ export const Groups: Story = {
 						aria-label="Vertical alignment"
 						defaultValue={["center"]}
 						join
-						orientation="vertical">
+						orientation="vertical"
+					>
 						<SegmentToggles variant="secondary" />
 					</ToggleGroup>
 					<ToggleGroup
@@ -414,7 +449,8 @@ export const Groups: Story = {
 						aria-label="Vertical formatting"
 						defaultValue={["italic", "underline"]}
 						join
-						orientation="vertical">
+						orientation="vertical"
+					>
 						<FormattingToggles variant="secondary" />
 					</ToggleGroup>
 				</Stack>

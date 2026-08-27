@@ -60,7 +60,10 @@ export function Item({
 }: ItemProps) {
 	const { marginStyles, rest } = extractMarginProps(props);
 	const hasDescription =
-		description !== undefined && description !== null && description !== false && description !== "";
+		description !== undefined &&
+		description !== null &&
+		description !== false &&
+		description !== "";
 	const sx = stylex.props(
 		itemParts.root,
 		itemVariantStyles[variant],
@@ -81,7 +84,10 @@ export function Item({
 			children: (
 				<>
 					{startSlot ? (
-						<span aria-hidden {...stylex.props(itemParts.startSlot, itemSlotVariantStyles[variant])}>
+						<span
+							aria-hidden
+							{...stylex.props(itemParts.startSlot, itemSlotVariantStyles[variant])}
+						>
 							{startSlot}
 						</span>
 					) : null}
@@ -90,7 +96,8 @@ export function Item({
 							itemParts.content,
 							descriptionLayoutStyles[descriptionLayout],
 							hasDescription && descriptionLayout === "stack" && itemParts.contentStackGap,
-						)}>
+						)}
+					>
 						<span
 							{...stylex.props(
 								textStyles.body,
@@ -98,7 +105,8 @@ export function Item({
 								itemParts.label,
 								itemLabelVariantStyles[variant],
 								descriptionLayout === "inline-wrap" && itemParts.labelInline,
-							)}>
+							)}
+						>
 							{label}
 						</span>
 						{hasDescription ? (
@@ -110,12 +118,17 @@ export function Item({
 									itemDescriptionVariantStyles[variant],
 									descriptionLayout === "inline" && itemParts.descriptionInline,
 									descriptionLayout === "inline-wrap" && itemParts.descriptionInlineWrap,
-								)}>
+								)}
+							>
 								{description}
 							</span>
 						) : null}
 					</span>
-					{endSlot ? <span {...stylex.props(itemParts.endSlot, itemSlotVariantStyles[variant])}>{endSlot}</span> : null}
+					{endSlot ? (
+						<span {...stylex.props(itemParts.endSlot, itemSlotVariantStyles[variant])}>
+							{endSlot}
+						</span>
+					) : null}
 				</>
 			),
 		},

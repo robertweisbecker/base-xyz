@@ -21,7 +21,7 @@ test("shows the plus indicator for a creatable item", async ({ page }) => {
 	const input = page.getByRole("combobox");
 	await input.fill("Gemini");
 
-	const creatableItem = page.getByRole("option", { name: 'Create “Gemini”' });
+	const creatableItem = page.getByRole("option", { name: "Create “Gemini”" });
 	await expect(creatableItem).toBeVisible();
 	await expect(creatableItem.locator("svg")).toBeVisible();
 });

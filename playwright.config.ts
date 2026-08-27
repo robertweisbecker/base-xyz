@@ -1,5 +1,8 @@
 import { defineConfig, devices } from "@playwright/test";
 
+const storybookPort = process.env.PLAYWRIGHT_STORYBOOK_PORT ?? "6106";
+const storybookURL = `http://127.0.0.1:${storybookPort}`;
+
 export default defineConfig({
 	testDir: "./tests",
 	testIgnore: "**/app/**",
@@ -12,16 +15,16 @@ export default defineConfig({
 		timeout: 15_000,
 	},
 	use: {
-		baseURL: "http://127.0.0.1:6106",
+		baseURL: storybookURL,
 		screenshot: "only-on-failure",
 		trace: "retain-on-failure",
 	},
 	webServer: process.env.PLAYWRIGHT_SKIP_WEBSERVER
 		? undefined
 		: {
-				command: "npx vite preview --outDir storybook-static --host 127.0.0.1 --port 6106",
+				command: `npx vite preview --outDir storybook-static --host 127.0.0.1 --port ${storybookPort}`,
 				reuseExistingServer: false,
-				url: "http://127.0.0.1:6106",
+				url: storybookURL,
 			},
 	projects: [
 		{

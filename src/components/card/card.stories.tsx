@@ -59,7 +59,9 @@ export const HorizontalLayout: Story = {
 				<Card.Title>Horizontal card</Card.Title>
 				<Card.Description>Uses direct overrides without a dedicated variant.</Card.Description>
 			</Card.Header>
-			<Card.Content xstyle={x.flexGrow._1}>Content expands without a dedicated horizontal variant.</Card.Content>
+			<Card.Content xstyle={x.flexGrow._1}>
+				Content expands without a dedicated horizontal variant.
+			</Card.Content>
 			<Card.Footer xstyle={[x.gap(tokens["--space-2"]), x.justifyContent["flex-end"]]}>
 				<Button size="sm" variant="secondary">
 					Cancel
@@ -106,13 +108,7 @@ export const Sizes: Story = {
 	),
 };
 
-function CardExample({
-	size = "md",
-	variant,
-}: {
-	size?: CardSize;
-	variant: CardVariant;
-}) {
+function CardExample({ size = "md", variant }: { size?: CardSize; variant: CardVariant }) {
 	return (
 		<Card.Root size={size} variant={variant}>
 			<Card.Header>

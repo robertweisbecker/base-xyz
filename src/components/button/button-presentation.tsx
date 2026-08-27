@@ -1,9 +1,5 @@
 import type { ReactNode } from "react";
-import {
-	getButtonSlotStyleProps,
-	type ButtonSize,
-	type ButtonVariant,
-} from "./button.stylex";
+import { getButtonSlotStyleProps, type ButtonSize, type ButtonVariant } from "./button.stylex";
 
 export function renderButtonSlot(
 	slot: ReactNode,

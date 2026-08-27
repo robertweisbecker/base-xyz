@@ -51,7 +51,10 @@ const loadingStyles = stylex.create({
 	},
 });
 
-export type ButtonProps = Omit<BaseButton.Props, "className" | "color" | "style" | keyof MarginProps> &
+export type ButtonProps = Omit<
+	BaseButton.Props,
+	"className" | "color" | "style" | keyof MarginProps
+> &
 	MarginProps &
 	BaseStyleProps & {
 		variant?: ButtonVariant;
@@ -68,7 +71,10 @@ export type ButtonProps = Omit<BaseButton.Props, "className" | "color" | "style"
 		loadingText?: string;
 	};
 
-export type IconButtonProps = Omit<ButtonProps, "children" | "endSlot" | "loadingText" | "shape" | "startSlot"> & {
+export type IconButtonProps = Omit<
+	ButtonProps,
+	"children" | "endSlot" | "loadingText" | "shape" | "startSlot"
+> & {
 	icon: ReactNode;
 	/** Visible tooltip text and the fallback accessible name. */
 	label: string;
@@ -96,7 +102,15 @@ export function IconButton({
 	tooltip = label,
 	...props
 }: IconButtonProps) {
-	const button = <ButtonRoot {...props} aria-label={ariaLabel ?? label} iconOnly shape={shape} startSlot={icon} />;
+	const button = (
+		<ButtonRoot
+			{...props}
+			aria-label={ariaLabel ?? label}
+			iconOnly
+			shape={shape}
+			startSlot={icon}
+		/>
+	);
 
 	if (tooltip === false) {
 		return button;
@@ -152,7 +166,8 @@ function ButtonRoot({
 			data-variant={variant}
 			className={attrJoin(sx.className, className)}
 			style={mergeStyle(sx.style, style)}
-			{...rest}>
+			{...rest}
+		>
 			<span {...stylex.props(loadingStyles.resting, loading && loadingStyles.hidden)}>
 				{renderButtonSlot(startSlot, "start", size, variant, iconOnly)}
 				{children}

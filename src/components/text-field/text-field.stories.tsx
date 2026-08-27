@@ -74,7 +74,10 @@ export const Playground: Story = {
 export const WrapperLayout: Story = {
 	parameters: { controls: { disable: true } },
 	render: (args) => (
-		<TextField {...args} xstyle={[x.display.flex, x.flexDirection.row, x.gap(tokens["--space-3"])]} />
+		<TextField
+			{...args}
+			xstyle={[x.display.flex, x.flexDirection.row, x.gap(tokens["--space-3"])]}
+		/>
 	),
 };
 
@@ -94,7 +97,11 @@ export const States: Story = {
 				<TextField label="Workspace name" defaultValue="Design Ops" autoFocus />
 			</StateSpecimen>
 			<StateSpecimen label="Invalid" attribute="data-invalid">
-				<TextField label="Workspace name" defaultValue="ab" error="Use at least three characters." />
+				<TextField
+					label="Workspace name"
+					defaultValue="ab"
+					error="Use at least three characters."
+				/>
 			</StateSpecimen>
 			<StateSpecimen label="Required" attribute="required">
 				<TextField label="Workspace name" placeholder="e.g. Acme Studio" required />
@@ -148,17 +155,27 @@ export const FieldFamilyParity: Story = {
 					</Text>
 				))}
 				<FamilyRow label="Text field">
-					{(size) => <TextField label="Text field" defaultValue="Shared control surface" size={size} />}
+					{(size) => (
+						<TextField label="Text field" defaultValue="Shared control surface" size={size} />
+					)}
 				</FamilyRow>
 				<FamilyRow label="Textarea">
-					{(size) => <Textarea label="Textarea" defaultValue="Shared control surface" size={size} />}
+					{(size) => (
+						<Textarea label="Textarea" defaultValue="Shared control surface" size={size} />
+					)}
 				</FamilyRow>
 				<FamilyRow label="Number field">
-					{(size) => <NumberField label="Number field" defaultValue={8} size={size} inputWidth="fill" />}
+					{(size) => (
+						<NumberField label="Number field" defaultValue={8} size={size} inputWidth="fill" />
+					)}
 				</FamilyRow>
 				<FamilyRow label="Select">
 					{(size) => (
-						<Select.Root<string> defaultValue="React" items={[{ label: "React", value: "React" }]} size={size}>
+						<Select.Root<string>
+							defaultValue="React"
+							items={[{ label: "React", value: "React" }]}
+							size={size}
+						>
 							<Select.Label>Select</Select.Label>
 							<Select.Trigger />
 							<Select.Popup>
@@ -212,7 +229,15 @@ function FamilyRow({
 	);
 }
 
-function StateSpecimen({ attribute, children, label }: { attribute?: string; children: ReactNode; label: string }) {
+function StateSpecimen({
+	attribute,
+	children,
+	label,
+}: {
+	attribute?: string;
+	children: ReactNode;
+	label: string;
+}) {
 	return (
 		<Stack gap={3}>
 			<Stack align="baseline" gap={2} justify="space-between" orientation="horizontal">

@@ -1,29 +1,30 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="color-scheme" content="light dark" />
-    <title>Base + StyleX Lab</title>
-    <script>
-      (() => {
-        const storedMode = localStorage.getItem('base-stylex-theme')
-        const storedTheme = localStorage.getItem('base-stylex-theme-brand')
-        const mode = ['system', 'light', 'dark'].includes(storedMode)
-          ? storedMode
-          : 'system'
-        const theme = storedTheme === 'mp' ? 'mp' : 'default'
-        const resolvedMode = mode === 'system'
-          ? matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
-          : mode
-        document.documentElement.dataset.theme = theme
-        document.documentElement.dataset.mode = mode
-        document.documentElement.style.colorScheme = resolvedMode
-      })()
-    </script>
-  </head>
-  <body>
-    <div id="root"></div>
-    <script type="module" src="/src/main.tsx"></script>
-  </body>
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<meta name="color-scheme" content="light dark" />
+		<title>Base + StyleX Lab</title>
+		<script>
+			(() => {
+				const storedMode = localStorage.getItem("base-stylex-theme");
+				const storedTheme = localStorage.getItem("base-stylex-theme-brand");
+				const mode = ["system", "light", "dark"].includes(storedMode) ? storedMode : "system";
+				const theme = storedTheme === "mp" ? "mp" : "default";
+				const resolvedMode =
+					mode === "system"
+						? matchMedia("(prefers-color-scheme: dark)").matches
+							? "dark"
+							: "light"
+						: mode;
+				document.documentElement.dataset.theme = theme;
+				document.documentElement.dataset.mode = mode;
+				document.documentElement.style.colorScheme = resolvedMode;
+			})();
+		</script>
+	</head>
+	<body>
+		<div id="root"></div>
+		<script type="module" src="/src/main.tsx"></script>
+	</body>
 </html>

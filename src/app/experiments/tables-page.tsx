@@ -116,10 +116,12 @@ export function TablesPage() {
 	return (
 		<ExperimentPage
 			description="Semantic and stateful tables exercised with realistic deployment data, filters, selection, and overflow."
-			title="Tables">
+			title="Tables"
+		>
 			<ExperimentSection
 				description="The stateful table combines filtering, sorting, selection, column controls, and row actions."
-				title="Recent deployments">
+				title="Recent deployments"
+			>
 				<DataTable
 					columns={columns}
 					data={deployments}
@@ -140,7 +142,8 @@ export function TablesPage() {
 
 			<ExperimentSection
 				description="The presentation-only table keeps native table structure when the application already owns the data state."
-				title="Build queue">
+				title="Build queue"
+			>
 				<Table.Root>
 					<Table.Container>
 						<Table.Content caption={<VisuallyHidden>Queued and active builds</VisuallyHidden>}>

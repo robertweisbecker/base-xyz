@@ -40,7 +40,8 @@ export const Playground: Story = {
 			mode={mode}
 			render={<section aria-label="Theme preview" />}
 			style={verificationStyles.preview}
-			theme={theme}>
+			theme={theme}
+		>
 			<span {...stylex.props(verificationStyles.swatch)} />
 			{children}
 		</ThemeProvider>
@@ -61,7 +62,8 @@ export const StatusRamps: Story = {
 			mode="light"
 			render={<section />}
 			style={statusRampStyles.collection}
-			theme="mp">
+			theme="mp"
+		>
 			<Text color="muted" render={<h2 />} size="1">
 				Light
 			</Text>
@@ -241,7 +243,8 @@ function MultipleRootsFixture() {
 				onClick={() => {
 					rootsRef.current?.first?.unmount();
 					if (rootsRef.current) rootsRef.current.first = null;
-				}}>
+				}}
+			>
 				Unmount first root
 			</button>
 			<button
@@ -249,7 +252,8 @@ function MultipleRootsFixture() {
 				onClick={() => {
 					rootsRef.current?.second?.unmount();
 					if (rootsRef.current) rootsRef.current.second = null;
-				}}>
+				}}
+			>
 				Unmount second root
 			</button>
 		</Stack>
@@ -276,14 +280,22 @@ function ContractFixture() {
 				mode="light"
 				onClick={() => setProviderClicks((count) => count + 1)}
 				render={
-					<main ref={renderRef} aria-label="Custom theme host" onClick={() => setRenderClicks((count) => count + 1)} />
+					<main
+						ref={renderRef}
+						aria-label="Custom theme host"
+						onClick={() => setRenderClicks((count) => count + 1)}
+					/>
 				}
 				style={verificationStyles.callerOverride}
-				theme="mp">
+				theme="mp"
+			>
 				<Stack align="center" data-testid="custom-theme-content" gap={2} orientation="horizontal">
 					<span data-testid="custom-accent" {...stylex.props(verificationStyles.swatch)} />
 					<span data-testid="custom-error-s1" {...stylex.props(statusRampStyles.errorS1)} />
-					<span data-testid="warning-reference" {...stylex.props(verificationStyles.warningReference)} />
+					<span
+						data-testid="warning-reference"
+						{...stylex.props(verificationStyles.warningReference)}
+					/>
 					<ThemeSnapshot />
 					<span data-testid="merged-refs">{String(refsMerged)}</span>
 					<span data-testid="merged-events">{`${renderClicks}:${providerClicks}`}</span>
@@ -292,9 +304,16 @@ function ContractFixture() {
 					<ThemeProvider
 						data-testid="nested-default-host"
 						render={<section aria-label="Nested default theme" />}
-						theme="default">
-						<span data-testid="nested-default-accent" {...stylex.props(verificationStyles.swatch)} />
-						<span data-testid="nested-default-error-s1" {...stylex.props(statusRampStyles.errorS1)} />
+						theme="default"
+					>
+						<span
+							data-testid="nested-default-accent"
+							{...stylex.props(verificationStyles.swatch)}
+						/>
+						<span
+							data-testid="nested-default-error-s1"
+							{...stylex.props(statusRampStyles.errorS1)}
+						/>
 						<ThemeSnapshot />
 					</ThemeProvider>
 				</Stack>
@@ -357,7 +376,10 @@ function PortalFixture() {
 					)}
 			{container
 				? createPortal(
-						<span data-testid="nested-portal-accent" {...stylex.props(verificationStyles.swatch)} />,
+						<span
+							data-testid="nested-portal-accent"
+							{...stylex.props(verificationStyles.swatch)}
+						/>,
 						container,
 					)
 				: null}
@@ -368,13 +390,25 @@ function PortalFixture() {
 function OuterThemeSnapshot() {
 	const { mode, resolvedMode, theme } = useTheme();
 	return (
-		<span data-testid="outer-theme-context" data-mode={mode} data-resolved-mode={resolvedMode} data-theme={theme} />
+		<span
+			data-testid="outer-theme-context"
+			data-mode={mode}
+			data-resolved-mode={resolvedMode}
+			data-theme={theme}
+		/>
 	);
 }
 
 function ThemeSnapshot() {
 	const { mode, resolvedMode, theme } = useTheme();
-	return <span data-testid="theme-context" data-mode={mode} data-resolved-mode={resolvedMode} data-theme={theme} />;
+	return (
+		<span
+			data-testid="theme-context"
+			data-mode={mode}
+			data-resolved-mode={resolvedMode}
+			data-theme={theme}
+		/>
+	);
 }
 
 const verificationStyles = stylex.create({

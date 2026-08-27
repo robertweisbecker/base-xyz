@@ -17,7 +17,9 @@ export type TextareaAutoResizeReturn = {
 };
 
 function normalizeRows(value: number | undefined, fallback: number): number {
-	return typeof value === "number" && Number.isFinite(value) && value > 0 ? Math.max(1, Math.round(value)) : fallback;
+	return typeof value === "number" && Number.isFinite(value) && value > 0
+		? Math.max(1, Math.round(value))
+		: fallback;
 }
 
 function parsePixels(value: string): number {
@@ -48,15 +50,19 @@ export function useTextareaAutoResize({
 		if (!enabledRef.current || !textarea || typeof window === "undefined") return;
 
 		const computedStyle = window.getComputedStyle(textarea);
-		const borderHeight = parsePixels(computedStyle.borderTopWidth) + parsePixels(computedStyle.borderBottomWidth);
-		const paddingHeight = parsePixels(computedStyle.paddingTop) + parsePixels(computedStyle.paddingBottom);
+		const borderHeight =
+			parsePixels(computedStyle.borderTopWidth) + parsePixels(computedStyle.borderBottomWidth);
+		const paddingHeight =
+			parsePixels(computedStyle.paddingTop) + parsePixels(computedStyle.paddingBottom);
 		const isBorderBox = computedStyle.boxSizing === "border-box";
 		const lineHeight = getLineHeight(computedStyle.fontSize, computedStyle.lineHeight);
 		const boxSpacing = isBorderBox ? paddingHeight + borderHeight : 0;
 
 		// Reset before reading scrollHeight so deleting content can shrink the control.
 		textarea.style.height = "auto";
-		let height = isBorderBox ? textarea.scrollHeight + borderHeight : textarea.scrollHeight - paddingHeight;
+		let height = isBorderBox
+			? textarea.scrollHeight + borderHeight
+			: textarea.scrollHeight - paddingHeight;
 		height = Math.max(height, lineHeight * minRowsRef.current + boxSpacing);
 
 		const currentMaxRows = maxRowsRef.current;

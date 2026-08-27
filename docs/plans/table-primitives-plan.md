@@ -109,7 +109,11 @@ The public composition must support this exact shape:
 
 			<Table.Body>
 				<Table.Row checked={rowChecked}>
-					<Table.CellCheckbox label="Select app.example.com" checked={rowChecked} onCheckedChange={setRowChecked} />
+					<Table.CellCheckbox
+						label="Select app.example.com"
+						checked={rowChecked}
+						onCheckedChange={setRowChecked}
+					/>
 					<Table.Cell>app.example.com</Table.Cell>
 					<Table.CellAction>
 						<IconButton icon={<Icon.More />} label="Open actions" />
@@ -271,10 +275,16 @@ type TableCheckboxControlProps = Pick<
 	| "value"
 >;
 
-export type TableHeaderCheckboxProps = Omit<TableHeaderActionProps, "children" | keyof TableCheckboxControlProps> &
+export type TableHeaderCheckboxProps = Omit<
+	TableHeaderActionProps,
+	"children" | keyof TableCheckboxControlProps
+> &
 	TableCheckboxControlProps;
 
-export type TableCellCheckboxProps = Omit<TableCellActionProps, "children" | keyof TableCheckboxControlProps> &
+export type TableCellCheckboxProps = Omit<
+	TableCellActionProps,
+	"children" | keyof TableCheckboxControlProps
+> &
 	TableCheckboxControlProps;
 
 export type TableEmptyProps = Omit<TableRowProps, "checked"> & {
@@ -364,7 +374,12 @@ export function Root({ ref, className, style, children, ...props }: TableRootPro
 		<TableLevelContext.Provider value="root">
 			<TableSectionContext.Provider value={null}>
 				<TableRowContext.Provider value={null}>
-					<div ref={ref} className={joinClassNames(sx.className, className)} style={sx.style} {...props}>
+					<div
+						ref={ref}
+						className={joinClassNames(sx.className, className)}
+						style={sx.style}
+						{...props}
+					>
 						{children}
 					</div>
 				</TableRowContext.Provider>
@@ -409,8 +424,14 @@ Each section must:
 ```tsx
 export function Row({ ref, checked = false, className, style, ...props }: TableRowProps) {
 	const section = useContext(TableSectionContext);
-	invariantDev(section != null, "Table.Row must be rendered inside Table.Header, Table.Body, or Table.Footer.");
-	invariantDev(!checked || section === "body", "Table.Row checked is only valid inside Table.Body.");
+	invariantDev(
+		section != null,
+		"Table.Row must be rendered inside Table.Header, Table.Body, or Table.Footer.",
+	);
+	invariantDev(
+		!checked || section === "body",
+		"Table.Row checked is only valid inside Table.Body.",
+	);
 
 	const rowContext = useMemo(
 		() => ({ section: section ?? "body", checked: section === "body" && checked }),
@@ -697,7 +718,9 @@ DataTable deliberately continues using `Table.Container` so it retains the canon
 ```tsx
 return (
 	<Table.Root className={className} style={style} {...props}>
-		<div {...stylex.props(dataTableParts.toolbar)}>{/* Existing filter and toolbar actions, unchanged */}</div>
+		<div {...stylex.props(dataTableParts.toolbar)}>
+			{/* Existing filter and toolbar actions, unchanged */}
+		</div>
 
 		<Table.Container>
 			<Table.Content>
@@ -750,7 +773,9 @@ Copy-ready branch shape:
 			);
 		}
 
-		const content = header.isPlaceholder ? null : <HeaderContent column={header.column} header={header} />;
+		const content = header.isPlaceholder ? null : (
+			<HeaderContent column={header.column} header={header} />
+		);
 
 		if (isActionColumn(columnId)) {
 			return (
@@ -761,7 +786,11 @@ Copy-ready branch shape:
 		}
 
 		return (
-			<Table.HeaderCell key={header.id} colSpan={header.colSpan} aria-sort={getAriaSort(header.column)}>
+			<Table.HeaderCell
+				key={header.id}
+				colSpan={header.colSpan}
+				aria-sort={getAriaSort(header.column)}
+			>
 				{content}
 			</Table.HeaderCell>
 		);
@@ -817,7 +846,10 @@ Expansion is not a public Table concept. Compose normal primitives and apply Dat
 {
 	renderExpandedRow && row.getIsExpanded() ? (
 		<Table.Row key={`${row.id}-expanded`} style={dataTableParts.expandedRow}>
-			<Table.Cell colSpan={Math.max(1, row.getVisibleCells().length)} style={dataTableParts.expandedCell}>
+			<Table.Cell
+				colSpan={Math.max(1, row.getVisibleCells().length)}
+				style={dataTableParts.expandedCell}
+			>
 				{renderExpandedRow(row)}
 			</Table.Cell>
 		</Table.Row>

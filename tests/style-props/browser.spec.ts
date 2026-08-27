@@ -1,7 +1,9 @@
 import { expect, test, type Page } from "@playwright/test";
 
-const storyPath = "/iframe.html?id=design-system-style-props-verification--consumer-contract&viewMode=story";
-const badgeTruncationStoryPath = "/iframe.html?id=components-badge--truncation-tooltip&viewMode=story";
+const storyPath =
+	"/iframe.html?id=design-system-style-props-verification--consumer-contract&viewMode=story";
+const badgeTruncationStoryPath =
+	"/iframe.html?id=components-badge--truncation-tooltip&viewMode=story";
 const consoleErrorsByPage = new WeakMap<Page, string[]>();
 
 test.beforeEach(({ page }) => {
@@ -21,7 +23,9 @@ async function openFixture(page: Page) {
 	await expect(page.getByTestId("fixture-ready")).toBeVisible();
 }
 
-test("margin props preserve shorthand precedence, logical edges, negatives, and auto", async ({ page }) => {
+test("margin props preserve shorthand precedence, logical edges, negatives, and auto", async ({
+	page,
+}) => {
 	await openFixture(page);
 
 	const precedence = page.getByTestId("margin-precedence");
@@ -55,7 +59,9 @@ test("margin, padding, gap, and inset props accept CSS values", async ({ page })
 	await expect(page.getByTestId("css-inset")).toHaveCSS("top", "11px");
 });
 
-test("border styles provide a default width while borderWidth remains the final override", async ({ page }) => {
+test("border styles provide a default width while borderWidth remains the final override", async ({
+	page,
+}) => {
 	await openFixture(page);
 
 	const defaultBorder = page.getByTestId("border-style-default");
@@ -67,7 +73,9 @@ test("border styles provide a default width while borderWidth remains the final 
 	await expect(overriddenBorder).toHaveCSS("border-top-width", "5px");
 });
 
-test("theme overrides, xstyle, and native style follow the declared precedence", async ({ page }) => {
+test("theme overrides, xstyle, and native style follow the declared precedence", async ({
+	page,
+}) => {
 	await openFixture(page);
 
 	const themed = page.getByTestId("themed-margin");
@@ -95,7 +103,12 @@ test("field margins land on the wrapper and custom props do not leak to DOM", as
 	await expect(wrapper).toHaveCSS("margin-top", "16px");
 	await expect(control).toHaveCSS("margin-top", "0px");
 
-	for (const testId of ["margin-precedence", "logical-margin", "negative-margin", "themed-margin"]) {
+	for (const testId of [
+		"margin-precedence",
+		"logical-margin",
+		"negative-margin",
+		"themed-margin",
+	]) {
 		const element = page.getByTestId(testId);
 		for (const attribute of ["m", "mx", "my", "mt", "mb", "ms", "me"]) {
 			await expect(element).not.toHaveAttribute(attribute);
@@ -104,7 +117,9 @@ test("field margins land on the wrapper and custom props do not leak to DOM", as
 	await expect(control).not.toHaveAttribute("mt");
 });
 
-test("delegated CodeBlock margins stay on ScrollArea while native props stay on pre", async ({ page }) => {
+test("delegated CodeBlock margins stay on ScrollArea while native props stay on pre", async ({
+	page,
+}) => {
 	await openFixture(page);
 
 	const pre = page.getByTestId("code-block-pre");
@@ -116,7 +131,9 @@ test("delegated CodeBlock margins stay on ScrollArea while native props stay on 
 	await expect(root).not.toHaveAttribute("mt");
 });
 
-test("Combobox chip overflow delegates trigger props, styles, and tooltip behavior", async ({ page }) => {
+test("Combobox chip overflow delegates trigger props, styles, and tooltip behavior", async ({
+	page,
+}) => {
 	await openFixture(page);
 
 	const trigger = page.getByRole("button", { name: "+3 more" });

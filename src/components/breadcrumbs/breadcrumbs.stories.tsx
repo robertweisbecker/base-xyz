@@ -34,11 +34,19 @@ type Story = StoryObj<typeof meta>;
 export const Playground: Story = {
 	render: (args) => (
 		<Breadcrumbs.Root {...args}>
-			<Breadcrumbs.Link href="#" startSlot={<HouseIcon aria-hidden weight="duotone" />} color={args.color}>
+			<Breadcrumbs.Link
+				href="#"
+				startSlot={<HouseIcon aria-hidden weight="duotone" />}
+				color={args.color}
+			>
 				Home
 			</Breadcrumbs.Link>
 			<Breadcrumbs.Separator />
-			<Breadcrumbs.Link href="#" color={args.color} startSlot={<BookOpenIcon aria-hidden weight="duotone" />}>
+			<Breadcrumbs.Link
+				href="#"
+				color={args.color}
+				startSlot={<BookOpenIcon aria-hidden weight="duotone" />}
+			>
 				Docs
 			</Breadcrumbs.Link>
 			<Breadcrumbs.Separator />

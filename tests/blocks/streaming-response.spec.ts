@@ -29,8 +29,10 @@ test("resets replacement and retry streams before their first render", async ({ 
 
 	await expect(content).toBeVisible({ timeout: 30_000 });
 	await expect(completionCount).toHaveText("1", { timeout: 30_000 });
-	await expect(content).toContainText("The initial response contains enough words to expose stale reveal state");
-	await expect(content.locator('[data-streaming-text-caret]')).toHaveCount(0);
+	await expect(content).toContainText(
+		"The initial response contains enough words to expose stale reveal state",
+	);
+	await expect(content.locator("[data-streaming-text-caret]")).toHaveCount(0);
 
 	await pauseClock(page);
 
@@ -38,21 +40,21 @@ test("resets replacement and retry streams before their first render", async ({ 
 	await expect(content).toContainText("The replacement response");
 	await expect(content).not.toContainText("is ready");
 	await expect(completionCount).toHaveText("1");
-	await expect(content.locator('[data-streaming-text-caret]')).toHaveCount(1);
+	await expect(content.locator("[data-streaming-text-caret]")).toHaveCount(1);
 
 	await page.clock.runFor(92);
 	await expect(content).toContainText("The replacement response is ready");
 	await expect(completionCount).toHaveText("2");
-	await expect(content.locator('[data-streaming-text-caret]')).toHaveCount(0);
+	await expect(content.locator("[data-streaming-text-caret]")).toHaveCount(0);
 
 	await page.getByRole("button", { name: "Retry same response" }).click();
 	await expect(content).toContainText("The replacement response");
 	await expect(content).not.toContainText("is ready");
 	await expect(completionCount).toHaveText("2");
-	await expect(content.locator('[data-streaming-text-caret]')).toHaveCount(1);
+	await expect(content.locator("[data-streaming-text-caret]")).toHaveCount(1);
 
 	await page.clock.runFor(92);
 	await expect(content).toContainText("The replacement response is ready");
 	await expect(completionCount).toHaveText("3");
-	await expect(content.locator('[data-streaming-text-caret]')).toHaveCount(0);
+	await expect(content.locator("[data-streaming-text-caret]")).toHaveCount(0);
 });

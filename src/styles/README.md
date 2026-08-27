@@ -77,7 +77,13 @@ export function Button({ className, style, xstyle, ...props }: ButtonProps) {
 	const { marginStyles, rest } = extractMarginProps(props);
 	const sx = stylex.props(buttonParts.root, marginStyles, xstyle);
 
-	return <BaseButton className={attrJoin(sx.className, className)} style={mergeStyle(sx.style, style)} {...rest} />;
+	return (
+		<BaseButton
+			className={attrJoin(sx.className, className)}
+			style={mergeStyle(sx.style, style)}
+			{...rest}
+		/>
+	);
 }
 ```
 
@@ -149,7 +155,10 @@ Popup composites render their children directly. Opt into Base UI's content
 swapping and detached-trigger movement only where they are actually needed:
 
 ```tsx
-<Popover.Popup positionerProps={{ xstyle: popupMotionStyles.movingPositioner }} xstyle={popupMotionStyles.movingPopup}>
+<Popover.Popup
+	positionerProps={{ xstyle: popupMotionStyles.movingPositioner }}
+	xstyle={popupMotionStyles.movingPopup}
+>
 	<Popover.Viewport>{content}</Popover.Viewport>
 </Popover.Popup>
 ```
@@ -216,7 +225,11 @@ stylex.props(modalPopupStyles, dialogParts.popup, style); // dialog surface + mo
 stylex.props(modalTextStyles.title); // title role
 
 // Drawers: reuse chrome without dialog scale/fade motion
-stylex.props(modalChromeStyles.backdrop, modalChromeStyles.modalBackdropLayer, drawerParts.backdrop);
+stylex.props(
+	modalChromeStyles.backdrop,
+	modalChromeStyles.modalBackdropLayer,
+	drawerParts.backdrop,
+);
 stylex.props(modalChromeStyles.surface, drawerParts.popup);
 ```
 

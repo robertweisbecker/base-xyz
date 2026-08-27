@@ -60,10 +60,14 @@ export const Playground: Story = {
 				<LinkPreview.Root>
 					<LinkPreview.Trigger
 						delay={_delay}
-						render={<Link href="https://base-ui.com/react/overview/about" external />}>
+						render={<Link href="https://base-ui.com/react/overview/about" external />}
+					>
 						Base UI
 					</LinkPreview.Trigger>
-					<LinkPreview.Popup arrowProps={_showArrow ? {} : undefined} positionerProps={{ side: _side, align: _align }}>
+					<LinkPreview.Popup
+						arrowProps={_showArrow ? {} : undefined}
+						positionerProps={{ side: _side, align: _align }}
+					>
 						<PreviewContent
 							title="Base UI"
 							description="An unstyled React component library for building accessible interfaces."
@@ -108,7 +112,13 @@ export const SharedPreviews: Story = {
 			</Text>
 			<Stack aria-label="Component previews" gap={4} orientation="horizontal" render={<nav />}>
 				{previews.map(({ href, ...payload }) => (
-					<LinkPreview.Trigger key={href} delay={_delay} href={href} handle={sharedPreview} payload={payload}>
+					<LinkPreview.Trigger
+						key={href}
+						delay={_delay}
+						href={href}
+						handle={sharedPreview}
+						payload={payload}
+					>
 						{payload.title}
 					</LinkPreview.Trigger>
 				))}
@@ -122,8 +132,11 @@ export const SharedPreviews: Story = {
 							align: _align,
 							xstyle: popupMotionStyles.movingPositioner,
 						}}
-						xstyle={popupMotionStyles.movingPopup}>
-						<LinkPreview.Viewport>{payload ? <PreviewContent {...payload} /> : null}</LinkPreview.Viewport>
+						xstyle={popupMotionStyles.movingPopup}
+					>
+						<LinkPreview.Viewport>
+							{payload ? <PreviewContent {...payload} /> : null}
+						</LinkPreview.Viewport>
 					</LinkPreview.Popup>
 				)}
 			</LinkPreview.Root>

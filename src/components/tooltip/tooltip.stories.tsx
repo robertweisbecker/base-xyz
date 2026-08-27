@@ -66,7 +66,10 @@ export const Playground: Story = {
 							/>
 						}
 					/>
-					<Tooltip.Popup arrowProps={_showArrow ? {} : undefined} positionerProps={{ side: _side, align: _align }}>
+					<Tooltip.Popup
+						arrowProps={_showArrow ? {} : undefined}
+						positionerProps={{ side: _side, align: _align }}
+					>
 						More information about this setting
 					</Tooltip.Popup>
 				</Tooltip.Root>
@@ -88,7 +91,9 @@ export const Positioning: Story = {
 					{popupSides.map((side) => (
 						<Stack key={side} align="center" justify="center" minHeight="5rem" minWidth="5rem">
 							<Tooltip.Root>
-								<Tooltip.Trigger render={<Button size="sm" variant="neutral" />}>{capitalize(side)}</Tooltip.Trigger>
+								<Tooltip.Trigger render={<Button size="sm" variant="neutral" />}>
+									{capitalize(side)}
+								</Tooltip.Trigger>
 								<Tooltip.Popup positionerProps={{ side }}>{capitalize(side)} tooltip</Tooltip.Popup>
 							</Tooltip.Root>
 						</Stack>
@@ -122,14 +127,23 @@ export const SharedGroup: Story = {
 							handle={sharedTooltip}
 							payload={copy}
 							render={
-								<IconButton icon={<Icon aria-hidden />} label={label} shape="circle" tooltip={false} variant="ghost" />
+								<IconButton
+									icon={<Icon aria-hidden />}
+									label={label}
+									shape="circle"
+									tooltip={false}
+									variant="ghost"
+								/>
 							}
 						/>
 					))}
 				</Stack>
 				<Tooltip.Root disabled={disabled} handle={sharedTooltip}>
 					{({ payload }) => (
-						<Tooltip.Popup arrowProps={_showArrow ? {} : undefined} positionerProps={{ side: _side, align: _align }}>
+						<Tooltip.Popup
+							arrowProps={_showArrow ? {} : undefined}
+							positionerProps={{ side: _side, align: _align }}
+						>
 							<Tooltip.Viewport>{payload}</Tooltip.Viewport>
 						</Tooltip.Popup>
 					)}

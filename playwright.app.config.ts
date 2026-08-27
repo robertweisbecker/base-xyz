@@ -1,5 +1,8 @@
 import { defineConfig, devices } from "@playwright/test";
 
+const appPort = process.env.PLAYWRIGHT_APP_PORT ?? "6107";
+const appURL = `http://127.0.0.1:${appPort}`;
+
 export default defineConfig({
 	testDir: "./tests/app",
 	fullyParallel: false,
@@ -7,14 +10,14 @@ export default defineConfig({
 	retries: process.env.CI ? 2 : 0,
 	reporter: "list",
 	use: {
-		baseURL: "http://127.0.0.1:6107",
+		baseURL: appURL,
 		screenshot: "only-on-failure",
 		trace: "retain-on-failure",
 	},
 	webServer: {
-		command: "npm run preview -- --host 127.0.0.1 --port 6107",
+		command: `npm run preview -- --host 127.0.0.1 --port ${appPort}`,
 		reuseExistingServer: false,
-		url: "http://127.0.0.1:6107",
+		url: appURL,
 	},
 	projects: [
 		{

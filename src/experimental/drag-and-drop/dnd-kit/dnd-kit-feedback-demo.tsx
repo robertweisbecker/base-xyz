@@ -85,13 +85,16 @@ export function DndKitFeedbackDemo() {
 			]}
 			onDragStart={handleDragStart}
 			onDragOver={handleDragOver}
-			onDragEnd={handleDragEnd}>
+			onDragEnd={handleDragEnd}
+		>
 			<DemoPanel
 				title="dnd-kit sensors and overlay"
 				description="The current adapter keeps keyboard defaults while allowing pointer activation constraints and custom overlays."
 				instructions={
 					<DemoInstructions>
-						<li {...stylex.props(demoStyles.instructionItem)}>Mouse or pen: move at least 5px before drag starts.</li>
+						<li {...stylex.props(demoStyles.instructionItem)}>
+							Mouse or pen: move at least 5px before drag starts.
+						</li>
 						<li {...stylex.props(demoStyles.instructionItem)}>
 							Touch: hold 250ms and stay within 5px tolerance before activation.
 						</li>
@@ -101,14 +104,17 @@ export function DndKitFeedbackDemo() {
 					</DemoInstructions>
 				}
 				status={status}
-				onReset={reset}>
+				onReset={reset}
+			>
 				<div {...stylex.props(demoStyles.shortList)}>
 					{items.map((item, index) => (
 						<DndKitFeedbackItem key={item.id} item={item} index={index} />
 					))}
 				</div>
 				<DragOverlay style={overlayRootStyle}>
-					{activeLabel ? <DemoCard label={activeLabel} meta="Overlay preview" style={demoStyles.overlay} /> : null}
+					{activeLabel ? (
+						<DemoCard label={activeLabel} meta="Overlay preview" style={demoStyles.overlay} />
+					) : null}
 				</DragOverlay>
 			</DemoPanel>
 		</DragDropProvider>

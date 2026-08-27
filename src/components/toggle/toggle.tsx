@@ -13,11 +13,24 @@ import {
 import { mergeStyle, type BaseStyleProps } from "@/styles/props/base";
 import { extractMarginProps, type MarginProps } from "@/styles/props/spacing.stylex";
 import { attrJoin } from "@/utils/attr-join";
-import { toggleGroupMarker, toggleGroupStyles, toggleJoinStyles, toggleMarker } from "./toggle.stylex";
+import {
+	toggleGroupMarker,
+	toggleGroupStyles,
+	toggleJoinStyles,
+	toggleMarker,
+} from "./toggle.stylex";
 
 type ToggleBaseProps = Omit<
 	BaseToggle.Props,
-	"children" | "className" | "color" | "height" | "nativeButton" | "render" | "style" | "width" | keyof MarginProps
+	| "children"
+	| "className"
+	| "color"
+	| "height"
+	| "nativeButton"
+	| "render"
+	| "style"
+	| "width"
+	| keyof MarginProps
 > &
 	MarginProps &
 	BaseStyleProps & {
@@ -55,7 +68,10 @@ export type ToggleIconButtonProps = ToggleBaseProps & {
 
 export type ToggleProps = ToggleButtonProps | ToggleIconButtonProps;
 
-export type ToggleGroupProps = Omit<BaseToggleGroup.Props, "className" | "style" | keyof MarginProps> &
+export type ToggleGroupProps = Omit<
+	BaseToggleGroup.Props,
+	"className" | "style" | keyof MarginProps
+> &
 	MarginProps &
 	BaseStyleProps & {
 		className?: string;
@@ -73,7 +89,11 @@ export type ToggleShape = ButtonShape;
 
 const toggleStyleProps = stylex.props(toggleMarker, toggleJoinStyles.root);
 
-function resolvePressedSlot(pressed: boolean, resting: ReactNode, pressedIcon: ReactNode | undefined) {
+function resolvePressedSlot(
+	pressed: boolean,
+	resting: ReactNode,
+	pressedIcon: ReactNode | undefined,
+) {
 	return pressed && pressedIcon !== undefined ? pressedIcon : resting;
 }
 
@@ -119,7 +139,8 @@ function ToggleAsButton({
 					style={mergeStyle(toggleStyleProps.style, style)}
 					xstyle={xstyle}
 					{...{ m, mx, my, mt, mb, ms, me }}
-					variant={variant}>
+					variant={variant}
+				>
 					{children}
 				</Button>
 			)}

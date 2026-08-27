@@ -38,7 +38,9 @@ export const Playground: Story = {
 			<AlertDialog.Popup>
 				<AlertDialog.Header>
 					<AlertDialog.Title>Discard this draft?</AlertDialog.Title>
-					<AlertDialog.Description>Your unsaved changes will be permanently lost.</AlertDialog.Description>
+					<AlertDialog.Description>
+						Your unsaved changes will be permanently lost.
+					</AlertDialog.Description>
 				</AlertDialog.Header>
 				<AlertDialog.Footer>
 					<AlertDialog.Close render={<Button variant="neutral" />}>Keep editing</AlertDialog.Close>
@@ -55,18 +57,22 @@ export const DetailedMessage: Story = {
 	},
 	render: () => (
 		<AlertDialog.Root>
-			<AlertDialog.Trigger render={<Button variant="error" />}>Delete environment</AlertDialog.Trigger>
+			<AlertDialog.Trigger render={<Button variant="error" />}>
+				Delete environment
+			</AlertDialog.Trigger>
 			<AlertDialog.Popup>
 				<AlertDialog.Header>
 					<AlertDialog.Title>Delete the staging environment?</AlertDialog.Title>
 					<AlertDialog.Description>
-						The environment, its variables, and its deployment history will be permanently removed. Production will
-						remain available.
+						The environment, its variables, and its deployment history will be permanently removed.
+						Production will remain available.
 					</AlertDialog.Description>
 				</AlertDialog.Header>
 				<AlertDialog.Footer>
 					<AlertDialog.Close render={<Button variant="neutral" />}>Cancel</AlertDialog.Close>
-					<AlertDialog.Close render={<Button variant="error" />}>Delete environment</AlertDialog.Close>
+					<AlertDialog.Close render={<Button variant="error" />}>
+						Delete environment
+					</AlertDialog.Close>
 				</AlertDialog.Footer>
 			</AlertDialog.Popup>
 		</AlertDialog.Root>

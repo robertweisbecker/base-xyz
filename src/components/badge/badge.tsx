@@ -31,16 +31,16 @@ const badgeParts = stylex.create({
 		minWidth: 0,
 	},
 	slot: {
+		placeContent: "center",
 		alignItems: "center",
 		color: "currentColor",
 		display: "grid",
 		flexShrink: 0,
-		placeContent: "center",
+		fontSize: "1em",
 		lineHeight: 0,
 		pointerEvents: "none",
 		height: "1em",
 		width: "1em",
-		fontSize: "1em",
 	},
 	label: {
 		overflow: "hidden",
@@ -339,8 +339,13 @@ export function Badge({
 
 	return (
 		<Tooltip.Root disabled={!hasTooltip}>
-			<Tooltip.Trigger render={element} {...stylex.props(hasTooltip && badgeParts.tooltipTrigger)} />
-			<Tooltip.Popup positionerProps={{ side: "inline-start" }}>{resolvedTooltipText}</Tooltip.Popup>
+			<Tooltip.Trigger
+				render={element}
+				{...stylex.props(hasTooltip && badgeParts.tooltipTrigger)}
+			/>
+			<Tooltip.Popup positionerProps={{ side: "inline-start" }}>
+				{resolvedTooltipText}
+			</Tooltip.Popup>
 		</Tooltip.Root>
 	);
 }

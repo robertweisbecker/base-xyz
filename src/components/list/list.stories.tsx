@@ -112,10 +112,12 @@ export const Examples: Story = {
 			<Separator />
 			<Example label="Custom item markers">
 				<List.Root data-testid="custom-marker-list-example" size="3">
-					<List.Item marker={<CheckCircleIcon aria-hidden weight="duotone" />}>TypeScript passes.</List.Item>
+					<List.Item marker={<CheckCircleIcon aria-hidden weight="duotone" />}>
+						TypeScript passes.
+					</List.Item>
 					<List.Item marker={<CheckCircleIcon aria-hidden weight="duotone" />} color="success">
-						The production build completed successfully, including a deliberately long line that wraps beneath its text rather
-						than beneath the icon marker.
+						The production build completed successfully, including a deliberately long line that
+						wraps beneath its text rather than beneath the icon marker.
 					</List.Item>
 					<List.Item marker={<ArrowRightIcon aria-hidden weight="bold" />} fontWeight="semibold">
 						Ready to publish.

@@ -66,7 +66,7 @@ export const tokens = stylex.defineVars({
 	// Linear blue: oklch(0.74 0.15 249.88)
 
 	// "--color-accent-p1": "light-dark(hsl(214deg 98% 50%), #0169CC)",
-	"--color-accent-p1": "light-dark(#0088FF, #0091FF)",
+	"--color-accent-p1": "light-dark(#0078F0, #0091FF)",
 	"--color-accent-p2": "light-dark(#1470f4, #0169CC)",
 	"--color-accent-t1": "light-dark(oklch(53.072% 0.20334 262.925), oklch(69.483% 0.15223 255.815))",
 	"--color-accent-t2": "light-dark(oklch(28.072% 0.09716 262.82), oklch(87.811% 0.0624 249.313))",
@@ -78,7 +78,8 @@ export const tokens = stylex.defineVars({
 	"--color-success-c3": "light-dark(hsl(132 55% 89%), oklch(31.478% 0.06647 164.273))",
 	"--color-success-b1": "light-dark(oklch(88.301% 0.06322 159.21), oklch(39.834% 0.1404 158.504))",
 	"--color-success-b2": "light-dark(oklch(84.735% 0.08475 158.845), oklch(44.778% 0.1204 158.697))",
-	"--color-success-b3": "light-dark(oklch(78.559% 0.11329 160.313), oklch(53.559% 0.11329 160.313))",
+	"--color-success-b3":
+		"light-dark(oklch(78.559% 0.11329 160.313), oklch(53.559% 0.11329 160.313))",
 	"--color-success-p1": "light-dark(hsl(151 55% 42%), oklch(64.611% 0.13465 157.624))",
 	"--color-success-p2": "light-dark(hsl(152 56% 39%), oklch(71.462% 0.1267 158.328))",
 	"--color-success-t1": "light-dark(oklch(54.347% 0.15 159.526), oklch(78.941% 0.15826 161.688))",
@@ -287,7 +288,8 @@ export const tokens = stylex.defineVars({
 		'-apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji"',
 	"--font-family-serif":
 		'Georgia, -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans", Helvetica, Arial, Times, sans-serif, "Apple Color Emoji", "Segoe UI Emoji"',
-	"--font-family-mono": "ui-monospace, SFMono-Regular, SF Mono, Menlo, Consolas, Liberation Mono, monospace",
+	"--font-family-mono":
+		"ui-monospace, SFMono-Regular, SF Mono, Menlo, Consolas, Liberation Mono, monospace",
 	"--font-size-1": "0.75rem",
 	"--font-size-2": "0.875rem",
 	"--font-size-3": "1rem",

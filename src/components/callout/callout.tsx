@@ -60,18 +60,30 @@ export function Callout({
 			className={attrJoin(sx.className, className)}
 			role={alert ? "alert" : undefined}
 			style={mergeStyle(sx.style, style)}
-			{...rest}>
+			{...rest}
+		>
 			<div {...stylex.props(calloutParts.body, calloutBodyVariantStyles[variant])}>
 				{icon ? (
 					<div
 						aria-hidden
-						{...stylex.props(calloutParts.icon, calloutIconHueStyles[hue], calloutIconVariantStyles[variant])}>
+						{...stylex.props(
+							calloutParts.icon,
+							calloutIconHueStyles[hue],
+							calloutIconVariantStyles[variant],
+						)}
+					>
 						{icon}
 					</div>
 				) : null}
 				<div {...stylex.props(calloutParts.content, calloutContentVariantStyles[variant])}>
 					{hasVisibleTitle ? (
-						<Heading color="inherit" size="2" {...stylex.props(calloutParts.title)} wrap="pretty" fontWeight="medium">
+						<Heading
+							color="inherit"
+							size="2"
+							{...stylex.props(calloutParts.title)}
+							wrap="pretty"
+							fontWeight="medium"
+						>
 							{title}
 						</Heading>
 					) : alert ? (
@@ -83,12 +95,15 @@ export function Callout({
 						size={variant === "banner" ? "1" : "2"}
 						{...stylex.props(calloutParts.description)}
 						wrap="pretty"
-						truncate={variant === "banner" ? true : undefined}>
+						truncate={variant === "banner" ? true : undefined}
+					>
 						{description}
 					</Text>
 				</div>
 				{action ? (
-					<div {...stylex.props(calloutParts.action, calloutActionVariantStyles[variant])}>{action}</div>
+					<div {...stylex.props(calloutParts.action, calloutActionVariantStyles[variant])}>
+						{action}
+					</div>
 				) : null}
 			</div>
 		</div>
@@ -124,9 +139,9 @@ const calloutParts = stylex.create({
 		height: "1lh",
 	},
 	content: {
+		gap: tokens["--space-1"],
 		display: "flex",
 		flexGrow: 1,
-		gap: tokens["--space-1"],
 		minWidth: 0,
 	},
 	title: {

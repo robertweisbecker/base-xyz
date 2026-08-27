@@ -9,7 +9,13 @@ import {
 	type DragStartEvent,
 } from "@dnd-kit/react";
 import { useSortable } from "@dnd-kit/react/sortable";
-import { ArchiveIcon, BellIcon, DotsSixVerticalIcon, EnvelopeSimpleIcon, FolderIcon } from "@phosphor-icons/react";
+import {
+	ArchiveIcon,
+	BellIcon,
+	DotsSixVerticalIcon,
+	EnvelopeSimpleIcon,
+	FolderIcon,
+} from "@phosphor-icons/react";
 import * as stylex from "@stylexjs/stylex";
 import type { ReactNode } from "react";
 import { useRef, useState } from "react";
@@ -43,12 +49,32 @@ const MENU_GROUPS: ReadonlyArray<{ id: MenuGroupId; trigger: string; label: stri
 
 const INITIAL_MENU_GROUPS: MenuGroupState = {
 	record: [
-		{ id: "assign-folder", label: "Assign folder", shortcut: "A", icon: <FolderIcon size={16} weight="regular" /> },
-		{ id: "notify-team", label: "Notify team", shortcut: "N", icon: <BellIcon size={16} weight="regular" /> },
+		{
+			id: "assign-folder",
+			label: "Assign folder",
+			shortcut: "A",
+			icon: <FolderIcon size={16} weight="regular" />,
+		},
+		{
+			id: "notify-team",
+			label: "Notify team",
+			shortcut: "N",
+			icon: <BellIcon size={16} weight="regular" />,
+		},
 	],
 	followUp: [
-		{ id: "email-owner", label: "Email owner", shortcut: "E", icon: <EnvelopeSimpleIcon size={16} weight="regular" /> },
-		{ id: "archive-record", label: "Archive record", shortcut: "⌘⌫", icon: <ArchiveIcon size={16} weight="regular" /> },
+		{
+			id: "email-owner",
+			label: "Email owner",
+			shortcut: "E",
+			icon: <EnvelopeSimpleIcon size={16} weight="regular" />,
+		},
+		{
+			id: "archive-record",
+			label: "Archive record",
+			shortcut: "⌘⌫",
+			icon: <ArchiveIcon size={16} weight="regular" />,
+		},
 	],
 };
 
@@ -83,7 +109,9 @@ export function DndKitMenuDemo() {
 		setSnapshot(null);
 		setActiveLabel(null);
 		isDraggingRef.current = false;
-		setStatus("Ready. Open either menu from its trigger, then reorder rows or move them between open menus.");
+		setStatus(
+			"Ready. Open either menu from its trigger, then reorder rows or move them between open menus.",
+		);
 	}
 
 	function handleOpenChange(groupId: MenuGroupId, open: boolean) {
@@ -120,20 +148,28 @@ export function DndKitMenuDemo() {
 	}
 
 	return (
-		<DragDropProvider onDragStart={handleDragStart} onDragOver={handleDragOver} onDragEnd={handleDragEnd}>
+		<DragDropProvider
+			onDragStart={handleDragStart}
+			onDragOver={handleDragOver}
+			onDragEnd={handleDragEnd}
+		>
 			<DemoPanel
 				title="dnd-kit with Base UI menu items"
 				description="Sortable refs attach directly to the design-system Menu.Item rows while Base UI keeps menu row semantics."
 				instructions={
 					<DemoInstructions>
 						<li>Both menus default open so the sortable behavior is inspectable.</li>
-						<li>Close and reopen a menu from its trigger to test Base UI keyboard navigation before dragging.</li>
+						<li>
+							Close and reopen a menu from its trigger to test Base UI keyboard navigation before
+							dragging.
+						</li>
 						<li>Focus a row and press Space or Enter to start keyboard dragging.</li>
 						<li>Use arrow keys to reorder, then Space or Enter to drop, or Escape to cancel.</li>
 					</DemoInstructions>
 				}
 				status={status}
-				onReset={reset}>
+				onReset={reset}
+			>
 				<div {...stylex.props(demoStyles.menuDemo)}>
 					{MENU_GROUPS.map((group) => (
 						<SortableMenu
@@ -147,7 +183,9 @@ export function DndKitMenuDemo() {
 						/>
 					))}
 				</div>
-				<DragOverlay style={overlayRootStyle}>{activeLabel ? <MenuOverlay label={activeLabel} /> : null}</DragOverlay>
+				<DragOverlay style={overlayRootStyle}>
+					{activeLabel ? <MenuOverlay label={activeLabel} /> : null}
+				</DragOverlay>
 			</DemoPanel>
 		</DragDropProvider>
 	);
@@ -181,7 +219,8 @@ function SortableMenu({
 				ref={ref}
 				data-drop-target={isDropTarget || undefined}
 				positionerProps={{ side: "bottom", align: "start" }}
-				xstyle={demoStyles.sortableMenuPopup}>
+				xstyle={demoStyles.sortableMenuPopup}
+			>
 				<Menu.Group>
 					<Menu.GroupLabel>{label}</Menu.GroupLabel>
 					{items.length === 0 ? <EmptyMenuGroup label={label} /> : null}
@@ -202,7 +241,15 @@ function EmptyMenuGroup({ label }: { label: string }) {
 	);
 }
 
-function SortableMenuItem({ item, index, groupId }: { item: MenuAction; index: number; groupId: MenuGroupId }) {
+function SortableMenuItem({
+	item,
+	index,
+	groupId,
+}: {
+	item: MenuAction;
+	index: number;
+	groupId: MenuGroupId;
+}) {
 	const { ref, handleRef, isDragging, isDropTarget } = useSortable({
 		id: item.id,
 		index,
@@ -223,7 +270,8 @@ function SortableMenuItem({ item, index, groupId }: { item: MenuAction; index: n
 			closeOnClick={false}
 			data-dragging={isDragging || undefined}
 			data-drop-target={isDropTarget || undefined}
-			xstyle={demoStyles.sortableMenuItem}>
+			xstyle={demoStyles.sortableMenuItem}
+		>
 			<Menu.ItemIcon>
 				<DotsSixVerticalIcon weight="bold" />
 			</Menu.ItemIcon>

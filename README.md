@@ -1,4 +1,5 @@
 # Base UI + StyleX
+
 <sup> ([base-x](https://www.npmjs.com/package/base-x) was taken…)</sup>
 
 An experimental React component library built with:
@@ -15,12 +16,14 @@ The project intentionally has no Tailwind or pre-styled component layer, and use
 npm install
 npm run storybook
 ```
-Storybook is the browsable inventory and behavior reference. 
+
+Storybook is the browsable inventory and behavior reference.
 The demo app (a gallery grid) is available with:
 
 ```sh
 npm run dev
 ```
+
 ### Structure
 
 ```text
@@ -48,9 +51,10 @@ src/
 
 ## Theming & tokens
 
-Tokens are currently<sup>*</sup> a single `defineVars` object using named CSS variables to allow page-level consumer overrides. 
+Tokens are currently<sup>*</sup> a single `defineVars` object using named CSS variables to allow page-level consumer overrides.
 
 Define colors with the mode-aware `light-dark()` syntax. Other tokens use standard CSS.
+
 ```ts
 // tokens.stylex.ts
 import * as stylex from '@stylexjs/stylex';
@@ -62,21 +66,23 @@ export const tokens = stylex.defineVars({
 ```
 
 Import tokens from `/src` with the alias `@/theme/tokens`, and use them in `styleX.create()`.
+
 ```tsx
 // someComponent.tsx
-import * as stylex from '@stylexjs/stylex';
-import { tokens } from '@/theme/tokens';
+import * as stylex from "@stylexjs/stylex";
+import { tokens } from "@/theme/tokens";
 
 const styles = stylex.create({
-  button: {
-    backgroundColor: tokens["--bg-primary"],
-    color: tokens["--fg-primary-contrast"],
-    paddingInline: tokens["--space-4"],
-  },
+	button: {
+		backgroundColor: tokens["--bg-primary"],
+		color: tokens["--fg-primary-contrast"],
+		paddingInline: tokens["--space-4"],
+	},
 });
 ```
 
 ### Themes
+
 Named themes in `@/theme/themes` provide partial overrides to `tokens` and inherit everything else.
 
 > [!NOTE]
@@ -84,11 +90,13 @@ Named themes in `@/theme/themes` provide partial overrides to `tokens` and inher
 
 `ThemeProvider` applies the selected theme and mode to a real host and mirrors the outermost provider onto the
 document root so body-level portals inherit it. See:
+
 - [`docs/adr/ADR-0011`](docs/adr/0011-layout-primitives-common-margins-and-stylex-overrides.md) for layout primitives, eligible common margins, and the `style`/`xstyle` split,
 - [`docs/adr/ADR-0003`](docs/adr/0003-stylex-ownership-and-application.md) for StyleX ownership and application boundaries,
 - and [`src/styles/README.md`](src/styles/README.md) for the current implementation map.
 
 ### Color modes
+
 Light/dark mode is automatic based on system prefs but can be forced to one mode or the other. Storybook includes a light/dark toolbar control, and the gallery persists its theme choice in local storage while defaulting to the operating-system preference.
 
 ## Components vs. blocks
@@ -123,13 +131,19 @@ belongs in an ADR instead of either onboarding document.
 ## Validation
 
 ```sh
-npx tsc -b --pretty false
-npm run lint
-npm run build
-npm run build-storybook
+npm run verify:quick
+npm run verify:full
 ```
 
-Run these independently so one successful check does not hide a failure in
-another. The repository has no `typecheck` script. Playwright discovers focused
-browser regressions throughout `tests/`; run the relevant spec for interaction
-changes after building Storybook.
+`verify:quick` runs TypeScript, Oxlint (including StyleX, anti-slop, and
+advisory complexity rules), and the Prettier check. All lint findings are
+blocking except complexity, which warns at the default maximum of 20 so
+existing hotspots can be reduced incrementally. `verify:full` repeats that
+gate, then builds and exercises the app and Storybook independently, including
+the StyleX bundle-boundary test. Focused checks remain available as
+`typecheck`, `lint`, `format:check`, `build`, `build-storybook`, `test:app`,
+`test:storybook`, and `test:style-props`.
+
+Playwright defaults to ports `6107` for the app and `6106` for Storybook. Set
+`PLAYWRIGHT_APP_PORT` or `PLAYWRIGHT_STORYBOOK_PORT` when another checkout owns
+one of those ports.

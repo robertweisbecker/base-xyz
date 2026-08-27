@@ -26,7 +26,9 @@ import { KanbanIcon } from "@phosphor-icons/react";
 export function DndKitBoardDemo() {
 	const [board, setBoard] = useState<DemoBoardState>(() => createInitialBoardState());
 	const [snapshot, setSnapshot] = useState<DemoBoardState | null>(null);
-	const [status, setStatus] = useState("Ready. Use the drag handles to reorder tasks or move them between columns.");
+	const [status, setStatus] = useState(
+		"Ready. Use the drag handles to reorder tasks or move them between columns.",
+	);
 
 	function reset() {
 		setBoard(createInitialBoardState());
@@ -54,22 +56,38 @@ export function DndKitBoardDemo() {
 	}
 
 	return (
-		<DragDropProvider onDragStart={handleDragStart} onDragOver={handleDragOver} onDragEnd={handleDragEnd}>
+		<DragDropProvider
+			onDragStart={handleDragStart}
+			onDragOver={handleDragOver}
+			onDragEnd={handleDragEnd}
+		>
 			<DemoPanel
 				title="dnd-kit board"
 				description="Sortable primitives provide optimistic geometric reflow while the provider reconciles drag events."
 				instructions={
 					<DemoInstructions>
-						<li {...stylex.props(demoStyles.instructionItem)}>Focus a handle and press Space or Enter to start.</li>
-						<li {...stylex.props(demoStyles.instructionItem)}>Use arrow keys to move through positions or columns.</li>
-						<li {...stylex.props(demoStyles.instructionItem)}>Press Escape to cancel and restore the snapshot.</li>
+						<li {...stylex.props(demoStyles.instructionItem)}>
+							Focus a handle and press Space or Enter to start.
+						</li>
+						<li {...stylex.props(demoStyles.instructionItem)}>
+							Use arrow keys to move through positions or columns.
+						</li>
+						<li {...stylex.props(demoStyles.instructionItem)}>
+							Press Escape to cancel and restore the snapshot.
+						</li>
 					</DemoInstructions>
 				}
 				status={status}
-				onReset={reset}>
+				onReset={reset}
+			>
 				<div {...stylex.props(demoStyles.board)}>
 					{BOARD_COLUMNS.map((column) => (
-						<DndKitBoardColumn key={column.id} columnId={column.id} label={column.label} items={board[column.id]} />
+						<DndKitBoardColumn
+							key={column.id}
+							columnId={column.id}
+							label={column.label}
+							items={board[column.id]}
+						/>
 					))}
 				</div>
 			</DemoPanel>
@@ -77,7 +95,15 @@ export function DndKitBoardDemo() {
 	);
 }
 
-function DndKitBoardColumn({ columnId, label, items }: { columnId: DemoColumnId; label: string; items: DemoItem[] }) {
+function DndKitBoardColumn({
+	columnId,
+	label,
+	items,
+}: {
+	columnId: DemoColumnId;
+	label: string;
+	items: DemoItem[];
+}) {
 	const { ref, isDropTarget } = useDroppable({
 		id: columnId,
 		accept: TASK_TYPE,
@@ -89,7 +115,8 @@ function DndKitBoardColumn({ columnId, label, items }: { columnId: DemoColumnId;
 			ref={ref}
 			aria-label={label}
 			data-drop-target={isDropTarget || undefined}
-			{...stylex.props(demoStyles.column, focusRing.within)}>
+			{...stylex.props(demoStyles.column, focusRing.within)}
+		>
 			<div {...stylex.props(demoStyles.columnHeader)}>
 				<span {...stylex.props(demoStyles.columnTitle)}>{label}</span>
 				<span {...stylex.props(demoStyles.columnCount)}>{items.length} tasks</span>
@@ -115,7 +142,15 @@ function DndKitBoardColumn({ columnId, label, items }: { columnId: DemoColumnId;
 	);
 }
 
-function DndKitSortableTask({ item, index, columnId }: { item: DemoItem; index: number; columnId: DemoColumnId }) {
+function DndKitSortableTask({
+	item,
+	index,
+	columnId,
+}: {
+	item: DemoItem;
+	index: number;
+	columnId: DemoColumnId;
+}) {
 	const { ref, handleRef, isDragging, isDropTarget } = useSortable({
 		id: item.id,
 		index,

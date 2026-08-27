@@ -1,6 +1,14 @@
 import { useRender } from "@base-ui/react/use-render";
 import * as stylex from "@stylexjs/stylex";
-import { createContext, useContext, useMemo, useRef, useState, type ComponentProps, type ReactNode } from "react";
+import {
+	createContext,
+	useContext,
+	useMemo,
+	useRef,
+	useState,
+	type ComponentProps,
+	type ReactNode,
+} from "react";
 import { IconButton, type IconButtonProps } from "@/components/button/button";
 import { NavListPresentationProvider } from "@/components/nav-list/nav-list";
 import { ScrollArea } from "@/components/scroll-area/scroll-area";
@@ -9,7 +17,8 @@ import { tokens } from "@/theme/tokens.stylex";
 import { mergeStyle, type BaseStyleProps } from "@/styles/props/base";
 import { attrJoin } from "@/utils/attr-join";
 
-type StyledProps<T> = Omit<T, "className" | "style" | "xstyle"> & BaseStyleProps & { className?: string };
+type StyledProps<T> = Omit<T, "className" | "style" | "xstyle"> &
+	BaseStyleProps & { className?: string };
 
 export type SidebarCollapseMode = "icon" | "offcanvas";
 export type SidebarSide = "start" | "end";
@@ -80,7 +89,15 @@ export function Root({
 	return <SidebarContext.Provider value={value}>{children}</SidebarContext.Provider>;
 }
 
-export function Panel({ ref, children, className, style, xstyle, render, ...props }: SidebarPanelProps) {
+export function Panel({
+	ref,
+	children,
+	className,
+	style,
+	xstyle,
+	render,
+	...props
+}: SidebarPanelProps) {
 	const sidebar = useSidebarContext("Sidebar.Panel");
 	const collapsed = sidebar.collapsed;
 	const offcanvasHidden = collapsed && sidebar.collapseMode === "offcanvas";
@@ -112,7 +129,8 @@ export function Panel({ ref, children, className, style, xstyle, render, ...prop
 							sidebarParts.content,
 							iconCollapsed && sidebarParts.contentIconCollapsed,
 							offcanvasHidden && sidebarParts.contentOffcanvasHidden,
-						)}>
+						)}
+					>
 						{children}
 					</div>
 				</div>
@@ -133,29 +151,43 @@ export function Content({ className, style, xstyle, children, ...props }: Sideba
 		<ScrollArea
 			{...props}
 			disableFade
-				label="Sidebar content"
-				className={attrJoin(sx.className, className)}
-				style={mergeStyle(sx.style, style)}
-				viewportRef={scrollRef}>
-				<div {...stylex.props(sidebarParts.scrollContent)}>
-					<NavListPresentationProvider
-						presentation={iconCollapsed ? "icon" : "expanded"}
-						popoverSide={sidebar.side === "start" ? "right" : "left"}
-						scrollMode="external"
-						scrollRef={scrollRef}>
-						{children}
-					</NavListPresentationProvider>
-				</div>
+			label="Sidebar content"
+			className={attrJoin(sx.className, className)}
+			style={mergeStyle(sx.style, style)}
+			viewportRef={scrollRef}
+		>
+			<div {...stylex.props(sidebarParts.scrollContent)}>
+				<NavListPresentationProvider
+					presentation={iconCollapsed ? "icon" : "expanded"}
+					popoverSide={sidebar.side === "start" ? "right" : "left"}
+					scrollMode="external"
+					scrollRef={scrollRef}
+				>
+					{children}
+				</NavListPresentationProvider>
+			</div>
 		</ScrollArea>
 	);
 }
 
-export function Header({ startSlot, endSlot, children, className, style, xstyle, ...props }: SidebarHeaderProps) {
+export function Header({
+	startSlot,
+	endSlot,
+	children,
+	className,
+	style,
+	xstyle,
+	...props
+}: SidebarHeaderProps) {
 	const sidebar = useSidebarContext("Sidebar.Header");
 	const iconCollapsed = sidebar.collapsed && sidebar.collapseMode === "icon";
 	const hasStartSlot = startSlot !== null && startSlot !== undefined && startSlot !== false;
 	const hasEndSlot = endSlot !== null && endSlot !== undefined && endSlot !== false;
-	const sx = stylex.props(sidebarParts.header, iconCollapsed && sidebarParts.headerRailCollapsed, xstyle);
+	const sx = stylex.props(
+		sidebarParts.header,
+		iconCollapsed && sidebarParts.headerRailCollapsed,
+		xstyle,
+	);
 
 	return (
 		<div
@@ -163,9 +195,17 @@ export function Header({ startSlot, endSlot, children, className, style, xstyle,
 			className={attrJoin(sx.className, className)}
 			data-collapsed={iconCollapsed ? "" : undefined}
 			data-side={sidebar.side}
-			style={mergeStyle(sx.style, style)}>
-			{hasStartSlot ? <span {...stylex.props(sidebarParts.headerStartSlot)}>{startSlot}</span> : null}
-			<div {...stylex.props(sidebarParts.headerContent, iconCollapsed && sidebarParts.headerContentIconCollapsed)}>
+			style={mergeStyle(sx.style, style)}
+		>
+			{hasStartSlot ? (
+				<span {...stylex.props(sidebarParts.headerStartSlot)}>{startSlot}</span>
+			) : null}
+			<div
+				{...stylex.props(
+					sidebarParts.headerContent,
+					iconCollapsed && sidebarParts.headerContentIconCollapsed,
+				)}
+			>
 				{children}
 			</div>
 			{hasEndSlot ? <span {...stylex.props(sidebarParts.headerEndSlot)}>{endSlot}</span> : null}
@@ -176,7 +216,13 @@ export function Header({ startSlot, endSlot, children, className, style, xstyle,
 export function Footer({ className, style, xstyle, ...props }: SidebarFooterProps) {
 	const sx = stylex.props(sidebarParts.footer, xstyle);
 
-	return <div className={attrJoin(sx.className, className)} style={mergeStyle(sx.style, style)} {...props} />;
+	return (
+		<div
+			className={attrJoin(sx.className, className)}
+			style={mergeStyle(sx.style, style)}
+			{...props}
+		/>
+	);
 }
 
 export function Title({ className, style, xstyle, ...props }: SidebarTitleProps) {
@@ -188,13 +234,30 @@ export function Title({ className, style, xstyle, ...props }: SidebarTitleProps)
 		xstyle,
 	);
 
-	return <div className={attrJoin(sx.className, className)} style={mergeStyle(sx.style, style)} {...props} />;
+	return (
+		<div
+			className={attrJoin(sx.className, className)}
+			style={mergeStyle(sx.style, style)}
+			{...props}
+		/>
+	);
 }
 
 export function Description({ className, style, xstyle, ...props }: SidebarDescriptionProps) {
-	const sx = stylex.props(textStyles.body, typescaleStyles["1"], sidebarParts.headerDescription, xstyle);
+	const sx = stylex.props(
+		textStyles.body,
+		typescaleStyles["1"],
+		sidebarParts.headerDescription,
+		xstyle,
+	);
 
-	return <div className={attrJoin(sx.className, className)} style={mergeStyle(sx.style, style)} {...props} />;
+	return (
+		<div
+			className={attrJoin(sx.className, className)}
+			style={mergeStyle(sx.style, style)}
+			{...props}
+		/>
+	);
 }
 
 export function Trigger({
@@ -229,9 +292,13 @@ export function Trigger({
 
 function SidebarPanelIcon({ collapsed, side }: { collapsed: boolean; side: SidebarSide }) {
 	const expandedStyle =
-		side === "start" ? sidebarParts.triggerIconDividerStartExpanded : sidebarParts.triggerIconDividerEndExpanded;
+		side === "start"
+			? sidebarParts.triggerIconDividerStartExpanded
+			: sidebarParts.triggerIconDividerEndExpanded;
 	const collapsedStyle =
-		side === "start" ? sidebarParts.triggerIconDividerStartCollapsed : sidebarParts.triggerIconDividerEndCollapsed;
+		side === "start"
+			? sidebarParts.triggerIconDividerStartCollapsed
+			: sidebarParts.triggerIconDividerEndCollapsed;
 
 	return (
 		<svg
@@ -247,11 +314,15 @@ function SidebarPanelIcon({ collapsed, side }: { collapsed: boolean; side: Sideb
 			strokeWidth="1.5"
 			viewBox="0 0 24 24"
 			width="16"
-			{...stylex.props(sidebarParts.triggerIcon)}>
+			{...stylex.props(sidebarParts.triggerIcon)}
+		>
 			<path d="M21.25 6.72v10.56a2.97 2.97 0 0 1-2.97 2.97H5.72a2.97 2.97 0 0 1-2.97-2.97V6.72a2.97 2.97 0 0 1 2.97-2.97h12.56a2.97 2.97 0 0 1 2.97 2.97" />
 			<path
 				d="M6.25 7.25v9.5"
-				{...stylex.props(sidebarParts.triggerIconDivider, collapsed ? collapsedStyle : expandedStyle)}
+				{...stylex.props(
+					sidebarParts.triggerIconDivider,
+					collapsed ? collapsedStyle : expandedStyle,
+				)}
 			/>
 		</svg>
 	);
@@ -301,13 +372,13 @@ const sidebarParts = stylex.create({
 		inlineSize: tokens["--size-sidebar-rail"],
 	},
 	content: {
+		gap: tokens["--space-2"],
 		paddingInline: tokens["--space-3"],
+		alignItems: "stretch",
 		blockSize: "100%",
 		boxSizing: "border-box",
 		display: "flex",
 		flexDirection: "column",
-		gap: tokens["--space-2"],
-		alignItems: "stretch",
 		inlineSize: tokens["--size-sidebar"],
 		minBlockSize: 0,
 		transform: "translateX(0)",
@@ -316,12 +387,12 @@ const sidebarParts = stylex.create({
 		transitionTimingFunction: tokens["--motion-ease-smooth-out"],
 	},
 	contentArea: {
+		paddingBlock: tokens["--space-2"],
 		flexBasis: "auto",
 		flexGrow: "1",
 		flexShrink: "1",
 		minBlockSize: 0,
 		minInlineSize: 0,
-		paddingBlock: tokens["--space-2"],
 	},
 	contentIconCollapsed: {
 		paddingInline: tokens["--space-2"],

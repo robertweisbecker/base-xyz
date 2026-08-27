@@ -77,7 +77,11 @@ export const Composition: Story = {
 						aria-label="Open user settings"
 						image={image}
 						name="Ada Lovelace"
-						render={<Menu.Trigger render={<Button nativeButton shape="circle" size="lg" variant="ghost" />} />}
+						render={
+							<Menu.Trigger
+								render={<Button nativeButton shape="circle" size="lg" variant="ghost" />}
+							/>
+						}
 						size={10}
 					/>
 					<AccountMenu />
@@ -89,7 +93,13 @@ export const Composition: Story = {
 				</Text>
 				<Menu.Root>
 					<Menu.Trigger
-						render={<IconButton icon={<Avatar image={image} size={4} />} label="Ada Lovelace" variant="neutral" />}
+						render={
+							<IconButton
+								icon={<Avatar image={image} size={4} />}
+								label="Ada Lovelace"
+								variant="neutral"
+							/>
+						}
 					/>
 					<AccountMenu />
 				</Menu.Root>

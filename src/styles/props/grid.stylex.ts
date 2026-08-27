@@ -106,7 +106,10 @@ export type GridLayoutProps = GapProps & {
 };
 
 export function resolveGridLayout(
-	props: Pick<GridLayoutProps, "columns" | "flow" | "align" | "justify" | "placeContent" | "placeItems">,
+	props: Pick<
+		GridLayoutProps,
+		"columns" | "flow" | "align" | "justify" | "placeContent" | "placeItems"
+	>,
 ): StyleXStyles[] {
 	const styles: StyleXStyles[] = [];
 	if (props.columns !== undefined) styles.push(gridTemplateColumnsStyles[props.columns]);

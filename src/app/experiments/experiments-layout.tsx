@@ -20,7 +20,11 @@ export function ExperimentsLayout() {
 					<Sidebar.Content>
 						<NavList.Root aria-label="Experiments">
 							{experimentNavigationGroups.map((group) => (
-								<NavList.Section key={group.label} label={group.label} visuallyHideLabel={collapsed}>
+								<NavList.Section
+									key={group.label}
+									label={group.label}
+									visuallyHideLabel={collapsed}
+								>
 									<ExperimentNavItem
 										current={pathname === group.to}
 										icon={group.icon}

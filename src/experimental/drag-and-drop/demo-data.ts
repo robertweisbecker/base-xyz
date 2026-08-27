@@ -58,7 +58,9 @@ export function createInitialBoardState(): DemoBoardState {
 }
 
 export function createInitialBoardItems(): DemoBoardItem[] {
-	return BOARD_COLUMNS.flatMap(({ id }) => INITIAL_BOARD[id].map((item) => ({ ...item, columnId: id })));
+	return BOARD_COLUMNS.flatMap(({ id }) =>
+		INITIAL_BOARD[id].map((item) => ({ ...item, columnId: id })),
+	);
 }
 
 export function cloneBoardState(state: DemoBoardState): DemoBoardState {
@@ -75,6 +77,7 @@ export function getItemType(item: DemoItem) {
 export function parseDemoItemString(serializedItem: string, key: "id" | "label") {
 	const item: unknown = JSON.parse(serializedItem);
 	if (typeof item !== "object" || item === null) return null;
-	const value = key === "id" && "id" in item ? item.id : key === "label" && "label" in item ? item.label : null;
+	const value =
+		key === "id" && "id" in item ? item.id : key === "label" && "label" in item ? item.label : null;
 	return typeof value === "string" ? value : null;
 }

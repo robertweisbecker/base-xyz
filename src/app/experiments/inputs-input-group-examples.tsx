@@ -6,7 +6,17 @@ import { PaperPlaneTiltIcon } from "@phosphor-icons/react/dist/csr/PaperPlaneTil
 import * as stylex from "@stylexjs/stylex";
 import type { ReactNode } from "react";
 import { CopyButton } from "@/blocks";
-import { Button, Grid, IconButton, InputGroup, Kbd, KbdGroup, Stack, Text, TextField } from "@/components";
+import {
+	Button,
+	Grid,
+	IconButton,
+	InputGroup,
+	Kbd,
+	KbdGroup,
+	Stack,
+	Text,
+	TextField,
+} from "@/components";
 import { inputsPageStyles as styles } from "./inputs-page.styles";
 
 export function InputGroupVariations() {
@@ -17,7 +27,11 @@ export function InputGroupVariations() {
 					<InputGroup.Addon>
 						<CircleIcon aria-hidden />
 					</InputGroup.Addon>
-					<InputGroup.Input aria-label="Search projects" placeholder="Search by name…" type="search" />
+					<InputGroup.Input
+						aria-label="Search projects"
+						placeholder="Search by name…"
+						type="search"
+					/>
 					<InputGroup.Addon position="end">
 						<KbdGroup>
 							<Kbd size="sm">⌘</Kbd>
@@ -38,7 +52,11 @@ export function InputGroupVariations() {
 					<InputGroup.Addon>
 						<EnvelopeIcon aria-hidden />
 					</InputGroup.Addon>
-					<InputGroup.Input aria-label="Teammate email" placeholder="name@company.com" type="email" />
+					<InputGroup.Input
+						aria-label="Teammate email"
+						placeholder="name@company.com"
+						type="email"
+					/>
 					<InputGroup.Actions>
 						<Button size="xs" variant="neutral">
 							Invite
@@ -53,14 +71,24 @@ export function InputGroupVariations() {
 					</InputGroup.Addon>
 					<InputGroup.Input aria-label="API token" defaultValue="sk_live_••••••••42" readOnly />
 					<InputGroup.Actions>
-						<CopyButton aria-label="Copy API token" size="xs" value="sk_live_••••••••42" variant="ghost" />
+						<CopyButton
+							aria-label="Copy API token"
+							size="xs"
+							value="sk_live_••••••••42"
+							variant="ghost"
+						/>
 					</InputGroup.Actions>
 				</InputGroup.Root>
 			</InputGroupSpecimen>
 			<InputGroupSpecimen label="Set a monthly limit">
 				<InputGroup.Root>
 					<InputGroup.Addon>$</InputGroup.Addon>
-					<InputGroup.Input aria-label="Monthly limit" defaultValue="250" inputMode="decimal" type="number" />
+					<InputGroup.Input
+						aria-label="Monthly limit"
+						defaultValue="250"
+						inputMode="decimal"
+						type="number"
+					/>
 					<InputGroup.Addon position="end">USD</InputGroup.Addon>
 				</InputGroup.Root>
 			</InputGroupSpecimen>
@@ -70,7 +98,12 @@ export function InputGroupVariations() {
 					<InputGroup.Textarea aria-label="Review reply" placeholder="Write a reply…" rows={3} />
 					<InputGroup.Footer>
 						<InputGroup.Actions position="start">
-							<IconButton icon={<PaperclipIcon aria-hidden />} label="Attach a file" size="sm" variant="ghost" />
+							<IconButton
+								icon={<PaperclipIcon aria-hidden />}
+								label="Attach a file"
+								size="sm"
+								variant="ghost"
+							/>
 						</InputGroup.Actions>
 						<InputGroup.Actions>
 							<Button size="sm" startSlot={<PaperPlaneTiltIcon aria-hidden weight="fill" />}>
@@ -111,8 +144,16 @@ export function InputPaddingComparison() {
 				<InputGroup.Root>
 					<InputGroup.Input aria-label="Project domain" defaultValue="design-system.example.com" />
 				</InputGroup.Root>
-				<div aria-hidden data-padding-guide="start" {...stylex.props(styles.paddingGuide, styles.paddingGuideStart)} />
-				<div aria-hidden data-padding-guide="end" {...stylex.props(styles.paddingGuide, styles.paddingGuideEnd)} />
+				<div
+					aria-hidden
+					data-padding-guide="start"
+					{...stylex.props(styles.paddingGuide, styles.paddingGuideStart)}
+				/>
+				<div
+					aria-hidden
+					data-padding-guide="end"
+					{...stylex.props(styles.paddingGuide, styles.paddingGuideEnd)}
+				/>
 			</div>
 		</Stack>
 	);

@@ -1,7 +1,15 @@
 import { ArrowCounterClockwiseIcon } from "@phosphor-icons/react/dist/csr/ArrowCounterClockwise";
 import { LightningIcon } from "@phosphor-icons/react/dist/csr/Lightning";
 import * as stylex from "@stylexjs/stylex";
-import { createContext, Fragment, type ComponentProps, type ReactNode, useContext, useRef, useState } from "react";
+import {
+	createContext,
+	Fragment,
+	type ComponentProps,
+	type ReactNode,
+	useContext,
+	useRef,
+	useState,
+} from "react";
 import { Button, Menu } from "@/components";
 import type { ButtonProps } from "@/components";
 import { menuItemVars } from "@/components/menu/menu-item-vars.stylex";
@@ -111,7 +119,8 @@ export function Root({
 				speedOptions,
 				updateValue,
 				value: normalizedValue.value,
-			}}>
+			}}
+		>
 			<Menu.Root
 				{...props}
 				onOpenChange={(open, details) => {
@@ -127,7 +136,8 @@ export function Root({
 						submenuOpen.current = false;
 					}
 					onOpenChange?.(open, details);
-				}}>
+				}}
+			>
 				{children}
 			</Menu.Root>
 		</ModelSelectorContext.Provider>
@@ -148,7 +158,8 @@ export function Trigger({
 	...props
 }: ModelSelectorTriggerProps) {
 	const { selectedModel, value } = useModelSelectorContext("Trigger");
-	const triggerIcon = value.speed === "Fast" ? <LightningIcon size="1em" weight="fill" /> : selectedModel.icon;
+	const triggerIcon =
+		value.speed === "Fast" ? <LightningIcon size="1em" weight="fill" /> : selectedModel.icon;
 	const triggerLabel = showEffort
 		? `Choose model, current ${getTextLabel(selectedModel.label)}, ${value.effort} effort`
 		: `Choose model, current ${getTextLabel(selectedModel.label)}`;
@@ -170,7 +181,8 @@ export function Trigger({
 					/>
 				)
 			}
-			{...props}>
+			{...props}
+		>
 			{children ?? (
 				<>
 					{render && triggerIcon ? (
@@ -193,7 +205,8 @@ export function Popup({ positionerProps, xstyle, ...props }: ModelSelectorPopupP
 		<Menu.Popup
 			positionerProps={{ align: "start", side: "top", ...positionerProps }}
 			xstyle={[parts.popup, xstyle]}
-			{...props}>
+			{...props}
+		>
 			<Menu.SubmenuRoot onOpenChange={(open) => open && context.latchSubmenu()}>
 				<SettingsTrigger label="Model" value={context.selectedModel.label} />
 				<Menu.Popup
@@ -208,7 +221,8 @@ export function Popup({ positionerProps, xstyle, ...props }: ModelSelectorPopupP
 							fallbackAxisSide: "none",
 						},
 					}}
-					{...stylex.props(parts.popup)}>
+					{...stylex.props(parts.popup)}
+				>
 					<List
 						groups={context.groups}
 						value={context.value.model}
@@ -229,15 +243,31 @@ export function Popup({ positionerProps, xstyle, ...props }: ModelSelectorPopupP
 				onValueChange={(speed) => context.updateValue({ ...context.value, speed }, "speed")}
 			/>
 			<Menu.Separator />
-			<Menu.Item {...stylex.props(parts.resetItem)} onClick={() => context.updateValue(context.defaultValue, "reset")}>
+			<Menu.Item
+				{...stylex.props(parts.resetItem)}
+				onClick={() => context.updateValue(context.defaultValue, "reset")}
+			>
 				<span {...stylex.props(parts.resetLabel)}>Reset to default</span>
-				<ArrowCounterClockwiseIcon aria-hidden size="1em" weight="regular" {...stylex.props(parts.resetIcon)} />
+				<ArrowCounterClockwiseIcon
+					aria-hidden
+					size="1em"
+					weight="regular"
+					{...stylex.props(parts.resetIcon)}
+				/>
 			</Menu.Item>
 		</Menu.Popup>
 	);
 }
 
-function SettingsTrigger({ label, value, valueIcon }: { label: ReactNode; value: ReactNode; valueIcon?: ReactNode }) {
+function SettingsTrigger({
+	label,
+	value,
+	valueIcon,
+}: {
+	label: ReactNode;
+	value: ReactNode;
+	valueIcon?: ReactNode;
+}) {
 	return (
 		<Menu.SubmenuTrigger openOnHover delay={0} {...stylex.props(parts.settingsRow)}>
 			<span {...stylex.props(parts.settingsLabel)}>{label}</span>
@@ -284,7 +314,8 @@ function ChoiceSubmenu({
 						align: "shift",
 						fallbackAxisSide: "none",
 					},
-					}}>
+				}}
+			>
 				<Menu.RadioGroup value={value} onValueChange={onValueChange}>
 					<Menu.GroupLabel>{label}</Menu.GroupLabel>
 					{options.map((option) => (
@@ -311,15 +342,20 @@ export function List({ groups, value, onValueChange }: ModelSelectorListProps) {
 								key={option.value}
 								value={option.value}
 								disabled={option.disabled}
-								{...stylex.props(parts.modelItem)}>
+								{...stylex.props(parts.modelItem)}
+							>
 								{option.icon ? (
 									<span aria-hidden {...stylex.props(parts.modelIcon)}>
 										{option.icon}
 									</span>
 								) : null}
-								<span {...stylex.props(parts.modelLabel, !option.icon && parts.copyWithoutIcon)}>{option.label}</span>
+								<span {...stylex.props(parts.modelLabel, !option.icon && parts.copyWithoutIcon)}>
+									{option.label}
+								</span>
 								{option.description ? (
-									<span {...stylex.props(parts.modelDescription, !option.icon && parts.copyWithoutIcon)}>
+									<span
+										{...stylex.props(parts.modelDescription, !option.icon && parts.copyWithoutIcon)}
+									>
 										{option.description}
 									</span>
 								) : null}

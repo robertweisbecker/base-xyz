@@ -127,7 +127,11 @@ export function extractMarginProps<T extends MarginProps>(props: T) {
 	};
 }
 
-export function resolveEdge<T>(all: T | undefined, axis: T | undefined, side: T | undefined): T | undefined {
+export function resolveEdge<T>(
+	all: T | undefined,
+	axis: T | undefined,
+	side: T | undefined,
+): T | undefined {
 	return side ?? axis ?? all;
 }
 
@@ -138,10 +142,14 @@ export function resolvePadding(props: PaddingProps): StyleXStyles[] {
 	const blockEnd = resolveEdge(props.p, props.py, props.pb);
 	const inlineStart = resolveEdge(props.p, props.px, props.ps);
 	const inlineEnd = resolveEdge(props.p, props.px, props.pe);
-	if (blockStart !== undefined) styles.push(paddingEdgeStyles.blockStart(resolveSpacingValue(blockStart)));
-	if (blockEnd !== undefined) styles.push(paddingEdgeStyles.blockEnd(resolveSpacingValue(blockEnd)));
-	if (inlineStart !== undefined) styles.push(paddingEdgeStyles.inlineStart(resolveSpacingValue(inlineStart)));
-	if (inlineEnd !== undefined) styles.push(paddingEdgeStyles.inlineEnd(resolveSpacingValue(inlineEnd)));
+	if (blockStart !== undefined)
+		styles.push(paddingEdgeStyles.blockStart(resolveSpacingValue(blockStart)));
+	if (blockEnd !== undefined)
+		styles.push(paddingEdgeStyles.blockEnd(resolveSpacingValue(blockEnd)));
+	if (inlineStart !== undefined)
+		styles.push(paddingEdgeStyles.inlineStart(resolveSpacingValue(inlineStart)));
+	if (inlineEnd !== undefined)
+		styles.push(paddingEdgeStyles.inlineEnd(resolveSpacingValue(inlineEnd)));
 	return styles;
 }
 

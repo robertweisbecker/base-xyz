@@ -5,10 +5,6 @@ const group = blocksNavigationGroup;
 
 export function BlocksIndexPage() {
 	return (
-		<ExperimentIndexPage
-				description={group.description}
-				items={group.items}
-				title={group.label}
-		/>
+		<ExperimentIndexPage description={group.description} items={group.items} title={group.label} />
 	);
 }

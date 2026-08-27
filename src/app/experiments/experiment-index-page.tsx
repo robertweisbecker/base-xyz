@@ -23,7 +23,8 @@ export function ExperimentIndexPage({
 					<Card.Root
 						key={item.to}
 						render={<RouterLink to={item.to} search={true} />}
-						xstyle={[styles.link, focusRing.offset]}>
+						xstyle={[styles.link, focusRing.offset]}
+					>
 						<Card.Header>
 							<span {...stylex.props(styles.icon)}>{item.icon}</span>
 							<Card.Title render={<h2 />}>{item.label}</Card.Title>
@@ -59,6 +60,7 @@ const styles = stylex.create({
 	},
 	icon: {
 		borderRadius: tokens["--radius-sm"],
+		marginBlock: tokens["--space-2"],
 		alignItems: "center",
 		backgroundColor: tokens["--surface-subtle"],
 		color: tokens["--fg-muted"],
@@ -66,6 +68,5 @@ const styles = stylex.create({
 		justifyContent: "center",
 		height: tokens["--space-8"],
 		width: tokens["--space-8"],
-		marginBlock: tokens["--space-2"],
 	},
 });

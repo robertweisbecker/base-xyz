@@ -56,8 +56,17 @@ export function ThemeProvider({
 	const isRootProvider = parentTheme === null;
 	const documentThemeOwner = useRef(Symbol("ThemeProvider"));
 	const themeStyle = themeStyles[theme];
-	const ownedStyleProps = stylex.props(themeStyle, providerStyles.root, providerStyles[resolvedMode]);
-	const hostStyleProps = stylex.props(themeStyle, providerStyles.root, providerStyles[resolvedMode], style);
+	const ownedStyleProps = stylex.props(
+		themeStyle,
+		providerStyles.root,
+		providerStyles[resolvedMode],
+	);
+	const hostStyleProps = stylex.props(
+		themeStyle,
+		providerStyles.root,
+		providerStyles[resolvedMode],
+		style,
+	);
 
 	useLayoutEffect(() => {
 		if (!isRootProvider) return;
@@ -70,7 +79,10 @@ export function ThemeProvider({
 		});
 	}, [isRootProvider, mode, ownedStyleProps.className, ownedStyleProps.style, resolvedMode, theme]);
 
-	const value = useMemo<ThemeContextValue>(() => ({ mode, resolvedMode, theme }), [mode, resolvedMode, theme]);
+	const value = useMemo<ThemeContextValue>(
+		() => ({ mode, resolvedMode, theme }),
+		[mode, resolvedMode, theme],
+	);
 	const element = useRender<ThemeProviderState, HTMLElement>({
 		defaultTagName: "div",
 		ref,
@@ -97,7 +109,9 @@ function subscribeToSystemMode(onStoreChange: () => void) {
 }
 
 function getSystemMode(): ResolvedThemeMode {
-	return typeof window !== "undefined" && window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+	return typeof window !== "undefined" && window.matchMedia("(prefers-color-scheme: dark)").matches
+		? "dark"
+		: "light";
 }
 
 function getServerMode(): ResolvedThemeMode {
@@ -121,10 +135,7 @@ let originalDocumentTheme: OriginalDocumentTheme | null = null;
 let appliedDocumentClassNames = new Set<string>();
 let appliedDocumentStyleProperties = new Set<string>();
 
-function synchronizeDocumentTheme(
-	owner: symbol,
-	registration: DocumentThemeRegistration,
-) {
+function synchronizeDocumentTheme(owner: symbol, registration: DocumentThemeRegistration) {
 	if (documentThemeRegistrations.size === 0) captureOriginalDocumentTheme();
 	documentThemeRegistrations.set(owner, registration);
 	applyActiveDocumentTheme();
@@ -156,16 +167,16 @@ function applyActiveDocumentTheme() {
 
 	const nextClassNames = new Set(activeTheme.className?.split(/\s+/).filter(Boolean) ?? []);
 	for (const name of appliedDocumentClassNames) {
-		if (!nextClassNames.has(name) && !originalDocumentTheme.classNames.has(name)) root.classList.remove(name);
+		if (!nextClassNames.has(name) && !originalDocumentTheme.classNames.has(name))
+			root.classList.remove(name);
 	}
 	for (const name of nextClassNames) root.classList.add(name);
 	appliedDocumentClassNames = nextClassNames;
 
 	const nextStyleEntries = new Map(
-		Object.entries({ ...activeTheme.style, colorScheme: activeTheme.resolvedMode }).map(([property, value]) => [
-			toCssProperty(property),
-			value,
-		]),
+		Object.entries({ ...activeTheme.style, colorScheme: activeTheme.resolvedMode }).map(
+			([property, value]) => [toCssProperty(property), value],
+		),
 	);
 	for (const property of appliedDocumentStyleProperties) {
 		if (!nextStyleEntries.has(property)) restoreDocumentStyle(property);
@@ -202,7 +213,11 @@ function restoreDocumentStyle(property: string) {
 	if (!originalDocumentTheme) return;
 	const originalStyle = originalDocumentTheme.styles.get(property);
 	if (originalStyle?.value) {
-		document.documentElement.style.setProperty(property, originalStyle.value, originalStyle.priority);
+		document.documentElement.style.setProperty(
+			property,
+			originalStyle.value,
+			originalStyle.priority,
+		);
 	} else {
 		document.documentElement.style.removeProperty(property);
 	}

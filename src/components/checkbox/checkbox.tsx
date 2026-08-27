@@ -39,10 +39,7 @@ export type CheckboxProps = Omit<
 
 export type CheckboxGroupProps = Omit<
 	BaseCheckboxGroup.Props,
-	| "className"
-	| "color"
-	| "style"
-	| keyof MarginProps
+	"className" | "color" | "style" | keyof MarginProps
 > &
 	MarginProps &
 	BaseStyleProps & {
@@ -100,7 +97,8 @@ export function Checkbox({
 			<Field.Label
 				data-disabled={isDisabled ? "" : undefined}
 				data-readonly={readOnly ? "" : undefined}
-				{...stylex.props(labelMarker, checkboxParts.labelRoot)}>
+				{...stylex.props(labelMarker, checkboxParts.labelRoot)}
+			>
 				<BaseCheckbox.Root
 					ref={ref}
 					id={id}
@@ -116,7 +114,8 @@ export function Checkbox({
 						focusRing.offset,
 						pressable.transition,
 					)}
-					{...rest}>
+					{...rest}
+				>
 					<BaseCheckbox.Indicator
 						{...stylex.props(checkboxParts.indicator, checkboxParts.indicatorTransition)}
 						render={(indicatorProps, state) => (
@@ -143,17 +142,14 @@ export function Checkbox({
 						fieldStyles.description,
 						checkboxParts.description,
 						checkboxDescriptionStyles[resolvedSize],
-					)}>
+					)}
+				>
 					{description}
 				</Field.Description>
 			) : null}
 		</>
 	);
-	const containerSx = stylex.props(
-		checkboxParts.item,
-		marginStyles,
-		xstyle,
-	);
+	const containerSx = stylex.props(checkboxParts.item, marginStyles, xstyle);
 	const containerClassName = attrJoin(containerSx.className, className);
 	const containerStyle = mergeStyle(containerSx.style, style);
 
@@ -163,7 +159,8 @@ export function Checkbox({
 			data-invalid={invalid ? "" : undefined}
 			data-readonly={readOnly ? "" : undefined}
 			className={containerClassName}
-			style={containerStyle}>
+			style={containerStyle}
+		>
 			{content}
 		</Field.Item>
 	) : (
@@ -172,7 +169,8 @@ export function Checkbox({
 			invalid={invalid}
 			data-readonly={readOnly ? "" : undefined}
 			className={containerClassName}
-			style={containerStyle}>
+			style={containerStyle}
+		>
 			{content}
 		</Field.Root>
 	);
@@ -199,11 +197,7 @@ export function CheckboxGroup({
 	const resolvedSize = size ?? parentGroupContext.size ?? "md";
 	const generatedId = useId();
 	const descriptionId = description ? `${generatedId}-description` : undefined;
-	const groupSx = stylex.props(
-		checkboxParts.group,
-		marginStyles,
-		xstyle,
-	);
+	const groupSx = stylex.props(checkboxParts.group, marginStyles, xstyle);
 
 	return (
 		<Field.Root
@@ -223,17 +217,29 @@ export function CheckboxGroup({
 				/>
 			}
 			className={attrJoin(groupSx.className, className)}
-			style={mergeStyle(groupSx.style, style)}>
+			style={mergeStyle(groupSx.style, style)}
+		>
 			{label ? (
-				<Fieldset.Legend {...stylex.props(fieldStyles.groupLabel, checkboxParts.legend)}>{label}</Fieldset.Legend>
+				<Fieldset.Legend {...stylex.props(fieldStyles.groupLabel, checkboxParts.legend)}>
+					{label}
+				</Fieldset.Legend>
 			) : null}
 			{description ? (
-				<p id={descriptionId} {...stylex.props(fieldStyles.description, checkboxParts.groupDescription)}>
+				<p
+					id={descriptionId}
+					{...stylex.props(fieldStyles.description, checkboxParts.groupDescription)}
+				>
 					{description}
 				</p>
 			) : null}
-			<CheckboxGroupFieldContext.Provider value={{ disabled: isDisabled, inGroup: true, size: resolvedSize }}>
-				<div {...stylex.props(fieldChoiceGroupStyles.root, inline && fieldChoiceGroupStyles.inline)}>{children}</div>
+			<CheckboxGroupFieldContext.Provider
+				value={{ disabled: isDisabled, inGroup: true, size: resolvedSize }}
+			>
+				<div
+					{...stylex.props(fieldChoiceGroupStyles.root, inline && fieldChoiceGroupStyles.inline)}
+				>
+					{children}
+				</div>
 			</CheckboxGroupFieldContext.Provider>
 		</Field.Root>
 	);

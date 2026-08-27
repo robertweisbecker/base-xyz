@@ -14,7 +14,10 @@ const iconOptions = {
 	Square: <Icon.Square width={24} height={24} />,
 };
 
-type RatingStoryArgs = Pick<RatingProps, "count" | "defaultValue" | "disabled" | "readOnly" | "icon" | "pressedIcon">;
+type RatingStoryArgs = Pick<
+	RatingProps,
+	"count" | "defaultValue" | "disabled" | "readOnly" | "icon" | "pressedIcon"
+>;
 
 const meta = {
 	title: "Experimental/Rating",

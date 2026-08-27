@@ -16,10 +16,7 @@ export type SliderSize = "sm" | "md" | "lg";
 
 export type SliderRootProps<Value extends SliderValue = SliderValue> = Omit<
 	BaseSlider.Root.Props<Value>,
-	| "className"
-	| "style"
-	| "thumbAlignment"
-	| keyof MarginProps
+	"className" | "style" | "thumbAlignment" | keyof MarginProps
 > &
 	MarginProps &
 	BaseStyleProps & {
@@ -41,13 +38,15 @@ export type SliderMarkersOptions = {
 	every?: number;
 };
 
-type StyledPartProps<Props> = Omit<Props, "className" | "style"> & BaseStyleProps & {
-	className?: string;
-};
+type StyledPartProps<Props> = Omit<Props, "className" | "style"> &
+	BaseStyleProps & {
+		className?: string;
+	};
 
-type StyledDivProps = Omit<ComponentPropsWithoutRef<"div">, "className" | "style"> & BaseStyleProps & {
-	className?: string;
-};
+type StyledDivProps = Omit<ComponentPropsWithoutRef<"div">, "className" | "style"> &
+	BaseStyleProps & {
+		className?: string;
+	};
 
 type SliderContextValue = {
 	format: Intl.NumberFormatOptions | undefined;
@@ -77,12 +76,7 @@ export function Root<Value extends SliderValue = number>({
 	...props
 }: SliderRootProps<Value>) {
 	const { marginStyles, rest } = extractMarginProps(props);
-	const sx = stylex.props(
-		sliderParts.root,
-		sizeVariants[sliderSize],
-		marginStyles,
-		xstyle,
-	);
+	const sx = stylex.props(sliderParts.root, sizeVariants[sliderSize], marginStyles, xstyle);
 	const contextValue = useMemo(
 		() => ({ format, locale, max, min, orientation, step }),
 		[format, locale, max, min, orientation, step],
@@ -101,7 +95,8 @@ export function Root<Value extends SliderValue = number>({
 				data-size={sliderSize}
 				className={attrJoin(sx.className, className)}
 				style={mergeStyle(sx.style, style)}
-				{...rest}>
+				{...rest}
+			>
 				{children}
 			</BaseSlider.Root>
 		</SliderContext>
@@ -110,23 +105,42 @@ export function Root<Value extends SliderValue = number>({
 
 export function Header({ className, style, xstyle, ...props }: SliderHeaderProps) {
 	const sx = stylex.props(sliderParts.header, xstyle);
-	return <div {...props} className={attrJoin(sx.className, className)} style={mergeStyle(sx.style, style)} />;
+	return (
+		<div
+			{...props}
+			className={attrJoin(sx.className, className)}
+			style={mergeStyle(sx.style, style)}
+		/>
+	);
 }
 
 export function Label({ className, style, xstyle, ...props }: SliderLabelProps) {
 	const sx = stylex.props(fieldStyles.itemLabel, sliderParts.label, xstyle);
 	return (
-		<BaseSlider.Label {...props} className={attrJoin(sx.className, className)} style={mergeStyle(sx.style, style)} />
+		<BaseSlider.Label
+			{...props}
+			className={attrJoin(sx.className, className)}
+			style={mergeStyle(sx.style, style)}
+		/>
 	);
 }
 
 export function Value({ children, className, style, xstyle, ...props }: SliderValueProps) {
 	const { format, locale, max, min } = useSliderContext();
 	const formatter = useMemo(() => new Intl.NumberFormat(locale, format), [format, locale]);
-	const sx = stylex.props(typescaleStyles["2"], fontWeightStyles.regular, sliderParts.value, xstyle);
+	const sx = stylex.props(
+		typescaleStyles["2"],
+		fontWeightStyles.regular,
+		sliderParts.value,
+		xstyle,
+	);
 
 	return (
-		<BaseSlider.Value {...props} className={attrJoin(sx.className, className)} style={mergeStyle(sx.style, style)}>
+		<BaseSlider.Value
+			{...props}
+			className={attrJoin(sx.className, className)}
+			style={mergeStyle(sx.style, style)}
+		>
 			{(formattedValues, values) => {
 				const minValues = values.map(() => min);
 				const maxValues = values.map(() => max);
@@ -151,16 +165,33 @@ export function Value({ children, className, style, xstyle, ...props }: SliderVa
 
 export function Row({ className, style, xstyle, ...props }: SliderRowProps) {
 	const sx = stylex.props(sliderParts.row, xstyle);
-	return <div {...props} className={attrJoin(sx.className, className)} style={mergeStyle(sx.style, style)} />;
+	return (
+		<div
+			{...props}
+			className={attrJoin(sx.className, className)}
+			style={mergeStyle(sx.style, style)}
+		/>
+	);
 }
 
-export function Control({ children, className, markers = false, style, xstyle, ...props }: SliderControlProps) {
+export function Control({
+	children,
+	className,
+	markers = false,
+	style,
+	xstyle,
+	...props
+}: SliderControlProps) {
 	const sx = stylex.props(sliderParts.control, xstyle);
 	const trackSx = stylex.props(sliderParts.track);
 	const indicatorSx = stylex.props(sliderParts.indicator);
 
 	return (
-		<BaseSlider.Control {...props} className={attrJoin(sx.className, className)} style={mergeStyle(sx.style, style)}>
+		<BaseSlider.Control
+			{...props}
+			className={attrJoin(sx.className, className)}
+			style={mergeStyle(sx.style, style)}
+		>
 			<BaseSlider.Track className={trackSx.className} style={trackSx.style}>
 				<BaseSlider.Indicator className={indicatorSx.className} style={indicatorSx.style} />
 				{markers ? <Markers every={markers === true ? 1 : markers.every} /> : null}
@@ -199,7 +230,11 @@ function Markers({ every = 1 }: SliderMarkersOptions) {
 export function Thumb({ className, style, xstyle, ...props }: SliderThumbProps) {
 	const sx = stylex.props(focusRing.offset, sliderParts.thumb, xstyle);
 	return (
-		<BaseSlider.Thumb {...props} className={attrJoin(sx.className, className)} style={mergeStyle(sx.style, style)} />
+		<BaseSlider.Thumb
+			{...props}
+			className={attrJoin(sx.className, className)}
+			style={mergeStyle(sx.style, style)}
+		/>
 	);
 }
 
@@ -230,7 +265,8 @@ function getMarkerValues(min: number, max: number, step: number, every: number) 
 	const stepCount = Math.floor(rawStepCount + Number.EPSILON);
 	const requestedInterval = Math.max(1, Math.round(every));
 	const minimumSafeInterval = Math.max(1, Math.ceil(stepCount / (MAX_SLIDER_MARKERS - 1)));
-	const markerInterval = requestedInterval * Math.max(1, Math.ceil(minimumSafeInterval / requestedInterval));
+	const markerInterval =
+		requestedInterval * Math.max(1, Math.ceil(minimumSafeInterval / requestedInterval));
 	const markerValues: number[] = [];
 
 	for (let stepIndex = 0; stepIndex <= stepCount; stepIndex += markerInterval) {

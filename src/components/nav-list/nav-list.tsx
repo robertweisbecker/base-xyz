@@ -21,7 +21,11 @@ import {
 	type Ref,
 	type RefObject,
 } from "react";
-import { menuItemSizeStyles, menuItemStyles, menuItemVariantStyles } from "@/components/menu/menu-item.stylex";
+import {
+	menuItemSizeStyles,
+	menuItemStyles,
+	menuItemVariantStyles,
+} from "@/components/menu/menu-item.stylex";
 import { menuItemVars } from "@/components/menu/menu-item-vars.stylex";
 import { Popover } from "@/components/popover/popover";
 import { typescaleStyles, textStyles, fontWeightStyles } from "@/components/text/text.stylex";
@@ -33,7 +37,10 @@ import { extractMarginProps, type MarginProps } from "@/styles/props/spacing.sty
 import { tokens } from "@/theme/tokens.stylex";
 import { attrJoin } from "@/utils/attr-join";
 
-export type NavListRootProps = Omit<ComponentProps<"nav">, "className" | "style" | keyof MarginProps> &
+export type NavListRootProps = Omit<
+	ComponentProps<"nav">,
+	"className" | "style" | keyof MarginProps
+> &
 	MarginProps &
 	BaseStyleProps & {
 		className?: string;
@@ -117,12 +124,29 @@ export function NavListPresentationProvider({
 		[presentation, popoverSide, scrollMode, scrollRef],
 	);
 
-	return <NavListPresentationContext.Provider value={value}>{children}</NavListPresentationContext.Provider>;
+	return (
+		<NavListPresentationContext.Provider value={value}>
+			{children}
+		</NavListPresentationContext.Provider>
+	);
 }
 
-export function Root({ ref, className, style, xstyle, children, size = "md", onNavigate, ...props }: NavListRootProps) {
+export function Root({
+	ref,
+	className,
+	style,
+	xstyle,
+	children,
+	size = "md",
+	onNavigate,
+	...props
+}: NavListRootProps) {
 	const localScrollRef = useRef<HTMLDivElement>(null);
-	const { presentation, scrollMode, scrollRef: externalScrollRef } = useContext(NavListPresentationContext);
+	const {
+		presentation,
+		scrollMode,
+		scrollRef: externalScrollRef,
+	} = useContext(NavListPresentationContext);
 	const context = useMemo(() => ({ size, onNavigate }), [onNavigate, size]);
 	const scrollRef = externalScrollRef ?? localScrollRef;
 	const scrollContext = useMemo(() => ({ scrollRef }), [scrollRef]);
@@ -148,10 +172,15 @@ export function Root({ ref, className, style, xstyle, children, size = "md", onN
 					data-presentation={presentation}
 					data-scroll-mode={scrollMode}
 					data-size={size}
-					{...rest}>
+					{...rest}
+				>
 					<div
 						ref={localScrollRef}
-						{...stylex.props(navListParts.scroller, scrollMode === "external" && navListParts.scrollerExternal)}>
+						{...stylex.props(
+							navListParts.scroller,
+							scrollMode === "external" && navListParts.scrollerExternal,
+						)}
+					>
 						{children}
 					</div>
 				</nav>
@@ -181,7 +210,8 @@ export function Section({
 				fontWeightStyles.medium,
 				navListText.sectionLabel,
 				navListParts.sectionLabel,
-			)}>
+			)}
+		>
 			<span {...stylex.props(navListParts.sectionLabelText)}>{label}</span>
 			{endSlot ? <span {...stylex.props(navListParts.sectionEndSlot)}>{endSlot}</span> : null}
 			{description ? (
@@ -191,7 +221,8 @@ export function Section({
 						typescaleStyles["1"],
 						navListText.description,
 						navListParts.sectionDescription,
-					)}>
+					)}
+				>
 					{description}
 				</span>
 			) : null}
@@ -203,7 +234,8 @@ export function Section({
 			role="group"
 			aria-labelledby={headingId}
 			className={attrJoin(sxClassName, className)}
-			style={mergeStyle(sxStyle, style)}>
+			style={mergeStyle(sxStyle, style)}
+		>
 			{visuallyHideLabel ? <VisuallyHidden id={headingId}>{label}</VisuallyHidden> : heading}
 			<ul {...stylex.props(navListParts.list)}>{children}</ul>
 		</section>
@@ -283,7 +315,9 @@ function Row({
 			<span {...stylex.props(menuItemStyles.label, navListParts.labelCell)}>
 				<span {...stylex.props(navListParts.labelText)}>{children ?? label}</span>
 			</span>
-			{resolvedEndSlot ? <span {...stylex.props(navListParts.endSlot)}>{resolvedEndSlot}</span> : null}
+			{resolvedEndSlot ? (
+				<span {...stylex.props(navListParts.endSlot)}>{resolvedEndSlot}</span>
+			) : null}
 			{disclosure && disclosure !== "back" ? (
 				<span
 					aria-hidden
@@ -291,7 +325,8 @@ function Row({
 						navListParts.disclosureIcon,
 						disclosure === "collapse" && navListParts.collapseIcon,
 						disclosure === "collapse" && collapseOpen && navListParts.collapseIconOpen,
-					)}>
+					)}
+				>
 					{disclosure === "collapse" ? <Collapsible.Icon /> : <ArrowRightIcon />}
 				</span>
 			) : null}
@@ -368,7 +403,12 @@ function Row({
 	}
 
 	return (
-		<li {...stylex.props(navListParts.listItem, !isIconMode && indentLevel === 1 && navListParts.indentedListItem)}>
+		<li
+			{...stylex.props(
+				navListParts.listItem,
+				!isIconMode && indentLevel === 1 && navListParts.indentedListItem,
+			)}
+		>
 			{rowWithTooltip}
 		</li>
 	);
@@ -409,7 +449,10 @@ export function CollapsibleGroup({
 		() => ({ open: resolvedOpen, popoverContent, setPopoverContent }),
 		[popoverContent, resolvedOpen],
 	);
-	const { className: sxClassName, style: sxStyle } = stylex.props(navListParts.collapsibleGroup, xstyle);
+	const { className: sxClassName, style: sxStyle } = stylex.props(
+		navListParts.collapsibleGroup,
+		xstyle,
+	);
 
 	return (
 		<li ref={ref} className={attrJoin(sxClassName, className)} style={mergeStyle(sxStyle, style)}>
@@ -423,7 +466,8 @@ export function CollapsibleGroup({
 						}
 						onOpenChange?.(nextOpen);
 					}}
-					open={open}>
+					open={open}
+				>
 					{children}
 				</BaseCollapsible.Root>
 			</CollapsibleGroupContext.Provider>
@@ -462,7 +506,8 @@ export function CollapsibleGroupTrigger({
 				tooltip={tooltip}
 				triggerClassName={className}
 				triggerInlineStyle={style}
-				triggerStyle={xstyle}>
+				triggerStyle={xstyle}
+			>
 				<ul {...stylex.props(navListParts.list)}>{group?.popoverContent}</ul>
 			</CollapsedChildrenPopover>
 		);
@@ -486,7 +531,8 @@ export function CollapsibleGroupTrigger({
 			render={<BaseCollapsible.Trigger />}
 			xstyle={xstyle}
 			suppressNavigate
-			tooltip={tooltip}>
+			tooltip={tooltip}
+		>
 			{children}
 		</Row>
 	);
@@ -530,7 +576,8 @@ export function CollapsibleGroupPanel({
 						aria-hidden={state.open ? undefined : true}
 						inert={state.open ? undefined : true}
 						className={attrJoin(sx.className, className)}
-						style={mergeStyle(sx.style, style)}>
+						style={mergeStyle(sx.style, style)}
+					>
 						{children}
 					</ul>
 				);
@@ -595,7 +642,9 @@ export function Drilldown({ value, defaultValue, onValueChange, children }: NavL
 	const panels = useMemo(() => collectPanels(children), [children]);
 
 	if (import.meta.env.DEV && !panels.has(defaultValue)) {
-		console.error(`NavList.Drilldown defaultValue "${defaultValue}" does not match a DrilldownPanel value.`);
+		console.error(
+			`NavList.Drilldown defaultValue "${defaultValue}" does not match a DrilldownPanel value.`,
+		);
 	}
 
 	const setValue = useCallback(
@@ -643,7 +692,9 @@ export function Drilldown({ value, defaultValue, onValueChange, children }: NavL
 
 		requestAnimationFrame(() => {
 			if (pending.direction === "forward") {
-				drilldownRef.current?.querySelector<HTMLElement>("[data-active] [data-nav-list-back]")?.focus();
+				drilldownRef.current
+					?.querySelector<HTMLElement>("[data-active] [data-nav-list-back]")
+					?.focus();
 				return;
 			}
 
@@ -674,8 +725,11 @@ export function Drilldown({ value, defaultValue, onValueChange, children }: NavL
 							inert={active ? undefined : true}
 							role="group"
 							tabIndex={active ? -1 : undefined}
-							{...stylex.props(navListParts.drilldownPanel)}>
-							<DrilldownPanelContext.Provider value={panel.label}>{panel.node}</DrilldownPanelContext.Provider>
+							{...stylex.props(navListParts.drilldownPanel)}
+						>
+							<DrilldownPanelContext.Provider value={panel.label}>
+								{panel.node}
+							</DrilldownPanelContext.Provider>
 						</section>
 					);
 				})}
@@ -740,7 +794,8 @@ export function DrilldownTrigger({
 			onClick={onClick}
 			onDisclosureClick={(event) => drilldown?.setValue(to, "forward", event.currentTarget)}
 			xstyle={xstyle}
-			tooltip={tooltip}>
+			tooltip={tooltip}
+		>
 			{children}
 		</Row>
 	);
@@ -752,7 +807,9 @@ export function DrilldownBack({ to, label, className, style, xstyle }: NavListDr
 	const destinationLabel = drilldown?.panels.get(to)?.label;
 	const visibleLabel = label ?? panelLabel ?? "Back";
 	const accessibleLabelPrefix = label ?? "Back";
-	const accessibleLabel = destinationLabel ? `${accessibleLabelPrefix} to ${destinationLabel}` : accessibleLabelPrefix;
+	const accessibleLabel = destinationLabel
+		? `${accessibleLabelPrefix} to ${destinationLabel}`
+		: accessibleLabelPrefix;
 
 	if (drilldown?.hideBack) {
 		return null;
@@ -840,9 +897,10 @@ function CollapsedChildrenPopover({
 				}
 			/>
 			<Popover.Popup
-				positionerProps={{ side: popoverSide, align: "start", sideOffset: -8 }}
+				positionerProps={{ side: popoverSide, align: "start" }}
 				showClose={false}
-				{...stylex.props(navListParts.childPopover)}>
+				xstyle={navListParts.childPopover}
+			>
 				<NavListPresentationProvider presentation="expanded" popoverSide={popoverSide}>
 					{children}
 				</NavListPresentationProvider>
@@ -919,7 +977,8 @@ function CollapsedDrilldownPopover({
 				if (nextOpen) {
 					setStack([targetValue]);
 				}
-			}}>
+			}}
+		>
 			<Popover.Trigger
 				disabled={disabled}
 				render={
@@ -940,13 +999,17 @@ function CollapsedDrilldownPopover({
 			<Popover.Popup
 				positionerProps={{ side: popoverSide, align: "start" }}
 				showClose={false}
-				{...stylex.props(navListParts.childPopover)}>
+				xstyle={navListParts.childPopover}
+			>
 				{localContext && panel ? (
 					<NavListPresentationContext.Provider
-						value={{ presentation: "expanded", popoverSide, scrollMode: "internal" }}>
+						value={{ presentation: "expanded", popoverSide, scrollMode: "internal" }}
+					>
 						<DrilldownContext.Provider value={localContext}>
 							<div aria-label={panel.label} role="group">
-								<DrilldownPanelContext.Provider value={panel.label}>{panel.node}</DrilldownPanelContext.Provider>
+								<DrilldownPanelContext.Provider value={panel.label}>
+									{panel.node}
+								</DrilldownPanelContext.Provider>
 							</div>
 						</DrilldownContext.Provider>
 					</NavListPresentationContext.Provider>
@@ -1013,7 +1076,6 @@ const navListParts = stylex.create({
 		[menuItemVars.columnGap]: tokens["--space-2"],
 		[menuItemVars.paddingInlineEnd]: tokens["--space-2"],
 		[menuItemVars.paddingInlineStart]: tokens["--space-2"],
-		height: tokens["--size-control-md"],
 		borderColor: "transparent",
 		borderRadius: tokens["--radius-md"],
 		borderStyle: "solid",
@@ -1035,6 +1097,7 @@ const navListParts = stylex.create({
 		},
 		fontFamily: "inherit",
 		textAlign: "start",
+		height: tokens["--size-control-md"],
 		width: "100%",
 	},
 	currentRow: {
@@ -1109,8 +1172,6 @@ const navListParts = stylex.create({
 		flexDirection: "column",
 	},
 	sectionLabel: {
-		paddingBlockStart: tokens["--space-3"],
-		paddingBlockEnd: tokens["--space-1"],
 		paddingInline: tokens["--space-3"],
 		display: "grid",
 		fontSize: tokens["--font-size-1"],
@@ -1118,6 +1179,8 @@ const navListParts = stylex.create({
 		gridTemplateColumns: "1fr auto",
 		letterSpacing: tokens["--letter-spacing-1"],
 		lineHeight: tokens["--line-height-1"],
+		paddingBlockEnd: tokens["--space-1"],
+		paddingBlockStart: tokens["--space-3"],
 		rowGap: tokens["--space-0-5"],
 	},
 	sectionLabelText: {
@@ -1132,21 +1195,21 @@ const navListParts = stylex.create({
 		color: tokens["--fg-muted"],
 	},
 	collapsibleGroup: {
+		gap: 1,
 		display: "flex",
 		flexDirection: "column",
-		gap: 1,
 	},
 	collapsiblePanel: {
 		margin: 0,
 		gap: 1,
 		listStyle: "none",
-		overflow: "hidden",
 		marginBlock: {
 			'[aria-hidden="true"]': 0,
 			"[data-ending-style]": 0,
 			"[data-starting-style]": 0,
 			default: 2,
 		},
+		overflow: "hidden",
 		borderInlineStartColor: tokens["--border"],
 		borderInlineStartStyle: "solid",
 		borderInlineStartWidth: tokens["--border-width"],
@@ -1203,19 +1266,19 @@ const navListParts = stylex.create({
 		minWidth: 0,
 	},
 	backControl: {
+		paddingBlock: tokens["--space-1"],
 		fontSize: tokens["--font-size-1"],
 		fontWeight: tokens["--font-weight-regular"],
 		letterSpacing: tokens["--letter-spacing-1"],
 		lineHeight: tokens["--line-height-1"],
-		paddingBlock: tokens["--space-1"],
 		marginBlockEnd: 1,
 	},
 	childPopover: {
 		gap: tokens["--space-1"],
 		paddingBlock: tokens["--space-1"],
 		paddingInline: tokens["--space-1"],
-		inlineSize: "min(12rem, calc(100vw - 2rem))",
-		minWidth: "8rem",
+		maxWidth: "min(10rem, calc(100vw - 2rem))",
+		// minWidth: "8rem",
 	},
 });
 

@@ -40,7 +40,11 @@ export function PageHeader({
 	const titleNode = createElement(`h${headingLevel}`, stylex.props(parts.title), title);
 
 	return (
-		<section className={attrJoin(sx.className, className)} style={mergeStyle(sx.style, style)} {...props}>
+		<section
+			className={attrJoin(sx.className, className)}
+			style={mergeStyle(sx.style, style)}
+			{...props}
+		>
 			<Stack gap={4}>
 				{breadcrumbs ? <Box {...stylex.props(parts.breadcrumbs)}>{breadcrumbs}</Box> : null}
 				<Box {...stylex.props(parts.content)}>

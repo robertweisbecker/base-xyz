@@ -111,11 +111,7 @@ export function Root({
 		},
 	});
 
-	return (
-		<ListDepthContext.Provider value={depth}>
-			{element}
-		</ListDepthContext.Provider>
-	);
+	return <ListDepthContext.Provider value={depth}>{element}</ListDepthContext.Provider>;
 }
 
 export function Item({
@@ -151,7 +147,8 @@ export function Item({
 			ref={ref}
 			className={attrJoin(sx.className, className)}
 			style={mergeStyle(sx.style, style)}
-			{...props}>
+			{...props}
+		>
 			{hasMarker ? (
 				<>
 					<span aria-hidden {...stylex.props(listStyles.customMarker)}>

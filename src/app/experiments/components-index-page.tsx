@@ -5,10 +5,6 @@ const group = componentsNavigationGroup;
 
 export function ComponentsIndexPage() {
 	return (
-		<ExperimentIndexPage
-				description={group.description}
-				items={group.items}
-				title={group.label}
-		/>
+		<ExperimentIndexPage description={group.description} items={group.items} title={group.label} />
 	);
 }

@@ -1,14 +1,6 @@
 import * as stylex from "@stylexjs/stylex";
 import type { ReactNode } from "react";
-import {
-	Checkbox,
-	type FieldSize,
-	Radio,
-	RadioGroup,
-	Slider,
-	Switch,
-	Text,
-} from "@/components";
+import { Checkbox, type FieldSize, Radio, RadioGroup, Slider, Switch, Text } from "@/components";
 import { fieldSizes, formatComparisonLabel } from "./inputs-comparison-model";
 import { inputsPageStyles as styles } from "./inputs-page.styles";
 
@@ -82,7 +74,11 @@ function UnsupportedSize() {
 
 export function ChoiceControlStateMatrix() {
 	return (
-		<div aria-label="Radio and checkbox state comparison" role="region" {...stylex.props(styles.matrixOverflow)}>
+		<div
+			aria-label="Radio and checkbox state comparison"
+			role="region"
+			{...stylex.props(styles.matrixOverflow)}
+		>
 			<div {...stylex.props(styles.choiceControlStateMatrix)}>
 				<span aria-hidden />
 				{choiceControlStates.map((state) => (
@@ -90,8 +86,14 @@ export function ChoiceControlStateMatrix() {
 						{formatComparisonLabel(state)}
 					</Text>
 				))}
-				<ChoiceControlStateRow label="Radio" renderControl={(state) => <ComparisonRadio state={state} />} />
-				<ChoiceControlStateRow label="Checkbox" renderControl={(state) => <ComparisonCheckbox state={state} />} />
+				<ChoiceControlStateRow
+					label="Radio"
+					renderControl={(state) => <ComparisonRadio state={state} />}
+				/>
+				<ChoiceControlStateRow
+					label="Checkbox"
+					renderControl={(state) => <ComparisonCheckbox state={state} />}
+				/>
 			</div>
 		</div>
 	);
@@ -124,7 +126,8 @@ function ComparisonRadio({ state }: { state: ChoiceControlState }) {
 			<RadioGroup
 				defaultValue={state === "on" ? state : undefined}
 				disabled={state === "disabled"}
-				label={`Radio ${formatComparisonLabel(state)}`}>
+				label={`Radio ${formatComparisonLabel(state)}`}
+			>
 				<Radio
 					label={`Radio ${formatComparisonLabel(state)}`}
 					readOnly={state === "read-only"}
@@ -185,7 +188,11 @@ function ValueControlSizeRow({ size }: { size: FieldSize }) {
 
 export function ValueControlStateMatrix() {
 	return (
-		<div aria-label="Switch and slider state comparison" role="region" {...stylex.props(styles.matrixOverflow)}>
+		<div
+			aria-label="Switch and slider state comparison"
+			role="region"
+			{...stylex.props(styles.matrixOverflow)}
+		>
 			<div {...stylex.props(styles.valueControlStateMatrix)}>
 				<span aria-hidden />
 				{valueControlStates.map((state) => (
@@ -193,8 +200,15 @@ export function ValueControlStateMatrix() {
 						{valueControlStateLabels[state]}
 					</Text>
 				))}
-				<ValueControlStateRow label="Switch" renderControl={(state) => <ComparisonSwitch state={state} />} />
-				<ValueControlStateRow label="Slider" renderControl={(state) => <ComparisonStateSlider state={state} />} wide />
+				<ValueControlStateRow
+					label="Switch"
+					renderControl={(state) => <ComparisonSwitch state={state} />}
+				/>
+				<ValueControlStateRow
+					label="Slider"
+					renderControl={(state) => <ComparisonStateSlider state={state} />}
+					wide
+				/>
 			</div>
 		</div>
 	);

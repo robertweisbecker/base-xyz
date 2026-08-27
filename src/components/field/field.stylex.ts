@@ -39,11 +39,11 @@ const parts = stylex.create({
 		minWidth: 0,
 	},
 	label: {
-		lineHeight: tokens["--line-height-2"],
 		color: {
 			"[data-disabled]": tokens["--fg-subtle"],
 			default: tokens["--fg"],
 		},
+		lineHeight: tokens["--line-height-2"],
 	},
 	groupLabel: {
 		color: {
@@ -58,14 +58,14 @@ const parts = stylex.create({
 		color: tokens["--fg-error"],
 		display: "inline-flex",
 		opacity: {
+			"[data-ending-style]": 1,
 			"[data-starting-style]": 0,
 			default: 1,
-			"[data-ending-style]": 1,
 		},
 		transform: {
+			"[data-ending-style]": "translateY(0)",
 			"[data-starting-style]": "translateY(-4px)",
 			default: "translateY(0)",
-			"[data-ending-style]": "translateY(0)",
 		},
 		transitionDuration: tokens["--motion-duration-short"],
 		transitionProperty: "opacity, transform",
@@ -92,7 +92,7 @@ const parts = stylex.create({
 		backgroundColor: {
 			// eslint-disable-next-line @stylexjs/valid-styles -- the compiler supports chained pseudo-class conditions; the lint rule is stricter than the compiler.
 			[INTERACTIVE_CONTROL_HOVER]: {
-				[media.canHover]: tokens["--color-gray-s3"],
+				[media.canHover]: tokens["--panel"],
 			},
 			"[data-disabled]": tokens["--bg-disabled"],
 			default: tokens["--surface"],
@@ -266,7 +266,25 @@ export const fieldInputStyles = {
 
 /** Apply to a button-like field trigger (select, combobox): surface and sizing without the text cursor. */
 export const fieldControlStyles = {
-	sm: [fieldStyles.input, fieldStyles.inputUnstyled, fieldTextStyles.sm, fieldControlSizes.sm, fieldPaddingSizes.sm],
-	md: [fieldStyles.input, fieldStyles.inputUnstyled, fieldTextStyles.md, fieldControlSizes.md, fieldPaddingSizes.md],
-	lg: [fieldStyles.input, fieldStyles.inputUnstyled, fieldTextStyles.lg, fieldControlSizes.lg, fieldPaddingSizes.lg],
+	sm: [
+		fieldStyles.input,
+		fieldStyles.inputUnstyled,
+		fieldTextStyles.sm,
+		fieldControlSizes.sm,
+		fieldPaddingSizes.sm,
+	],
+	md: [
+		fieldStyles.input,
+		fieldStyles.inputUnstyled,
+		fieldTextStyles.md,
+		fieldControlSizes.md,
+		fieldPaddingSizes.md,
+	],
+	lg: [
+		fieldStyles.input,
+		fieldStyles.inputUnstyled,
+		fieldTextStyles.lg,
+		fieldControlSizes.lg,
+		fieldPaddingSizes.lg,
+	],
 } as const satisfies Record<FieldSize, unknown>;

@@ -124,7 +124,13 @@ export type TabsRootProps = Omit<BaseTabs.Root.Props, "className" | "style" | ke
 		size?: TabsSize;
 	};
 
-export function Root({ className, orientation = "horizontal", style, xstyle, ...props }: TabsRootProps) {
+export function Root({
+	className,
+	orientation = "horizontal",
+	style,
+	xstyle,
+	...props
+}: TabsRootProps) {
 	const { marginStyles, rest } = extractMarginProps(props);
 	const sx = stylex.props(tabsParts.root, rootOrientationStyles[orientation], marginStyles, xstyle);
 	return (
@@ -221,15 +227,15 @@ different enough to need their own owner.
 
 ## Commands you will need
 
-| Purpose | Command | Expected on success |
-|---|---|---|
-| Inspect scope | `git status --short` | Existing unrelated edits are preserved; no in-scope edit exists before work |
-| TypeScript | `npx tsc -b --pretty false` | exit 0, no errors |
-| Lint | `npm run lint` | exit 0 from Oxlint and StyleX ESLint |
-| App build | `npm run build` | exit 0; TypeScript and Vite app build succeed |
-| Storybook build | `npm run build-storybook` | exit 0; `storybook-static/` generated |
-| Focused browser test | `npx playwright test tests/components/stepper.spec.ts` | all Stepper tests pass in Chromium with no console errors |
-| Live Storybook | `npm run storybook` | dev Storybook reaches ready state on port 6006 |
+| Purpose              | Command                                                | Expected on success                                                         |
+| -------------------- | ------------------------------------------------------ | --------------------------------------------------------------------------- |
+| Inspect scope        | `git status --short`                                   | Existing unrelated edits are preserved; no in-scope edit exists before work |
+| TypeScript           | `npx tsc -b --pretty false`                            | exit 0, no errors                                                           |
+| Lint                 | `npm run lint`                                         | exit 0 from Oxlint, including StyleX rules                                  |
+| App build            | `npm run build`                                        | exit 0; TypeScript and Vite app build succeed                               |
+| Storybook build      | `npm run build-storybook`                              | exit 0; `storybook-static/` generated                                       |
+| Focused browser test | `npx playwright test tests/components/stepper.spec.ts` | all Stepper tests pass in Chromium with no console errors                   |
+| Live Storybook       | `npm run storybook`                                    | dev Storybook reaches ready state on port 6006                              |
 
 Do not run a formatter that writes the working tree. Do not install packages.
 
@@ -258,8 +264,7 @@ export type StepperStatus = "incomplete" | "completed" | "invalid";
 export type StepperValue = string;
 
 type StepperSelectionProps =
-	| { value: StepperValue; defaultValue?: never }
-	| { value?: never; defaultValue: StepperValue };
+	{ value: StepperValue; defaultValue?: never } | { value?: never; defaultValue: StepperValue };
 
 export const Stepper = {
 	Root,
@@ -707,18 +712,18 @@ All criteria must hold:
 
 - [ ] `Stepper` and its public types export from `@/components`.
 - [ ] Public parts are exactly Root, List, Step, Marker, Heading, Title,
-  Description, Content, Panel, Previous, and Next; no v1 extras were added.
+      Description, Content, Panel, Previous, and Next; no v1 extras were added.
 - [ ] Horizontal and responsive vertical layouts match the decided placement.
 - [ ] Number and icon markers work without state-driven child replacement.
 - [ ] Inactive/current/locked/completed/invalid states are visible and
-  accessible.
+      accessible.
 - [ ] Connector track spans marker centers and fill ends at current center in
-  horizontal, vertical, and RTL layouts.
+      horizontal, vertical, and RTL layouts.
 - [ ] Direct Step selection is manual and non-looping; paging is adjacent,
-  lock-aware, cancelable, and focuses the accepted Panel.
+      lock-aware, cancelable, and focuses the accepted Panel.
 - [ ] Panels preserve state by default and opt out with `keepMounted={false}`.
 - [ ] Missing/removed values normalize silently; disabling current does not
-  select another step.
+      select another step.
 - [ ] Playground is the first story and all required stories build.
 - [ ] Gallery uses the public export and remains alphabetized.
 - [ ] `npx tsc -b --pretty false` exits 0.
@@ -726,9 +731,9 @@ All criteria must hold:
 - [ ] `npm run build` exits 0.
 - [ ] `npm run build-storybook` exits 0.
 - [ ] `npx playwright test tests/components/stepper.spec.ts` exits 0 with no
-  console errors.
+      console errors.
 - [ ] `git status --short` shows no out-of-scope modifications introduced by
-  this plan; all pre-existing unrelated edits remain intact.
+      this plan; all pre-existing unrelated edits remain intact.
 - [ ] `docs/plans/README.md` marks Plan 001 DONE, or BLOCKED with a one-line reason.
 
 ## STOP conditions

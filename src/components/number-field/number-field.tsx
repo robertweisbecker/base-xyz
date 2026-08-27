@@ -77,7 +77,16 @@ export function NumberField({
 			disabled={disabled}
 			invalid={Boolean(error)}
 			name={name}
-			render={<BaseNumberField.Root id={id} disabled={disabled} readOnly={readOnly} required={required} {...rest} />}>
+			render={
+				<BaseNumberField.Root
+					id={id}
+					disabled={disabled}
+					readOnly={readOnly}
+					required={required}
+					{...rest}
+				/>
+			}
+		>
 			<BaseNumberField.ScrubArea {...stylex.props(numberFieldParts.scrubArea)}>
 				<Field.Label htmlFor={id} {...stylex.props(fieldStyles.label, numberFieldParts.label)}>
 					{label}
@@ -88,10 +97,19 @@ export function NumberField({
 					) : null}
 				</Field.Label>
 				<BaseNumberField.ScrubAreaCursor {...stylex.props(numberFieldParts.scrubCursor)}>
-					<ArrowsHorizontalIcon aria-hidden size={24} weight="fill" strokeWidth={8} fill="black" stroke={"white"} />
+					<ArrowsHorizontalIcon
+						aria-hidden
+						size={24}
+						weight="fill"
+						strokeWidth={8}
+						fill="black"
+						stroke={"white"}
+					/>
 				</BaseNumberField.ScrubAreaCursor>
 			</BaseNumberField.ScrubArea>
-			<BaseNumberField.Group {...stylex.props(numberFieldParts.group, numberFieldGroupSizes[fieldSize])}>
+			<BaseNumberField.Group
+				{...stylex.props(numberFieldParts.group, numberFieldGroupSizes[fieldSize])}
+			>
 				<BaseNumberField.Decrement
 					aria-label={decrementLabel}
 					{...stylex.props(
@@ -101,7 +119,8 @@ export function NumberField({
 						fieldSize === "sm" && numberFieldDecrementRadii.sm,
 						numberFieldParts.decrement,
 						pressable.transition,
-					)}>
+					)}
+				>
 					<MinusIcon aria-hidden size={12} weight="bold" />
 				</BaseNumberField.Decrement>
 				<BaseNumberField.Input
@@ -127,7 +146,8 @@ export function NumberField({
 						fieldSize === "sm" && numberFieldIncrementRadii.sm,
 						numberFieldParts.increment,
 						pressable.transition,
-					)}>
+					)}
+				>
 					<PlusIcon aria-hidden size={12} weight="bold" />
 				</BaseNumberField.Increment>
 			</BaseNumberField.Group>

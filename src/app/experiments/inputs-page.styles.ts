@@ -61,7 +61,7 @@ export const inputsPageStyles = stylex.create({
 		position: "absolute",
 	},
 	topGuide: { top: 0 },
-	baselineGuide: { borderBlockStartStyle: "dashed", top: "calc(50% + 0.34em)", opacity: 0.5 },
+	baselineGuide: { borderBlockStartStyle: "dashed", opacity: 0.5, top: "calc(50% + 0.34em)" },
 	bottomGuide: { bottom: 0 },
 	matrixOverflow: { paddingBlockEnd: tokens["--space-2"], overflowX: "auto" },
 	fieldStateMatrix: {
@@ -73,9 +73,17 @@ export const inputsPageStyles = stylex.create({
 	},
 	stateCell: { minWidth: 0 },
 	inputGroupGrid: {
-		gridTemplateColumns: { default: "minmax(0, 1fr)", [breakpoints.lg]: "repeat(2, minmax(0, 1fr))" },
+		gridTemplateColumns: {
+			default: "minmax(0, 1fr)",
+			[breakpoints.lg]: "repeat(2, minmax(0, 1fr))",
+		},
 	},
-	paddingComparison: { gap: tokens["--space-4"], display: "flex", flexDirection: "column", position: "relative" },
+	paddingComparison: {
+		gap: tokens["--space-4"],
+		display: "flex",
+		flexDirection: "column",
+		position: "relative",
+	},
 	paddingGuide: {
 		borderInlineStartColor: tokens["--fg-error"],
 		borderInlineStartStyle: "dashed",
@@ -122,9 +130,17 @@ export const inputsPageStyles = stylex.create({
 		justifyContent: "center",
 		minHeight: tokens["--size-control-lg"],
 	},
-	sliderCell: { alignItems: "center", display: "flex", minHeight: tokens["--size-control-lg"], width: "100%" },
+	sliderCell: {
+		alignItems: "center",
+		display: "flex",
+		minHeight: tokens["--size-control-lg"],
+		width: "100%",
+	},
 	formFieldGrid: {
-		gridTemplateColumns: { default: "minmax(0, 1fr)", [breakpoints.sm]: "repeat(2, minmax(0, 1fr))" },
+		gridTemplateColumns: {
+			default: "minmax(0, 1fr)",
+			[breakpoints.sm]: "repeat(2, minmax(0, 1fr))",
+		},
 	},
 });
 

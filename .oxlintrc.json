@@ -1,83 +1,100 @@
 {
-  "$schema": "./node_modules/oxlint/configuration_schema.json",
-  "ignorePatterns": [
-    ".agent/**",
-    ".agents/**",
-    ".claude/**",
-    ".codex/**",
-    ".continue/**",
-    ".cursor/**",
-    ".gemini/**",
-    ".opencode/**",
-    ".pi/**",
-    ".roo/**",
-    ".windsurf/**",
-    ".worktrees/**",
-    "src/routeTree.gen.ts",
-    "tools/oxlint/anti-slop/**"
-  ],
-  "jsPlugins": [
-    {
-      "name": "anti-slop",
-      "specifier": "./tools/oxlint/anti-slop/index.ts"
-    }
-  ],
-  "plugins": ["react", "typescript", "oxc"],
-  "rules": {
-    "anti-slop/no-chained-type-assertions": "error",
-    "anti-slop/no-conditional-empty-object-spread": "off",
-    "anti-slop/no-known-value-widening": "error",
-    "anti-slop/no-module-mocking": "warn",
-    "anti-slop/no-object-parameters": "off",
-    "anti-slop/no-reflect-apply": "error",
-    "anti-slop/no-reflect-get": "error",
-    "anti-slop/no-runtime-typeof": "off",
-    "anti-slop/no-shape-in-symbol-names": "off",
-    "anti-slop/no-unknown-parameters": "off",
-    "anti-slop/no-unknown-returns": "warn",
-    "anti-slop/no-unknown-type-aliases": "error",
-    "anti-slop/no-unsafe-dictionary-type": "off",
-    "anti-slop/no-widen-then-assert": "error",
-    "anti-slop/require-safety-comment-for-type-assertion": "warn",
-    "no-restricted-imports": [
-      "error",
-      {
-        "paths": [
-          {
-            "name": "@/theme/theme-props",
-            "message": "The theme-prop engine was removed in ADR 0010. Use src/styles/props."
-          },
-          {
-            "name": "@/theme/theme-props.types",
-            "message": "The theme-prop engine was removed in ADR 0010. Use src/styles/props."
-          },
-          {
-            "name": "@/theme/theme-props-layout.stylex",
-            "message": "The theme-prop engine was removed in ADR 0010. Use src/styles/props."
-          },
-          {
-            "name": "@/theme/theme-props-spacing.stylex",
-            "message": "The theme-prop engine was removed in ADR 0010. Use src/styles/props."
-          },
-          {
-            "name": "@/theme/theme-props-surface.stylex",
-            "message": "The theme-prop engine was removed in ADR 0010. Use src/styles/props."
-          }
-        ],
-        "patterns": [
-          {
-            "group": [
-              "**/theme/theme-props",
-              "**/theme/theme-props.types",
-              "**/theme/theme-props-*.stylex",
-              "@/theme/theme-props*"
-            ],
-            "message": "The theme-prop engine was removed in ADR 0010. Use src/styles/props."
-          }
-        ]
-      }
-    ],
-    "react/rules-of-hooks": "error",
-    "react/only-export-components": ["warn", { "allowConstantExport": true }]
-  }
+	"$schema": "./node_modules/oxlint/configuration_schema.json",
+	"ignorePatterns": [
+		".agent/**",
+		".agents/**",
+		".claude/**",
+		".codex/**",
+		".continue/**",
+		".cursor/**",
+		".gemini/**",
+		".opencode/**",
+		".pi/**",
+		".roo/**",
+		".windsurf/**",
+		".worktrees/**",
+		"src/routeTree.gen.ts",
+		"tools/oxlint/anti-slop/**"
+	],
+	"jsPlugins": [
+		{
+			"name": "anti-slop",
+			"specifier": "./tools/oxlint/anti-slop/index.ts"
+		},
+		{
+			"name": "@stylexjs",
+			"specifier": "@stylexjs/eslint-plugin"
+		}
+	],
+	"plugins": ["react", "typescript", "oxc"],
+	"rules": {
+		"anti-slop/no-chained-type-assertions": "error",
+		"anti-slop/no-conditional-empty-object-spread": "off",
+		"anti-slop/no-known-value-widening": "error",
+		"anti-slop/no-module-mocking": "error",
+		"anti-slop/no-object-parameters": "off",
+		"anti-slop/no-reflect-apply": "error",
+		"anti-slop/no-reflect-get": "error",
+		"anti-slop/no-runtime-typeof": "off",
+		"anti-slop/no-shape-in-symbol-names": "off",
+		"anti-slop/no-unknown-parameters": "off",
+		"anti-slop/no-unknown-returns": "error",
+		"anti-slop/no-unknown-type-aliases": "error",
+		"anti-slop/no-unsafe-dictionary-type": "off",
+		"anti-slop/no-widen-then-assert": "error",
+		"anti-slop/require-safety-comment-for-type-assertion": "error",
+		"@stylexjs/no-unused": "error",
+		"@stylexjs/valid-styles": "error",
+		"@stylexjs/valid-shorthands": "error",
+		"@stylexjs/sort-keys": "error",
+		"complexity": ["warn", { "max": 20, "variant": "classic" }],
+		"no-restricted-imports": [
+			"error",
+			{
+				"paths": [
+					{
+						"name": "@/theme/theme-props",
+						"message": "The theme-prop engine was removed in ADR 0010. Use src/styles/props."
+					},
+					{
+						"name": "@/theme/theme-props.types",
+						"message": "The theme-prop engine was removed in ADR 0010. Use src/styles/props."
+					},
+					{
+						"name": "@/theme/theme-props-layout.stylex",
+						"message": "The theme-prop engine was removed in ADR 0010. Use src/styles/props."
+					},
+					{
+						"name": "@/theme/theme-props-spacing.stylex",
+						"message": "The theme-prop engine was removed in ADR 0010. Use src/styles/props."
+					},
+					{
+						"name": "@/theme/theme-props-surface.stylex",
+						"message": "The theme-prop engine was removed in ADR 0010. Use src/styles/props."
+					}
+				],
+				"patterns": [
+					{
+						"group": [
+							"**/theme/theme-props",
+							"**/theme/theme-props.types",
+							"**/theme/theme-props-*.stylex",
+							"@/theme/theme-props*"
+						],
+						"message": "The theme-prop engine was removed in ADR 0010. Use src/styles/props."
+					}
+				]
+			}
+		],
+		"react/rules-of-hooks": "error",
+		"react/only-export-components": ["error", { "allowConstantExport": true }]
+	},
+	"overrides": [
+		{
+			"files": ["src/blocks/**/*.{ts,tsx}", "src/components/**/*.{ts,tsx}"],
+			"rules": {
+				"react/only-export-components": "off"
+			}
+		}
+	]
 }

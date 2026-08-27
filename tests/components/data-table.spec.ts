@@ -15,7 +15,9 @@ test.afterEach(({ page }) => {
 	expect(consoleErrorsByPage.get(page)).toEqual([]);
 });
 
-test("row expansion toggles keep row context in the accessible name and short tooltip copy", async ({ page }) => {
+test("row expansion toggles keep row context in the accessible name and short tooltip copy", async ({
+	page,
+}) => {
 	await page.goto(storyPath);
 
 	const firstRowToggle = page.getByRole("button", { name: "Expand row 1" });

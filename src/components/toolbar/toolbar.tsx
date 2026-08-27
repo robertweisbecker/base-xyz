@@ -12,9 +12,10 @@ const HOVER_WHEN_INACTIVE =
 const TOGGLED_ON =
 	':is([aria-pressed="true"], [data-active], [data-pressed]):not([data-panel-open]):not([data-popup-open])';
 
-type StyledProps<T> = Omit<T, "className" | "style"> & BaseStyleProps & {
-	className?: string;
-};
+type StyledProps<T> = Omit<T, "className" | "style"> &
+	BaseStyleProps & {
+		className?: string;
+	};
 
 export type ToolbarVariant = "surface" | "elevated" | "unstyled";
 
@@ -37,12 +38,7 @@ export function Root({
 	...props
 }: ToolbarRootProps) {
 	const { marginStyles, rest } = extractMarginProps(props);
-	const sx = stylex.props(
-		toolbarParts.root,
-		toolbarVariants[variant],
-		marginStyles,
-		xstyle,
-	);
+	const sx = stylex.props(toolbarParts.root, toolbarVariants[variant], marginStyles, xstyle);
 
 	return (
 		<BaseToolbar.Root
@@ -67,7 +63,14 @@ export function Group({ ref, className, style, xstyle, ...props }: ToolbarGroupP
 	);
 }
 
-export function Button({ ref, className, style, xstyle, type = "button", ...props }: ToolbarButtonProps) {
+export function Button({
+	ref,
+	className,
+	style,
+	xstyle,
+	type = "button",
+	...props
+}: ToolbarButtonProps) {
 	const sx = stylex.props(toolbarParts.control, toolbarParts.button, focusRing.offset, xstyle);
 
 	return (

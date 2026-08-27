@@ -28,18 +28,32 @@ function SimulatedProgress() {
 		return () => window.clearTimeout(timeout);
 	}, [value]);
 
-	const label = value === null ? "Preparing workspace" : value === 100 ? "Workspace ready" : "Processing workspace";
+	const label =
+		value === null
+			? "Preparing workspace"
+			: value === 100
+				? "Workspace ready"
+				: "Processing workspace";
 
 	return (
 		<Stack gap={2}>
 			<Progress.Root aria-valuetext={value === null ? label : undefined} value={value}>
 				<Progress.Label>{label}</Progress.Label>
-				{value === null ? <Progress.Value>{() => "In progress"}</Progress.Value> : <Progress.Value />}
+				{value === null ? (
+					<Progress.Value>{() => "In progress"}</Progress.Value>
+				) : (
+					<Progress.Value />
+				)}
 				<Progress.Track>
 					<Progress.Indicator />
 				</Progress.Track>
 			</Progress.Root>
-			<Button onClick={() => setValue(null)} size="sm" variant="secondary" xstyle={x.width["fit-content"]}>
+			<Button
+				onClick={() => setValue(null)}
+				size="sm"
+				variant="secondary"
+				xstyle={x.width["fit-content"]}
+			>
 				Restart
 			</Button>
 		</Stack>

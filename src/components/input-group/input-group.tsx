@@ -23,7 +23,10 @@ type InputGroupStyledProps<T> = Omit<T, "className" | "style"> &
 		className?: string;
 	};
 
-export type InputGroupRootProps = Omit<ComponentProps<"div">, "className" | "style" | keyof MarginProps> &
+export type InputGroupRootProps = Omit<
+	ComponentProps<"div">,
+	"className" | "style" | keyof MarginProps
+> &
 	MarginProps &
 	InputGroupStyledProps<ComponentProps<"div">> & {
 		size?: FieldSize;
@@ -95,7 +98,12 @@ export function Input({ ref, className, style, xstyle, ...props }: InputGroupInp
 	const sx = stylex.props(fieldStyles.inputUnstyled, inputGroupParts.input, xstyle);
 
 	return (
-		<BaseInput ref={ref} className={attrJoin(sx.className, className)} style={mergeStyle(sx.style, style)} {...props} />
+		<BaseInput
+			ref={ref}
+			className={attrJoin(sx.className, className)}
+			style={mergeStyle(sx.style, style)}
+			{...props}
+		/>
 	);
 }
 
@@ -112,7 +120,12 @@ export function Textarea({
 	value,
 	...props
 }: InputGroupTextareaProps) {
-	const sx = stylex.props(fieldStyles.inputUnstyled, inputGroupParts.input, inputGroupParts.textarea, xstyle);
+	const sx = stylex.props(
+		fieldStyles.inputUnstyled,
+		inputGroupParts.input,
+		inputGroupParts.textarea,
+		xstyle,
+	);
 	const autoResizeEnabled = minRows !== undefined || maxRows !== undefined;
 	const autoResizeState = useTextareaAutoResize({
 		enabled: autoResizeEnabled,
@@ -141,7 +154,15 @@ export function Textarea({
 	return <Field.Control render={control} disabled={disabled} />;
 }
 
-export function Addon({ ref, className, style, xstyle, onClick, position = "start", ...props }: InputGroupAddonProps) {
+export function Addon({
+	ref,
+	className,
+	style,
+	xstyle,
+	onClick,
+	position = "start",
+	...props
+}: InputGroupAddonProps) {
 	const sx = stylex.props(inputGroupParts.addon, inputGroupAddonPositions[position], xstyle);
 
 	return (
@@ -170,10 +191,29 @@ function isInteractiveTarget(target: EventTarget) {
 	);
 }
 
-export function Actions({ ref, className, style, xstyle, position = "end", ...props }: InputGroupActionsProps) {
-	const sx = stylex.props(inputGroupParts.addon, inputGroupAddonPositions[position], inputGroupParts.actions, xstyle);
+export function Actions({
+	ref,
+	className,
+	style,
+	xstyle,
+	position = "end",
+	...props
+}: InputGroupActionsProps) {
+	const sx = stylex.props(
+		inputGroupParts.addon,
+		inputGroupAddonPositions[position],
+		inputGroupParts.actions,
+		xstyle,
+	);
 
-	return <div ref={ref} className={attrJoin(sx.className, className)} style={mergeStyle(sx.style, style)} {...props} />;
+	return (
+		<div
+			ref={ref}
+			className={attrJoin(sx.className, className)}
+			style={mergeStyle(sx.style, style)}
+			{...props}
+		/>
+	);
 }
 
 export function Header({ ref, className, style, xstyle, ...props }: InputGroupHeaderProps) {
@@ -279,10 +319,10 @@ const inputGroupParts = stylex.create({
 	actions: {
 		gap: tokens["--space-1"],
 		alignItems: "center",
+		cursor: null,
 		display: "flex",
 		flexShrink: 0,
 		minWidth: 0,
-		cursor: null,
 	},
 	header: {
 		gap: tokens["--space-2"],
@@ -298,13 +338,13 @@ const inputGroupParts = stylex.create({
 	},
 	footer: {
 		gap: tokens["--space-2"],
-		paddingInlineStart: "var(--_input-group-padding)",
-		paddingInlineEnd: "var(--_input-padding)",
 		alignItems: "center",
 		display: "flex",
 		flexBasis: "100%",
 		justifyContent: "space-between",
 		paddingBlockEnd: "var(--_input-group-padding)",
+		paddingInlineEnd: "var(--_input-padding)",
+		paddingInlineStart: "var(--_input-group-padding)",
 		minWidth: 0,
 		width: "100%",
 	},
@@ -363,8 +403,8 @@ const inputGroupSizes = stylex.create({
 		paddingBlock: tokens["--space-0"],
 		paddingInline: tokens["--space-1"],
 		height: {
-			":has(textarea)": "auto",
 			default: tokens["--size-control-sm"],
+			":has(textarea)": "auto",
 		},
 		minHeight: tokens["--size-control-sm"],
 	},

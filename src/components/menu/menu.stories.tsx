@@ -71,12 +71,24 @@ export default meta;
 type Story = StoryObj<MenuStoryArgs>;
 
 export const Playground: Story = {
-	render: ({ _side, _align, defaultOpen, _showShortcuts, _showSelectionItems, _disabledItem, _itemVariant, size }) => (
+	render: ({
+		_side,
+		_align,
+		defaultOpen,
+		_showShortcuts,
+		_showSelectionItems,
+		_disabledItem,
+		_itemVariant,
+		size,
+	}) => (
 		<Menu.Root
 			key={`${_side}-${_align}-${defaultOpen}-${_showShortcuts}-${_showSelectionItems}-${_disabledItem}-${_itemVariant}-${size}`}
 			defaultOpen={defaultOpen}
-			size={size}>
-			<Menu.Trigger render={<Button endSlot={<Menu.TriggerIcon />} variant="neutral" />}>Open menu</Menu.Trigger>
+			size={size}
+		>
+			<Menu.Trigger render={<Button endSlot={<Menu.TriggerIcon />} variant="neutral" />}>
+				Open menu
+			</Menu.Trigger>
 			<Menu.Popup positionerProps={{ side: _side, align: _align }}>
 				<Menu.Item variant={_itemVariant}>
 					<Menu.ItemIcon>
@@ -138,7 +150,9 @@ export const ItemVariants: Story = {
 	},
 	render: () => (
 		<Menu.Root defaultOpen>
-			<Menu.Trigger render={<Button endSlot={<Menu.TriggerIcon />} variant="neutral" />}>Item variants</Menu.Trigger>
+			<Menu.Trigger render={<Button endSlot={<Menu.TriggerIcon />} variant="neutral" />}>
+				Item variants
+			</Menu.Trigger>
 			<Menu.Popup positionerProps={{ align: "start" }} xstyle={storyStyles.itemVariantsMenu}>
 				<Menu.Group>
 					<Menu.GroupLabel>Actions</Menu.GroupLabel>
@@ -245,7 +259,12 @@ export const SharedRowParity: Story = {
 					</Text>
 					<div
 						data-highlighted={index === 1 ? "" : undefined}
-						{...stylex.props(menuItemStyles.item, menuItemVariantStyles.default, storyStyles.parityRow)}>
+						{...stylex.props(
+							menuItemStyles.item,
+							menuItemVariantStyles.default,
+							storyStyles.parityRow,
+						)}
+					>
 						<span aria-hidden {...stylex.props(menuItemStyles.indicator)} />
 						<span {...stylex.props(menuItemStyles.label)}>Shared selectable row</span>
 					</div>
@@ -277,7 +296,12 @@ export const Positioning: Story = {
 	render: () => (
 		<Grid columns={2} gap={4} xstyle={storyStyles.positioningGrid}>
 			{positioningPlacements.map(({ _side, _align }) => (
-				<Stack align="center" justify="center" key={`${_side}-${_align}`} xstyle={storyStyles.positioningCell}>
+				<Stack
+					align="center"
+					justify="center"
+					key={`${_side}-${_align}`}
+					xstyle={storyStyles.positioningCell}
+				>
 					<PositionedMenu _side={_side} _align={_align} />
 				</Stack>
 			))}
@@ -502,7 +526,9 @@ export const CollapsibleGroup: Story = {
 	},
 	render: () => (
 		<Menu.Root>
-			<Menu.Trigger render={<Button endSlot={<Menu.TriggerIcon />} variant="neutral" />}>Account</Menu.Trigger>
+			<Menu.Trigger render={<Button endSlot={<Menu.TriggerIcon />} variant="neutral" />}>
+				Account
+			</Menu.Trigger>
 			<Menu.Popup positionerProps={{ align: "start" }} xstyle={storyStyles.accountMenu}>
 				<Menu.Item>
 					<Menu.ItemIcon>
@@ -597,7 +623,9 @@ function PositionedMenu({ _side, _align }: Pick<MenuStoryArgs, "_side" | "_align
 function MenuExample({ children, trigger }: { children: ReactNode; trigger: string }) {
 	return (
 		<Menu.Root>
-			<Menu.Trigger render={<Button endSlot={<Menu.TriggerIcon />} variant="neutral" />}>{trigger}</Menu.Trigger>
+			<Menu.Trigger render={<Button endSlot={<Menu.TriggerIcon />} variant="neutral" />}>
+				{trigger}
+			</Menu.Trigger>
 			<Menu.Popup positionerProps={{ align: "start" }}>{children}</Menu.Popup>
 		</Menu.Root>
 	);

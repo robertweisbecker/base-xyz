@@ -13,7 +13,8 @@ import { popupVars } from "@/components/popover/popover-vars.stylex";
 import { tokens } from "@/theme/tokens.stylex";
 import { attrJoin } from "@/utils/attr-join";
 
-type StyledProps<T> = Omit<T, "className" | "style" | "xstyle"> & BaseStyleProps & { className?: string };
+type StyledProps<T> = Omit<T, "className" | "style" | "xstyle"> &
+	BaseStyleProps & { className?: string };
 
 export type LinkPreviewBackdropProps = StyledProps<BaseLinkPreview.Backdrop.Props>;
 export type LinkPreviewPositionerProps = StyledProps<BaseLinkPreview.Positioner.Props>;
@@ -26,8 +27,19 @@ export type LinkPreviewPopupProps = StyledProps<BaseLinkPreview.Popup.Props> & {
 	positionerProps?: LinkPreviewPositionerProps;
 };
 
-export function Trigger({ ref, className, style, xstyle, delay = 100, ...props }: StyledProps<BaseLinkPreview.Trigger.Props>) {
-	const { className: sxClassName, style: sxStyle } = stylex.props(linkPreviewParts.trigger, focusRing.offset, xstyle);
+export function Trigger({
+	ref,
+	className,
+	style,
+	xstyle,
+	delay = 100,
+	...props
+}: StyledProps<BaseLinkPreview.Trigger.Props>) {
+	const { className: sxClassName, style: sxStyle } = stylex.props(
+		linkPreviewParts.trigger,
+		focusRing.offset,
+		xstyle,
+	);
 
 	return (
 		<BaseLinkPreview.Trigger
@@ -40,7 +52,14 @@ export function Trigger({ ref, className, style, xstyle, delay = 100, ...props }
 	);
 }
 
-function Positioner({ ref, className, style, xstyle, sideOffset = 8, ...props }: LinkPreviewPositionerProps) {
+function Positioner({
+	ref,
+	className,
+	style,
+	xstyle,
+	sideOffset = 8,
+	...props
+}: LinkPreviewPositionerProps) {
 	const { className: sxClassName, style: sxStyle } = stylex.props(popupPositionerStyles, xstyle);
 
 	return (
@@ -81,7 +100,8 @@ export function Popup({
 					ref={ref}
 					className={attrJoin(sxClassName, className)}
 					style={mergeStyle(sxStyle, style)}
-					{...props}>
+					{...props}
+				>
 					{arrowProps ? <Arrow {...arrowProps} /> : null}
 					{children}
 				</BaseLinkPreview.Popup>
@@ -129,22 +149,49 @@ function Arrow({ ref, className, style, xstyle, ...props }: LinkPreviewArrowProp
 	);
 }
 
-export function Content({ className, style, xstyle, ...props }: StyledProps<ComponentProps<"div">>) {
+export function Content({
+	className,
+	style,
+	xstyle,
+	...props
+}: StyledProps<ComponentProps<"div">>) {
 	const { className: sxClassName, style: sxStyle } = stylex.props(linkPreviewParts.content, xstyle);
 
-	return <div className={attrJoin(sxClassName, className)} style={mergeStyle(sxStyle, style)} {...props} />;
+	return (
+		<div
+			className={attrJoin(sxClassName, className)}
+			style={mergeStyle(sxStyle, style)}
+			{...props}
+		/>
+	);
 }
 
 export function Title({ className, style, xstyle, ...props }: StyledProps<ComponentProps<"h3">>) {
 	const { className: sxClassName, style: sxStyle } = stylex.props(linkPreviewParts.title, xstyle);
 
-	return <h3 className={attrJoin(sxClassName, className)} style={mergeStyle(sxStyle, style)} {...props} />;
+	return (
+		<h3
+			className={attrJoin(sxClassName, className)}
+			style={mergeStyle(sxStyle, style)}
+			{...props}
+		/>
+	);
 }
 
-export function Description({ className, style, xstyle, ...props }: StyledProps<ComponentProps<"p">>) {
-	const { className: sxClassName, style: sxStyle } = stylex.props(linkPreviewParts.description, xstyle);
+export function Description({
+	className,
+	style,
+	xstyle,
+	...props
+}: StyledProps<ComponentProps<"p">>) {
+	const { className: sxClassName, style: sxStyle } = stylex.props(
+		linkPreviewParts.description,
+		xstyle,
+	);
 
-	return <p className={attrJoin(sxClassName, className)} style={mergeStyle(sxStyle, style)} {...props} />;
+	return (
+		<p className={attrJoin(sxClassName, className)} style={mergeStyle(sxStyle, style)} {...props} />
+	);
 }
 
 export const Root = BaseLinkPreview.Root;

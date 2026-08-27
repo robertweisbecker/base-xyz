@@ -69,7 +69,8 @@ function FieldSizeComparison({ size }: { size: FieldSize }) {
 					<div
 						data-field-label-hidden={kind === "input-group" ? undefined : ""}
 						key={kind}
-						{...stylex.props(styles.comparisonControl)}>
+						{...stylex.props(styles.comparisonControl)}
+					>
 						<ComparisonField kind={kind} size={size} state="filled" />
 					</div>
 				))}
@@ -138,7 +139,8 @@ function FieldStateRow({ kind }: { kind: FieldKind }) {
 				<div
 					data-field-label-hidden={kind === "input-group" ? undefined : ""}
 					key={state}
-					{...stylex.props(styles.stateCell)}>
+					{...stylex.props(styles.stateCell)}
+				>
 					<ComparisonField kind={kind} size="md" state={state} />
 				</div>
 			))}
@@ -146,7 +148,15 @@ function FieldStateRow({ kind }: { kind: FieldKind }) {
 	);
 }
 
-function ComparisonField({ kind, size, state }: { kind: FieldKind; size: FieldSize; state: FieldState }) {
+function ComparisonField({
+	kind,
+	size,
+	state,
+}: {
+	kind: FieldKind;
+	size: FieldSize;
+	state: FieldState;
+}) {
 	const disabled = state === "disabled";
 	const invalid = state === "invalid";
 	const readOnly = state === "read-only";
@@ -169,7 +179,9 @@ function ComparisonField({ kind, size, state }: { kind: FieldKind; size: FieldSi
 		case "textarea":
 			return (
 				<Textarea
-					defaultValue={hasValue ? (invalid ? "Missing project context" : "Design system notes") : undefined}
+					defaultValue={
+						hasValue ? (invalid ? "Missing project context" : "Design system notes") : undefined
+					}
 					disabled={disabled}
 					error={invalid ? "Add a complete sentence." : undefined}
 					label={label}
@@ -199,7 +211,8 @@ function ComparisonField({ kind, size, state }: { kind: FieldKind; size: FieldSi
 					invalid={invalid}
 					items={frameworkItems}
 					readOnly={readOnly}
-					size={size}>
+					size={size}
+				>
 					<Select.Label>{label}</Select.Label>
 					<Select.Trigger placeholder="Choose framework" />
 					<Select.Popup>
@@ -221,7 +234,8 @@ function ComparisonField({ kind, size, state }: { kind: FieldKind; size: FieldSi
 					invalid={invalid}
 					items={["React", "Vue"]}
 					readOnly={readOnly}
-					size={size}>
+					size={size}
+				>
 					<Combobox.Label>{label}</Combobox.Label>
 					<Combobox.InputGroup>
 						<Combobox.Input placeholder="Choose framework" />
