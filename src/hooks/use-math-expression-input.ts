@@ -12,6 +12,8 @@ export type UseMathExpressionInputOptions = {
 	required?: boolean;
 	disabled?: boolean;
 	readOnly?: boolean;
+	/** Mobile keyboard hint. Defaults to `decimal` for numeric entry; use `text` when operators should stay on the primary keyboard. */
+	inputMode?: "decimal" | "numeric" | "text";
 	/** Error shown when the draft cannot be evaluated. */
 	invalidExpressionMessage?: string;
 	/** Error shown when the draft is empty but a value is required. */
@@ -29,7 +31,7 @@ export type UseMathExpressionInputReturn = {
 	isEditing: boolean;
 	inputProps: {
 		value: string;
-		inputMode: "text";
+		inputMode: "decimal" | "numeric" | "text";
 		disabled: boolean;
 		readOnly: boolean;
 		required: boolean;
@@ -72,6 +74,7 @@ export function useMathExpressionInput({
 	required = false,
 	disabled = false,
 	readOnly = false,
+	inputMode = "decimal",
 	invalidExpressionMessage = "Enter a valid math expression",
 	requiredMessage = "Enter a value",
 	onValueCommitted,
@@ -119,7 +122,7 @@ export function useMathExpressionInput({
 		isEditing: draft !== null,
 		inputProps: {
 			value: displayValue,
-			inputMode: "text",
+			inputMode,
 			disabled,
 			readOnly,
 			required,

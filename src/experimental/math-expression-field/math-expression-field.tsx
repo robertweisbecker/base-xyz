@@ -1,9 +1,8 @@
 import { Field } from "@base-ui/react/field";
-import { Input } from "@base-ui/react/input";
 import * as stylex from "@stylexjs/stylex";
-import { useId } from "react";
-import { fieldStyles, fieldInputStyles } from "@/components/field/field.stylex";
-import { focusRing } from "@/styles/recipes/focus";
+import { useId, type ReactNode } from "react";
+import { fieldStyles } from "@/components/field/field.stylex";
+import { InputGroup } from "@/components/input-group/input-group";
 import { attrJoin } from "@/utils/attr-join";
 import {
 	useMathExpressionInput,
@@ -17,18 +16,21 @@ export type MathExpressionFieldProps = UseMathExpressionInputOptions & {
 	name?: string;
 	/** Consumer-owned error; expression-validity errors take precedence. */
 	error?: string;
+	/** Decorative start addon, such as Figma-style dimension letters. */
+	prefix?: ReactNode;
 };
 
 /**
  * Experimental field that accepts arithmetic expressions, then commits a number
  * on blur or Enter. Base UI NumberField filters expression characters, so this
- * attaches the math-expression hook to a plain text input.
+ * attaches the math-expression hook to a plain text input inside InputGroup.
  */
 export function MathExpressionField({
 	label,
 	description,
 	name,
 	error: consumerError,
+	prefix,
 	...options
 }: MathExpressionFieldProps) {
 	const { committedValue, error: expressionError, inputProps } = useMathExpressionInput(options);
@@ -42,13 +44,19 @@ export function MathExpressionField({
 			<Field.Label htmlFor={id} {...stylex.props(fieldStyles.label)}>
 				{label}
 			</Field.Label>
-			<Input
-				id={id}
-				aria-describedby={attrJoin(descriptionId, errorId) || undefined}
-				{...stylex.props(fieldInputStyles.md, focusRing.inset)}
-				{...inputProps}
-				aria-invalid={error ? true : undefined}
-			/>
+			<InputGroup.Root data-invalid={error ? "" : undefined}>
+				{prefix ? (
+					<InputGroup.Addon aria-hidden position="start">
+						{prefix}
+					</InputGroup.Addon>
+				) : null}
+				<InputGroup.Input
+					id={id}
+					aria-describedby={attrJoin(descriptionId, errorId) || undefined}
+					{...inputProps}
+					aria-invalid={error ? true : undefined}
+				/>
+			</InputGroup.Root>
 			{name ? <input type="hidden" name={name} value={committedValue ?? ""} /> : null}
 			{description ? (
 				<Field.Description id={descriptionId} {...stylex.props(fieldStyles.description)}>

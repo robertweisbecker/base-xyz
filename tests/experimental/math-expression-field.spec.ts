@@ -19,6 +19,7 @@ test("keeps the raw expression while typing and evaluates on blur", async ({ pag
 	await page.goto(storyPath);
 	const input = page.getByRole("textbox", { name: "Amount", exact: true });
 	await expect(input).toHaveValue("12");
+	await expect(input).toHaveAttribute("inputmode", "decimal");
 
 	await input.fill("");
 	await input.pressSequentially("100 / 5");

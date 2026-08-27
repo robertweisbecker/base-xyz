@@ -8,7 +8,17 @@ import { MathExpressionField, type MathExpressionFieldProps } from "./math-expre
 
 type MathExpressionFieldStoryArgs = Pick<
 	MathExpressionFieldProps,
-	"label" | "description" | "defaultValue" | "min" | "max" | "required" | "disabled" | "readOnly" | "error"
+	| "label"
+	| "description"
+	| "defaultValue"
+	| "min"
+	| "max"
+	| "required"
+	| "disabled"
+	| "readOnly"
+	| "error"
+	| "prefix"
+	| "inputMode"
 >;
 
 const meta = {
@@ -23,6 +33,8 @@ const meta = {
 		disabled: false,
 		readOnly: false,
 		error: "",
+		prefix: "W",
+		inputMode: "decimal",
 	},
 	argTypes: {
 		label: { control: "text" },
@@ -34,10 +46,24 @@ const meta = {
 		disabled: { control: "boolean" },
 		readOnly: { control: "boolean" },
 		error: { control: "text" },
+		prefix: { control: "text" },
+		inputMode: { control: "inline-radio", options: ["decimal", "numeric", "text"] },
 	},
 	parameters: {
 		controls: {
-			include: ["label", "description", "defaultValue", "min", "max", "required", "disabled", "readOnly", "error"],
+			include: [
+				"label",
+				"description",
+				"defaultValue",
+				"min",
+				"max",
+				"required",
+				"disabled",
+				"readOnly",
+				"error",
+				"prefix",
+				"inputMode",
+			],
 		},
 	},
 } satisfies Meta<MathExpressionFieldStoryArgs>;
@@ -46,9 +72,9 @@ export default meta;
 type Story = StoryObj<MathExpressionFieldStoryArgs>;
 
 export const Playground: Story = {
-	render: ({ label, description, defaultValue, min, max, required, disabled, readOnly, error }) => (
+	render: ({ label, description, defaultValue, min, max, required, disabled, readOnly, error, prefix, inputMode }) => (
 		<MathExpressionField
-			key={`${defaultValue}-${min}-${max}-${required}-${disabled}-${readOnly}-${error}`}
+			key={`${defaultValue}-${min}-${max}-${required}-${disabled}-${readOnly}-${error}-${prefix}-${inputMode}`}
 			label={label}
 			description={description}
 			defaultValue={defaultValue}
@@ -58,6 +84,8 @@ export const Playground: Story = {
 			disabled={disabled}
 			readOnly={readOnly}
 			error={error || undefined}
+			prefix={prefix || undefined}
+			inputMode={inputMode}
 		/>
 	),
 };
@@ -69,21 +97,26 @@ export const Examples: Story = {
 	render: () => (
 		<Stack gap={6} maxWidth="420px">
 			<Example label="Evaluates on blur or Enter">
-				<MathExpressionField label="Amount" defaultValue={12} description="Type an expression such as 100 / 5." />
+				<MathExpressionField
+					label="Amount"
+					prefix="W"
+					defaultValue={12}
+					description="Type an expression such as 100 / 5."
+				/>
 			</Example>
 			<Separator />
 			<Example label="Clamped between 0 and 50">
-				<MathExpressionField label="Clamped amount" defaultValue={10} min={0} max={50} />
+				<MathExpressionField label="Clamped amount" prefix="H" defaultValue={10} min={0} max={50} />
 			</Example>
 			<Separator />
 			<Example label="Required">
-				<MathExpressionField label="Required amount" defaultValue={5} required />
+				<MathExpressionField label="Required amount" prefix="X" defaultValue={5} required />
 			</Example>
 			<Separator />
 			<Example label="Read-only and disabled">
 				<Stack gap={4}>
-					<MathExpressionField label="Read-only" defaultValue={20} readOnly />
-					<MathExpressionField label="Disabled" defaultValue={20} disabled />
+					<MathExpressionField label="Read-only" prefix="Y" defaultValue={20} readOnly />
+					<MathExpressionField label="Disabled" prefix="Y" defaultValue={20} disabled />
 				</Stack>
 			</Example>
 			<Separator />
@@ -119,7 +152,7 @@ function MathExpressionFormExample() {
 				setSubmitted(String(data.get("quantity")));
 			}}>
 			<Stack gap={3} align="start">
-				<MathExpressionField label="Quantity" name="quantity" defaultValue={4} />
+				<MathExpressionField label="Quantity" prefix="W" name="quantity" defaultValue={4} />
 				<Button type="submit">Submit</Button>
 				<Text size="1" color="muted">
 					{submitted === null ? "Not submitted" : `Submitted: ${submitted}`}
@@ -143,6 +176,7 @@ function MathExpressionControlledExample() {
 			<Text size="1" color="muted">{`Commits: ${commits}`}</Text>
 			<MathExpressionField
 				label="Controlled amount"
+				prefix="W"
 				value={value}
 				onValueCommitted={(next) => {
 					setValue(next);
