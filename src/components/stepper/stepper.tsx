@@ -49,7 +49,8 @@ type StepperRootContextValue = {
 	effectiveOrientation: StepperOrientation;
 	effectiveValue: StepperValue | null;
 	queuePanelFocus: (value: StepperValue | null) => void;
-	registerStep: (record: DeclaredStep) => () => void;
+	registerStep: (record: DeclaredStep) => void;
+	unregisterStep: (id: string) => void;
 };
 
 type StepperStepContextValue = {
@@ -140,10 +141,13 @@ export function Root({
 			registeredStepsRef.current = upsertDeclaredStep(registeredStepsRef.current, record);
 			warnDuplicateStepValues(registeredStepsRef.current);
 			publishDeclaredSteps();
-			return () => {
-				registeredStepsRef.current = registeredStepsRef.current.filter((step) => step.id !== record.id);
-				publishDeclaredSteps();
-			};
+		},
+		[publishDeclaredSteps],
+	);
+	const unregisterStep = useCallback(
+		(id: string) => {
+			registeredStepsRef.current = registeredStepsRef.current.filter((step) => step.id !== id);
+			publishDeclaredSteps();
 		},
 		[publishDeclaredSteps],
 	);
@@ -176,8 +180,9 @@ export function Root({
 			effectiveValue,
 			queuePanelFocus,
 			registerStep,
+			unregisterStep,
 		}),
-		[commitValue, declaredSteps, effectiveOrientation, effectiveValue, queuePanelFocus, registerStep],
+		[commitValue, declaredSteps, effectiveOrientation, effectiveValue, queuePanelFocus, registerStep, unregisterStep],
 	);
 	const sx = stylex.props(
 		stepperParts.root,
@@ -256,7 +261,8 @@ export function Step({
 	"aria-describedby": ariaDescribedBy,
 	...props
 }: StepperStepProps) {
-	const { declaredSteps, effectiveOrientation, effectiveValue, registerStep } = useStepperRootContext();
+	const { declaredSteps, effectiveOrientation, effectiveValue, registerStep, unregisterStep } =
+		useStepperRootContext();
 	const instanceId = useId();
 	const titleId = `${instanceId}-title`;
 	const descriptionId = `${instanceId}-description`;
@@ -290,7 +296,12 @@ export function Step({
 		[descriptionId, disabled, effectiveOrientation, index, registerDescription, selected, status, statusId, titleId],
 	);
 
-	useLayoutEffect(() => registerStep({ disabled, id: instanceId, value }), [disabled, instanceId, registerStep, value]);
+	useLayoutEffect(() => {
+		registerStep({ disabled, id: instanceId, value });
+	}, [disabled, instanceId, registerStep, value]);
+	useLayoutEffect(() => {
+		return () => unregisterStep(instanceId);
+	}, [instanceId, unregisterStep]);
 
 	const sx = stylex.props(
 		focusRing.offset,
@@ -762,7 +773,7 @@ const rootOrientationStyles = stylex.create({
 	vertical: {
 		alignItems: "start",
 		columnGap: tokens["--space-6"],
-		gridTemplateColumns: "minmax(12rem, min(max-content, 24rem)) minmax(0, 1fr)",
+		gridTemplateColumns: "minmax(12rem, 24rem) minmax(0, 1fr)",
 		gridTemplateRows: "auto auto",
 		rowGap: tokens["--space-4"],
 	},

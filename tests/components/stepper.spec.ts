@@ -199,6 +199,8 @@ test("preserves mounted panel state and silently falls back when the domain chan
 	await domain.getByRole("button", { name: "Disable current step" }).click();
 	await expect(domain.getByRole("tab", { name: "Review" })).toHaveAttribute("aria-selected", "true");
 	await expect(domain.getByRole("tabpanel", { name: "Review" })).toBeVisible();
+	await expect(domain.getByRole("button", { name: "Back" })).toBeEnabled();
+	await expect(domain.getByRole("button", { name: "Continue" })).toBeEnabled();
 	await expect(lastChange).toHaveText("Last change: none");
 	await expect(domain.getByRole("tab", { name: "Review" }).locator("[aria-hidden]").first()).not.toHaveCSS(
 		"box-shadow",
