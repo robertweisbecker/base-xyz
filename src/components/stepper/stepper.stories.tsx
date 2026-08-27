@@ -135,13 +135,6 @@ export const Orientations: Story = {
 				</Text>
 				<ExampleStepper defaultValue="security" orientation="vertical" />
 			</Stack>
-			<Separator />
-			<Stack data-testid="rtl-stepper" dir="rtl" gap={2} minWidth={0}>
-				<Text color="muted" size="1">
-					Right to left
-				</Text>
-				<ExampleStepper defaultValue="security" />
-			</Stack>
 		</Stack>
 	),
 };

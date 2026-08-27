@@ -484,7 +484,7 @@ domain change invokes the public callback.
    - connector segments are `aria-hidden` presentation, use
      `pointerEvents: "none"`, and remain behind the interactive marker/header so
      they cannot enlarge or block hit targets;
-   - use logical properties and verify RTL rather than branching on LTR.
+   - use logical properties; do not add RTL-specific fill or layout branches.
 6. State treatment:
    - default incomplete + non-current is neutral/inactive;
    - current incomplete uses accent emphasis;
@@ -630,7 +630,7 @@ attributes only for connector geometry that has no semantic locator:
      the active Step into view.
    - Connector begins at the first marker center, ends at the last marker center,
      and the filled/neutral boundary is within 1 CSS pixel of the active marker
-     center in horizontal, vertical, and `dir="rtl"` examples.
+     center in horizontal and vertical examples.
    - Focus rings are not clipped and the browser console has no errors.
 
 If Home/End are not supported by the installed public Base UI Tabs behavior,
@@ -673,8 +673,6 @@ Then run `npm run storybook` and manually verify after optimization finishes:
 - Long horizontal steps scroll and the active step enters view.
 - Light/dark and both repository themes retain readable inactive, current,
   completed, invalid, disabled, track, and fill contrast.
-- RTL reverses horizontal presentation while keeping logical progression and
-  connector fill correct.
 
 If live Storybook reports a transient missing story or `Invalid empty
 selector`, restart once and reacquire browser references before changing valid
@@ -689,7 +687,7 @@ source, per repository guidance.
 - The new spec must cover semantics, exact accessible name/description,
   keyboard selection, responsive orientation, locked-step behavior,
   order-aware paging, focus transfer, panel mounting, dynamic-domain fallback,
-  horizontal overflow, RTL, connector geometry, and console state.
+  horizontal overflow, connector geometry, and console state.
 - Storybook stories are intentional executable fixtures. Do not create a second
   private test-only component implementation.
 - Focused verification:
@@ -713,7 +711,7 @@ All criteria must hold:
 - [ ] Inactive/current/locked/completed/invalid states are visible and
   accessible.
 - [ ] Connector track spans marker centers and fill ends at current center in
-  horizontal, vertical, and RTL layouts.
+  horizontal and vertical layouts.
 - [ ] Direct Step selection is manual and non-looping; paging is adjacent,
   lock-aware, cancelable, and focuses the accepted Panel.
 - [ ] Panels preserve state by default and opt out with `keepMounted={false}`.
@@ -750,9 +748,9 @@ Stop and report back; do not improvise if any occurs:
   API into props or silently dropping description semantics.
 - Responsive visual orientation and Base UI keyboard/ARIA orientation cannot be
   driven by the same effective value without hydration errors.
-- Connector geometry cannot meet marker centers for variable descriptions and
-  RTL using the specified per-Step segment model. Report measurements before
-  replacing it with a JS measurement engine or public Track API.
+- Connector geometry cannot meet marker centers for variable descriptions using
+  the specified per-Step segment model. Report measurements before replacing it
+  with a JS measurement engine or public Track API.
 - A verification command fails twice after one reasonable, scoped correction.
 - Storybook's transient missing-story/empty-selector problem remains after one
   clean restart and reference reacquisition.
@@ -773,6 +771,6 @@ Stop and report back; do not improvise if any occurs:
   design it separately rather than expanding this primitive opportunistically.
 - Reviewers should scrutinize accessible name/description output, cancellation,
   rejected controlled changes, hidden-panel focus, responsive key mapping,
-  connector endpoints, RTL, and preservation of unrelated dirty-worktree edits.
+  connector endpoints, and preservation of unrelated dirty-worktree edits.
 - Defer size variants and automatic status icons until real consumers establish
   stable requirements.

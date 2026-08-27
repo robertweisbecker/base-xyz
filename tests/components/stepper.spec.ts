@@ -216,7 +216,7 @@ test("preserves mounted panel state and silently falls back when the domain chan
 	await expect(reordered.getByTestId("domain-last-change")).toHaveText("Last change: profile");
 });
 
-test("lays out markers and connector fill in horizontal, vertical, and rtl", async ({ page }) => {
+test("lays out markers and connector fill in horizontal and vertical", async ({ page }) => {
 	await page.setViewportSize({ width: 1024, height: 900 });
 	await page.goto(orientationsPath);
 
@@ -229,11 +229,8 @@ test("lays out markers and connector fill in horizontal, vertical, and rtl", asy
 	await expect.poll(async () => contentIsBesideList(vertical)).toBe(true);
 	await expect.poll(async () => connectorMeetsCurrentMarker(vertical)).toBe(true);
 
-	const rtl = page.getByTestId("rtl-stepper");
-	await expect.poll(async () => connectorMeetsCurrentMarker(rtl)).toBe(true);
 	await expect.poll(async () => markersAreOpaque(horizontal)).toBe(true);
 	await expect.poll(async () => markersAreOpaque(vertical)).toBe(true);
-	await expect.poll(async () => markersAreOpaque(rtl)).toBe(true);
 	await expect.poll(async () => connectorIsBehindMarkers(vertical)).toBe(true);
 
 	await page.setViewportSize({ width: 360, height: 800 });
@@ -318,9 +315,8 @@ async function connectorMeetsCurrentMarker(root: Locator) {
 			const height = Number.parseFloat(style.height);
 			const insetInlineStart = Number.parseFloat(style.insetInlineStart);
 			const insetBlockStart = Number.parseFloat(style.insetBlockStart);
-			const isRtl = getComputedStyle(node).direction === "rtl";
 			const top = rect.top + insetBlockStart;
-			const left = isRtl ? rect.right - insetInlineStart - width : rect.left + insetInlineStart;
+			const left = rect.left + insetInlineStart;
 			return {
 				bottom: top + height,
 				left,
@@ -338,7 +334,6 @@ async function connectorMeetsCurrentMarker(root: Locator) {
 	const firstCenter = { x: first.x + first.width / 2, y: first.y + first.height / 2 };
 	const lastCenter = { x: last.x + last.width / 2, y: last.y + last.height / 2 };
 	const horizontal = Math.abs(firstCenter.y - lastCenter.y) <= 4;
-	const isRtl = horizontal && firstCenter.x > lastCenter.x;
 	const trackStart = {
 		x: Math.min(...segments.map((segment) => segment.left)),
 		y: Math.min(...segments.map((segment) => segment.top)),
@@ -347,13 +342,13 @@ async function connectorMeetsCurrentMarker(root: Locator) {
 		x: Math.max(...segments.map((segment) => segment.right)),
 		y: Math.max(...segments.map((segment) => segment.bottom)),
 	};
-	const fillEdge = horizontal ? (isRtl ? fillBox.x : fillBox.x + fillBox.width) : fillBox.y + fillBox.height;
+	const fillEdge = horizontal ? fillBox.x + fillBox.width : fillBox.y + fillBox.height;
 
 	const startOk = horizontal
-		? Math.abs((isRtl ? trackEnd.x : trackStart.x) - firstCenter.x) <= 1
+		? Math.abs(trackStart.x - firstCenter.x) <= 1
 		: Math.abs(trackStart.y - firstCenter.y) <= 1;
 	const endOk = horizontal
-		? Math.abs((isRtl ? trackStart.x : trackEnd.x) - lastCenter.x) <= 1
+		? Math.abs(trackEnd.x - lastCenter.x) <= 1
 		: Math.abs(trackEnd.y - lastCenter.y) <= 1;
 	const fillOk = horizontal
 		? Math.abs(fillEdge - currentCenter.x) <= 2

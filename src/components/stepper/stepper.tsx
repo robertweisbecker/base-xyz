@@ -264,7 +264,7 @@ export function List({ children, className, style, xstyle, ...props }: StepperLi
 					style={(state) =>
 						mergeStyle(
 							indicatorSx.style,
-							indicatorFillStyle(state.activeTabPosition, effectiveOrientation, viewportRef.current),
+							indicatorFillStyle(state.activeTabPosition, effectiveOrientation),
 						)
 					}
 				/>
@@ -625,7 +625,6 @@ function sameStepSequence(current: readonly StepRecord[], next: readonly StepRec
 function indicatorFillStyle(
 	position: { left: number; right: number; top: number } | null,
 	orientation: StepperOrientation,
-	viewport: HTMLElement | null,
 ): CSSProperties | undefined {
 	if (position == null) {
 		return undefined;
@@ -635,11 +634,9 @@ function indicatorFillStyle(
 			height: `calc(${position.top}px + var(--_stepper-marker-size) / 2)`,
 		};
 	}
-	const rtl = viewport != null && getComputedStyle(viewport).direction === "rtl";
 	return {
-		left: rtl ? "auto" : 0,
-		right: rtl ? 0 : "auto",
-		width: `calc(${rtl ? position.right : position.left}px + var(--_stepper-marker-size) / 2)`,
+		left: 0,
+		width: `calc(${position.left}px + var(--_stepper-marker-size) / 2)`,
 	};
 }
 
