@@ -53,6 +53,10 @@ const stepperParts = stylex.create({
 		width: "100%",
 	},
 	step: {
+		"--_stepper-content-opacity": {
+			"[data-disabled]": 0.48,
+			default: 1,
+		},
 		"--_stepper-marker-background": {
 			'[data-active][data-status="incomplete"]': tokens["--bg-primary"],
 			'[data-status="completed"]': tokens["--bg-success-primary"],
@@ -112,10 +116,6 @@ const stepperParts = stylex.create({
 			default: "start",
 			[stylex.when.ancestor("[data-orientation=vertical]", stepperRootMarker)]: null,
 		},
-		opacity: {
-			"[data-disabled]": 0.48,
-			default: 1,
-		},
 		paddingBlockEnd: {
 			default: 0,
 			[stylex.when.ancestor("[data-orientation=vertical]", stepperRootMarker)]: tokens["--space-6"],
@@ -133,7 +133,6 @@ const stepperParts = stylex.create({
 		position: "relative",
 		textAlign: "start",
 		userSelect: "none",
-		zIndex: 1,
 		minWidth: 0,
 		width: {
 			default: null,
@@ -179,7 +178,7 @@ const stepperParts = stylex.create({
 		},
 		transitionProperty: "width, height",
 		transitionTimingFunction: tokens["--motion-ease-smooth-out"],
-		zIndex: 0,
+		zIndex: 1,
 		height: {
 			default: "var(--_stepper-connector-thickness)",
 			[stylex.when.ancestor("[data-orientation=vertical]", stepperRootMarker)]: "calc(var(--active-tab-top) - var(--_stepper-list-padding))",
@@ -214,11 +213,12 @@ const stepperParts = stylex.create({
 		justifyContent: "center",
 		letterSpacing: tokens["--letter-spacing-2"],
 		lineHeight: tokens["--line-height-2"],
+		opacity: "var(--_stepper-content-opacity)",
 		position: "relative",
 		transitionDuration: tokens["--motion-duration-medium"],
 		transitionProperty: "background-color, border-color, box-shadow, color",
 		transitionTimingFunction: tokens["--motion-ease-smooth-out"],
-		zIndex: 1,
+		zIndex: 2,
 		height: "var(--_stepper-marker-size)",
 		width: "var(--_stepper-marker-size)",
 	},
@@ -226,8 +226,9 @@ const stepperParts = stylex.create({
 		gap: tokens["--space-0-5"],
 		display: "flex",
 		flexDirection: "column",
+		opacity: "var(--_stepper-content-opacity)",
 		position: "relative",
-		zIndex: 1,
+		zIndex: 2,
 		minWidth: 0,
 	},
 	title: {

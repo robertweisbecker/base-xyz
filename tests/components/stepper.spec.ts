@@ -134,5 +134,28 @@ async function connectorMeetsCurrentMarker(root: Locator) {
 	const horizontal = fillBox.width >= fillBox.height;
 	const markerCenter = horizontal ? markerBox.x + markerBox.width / 2 : markerBox.y + markerBox.height / 2;
 	const fillEdge = horizontal ? fillBox.x + fillBox.width : fillBox.y + fillBox.height;
-	return Math.abs(markerCenter - fillEdge) <= 2;
+	if (Math.abs(markerCenter - fillEdge) > 2) return false;
+	return fillPaintsAboveTrack(root);
+}
+
+async function fillPaintsAboveTrack(root: Locator) {
+	return root.evaluate((node) => {
+		const list = node.querySelector("[role='tablist']");
+		const indicator = list?.querySelector(":scope > [role='presentation']");
+		const step = list?.querySelector("[role='tab']");
+		const marker = step?.querySelector("[aria-hidden]");
+		if (list == null || indicator == null || step == null || marker == null) {
+			return false;
+		}
+		const indicatorZ = Number.parseFloat(getComputedStyle(indicator).zIndex);
+		const trackZ = Number.parseFloat(getComputedStyle(step, "::after").zIndex);
+		const markerZ = Number.parseFloat(getComputedStyle(marker).zIndex);
+		return (
+			Number.isFinite(indicatorZ) &&
+			Number.isFinite(trackZ) &&
+			Number.isFinite(markerZ) &&
+			indicatorZ > trackZ &&
+			markerZ > indicatorZ
+		);
+	});
 }
