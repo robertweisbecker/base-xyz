@@ -144,7 +144,9 @@ export function Root({
 		const shouldFocus = pendingFocusValue === effectiveValue;
 		setPendingFocusValue(null);
 		if (shouldFocus) {
-			rootRef.current?.querySelector<HTMLElement>('[role="tabpanel"][tabindex="0"]')?.focus();
+			rootRef.current
+				?.querySelector<HTMLElement>(`[data-stepper-panel="${CSS.escape(pendingFocusValue)}"]`)
+				?.focus();
 		}
 	}, [effectiveValue, pendingFocusValue]);
 
@@ -320,9 +322,9 @@ export function Marker({ children, className, style, xstyle, ...props }: Stepper
 		fontWeightStyles.medium,
 		status === "completed" && markerToneStyles.completed,
 		status === "invalid" && markerToneStyles.invalid,
-		selected && status === "incomplete" && markerToneStyles.currentIncomplete,
-		selected && markerToneStyles.current,
+		selected && status === "incomplete" && !disabled && markerToneStyles.currentIncomplete,
 		disabled && markerToneStyles.disabled,
+		selected && markerToneStyles.current,
 		xstyle,
 	);
 	const content = children == null || typeof children === "boolean" ? (index >= 0 ? index + 1 : null) : children;
@@ -363,7 +365,7 @@ export function Title({ className, style, xstyle, ...props }: StepperTitleProps)
 		textTruncationStyles.truncate,
 		stepperParts.title,
 		selected && titleStateStyles.selected,
-		disabled && titleStateStyles.disabled,
+		disabled && !selected && titleStateStyles.disabled,
 		xstyle,
 	);
 
@@ -440,6 +442,7 @@ export function Panel({
 			keepMounted={keepMounted}
 			style={mergeStyle(sx.style, style)}
 			value={value}
+			data-stepper-panel={value}
 			{...props}
 		/>
 	);
@@ -558,14 +561,15 @@ function indicatorFillStyle(
 	}
 	if (orientation === "vertical") {
 		return {
-			height: `calc(${position.top}px + var(--_stepper-marker-size) / 2)`,
+			height: `calc(${position.top}px - var(--_stepper-list-padding))`,
 			insetInlineStart: `calc(${position.left}px + var(--_stepper-marker-size) / 2 - var(--_stepper-connector-thickness) / 2)`,
+			top: "calc(var(--_stepper-list-padding) + var(--_stepper-marker-size) / 2)",
 		};
 	}
 	return {
-		left: 0,
+		left: "calc(var(--_stepper-list-padding) + var(--_stepper-marker-size) / 2)",
 		top: `calc(${position.top}px + var(--_stepper-marker-size) / 2 - var(--_stepper-connector-thickness) / 2)`,
-		width: `calc(${position.left}px + var(--_stepper-marker-size) / 2)`,
+		width: `calc(${position.left}px - var(--_stepper-list-padding))`,
 	};
 }
 
@@ -612,9 +616,10 @@ const stepperParts = stylex.create({
 		width: "100%",
 	},
 	list: {
+		"--_stepper-list-padding": tokens["--space-2"],
 		gap: 0,
-		paddingBlock: tokens["--space-2"],
-		paddingInline: tokens["--space-2"],
+		paddingBlock: "var(--_stepper-list-padding)",
+		paddingInline: "var(--_stepper-list-padding)",
 		boxSizing: "border-box",
 		display: "flex",
 		isolation: "isolate",
@@ -760,7 +765,7 @@ const rootOrientationStyles = stylex.create({
 	vertical: {
 		alignItems: "start",
 		columnGap: tokens["--space-6"],
-		gridTemplateColumns: "minmax(12rem, max-content) minmax(0, 1fr)",
+		gridTemplateColumns: "minmax(12rem, min(max-content, 24rem)) minmax(0, 1fr)",
 		gridTemplateRows: "auto auto",
 		rowGap: tokens["--space-4"],
 	},
@@ -782,8 +787,9 @@ const listOrientationStyles = stylex.create({
 		flexDirection: "column",
 		gridRowEnd: "-1",
 		gridRowStart: "1",
+		maxWidth: "24rem",
 		minHeight: 0,
-		minWidth: "12rem",
+		minWidth: 0,
 	},
 });
 
@@ -792,7 +798,6 @@ const indicatorOrientationStyles = stylex.create({
 		height: "var(--_stepper-connector-thickness)",
 	},
 	vertical: {
-		top: 0,
 		width: "var(--_stepper-connector-thickness)",
 	},
 });
@@ -809,6 +814,7 @@ const stepOrientationStyles = stylex.create({
 	vertical: {
 		alignItems: "start",
 		gridTemplateColumns: "var(--_stepper-marker-size) minmax(0, 1fr)",
+		minWidth: 0,
 		width: "100%",
 	},
 });
@@ -831,6 +837,7 @@ const headingOrientationStyles = stylex.create({
 	vertical: {
 		gridColumn: "2",
 		paddingBlockStart: tokens["--space-0-5"],
+		minWidth: 0,
 	},
 });
 

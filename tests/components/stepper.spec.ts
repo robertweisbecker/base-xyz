@@ -199,6 +199,10 @@ test("preserves mounted panel state and silently falls back when the domain chan
 	await expect(domain.getByRole("tab", { name: "Review" })).toHaveAttribute("aria-selected", "true");
 	await expect(domain.getByRole("tabpanel", { name: "Review" })).toBeVisible();
 	await expect(lastChange).toHaveText("Last change: none");
+	await expect(domain.getByRole("tab", { name: "Review" }).locator("[aria-hidden]").first()).not.toHaveCSS(
+		"box-shadow",
+		"none",
+	);
 
 	await domain.getByRole("button", { name: "Remove current step" }).click();
 	await expect(domain.getByRole("tab", { name: "Profile" })).toHaveAttribute("aria-selected", "true");
@@ -327,6 +331,7 @@ async function connectorMeetsCurrentMarker(root: Locator) {
 		x: Math.max(...segments.map((segment) => segment.right)),
 		y: Math.max(...segments.map((segment) => segment.bottom)),
 	};
+	const fillStart = horizontal ? fillBox.x : fillBox.y;
 	const fillEdge = horizontal ? fillBox.x + fillBox.width : fillBox.y + fillBox.height;
 	const fillCenter = horizontal ? fillBox.y + fillBox.height / 2 : fillBox.x + fillBox.width / 2;
 	const currentCross = horizontal ? currentCenter.y : currentCenter.x;
@@ -337,11 +342,14 @@ async function connectorMeetsCurrentMarker(root: Locator) {
 	const endOk = horizontal
 		? Math.abs(trackEnd.x - lastCenter.x) <= 1
 		: Math.abs(trackEnd.y - lastCenter.y) <= 1;
+	const fillOriginOk = horizontal
+		? Math.abs(fillStart - firstCenter.x) <= 2
+		: Math.abs(fillStart - firstCenter.y) <= 2;
 	const fillOk = horizontal
 		? Math.abs(fillEdge - currentCenter.x) <= 2 && Math.abs(fillCenter - currentCross) <= 1
 		: Math.abs(fillEdge - currentCenter.y) <= 2 && Math.abs(fillCenter - currentCross) <= 1;
 
-	return startOk && endOk && fillOk;
+	return startOk && endOk && fillOriginOk && fillOk;
 }
 
 async function markersAreOpaque(root: Locator) {
