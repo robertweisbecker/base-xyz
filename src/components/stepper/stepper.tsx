@@ -793,17 +793,17 @@ const rootOrientationStyles = stylex.create({
 
 const listOrientationStyles = stylex.create({
 	horizontal: {
+		gridColumn: "1",
 		alignItems: "flex-start",
 		alignSelf: "stretch",
-		gridColumn: "1",
 		flexDirection: "row",
 		flexWrap: "nowrap",
 		minWidth: 0,
 	},
 	vertical: {
+		gridColumn: "1",
 		alignItems: "stretch",
 		alignSelf: "stretch",
-		gridColumn: "1",
 		flexDirection: "column",
 		gridRowEnd: "-1",
 		gridRowStart: "1",
