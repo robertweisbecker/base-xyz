@@ -643,8 +643,8 @@ const stepperParts = stylex.create({
 		boxSizing: "border-box",
 		display: "flex",
 		isolation: "isolate",
-		minWidth: 0,
 		position: "relative",
+		minWidth: 0,
 		width: "100%",
 	},
 	step: {
@@ -795,16 +795,16 @@ const listOrientationStyles = stylex.create({
 	horizontal: {
 		alignItems: "flex-start",
 		alignSelf: "stretch",
+		gridColumn: "1",
 		flexDirection: "row",
 		flexWrap: "nowrap",
-		gridColumn: "1",
 		minWidth: 0,
 	},
 	vertical: {
 		alignItems: "stretch",
 		alignSelf: "stretch",
-		flexDirection: "column",
 		gridColumn: "1",
+		flexDirection: "column",
 		gridRowEnd: "-1",
 		gridRowStart: "1",
 		minHeight: 0,
