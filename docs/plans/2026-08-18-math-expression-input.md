@@ -2,7 +2,9 @@
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
-**Goal:** A private math-expression evaluation seam (pure evaluator + internal hook) whose first consumer is a story-local field harness in the NumberField stories, so typing `100 / 5` and committing yields `20`.
+**Goal:** A private math-expression evaluation seam (pure evaluator + internal hook) whose first consumer is an experimental `MathExpressionField`, so typing `100 / 5` and committing yields `20`.
+
+**Implementation note:** Shipped as `src/experimental/math-expression-field/` rather than a NumberField story-local harness, so the field can be exercised independently without changing the public NumberField contract. Evaluator and hook locations are unchanged. Nothing is exported from `src/components/index.ts`.
 
 **Architecture:** Three layers: a pure `evaluateMathExpression` utility in `src/utils/`, an internal `useMathExpressionInput` hook in `src/hooks/` that owns draft/commit state, and a story-local `MathExpressionField` harness defined inside `src/components/number-field/number-field.stories.tsx` that owns markup, Field semantics, and form submission. Display is derived at render time (`draft ?? format(committedValue)`) — there is no synchronization effect. No component source files change and nothing is exported from `src/components/index.ts`.
 
