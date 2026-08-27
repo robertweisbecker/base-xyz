@@ -51,7 +51,6 @@ type StepperRootContextValue = {
 	effectiveValue: StepperValue | null;
 	goToAdjacent: (delta: -1 | 1, event: ReactMouseEvent<HTMLElement>) => void;
 	orderedSteps: readonly StepRecord[];
-	registerPanel: (value: StepperValue, node: HTMLElement) => () => void;
 	registerStep: (record: StepRecord) => () => void;
 };
 
@@ -86,6 +85,7 @@ export type StepperRootProps = Omit<
 	};
 
 export function Root({
+	ref,
 	className,
 	defaultValue,
 	onValueChange,
@@ -96,6 +96,8 @@ export function Root({
 	...props
 }: StepperRootProps) {
 	const { marginStyles, rest } = extractMarginProps(props);
+	const rootRef = useRef<HTMLDivElement | null>(null);
+	const mergedRef = useMergedRefs(ref, rootRef);
 	const isControlled = valueProp !== undefined;
 	const [uncontrolledValue, setUncontrolledValue] = useState(defaultValue);
 	const requestedValue = isControlled ? valueProp : uncontrolledValue;
@@ -103,14 +105,8 @@ export function Root({
 	const effectiveOrientation: StepperOrientation =
 		orientation === "vertical" && isMdViewport ? "vertical" : "horizontal";
 	const stepsRef = useRef(new Map<StepperValue, StepRecord>());
-	const panelsRef = useRef(new Map<StepperValue, HTMLElement>());
-	const pendingPanelFocusRef = useRef<StepperValue | null>(null);
-	const [stepVersion, setStepVersion] = useState(0);
-	const [focusRequest, setFocusRequest] = useState(0);
-	const orderedSteps = useMemo(() => {
-		void stepVersion;
-		return sortStepRecords([...stepsRef.current.values()]);
-	}, [stepVersion]);
+	const [orderedSteps, setOrderedSteps] = useState<readonly StepRecord[]>([]);
+	const [pendingFocusValue, setPendingFocusValue] = useState<StepperValue | null>(null);
 	const effectiveValue = useMemo(() => {
 		if (orderedSteps.length === 0) {
 			return null;
@@ -121,7 +117,8 @@ export function Root({
 		return orderedSteps[0]?.value ?? null;
 	}, [orderedSteps, requestedValue]);
 	const publishSteps = useCallback(() => {
-		setStepVersion((version) => version + 1);
+		const next = sortStepRecords([...stepsRef.current.values()]);
+		setOrderedSteps((current) => (sameStepSequence(current, next) ? current : next));
 	}, []);
 	const registerStep = useCallback(
 		(record: StepRecord) => {
@@ -141,23 +138,13 @@ export function Root({
 		},
 		[publishSteps],
 	);
-	const registerPanel = useCallback((value: StepperValue, node: HTMLElement) => {
-		panelsRef.current.set(value, node);
-		return () => {
-			if (panelsRef.current.get(value) === node) {
-				panelsRef.current.delete(value);
-			}
-		};
-	}, []);
 	const handleValueChange = useCallback(
 		(next: BaseTabs.Tab.Value, details: StepperChangeEventDetails) => {
 			if (details.reason !== "none" || typeof next !== "string") {
-				pendingPanelFocusRef.current = null;
 				return;
 			}
 			onValueChange?.(next, details);
 			if (details.isCanceled) {
-				pendingPanelFocusRef.current = null;
 				return;
 			}
 			if (!isControlled) {
@@ -173,33 +160,27 @@ export function Root({
 			if (target == null || target.disabled) {
 				return;
 			}
-			pendingPanelFocusRef.current = target.value;
-			handleValueChange(target.value, createCancelableChangeDetails(event.nativeEvent, event.currentTarget));
-			setFocusRequest((request) => request + 1);
+			const details = createCancelableChangeDetails(event.nativeEvent, event.currentTarget);
+			handleValueChange(target.value, details);
+			setPendingFocusValue(details.isCanceled ? null : target.value);
 		},
 		[effectiveValue, handleValueChange, orderedSteps],
 	);
 
 	useLayoutEffect(() => {
-		const sorted = sortStepRecords([...stepsRef.current.values()]);
-		const currentKey = orderedSteps.map((step) => step.value).join("\0");
-		const nextKey = sorted.map((step) => step.value).join("\0");
-		if (currentKey !== nextKey) {
-			publishSteps();
-		}
+		publishSteps();
 	});
 
 	useLayoutEffect(() => {
-		if (effectiveValue == null) {
-			pendingPanelFocusRef.current = null;
+		if (pendingFocusValue == null) {
 			return;
 		}
-		const pending = pendingPanelFocusRef.current;
-		pendingPanelFocusRef.current = null;
-		if (pending != null && pending === effectiveValue) {
-			panelsRef.current.get(effectiveValue)?.focus();
+		const shouldFocus = pendingFocusValue === effectiveValue;
+		setPendingFocusValue(null);
+		if (shouldFocus) {
+			rootRef.current?.querySelector<HTMLElement>('[role="tabpanel"]:not([hidden])')?.focus();
 		}
-	}, [effectiveValue, focusRequest]);
+	}, [effectiveValue, pendingFocusValue]);
 
 	const contextValue = useMemo<StepperRootContextValue>(
 		() => ({
@@ -207,10 +188,9 @@ export function Root({
 			effectiveValue,
 			goToAdjacent,
 			orderedSteps,
-			registerPanel,
 			registerStep,
 		}),
-		[effectiveOrientation, effectiveValue, goToAdjacent, orderedSteps, registerPanel, registerStep],
+		[effectiveOrientation, effectiveValue, goToAdjacent, orderedSteps, registerStep],
 	);
 	const sx = stylex.props(
 		stepperParts.root,
@@ -228,6 +208,7 @@ export function Root({
 				style={mergeStyle(sx.style, style)}
 				value={effectiveValue}
 				{...rest}
+				ref={mergedRef}
 			/>
 		</StepperRootContext>
 	);
@@ -501,22 +482,11 @@ export function Panel({
 	xstyle,
 	...props
 }: StepperPanelProps) {
-	const { registerPanel } = useStepperRootContext();
-	const panelRef = useRef<HTMLDivElement | null>(null);
-	const mergedRef = useMergedRefs(ref, panelRef);
 	const sx = stylex.props(stepperParts.panel, focusRing.inset, xstyle);
-
-	useLayoutEffect(() => {
-		const node = panelRef.current;
-		if (node == null) {
-			return;
-		}
-		return registerPanel(value, node);
-	}, [registerPanel, value]);
 
 	return (
 		<BaseTabs.Panel
-			ref={mergedRef}
+			ref={ref}
 			className={attrJoin(sx.className, className)}
 			keepMounted={keepMounted}
 			style={mergeStyle(sx.style, style)}
@@ -639,6 +609,16 @@ function sortStepRecords(records: StepRecord[]) {
 			return 1;
 		}
 		return 0;
+	});
+}
+
+function sameStepSequence(current: readonly StepRecord[], next: readonly StepRecord[]) {
+	if (current.length !== next.length) {
+		return false;
+	}
+	return current.every((step, index) => {
+		const other = next[index];
+		return other != null && step.value === other.value && step.disabled === other.disabled && step.node === other.node;
 	});
 }
 
