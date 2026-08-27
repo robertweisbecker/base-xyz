@@ -122,7 +122,7 @@ test("maps vertical arrow keys above the md breakpoint and horizontal keys below
 
 	await page.setViewportSize({ width: 500, height: 800 });
 	await expect.poll(async () => list.getAttribute("data-orientation")).toBe("horizontal");
-	await expect(list).toHaveAttribute("aria-orientation", "horizontal");
+	await expect(list).not.toHaveAttribute("aria-orientation");
 	await expect.poll(async () => markerIsAboveTitle(security)).toBe(true);
 	await expect.poll(async () => contentIsBelowList(root)).toBe(true);
 
@@ -287,7 +287,7 @@ async function connectorMeetsCurrentMarker(root: Locator) {
 	const last = await markerBox(tabs.nth((await tabs.count()) - 1));
 	if (first == null || last == null) return false;
 
-	const segments = await root.locator("[data-stepper-track]").evaluateAll((nodes) =>
+	const segments = await root.locator("[role='tab']:not(:last-of-type)").evaluateAll((nodes) =>
 		nodes.map((node) => {
 			const style = getComputedStyle(node, "::after");
 			const rect = node.getBoundingClientRect();
@@ -373,7 +373,7 @@ async function connectorIsBehindMarkers(root: Locator) {
 			const markerZ = marker == null ? Number.NaN : Number.parseFloat(getComputedStyle(marker).zIndex);
 			return Number.isFinite(indicatorZ) && markerZ > indicatorZ;
 		});
-	}, "[data-stepper-track]");
+	}, "[role='tab']");
 }
 
 async function markerBox(tab: Locator) {

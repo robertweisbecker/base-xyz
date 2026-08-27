@@ -12,7 +12,6 @@ import {
 	useState,
 	useSyncExternalStore,
 	type ComponentPropsWithRef,
-	type CSSProperties,
 } from "react";
 import { Button, type ButtonProps } from "@/components/button/button";
 import { fontWeightStyles, textStyles, textTruncationStyles } from "@/components/text/text.stylex";
@@ -158,10 +157,14 @@ export function Root({
 		}
 		const shouldFocus = pendingFocusValue === effectiveValue;
 		setPendingFocusValue(null);
-		if (shouldFocus) {
-			rootRef.current
-				?.querySelector<HTMLElement>(`[data-stepper-panel="${CSS.escape(pendingFocusValue)}"]`)
-				?.focus();
+		if (!shouldFocus) {
+			return;
+		}
+		const panelId = rootRef.current
+			?.querySelector("[role='tab'][aria-selected='true']")
+			?.getAttribute("aria-controls");
+		if (panelId) {
+			document.getElementById(panelId)?.focus();
 		}
 	}, [effectiveValue, pendingFocusValue]);
 
@@ -223,18 +226,12 @@ export function List({ ref, children, className, style, xstyle, ...props }: Step
 			loopFocus={false}
 			style={mergeStyle(sx.style, style)}
 			{...props}
-			aria-orientation={effectiveOrientation}
 			ref={ref}>
 			{children}
 			<BaseTabs.Indicator
 				className={indicatorSx.className}
 				data-stepper-indicator=""
-				style={(state) =>
-					mergeStyle(
-						indicatorSx.style,
-						indicatorFillStyle(state.activeTabPosition, effectiveOrientation),
-					)
-				}
+				style={indicatorSx.style}
 			/>
 		</BaseTabs.List>
 	);
@@ -266,7 +263,6 @@ export function Step({
 	const statusId = `${instanceId}-status`;
 	const index = declaredSteps.findIndex((step) => step.value === value);
 	const selected = effectiveValue === value;
-	const isLast = index >= 0 && index === declaredSteps.length - 1;
 	const statusLabel = getStatusLabel(status);
 	const [hasDescription, setHasDescription] = useState(false);
 	const registerDescription = useCallback(() => {
@@ -300,9 +296,9 @@ export function Step({
 		focusRing.offset,
 		stepperParts.step,
 		stepOrientationStyles[effectiveOrientation],
-		!isLast && stepBreathingStyles[effectiveOrientation],
-		!isLast && effectiveOrientation === "horizontal" && stepperParts.connectorHorizontal,
-		!isLast && effectiveOrientation === "vertical" && stepperParts.connectorVertical,
+		stepBreathingStyles[effectiveOrientation],
+		effectiveOrientation === "horizontal" && stepperParts.connectorHorizontal,
+		effectiveOrientation === "vertical" && stepperParts.connectorVertical,
 		xstyle,
 	);
 
@@ -313,7 +309,6 @@ export function Step({
 				aria-labelledby={titleId}
 				className={attrJoin(sx.className, className)}
 				data-status={status}
-				data-stepper-track={isLast ? undefined : ""}
 				disabled={disabled}
 				style={mergeStyle(sx.style, style)}
 				type={type}
@@ -459,7 +454,6 @@ export function Panel({
 			style={mergeStyle(sx.style, style)}
 			value={value}
 			{...props}
-			data-stepper-panel={value}
 		/>
 	);
 }
@@ -568,27 +562,6 @@ function sameDeclaredSteps(current: readonly DeclaredStep[], next: readonly Decl
 	});
 }
 
-function indicatorFillStyle(
-	position: { left: number; right: number; top: number } | null,
-	orientation: StepperOrientation,
-): CSSProperties | undefined {
-	if (position == null) {
-		return undefined;
-	}
-	if (orientation === "vertical") {
-		return {
-			height: `calc(${position.top}px - var(--_stepper-list-padding))`,
-			insetInlineStart: `calc(${position.left}px + var(--_stepper-marker-size) / 2 - var(--_stepper-connector-thickness) / 2)`,
-			top: "calc(var(--_stepper-list-padding) + var(--_stepper-marker-size) / 2)",
-		};
-	}
-	return {
-		left: "calc(var(--_stepper-list-padding) + var(--_stepper-marker-size) / 2)",
-		top: `calc(${position.top}px + var(--_stepper-marker-size) / 2 - var(--_stepper-connector-thickness) / 2)`,
-		width: `calc(${position.left}px - var(--_stepper-list-padding))`,
-	};
-}
-
 function getStatusLabel(status: StepperStatus) {
 	switch (status) {
 		case "incomplete":
@@ -673,6 +646,10 @@ const stepperParts = stylex.create({
 			borderRadius: tokens["--radius-full"],
 			backgroundColor: tokens["--fill-track"],
 			content: '""',
+			display: {
+				default: "block",
+				":last-of-type": "none",
+			},
 			insetBlockStart: "calc(var(--_stepper-marker-size) / 2 - var(--_stepper-connector-thickness) / 2)",
 			insetInlineStart: "calc(var(--_stepper-marker-size) / 2)",
 			pointerEvents: "none",
@@ -687,6 +664,10 @@ const stepperParts = stylex.create({
 			borderRadius: tokens["--radius-full"],
 			backgroundColor: tokens["--fill-track"],
 			content: '""',
+			display: {
+				default: "block",
+				":last-of-type": "none",
+			},
 			insetBlockStart: "calc(var(--_stepper-marker-size) / 2)",
 			insetInlineStart: "calc(var(--_stepper-marker-size) / 2 - var(--_stepper-connector-thickness) / 2)",
 			pointerEvents: "none",
@@ -812,8 +793,14 @@ const listOrientationStyles = stylex.create({
 const indicatorOrientationStyles = stylex.create({
 	horizontal: {
 		height: "var(--_stepper-connector-thickness)",
+		left: "calc(var(--_stepper-list-padding) + var(--_stepper-marker-size) / 2)",
+		top: "calc(var(--active-tab-top) + var(--_stepper-marker-size) / 2 - var(--_stepper-connector-thickness) / 2)",
+		width: "calc(var(--active-tab-left) - var(--_stepper-list-padding))",
 	},
 	vertical: {
+		height: "calc(var(--active-tab-top) - var(--_stepper-list-padding))",
+		insetInlineStart: "calc(var(--active-tab-left) + var(--_stepper-marker-size) / 2 - var(--_stepper-connector-thickness) / 2)",
+		top: "calc(var(--_stepper-list-padding) + var(--_stepper-marker-size) / 2)",
 		width: "var(--_stepper-connector-thickness)",
 	},
 });
@@ -837,10 +824,16 @@ const stepOrientationStyles = stylex.create({
 
 const stepBreathingStyles = stylex.create({
 	horizontal: {
-		paddingInlineEnd: tokens["--space-6"],
+		paddingInlineEnd: {
+			default: tokens["--space-6"],
+			":last-of-type": 0,
+		},
 	},
 	vertical: {
-		paddingBlockEnd: tokens["--space-6"],
+		paddingBlockEnd: {
+			default: tokens["--space-6"],
+			":last-of-type": 0,
+		},
 	},
 });
 
