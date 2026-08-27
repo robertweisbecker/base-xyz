@@ -178,7 +178,7 @@ export function Root({
 		const shouldFocus = pendingFocusValue === effectiveValue;
 		setPendingFocusValue(null);
 		if (shouldFocus) {
-			rootRef.current?.querySelector<HTMLElement>('[role="tabpanel"]:not([hidden])')?.focus();
+			rootRef.current?.querySelector<HTMLElement>('[role="tabpanel"][tabindex="0"]')?.focus();
 		}
 	}, [effectiveValue, pendingFocusValue]);
 
