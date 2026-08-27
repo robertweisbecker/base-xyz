@@ -559,10 +559,12 @@ function indicatorFillStyle(
 	if (orientation === "vertical") {
 		return {
 			height: `calc(${position.top}px + var(--_stepper-marker-size) / 2)`,
+			insetInlineStart: `calc(${position.left}px + var(--_stepper-marker-size) / 2 - var(--_stepper-connector-thickness) / 2)`,
 		};
 	}
 	return {
 		left: 0,
+		top: `calc(${position.top}px + var(--_stepper-marker-size) / 2 - var(--_stepper-connector-thickness) / 2)`,
 		width: `calc(${position.left}px + var(--_stepper-marker-size) / 2)`,
 	};
 }
@@ -788,10 +790,8 @@ const listOrientationStyles = stylex.create({
 const indicatorOrientationStyles = stylex.create({
 	horizontal: {
 		height: "var(--_stepper-connector-thickness)",
-		top: "calc(var(--_stepper-marker-size) / 2 - var(--_stepper-connector-thickness) / 2)",
 	},
 	vertical: {
-		insetInlineStart: "calc(var(--_stepper-marker-size) / 2 - var(--_stepper-connector-thickness) / 2)",
 		top: 0,
 		width: "var(--_stepper-connector-thickness)",
 	},

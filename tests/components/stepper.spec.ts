@@ -328,6 +328,8 @@ async function connectorMeetsCurrentMarker(root: Locator) {
 		y: Math.max(...segments.map((segment) => segment.bottom)),
 	};
 	const fillEdge = horizontal ? fillBox.x + fillBox.width : fillBox.y + fillBox.height;
+	const fillCenter = horizontal ? fillBox.y + fillBox.height / 2 : fillBox.x + fillBox.width / 2;
+	const currentCross = horizontal ? currentCenter.y : currentCenter.x;
 
 	const startOk = horizontal
 		? Math.abs(trackStart.x - firstCenter.x) <= 1
@@ -336,8 +338,8 @@ async function connectorMeetsCurrentMarker(root: Locator) {
 		? Math.abs(trackEnd.x - lastCenter.x) <= 1
 		: Math.abs(trackEnd.y - lastCenter.y) <= 1;
 	const fillOk = horizontal
-		? Math.abs(fillEdge - currentCenter.x) <= 2
-		: Math.abs(fillEdge - currentCenter.y) <= 2;
+		? Math.abs(fillEdge - currentCenter.x) <= 2 && Math.abs(fillCenter - currentCross) <= 1
+		: Math.abs(fillEdge - currentCenter.y) <= 2 && Math.abs(fillCenter - currentCross) <= 1;
 
 	return startOk && endOk && fillOk;
 }
