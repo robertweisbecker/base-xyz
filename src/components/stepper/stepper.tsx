@@ -247,6 +247,7 @@ export function Step({
 	type = "button",
 	value,
 	xstyle,
+	"aria-describedby": ariaDescribedBy,
 	...props
 }: StepperStepProps) {
 	const { declaredSteps, effectiveOrientation, effectiveValue } = useStepperRootContext();
@@ -263,7 +264,11 @@ export function Step({
 		setHasDescription(true);
 		return () => setHasDescription(false);
 	}, []);
-	const describedBy = attrJoin(hasDescription ? descriptionId : undefined, statusLabel ? statusId : undefined);
+	const describedBy = attrJoin(
+		ariaDescribedBy,
+		hasDescription ? descriptionId : undefined,
+		statusLabel ? statusId : undefined,
+	);
 
 	const stepContext = useMemo<StepperStepContextValue>(
 		() => ({
@@ -293,7 +298,6 @@ export function Step({
 		<StepperStepContext value={stepContext}>
 			<BaseTabs.Tab
 				ref={ref}
-				aria-describedby={describedBy || undefined}
 				aria-labelledby={titleId}
 				className={attrJoin(sx.className, className)}
 				data-status={status}
@@ -303,7 +307,8 @@ export function Step({
 				style={mergeStyle(sx.style, style)}
 				type={type}
 				value={value}
-				{...props}>
+				{...props}
+				aria-describedby={describedBy || undefined}>
 				{children}
 				{statusLabel ? (
 					<VisuallyHidden id={statusId}>{statusLabel}</VisuallyHidden>
@@ -442,8 +447,8 @@ export function Panel({
 			keepMounted={keepMounted}
 			style={mergeStyle(sx.style, style)}
 			value={value}
-			data-stepper-panel={value}
 			{...props}
+			data-stepper-panel={value}
 		/>
 	);
 }

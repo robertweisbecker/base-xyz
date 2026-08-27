@@ -32,6 +32,7 @@ test("exposes tab semantics, names, and descriptions without marker text", async
 	await expect(account).toHaveAccessibleName("Account");
 	await expect(account).toHaveAccessibleDescription(/Saved contact details\./);
 	await expect(account).toHaveAccessibleDescription(/Completed/);
+	await expect(account).toHaveAccessibleDescription(/External account hint/);
 	await expect(review).toHaveAccessibleName("Review");
 	await expect(review).toHaveAccessibleDescription("Confirm the submitted information.");
 	await expect(documents).toHaveAccessibleDescription(/Invalid/);

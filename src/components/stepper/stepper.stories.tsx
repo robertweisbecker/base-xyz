@@ -7,6 +7,7 @@ import { Box, Stack } from "@/components/layout/layout";
 import { Separator } from "@/components/separator/separator";
 import { Text } from "@/components/text/text";
 import { TextField } from "@/components/text-field/text-field";
+import { VisuallyHidden } from "@/components/visually-hidden/visually-hidden";
 import { Stepper, type StepperOrientation, type StepperStatus } from "./stepper";
 
 const iconOptions = {
@@ -147,9 +148,16 @@ export const States: Story = {
 			<Text color="muted" size="1">
 				Completed, current, incomplete, invalid, and locked
 			</Text>
+			<VisuallyHidden id="states-account-external-hint">External account hint.</VisuallyHidden>
 			<Stepper.Root defaultValue="review">
 				<Stepper.List aria-label="Verification progress">
-					<AccountStep description="Saved contact details." status="completed" title="Account" value="account" />
+					<AccountStep
+						aria-describedby="states-account-external-hint"
+						description="Saved contact details."
+						status="completed"
+						title="Account"
+						value="account"
+					/>
 					<AccountStep description="Confirm the submitted information." title="Review" value="review" />
 					<AccountStep description="Not started yet." title="Billing" value="billing" />
 					<AccountStep
@@ -413,6 +421,7 @@ function DomainStepper() {
 }
 
 function AccountStep({
+	"aria-describedby": ariaDescribedBy,
 	description,
 	disabled,
 	marker,
@@ -420,6 +429,7 @@ function AccountStep({
 	title,
 	value,
 }: {
+	"aria-describedby"?: string;
 	description: string;
 	disabled?: boolean;
 	marker?: ReactNode;
@@ -428,7 +438,7 @@ function AccountStep({
 	value: string;
 }) {
 	return (
-		<Stepper.Step disabled={disabled} status={status} value={value}>
+		<Stepper.Step aria-describedby={ariaDescribedBy} disabled={disabled} status={status} value={value}>
 			<Stepper.Marker>{marker}</Stepper.Marker>
 			<Stepper.Heading>
 				<Stepper.Title>{title}</Stepper.Title>
