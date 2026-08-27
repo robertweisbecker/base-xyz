@@ -12,6 +12,7 @@ import {
 	useState,
 	useSyncExternalStore,
 	type ComponentPropsWithRef,
+	type CSSProperties,
 	type MouseEvent as ReactMouseEvent,
 } from "react";
 import { Button, type ButtonProps } from "@/components/button/button";
@@ -39,7 +40,7 @@ type StepperPartStyleProps = BaseStyleProps & {
 
 type StepRecord = {
 	disabled: boolean;
-	node: HTMLElement | null;
+	node: HTMLElement;
 	value: StepperValue;
 };
 
@@ -71,8 +72,6 @@ const StepperStepContext = createContext<StepperStepContextValue | null>(null);
 
 /** Matches `breakpoints.md` (`@media (min-width: 48rem)`). */
 const MD_MEDIA_QUERY = "(min-width: 48rem)";
-const DOCUMENT_FOLLOWING = 4;
-const DOCUMENT_PRECEDING = 2;
 
 export type StepperRootProps = Omit<
 	BaseTabs.Root.Props,
@@ -167,16 +166,6 @@ export function Root({
 		},
 		[isControlled, onValueChange],
 	);
-	const requestValue = useCallback(
-		(next: StepperValue, event: Event, trigger?: Element) => {
-			if (next === effectiveValue) {
-				pendingPanelFocusRef.current = null;
-				return;
-			}
-			handleValueChange(next, createCancelableChangeDetails(event, trigger));
-		},
-		[effectiveValue, handleValueChange],
-	);
 	const goToAdjacent = useCallback(
 		(delta: -1 | 1, event: ReactMouseEvent<HTMLElement>) => {
 			const currentIndex = orderedSteps.findIndex((step) => step.value === effectiveValue);
@@ -185,10 +174,10 @@ export function Root({
 				return;
 			}
 			pendingPanelFocusRef.current = target.value;
-			requestValue(target.value, event.nativeEvent, event.currentTarget);
+			handleValueChange(target.value, createCancelableChangeDetails(event.nativeEvent, event.currentTarget));
 			setFocusRequest((request) => request + 1);
 		},
-		[effectiveValue, orderedSteps, requestValue],
+		[effectiveValue, handleValueChange, orderedSteps],
 	);
 
 	useLayoutEffect(() => {
@@ -291,7 +280,12 @@ export function List({ children, className, style, xstyle, ...props }: StepperLi
 				<BaseTabs.Indicator
 					className={indicatorSx.className}
 					data-stepper-indicator=""
-					style={indicatorSx.style}
+					style={(state) =>
+						mergeStyle(
+							indicatorSx.style,
+							indicatorFillStyle(state.activeTabPosition, effectiveOrientation, viewportRef.current),
+						)
+					}
 				/>
 			</BaseTabs.List>
 		</ScrollArea>
@@ -335,7 +329,11 @@ export function Step({
 	const describedBy = attrJoin(hasDescription ? descriptionId : undefined, statusLabel ? statusId : undefined);
 
 	useLayoutEffect(() => {
-		return registerStep({ disabled, node: stepRef.current, value });
+		const node = stepRef.current;
+		if (node == null) {
+			return;
+		}
+		return registerStep({ disabled, node, value });
 	}, [disabled, registerStep, value]);
 
 	const stepContext = useMemo<StepperStepContextValue>(
@@ -489,7 +487,10 @@ export function Content({ className, style, xstyle, ...props }: StepperContentPr
 	);
 }
 
-export type StepperPanelProps = Omit<BaseTabs.Panel.Props, "className" | "style"> & StepperPartStyleProps;
+export type StepperPanelProps = Omit<BaseTabs.Panel.Props, "className" | "style" | "value"> &
+	StepperPartStyleProps & {
+		value: StepperValue;
+	};
 
 export function Panel({
 	ref,
@@ -510,7 +511,7 @@ export function Panel({
 		if (node == null) {
 			return;
 		}
-		return registerPanel(String(value), node);
+		return registerPanel(value, node);
 	}, [registerPanel, value]);
 
 	return (
@@ -525,38 +526,24 @@ export function Panel({
 	);
 }
 
-export function Previous({
-	disabled,
-	onClick,
-	variant = "secondary",
-	...props
-}: ButtonProps) {
-	const { effectiveValue, goToAdjacent, orderedSteps } = useStepperRootContext();
-	const currentIndex = orderedSteps.findIndex((step) => step.value === effectiveValue);
-	const previous = currentIndex < 0 ? undefined : orderedSteps[currentIndex - 1];
-	const adjacencyDisabled = previous == null || previous.disabled;
-
-	return (
-		<Button
-			disabled={Boolean(disabled) || adjacencyDisabled}
-			onClick={(event) => {
-				onClick?.(event);
-				if (event.defaultPrevented) {
-					return;
-				}
-				goToAdjacent(-1, event);
-			}}
-			variant={variant}
-			{...props}
-		/>
-	);
+export function Previous({ disabled, onClick, variant = "secondary", ...props }: ButtonProps) {
+	return <AdjacentButton delta={-1} disabled={disabled} onClick={onClick} variant={variant} {...props} />;
 }
 
 export function Next({ disabled, onClick, variant = "primary", ...props }: ButtonProps) {
+	return <AdjacentButton delta={1} disabled={disabled} onClick={onClick} variant={variant} {...props} />;
+}
+
+function AdjacentButton({
+	delta,
+	disabled,
+	onClick,
+	...props
+}: ButtonProps & { delta: -1 | 1 }) {
 	const { effectiveValue, goToAdjacent, orderedSteps } = useStepperRootContext();
 	const currentIndex = orderedSteps.findIndex((step) => step.value === effectiveValue);
-	const next = currentIndex < 0 ? undefined : orderedSteps[currentIndex + 1];
-	const adjacencyDisabled = next == null || next.disabled;
+	const target = currentIndex < 0 ? undefined : orderedSteps[currentIndex + delta];
+	const adjacencyDisabled = target == null || target.disabled;
 
 	return (
 		<Button
@@ -566,9 +553,8 @@ export function Next({ disabled, onClick, variant = "primary", ...props }: Butto
 				if (event.defaultPrevented) {
 					return;
 				}
-				goToAdjacent(1, event);
+				goToAdjacent(delta, event);
 			}}
-			variant={variant}
 			{...props}
 		/>
 	);
@@ -642,18 +628,39 @@ function scrollChildIntoViewport(child: HTMLElement, viewport: HTMLElement) {
 
 function sortStepRecords(records: StepRecord[]) {
 	return [...records].sort((left, right) => {
-		if (left.node == null || right.node == null || left.node === right.node) {
+		if (left.node === right.node) {
 			return 0;
 		}
 		const position = left.node.compareDocumentPosition(right.node);
-		if (position & DOCUMENT_FOLLOWING) {
+		if (position & Node.DOCUMENT_POSITION_FOLLOWING) {
 			return -1;
 		}
-		if (position & DOCUMENT_PRECEDING) {
+		if (position & Node.DOCUMENT_POSITION_PRECEDING) {
 			return 1;
 		}
 		return 0;
 	});
+}
+
+function indicatorFillStyle(
+	position: { left: number; right: number; top: number } | null,
+	orientation: StepperOrientation,
+	viewport: HTMLElement | null,
+): CSSProperties | undefined {
+	if (position == null) {
+		return undefined;
+	}
+	if (orientation === "vertical") {
+		return {
+			height: `calc(${position.top}px + var(--_stepper-marker-size) / 2)`,
+		};
+	}
+	const rtl = viewport != null && getComputedStyle(viewport).direction === "rtl";
+	return {
+		left: rtl ? "auto" : 0,
+		right: rtl ? 0 : "auto",
+		width: `calc(${rtl ? position.right : position.left}px + var(--_stepper-marker-size) / 2)`,
+	};
 }
 
 function getStatusLabel(status: StepperStatus) {
@@ -887,23 +894,10 @@ const listOrientationStyles = stylex.create({
 const indicatorOrientationStyles = stylex.create({
 	horizontal: {
 		height: "var(--_stepper-connector-thickness)",
-		left: {
-			default: 0,
-			[stylex.when.ancestor("[dir='rtl']")]: "auto",
-		},
-		right: {
-			default: "auto",
-			[stylex.when.ancestor("[dir='rtl']")]: 0,
-		},
 		top: "calc(var(--_stepper-marker-size) / 2 - var(--_stepper-connector-thickness) / 2)",
-		width: {
-			default: "calc(var(--active-tab-left) + var(--_stepper-marker-size) / 2)",
-			[stylex.when.ancestor("[dir='rtl']")]: "calc(var(--active-tab-right) + var(--_stepper-marker-size) / 2)",
-		},
 	},
 	vertical: {
-		height: "calc(var(--active-tab-top) + var(--_stepper-marker-size) / 2)",
-		left: "calc(var(--_stepper-marker-size) / 2 - var(--_stepper-connector-thickness) / 2)",
+		insetInlineStart: "calc(var(--_stepper-marker-size) / 2 - var(--_stepper-connector-thickness) / 2)",
 		top: 0,
 		width: "var(--_stepper-connector-thickness)",
 	},

@@ -144,11 +144,6 @@ test("pages to adjacent steps, respects locks, and focuses accepted panels", asy
 	await expect(root.getByRole("tab", { name: "Security" })).toHaveAttribute("aria-selected", "true");
 	await expect(panel).toBeFocused();
 
-	const states = page.getByTestId("states-stepper");
-	if (await states.count()) {
-		// States lives on another story; lock coverage uses that fixture below.
-	}
-
 	await root.getByRole("tab", { name: "Profile" }).click();
 	await expect(root.getByRole("tab", { name: "Profile" })).toBeFocused();
 });
