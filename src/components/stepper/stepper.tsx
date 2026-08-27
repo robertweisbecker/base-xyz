@@ -798,8 +798,8 @@ const indicatorOrientationStyles = stylex.create({
 		width: "calc(var(--active-tab-left) - var(--_stepper-list-padding))",
 	},
 	vertical: {
-		height: "calc(var(--active-tab-top) - var(--_stepper-list-padding))",
 		insetInlineStart: "calc(var(--active-tab-left) + var(--_stepper-marker-size) / 2 - var(--_stepper-connector-thickness) / 2)",
+		height: "calc(var(--active-tab-top) - var(--_stepper-list-padding))",
 		top: "calc(var(--_stepper-list-padding) + var(--_stepper-marker-size) / 2)",
 		width: "var(--_stepper-connector-thickness)",
 	},
