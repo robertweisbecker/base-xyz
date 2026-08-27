@@ -17,7 +17,7 @@ test.afterEach(({ page }) => {
 
 test("keeps the raw expression while typing and evaluates on blur", async ({ page }) => {
 	await page.goto(storyPath);
-	const input = page.getByRole("textbox", { name: "Amount" });
+	const input = page.getByRole("textbox", { name: "Amount", exact: true });
 	await expect(input).toHaveValue("12");
 
 	await input.fill("");
@@ -37,7 +37,7 @@ test("keeps the raw expression while typing and evaluates on blur", async ({ pag
 
 test("keeps invalid expressions visible with an error", async ({ page }) => {
 	await page.goto(storyPath);
-	const input = page.getByRole("textbox", { name: "Amount" });
+	const input = page.getByRole("textbox", { name: "Amount", exact: true });
 
 	await input.fill("2 +");
 	await input.blur();
@@ -54,7 +54,7 @@ test("keeps invalid expressions visible with an error", async ({ page }) => {
 
 test("reverts the draft on Escape", async ({ page }) => {
 	await page.goto(storyPath);
-	const input = page.getByRole("textbox", { name: "Amount" });
+	const input = page.getByRole("textbox", { name: "Amount", exact: true });
 	await input.fill("5 + 5");
 	await input.press("Escape");
 	await expect(input).toHaveValue("12");
