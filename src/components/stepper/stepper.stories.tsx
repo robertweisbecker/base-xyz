@@ -152,7 +152,13 @@ function ControlledStepper() {
 	const next = values[index + 1];
 
 	return (
-		<Stepper.Root onValueChange={setValue} value={value}>
+		<Stepper.Root
+			onValueChange={(nextValue) => {
+				if (nextValue != null) {
+					setValue(nextValue);
+				}
+			}}
+			value={value}>
 			<Stepper.List aria-label="Controlled account setup">
 				<AccountStep description="Add your personal details." marker={1} status="completed" title="Profile" value="profile" />
 				<AccountStep description="Choose authentication options." marker={2} title="Security" value="security" />
