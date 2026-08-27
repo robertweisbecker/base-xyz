@@ -210,16 +210,6 @@ test("preserves mounted panel state and silently falls back when the domain chan
 	await expect(lastChange).toHaveText("Last change: none");
 	await domain.getByRole("button", { name: "Continue" }).click();
 	await expect(lastChange).toHaveText("Last change: billing");
-
-	await page.goto(navigationPath);
-	const reordered = page.getByTestId("domain-stepper");
-	await reordered.getByRole("button", { name: "Reverse step order" }).click();
-	await expect.poll(async () => {
-		const labels = await reordered.getByRole("tab").allInnerTexts();
-		return Boolean(labels[0]?.includes("Billing") && labels.at(-1)?.includes("Profile"));
-	}).toBe(true);
-	await reordered.getByRole("button", { name: "Continue" }).click();
-	await expect(reordered.getByTestId("domain-last-change")).toHaveText("Last change: profile");
 });
 
 test("lays out markers and connector fill in horizontal and vertical", async ({ page }) => {

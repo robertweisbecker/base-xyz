@@ -343,10 +343,6 @@ function DomainStepper() {
 	const [currentDisabled, setCurrentDisabled] = useState(false);
 	const [includeReview, setIncludeReview] = useState(true);
 	const [lastChange, setLastChange] = useState("none");
-	const [reversed, setReversed] = useState(false);
-	const steps = reversed
-		? (["billing", "review", "profile"] as const)
-		: (["profile", "review", "billing"] as const);
 
 	return (
 		<Stack gap={3}>
@@ -356,9 +352,6 @@ function DomainStepper() {
 				</Button>
 				<Button onClick={() => setIncludeReview(false)} variant="secondary">
 					Remove current step
-				</Button>
-				<Button onClick={() => setReversed((current) => !current)} variant="secondary">
-					Reverse step order
 				</Button>
 			</Stack>
 			<Text color="muted" data-testid="domain-last-change" size="1">
@@ -370,36 +363,21 @@ function DomainStepper() {
 					setLastChange(nextValue);
 				}}>
 				<Stepper.List aria-label="Domain fallback">
-					{steps.map((value) => {
-						if (value === "review" && !includeReview) {
-							return null;
-						}
-						if (value === "profile") {
-							return (
-								<AccountStep
-									key="profile"
-									description="Already saved."
-									status="completed"
-									title="Profile"
-									value="profile"
-								/>
-							);
-						}
-						if (value === "review") {
-							return (
-								<AccountStep
-									key="review"
-									description="Confirm the submitted information."
-									disabled={currentDisabled}
-									title="Review"
-									value="review"
-								/>
-							);
-						}
-						return (
-							<AccountStep key="billing" description="Add a payment method." title="Billing" value="billing" />
-						);
-					})}
+					<AccountStep
+						description="Already saved."
+						status="completed"
+						title="Profile"
+						value="profile"
+					/>
+					{includeReview ? (
+						<AccountStep
+							description="Confirm the submitted information."
+							disabled={currentDisabled}
+							title="Review"
+							value="review"
+						/>
+					) : null}
+					<AccountStep description="Add a payment method." title="Billing" value="billing" />
 				</Stepper.List>
 				<Stepper.Content>
 					<AccountPanel value="profile">

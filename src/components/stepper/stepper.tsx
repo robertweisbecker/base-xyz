@@ -38,6 +38,7 @@ type StepperPartStyleProps = BaseStyleProps & {
 
 type DeclaredStep = {
 	disabled: boolean;
+	id: string;
 	value: StepperValue;
 };
 
@@ -49,7 +50,7 @@ type StepperRootContextValue = {
 	effectiveOrientation: StepperOrientation;
 	effectiveValue: StepperValue | null;
 	queuePanelFocus: (value: StepperValue | null) => void;
-	replaceSteps: (next: DeclaredStep[]) => void;
+	registerStep: (record: DeclaredStep) => () => void;
 };
 
 type StepperStepContextValue = {
@@ -100,6 +101,7 @@ export function Root({
 	const [uncontrolledValue, setUncontrolledValue] = useState(defaultValue);
 	const [declaredSteps, setDeclaredSteps] = useState<readonly DeclaredStep[]>([]);
 	const [pendingFocusValue, setPendingFocusValue] = useState<StepperValue | null>(null);
+	const registeredStepsRef = useRef<DeclaredStep[]>([]);
 	const requestedValue = isControlled ? valueProp : uncontrolledValue;
 	const isMdViewport = useIsMdViewport();
 	const effectiveOrientation: StepperOrientation =
@@ -130,9 +132,22 @@ export function Root({
 		},
 		[commitValue],
 	);
-	const replaceSteps = useCallback((next: DeclaredStep[]) => {
+	const publishDeclaredSteps = useCallback(() => {
+		const next = registeredStepsRef.current;
 		setDeclaredSteps((current) => (sameDeclaredSteps(current, next) ? current : next));
 	}, []);
+	const registerStep = useCallback(
+		(record: DeclaredStep) => {
+			registeredStepsRef.current = upsertDeclaredStep(registeredStepsRef.current, record);
+			warnDuplicateStepValues(registeredStepsRef.current);
+			publishDeclaredSteps();
+			return () => {
+				registeredStepsRef.current = registeredStepsRef.current.filter((step) => step.id !== record.id);
+				publishDeclaredSteps();
+			};
+		},
+		[publishDeclaredSteps],
+	);
 	const queuePanelFocus = useCallback((value: StepperValue | null) => {
 		setPendingFocusValue(value);
 	}, []);
@@ -157,9 +172,9 @@ export function Root({
 			effectiveOrientation,
 			effectiveValue,
 			queuePanelFocus,
-			replaceSteps,
+			registerStep,
 		}),
-		[commitValue, declaredSteps, effectiveOrientation, effectiveValue, queuePanelFocus, replaceSteps],
+		[commitValue, declaredSteps, effectiveOrientation, effectiveValue, queuePanelFocus, registerStep],
 	);
 	const sx = stylex.props(
 		stepperParts.root,
@@ -190,9 +205,7 @@ export type StepperListProps = Omit<
 	StepperPartStyleProps;
 
 export function List({ ref, children, className, style, xstyle, ...props }: StepperListProps) {
-	const { effectiveOrientation, replaceSteps } = useStepperRootContext();
-	const listRef = useRef<HTMLDivElement | null>(null);
-	const mergedRef = useMergedRefs(ref, listRef);
+	const { effectiveOrientation } = useStepperRootContext();
 	const sx = stylex.props(
 		stepperParts.list,
 		listOrientationStyles[effectiveOrientation],
@@ -203,10 +216,6 @@ export function List({ ref, children, className, style, xstyle, ...props }: Step
 		indicatorOrientationStyles[effectiveOrientation],
 	);
 
-	useLayoutEffect(() => {
-		replaceSteps(readDeclaredSteps(listRef.current));
-	});
-
 	return (
 		<BaseTabs.List
 			activateOnFocus={false}
@@ -215,7 +224,7 @@ export function List({ ref, children, className, style, xstyle, ...props }: Step
 			style={mergeStyle(sx.style, style)}
 			{...props}
 			aria-orientation={effectiveOrientation}
-			ref={mergedRef}>
+			ref={ref}>
 			{children}
 			<BaseTabs.Indicator
 				className={indicatorSx.className}
@@ -250,7 +259,7 @@ export function Step({
 	"aria-describedby": ariaDescribedBy,
 	...props
 }: StepperStepProps) {
-	const { declaredSteps, effectiveOrientation, effectiveValue } = useStepperRootContext();
+	const { declaredSteps, effectiveOrientation, effectiveValue, registerStep } = useStepperRootContext();
 	const instanceId = useId();
 	const titleId = `${instanceId}-title`;
 	const descriptionId = `${instanceId}-description`;
@@ -284,6 +293,9 @@ export function Step({
 		}),
 		[descriptionId, disabled, effectiveOrientation, index, registerDescription, selected, status, statusId, titleId],
 	);
+
+	useLayoutEffect(() => registerStep({ disabled, id: instanceId, value }), [disabled, instanceId, registerStep, value]);
+
 	const sx = stylex.props(
 		focusRing.offset,
 		stepperParts.step,
@@ -302,7 +314,6 @@ export function Step({
 				className={attrJoin(sx.className, className)}
 				data-status={status}
 				data-stepper-track={isLast ? undefined : ""}
-				data-stepper-value={value}
 				disabled={disabled}
 				style={mergeStyle(sx.style, style)}
 				type={type}
@@ -526,25 +537,25 @@ function getServerMdViewport() {
 	return false;
 }
 
-function readDeclaredSteps(list: HTMLElement | null): DeclaredStep[] {
-	if (list == null) {
-		return [];
+function upsertDeclaredStep(steps: readonly DeclaredStep[], record: DeclaredStep) {
+	const index = steps.findIndex((step) => step.id === record.id);
+	if (index === -1) {
+		return [...steps, record];
 	}
-	const tabs = [...list.querySelectorAll<HTMLElement>('[role="tab"]')];
-	if (import.meta.env.DEV) {
-		const seen = new Set<string>();
-		for (const tab of tabs) {
-			const value = tab.dataset.stepperValue ?? "";
-			if (value !== "" && seen.has(value)) {
-				console.error(`Stepper received duplicate step value "${value}".`);
-			}
-			seen.add(value);
+	return steps.map((step, stepIndex) => (stepIndex === index ? record : step));
+}
+
+function warnDuplicateStepValues(steps: readonly DeclaredStep[]) {
+	if (!import.meta.env.DEV) {
+		return;
+	}
+	const seen = new Set<string>();
+	for (const step of steps) {
+		if (seen.has(step.value)) {
+			console.error(`Stepper received duplicate step value "${step.value}".`);
 		}
+		seen.add(step.value);
 	}
-	return tabs.map((tab) => ({
-		disabled: tab.hasAttribute("data-disabled"),
-		value: tab.dataset.stepperValue ?? "",
-	}));
 }
 
 function sameDeclaredSteps(current: readonly DeclaredStep[], next: readonly DeclaredStep[]) {
