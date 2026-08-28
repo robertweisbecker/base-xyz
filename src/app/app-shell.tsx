@@ -4,9 +4,9 @@ import { StairsIcon } from "@phosphor-icons/react/dist/csr/Stairs";
 import { SunIcon } from "@phosphor-icons/react/dist/csr/Sun";
 import * as stylex from "@stylexjs/stylex";
 import { useLayoutEffect, useState } from "react";
-import { IconButton, Select, Separator } from "@/components";
+import { IconButton, Navbar, Select, Separator } from "@/components";
 import { textStyles } from "@/components/text/text.stylex";
-import { media, zIndex } from "@/styles/constants.stylex";
+import { media } from "@/styles/constants.stylex";
 import { focusRing } from "@/styles/recipes/focus";
 import {
 	ThemeProvider,
@@ -88,73 +88,78 @@ function AppHeader({
 	const nextMode: ResolvedThemeMode = resolvedMode === "light" ? "dark" : "light";
 
 	return (
-		<header {...stylex.props(styles.header)}>
-			<RouterLink
-				to="/"
-				search={true}
-				{...stylex.props(textStyles.supporting, styles.brand, focusRing.offset)}
-			>
-				<span {...stylex.props(styles.brandMark)}>
-					<StairsIcon aria-hidden size={16} weight="duotone" />
-				</span>
-				<span>BaseX</span>
-			</RouterLink>
-			<div {...stylex.props(styles.headerMeta)}>
-				<nav aria-label="Demo pages" {...stylex.props(styles.navigation)}>
-					<RouterLink
-						to="/"
-						activeOptions={{ exact: true }}
-						search={true}
-						{...stylex.props(textStyles.supporting, styles.headerNavLink, focusRing.offset)}
-					>
-						Gallery
-					</RouterLink>
-					<RouterLink
-						to="/experiments"
-						search={true}
-						{...stylex.props(textStyles.supporting, styles.headerNavLink, focusRing.offset)}
-					>
-						Experiments
-					</RouterLink>
-				</nav>
-				<Separator orientation="vertical" />
-				<Select.Root<ThemeName>
-					size="sm"
-					value={theme}
-					items={themeBrandItems}
-					onValueChange={(value) => {
-						if (value) onThemeChange(value);
-					}}
+		<Navbar
+			position="sticky"
+			start={
+				<RouterLink
+					to="/"
+					search={true}
+					{...stylex.props(textStyles.supporting, styles.brand, focusRing.offset)}
 				>
-					<Select.Trigger aria-label="Theme" variant="inline" />
-					<Select.Popup>
-						<Select.List>
-							{themeBrandItems.map((item) => (
-								<Select.Item key={item.value} value={item.value}>
-									{item.label}
-								</Select.Item>
-							))}
-						</Select.List>
-					</Select.Popup>
-				</Select.Root>
-				<IconButton
-					icon={
-						<span {...stylex.props(styles.themeIcon)}>
-							{resolvedMode === "light" ? (
-								<MoonIcon aria-hidden size={themeIconSize} weight="duotone" />
-							) : (
-								<SunIcon aria-hidden size={themeIconSize} weight="duotone" />
-							)}
-						</span>
-					}
-					label={`Switch to ${nextMode} mode`}
-					variant="ghost"
-					shape="circle"
-					size="sm"
-					onClick={() => onModeChange(nextMode)}
-				/>
-			</div>
-		</header>
+					<span {...stylex.props(styles.brandMark)}>
+						<StairsIcon aria-hidden size={16} weight="duotone" />
+					</span>
+					<span>BaseX</span>
+				</RouterLink>
+			}
+			end={
+				<>
+					<nav aria-label="Demo pages" {...stylex.props(styles.navigation)}>
+						<RouterLink
+							to="/"
+							activeOptions={{ exact: true }}
+							search={true}
+							{...stylex.props(textStyles.supporting, styles.headerNavLink, focusRing.offset)}
+						>
+							Gallery
+						</RouterLink>
+						<RouterLink
+							to="/experiments"
+							search={true}
+							{...stylex.props(textStyles.supporting, styles.headerNavLink, focusRing.offset)}
+						>
+							Experiments
+						</RouterLink>
+					</nav>
+					<Separator orientation="vertical" />
+					<Select.Root<ThemeName>
+						size="sm"
+						value={theme}
+						items={themeBrandItems}
+						onValueChange={(value) => {
+							if (value) onThemeChange(value);
+						}}
+					>
+						<Select.Trigger aria-label="Theme" variant="inline" />
+						<Select.Popup>
+							<Select.List>
+								{themeBrandItems.map((item) => (
+									<Select.Item key={item.value} value={item.value}>
+										{item.label}
+									</Select.Item>
+								))}
+							</Select.List>
+						</Select.Popup>
+					</Select.Root>
+					<IconButton
+						icon={
+							<span {...stylex.props(styles.themeIcon)}>
+								{resolvedMode === "light" ? (
+									<MoonIcon aria-hidden size={themeIconSize} weight="duotone" />
+								) : (
+									<SunIcon aria-hidden size={themeIconSize} weight="duotone" />
+								)}
+							</span>
+						}
+						label={`Switch to ${nextMode} mode`}
+						variant="ghost"
+						shape="circle"
+						size="sm"
+						onClick={() => onModeChange(nextMode)}
+					/>
+				</>
+			}
+		/>
 	);
 }
 
@@ -178,28 +183,6 @@ const styles = stylex.create({
 		color: tokens["--fg"],
 		minHeight: "100svh",
 	},
-	header: {
-		paddingInline: tokens["--space-4"],
-		alignItems: "center",
-		// backgroundImage: `linear-gradient(to bottom, ${tokens["--canvas"]}, transparent)`,
-		backgroundColor: tokens["--surface"],
-		display: "flex",
-		justifyContent: "space-between",
-		position: "sticky",
-		zIndex: zIndex.sticky,
-		borderBottomColor: tokens["--border"],
-		borderBottomStyle: "solid",
-		borderBottomWidth: tokens["--border-width"],
-		height: tokens["--size-navbar-height"],
-		top: 0,
-	},
-	brand: {
-		gap: tokens["--space-2"],
-		textDecoration: "none",
-		alignItems: "center",
-		color: tokens["--fg"],
-		display: "inline-flex",
-	},
 	brandMark: {
 		borderRadius: tokens["--radius-xs"],
 		outline: `1px solid ${tokens["--canvas"]}`,
@@ -211,10 +194,12 @@ const styles = stylex.create({
 		justifyContent: "center",
 		height: "20px",
 	},
-	headerMeta: {
-		gap: tokens["--space-3"],
+	brand: {
+		gap: tokens["--space-2"],
+		textDecoration: "none",
 		alignItems: "center",
-		display: "flex",
+		color: tokens["--fg"],
+		display: "inline-flex",
 	},
 	navigation: {
 		gap: tokens["--space-3"],
