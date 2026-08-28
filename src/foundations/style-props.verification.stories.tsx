@@ -73,10 +73,11 @@ function ChipOverflowFixture() {
 			<Combobox.ChipOverflow
 				anchor={anchor}
 				data-forwarded="true"
+				data-testid="chip-overflow-trigger"
 				label="+3 more"
 				xstyle={x.marginInlineStart._8px}
 			>
-				Ada, Grace, Linus
+				<span data-testid="chip-overflow-tooltip">Ada, Grace, Linus</span>
 			</Combobox.ChipOverflow>
 		</div>
 	);

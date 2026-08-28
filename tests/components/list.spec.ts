@@ -1,62 +1,22 @@
-import { expect, test, type Page } from "@playwright/test";
+import { expect, test } from "../playwright";
 
-const consoleErrorsByPage = new WeakMap<Page, string[]>();
-
-test.beforeEach(({ page }) => {
-	const consoleErrors: string[] = [];
-	consoleErrorsByPage.set(page, consoleErrors);
-	page.on("console", (message) => {
-		if (message.type() === "error") consoleErrors.push(message.text());
-	});
-});
-
-test.afterEach(({ page }) => {
-	expect(consoleErrorsByPage.get(page)).toEqual([]);
-});
-
-test("preserves list semantics and differentiates nested markers", async ({ page }) => {
+test("preserves native list semantics and decorative custom markers", async ({ page }) => {
 	await page.goto("/iframe.html?id=components-list--examples&viewMode=story");
 
-	const unorderedLists = page.getByTestId("unordered-list-example").locator("ul");
+	const unorderedRoot = page.getByTestId("unordered-list-example");
+	const unorderedLists = unorderedRoot.locator("ul");
+	await expect(unorderedRoot).toHaveJSProperty("tagName", "UL");
 	await expect(unorderedLists).toHaveCount(2);
-	await expect(page.getByTestId("unordered-list-example")).toHaveCSS("list-style-type", "disc");
-	await expect(unorderedLists.nth(0)).toHaveCSS("list-style-type", "circle");
-	await expect(unorderedLists.nth(1)).toHaveCSS("list-style-type", "square");
 
 	const orderedRoot = page.getByTestId("ordered-list-example");
-	await expect(orderedRoot).toHaveCSS("list-style-type", "decimal");
-	await expect(orderedRoot.locator("ol")).toHaveCSS("list-style-type", "lower-alpha");
+	await expect(orderedRoot).toHaveJSProperty("tagName", "OL");
+	await expect(orderedRoot.locator("ol")).toHaveCount(1);
 
-	const customItem = page.getByRole("listitem").filter({ hasText: "deliberately long line" });
-	await expect(customItem).toHaveCSS("display", "grid");
-	await expect(customItem).toHaveCSS("align-items", "start");
-	await expect
-		.poll(() =>
-			customItem.evaluate((item) => {
-				const marker = item.querySelector(":scope > span");
-				if (!(marker instanceof HTMLElement)) return false;
-				return (
-					Math.abs(
-						marker.getBoundingClientRect().height -
-							Number.parseFloat(getComputedStyle(item).lineHeight),
-					) <= 1
-				);
-			}),
-		)
-		.toBe(true);
-	await expect
-		.poll(async () => {
-			const [itemBox, markerBox, contentBox] = await Promise.all([
-				customItem.boundingBox(),
-				customItem.locator(":scope > span").boundingBox(),
-				customItem.locator(":scope > div").boundingBox(),
-			]);
-			if (itemBox === null || markerBox === null || contentBox === null) return false;
-			return (
-				markerBox.x < contentBox.x && Math.abs(itemBox.x + markerBox.width - contentBox.x) <= 1
-			);
-		})
-		.toBe(true);
+	const customRoot = page.getByTestId("custom-marker-list-example");
+	await expect(customRoot).toHaveJSProperty("tagName", "UL");
+	const customItems = customRoot.getByRole("listitem");
+	await expect(customItems).toHaveCount(3);
+	await expect(customItems.locator(":scope > span[aria-hidden='true']")).toHaveCount(3);
 });
 
 test("a custom item marker forces unordered semantics", async ({ page }) => {

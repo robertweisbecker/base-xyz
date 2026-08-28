@@ -149,22 +149,35 @@ function ShortcutArbitrationFixture() {
 	return (
 		<Stack align="start" gap={3}>
 			<Stack align="center" gap={2} orientation="horizontal" wrap="wrap">
-				<button type="button" onClick={() => setRerenderCount((count) => count + 1)}>
+				<button
+					data-testid="command-rerender"
+					type="button"
+					onClick={() => setRerenderCount((count) => count + 1)}
+				>
 					Rerender callbacks
 				</button>
-				<Text data-testid="rerender-count" size="2">
+				<Text data-testid="rerender-count" data-value={rerenderCount} size="2">
 					Rerenders: {rerenderCount}
 				</Text>
 			</Stack>
-			<button type="button" onClick={() => setSecondMounted(false)} disabled={!secondMounted}>
+			<button
+				data-testid="command-unmount-second"
+				type="button"
+				onClick={() => setSecondMounted(false)}
+				disabled={!secondMounted}
+			>
 				Unmount second palette
 			</button>
-			<input aria-label="Reserved shortcut input" onKeyDown={handleReservedShortcut} />
+			<input
+				aria-label="Reserved shortcut input"
+				data-testid="command-reserved-input"
+				onKeyDown={handleReservedShortcut}
+			/>
 			<Stack align="center" gap={2} orientation="horizontal" wrap="wrap">
-				<Text data-testid="first-open-count" size="2">
+				<Text data-testid="first-open-count" data-value={firstOpens} size="2">
 					First opens: {firstOpens}
 				</Text>
-				<Text data-testid="second-open-count" size="2">
+				<Text data-testid="second-open-count" data-value={secondOpens} size="2">
 					Second opens: {secondOpens}
 				</Text>
 			</Stack>

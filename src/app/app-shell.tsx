@@ -100,7 +100,11 @@ function AppHeader({
 				<span>BaseX</span>
 			</RouterLink>
 			<div {...stylex.props(styles.headerMeta)}>
-				<nav aria-label="Demo pages" {...stylex.props(styles.navigation)}>
+				<nav
+					aria-label="Demo pages"
+					data-testid="app-navigation"
+					{...stylex.props(styles.navigation)}
+				>
 					<RouterLink
 						to="/"
 						activeOptions={{ exact: true }}
@@ -126,11 +130,15 @@ function AppHeader({
 						if (value) onThemeChange(value);
 					}}
 				>
-					<Select.Trigger aria-label="Theme" variant="inline" />
+					<Select.Trigger aria-label="Theme" data-testid="theme-trigger" variant="inline" />
 					<Select.Popup>
 						<Select.List>
 							{themeBrandItems.map((item) => (
-								<Select.Item key={item.value} value={item.value}>
+								<Select.Item
+									data-testid={`theme-option-${item.value}`}
+									key={item.value}
+									value={item.value}
+								>
 									{item.label}
 								</Select.Item>
 							))}
@@ -138,6 +146,7 @@ function AppHeader({
 					</Select.Popup>
 				</Select.Root>
 				<IconButton
+					data-testid="theme-mode-toggle"
 					icon={
 						<span {...stylex.props(styles.themeIcon)}>
 							{resolvedMode === "light" ? (

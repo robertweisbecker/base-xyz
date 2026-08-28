@@ -101,7 +101,11 @@ export const Rendering: Story = {
 							Button's <Code>render</Code> prop preserves button semantics.
 							<br />
 							For navigation to a URL, use{" "}
-							<Link href="/?path=/story/components-link-link-button--playground" target="_top">
+							<Link
+								data-testid="button-link-guidance"
+								href="/?path=/story/components-link-link-button--playground"
+								target="_top"
+							>
 								LinkButton
 							</Link>{" "}
 							instead.

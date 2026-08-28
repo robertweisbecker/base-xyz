@@ -1,19 +1,6 @@
-import { expect, test, type Page } from "@playwright/test";
+import { expect, test } from "../playwright";
 
 const storyPath = "/iframe.html?id=components-slider--marker-density&viewMode=story";
-const consoleErrorsByPage = new WeakMap<Page, string[]>();
-
-test.beforeEach(({ page }) => {
-	const consoleErrors: string[] = [];
-	consoleErrorsByPage.set(page, consoleErrors);
-	page.on("console", (message) => {
-		if (message.type() === "error") consoleErrors.push(message.text());
-	});
-});
-
-test.afterEach(({ page }) => {
-	expect(consoleErrorsByPage.get(page)).toEqual([]);
-});
 
 test("bounds marker density without changing slider values", async ({ page }) => {
 	await page.goto(storyPath);

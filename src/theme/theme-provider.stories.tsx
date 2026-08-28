@@ -239,6 +239,7 @@ function MultipleRootsFixture() {
 			<div ref={firstContainerRef} />
 			<div ref={secondContainerRef} />
 			<button
+				data-testid="unmount-first-root"
 				type="button"
 				onClick={() => {
 					rootsRef.current?.first?.unmount();
@@ -248,6 +249,7 @@ function MultipleRootsFixture() {
 				Unmount first root
 			</button>
 			<button
+				data-testid="unmount-second-root"
 				type="button"
 				onClick={() => {
 					rootsRef.current?.second?.unmount();
@@ -297,8 +299,16 @@ function ContractFixture() {
 						{...stylex.props(verificationStyles.warningReference)}
 					/>
 					<ThemeSnapshot />
-					<span data-testid="merged-refs">{String(refsMerged)}</span>
-					<span data-testid="merged-events">{`${renderClicks}:${providerClicks}`}</span>
+					<span data-testid="merged-refs" data-value={String(refsMerged)}>
+						{String(refsMerged)}
+					</span>
+					<span
+						data-testid="merged-events"
+						data-provider-clicks={providerClicks}
+						data-render-clicks={renderClicks}
+					>
+						{`${renderClicks}:${providerClicks}`}
+					</span>
 					<SemanticContent />
 					<PortalFixture />
 					<ThemeProvider
@@ -336,13 +346,13 @@ function ContractFixture() {
 
 function SemanticContent() {
 	return (
-		<section aria-labelledby="theme-semantics-heading">
+		<section aria-labelledby="theme-semantics-heading" data-testid="theme-semantics">
 			<h2 id="theme-semantics-heading">Theme semantics</h2>
 			<ul>
 				<li>Surface</li>
 				<li>Accent</li>
 			</ul>
-			<table>
+			<table data-testid="theme-values-table">
 				<caption>Theme values</caption>
 				<thead>
 					<tr>
@@ -358,7 +368,7 @@ function SemanticContent() {
 				</tbody>
 			</table>
 			<label htmlFor="theme-label">Theme label</label>
-			<input id="theme-label" defaultValue="MP" />
+			<input data-testid="theme-label-input" id="theme-label" defaultValue="MP" />
 		</section>
 	);
 }

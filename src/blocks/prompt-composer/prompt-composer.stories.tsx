@@ -51,7 +51,7 @@ export const Examples: Story = {
 				<ComposerDemo clearOnSubmit={false} defaultValue="Summarize the open review comments." />
 			</Example>
 			<Separator />
-			<Example label="Growing input">
+			<Example label="Growing input" testId="growing-prompt-composer">
 				<ComposerDemo
 					clearOnSubmit={false}
 					defaultValue={
@@ -225,9 +225,17 @@ function ComposerDemo({ clearOnSubmit, defaultValue, disabled }: ComposerDemoPro
 	);
 }
 
-function Example({ children, label }: { children: ReactNode; label: string }) {
+function Example({
+	children,
+	label,
+	testId,
+}: {
+	children: ReactNode;
+	label: string;
+	testId?: string;
+}) {
 	return (
-		<Stack gap={3}>
+		<Stack data-testid={testId} gap={3}>
 			<Text size="1" color="muted">
 				{label}
 			</Text>

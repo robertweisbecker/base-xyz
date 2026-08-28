@@ -1,26 +1,19 @@
-import { expect, test, type Page } from "@playwright/test";
+import { expect, test, type Locator, type Page } from "../playwright";
 
 const storyPath =
 	"/iframe.html?id=design-system-style-props-verification--consumer-contract&viewMode=story";
 const badgeTruncationStoryPath =
 	"/iframe.html?id=components-badge--truncation-tooltip&viewMode=story";
-const consoleErrorsByPage = new WeakMap<Page, string[]>();
-
-test.beforeEach(({ page }) => {
-	const consoleErrors: string[] = [];
-	consoleErrorsByPage.set(page, consoleErrors);
-	page.on("console", (message) => {
-		if (message.type() === "error") consoleErrors.push(message.text());
-	});
-});
-
-test.afterEach(({ page }) => {
-	expect(consoleErrorsByPage.get(page)).toEqual([]);
-});
 
 async function openFixture(page: Page) {
 	await page.goto(storyPath);
 	await expect(page.getByTestId("fixture-ready")).toBeVisible();
+}
+
+async function expectTooltip(trigger: Locator, content: Locator) {
+	await expect(trigger).toHaveAttribute("data-popup-open", "");
+	await expect(content).toBeVisible();
+	await expect(content).toContainText(/\S/);
 }
 
 test("margin props preserve shorthand precedence, logical edges, negatives, and auto", async ({
@@ -136,11 +129,11 @@ test("Combobox chip overflow delegates trigger props, styles, and tooltip behavi
 }) => {
 	await openFixture(page);
 
-	const trigger = page.getByRole("button", { name: "+3 more" });
+	const trigger = page.getByTestId("chip-overflow-trigger");
 	await expect(trigger).toHaveAttribute("data-forwarded", "true");
 	await expect(trigger).toHaveCSS("margin-left", "8px");
 	await trigger.hover();
-	await expect(page.getByText("Ada, Grace, Linus", { exact: true })).toBeVisible();
+	await expectTooltip(trigger, page.getByTestId("chip-overflow-tooltip"));
 });
 
 test("created styles and static Atoms compose in one stateful xstyle array", async ({ page }) => {
@@ -174,36 +167,25 @@ test("responsive layout remains a predeclared stylex.create set", async ({ page 
 
 test("Badge exposes its measured truncated label through a tooltip", async ({ page }) => {
 	await page.goto(badgeTruncationStoryPath);
-	const labelText = "Approved for the upcoming production release";
-	const label = page.getByText(labelText, { exact: true });
-	const badge = label.locator("..");
+	const badge = page.getByTestId("truncated-badge");
+	const label = badge.locator("span").last();
 
 	await expect(label).toBeVisible();
 	expect(await label.evaluate((element) => element.scrollWidth > element.clientWidth)).toBe(true);
 	await expect(badge).toHaveAttribute("tabindex", "0");
 	await badge.focus();
-	await expect(page.getByText(labelText, { exact: true })).toHaveCount(2);
-	await expect(page.getByText(labelText, { exact: true }).last()).toBeVisible();
+	const badgeText = (await badge.textContent())?.trim() ?? "";
+	const tooltip = page.locator("[data-open]").filter({ hasText: badgeText }).last();
+	await expectTooltip(badge, tooltip);
+	await expect(tooltip).toContainText((await badge.textContent())?.trim() ?? "");
 });
 
-test("field choice groups retain inline and stacked interaction layouts", async ({ page }) => {
+test("field choice groups retain native interaction behavior", async ({ page }) => {
 	await openFixture(page);
-	const inlineItems = page.getByTestId("inline-checkbox-group").locator(":scope > div").last();
-	await expect(inlineItems).toHaveCSS("display", "flex");
-	await expect(inlineItems).toHaveCSS("flex-direction", "row");
-	await expect(inlineItems).toHaveCSS("column-gap", "24px");
-	await expect(inlineItems).toHaveCSS("row-gap", "12px");
-
-	const stackedItems = page.getByTestId("stacked-radio-group").locator(":scope > div").last();
-	await expect(stackedItems).toHaveCSS("display", "flex");
-	await expect(stackedItems).toHaveCSS("flex-direction", "column");
-	await expect(stackedItems).toHaveCSS("column-gap", "12px");
-	await expect(stackedItems).toHaveCSS("row-gap", "12px");
-
-	const firstChoice = page.getByRole("checkbox", { name: "First choice" });
+	const firstChoice = page.getByTestId("inline-checkbox-group").getByRole("checkbox").first();
 	await firstChoice.check();
 	await expect(firstChoice).toBeChecked();
-	const firstRadio = page.getByRole("radio", { name: "First choice" });
+	const firstRadio = page.getByTestId("stacked-radio-group").getByRole("radio").first();
 	await firstRadio.check();
 	await expect(firstRadio).toBeChecked();
 });

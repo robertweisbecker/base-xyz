@@ -187,27 +187,52 @@ function AsyncSettlementFixture() {
 
 	return (
 		<Stack gap={3}>
-			<Text data-testid="confirmation-operation-count">{operationCount}</Text>
-			<Text data-testid="confirmation-error-count">{errorCount}</Text>
+			<Text data-testid="confirmation-operation-count" data-value={operationCount}>
+				{operationCount}
+			</Text>
+			<Text data-testid="confirmation-error-count" data-value={errorCount}>
+				{errorCount}
+			</Text>
 			<AsyncSettlementDialog
-				trigger={<Button>Resolve async action</Button>}
+				testId="resolve"
+				trigger={<Button data-testid="resolve-trigger">Resolve async action</Button>}
 				confirmLabel="Confirm resolve async action"
 				onConfirm={resolveAsyncAction}
-				successToast={{ title: "Async action completed" }}
+				successToast={{
+					title: (
+						<span data-testid="confirmation-success-announcement">Async action completed</span>
+					),
+				}}
 			/>
 			<AsyncSettlementDialog
-				trigger={<Button>Reject async action</Button>}
+				testId="reject"
+				trigger={<Button data-testid="reject-trigger">Reject async action</Button>}
 				confirmLabel="Confirm reject async action"
 				onConfirm={rejectAsyncAction}
 				onConfirmError={() => setErrorCount((count) => count + 1)}
-				successToast={{ title: "Unexpected success" }}
-				failureToast={{ title: "Async action failed" }}
+				successToast={{
+					title: (
+						<span data-testid="confirmation-unexpected-success-announcement">
+							Unexpected success
+						</span>
+					),
+				}}
+				failureToast={{
+					title: <span data-testid="confirmation-failure-announcement">Async action failed</span>,
+				}}
 			/>
 			<AsyncSettlementDialog
-				trigger={<Button>Prevent confirmation</Button>}
+				testId="prevent"
+				trigger={<Button data-testid="prevent-trigger">Prevent confirmation</Button>}
 				confirmLabel="Prevent confirmation"
 				onConfirmClick={(event) => event.preventDefault()}
-				successToast={{ title: "Prevented action completed" }}
+				successToast={{
+					title: (
+						<span data-testid="confirmation-prevented-announcement">
+							Prevented action completed
+						</span>
+					),
+				}}
 			/>
 		</Stack>
 	);
@@ -220,6 +245,7 @@ function AsyncSettlementDialog({
 	onConfirmClick,
 	onConfirmError,
 	successToast,
+	testId,
 	trigger,
 }: {
 	confirmLabel: string;
@@ -228,6 +254,7 @@ function AsyncSettlementDialog({
 	onConfirmClick?: ComponentProps<typeof ConfirmationDialog.Confirm>["onClick"];
 	onConfirmError?: (error: unknown) => void;
 	successToast?: ConfirmationDialogSuccessToast | false;
+	testId: string;
 	trigger: ReactElement;
 }) {
 	return (
@@ -239,7 +266,9 @@ function AsyncSettlementDialog({
 			failureToast={failureToast}
 		>
 			<ConfirmationDialog.Header>
-				<ConfirmationDialog.Title>Confirm async action?</ConfirmationDialog.Title>
+				<ConfirmationDialog.Title data-testid={`${testId}-title`}>
+					Confirm async action?
+				</ConfirmationDialog.Title>
 				<ConfirmationDialog.Description>
 					The operation will settle before this dialog closes.
 				</ConfirmationDialog.Description>
@@ -248,7 +277,7 @@ function AsyncSettlementDialog({
 			<ConfirmationDialog.Footer>
 				<ConfirmationDialog.Actions>
 					<ConfirmationDialog.Cancel>Cancel</ConfirmationDialog.Cancel>
-					<ConfirmationDialog.Confirm onClick={onConfirmClick}>
+					<ConfirmationDialog.Confirm data-testid={`${testId}-confirm`} onClick={onConfirmClick}>
 						{confirmLabel}
 					</ConfirmationDialog.Confirm>
 				</ConfirmationDialog.Actions>

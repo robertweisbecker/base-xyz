@@ -108,7 +108,7 @@ export const Examples: Story = {
 	},
 	render: () => (
 		<Stack gap={6} maxWidth="420px">
-			<Example label="Evaluates on blur or Enter">
+			<Example label="Evaluates on blur or Enter" testId="math-expression-basic">
 				<MathExpressionField
 					label="Amount"
 					prefix="W"
@@ -143,9 +143,17 @@ export const Examples: Story = {
 	),
 };
 
-function Example({ children, label }: { children: ReactNode; label: string }) {
+function Example({
+	children,
+	label,
+	testId,
+}: {
+	children: ReactNode;
+	label: string;
+	testId?: string;
+}) {
 	return (
-		<Stack align="start" gap={2}>
+		<Stack align="start" data-testid={testId} gap={2}>
 			<Text size="1" color="muted">
 				{label}
 			</Text>
