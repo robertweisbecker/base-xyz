@@ -17,6 +17,7 @@ import {
 	useState,
 	type ComponentProps,
 	type MouseEvent,
+	type ReactElement,
 	type ReactNode,
 	type Ref,
 	type RefObject,
@@ -289,34 +290,152 @@ function Row({
 	const navList = useContext(NavListContext);
 	const { presentation, popoverSide } = useContext(NavListPresentationContext);
 	const size = navList?.size ?? "md";
+	const rowModel = resolveRowModel({
+		ariaLabel,
+		badge,
+		endSlot,
+		forceButton,
+		href,
+		icon,
+		label,
+		onClick,
+		onDisclosureClick,
+		presentation,
+		startSlot,
+		tooltip,
+		disclosure,
+	});
+	const rowSx = rowStyles({
+		active,
+		collapseOpen,
+		current,
+		disabled,
+		disclosure,
+		size,
+		rowModel,
+		xstyle,
+	});
+	const content = (
+		<RowContent
+			collapseOpen={collapseOpen}
+			disclosure={disclosure}
+			label={label}
+			rowModel={rowModel}
+		>
+			{children}
+		</RowContent>
+	);
+	const row = useRender<{}, HTMLElement>({
+		defaultTagName: rowModel.defaultTagName,
+		ref,
+		render,
+		props: {
+			...rowNativeProps({ disabled, href, render, rowModel }),
+			...rowStateAttributes({ active, current, dataNavListBack, disabled, rowModel }),
+			className: attrJoin(rowSx.className, className),
+			style: mergeStyle(rowSx.style, style),
+			onClick: createRowClickHandler({
+				disabled,
+				onClick,
+				onDisclosureClick,
+				onNavigate: navList?.onNavigate,
+				rowModel,
+				suppressNavigate,
+			}),
+			children: content,
+		},
+	});
+
+	return (
+		<RowPresentation
+			asListItem={asListItem}
+			indentLevel={indentLevel}
+			label={label}
+			popoverSide={popoverSide}
+			row={row}
+			rowModel={rowModel}
+			tooltip={tooltip}
+		/>
+	);
+}
+
+function resolveRowModel({
+	ariaLabel,
+	badge,
+	disclosure,
+	endSlot,
+	forceButton,
+	href,
+	icon,
+	label,
+	onClick,
+	onDisclosureClick,
+	presentation,
+	startSlot,
+	tooltip,
+}: Pick<
+	RowProps,
+	| "badge"
+	| "disclosure"
+	| "endSlot"
+	| "forceButton"
+	| "href"
+	| "icon"
+	| "label"
+	| "onClick"
+	| "onDisclosureClick"
+	| "startSlot"
+	| "tooltip"
+> & {
+	ariaLabel: RowProps["aria-label"];
+	presentation: Presentation;
+}) {
 	const isIconMode = presentation === "icon";
-	const showTooltip = isIconMode && (tooltip ?? label) !== false;
-	const visualIcon = icon || startSlot || <FileIcon weight="duotone" />;
-	const backIcon = disclosure === "back";
-	const resolvedEndSlot = endSlot ?? badge;
-	const resolvedAriaLabel = isIconMode ? (ariaLabel ?? label) : ariaLabel;
 	const isLink = Boolean(href && !forceButton);
 	const isAction = forceButton || Boolean(onClick || onDisclosureClick);
-	const isStatic = !isLink && !isAction;
-	const renderedIcon = backIcon ? (
-		<span aria-hidden {...stylex.props(navListParts.icon)}>
-			<ArrowLeftIcon />
-		</span>
-	) : (
-		<span aria-hidden {...stylex.props(navListParts.icon)}>
-			{visualIcon}
-		</span>
-	);
-	const content = isIconMode ? (
-		renderedIcon
-	) : (
+
+	return {
+		backIcon: disclosure === "back",
+		defaultTagName: defaultRowTagName(isLink, isAction),
+		isAction,
+		isIconMode,
+		isLink,
+		isStatic: !isLink && !isAction,
+		resolvedAriaLabel: isIconMode ? (ariaLabel ?? label) : ariaLabel,
+		resolvedEndSlot: endSlot ?? badge,
+		showTooltip: isIconMode && (tooltip ?? label) !== false,
+		visualIcon: icon || startSlot || <FileIcon weight="duotone" />,
+	};
+}
+
+type ResolvedRowModel = ReturnType<typeof resolveRowModel>;
+
+function defaultRowTagName(isLink: boolean, isAction: boolean): "a" | "button" | "div" {
+	if (isLink) return "a";
+	if (isAction) return "button";
+	return "div";
+}
+
+function RowContent({
+	collapseOpen,
+	children,
+	disclosure,
+	label,
+	rowModel,
+}: Pick<RowProps, "collapseOpen" | "children" | "disclosure" | "label"> & {
+	rowModel: ResolvedRowModel;
+}) {
+	const renderedIcon = <RowIcon backIcon={rowModel.backIcon}>{rowModel.visualIcon}</RowIcon>;
+	if (rowModel.isIconMode) return renderedIcon;
+
+	return (
 		<>
 			{renderedIcon}
 			<span {...stylex.props(menuItemStyles.label, navListParts.labelCell)}>
 				<span {...stylex.props(navListParts.labelText)}>{children ?? label}</span>
 			</span>
-			{resolvedEndSlot ? (
-				<span {...stylex.props(navListParts.endSlot)}>{resolvedEndSlot}</span>
+			{rowModel.resolvedEndSlot ? (
+				<span {...stylex.props(navListParts.endSlot)}>{rowModel.resolvedEndSlot}</span>
 			) : null}
 			{disclosure && disclosure !== "back" ? (
 				<span
@@ -332,7 +451,30 @@ function Row({
 			) : null}
 		</>
 	);
-	const rowSx = stylex.props(
+}
+
+function RowIcon({ backIcon, children }: { backIcon: boolean; children: ReactNode }) {
+	return (
+		<span aria-hidden {...stylex.props(navListParts.icon)}>
+			{backIcon ? <ArrowLeftIcon /> : children}
+		</span>
+	);
+}
+
+function rowStyles({
+	active,
+	collapseOpen,
+	current,
+	disabled,
+	disclosure,
+	size,
+	rowModel,
+	xstyle,
+}: Pick<RowProps, "active" | "collapseOpen" | "current" | "disabled" | "disclosure" | "xstyle"> & {
+	size: NavListSize;
+	rowModel: ResolvedRowModel;
+}) {
+	return stylex.props(
 		menuItemStyles.item,
 		menuItemSizeStyles[size],
 		menuItemVariantStyles.default,
@@ -341,55 +483,93 @@ function Row({
 		(current || active) && !disabled && navListParts.currentRow,
 		disclosure === "collapse" && collapseOpen && !disabled && navListParts.collapsibleTriggerOpen,
 		disclosure === "back" && navListParts.backRow,
-		isIconMode && navListParts.iconModeRow,
+		rowModel.isIconMode && navListParts.iconModeRow,
 		xstyle,
 	);
-	const row = useRender<{}, HTMLElement>({
-		defaultTagName: isLink ? "a" : isAction ? "button" : "div",
-		ref,
-		render,
-		props: {
-			href: isLink && !disabled ? href : undefined,
-			type: isAction && !href && !render ? "button" : undefined,
-			disabled: isAction && !href && disabled ? true : undefined,
-			"aria-current": current || (active ? "page" : undefined),
-			"aria-label": resolvedAriaLabel,
-			"aria-disabled": (isStatic || isLink) && disabled ? true : undefined,
-			"data-current": current || active ? "" : undefined,
-			"data-disabled": disabled ? "" : undefined,
-			"data-icon-mode": isIconMode ? "" : undefined,
-			"data-nav-list-back": dataNavListBack ? "" : undefined,
-			className: attrJoin(rowSx.className, className),
-			style: mergeStyle(rowSx.style, style),
-			onClick: isStatic
-				? undefined
-				: (event: MouseEvent<HTMLElement>) => {
-						if (disabled) {
-							event.preventDefault();
-							event.stopPropagation();
-							return;
-						}
+}
 
-						onClick?.(event);
-						if (event.defaultPrevented) {
-							return;
-						}
+function rowNativeProps({
+	disabled,
+	href,
+	render,
+	rowModel,
+}: Pick<RowProps, "disabled" | "href" | "render"> & { rowModel: ResolvedRowModel }) {
+	const buttonType = "button";
+	const disabledState = true;
 
-						if (onDisclosureClick) {
-							onDisclosureClick(event);
-							return;
-						}
+	return {
+		href: rowModel.isLink && !disabled ? href : undefined,
+		type: rowModel.isAction && !href && !render ? buttonType : undefined,
+		disabled: rowModel.isAction && !href && disabled ? disabledState : undefined,
+	};
+}
 
-						if (suppressNavigate) {
-							return;
-						}
+function rowStateAttributes({
+	active,
+	current,
+	dataNavListBack,
+	disabled,
+	rowModel,
+}: Pick<RowProps, "active" | "current" | "dataNavListBack" | "disabled"> & {
+	rowModel: ResolvedRowModel;
+}) {
+	return {
+		"aria-current": current || (active ? "page" : undefined),
+		"aria-label": rowModel.resolvedAriaLabel,
+		"aria-disabled": (rowModel.isStatic || rowModel.isLink) && disabled ? true : undefined,
+		"data-current": current || active ? "" : undefined,
+		"data-disabled": disabled ? "" : undefined,
+		"data-icon-mode": rowModel.isIconMode ? "" : undefined,
+		"data-nav-list-back": dataNavListBack ? "" : undefined,
+	};
+}
 
-						navList?.onNavigate?.(event);
-					},
-			children: content,
-		},
-	});
-	const rowWithTooltip = showTooltip ? (
+function createRowClickHandler({
+	disabled,
+	onClick,
+	onDisclosureClick,
+	onNavigate,
+	rowModel,
+	suppressNavigate,
+}: Pick<RowProps, "disabled" | "onClick" | "onDisclosureClick" | "suppressNavigate"> & {
+	onNavigate: NavListContextValue["onNavigate"];
+	rowModel: ResolvedRowModel;
+}) {
+	if (rowModel.isStatic) return undefined;
+
+	return (event: MouseEvent<HTMLElement>) => {
+		if (disabled) {
+			event.preventDefault();
+			event.stopPropagation();
+			return;
+		}
+
+		onClick?.(event);
+		if (event.defaultPrevented) return;
+
+		if (onDisclosureClick) {
+			onDisclosureClick(event);
+			return;
+		}
+
+		if (!suppressNavigate) onNavigate?.(event);
+	};
+}
+
+function RowPresentation({
+	asListItem,
+	indentLevel,
+	label,
+	popoverSide,
+	row,
+	rowModel,
+	tooltip,
+}: Pick<RowProps, "asListItem" | "indentLevel" | "label" | "tooltip"> & {
+	popoverSide: PresentationContextValue["popoverSide"];
+	row: ReactElement;
+	rowModel: ResolvedRowModel;
+}) {
+	const rowWithTooltip = rowModel.showTooltip ? (
 		<Tooltip.Root>
 			<Tooltip.Trigger render={row} />
 			<Tooltip.Popup positionerProps={{ side: popoverSide }}>{tooltip ?? label}</Tooltip.Popup>
@@ -398,15 +578,13 @@ function Row({
 		row
 	);
 
-	if (!asListItem) {
-		return rowWithTooltip;
-	}
+	if (!asListItem) return rowWithTooltip;
 
 	return (
 		<li
 			{...stylex.props(
 				navListParts.listItem,
-				!isIconMode && indentLevel === 1 && navListParts.indentedListItem,
+				!rowModel.isIconMode && indentLevel === 1 && navListParts.indentedListItem,
 			)}
 		>
 			{rowWithTooltip}
