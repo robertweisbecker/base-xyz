@@ -70,6 +70,21 @@ export { Progress } from "./progress/progress";
 export { Separator, type SeparatorProps } from "./separator/separator";
 export { Sidebar } from "./sidebar/sidebar";
 export { Slider } from "./slider/slider";
+export {
+	Stepper,
+	type StepperContentProps,
+	type StepperDescriptionProps,
+	type StepperHeadingProps,
+	type StepperListProps,
+	type StepperMarkerProps,
+	type StepperOrientation,
+	type StepperPanelProps,
+	type StepperRootProps,
+	type StepperStatus,
+	type StepperStepProps,
+	type StepperTitleProps,
+	type StepperValue,
+} from "./stepper/stepper";
 export { Table } from "./table/table";
 export { Tabs, type TabsSize, type TabsVariant } from "./tabs/tabs";
 export { Toolbar } from "./toolbar/toolbar";
