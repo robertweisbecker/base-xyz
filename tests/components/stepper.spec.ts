@@ -32,7 +32,9 @@ test("uses Base UI tab semantics without custom naming relationships", async ({ 
 	await expect(account).not.toHaveAccessibleName(/1/);
 	await expect(review).toHaveAttribute("aria-selected", "true");
 	await expect(finish).toBeDisabled();
-	await expect(root.getByRole("tabpanel", { name: /Review Confirm the submitted information/ })).toBeVisible();
+	await expect(
+		root.getByRole("tabpanel", { name: /Review Confirm the submitted information/ }),
+	).toBeVisible();
 	await expect(root.getByRole("tabpanel", { name: /Account Saved contact details/ })).toBeHidden();
 });
 
@@ -73,7 +75,10 @@ test("leaves locking and pagination under external control", async ({ page }) =>
 	const continueButton = page.getByRole("button", { name: "Continue" });
 	await expect(billing).toBeDisabled();
 	await continueButton.click();
-	await expect(page.getByRole("tab", { name: /Security/ })).toHaveAttribute("aria-selected", "true");
+	await expect(page.getByRole("tab", { name: /Security/ })).toHaveAttribute(
+		"aria-selected",
+		"true",
+	);
 	await expect(continueButton).toBeDisabled();
 
 	await page.getByRole("button", { name: "Unlock billing" }).click();
@@ -88,11 +93,15 @@ test("places content and connector fill for horizontal and vertical layouts", as
 	await page.goto(orientationsPath);
 
 	const horizontal = page.getByTestId("horizontal-stepper");
-	await expect.poll(async () => markerIsAboveTitle(horizontal.getByRole("tab", { name: /Security/ }))).toBe(true);
+	await expect
+		.poll(async () => markerIsAboveTitle(horizontal.getByRole("tab", { name: /Security/ })))
+		.toBe(true);
 	await expect.poll(async () => connectorMeetsCurrentMarker(horizontal)).toBe(true);
 
 	const vertical = page.getByTestId("vertical-stepper");
-	await expect.poll(async () => markerIsLeftOfTitle(vertical.getByRole("tab", { name: /Security/ }))).toBe(true);
+	await expect
+		.poll(async () => markerIsLeftOfTitle(vertical.getByRole("tab", { name: /Security/ })))
+		.toBe(true);
 	await expect.poll(async () => contentIsBesideList(vertical)).toBe(true);
 	await expect.poll(async () => connectorMeetsCurrentMarker(vertical)).toBe(true);
 
@@ -102,25 +111,37 @@ test("places content and connector fill for horizontal and vertical layouts", as
 
 async function markerIsAboveTitle(tab: Locator) {
 	const marker = tab.locator("[aria-hidden]").first();
-	const title = tab.locator("span").filter({ hasText: /Profile|Security|Billing/ }).nth(1);
+	const title = tab
+		.locator("span")
+		.filter({ hasText: /Profile|Security|Billing/ })
+		.nth(1);
 	const [markerBox, titleBox] = await Promise.all([marker.boundingBox(), title.boundingBox()]);
 	return markerBox != null && titleBox != null && markerBox.y + markerBox.height <= titleBox.y + 1;
 }
 
 async function markerIsLeftOfTitle(tab: Locator) {
 	const marker = tab.locator("[aria-hidden]").first();
-	const title = tab.locator("span").filter({ hasText: /Profile|Security|Billing/ }).nth(1);
+	const title = tab
+		.locator("span")
+		.filter({ hasText: /Profile|Security|Billing/ })
+		.nth(1);
 	const [markerBox, titleBox] = await Promise.all([marker.boundingBox(), title.boundingBox()]);
 	return markerBox != null && titleBox != null && markerBox.x + markerBox.width <= titleBox.x + 1;
 }
 
 async function contentIsBesideList(root: Locator) {
-	const [listBox, panelBox] = await Promise.all([root.getByRole("tablist").boundingBox(), root.getByRole("tabpanel").boundingBox()]);
+	const [listBox, panelBox] = await Promise.all([
+		root.getByRole("tablist").boundingBox(),
+		root.getByRole("tabpanel").boundingBox(),
+	]);
 	return listBox != null && panelBox != null && panelBox.x >= listBox.x + listBox.width - 1;
 }
 
 async function contentIsBelowList(root: Locator) {
-	const [listBox, panelBox] = await Promise.all([root.getByRole("tablist").boundingBox(), root.getByRole("tabpanel").boundingBox()]);
+	const [listBox, panelBox] = await Promise.all([
+		root.getByRole("tablist").boundingBox(),
+		root.getByRole("tabpanel").boundingBox(),
+	]);
 	return listBox != null && panelBox != null && panelBox.y >= listBox.y + listBox.height - 1;
 }
 
@@ -132,7 +153,9 @@ async function connectorMeetsCurrentMarker(root: Locator) {
 	]);
 	if (markerBox == null || fillBox == null) return false;
 	const horizontal = fillBox.width >= fillBox.height;
-	const markerCenter = horizontal ? markerBox.x + markerBox.width / 2 : markerBox.y + markerBox.height / 2;
+	const markerCenter = horizontal
+		? markerBox.x + markerBox.width / 2
+		: markerBox.y + markerBox.height / 2;
 	const fillEdge = horizontal ? fillBox.x + fillBox.width : fillBox.y + fillBox.height;
 	if (Math.abs(markerCenter - fillEdge) > 2) return false;
 	return fillPaintsAboveTrack(root);

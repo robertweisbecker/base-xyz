@@ -80,7 +80,9 @@ Supported composition:
 			</Stepper.Heading>
 		</Stepper.Step>
 		<Stepper.Step value="security" disabled>
-			<Stepper.Marker><SecurityIcon aria-hidden /></Stepper.Marker>
+			<Stepper.Marker>
+				<SecurityIcon aria-hidden />
+			</Stepper.Marker>
 			<Stepper.Heading>
 				<Stepper.Title>Security</Stepper.Title>
 				<Stepper.Description>Choose authentication options.</Stepper.Description>
@@ -144,7 +146,7 @@ The focused browser spec covers:
 - [x] The public namespace contains only the nine parts listed above.
 - [x] Root forwards Base UI controlled and uncontrolled selection props directly.
 - [x] No step registry, value-normalization state, synthetic event details,
-  generated accessible IDs, or panel-focus state remains.
+      generated accessible IDs, or panel-focus state remains.
 - [x] Number and icon marker children render unchanged and remain decorative.
 - [x] Incomplete/current/locked/completed/invalid states are distinguishable.
 - [x] Horizontal and vertical connector fill ends at the current marker center.

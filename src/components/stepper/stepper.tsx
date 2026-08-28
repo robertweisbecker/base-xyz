@@ -38,10 +38,10 @@ const stepperParts = stylex.create({
 			[stylex.when.ancestor("[data-orientation=vertical]", stepperRootMarker)]: "column",
 		},
 		flexWrap: "nowrap",
-		gridColumnEnd: 'steps',
-		gridColumnStart: 'steps',
-		gridRowEnd: 'steps',
-		gridRowStart: 'steps',
+		gridColumnEnd: "steps",
+		gridColumnStart: "steps",
+		gridRowEnd: "steps",
+		gridRowStart: "steps",
 		isolation: "isolate",
 		position: "relative",
 		maxWidth: {
@@ -110,7 +110,8 @@ const stepperParts = stylex.create({
 		fontFamily: "inherit",
 		gridTemplateColumns: {
 			default: "minmax(0, 1fr)",
-			[stylex.when.ancestor("[data-orientation=vertical]", stepperRootMarker)]: "var(--_stepper-marker-size) minmax(0, 1fr)",
+			[stylex.when.ancestor("[data-orientation=vertical]", stepperRootMarker)]:
+				"var(--_stepper-marker-size) minmax(0, 1fr)",
 		},
 		justifyItems: {
 			default: "start",
@@ -148,11 +149,13 @@ const stepperParts = stylex.create({
 			},
 			insetBlockStart: {
 				default: "calc(var(--_stepper-marker-size) / 2 - var(--_stepper-connector-thickness) / 2)",
-				[stylex.when.ancestor("[data-orientation=vertical]", stepperRootMarker)]: "calc(var(--_stepper-marker-size) / 2)",
+				[stylex.when.ancestor("[data-orientation=vertical]", stepperRootMarker)]:
+					"calc(var(--_stepper-marker-size) / 2)",
 			},
 			insetInlineStart: {
 				default: "calc(var(--_stepper-marker-size) / 2)",
-				[stylex.when.ancestor("[data-orientation=vertical]", stepperRootMarker)]: "calc(var(--_stepper-marker-size) / 2 - var(--_stepper-connector-thickness) / 2)",
+				[stylex.when.ancestor("[data-orientation=vertical]", stepperRootMarker)]:
+					"calc(var(--_stepper-marker-size) / 2 - var(--_stepper-connector-thickness) / 2)",
 			},
 			pointerEvents: "none",
 			position: "absolute",
@@ -163,7 +166,8 @@ const stepperParts = stylex.create({
 			},
 			width: {
 				default: "100%",
-				[stylex.when.ancestor("[data-orientation=vertical]", stepperRootMarker)]: "var(--_stepper-connector-thickness)",
+				[stylex.when.ancestor("[data-orientation=vertical]", stepperRootMarker)]:
+					"var(--_stepper-connector-thickness)",
 			},
 		},
 	},
@@ -181,19 +185,24 @@ const stepperParts = stylex.create({
 		zIndex: 1,
 		height: {
 			default: "var(--_stepper-connector-thickness)",
-			[stylex.when.ancestor("[data-orientation=vertical]", stepperRootMarker)]: "calc(var(--active-tab-top) - var(--_stepper-list-padding))",
+			[stylex.when.ancestor("[data-orientation=vertical]", stepperRootMarker)]:
+				"calc(var(--active-tab-top) - var(--_stepper-list-padding))",
 		},
 		left: {
 			default: "calc(var(--_stepper-list-padding) + var(--_stepper-marker-size) / 2)",
-			[stylex.when.ancestor("[data-orientation=vertical]", stepperRootMarker)]: "calc(var(--active-tab-left) + var(--_stepper-marker-size) / 2 - var(--_stepper-connector-thickness) / 2)",
+			[stylex.when.ancestor("[data-orientation=vertical]", stepperRootMarker)]:
+				"calc(var(--active-tab-left) + var(--_stepper-marker-size) / 2 - var(--_stepper-connector-thickness) / 2)",
 		},
 		top: {
-			default: "calc(var(--active-tab-top) + var(--_stepper-marker-size) / 2 - var(--_stepper-connector-thickness) / 2)",
-			[stylex.when.ancestor("[data-orientation=vertical]", stepperRootMarker)]: "calc(var(--_stepper-list-padding) + var(--_stepper-marker-size) / 2)",
+			default:
+				"calc(var(--active-tab-top) + var(--_stepper-marker-size) / 2 - var(--_stepper-connector-thickness) / 2)",
+			[stylex.when.ancestor("[data-orientation=vertical]", stepperRootMarker)]:
+				"calc(var(--_stepper-list-padding) + var(--_stepper-marker-size) / 2)",
 		},
 		width: {
 			default: "calc(var(--active-tab-left) - var(--_stepper-list-padding))",
-			[stylex.when.ancestor("[data-orientation=vertical]", stepperRootMarker)]: "var(--_stepper-connector-thickness)",
+			[stylex.when.ancestor("[data-orientation=vertical]", stepperRootMarker)]:
+				"var(--_stepper-connector-thickness)",
 		},
 	},
 	marker: {
@@ -241,10 +250,10 @@ const stepperParts = stylex.create({
 	},
 	content: {
 		display: "grid",
-		gridColumnEnd: 'content',
-		gridColumnStart: 'content',
-		gridRowEnd: 'content',
-		gridRowStart: 'content',
+		gridColumnEnd: "content",
+		gridColumnStart: "content",
+		gridRowEnd: "content",
+		gridRowStart: "content",
 		gridTemplateColumns: "minmax(0, 1fr)",
 		minWidth: 0,
 	},
@@ -294,7 +303,10 @@ export type StepperRootProps = Omit<
 	BaseStyleProps & {
 		className?: string;
 		defaultValue?: StepperValue | null;
-		onValueChange?: (value: StepperValue | null, eventDetails: BaseTabs.Root.ChangeEventDetails) => void;
+		onValueChange?: (
+			value: StepperValue | null,
+			eventDetails: BaseTabs.Root.ChangeEventDetails,
+		) => void;
 		orientation?: StepperOrientation;
 		value?: StepperValue | null;
 	};
@@ -313,7 +325,13 @@ export function Root({
 	const { marginStyles, rest } = extractMarginProps(props);
 	const isWide = useMediaQuery("(min-width: 48rem)", { defaultMatches: true });
 	const effectiveOrientation = orientation === "vertical" && !isWide ? "horizontal" : orientation;
-	const sx = stylex.props(stepperRootMarker, stepperParts.root, rootOrientationStyles[effectiveOrientation], marginStyles, xstyle);
+	const sx = stylex.props(
+		stepperRootMarker,
+		stepperParts.root,
+		rootOrientationStyles[effectiveOrientation],
+		marginStyles,
+		xstyle,
+	);
 
 	return (
 		<BaseTabs.Root
@@ -347,22 +365,37 @@ export function List({ ref, children, className, style, xstyle, ...props }: Step
 			className={attrJoin(sx.className, className)}
 			loopFocus={false}
 			style={mergeStyle(sx.style, style)}
-			{...props}>
+			{...props}
+		>
 			{children}
 			<BaseTabs.Indicator className={indicatorSx.className} style={indicatorSx.style} />
 		</BaseTabs.List>
 	);
 }
 
-export type StepperStepProps = Omit<BaseTabs.Tab.Props, "className" | "render" | "style" | "value"> &
+export type StepperStepProps = Omit<
+	BaseTabs.Tab.Props,
+	"className" | "render" | "style" | "value"
+> &
 	StepperPartStyleProps & {
 		status?: StepperStatus;
 		value: StepperValue;
 	};
 
-export function Step({ ref, children, className, status = "incomplete", style, type = "button", value, xstyle, ...props }: StepperStepProps) {
+export function Step({
+	ref,
+	children,
+	className,
+	status = "incomplete",
+	style,
+	type = "button",
+	value,
+	xstyle,
+	...props
+}: StepperStepProps) {
 	const sx = stylex.props(focusRing.offset, stepperParts.step, xstyle);
-	const statusLabel = status === "completed" ? "Completed" : status === "invalid" ? "Invalid" : null;
+	const statusLabel =
+		status === "completed" ? "Completed" : status === "invalid" ? "Invalid" : null;
 
 	return (
 		<BaseTabs.Tab
@@ -372,7 +405,8 @@ export function Step({ ref, children, className, status = "incomplete", style, t
 			data-status={status}
 			style={mergeStyle(sx.style, style)}
 			type={type}
-			value={value}>
+			value={value}
+		>
 			{children}
 			{statusLabel ? <VisuallyHidden>{statusLabel}</VisuallyHidden> : null}
 		</BaseTabs.Tab>
@@ -394,38 +428,78 @@ export function Marker({ children, className, style, xstyle, ...props }: Stepper
 			{...props}
 			aria-hidden
 			className={attrJoin(sx.className, className)}
-			style={mergeStyle(sx.style, style)}>
+			style={mergeStyle(sx.style, style)}
+		>
 			{children}
 		</span>
 	);
 }
 
-export type StepperHeadingProps = Omit<ComponentPropsWithRef<"span">, "className" | "style"> & StepperPartStyleProps;
+export type StepperHeadingProps = Omit<ComponentPropsWithRef<"span">, "className" | "style"> &
+	StepperPartStyleProps;
 
 export function Heading({ className, style, xstyle, ...props }: StepperHeadingProps) {
 	const sx = stylex.props(stepperParts.heading, xstyle);
-	return <span {...props} className={attrJoin(sx.className, className)} style={mergeStyle(sx.style, style)} />;
+	return (
+		<span
+			{...props}
+			className={attrJoin(sx.className, className)}
+			style={mergeStyle(sx.style, style)}
+		/>
+	);
 }
 
-export type StepperTitleProps = Omit<ComponentPropsWithRef<"span">, "className" | "style"> & StepperPartStyleProps;
+export type StepperTitleProps = Omit<ComponentPropsWithRef<"span">, "className" | "style"> &
+	StepperPartStyleProps;
 
 export function Title({ className, style, xstyle, ...props }: StepperTitleProps) {
-	const sx = stylex.props(textStyles.label, fontWeightStyles.medium, textTruncationStyles.truncate, stepperParts.title, xstyle);
-	return <span {...props} className={attrJoin(sx.className, className)} style={mergeStyle(sx.style, style)} />;
+	const sx = stylex.props(
+		textStyles.label,
+		fontWeightStyles.medium,
+		textTruncationStyles.truncate,
+		stepperParts.title,
+		xstyle,
+	);
+	return (
+		<span
+			{...props}
+			className={attrJoin(sx.className, className)}
+			style={mergeStyle(sx.style, style)}
+		/>
+	);
 }
 
-export type StepperDescriptionProps = Omit<ComponentPropsWithRef<"span">, "className" | "style"> & StepperPartStyleProps;
+export type StepperDescriptionProps = Omit<ComponentPropsWithRef<"span">, "className" | "style"> &
+	StepperPartStyleProps;
 
 export function Description({ className, style, xstyle, ...props }: StepperDescriptionProps) {
-	const sx = stylex.props(textStyles.supporting, textTruncationStyles.truncate, stepperParts.description, xstyle);
-	return <span {...props} className={attrJoin(sx.className, className)} style={mergeStyle(sx.style, style)} />;
+	const sx = stylex.props(
+		textStyles.supporting,
+		textTruncationStyles.truncate,
+		stepperParts.description,
+		xstyle,
+	);
+	return (
+		<span
+			{...props}
+			className={attrJoin(sx.className, className)}
+			style={mergeStyle(sx.style, style)}
+		/>
+	);
 }
 
-export type StepperContentProps = Omit<ComponentPropsWithRef<"div">, "className" | "style"> & StepperPartStyleProps;
+export type StepperContentProps = Omit<ComponentPropsWithRef<"div">, "className" | "style"> &
+	StepperPartStyleProps;
 
 export function Content({ className, style, xstyle, ...props }: StepperContentProps) {
 	const sx = stylex.props(stepperParts.content, xstyle);
-	return <div {...props} className={attrJoin(sx.className, className)} style={mergeStyle(sx.style, style)} />;
+	return (
+		<div
+			{...props}
+			className={attrJoin(sx.className, className)}
+			style={mergeStyle(sx.style, style)}
+		/>
+	);
 }
 
 export type StepperPanelProps = Omit<BaseTabs.Panel.Props, "className" | "style" | "value"> &
