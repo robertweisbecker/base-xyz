@@ -64,7 +64,7 @@ test("reverts the draft on Escape", async ({ page }) => {
 
 test("commits on Enter before the form submits", async ({ page }) => {
 	await page.goto(storyPath);
-	const input = page.getByRole("textbox", { name: "Quantity" });
+	const input = page.getByRole("textbox", { name: "Quantity", exact: true });
 	await input.fill("6 * 7");
 	await input.press("Enter");
 	await expect(input).toHaveValue("42");
@@ -151,7 +151,7 @@ test("preserves integer magnitude and exponent round-trips", async ({ page }) =>
 
 test("blocks submit while the draft is invalid", async ({ page }) => {
 	await page.goto(storyPath);
-	const input = page.getByRole("textbox", { name: "Quantity" });
+	const input = page.getByRole("textbox", { name: "Quantity", exact: true });
 	await input.fill("2 +");
 	await page.getByRole("button", { name: "Submit" }).click();
 	await expect(page.getByText("Not submitted")).toBeVisible();
@@ -168,7 +168,7 @@ test("omits a disabled named field from form data", async ({ page }) => {
 
 test("restores the uncontrolled value when the form resets", async ({ page }) => {
 	await page.goto(storyPath);
-	const input = page.getByRole("textbox", { name: "Quantity" });
+	const input = page.getByRole("textbox", { name: "Quantity", exact: true });
 	await input.fill("6 * 7");
 	await input.blur();
 	await expect(input).toHaveValue("42");
