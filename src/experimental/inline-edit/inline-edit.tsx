@@ -202,6 +202,10 @@ function InlineEditRoot({
 	const confirm = useCallback(
 		async (restoreFocus = true) => {
 			if (!editingRef.current || disabled || pendingRef.current) return;
+			if (inputRef.current && !inputRef.current.checkValidity()) {
+				inputRef.current.reportValidity();
+				return;
+			}
 			pendingRef.current = true;
 			setPending(true);
 			try {
@@ -374,14 +378,20 @@ function InlineEditInput({
 }: InlineEditInputProps) {
 	const context = useInlineEditContext("Input");
 	const composedRef = useComposedRef(ref, context.inputRef);
-	if (!context.editing) return null;
-	const sx = stylex.props(fieldStyles.inputUnstyled, inlineEditStyles.input, xstyle);
+	const sx = stylex.props(
+		fieldStyles.inputUnstyled,
+		inlineEditStyles.input,
+		!context.editing && inlineEditStyles.inputIdle,
+		xstyle,
+	);
 	return (
 		<BaseInput
 			ref={composedRef}
 			{...props}
 			disabled={context.disabled || disabled}
 			readOnly={context.pending || readOnly}
+			tabIndex={context.editing ? props.tabIndex : -1}
+			aria-hidden={context.editing ? undefined : true}
 			aria-busy={context.pending || undefined}
 			data-pending={context.pending ? "" : undefined}
 			className={attrJoin(sx.className, className)}
@@ -416,7 +426,7 @@ function InlineEditConfirm({
 		<IconButton
 			{...props}
 			type="button"
-			icon={<Icon.Checkmark size={12} strokeWidth={3} />}
+			icon={<Icon.Checkmark strokeWidth={3} />}
 			label={label}
 			loading={context.pending}
 			disabled={context.disabled || props.disabled}
@@ -443,7 +453,7 @@ function InlineEditCancel({
 		<IconButton
 			{...props}
 			type="button"
-			icon={<XIcon aria-hidden size={12} weight="bold" />}
+			icon={<XIcon aria-hidden weight="bold" />}
 			label={label}
 			disabled={context.disabled || context.pending || props.disabled}
 			size={size}
@@ -573,6 +583,16 @@ const inlineEditStyles = stylex.create({
 		textTransform: "inherit",
 		minWidth: "8ch",
 		width: "20ch",
+	},
+	inputIdle: {
+		margin: "-1px",
+		overflow: "hidden",
+		clip: "rect(0 0 0 0)",
+		clipPath: "inset(50%)",
+		position: "absolute",
+		whiteSpace: "nowrap",
+		height: "1px",
+		width: "1px",
 	},
 	actions: {
 		alignItems: "center",

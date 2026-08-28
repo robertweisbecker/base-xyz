@@ -93,6 +93,7 @@ export const Playground: Story = {
 		...rootProps
 	}) => (
 		<InlineEditDemo
+			key={_value}
 			initialValue={_value}
 			showActions={_showActions}
 			confirmOnBlur={confirmOnBlur}
