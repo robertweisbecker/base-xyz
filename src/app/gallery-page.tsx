@@ -58,6 +58,7 @@ import {
 	Radio,
 	RadioGroup,
 	ScrollArea,
+	SegmentedControl,
 	Select,
 	Separator,
 	Slider,
@@ -561,6 +562,16 @@ function getComponentCells(): GalleryCell[] {
 						))}
 					</div>
 				</ScrollArea>
+			),
+		},
+		{
+			title: "SegmentedControl",
+			content: (
+				<SegmentedControl.Root aria-label="View range" defaultValue="week" size="sm">
+					<SegmentedControl.Item value="day">Day</SegmentedControl.Item>
+					<SegmentedControl.Item value="week">Week</SegmentedControl.Item>
+					<SegmentedControl.Item value="month">Month</SegmentedControl.Item>
+				</SegmentedControl.Root>
 			),
 		},
 		{
