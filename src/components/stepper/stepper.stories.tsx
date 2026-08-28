@@ -139,6 +139,7 @@ export const States: Story = {
 					<AccountStep
 						description="Saved contact details."
 						marker={1}
+						markerTestId="completed-step-marker"
 						status="completed"
 						title="Account"
 						value="account"
@@ -153,6 +154,7 @@ export const States: Story = {
 					<AccountStep
 						description="A required document is missing."
 						marker={4}
+						markerTestId="invalid-step-marker"
 						status="invalid"
 						title="Documents"
 						value="documents"
@@ -293,6 +295,7 @@ function AccountStep({
 	description,
 	disabled,
 	marker,
+	markerTestId,
 	status,
 	title,
 	value,
@@ -300,13 +303,14 @@ function AccountStep({
 	description: string;
 	disabled?: boolean;
 	marker: ReactNode;
+	markerTestId?: string;
 	status?: StepperStatus;
 	title: string;
 	value: StepperValue;
 }) {
 	return (
 		<Stepper.Step disabled={disabled} status={status} value={value}>
-			<Stepper.Marker>{marker}</Stepper.Marker>
+			<Stepper.Marker data-testid={markerTestId}>{marker}</Stepper.Marker>
 			<Stepper.Heading>
 				<Stepper.Title>{title}</Stepper.Title>
 				<Stepper.Description>{description}</Stepper.Description>

@@ -27,6 +27,20 @@ test("uses Base UI tab semantics without custom naming relationships", async ({ 
 	await expect(panel).toHaveAttribute("aria-labelledby", (await review.getAttribute("id")) ?? "");
 });
 
+test("replaces completed and invalid marker children with decorative status icons", async ({
+	page,
+}) => {
+	await page.goto(statesPath);
+
+	const completedMarker = page.getByTestId("completed-step-marker");
+	const invalidMarker = page.getByTestId("invalid-step-marker");
+
+	await expect(completedMarker).toHaveAttribute("aria-hidden", "true");
+	await expect(completedMarker).toHaveText("");
+	await expect(invalidMarker).toHaveAttribute("aria-hidden", "true");
+	await expect(invalidMarker).toHaveText("");
+});
+
 test("keeps Base UI manual keyboard navigation in both orientations", async ({ page }) => {
 	await page.setViewportSize({ width: 1024, height: 800 });
 	await page.goto(orientationsPath);
