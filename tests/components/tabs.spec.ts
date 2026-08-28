@@ -1,36 +1,20 @@
-import { expect, test, type Locator, type Page } from "@playwright/test";
+import { expect, test, type Locator } from "../playwright";
 
 const storyPath = "/iframe.html?id=components-tabs--orientations&viewMode=story";
-const consoleErrorsByPage = new WeakMap<Page, string[]>();
 
-test.beforeEach(({ page }) => {
-	const consoleErrors: string[] = [];
-	consoleErrorsByPage.set(page, consoleErrors);
-	page.on("console", (message) => {
-		if (message.type() === "error") consoleErrors.push(message.text());
-	});
-});
-
-test.afterEach(({ page }) => {
-	expect(consoleErrorsByPage.get(page)).toEqual([]);
-});
-
-test("positions the underline indicator on the bordered edge", async ({ page }) => {
+test("keeps the underline indicator on the selected tab's bordered edge", async ({ page }) => {
 	await page.goto(storyPath);
 
 	const horizontalRoot = page.getByTestId("horizontal-underline-tabs");
 	const verticalRoot = page.getByTestId("vertical-underline-tabs");
 
-	await expectIndicatorOnBorderedEdge(horizontalRoot, "horizontal", "Overview");
-	const inactiveHorizontalTab = horizontalRoot.getByRole("tab", { name: "Projects" });
-	await inactiveHorizontalTab.hover();
-	await expect(inactiveHorizontalTab).not.toHaveCSS("background-color", "rgba(0, 0, 0, 0)");
-	await horizontalRoot.getByRole("tab", { name: "Projects" }).click();
-	await expectIndicatorOnBorderedEdge(horizontalRoot, "horizontal", "Projects");
+	await expectIndicatorOnBorderedEdge(horizontalRoot, "horizontal", 0);
+	await horizontalRoot.getByRole("tab").nth(1).click();
+	await expectIndicatorOnBorderedEdge(horizontalRoot, "horizontal", 1);
 
-	await expectIndicatorOnBorderedEdge(verticalRoot, "vertical", "Overview");
-	await verticalRoot.getByRole("tab", { name: "Projects" }).click();
-	await expectIndicatorOnBorderedEdge(verticalRoot, "vertical", "Projects");
+	await expectIndicatorOnBorderedEdge(verticalRoot, "vertical", 0);
+	await verticalRoot.getByRole("tab").nth(1).click();
+	await expectIndicatorOnBorderedEdge(verticalRoot, "vertical", 1);
 });
 
 test("removes indicator movement when reduced motion is requested", async ({ page }) => {
@@ -55,13 +39,13 @@ test("removes indicator movement when reduced motion is requested", async ({ pag
 async function expectIndicatorOnBorderedEdge(
 	root: Locator,
 	orientation: "horizontal" | "vertical",
-	name: string,
+	selectedIndex: number,
 ) {
 	const list = root.getByRole("tablist");
-	const tab = root.getByRole("tab", { name });
+	const tab = root.getByRole("tab").nth(selectedIndex);
 	const indicator = list.locator(":scope > span").last();
 
-	await expect(tab).toHaveAttribute("data-active", "");
+	await expect(tab).toHaveAttribute("aria-selected", "true");
 	await expect
 		.poll(async () => {
 			const [listBox, indicatorBox] = await Promise.all([

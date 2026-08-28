@@ -22,6 +22,7 @@ const meta = {
 		endSlot: undefined,
 		external: false,
 		href: "#create-project",
+		id: "link-button-playground",
 		shape: "default",
 		size: "md",
 		startSlot: undefined,
@@ -118,7 +119,11 @@ export const Examples: Story = {
 export const Rendering: Story = {
 	parameters: { controls: { disable: true } },
 	render: () => (
-		<LinkButton render={<RouterLink to="#router-dashboard" />} variant="secondary">
+		<LinkButton
+			id="link-button-rendered"
+			render={<RouterLink to="#router-dashboard" />}
+			variant="secondary"
+		>
 			Open dashboard
 		</LinkButton>
 	),

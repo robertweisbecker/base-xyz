@@ -64,14 +64,15 @@ export const NormalizationRegression: Story = {
 };
 
 function NormalizationRegressionFixture() {
-	const [dynamicGroups, setDynamicGroups] = useState(exampleModelGroups);
+	const [dynamicGroups, setDynamicGroups] =
+		useState<readonly ModelSelectorGroup[]>(regressionModelGroups);
 	const [dynamicEvents, setDynamicEvents] = useState<RegressionEvent[]>([]);
 
 	function removeSelectedModel() {
 		setDynamicGroups((groups) =>
 			groups.map((group) => ({
 				...group,
-				options: group.options.filter((option) => option.value !== "gpt-5.6-terra"),
+				options: group.options.filter((option) => option.value !== "model-beta"),
 			})),
 		);
 	}
@@ -81,28 +82,35 @@ function NormalizationRegressionFixture() {
 			<NormalizationCase
 				label="Controlled invalid model"
 				statusTestId="controlled-status"
+				triggerTestId="controlled-trigger"
 				value={{ model: "removed-model", effort: "Medium", speed: "Default" }}
 			/>
 			<NormalizationCase
 				label="Uncontrolled invalid default"
 				statusTestId="uncontrolled-status"
+				triggerTestId="uncontrolled-trigger"
 				defaultValue={{ model: "removed-model", effort: "Medium", speed: "Default" }}
 			/>
 			<Stack align="start" gap={2}>
 				<Text size="1" color="muted">
 					Dynamic model removal
 				</Text>
-				<Button onClick={removeSelectedModel}>Remove selected model</Button>
+				<Button data-testid="dynamic-remove-model" onClick={removeSelectedModel}>
+					Remove selected model
+				</Button>
 				<ModelSelector.Root
 					groups={dynamicGroups}
-					effortOptions={exampleEffortOptions}
-					speedOptions={exampleSpeedOptions}
-					defaultValue={{ model: "gpt-5.6-terra", effort: "Medium", speed: "Default" }}
+					effortOptions={regressionEffortOptions}
+					speedOptions={regressionSpeedOptions}
+					defaultValue={{ model: "model-beta", effort: "Medium", speed: "Default" }}
 					onValueChange={(value, details) =>
 						setDynamicEvents((events) => [...events, { value, reason: details.reason }])
 					}
 				>
-					<ModelSelector.Trigger aria-label="Dynamic model removal selector" />
+					<ModelSelector.Trigger
+						aria-label="Dynamic model removal selector"
+						data-testid="dynamic-trigger"
+					/>
 					<ModelSelector.Popup />
 				</ModelSelector.Root>
 				<RegressionStatus testId="dynamic-status" events={dynamicEvents} />
@@ -115,11 +123,13 @@ function NormalizationCase({
 	defaultValue,
 	label,
 	statusTestId,
+	triggerTestId,
 	value,
 }: {
 	defaultValue?: ModelSelectorValue;
 	label: string;
 	statusTestId: string;
+	triggerTestId: string;
 	value?: ModelSelectorValue;
 }) {
 	const [events, setEvents] = useState<RegressionEvent[]>([]);
@@ -130,15 +140,15 @@ function NormalizationCase({
 			</Text>
 			<ModelSelector.Root
 				groups={emptyFirstGroupModelGroups}
-				effortOptions={exampleEffortOptions}
-				speedOptions={exampleSpeedOptions}
-				defaultValue={defaultValue ?? { model: "gpt-5.6-sol", effort: "Medium", speed: "Default" }}
+				effortOptions={regressionEffortOptions}
+				speedOptions={regressionSpeedOptions}
+				defaultValue={defaultValue ?? { model: "model-alpha", effort: "Medium", speed: "Default" }}
 				value={value}
 				onValueChange={(nextValue, details) =>
 					setEvents((current) => [...current, { value: nextValue, reason: details.reason }])
 				}
 			>
-				<ModelSelector.Trigger aria-label={`${label} selector`} />
+				<ModelSelector.Trigger aria-label={`${label} selector`} data-testid={triggerTestId} />
 				<ModelSelector.Popup />
 			</ModelSelector.Root>
 			<RegressionStatus testId={statusTestId} events={events} />
@@ -157,19 +167,38 @@ function RegressionStatus({
 }) {
 	const latest = events.at(-1);
 	return (
-		<Text aria-live="polite" data-testid={testId}>
+		<Text
+			aria-live="polite"
+			data-effort={latest?.value.effort ?? ""}
+			data-event-count={events.length}
+			data-model={latest?.value.model ?? ""}
+			data-reason={latest?.reason ?? ""}
+			data-speed={latest?.value.speed ?? ""}
+			data-testid={testId}
+		>
 			{`${events.length}|${latest?.value.model ?? ""}|${latest?.value.effort ?? ""}|${latest?.value.speed ?? ""}|${latest?.reason ?? ""}`}
 		</Text>
 	);
 }
 
-const emptyFirstGroupModelGroups = [
-	{ id: "empty", label: "Empty group", options: [] },
+const regressionModelGroups = [
 	{
-		...exampleModelGroups[0],
-		options: exampleModelGroups[0].options.slice(0, 2),
+		id: "regression-models",
+		label: "Regression models",
+		options: [
+			{ value: "model-alpha", label: "Alpha" },
+			{ value: "model-beta", label: "Beta" },
+		],
 	},
 ] satisfies readonly ModelSelectorGroup[];
+
+const emptyFirstGroupModelGroups = [
+	{ id: "empty", label: "Empty group", options: [] },
+	...regressionModelGroups,
+] satisfies readonly ModelSelectorGroup[];
+
+const regressionEffortOptions = ["Low", "Medium", "High"] as const;
+const regressionSpeedOptions = ["Default", "Fast"] as const;
 
 function ModelSelectorSample({
 	defaultValue,

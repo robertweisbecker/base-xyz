@@ -64,6 +64,9 @@
 - During parallel work, only the primary or explicitly designated validator runs `verify:full`; other workers run focused checks and report their evidence.
 - If another checkout owns Playwright's default ports, leave its server running and set `PLAYWRIGHT_STORYBOOK_PORT` or `PLAYWRIGHT_APP_PORT` on the designated validation command. Do not reuse another checkout's preview server.
 - Playwright discovers the full `tests/` tree. For interaction changes, run the focused browser spec with console-error capture after building Storybook.
+- Keep blocking tests focused on durable contracts: native semantics, accessible names and relationships, keyboard and focus behavior, state, callbacks, forms, routing, and explicitly documented component mechanics. Do not gate on showcase copy, exact colors or spacing, incidental geometry, SVG internals, or the current CSS implementation.
+- Target evolving stories and prototypes through stable fixture hooks, then assert roles, ARIA state, relationships, and behavior. Use exact text only when the wording itself is the contract. Assert computed style or geometry only when that visual mechanism is an explicit contract; keep the assertion to the smallest relevant boundary, such as an indicator's thickness and anchored edge.
+- Treat Storybook and manual visual review as the design-change feedback loop. Do not turn screenshots or paint details into blocking regression tests for in-progress components.
 - For StyleX selector, popup, responsive, or interaction changes, also verify live Storybook after optimization finishes. A production build does not prove dev-transform behavior.
 - If Storybook reports a transient missing story or `Invalid empty selector`, reload/restart and reacquire browser references before changing valid code.
 - Report unrelated failures instead of modifying concurrent work.

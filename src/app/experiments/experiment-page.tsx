@@ -19,14 +19,16 @@ export function ExperimentPage({
 		<Stack gap={8} pb={10}>
 			<PageHeader
 				breadcrumbs={
-					<Breadcrumbs.Root>
+					<Breadcrumbs.Root data-testid="experiment-breadcrumbs">
 						{breadcrumbs.map((breadcrumb, index) => {
 							const current = index === breadcrumbs.length - 1;
 
 							return (
 								<Fragment key={JSON.stringify(breadcrumb.label)}>
 									{current ? (
-										<Breadcrumbs.Current>{breadcrumb.label}</Breadcrumbs.Current>
+										<Breadcrumbs.Current data-path={location.pathname}>
+											{breadcrumb.label}
+										</Breadcrumbs.Current>
 									) : (
 										<>
 											<Breadcrumbs.Link href={breadcrumb.href}>{breadcrumb.label}</Breadcrumbs.Link>

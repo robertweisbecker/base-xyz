@@ -18,7 +18,7 @@ export function ExperimentsLayout() {
 						<Sidebar.Title>Experiments</Sidebar.Title>
 					</Sidebar.Header>
 					<Sidebar.Content>
-						<NavList.Root aria-label="Experiments">
+						<NavList.Root aria-label="Experiments" data-testid="experiment-navigation">
 							{experimentNavigationGroups.map((group) => (
 								<NavList.Section
 									key={group.label}

@@ -86,12 +86,22 @@ function ReplacementResetExample() {
 				>
 					{response}
 				</StreamingResponse.Content>
-				<Text data-testid="streaming-completion-count">{completionCount}</Text>
+				<Text data-testid="streaming-completion-count" data-value={completionCount}>
+					{completionCount}
+				</Text>
 				<Stack gap={2} orientation="horizontal">
-					<Button type="button" onClick={() => setResponse("The replacement response is ready")}>
+					<Button
+						data-testid="streaming-replace"
+						type="button"
+						onClick={() => setResponse("The replacement response is ready")}
+					>
 						Replace response
 					</Button>
-					<Button type="button" onClick={() => setStreamKey((key) => key + 1)}>
+					<Button
+						data-testid="streaming-retry"
+						type="button"
+						onClick={() => setStreamKey((key) => key + 1)}
+					>
 						Retry same response
 					</Button>
 				</Stack>

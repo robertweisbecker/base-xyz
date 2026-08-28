@@ -60,6 +60,7 @@ type Story = StoryObj<RatingStoryArgs>;
 export const Playground: Story = {
 	render: ({ count, defaultValue, disabled, readOnly, icon, pressedIcon }) => (
 		<Rating
+			data-testid="rating-playground"
 			key={`${count}-${defaultValue}`}
 			label="Product rating"
 			count={count}

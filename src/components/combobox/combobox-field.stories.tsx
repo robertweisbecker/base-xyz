@@ -645,7 +645,7 @@ function CreatableTagsExample() {
 				label="Harness"
 				placeholder="Type to choose…"
 				value={selectedValues}
-				inputProps={{ onKeyDown: handleInputKeyDown }}
+				inputProps={{ id: "creatable-input", onKeyDown: handleInputKeyDown }}
 				onInputValueChange={setInputValue}
 				onItemHighlighted={(item) => {
 					highlightedItemRef.current = item;
@@ -661,7 +661,13 @@ function CreatableTagsExample() {
 					setSelectedValues(nextValue);
 					setInputValue("");
 				}}
-				renderItem={(item) => (item === creatableItem ? `Create “${item}”` : item)}
+				renderItem={(item) =>
+					item === creatableItem ? (
+						<span data-testid="creatable-option">{`Create “${item}”`}</span>
+					) : (
+						item
+					)
+				}
 			/>
 			<Text aria-live="polite" color="muted" size="1">
 				{createdItems.length > 0

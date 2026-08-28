@@ -213,7 +213,11 @@ export const TruncationTooltip: Story = {
 				<Text size="1" color="muted">
 					Status
 				</Text>
-				<Badge hue="accent" startSlot={<CheckCircleIcon aria-hidden weight="fill" />}>
+				<Badge
+					data-testid="truncated-badge"
+					hue="accent"
+					startSlot={<CheckCircleIcon aria-hidden weight="fill" />}
+				>
 					Approved for the upcoming production release
 				</Badge>
 			</Stack>

@@ -228,6 +228,7 @@ function ControlledStepper() {
 			<AccountPanels />
 			<Stack gap={2} mt={4} orientation="horizontal">
 				<Button
+					data-testid="stepper-back"
 					disabled={previous == null}
 					onClick={() => previous && setValue(previous)}
 					variant="secondary"
@@ -235,12 +236,17 @@ function ControlledStepper() {
 					Back
 				</Button>
 				<Button
+					data-testid="stepper-continue"
 					disabled={next == null || (next === "billing" && billingLocked)}
 					onClick={() => next && setValue(next)}
 				>
 					Continue
 				</Button>
-				<Button onClick={() => setBillingLocked((locked) => !locked)} variant="ghost">
+				<Button
+					data-testid="stepper-toggle-billing"
+					onClick={() => setBillingLocked((locked) => !locked)}
+					variant="ghost"
+				>
 					{billingLocked ? "Unlock billing" : "Lock billing"}
 				</Button>
 			</Stack>

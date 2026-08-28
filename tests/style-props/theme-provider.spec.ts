@@ -1,21 +1,8 @@
-import { expect, test, type Page } from "@playwright/test";
+import { expect, test } from "../playwright";
 
 const storyPath = "/iframe.html?id=design-system-theme-provider--contract&viewMode=story";
 const multipleRootsStoryPath =
 	"/iframe.html?id=design-system-theme-provider--multiple-roots&viewMode=story";
-const consoleErrorsByPage = new WeakMap<Page, string[]>();
-
-test.beforeEach(({ page }) => {
-	const consoleErrors: string[] = [];
-	consoleErrorsByPage.set(page, consoleErrors);
-	page.on("console", (message) => {
-		if (message.type() === "error") consoleErrors.push(message.text());
-	});
-});
-
-test.afterEach(({ page }) => {
-	expect(consoleErrorsByPage.get(page)).toEqual([]);
-});
 
 test("custom render host merges semantics, refs, events, and theme state without a wrapper", async ({
 	page,
@@ -24,15 +11,14 @@ test("custom render host merges semantics, refs, events, and theme state without
 	const host = page.getByTestId("custom-theme-host");
 
 	await expect(host).toBeVisible();
-	await expect(page.getByRole("main", { name: "Custom theme host" })).toBeVisible();
 	expect(await host.evaluate((element) => element.tagName)).toBe("MAIN");
-	await expect(host).toHaveAttribute("aria-label", "Custom theme host");
+	await expect(host).toHaveAccessibleName(/\S/);
 	await expect(host).toHaveAttribute("data-theme", "mp");
 	await expect(host).toHaveAttribute("data-mode", "light");
 	await expect(host).toHaveCSS("color-scheme", "light");
 	await expect(host).not.toHaveCSS("display", "contents");
 	await expect(host.locator(":scope > [data-testid='custom-theme-content']")).toHaveCount(1);
-	await expect(page.getByTestId("merged-refs")).toHaveText("true");
+	await expect(page.getByTestId("merged-refs")).toHaveAttribute("data-value", "true");
 	const hostColor = await host.evaluate((element) => getComputedStyle(element).color);
 	const warningColor = await page
 		.getByTestId("warning-reference")
@@ -40,7 +26,8 @@ test("custom render host merges semantics, refs, events, and theme state without
 	expect(hostColor).toBe(warningColor);
 
 	await host.click();
-	await expect(page.getByTestId("merged-events")).toHaveText("1:1");
+	await expect(page.getByTestId("merged-events")).toHaveAttribute("data-render-clicks", "1");
+	await expect(page.getByTestId("merged-events")).toHaveAttribute("data-provider-clicks", "1");
 	await expect(host.getByTestId("theme-context").first()).toHaveAttribute("data-theme", "mp");
 	await expect(host.getByTestId("theme-context").first()).toHaveAttribute(
 		"data-resolved-mode",
@@ -50,16 +37,17 @@ test("custom render host merges semantics, refs, events, and theme state without
 
 test("semantic hosts preserve accessible structured content", async ({ page }) => {
 	await page.goto(storyPath);
-	const main = page.getByRole("main", { name: "Custom theme host" });
-	const region = main.getByRole("region", { name: "Theme semantics" });
+	const main = page.getByTestId("custom-theme-host");
+	const region = main.getByTestId("theme-semantics");
 
-	await expect(region.getByRole("heading", { level: 2, name: "Theme semantics" })).toBeVisible();
+	await expect(region).toHaveAccessibleName(/\S/);
+	await expect(region.getByRole("heading", { level: 2 })).toHaveAccessibleName(/\S/);
 	await expect(region.getByRole("list")).toBeVisible();
 	await expect(region.getByRole("listitem")).toHaveCount(2);
-	await expect(region.getByRole("table", { name: "Theme values" })).toBeVisible();
+	await expect(region.getByTestId("theme-values-table")).toHaveAccessibleName(/\S/);
 	await expect(region.getByRole("columnheader")).toHaveCount(2);
-	await expect(region.getByRole("textbox", { name: "Theme label" })).toHaveValue("MP");
-	await expect(main.getByRole("region", { name: "Nested default theme" })).toBeVisible();
+	await expect(region.getByTestId("theme-label-input")).toHaveValue("MP");
+	await expect(page.getByTestId("nested-default-host")).toBeVisible();
 
 	const fallback = page.getByTestId("fallback-theme-host");
 	await expect(fallback).not.toHaveAttribute("role");
@@ -155,13 +143,13 @@ test("document theme ownership survives independent roots unmounting out of orde
 	await expect(page.locator("html")).toHaveAttribute("data-theme", "mp");
 	await expect(page.locator("html")).toHaveAttribute("data-mode", "light");
 
-	await page.getByRole("button", { name: "Unmount first root" }).click();
+	await page.getByTestId("unmount-first-root").click();
 	await expect(page.getByTestId("first-independent-root")).toHaveCount(0);
 	await expect(page.getByTestId("second-independent-root")).toBeVisible();
 	await expect(page.locator("html")).toHaveAttribute("data-theme", "mp");
 	await expect(page.locator("html")).toHaveAttribute("data-mode", "light");
 
-	await page.getByRole("button", { name: "Unmount second root" }).click();
+	await page.getByTestId("unmount-second-root").click();
 	await expect(page.getByTestId("second-independent-root")).toHaveCount(0);
 	await expect(page.locator("html")).toHaveAttribute("data-theme", "default");
 	await expect(page.locator("html")).toHaveAttribute("data-mode", "system");
