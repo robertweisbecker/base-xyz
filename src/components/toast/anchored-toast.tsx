@@ -21,6 +21,7 @@ import {
 	type AnchoredToastData,
 	type AnchoredToastStatus,
 	type AnchoredToastTone,
+	type AnchoredToastVariant,
 	useAnchoredToastManager,
 } from "./anchored-toast-manager";
 import { toastMotion } from "./toast-motion.stylex";
@@ -95,25 +96,87 @@ export function AnchoredToast({
 	style,
 	xstyle,
 }: AnchoredToastProps) {
+	const presentation = resolveAnchoredToastPresentation(toast);
+	const rootSx = anchoredToastRootStyles(presentation, xstyle);
+
+	return (
+		<AnchoredPositioner
+			toast={toast}
+			sideOffset={presentation.sideOffset}
+			className={positionerClassName}
+			style={positionerStyle}
+			xstyle={positionerXstyle}
+		>
+			<BaseToast.Root
+				toast={toast}
+				data-variant={presentation.variant}
+				data-tone={presentation.tone}
+				data-status={presentation.status}
+				className={attrJoin(rootSx.className, className)}
+				style={mergeStyle(rootSx.style, style)}
+			>
+				<AnchoredToastContent toast={toast} presentation={presentation} />
+			</BaseToast.Root>
+		</AnchoredPositioner>
+	);
+}
+
+function resolveAnchoredToastPresentation(toast: AnchoredToastObject) {
 	const data = toast.data ?? {};
 	const variant = data.variant ?? "default";
-	const status = data.status ?? (variant === "pill" ? "ongoing" : "idle");
-	const tone = data.tone ?? toneForStatus(status);
-	const dismissible = data.dismissible ?? variant === "default";
-	const defaultIcon = variant !== "tooltip" && (status !== "idle" || variant === "pill");
-	const customIcon =
-		data.icon !== undefined && data.icon !== null && data.icon !== false && data.icon !== true;
-	const showGeneratedIcon = data.icon === true || (data.icon === undefined && defaultIcon);
-	const showIcon = customIcon || showGeneratedIcon;
-	const sideOffset = toast.positionerProps?.sideOffset ?? (variant === "tooltip" ? 4 : 8);
-	const updateKey = toast.updateKey ?? 0;
-	const pulseStyle =
-		updateKey === 0
-			? null
-			: updateKey % 2 === 0
-				? anchoredMotion.renotifyEven
-				: anchoredMotion.renotifyOdd;
-	const rootSx = stylex.props(
+	const status = data.status ?? defaultStatus(variant);
+	const customIcon = hasCustomIcon(data.icon);
+
+	return {
+		customIcon,
+		data,
+		dismissible: data.dismissible ?? variant === "default",
+		pulseStyle: pulseStyleForUpdate(toast.updateKey ?? 0),
+		showIcon: customIcon || shouldShowGeneratedIcon(data.icon, variant, status),
+		sideOffset: toast.positionerProps?.sideOffset ?? defaultSideOffset(variant),
+		status,
+		tone: data.tone ?? toneForStatus(status),
+		variant,
+	};
+}
+
+type AnchoredToastPresentation = ReturnType<typeof resolveAnchoredToastPresentation>;
+
+function defaultStatus(variant: AnchoredToastVariant): AnchoredToastStatus {
+	return variant === "pill" ? "ongoing" : "idle";
+}
+
+function defaultSideOffset(variant: AnchoredToastVariant) {
+	return variant === "tooltip" ? 4 : 8;
+}
+
+function hasCustomIcon(icon: AnchoredToastData["icon"]): boolean {
+	return icon !== undefined && icon !== null && icon !== false && icon !== true;
+}
+
+function shouldShowGeneratedIcon(
+	icon: AnchoredToastData["icon"],
+	variant: AnchoredToastVariant,
+	status: AnchoredToastStatus,
+) {
+	if (icon === true) return true;
+	if (icon !== undefined) return false;
+
+	return variant !== "tooltip" && (status !== "idle" || variant === "pill");
+}
+
+function pulseStyleForUpdate(updateKey: number) {
+	if (updateKey === 0) return null;
+	return updateKey % 2 === 0 ? anchoredMotion.renotifyEven : anchoredMotion.renotifyOdd;
+}
+
+function anchoredToastRootStyles(
+	presentation: AnchoredToastPresentation,
+	xstyle: StyleXStyles | undefined,
+) {
+	const { pulseStyle, variant } = presentation;
+
+	return stylex.props(
 		anchoredParts.root,
 		popupMotionStyles.anchoredPopup,
 		variant === "tooltip" && popupMotionStyles.tooltipPopup,
@@ -125,88 +188,120 @@ export function AnchoredToast({
 		focusRing.inset,
 		xstyle,
 	);
+}
+
+function AnchoredToastContent({
+	toast,
+	presentation,
+}: {
+	toast: AnchoredToastObject;
+	presentation: AnchoredToastPresentation;
+}) {
+	const { variant } = presentation;
 
 	return (
-		<AnchoredPositioner
-			toast={toast}
-			sideOffset={sideOffset}
-			className={positionerClassName}
-			style={positionerStyle}
-			xstyle={positionerXstyle}
+		<BaseToast.Content
+			{...stylex.props(
+				anchoredParts.content,
+				contentVariants[variant === "popover" ? "default" : variant],
+				variant === "pill" && anchoredParts.pillContent,
+			)}
 		>
-			<BaseToast.Root
-				toast={toast}
-				data-variant={variant}
-				data-tone={tone}
-				data-status={status}
-				className={attrJoin(rootSx.className, className)}
-				style={mergeStyle(rootSx.style, style)}
-			>
-				<BaseToast.Content
+			<AnchoredToastIcon presentation={presentation} />
+			<AnchoredToastText toast={toast} variant={variant} />
+			<AnchoredToastControls toast={toast} presentation={presentation} />
+		</BaseToast.Content>
+	);
+}
+
+function AnchoredToastIcon({ presentation }: { presentation: AnchoredToastPresentation }) {
+	const { customIcon, data, showIcon, status, tone, variant } = presentation;
+	if (!showIcon) return null;
+
+	return (
+		<span
+			aria-hidden
+			{...stylex.props(
+				anchoredParts.icon,
+				iconToneVariants[tone],
+				variant === "tooltip" && anchoredParts.tooltipIcon,
+				variant === "pill" && anchoredParts.pillIcon,
+				variant === "pill" && pillIconToneVariants[tone],
+			)}
+		>
+			{customIcon ? data.icon : statusIcon(status, iconSizeForVariant(variant))}
+		</span>
+	);
+}
+
+function iconSizeForVariant(variant: AnchoredToastVariant): number | string {
+	if (variant === "tooltip") return "1em";
+	if (variant === "pill") return 16;
+	return 18;
+}
+
+function AnchoredToastText({
+	toast,
+	variant,
+}: {
+	toast: AnchoredToastObject;
+	variant: AnchoredToastVariant;
+}) {
+	if (variant === "tooltip") {
+		return (
+			<BaseToast.Title {...stylex.props(anchoredParts.tooltipTitle)}>
+				{toast.title ?? toast.description}
+			</BaseToast.Title>
+		);
+	}
+
+	return (
+		<span {...stylex.props(anchoredParts.text, variant === "pill" && anchoredParts.pillText)}>
+			{toast.title != null ? (
+				<BaseToast.Title {...stylex.props(variant === "pill" && anchoredParts.pillTitle)} />
+			) : null}
+			{toast.description != null ? (
+				<BaseToast.Description
 					{...stylex.props(
-						anchoredParts.content,
-						contentVariants[variant === "popover" ? "default" : variant],
-						variant === "pill" && anchoredParts.pillContent,
+						toastTextStyles.description,
+						variant === "pill" && anchoredParts.pillDescription,
+					)}
+				/>
+			) : null}
+		</span>
+	);
+}
+
+function AnchoredToastControls({
+	toast,
+	presentation,
+}: {
+	toast: AnchoredToastObject;
+	presentation: AnchoredToastPresentation;
+}) {
+	if (presentation.variant === "tooltip") return null;
+
+	return (
+		<>
+			{toast.actionProps != null ? (
+				<BaseToast.Action
+					{...stylex.props(toastControlStyles.action, focusRing.offset, pressable.transition)}
+				/>
+			) : null}
+			{presentation.dismissible ? (
+				<BaseToast.Close
+					aria-label="Dismiss notification"
+					{...stylex.props(
+						toastControlStyles.close,
+						toastControlStyles.anchoredClose,
+						focusRing.offset,
+						pressable.transition,
 					)}
 				>
-					{showIcon ? (
-						<span
-							aria-hidden
-							{...stylex.props(
-								anchoredParts.icon,
-								iconToneVariants[tone],
-								variant === "tooltip" && anchoredParts.tooltipIcon,
-								variant === "pill" && anchoredParts.pillIcon,
-								variant === "pill" && pillIconToneVariants[tone],
-							)}
-						>
-							{customIcon
-								? data.icon
-								: statusIcon(status, variant === "tooltip" ? "1em" : variant === "pill" ? 16 : 18)}
-						</span>
-					) : null}
-					{variant === "tooltip" ? (
-						<BaseToast.Title {...stylex.props(anchoredParts.tooltipTitle)}>
-							{toast.title ?? toast.description}
-						</BaseToast.Title>
-					) : (
-						<span
-							{...stylex.props(anchoredParts.text, variant === "pill" && anchoredParts.pillText)}
-						>
-							{toast.title != null ? (
-								<BaseToast.Title {...stylex.props(variant === "pill" && anchoredParts.pillTitle)} />
-							) : null}
-							{toast.description != null ? (
-								<BaseToast.Description
-									{...stylex.props(
-										toastTextStyles.description,
-										variant === "pill" && anchoredParts.pillDescription,
-									)}
-								/>
-							) : null}
-						</span>
-					)}
-					{variant !== "tooltip" && toast.actionProps != null ? (
-						<BaseToast.Action
-							{...stylex.props(toastControlStyles.action, focusRing.offset, pressable.transition)}
-						/>
-					) : null}
-					{variant !== "tooltip" && dismissible ? (
-						<BaseToast.Close
-							aria-label="Dismiss notification"
-							{...stylex.props(
-								toastControlStyles.close,
-								toastControlStyles.anchoredClose,
-								focusRing.offset,
-								pressable.transition,
-							)}
-						>
-							<XIcon aria-hidden size={14} weight="bold" />
-						</BaseToast.Close>
-					) : null}
-				</BaseToast.Content>
-			</BaseToast.Root>
-		</AnchoredPositioner>
+					<XIcon aria-hidden size={14} weight="bold" />
+				</BaseToast.Close>
+			) : null}
+		</>
 	);
 }
 
