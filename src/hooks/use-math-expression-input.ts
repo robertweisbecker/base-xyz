@@ -1,7 +1,16 @@
-import { useState, type ChangeEvent, type FocusEvent, type KeyboardEvent } from "react";
+import {
+	useLayoutEffect,
+	useRef,
+	useState,
+	type ChangeEvent,
+	type FocusEvent,
+	type KeyboardEvent,
+	type RefObject,
+} from "react";
 import { evaluateMathExpression } from "@/utils/evaluate-math-expression";
 
-export type MathExpressionCommitEvent = FocusEvent<HTMLInputElement> | KeyboardEvent<HTMLInputElement>;
+export type MathExpressionCommitEvent =
+	FocusEvent<HTMLInputElement> | KeyboardEvent<HTMLInputElement>;
 
 export type UseMathExpressionInputOptions = {
 	/** Controlled committed value. `null` means intentionally empty. */
@@ -19,7 +28,10 @@ export type UseMathExpressionInputOptions = {
 	/** Error shown when the draft is empty but a value is required. */
 	requiredMessage?: string;
 	/** Called once per user-initiated commit whose numeric result differs from the current value. */
-	onValueCommitted?: (value: number | null, details: { expression: string; event: MathExpressionCommitEvent }) => void;
+	onValueCommitted?: (
+		value: number | null,
+		details: { expression: string; event: MathExpressionCommitEvent },
+	) => void;
 };
 
 export type UseMathExpressionInputReturn = {
@@ -30,6 +42,7 @@ export type UseMathExpressionInputReturn = {
 	error: string | null;
 	isEditing: boolean;
 	inputProps: {
+		ref: RefObject<HTMLInputElement | null>;
 		value: string;
 		inputMode: "decimal" | "numeric" | "text";
 		disabled: boolean;
@@ -42,7 +55,11 @@ export type UseMathExpressionInputReturn = {
 	};
 };
 
-function clampCommitted(value: number | null, min: number | undefined, max: number | undefined): number | null {
+function clampCommitted(
+	value: number | null,
+	min: number | undefined,
+	max: number | undefined,
+): number | null {
 	if (value === null) return null;
 	let next = value;
 	if (min !== undefined) next = Math.max(next, min);
@@ -50,8 +67,14 @@ function clampCommitted(value: number | null, min: number | undefined, max: numb
 	return next;
 }
 
-/** Strip binary floating point noise (0.1 + 0.2 → 0.3) and normalize -0. */
+function setInputValidity(input: EventTarget | null | undefined, message: string) {
+	if (input instanceof HTMLInputElement) input.setCustomValidity(message);
+}
+
+/** Strip binary floating point noise (0.1 + 0.2 → 0.3) and normalize -0. Integers keep full precision. */
 function stripFloatNoise(value: number): number {
+	if (Object.is(value, -0)) return 0;
+	if (Number.isInteger(value)) return value;
 	const rounded = Number.parseFloat(value.toPrecision(12));
 	return rounded === 0 ? 0 : rounded;
 }
@@ -80,6 +103,7 @@ export function useMathExpressionInput({
 	onValueCommitted,
 }: UseMathExpressionInputOptions): UseMathExpressionInputReturn {
 	const isControlled = value !== undefined;
+	const inputRef = useRef<HTMLInputElement | null>(null);
 	const [uncontrolledValue, setUncontrolledValue] = useState<number | null>(defaultValue);
 	const [draft, setDraft] = useState<string | null>(null);
 	const [error, setError] = useState<string | null>(null);
@@ -89,7 +113,26 @@ export function useMathExpressionInput({
 	const committedValue = clampCommitted(isControlled ? value : uncontrolledValue, min, max);
 	const displayValue = draft ?? formatCommitted(committedValue);
 
+	useLayoutEffect(() => {
+		inputRef.current?.setCustomValidity(error ?? "");
+	}, [error]);
+
+	useLayoutEffect(() => {
+		const input = inputRef.current;
+		if (!input) return;
+		const form = input.form;
+		if (!form) return;
+		function onReset() {
+			setDraft(null);
+			setError(null);
+			if (!isControlled) setUncontrolledValue(defaultValue);
+		}
+		form.addEventListener("reset", onReset);
+		return () => form.removeEventListener("reset", onReset);
+	}, [defaultValue, isControlled]);
+
 	function settle(next: number | null, expression: string, event: MathExpressionCommitEvent) {
+		setInputValidity(event.currentTarget, "");
 		setDraft(null);
 		setError(null);
 		if (!isControlled) setUncontrolledValue(next);
@@ -102,6 +145,7 @@ export function useMathExpressionInput({
 		if (trimmed === "") {
 			if (required) {
 				setError(requiredMessage);
+				setInputValidity(event.currentTarget, requiredMessage);
 				return;
 			}
 			settle(null, draft, event);
@@ -110,6 +154,7 @@ export function useMathExpressionInput({
 		const result = evaluateMathExpression(trimmed);
 		if (!result.ok) {
 			setError(invalidExpressionMessage);
+			setInputValidity(event.currentTarget, invalidExpressionMessage);
 			return;
 		}
 		settle(clampCommitted(stripFloatNoise(result.value), min, max), draft, event);
@@ -121,6 +166,7 @@ export function useMathExpressionInput({
 		error,
 		isEditing: draft !== null,
 		inputProps: {
+			ref: inputRef,
 			value: displayValue,
 			inputMode,
 			disabled,
@@ -128,6 +174,7 @@ export function useMathExpressionInput({
 			required,
 			"aria-invalid": error !== null ? true : undefined,
 			onChange: (event) => {
+				setInputValidity(event.currentTarget, "");
 				setDraft(event.target.value);
 				setError(null);
 			},
@@ -143,6 +190,7 @@ export function useMathExpressionInput({
 					return;
 				}
 				if (event.key === "Escape" && draft !== null) {
+					setInputValidity(event.currentTarget, "");
 					setDraft(null);
 					setError(null);
 				}

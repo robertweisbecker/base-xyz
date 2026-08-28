@@ -1,6 +1,7 @@
 export type MathExpressionFailureReason = "empty" | "syntax" | "division-by-zero" | "non-finite";
 
-export type MathExpressionResult = { ok: true; value: number } | { ok: false; reason: MathExpressionFailureReason };
+export type MathExpressionResult =
+	{ ok: true; value: number } | { ok: false; reason: MathExpressionFailureReason };
 
 type BinaryOperator = "+" | "-" | "*" | "/";
 
@@ -10,7 +11,10 @@ type Token =
 	| { kind: "open-paren" }
 	| { kind: "close-paren" };
 
-const NUMBER_PATTERN = /^(?:\d+(?:\.\d*)?|\.\d+)/;
+/** Nested parentheses and unary signs beyond this depth are a syntax failure. */
+const MAX_NEST_DEPTH = 64;
+
+const NUMBER_PATTERN = /^(?:\d+(?:\.\d*)?|\.\d+)(?:[eE][+-]?\d+)?/;
 
 function tokenize(expression: string): Token[] | null {
 	const tokens: Token[] = [];
@@ -58,6 +62,7 @@ export function evaluateMathExpression(expression: string): MathExpressionResult
 	const tokens: Token[] = tokenized;
 
 	let index = 0;
+	let nestDepth = 0;
 	let failure: MathExpressionFailureReason | null = null;
 
 	function fail(reason: MathExpressionFailureReason): number {
@@ -65,11 +70,22 @@ export function evaluateMathExpression(expression: string): MathExpressionResult
 		return Number.NaN;
 	}
 
+	function enterNest(): boolean {
+		nestDepth += 1;
+		if (nestDepth > MAX_NEST_DEPTH) {
+			nestDepth -= 1;
+			fail("syntax");
+			return false;
+		}
+		return true;
+	}
+
 	function parseExpression(): number {
 		let left = parseTerm();
 		while (failure === null) {
 			const token = tokens[index];
-			if (!token || token.kind !== "operator" || (token.value !== "+" && token.value !== "-")) break;
+			if (!token || token.kind !== "operator" || (token.value !== "+" && token.value !== "-"))
+				break;
 			index += 1;
 			const right = parseTerm();
 			left = token.value === "+" ? left + right : left - right;
@@ -81,7 +97,8 @@ export function evaluateMathExpression(expression: string): MathExpressionResult
 		let left = parseFactor();
 		while (failure === null) {
 			const token = tokens[index];
-			if (!token || token.kind !== "operator" || (token.value !== "*" && token.value !== "/")) break;
+			if (!token || token.kind !== "operator" || (token.value !== "*" && token.value !== "/"))
+				break;
 			index += 1;
 			const right = parseFactor();
 			if (token.value === "*") {
@@ -99,7 +116,9 @@ export function evaluateMathExpression(expression: string): MathExpressionResult
 		const token = tokens[index];
 		if (token?.kind === "operator" && (token.value === "+" || token.value === "-")) {
 			index += 1;
+			if (!enterNest()) return Number.NaN;
 			const operand = parseFactor();
+			nestDepth -= 1;
 			return token.value === "-" ? -operand : operand;
 		}
 		return parsePrimary();
@@ -113,9 +132,14 @@ export function evaluateMathExpression(expression: string): MathExpressionResult
 		}
 		if (token?.kind === "open-paren") {
 			index += 1;
+			if (!enterNest()) return Number.NaN;
 			const value = parseExpression();
-			if (tokens[index]?.kind !== "close-paren") return fail("syntax");
+			if (tokens[index]?.kind !== "close-paren") {
+				nestDepth -= 1;
+				return fail("syntax");
+			}
 			index += 1;
+			nestDepth -= 1;
 			return value;
 		}
 		return fail("syntax");

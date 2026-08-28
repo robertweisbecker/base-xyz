@@ -71,7 +71,7 @@ test("commits on Enter before the form submits", async ({ page }) => {
 	await expect(page.getByText("Not submitted")).toBeVisible();
 
 	await input.press("Enter");
-	await expect(page.getByText("Submitted: 42")).toBeVisible();
+	await expect(page.getByText("Submitted: 42; locked omitted")).toBeVisible();
 });
 
 test("clamps committed values to min and max", async ({ page }) => {
@@ -96,7 +96,9 @@ test("blocks committing an empty draft when required", async ({ page }) => {
 	await expect(page.getByText("Enter a value")).toBeVisible();
 });
 
-test("preserves the draft across controlled rerenders and skips unchanged commits", async ({ page }) => {
+test("preserves the draft across controlled rerenders and skips unchanged commits", async ({
+	page,
+}) => {
 	await page.goto(storyPath);
 	const input = page.getByRole("textbox", { name: "Controlled amount" });
 	const tick = page.getByText(/^Tick: /);
@@ -129,4 +131,48 @@ test("keeps disabled and read-only fields inert", async ({ page }) => {
 	const readOnly = page.getByRole("textbox", { name: "Read-only" });
 	await expect(readOnly).toHaveJSProperty("readOnly", true);
 	await expect(readOnly).toHaveValue("20");
+});
+
+test("preserves integer magnitude and exponent round-trips", async ({ page }) => {
+	await page.goto(storyPath);
+	const input = page.getByRole("textbox", { name: "Amount", exact: true });
+
+	await input.fill("1234567890123");
+	await input.blur();
+	await expect(input).toHaveValue("1234567890123");
+
+	await input.fill("1e21");
+	await input.blur();
+	await expect(input).toHaveValue("1e+21");
+	await input.fill("1e+21");
+	await input.blur();
+	await expect(input).toHaveValue("1e+21");
+});
+
+test("blocks submit while the draft is invalid", async ({ page }) => {
+	await page.goto(storyPath);
+	const input = page.getByRole("textbox", { name: "Quantity" });
+	await input.fill("2 +");
+	await page.getByRole("button", { name: "Submit" }).click();
+	await expect(page.getByText("Not submitted")).toBeVisible();
+	await expect(input).toHaveValue("2 +");
+	await expect(input).toHaveAttribute("aria-invalid", "true");
+});
+
+test("omits a disabled named field from form data", async ({ page }) => {
+	await page.goto(storyPath);
+	await expect(page.getByRole("textbox", { name: "Locked quantity" })).toBeDisabled();
+	await page.getByRole("button", { name: "Submit" }).click();
+	await expect(page.getByText("Submitted: 4; locked omitted")).toBeVisible();
+});
+
+test("restores the uncontrolled value when the form resets", async ({ page }) => {
+	await page.goto(storyPath);
+	const input = page.getByRole("textbox", { name: "Quantity" });
+	await input.fill("6 * 7");
+	await input.blur();
+	await expect(input).toHaveValue("42");
+	await page.getByRole("button", { name: "Reset" }).click();
+	await expect(input).toHaveValue("4");
+	await expect(page.getByText("Not submitted")).toBeVisible();
 });

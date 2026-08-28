@@ -32,10 +32,30 @@ test("rejects malformed expressions", () => {
 	expect(evaluateMathExpression("two + 2")).toEqual({ ok: false, reason: "syntax" });
 	expect(evaluateMathExpression("1 2")).toEqual({ ok: false, reason: "syntax" });
 	expect(evaluateMathExpression("2 ** 3")).toEqual({ ok: false, reason: "syntax" });
+	expect(evaluateMathExpression("1e")).toEqual({ ok: false, reason: "syntax" });
+});
+
+test("parses exponent notation so formatted results round-trip", () => {
+	expect(evaluateMathExpression("1e21")).toEqual({ ok: true, value: 1e21 });
+	expect(evaluateMathExpression("1e+21")).toEqual({ ok: true, value: 1e21 });
+	expect(evaluateMathExpression("1e-7")).toEqual({ ok: true, value: 1e-7 });
+	expect(evaluateMathExpression("2.5E3")).toEqual({ ok: true, value: 2500 });
+});
+
+test("rejects nesting beyond the parser depth limit without overflowing", () => {
+	const nested = `${"(".repeat(65)}1${")".repeat(65)}`;
+	expect(evaluateMathExpression(nested)).toEqual({ ok: false, reason: "syntax" });
+	const deepUnary = `${"-".repeat(65)}1`;
+	expect(evaluateMathExpression(deepUnary)).toEqual({ ok: false, reason: "syntax" });
+	const allowed = `${"(".repeat(64)}1${")".repeat(64)}`;
+	expect(evaluateMathExpression(allowed)).toEqual({ ok: true, value: 1 });
 });
 
 test("rejects division by zero and non-finite results", () => {
 	expect(evaluateMathExpression("1 / 0")).toEqual({ ok: false, reason: "division-by-zero" });
 	expect(evaluateMathExpression("1 / (2 - 2)")).toEqual({ ok: false, reason: "division-by-zero" });
-	expect(evaluateMathExpression(`1${"0".repeat(309)}`)).toEqual({ ok: false, reason: "non-finite" });
+	expect(evaluateMathExpression(`1${"0".repeat(309)}`)).toEqual({
+		ok: false,
+		reason: "non-finite",
+	});
 });

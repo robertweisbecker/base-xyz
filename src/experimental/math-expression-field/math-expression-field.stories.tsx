@@ -72,7 +72,19 @@ export default meta;
 type Story = StoryObj<MathExpressionFieldStoryArgs>;
 
 export const Playground: Story = {
-	render: ({ label, description, defaultValue, min, max, required, disabled, readOnly, error, prefix, inputMode }) => (
+	render: ({
+		label,
+		description,
+		defaultValue,
+		min,
+		max,
+		required,
+		disabled,
+		readOnly,
+		error,
+		prefix,
+		inputMode,
+	}) => (
 		<MathExpressionField
 			key={`${defaultValue}-${min}-${max}-${required}-${disabled}-${readOnly}-${error}-${prefix}-${inputMode}`}
 			label={label}
@@ -149,11 +161,23 @@ function MathExpressionFormExample() {
 			onSubmit={(event) => {
 				event.preventDefault();
 				const data = new FormData(event.currentTarget);
-				setSubmitted(String(data.get("quantity")));
-			}}>
+				const quantity = String(data.get("quantity"));
+				const locked = data.has("locked") ? String(data.get("locked")) : "omitted";
+				setSubmitted(`${quantity}; locked ${locked}`);
+			}}
+			onReset={() => setSubmitted(null)}
+		>
 			<Stack gap={3} align="start">
 				<MathExpressionField label="Quantity" prefix="W" name="quantity" defaultValue={4} />
+				<MathExpressionField
+					label="Locked quantity"
+					prefix="Y"
+					name="locked"
+					defaultValue={9}
+					disabled
+				/>
 				<Button type="submit">Submit</Button>
+				<Button type="reset">Reset</Button>
 				<Text size="1" color="muted">
 					{submitted === null ? "Not submitted" : `Submitted: ${submitted}`}
 				</Text>

@@ -40,7 +40,11 @@ export function MathExpressionField({
 	const errorId = error ? `${id}-error` : undefined;
 
 	return (
-		<Field.Root {...stylex.props(fieldStyles.root)} disabled={options.disabled} invalid={Boolean(error)}>
+		<Field.Root
+			{...stylex.props(fieldStyles.root)}
+			disabled={options.disabled}
+			invalid={Boolean(error)}
+		>
 			<Field.Label htmlFor={id} {...stylex.props(fieldStyles.label)}>
 				{label}
 			</Field.Label>
@@ -57,7 +61,14 @@ export function MathExpressionField({
 					aria-invalid={error ? true : undefined}
 				/>
 			</InputGroup.Root>
-			{name ? <input type="hidden" name={name} value={committedValue ?? ""} /> : null}
+			{name ? (
+				<input
+					type="hidden"
+					name={name}
+					value={committedValue ?? ""}
+					disabled={options.disabled || Boolean(expressionError)}
+				/>
+			) : null}
 			{description ? (
 				<Field.Description id={descriptionId} {...stylex.props(fieldStyles.description)}>
 					{description}
