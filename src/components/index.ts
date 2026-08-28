@@ -144,6 +144,12 @@ export {
 	type RadioSize,
 } from "./radio/radio";
 export { ScrollArea, type ScrollAreaProps } from "./scroll-area/scroll-area";
+export {
+	SegmentedControl,
+	type SegmentedControlItemProps,
+	type SegmentedControlRootProps,
+	type SegmentedControlSize,
+} from "./segmented-control/segmented-control";
 export { Select, type SelectRootProps } from "./select/select";
 export { Switch, type SwitchProps, type SwitchSize } from "./switch/switch";
 export { Text, type TextProps } from "./text/text";
