@@ -2,7 +2,6 @@ import * as stylex from "@stylexjs/stylex";
 import type { ComponentProps, ReactNode } from "react";
 import { zIndex } from "@/styles/constants.stylex";
 import { mergeStyle, type BaseStyleProps } from "@/styles/props/base";
-import { extractMarginProps, type MarginProps } from "@/styles/props/spacing.stylex";
 import { tokens } from "@/theme/tokens.stylex";
 import { attrJoin } from "@/utils/attr-join";
 
@@ -14,34 +13,39 @@ type StyledHeaderProps = Omit<
 		className?: string;
 	};
 
-export type NavbarPosition = "static" | "sticky";
+export type NavbarPosition = "absolute" | "fixed" | "sticky";
 
-export type NavbarProps = StyledHeaderProps &
-	MarginProps & {
-		end?: ReactNode;
-		position?: NavbarPosition;
-		start?: ReactNode;
-	};
+export type NavbarProps = StyledHeaderProps & {
+	end?: ReactNode;
+	position?: NavbarPosition;
+	start?: ReactNode;
+};
 
 export function Navbar({
 	ref,
 	className,
 	end,
-	position = "static",
+	position = "fixed",
 	start,
 	style,
 	xstyle,
 	...props
 }: NavbarProps) {
-	const { marginStyles, rest } = extractMarginProps(props);
-	const sx = stylex.props(styles.root, positionStyles[position], ...marginStyles, xstyle);
+	const fillsInlineEdge = position === "absolute" || position === "fixed";
+	const sx = stylex.props(
+		styles.root,
+		positionStyles.anchor,
+		fillsInlineEdge && positionStyles.inlineEdges,
+		positionStyles[position],
+		xstyle,
+	);
 
 	return (
 		<header
 			ref={ref}
 			className={attrJoin(sx.className, className)}
 			style={mergeStyle(sx.style, style)}
-			{...rest}
+			{...props}
 		>
 			{start == null ? null : <div {...stylex.props(styles.section)}>{start}</div>}
 			{end == null ? null : <div {...stylex.props(styles.section, styles.end)}>{end}</div>}
@@ -62,7 +66,6 @@ const styles = stylex.create({
 		borderBottomStyle: "solid",
 		borderBottomWidth: tokens["--border-width"],
 		minHeight: tokens["--size-navbar-height"],
-		width: "100%",
 	},
 	section: {
 		gap: tokens["--space-3"],
@@ -76,12 +79,20 @@ const styles = stylex.create({
 });
 
 const positionStyles = stylex.create({
-	static: {
-		position: "static",
+	anchor: {
+		zIndex: zIndex.sticky,
+		top: 0,
+	},
+	inlineEdges: {
+		insetInline: 0,
+	},
+	absolute: {
+		position: "absolute",
+	},
+	fixed: {
+		position: "fixed",
 	},
 	sticky: {
 		position: "sticky",
-		zIndex: zIndex.sticky,
-		top: 0,
 	},
 });

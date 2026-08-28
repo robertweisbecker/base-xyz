@@ -24,7 +24,7 @@ test("renders app-header landmarks, current-page state, and actions", async ({ p
 	const currentLink = navigation.getByTestId("navbar-link-overview");
 	const otherLink = navigation.getByTestId("navbar-link-projects");
 
-	await expect(banner).toHaveCSS("position", "static");
+	await expect(banner).toHaveCSS("position", "fixed");
 	await expect(brand).toHaveRole("link");
 	await expect(navigation).toHaveRole("navigation");
 	await expect(navigation).toHaveAccessibleName(/\S/);
@@ -50,10 +50,11 @@ test("keeps links in native keyboard order", async ({ page }) => {
 	await expect(page.getByTestId("navbar-notifications")).toBeFocused();
 });
 
-test("supports sticky positioning without changing document semantics", async ({ page }) => {
-	await page.goto(`${storyPath}&args=position:sticky`);
+test("supports absolute, fixed, and sticky positioning", async ({ page }) => {
+	for (const position of ["absolute", "fixed", "sticky"] as const) {
+		await page.goto(`${storyPath}&args=position:${position}`);
 
-	const banner = page.getByRole("banner");
-	await expect(banner).toHaveCSS("position", "sticky");
-	await expect(page.getByTestId("navbar-navigation")).toBeVisible();
+		await expect(page.getByRole("banner")).toHaveCSS("position", position);
+		await expect(page.getByTestId("navbar-navigation")).toBeVisible();
+	}
 });

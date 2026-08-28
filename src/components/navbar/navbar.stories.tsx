@@ -29,7 +29,7 @@ const meta: Meta<NavbarStoryArgs> = {
 	component: Navbar,
 	args: {
 		end: "Navigation and actions",
-		position: "static",
+		position: "fixed",
 		start: "Brand",
 	},
 	argTypes: {
@@ -40,7 +40,7 @@ const meta: Meta<NavbarStoryArgs> = {
 		},
 		position: {
 			control: "inline-radio",
-			options: ["static", "sticky"],
+			options: ["absolute", "fixed", "sticky"],
 		},
 		start: {
 			control: "select",
@@ -75,6 +75,7 @@ export const Examples: Story = {
 		<Stack gap={5}>
 			<Example label="Product navigation">
 				<Navbar
+					position="sticky"
 					start={
 						<a href="#product" {...stylex.props(styles.brand, focusRing.offset)}>
 							<CubeIcon aria-hidden size={18} weight="duotone" />
@@ -100,6 +101,7 @@ export const Examples: Story = {
 			<Separator />
 			<Example label="Brand and actions">
 				<Navbar
+					position="sticky"
 					start={
 						<a href="#workspace" {...stylex.props(styles.brand, focusRing.offset)}>
 							Acme workspace
