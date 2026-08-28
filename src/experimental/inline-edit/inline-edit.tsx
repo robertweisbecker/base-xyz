@@ -1,7 +1,6 @@
 /* eslint-disable react/only-export-components -- Compound component parts are intentionally grouped into the InlineEdit namespace. */
 import { Button as BaseButton } from "@base-ui/react/button";
 import { Input as BaseInput } from "@base-ui/react/input";
-import { CheckIcon } from "@phosphor-icons/react/dist/csr/Check";
 import { XIcon } from "@phosphor-icons/react/dist/csr/X";
 import * as stylex from "@stylexjs/stylex";
 import {
@@ -17,6 +16,7 @@ import {
 } from "react";
 import { IconButton, type IconButtonProps } from "@/components/button/button";
 import { fieldStyles } from "@/components/field/field.stylex";
+import { Icon } from "@/components/icons";
 import {
 	textColorStyles,
 	textTabularStyles,
@@ -137,7 +137,7 @@ function InlineEditRoot({
 	children,
 	className,
 	color,
-	confirmOnBlur = false,
+	confirmOnBlur = true,
 	confirmOnEnter = false,
 	defaultEditing = false,
 	disabled = false,
@@ -416,7 +416,7 @@ function InlineEditConfirm({
 		<IconButton
 			{...props}
 			type="button"
-			icon={<CheckIcon aria-hidden size={12} weight="bold" />}
+			icon={<Icon.Checkmark size={12} strokeWidth={3} />}
 			label={label}
 			loading={context.pending}
 			disabled={context.disabled || props.disabled}

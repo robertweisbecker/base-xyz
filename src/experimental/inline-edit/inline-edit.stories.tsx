@@ -32,7 +32,7 @@ const meta = {
 		_value: "Roadmap title",
 		children: null,
 		color: "inherit",
-		confirmOnBlur: false,
+		confirmOnBlur: true,
 		confirmOnEnter: true,
 		defaultEditing: false,
 		disabled: false,
