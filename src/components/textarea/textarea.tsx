@@ -12,12 +12,7 @@ import { useTextareaAutoResize } from "@/hooks/use-textarea-auto-resize";
 
 export type TextareaProps = Omit<
 	ComponentProps<"textarea">,
-	| "className"
-	| "color"
-	| "height"
-	| "style"
-	| "width"
-	| keyof MarginProps
+	"className" | "color" | "height" | "style" | "width" | keyof MarginProps
 > &
 	MarginProps &
 	BaseStyleProps & {
@@ -65,11 +60,7 @@ export function Textarea({
 	const id = providedId ?? generatedId;
 	const descriptionId = description ? `${id}-description` : undefined;
 	const errorId = error ? `${id}-error` : undefined;
-	const rootSx = stylex.props(
-		fieldStyles.root,
-		marginStyles,
-		xstyle,
-	);
+	const rootSx = stylex.props(fieldStyles.root, marginStyles, xstyle);
 
 	return (
 		<Field.Root

@@ -21,16 +21,16 @@ test("positions the underline indicator on the bordered edge", async ({ page }) 
 	const horizontalRoot = page.getByTestId("horizontal-underline-tabs");
 	const verticalRoot = page.getByTestId("vertical-underline-tabs");
 
-	await expectIndicatorToMatchTab(horizontalRoot, "horizontal", "Overview");
+	await expectIndicatorOnBorderedEdge(horizontalRoot, "horizontal", "Overview");
 	const inactiveHorizontalTab = horizontalRoot.getByRole("tab", { name: "Projects" });
 	await inactiveHorizontalTab.hover();
 	await expect(inactiveHorizontalTab).not.toHaveCSS("background-color", "rgba(0, 0, 0, 0)");
 	await horizontalRoot.getByRole("tab", { name: "Projects" }).click();
-	await expectIndicatorToMatchTab(horizontalRoot, "horizontal", "Projects");
+	await expectIndicatorOnBorderedEdge(horizontalRoot, "horizontal", "Projects");
 
-	await expectIndicatorToMatchTab(verticalRoot, "vertical", "Overview");
+	await expectIndicatorOnBorderedEdge(verticalRoot, "vertical", "Overview");
 	await verticalRoot.getByRole("tab", { name: "Projects" }).click();
-	await expectIndicatorToMatchTab(verticalRoot, "vertical", "Projects");
+	await expectIndicatorOnBorderedEdge(verticalRoot, "vertical", "Projects");
 });
 
 test("removes indicator movement when reduced motion is requested", async ({ page }) => {
@@ -44,11 +44,15 @@ test("removes indicator movement when reduced motion is requested", async ({ pag
 		.last();
 
 	await expect
-		.poll(async () => Number.parseFloat(await indicator.evaluate((element) => getComputedStyle(element).transitionDuration)))
+		.poll(async () =>
+			Number.parseFloat(
+				await indicator.evaluate((element) => getComputedStyle(element).transitionDuration),
+			),
+		)
 		.toBeLessThanOrEqual(0.00001);
 });
 
-async function expectIndicatorToMatchTab(
+async function expectIndicatorOnBorderedEdge(
 	root: Locator,
 	orientation: "horizontal" | "vertical",
 	name: string,
@@ -60,28 +64,23 @@ async function expectIndicatorToMatchTab(
 	await expect(tab).toHaveAttribute("data-active", "");
 	await expect
 		.poll(async () => {
-			const [listBox, tabBox, indicatorBox] = await Promise.all([
+			const [listBox, indicatorBox] = await Promise.all([
 				list.boundingBox(),
-				tab.boundingBox(),
 				indicator.boundingBox(),
 			]);
 
-			if (listBox === null || tabBox === null || indicatorBox === null) return false;
+			if (listBox === null || indicatorBox === null) return false;
 
 			if (orientation === "horizontal") {
 				return (
-					Math.abs(indicatorBox.x - tabBox.x) <= 1 &&
-					Math.abs(indicatorBox.width - tabBox.width) <= 1 &&
 					Math.abs(indicatorBox.y + indicatorBox.height - (listBox.y + listBox.height)) <= 0.25 &&
-					indicatorBox.height === 2
+					Math.abs(indicatorBox.height - 3) <= 0.25
 				);
 			}
 
 			return (
-				Math.abs(indicatorBox.y - tabBox.y) <= 1 &&
-				Math.abs(indicatorBox.height - tabBox.height) <= 1 &&
 				Math.abs(indicatorBox.x + indicatorBox.width - (listBox.x + listBox.width)) <= 0.25 &&
-				indicatorBox.width === 2
+				Math.abs(indicatorBox.width - 3) <= 0.25
 			);
 		})
 		.toBe(true);

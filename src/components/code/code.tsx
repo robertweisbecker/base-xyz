@@ -15,7 +15,14 @@ export function Code({ ref, className, style, xstyle, ...props }: CodeProps) {
 	const { marginStyles, rest } = extractMarginProps(props);
 	const sx = stylex.props(styles.root, ...marginStyles, xstyle);
 
-	return <code ref={ref} className={attrJoin(sx.className, className)} style={mergeStyle(sx.style, style)} {...rest} />;
+	return (
+		<code
+			ref={ref}
+			className={attrJoin(sx.className, className)}
+			style={mergeStyle(sx.style, style)}
+			{...rest}
+		/>
+	);
 }
 
 const styles = stylex.create({

@@ -2,7 +2,14 @@ import { LinkSimpleIcon } from "@phosphor-icons/react/dist/csr/LinkSimple";
 import { PaperclipIcon } from "@phosphor-icons/react/dist/csr/Paperclip";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import * as stylex from "@stylexjs/stylex";
-import { useEffect, useRef, useState, type ComponentProps, type ReactNode, type RefObject } from "react";
+import {
+	useEffect,
+	useRef,
+	useState,
+	type ComponentProps,
+	type ReactNode,
+	type RefObject,
+} from "react";
 import { Menu, MeterGauge, Toast, Toolbar } from "@/components";
 import { Box, Stack } from "@/components/layout/layout";
 import { Text } from "@/components/text/text";
@@ -115,7 +122,8 @@ function GoalPromptStackDemo({ id }: { id: string }) {
 					<PromptComposer.Root
 						clearOnSubmit={false}
 						defaultValue="Continue with the current goal and summarize the next change."
-						onSubmit={() => undefined}>
+						onSubmit={() => undefined}
+					>
 						<PromptComposer.Surface>
 							<PromptComposer.Input placeholder="Ask about the current goal…" />
 							<PromptComposer.Footer>
@@ -126,8 +134,11 @@ function GoalPromptStackDemo({ id }: { id: string }) {
 											groups={exampleModelGroups}
 											effortOptions={exampleEffortOptions}
 											speedOptions={exampleSpeedOptions}
-											defaultValue={exampleDefaultValue}>
-											<ModelSelector.Trigger render={<Toolbar.Button xstyle={storyParts.modelTrigger} />} />
+											defaultValue={exampleDefaultValue}
+										>
+											<ModelSelector.Trigger
+												render={<Toolbar.Button xstyle={storyParts.modelTrigger} />}
+											/>
 											<ModelSelector.Popup />
 										</ModelSelector.Root>
 									</Toolbar.Root>
@@ -253,7 +264,8 @@ function ChangeCount({ additions, deletions }: { additions: number; deletions: n
 		<Text
 			aria-label={`${additions} additions and ${deletions} deletions`}
 			render={<span />}
-			xstyle={storyParts.changeCount}>
+			xstyle={storyParts.changeCount}
+		>
 			<Text aria-hidden render={<span />} xstyle={storyParts.additions}>
 				+{additions}
 			</Text>

@@ -27,7 +27,10 @@ export type WorkflowProgressTitleProps = StyledProps<ComponentProps<"div">>;
 export type WorkflowProgressDescriptionProps = StyledProps<ComponentProps<"div">>;
 export type WorkflowProgressMetadataProps = StyledProps<ComponentProps<"div">>;
 export type WorkflowProgressMetaProps = StyledProps<ComponentProps<"span">>;
-export type WorkflowProgressStatusProps = Omit<BadgeProps, "children" | "endSlot" | "label" | "startSlot"> & {
+export type WorkflowProgressStatusProps = Omit<
+	BadgeProps,
+	"children" | "endSlot" | "label" | "startSlot"
+> & {
 	children?: ReactNode;
 	endSlot?: ReactNode;
 	icon?: ReactNode;
@@ -64,7 +67,11 @@ export function Item({ status, className, style, xstyle, ...props }: WorkflowPro
 	const sx = stylex.props(parts.item, xstyle);
 	return (
 		<WorkflowProgressItemContext.Provider value={status}>
-			<li className={attrJoin(sx.className, className)} style={mergeStyle(sx.style, style)} {...props} />
+			<li
+				className={attrJoin(sx.className, className)}
+				style={mergeStyle(sx.style, style)}
+				{...props}
+			/>
 		</WorkflowProgressItemContext.Provider>
 	);
 }
@@ -73,7 +80,12 @@ export function Marker({ className, style, xstyle, ...props }: WorkflowProgressM
 	const status = useWorkflowProgressStatus("Marker");
 	const sx = stylex.props(parts.marker, markerStatus[status], xstyle);
 	return (
-		<div aria-hidden className={attrJoin(sx.className, className)} style={mergeStyle(sx.style, style)} {...props}>
+		<div
+			aria-hidden
+			className={attrJoin(sx.className, className)}
+			style={mergeStyle(sx.style, style)}
+			{...props}
+		>
 			{renderStatusIcon(status)}
 		</div>
 	);
@@ -81,35 +93,83 @@ export function Marker({ className, style, xstyle, ...props }: WorkflowProgressM
 
 export function Content({ className, style, xstyle, ...props }: WorkflowProgressContentProps) {
 	const sx = stylex.props(parts.content, xstyle);
-	return <div className={attrJoin(sx.className, className)} style={mergeStyle(sx.style, style)} {...props} />;
+	return (
+		<div
+			className={attrJoin(sx.className, className)}
+			style={mergeStyle(sx.style, style)}
+			{...props}
+		/>
+	);
 }
 
 export function Header({ className, style, xstyle, ...props }: WorkflowProgressHeaderProps) {
 	const sx = stylex.props(parts.header, xstyle);
-	return <div className={attrJoin(sx.className, className)} style={mergeStyle(sx.style, style)} {...props} />;
+	return (
+		<div
+			className={attrJoin(sx.className, className)}
+			style={mergeStyle(sx.style, style)}
+			{...props}
+		/>
+	);
 }
 
 export function Title({ className, style, xstyle, ...props }: WorkflowProgressTitleProps) {
 	const sx = stylex.props(textStyles.body, fontWeightStyles.semibold, parts.title, xstyle);
-	return <div className={attrJoin(sx.className, className)} style={mergeStyle(sx.style, style)} {...props} />;
+	return (
+		<div
+			className={attrJoin(sx.className, className)}
+			style={mergeStyle(sx.style, style)}
+			{...props}
+		/>
+	);
 }
 
-export function Description({ className, style, xstyle, ...props }: WorkflowProgressDescriptionProps) {
+export function Description({
+	className,
+	style,
+	xstyle,
+	...props
+}: WorkflowProgressDescriptionProps) {
 	const sx = stylex.props(textStyles.body, parts.description, xstyle);
-	return <div className={attrJoin(sx.className, className)} style={mergeStyle(sx.style, style)} {...props} />;
+	return (
+		<div
+			className={attrJoin(sx.className, className)}
+			style={mergeStyle(sx.style, style)}
+			{...props}
+		/>
+	);
 }
 
 export function Metadata({ className, style, xstyle, ...props }: WorkflowProgressMetadataProps) {
 	const sx = stylex.props(parts.metadata, xstyle);
-	return <div className={attrJoin(sx.className, className)} style={mergeStyle(sx.style, style)} {...props} />;
+	return (
+		<div
+			className={attrJoin(sx.className, className)}
+			style={mergeStyle(sx.style, style)}
+			{...props}
+		/>
+	);
 }
 
 export function Meta({ className, style, xstyle, ...props }: WorkflowProgressMetaProps) {
 	const sx = stylex.props(textStyles.supporting, parts.meta, xstyle);
-	return <span className={attrJoin(sx.className, className)} style={mergeStyle(sx.style, style)} {...props} />;
+	return (
+		<span
+			className={attrJoin(sx.className, className)}
+			style={mergeStyle(sx.style, style)}
+			{...props}
+		/>
+	);
 }
 
-export function Status({ children, endSlot, icon, size = "sm", startSlot, ...props }: WorkflowProgressStatusProps) {
+export function Status({
+	children,
+	endSlot,
+	icon,
+	size = "sm",
+	startSlot,
+	...props
+}: WorkflowProgressStatusProps) {
 	const status = useWorkflowProgressStatus("Status");
 	const variant = statusVariants[status];
 	return (

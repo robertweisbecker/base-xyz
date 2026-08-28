@@ -82,7 +82,8 @@ export const Playground: Story = {
 			key={`${defaultOpen}-${disablePointerDismissal}-${modal}`}
 			defaultOpen={defaultOpen}
 			disablePointerDismissal={disablePointerDismissal}
-			modal={modal}>
+			modal={modal}
+		>
 			<Drawer.Trigger render={<Button />}>Open drawer</Drawer.Trigger>
 			<DrawerExample
 				title="Project settings"
@@ -113,7 +114,9 @@ function SnapPointsDrawer() {
 						<Drawer.Handle />
 						<Drawer.Header>
 							<Drawer.Title>Project activity</Drawer.Title>
-							<Drawer.Description>Drag between the compact and full-height snap points.</Drawer.Description>
+							<Drawer.Description>
+								Drag between the compact and full-height snap points.
+							</Drawer.Description>
 						</Drawer.Header>
 						<Drawer.Content scrollable role="region" aria-label="Project activity list">
 							<Drawer.Body>
@@ -185,7 +188,12 @@ export const DetachedTriggers: Story = {
 			</Text>
 			<Stack gap={2} wrap="wrap">
 				{drawerDestinations.map(({ label, ...payload }) => (
-					<Drawer.Trigger key={label} handle={detachedDrawer} payload={payload} render={<Button variant="secondary" />}>
+					<Drawer.Trigger
+						key={label}
+						handle={detachedDrawer}
+						payload={payload}
+						render={<Button variant="secondary" />}
+					>
 						{label}
 					</Drawer.Trigger>
 				))}
@@ -204,7 +212,9 @@ export const DetachedTriggers: Story = {
 													<Drawer.Title>{payload.title}</Drawer.Title>
 													<Drawer.Description>{payload.description}</Drawer.Description>
 												</Stack>
-												<Drawer.Close render={<Button variant="ghost" ms="auto" />}>Done</Drawer.Close>
+												<Drawer.Close render={<Button variant="ghost" ms="auto" />}>
+													Done
+												</Drawer.Close>
 											</Stack>
 										</Drawer.Header>
 										<Drawer.Body>{payload.body}</Drawer.Body>
@@ -237,11 +247,15 @@ export const Nested: Story = {
 						<Drawer.Content>
 							<Drawer.Header>
 								<Drawer.Title>Project settings</Drawer.Title>
-								<Drawer.Description>The parent drawer scales and peeks behind nested surfaces.</Drawer.Description>
+								<Drawer.Description>
+									The parent drawer scales and peeks behind nested surfaces.
+								</Drawer.Description>
 							</Drawer.Header>
 							<Drawer.Body>
 								<Drawer.Root>
-									<Drawer.Trigger render={<Button variant="secondary" />}>Open permissions drawer</Drawer.Trigger>
+									<Drawer.Trigger render={<Button variant="secondary" />}>
+										Open permissions drawer
+									</Drawer.Trigger>
 									<Drawer.Portal>
 										<Drawer.Backdrop />
 										<Drawer.Viewport>
@@ -250,7 +264,9 @@ export const Nested: Story = {
 												<Drawer.Content>
 													<Drawer.Header>
 														<Drawer.Title>Permissions</Drawer.Title>
-														<Drawer.Description>Configure who can edit this project.</Drawer.Description>
+														<Drawer.Description>
+															Configure who can edit this project.
+														</Drawer.Description>
 													</Drawer.Header>
 													<Drawer.Body>
 														<Drawer.Root>
@@ -270,10 +286,13 @@ export const Nested: Story = {
 																				</Drawer.Description>
 																			</Drawer.Header>
 																			<Drawer.Body>
-																				The three-layer stack exposes the scale, height, and content fade transitions.
+																				The three-layer stack exposes the scale, height, and content
+																				fade transitions.
 																			</Drawer.Body>
 																			<Drawer.Footer>
-																				<Drawer.Close render={<Button variant="secondary" />}>Done</Drawer.Close>
+																				<Drawer.Close render={<Button variant="secondary" />}>
+																					Done
+																				</Drawer.Close>
 																			</Drawer.Footer>
 																		</Drawer.Content>
 																	</Drawer.Popup>
@@ -282,7 +301,9 @@ export const Nested: Story = {
 														</Drawer.Root>
 													</Drawer.Body>
 													<Drawer.Footer>
-														<Drawer.Close render={<Button variant="secondary" />}>Back</Drawer.Close>
+														<Drawer.Close render={<Button variant="secondary" />}>
+															Back
+														</Drawer.Close>
 													</Drawer.Footer>
 												</Drawer.Content>
 											</Drawer.Popup>
@@ -320,7 +341,8 @@ function CloseConfirmationDrawer() {
 					setDraft("");
 				}
 				setDrawerOpen(open);
-			}}>
+			}}
+		>
 			<Drawer.Trigger render={<Button />}>Compose update</Drawer.Trigger>
 			<Drawer.Portal>
 				<Drawer.Backdrop />
@@ -330,14 +352,17 @@ function CloseConfirmationDrawer() {
 						<Drawer.Content>
 							<Drawer.Header>
 								<Drawer.Title>New project update</Drawer.Title>
-								<Drawer.Description>Type something, then swipe down or press Cancel.</Drawer.Description>
+								<Drawer.Description>
+									Type something, then swipe down or press Cancel.
+								</Drawer.Description>
 							</Drawer.Header>
 							<form
 								onSubmit={(event) => {
 									event.preventDefault();
 									setDraft("");
 									setDrawerOpen(false);
-								}}>
+								}}
+							>
 								<Drawer.Body>
 									<Textarea
 										label="Update"
@@ -364,14 +389,17 @@ function CloseConfirmationDrawer() {
 						<AlertDialog.Description>Your unsaved changes will be lost.</AlertDialog.Description>
 					</AlertDialog.Header>
 					<AlertDialog.Footer>
-						<AlertDialog.Close render={<Button variant="secondary" />}>Keep editing</AlertDialog.Close>
+						<AlertDialog.Close render={<Button variant="secondary" />}>
+							Keep editing
+						</AlertDialog.Close>
 						<Button
 							variant="error"
 							onClick={() => {
 								setConfirmationOpen(false);
 								setDraft("");
 								setDrawerOpen(false);
-							}}>
+							}}
+						>
 							Discard update
 						</Button>
 					</AlertDialog.Footer>

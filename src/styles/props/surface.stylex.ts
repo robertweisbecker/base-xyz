@@ -272,7 +272,8 @@ export const semanticTextColorStyles = stylex.create({
 	warningContrast: { color: tokens["--fg-warning-contrast"] },
 });
 
-export type TokenTextColorValues = keyof typeof semanticTextColorStyles | keyof typeof tokenTextColorStyles;
+export type TokenTextColorValues =
+	keyof typeof semanticTextColorStyles | keyof typeof tokenTextColorStyles;
 
 export const semanticBackgroundColorStyles = stylex.create({
 	canvas: { backgroundColor: tokens["--canvas"] },
@@ -372,9 +373,11 @@ const dynamicBorderWidthStyles = stylex.create({
 	width: (borderWidth: number | string) => ({ borderWidth }),
 });
 
-export type TokenBorderColorValues = keyof typeof borderColorStyles | keyof typeof tokenBorderColorStyles;
+export type TokenBorderColorValues =
+	keyof typeof borderColorStyles | keyof typeof tokenBorderColorStyles;
 export type BorderWidthValue = number | string;
-export type BorderStyleValue = "solid" | "dashed" | "dotted" | "double" | "groove" | "ridge" | "inset" | "outset";
+export type BorderStyleValue =
+	"solid" | "dashed" | "dotted" | "double" | "groove" | "ridge" | "inset" | "outset";
 
 export type SurfaceProps = {
 	bg?: TokenBackgroundColorValues;
@@ -413,6 +416,7 @@ export function resolveSurface(props: SurfaceProps): StyleXStyles[] {
 				: tokenBorderColorStyles[props.borderColor],
 		);
 	if (props.borderStyle !== undefined) styles.push(borderStyleStyles[props.borderStyle]);
-	if (props.borderWidth !== undefined) styles.push(dynamicBorderWidthStyles.width(props.borderWidth));
+	if (props.borderWidth !== undefined)
+		styles.push(dynamicBorderWidthStyles.width(props.borderWidth));
 	return styles;
 }

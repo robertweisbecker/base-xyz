@@ -7,7 +7,8 @@ import { createContext, useContext, type CSSProperties } from "react";
 import { tokens } from "@/theme/tokens.stylex";
 import { attrJoin } from "@/utils/attr-join";
 
-type PartProps<T> = Omit<T, "className" | "style" | "xstyle"> & BaseStyleProps & { className?: string };
+type PartProps<T> = Omit<T, "className" | "style" | "xstyle"> &
+	BaseStyleProps & { className?: string };
 
 type MeterStyle = CSSProperties & {
 	"--_meter-indicator-color"?: string;
@@ -16,7 +17,10 @@ type MeterStyle = CSSProperties & {
 
 export type MeterVariant = "bar" | "segmented";
 
-export type RootProps = Omit<BaseMeter.Root.Props, "className" | "style" | "xstyle" | "color" | keyof MarginProps> &
+export type RootProps = Omit<
+	BaseMeter.Root.Props,
+	"className" | "style" | "xstyle" | "color" | keyof MarginProps
+> &
 	MarginProps &
 	PartProps<BaseMeter.Root.Props> & {
 		/** The lower boundary of the middle range. */
@@ -73,8 +77,14 @@ export function Root({
 	const meterValues = resolveMeterValues({ high, low, max, min, optimum, value });
 	const hasSemanticThresholds = [low, high, optimum].some(isValidMeterNumber);
 	const meterState = hasSemanticThresholds ? getMeterState(meterValues) : undefined;
-	const resolvedIndicatorColor = indicatorColor ?? (meterState ? meterStateColors[meterState] : undefined);
-	const sx = stylex.props(meterParts.root, variant === "segmented" && meterParts.segmentedRoot, marginStyles, xstyle);
+	const resolvedIndicatorColor =
+		indicatorColor ?? (meterState ? meterStateColors[meterState] : undefined);
+	const sx = stylex.props(
+		meterParts.root,
+		variant === "segmented" && meterParts.segmentedRoot,
+		marginStyles,
+		xstyle,
+	);
 	const meterStyle: MeterStyle = {
 		...mergeStyle(sx.style, style),
 		...(resolvedIndicatorColor && {
@@ -124,9 +134,21 @@ function resolveMeterValues({
 	const minimumValue = isValidMeterNumber(min) ? min : 0;
 	const candidateMaximumValue = isValidMeterNumber(max) ? max : 100;
 	const maximumValue = Math.max(minimumValue, candidateMaximumValue);
-	const actualValue = clampMeterValue(isValidMeterNumber(value) ? value : 0, minimumValue, maximumValue);
-	const lowBoundary = clampMeterValue(isValidMeterNumber(low) ? low : minimumValue, minimumValue, maximumValue);
-	const highBoundary = clampMeterValue(isValidMeterNumber(high) ? high : maximumValue, lowBoundary, maximumValue);
+	const actualValue = clampMeterValue(
+		isValidMeterNumber(value) ? value : 0,
+		minimumValue,
+		maximumValue,
+	);
+	const lowBoundary = clampMeterValue(
+		isValidMeterNumber(low) ? low : minimumValue,
+		minimumValue,
+		maximumValue,
+	);
+	const highBoundary = clampMeterValue(
+		isValidMeterNumber(high) ? high : maximumValue,
+		lowBoundary,
+		maximumValue,
+	);
 	const optimumPoint = clampMeterValue(
 		isValidMeterNumber(optimum) ? optimum : minimumValue + (maximumValue - minimumValue) / 2,
 		minimumValue,
@@ -143,7 +165,12 @@ function resolveMeterValues({
 	};
 }
 
-function getMeterState({ actualValue, highBoundary, lowBoundary, optimumPoint }: ResolvedMeterValues): MeterState {
+function getMeterState({
+	actualValue,
+	highBoundary,
+	lowBoundary,
+	optimumPoint,
+}: ResolvedMeterValues): MeterState {
 	const valueRegion = getMeterRegion(actualValue, lowBoundary, highBoundary);
 	const optimumRegion = getMeterRegion(optimumPoint, lowBoundary, highBoundary);
 
@@ -212,7 +239,11 @@ export function Value({ ref, className, style, xstyle, ...props }: ValueProps) {
 
 export function Track({ ref, className, style, xstyle, ...props }: TrackProps) {
 	const variant = useContext(MeterVariantContext);
-	const sx = stylex.props(meterParts.track, variant === "segmented" && meterParts.segmentedTrack, xstyle);
+	const sx = stylex.props(
+		meterParts.track,
+		variant === "segmented" && meterParts.segmentedTrack,
+		xstyle,
+	);
 
 	return (
 		<BaseMeter.Track
@@ -226,7 +257,11 @@ export function Track({ ref, className, style, xstyle, ...props }: TrackProps) {
 
 export function Indicator({ ref, className, style, xstyle, ...props }: IndicatorProps) {
 	const variant = useContext(MeterVariantContext);
-	const sx = stylex.props(meterParts.indicator, variant === "segmented" && meterParts.segmentedIndicator, xstyle);
+	const sx = stylex.props(
+		meterParts.indicator,
+		variant === "segmented" && meterParts.segmentedIndicator,
+		xstyle,
+	);
 
 	return (
 		<BaseMeter.Indicator

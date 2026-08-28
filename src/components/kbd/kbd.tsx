@@ -8,7 +8,10 @@ import { attrJoin } from "@/utils/attr-join";
 type KbdSize = "sm" | "md";
 type KbdVariant = "default" | "inverse" | "outline" | "plain";
 
-export type KbdProps = Omit<React.ComponentProps<"kbd">, "className" | "style" | keyof MarginProps> &
+export type KbdProps = Omit<
+	React.ComponentProps<"kbd">,
+	"className" | "style" | keyof MarginProps
+> &
 	MarginProps &
 	BaseStyleProps & {
 		className?: string;
@@ -25,7 +28,13 @@ export function Kbd({
 	...props
 }: KbdProps): React.ReactElement {
 	const { marginStyles, rest } = extractMarginProps(props);
-	const sx = stylex.props(kbdStyles.key, kbdSizes[size], kbdVariants[variant], ...marginStyles, xstyle);
+	const sx = stylex.props(
+		kbdStyles.key,
+		kbdSizes[size],
+		kbdVariants[variant],
+		...marginStyles,
+		xstyle,
+	);
 
 	return (
 		<kbd
@@ -37,13 +46,21 @@ export function Kbd({
 	);
 }
 
-export type KbdGroupProps = Omit<React.ComponentProps<"kbd">, "className" | "style" | keyof MarginProps> &
+export type KbdGroupProps = Omit<
+	React.ComponentProps<"kbd">,
+	"className" | "style" | keyof MarginProps
+> &
 	MarginProps &
 	BaseStyleProps & {
 		className?: string;
 	};
 
-export function KbdGroup({ className, style, xstyle, ...props }: KbdGroupProps): React.ReactElement {
+export function KbdGroup({
+	className,
+	style,
+	xstyle,
+	...props
+}: KbdGroupProps): React.ReactElement {
 	const { marginStyles, rest } = extractMarginProps(props);
 	const sx = stylex.props(kbdStyles.group, ...marginStyles, xstyle);
 

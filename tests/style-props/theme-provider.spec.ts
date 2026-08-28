@@ -1,7 +1,8 @@
 import { expect, test, type Page } from "@playwright/test";
 
 const storyPath = "/iframe.html?id=design-system-theme-provider--contract&viewMode=story";
-const multipleRootsStoryPath = "/iframe.html?id=design-system-theme-provider--multiple-roots&viewMode=story";
+const multipleRootsStoryPath =
+	"/iframe.html?id=design-system-theme-provider--multiple-roots&viewMode=story";
 const consoleErrorsByPage = new WeakMap<Page, string[]>();
 
 test.beforeEach(({ page }) => {
@@ -16,7 +17,9 @@ test.afterEach(({ page }) => {
 	expect(consoleErrorsByPage.get(page)).toEqual([]);
 });
 
-test("custom render host merges semantics, refs, events, and theme state without a wrapper", async ({ page }) => {
+test("custom render host merges semantics, refs, events, and theme state without a wrapper", async ({
+	page,
+}) => {
 	await page.goto(storyPath);
 	const host = page.getByTestId("custom-theme-host");
 
@@ -39,7 +42,10 @@ test("custom render host merges semantics, refs, events, and theme state without
 	await host.click();
 	await expect(page.getByTestId("merged-events")).toHaveText("1:1");
 	await expect(host.getByTestId("theme-context").first()).toHaveAttribute("data-theme", "mp");
-	await expect(host.getByTestId("theme-context").first()).toHaveAttribute("data-resolved-mode", "light");
+	await expect(host.getByTestId("theme-context").first()).toHaveAttribute(
+		"data-resolved-mode",
+		"light",
+	);
 });
 
 test("semantic hosts preserve accessible structured content", async ({ page }) => {
@@ -71,12 +77,18 @@ test("fallback host inherits the root theme and remains a normal div", async ({ 
 	await expect(page.locator("html")).toHaveCSS("color-scheme", "dark");
 	await expect(host).not.toHaveCSS("display", "contents");
 	await expect(host.getByTestId("theme-context")).toHaveAttribute("data-resolved-mode", "dark");
-	await expect(page.getByTestId("outer-theme-context")).toHaveAttribute("data-resolved-mode", "dark");
+	await expect(page.getByTestId("outer-theme-context")).toHaveAttribute(
+		"data-resolved-mode",
+		"dark",
+	);
 
 	await page.emulateMedia({ colorScheme: "light" });
 	await expect(host).toHaveCSS("color-scheme", "light");
 	await expect(page.locator("html")).toHaveCSS("color-scheme", "light");
-	await expect(page.getByTestId("outer-theme-context")).toHaveAttribute("data-resolved-mode", "light");
+	await expect(page.getByTestId("outer-theme-context")).toHaveAttribute(
+		"data-resolved-mode",
+		"light",
+	);
 });
 
 test("nested MP overrides stay scoped away from the default sibling", async ({ page }) => {
@@ -116,15 +128,16 @@ test("nested MP overrides stay scoped away from the default sibling", async ({ p
 	expect(bodyPortalAccent).toBe(fallbackAccent);
 	expect(nestedPortalAccent).toBe(customAccent);
 	await expect(page.getByTestId("nested-default-host")).toHaveAttribute("data-mode", "light");
-	await expect(page.getByTestId("nested-default-host").getByTestId("theme-context")).toHaveAttribute(
-		"data-theme",
-		"default",
-	);
+	await expect(
+		page.getByTestId("nested-default-host").getByTestId("theme-context"),
+	).toHaveAttribute("data-theme", "default");
 	await expect(page.locator("html")).toHaveAttribute("data-theme", "default");
 	await expect(page.locator("html")).toHaveAttribute("data-mode", "system");
 });
 
-test("consumer CSS custom-property overrides still affect token-backed spacing", async ({ page }) => {
+test("consumer CSS custom-property overrides still affect token-backed spacing", async ({
+	page,
+}) => {
 	await page.goto(storyPath);
 	const content = page.getByTestId("custom-theme-content");
 
@@ -133,7 +146,9 @@ test("consumer CSS custom-property overrides still affect token-backed spacing",
 	await expect(content).toHaveCSS("gap", "19px");
 });
 
-test("document theme ownership survives independent roots unmounting out of order", async ({ page }) => {
+test("document theme ownership survives independent roots unmounting out of order", async ({
+	page,
+}) => {
 	await page.goto(multipleRootsStoryPath);
 	await expect(page.getByTestId("first-independent-root")).toBeVisible();
 	await expect(page.getByTestId("second-independent-root")).toBeVisible();

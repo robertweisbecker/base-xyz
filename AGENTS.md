@@ -60,7 +60,9 @@
 ## Validation
 
 - Inspect the intended checkout before editing; files may be untracked and local copies may diverge.
-- Run TypeScript, lint, the app build, and Storybook build independently. This repo has no `typecheck` script.
+- Use `npm run verify:quick` for the standard TypeScript, blocking lint, advisory complexity, and formatting gate. Run `npm run verify:full` when app and Storybook builds plus browser and bundle tests are required.
+- During parallel work, only the primary or explicitly designated validator runs `verify:full`; other workers run focused checks and report their evidence.
+- If another checkout owns Playwright's default ports, leave its server running and set `PLAYWRIGHT_STORYBOOK_PORT` or `PLAYWRIGHT_APP_PORT` on the designated validation command. Do not reuse another checkout's preview server.
 - Playwright discovers the full `tests/` tree. For interaction changes, run the focused browser spec with console-error capture after building Storybook.
 - For StyleX selector, popup, responsive, or interaction changes, also verify live Storybook after optimization finishes. A production build does not prove dev-transform behavior.
 - If Storybook reports a transient missing story or `Invalid empty selector`, reload/restart and reacquire browser references before changing valid code.

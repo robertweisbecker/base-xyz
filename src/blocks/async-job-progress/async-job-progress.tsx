@@ -2,7 +2,14 @@ import { ClockIcon } from "@phosphor-icons/react/dist/csr/Clock";
 import { WarningIcon } from "@phosphor-icons/react/dist/csr/Warning";
 import * as stylex from "@stylexjs/stylex";
 import { createContext, type ComponentProps, createElement, useContext, useId } from "react";
-import { Badge, type BadgeHue, Button, Icon, Loader, Progress as ProgressComponent } from "@/components";
+import {
+	Badge,
+	type BadgeHue,
+	Button,
+	Icon,
+	Loader,
+	Progress as ProgressComponent,
+} from "@/components";
 import { tokens } from "@/theme/tokens.stylex";
 import { mergeStyle, type BaseStyleProps } from "@/styles/props/base";
 import type { MarginProps } from "@/styles/props/spacing.stylex";
@@ -72,32 +79,69 @@ const statusPresentation = {
 	},
 } satisfies Record<
 	AsyncJobStatus,
-	{ badgeLabel: string; hue: BadgeHue; statusLabel: string; buttonLabel: string; buttonIcon: React.ReactNode }
+	{
+		badgeLabel: string;
+		hue: BadgeHue;
+		statusLabel: string;
+		buttonLabel: string;
+		buttonIcon: React.ReactNode;
+	}
 >;
 
-export function Root({ status, value, valueText, className, style, xstyle, ...props }: AsyncJobProgressRootProps) {
+export function Root({
+	status,
+	value,
+	valueText,
+	className,
+	style,
+	xstyle,
+	...props
+}: AsyncJobProgressRootProps) {
 	const titleId = useId();
 	const progressValue = getProgressValue(status, value);
 	const sx = stylex.props(parts.root, xstyle);
 
 	return (
 		<AsyncJobProgressContext.Provider value={{ status, titleId, value: progressValue, valueText }}>
-			<section className={attrJoin(sx.className, className)} style={mergeStyle(sx.style, style)} {...props} />
+			<section
+				className={attrJoin(sx.className, className)}
+				style={mergeStyle(sx.style, style)}
+				{...props}
+			/>
 		</AsyncJobProgressContext.Provider>
 	);
 }
 
 export function Header({ className, style, xstyle, ...props }: AsyncJobProgressHeaderProps) {
 	const sx = stylex.props(parts.header, xstyle);
-	return <div className={attrJoin(sx.className, className)} style={mergeStyle(sx.style, style)} {...props} />;
+	return (
+		<div
+			className={attrJoin(sx.className, className)}
+			style={mergeStyle(sx.style, style)}
+			{...props}
+		/>
+	);
 }
 
 export function Heading({ className, style, xstyle, ...props }: AsyncJobProgressHeadingProps) {
 	const sx = stylex.props(parts.heading, xstyle);
-	return <div className={attrJoin(sx.className, className)} style={mergeStyle(sx.style, style)} {...props} />;
+	return (
+		<div
+			className={attrJoin(sx.className, className)}
+			style={mergeStyle(sx.style, style)}
+			{...props}
+		/>
+	);
 }
 
-export function Title({ level = 3, id, className, style, xstyle, ...props }: AsyncJobProgressTitleProps) {
+export function Title({
+	level = 3,
+	id,
+	className,
+	style,
+	xstyle,
+	...props
+}: AsyncJobProgressTitleProps) {
 	const context = useAsyncJobProgressContext("Title");
 	const sx = stylex.props(parts.title, xstyle);
 
@@ -109,9 +153,20 @@ export function Title({ level = 3, id, className, style, xstyle, ...props }: Asy
 	});
 }
 
-export function Description({ className, style, xstyle, ...props }: AsyncJobProgressDescriptionProps) {
+export function Description({
+	className,
+	style,
+	xstyle,
+	...props
+}: AsyncJobProgressDescriptionProps) {
 	const sx = stylex.props(parts.description, xstyle);
-	return <p className={attrJoin(sx.className, className)} style={mergeStyle(sx.style, style)} {...props} />;
+	return (
+		<p
+			className={attrJoin(sx.className, className)}
+			style={mergeStyle(sx.style, style)}
+			{...props}
+		/>
+	);
 }
 
 export function Status({ className, style, xstyle, ...props }: AsyncJobProgressStatusProps) {
@@ -126,7 +181,8 @@ export function Status({ className, style, xstyle, ...props }: AsyncJobProgressS
 			aria-atomic="true"
 			className={attrJoin(sx.className, className)}
 			style={mergeStyle(sx.style, style)}
-			{...props}>
+			{...props}
+		>
 			<Badge hue={presentation.hue} startSlot={statusIcon}>
 				{presentation.badgeLabel}
 			</Badge>
@@ -139,7 +195,12 @@ export function Progress(props: AsyncJobProgressProgressProps) {
 	const ariaValueText = valueText ?? getAriaValueText(status, value);
 
 	return (
-		<ProgressComponent.Root aria-labelledby={titleId} aria-valuetext={ariaValueText} value={value} {...props}>
+		<ProgressComponent.Root
+			aria-labelledby={titleId}
+			aria-valuetext={ariaValueText}
+			value={value}
+			{...props}
+		>
 			<ProgressComponent.Value xstyle={parts.progressValue}>
 				{(formattedValue, currentValue) =>
 					valueText ??
@@ -161,13 +222,29 @@ export function Progress(props: AsyncJobProgressProgressProps) {
 
 export function Actions({ className, style, xstyle, ...props }: AsyncJobProgressActionsProps) {
 	const sx = stylex.props(parts.actions, xstyle);
-	return <div className={attrJoin(sx.className, className)} style={mergeStyle(sx.style, style)} {...props} />;
+	return (
+		<div
+			className={attrJoin(sx.className, className)}
+			style={mergeStyle(sx.style, style)}
+			{...props}
+		/>
+	);
 }
 
-export function ActionButton({ variant = "ghost", size = "xs", ...props }: React.ComponentProps<typeof Button>) {
+export function ActionButton({
+	variant = "ghost",
+	size = "xs",
+	...props
+}: React.ComponentProps<typeof Button>) {
 	const { status } = useAsyncJobProgressContext("ActionButton");
 	return (
-		<Button me={-1} variant={variant} size={size} endSlot={statusPresentation[status].buttonIcon} {...props}>
+		<Button
+			me={-1}
+			variant={variant}
+			size={size}
+			endSlot={statusPresentation[status].buttonIcon}
+			{...props}
+		>
 			{statusPresentation[status].buttonLabel}
 		</Button>
 	);
@@ -227,17 +304,17 @@ function renderStatusIcon(status: AsyncJobStatus) {
 
 const parts = stylex.create({
 	root: {
+		padding: tokens["--space-3"],
+		borderColor: tokens["--border"],
+		borderRadius: tokens["--radius-md"],
+		borderStyle: "solid",
+		borderWidth: 1,
 		gap: tokens["--space-3"],
 		color: tokens["--fg"],
 		display: "flex",
 		flexDirection: "column",
 		maxWidth: "36rem",
 		width: "100%",
-		borderRadius: tokens["--radius-md"],
-		borderWidth: 1,
-		borderStyle: "solid",
-		borderColor: tokens["--border"],
-		padding: tokens["--space-3"],
 	},
 	header: {
 		gap: tokens["--space-4"],

@@ -3,7 +3,13 @@ import { ArrowClockwiseIcon } from "@phosphor-icons/react/dist/csr/ArrowClockwis
 import { ArrowCounterClockwiseIcon } from "@phosphor-icons/react/dist/csr/ArrowCounterClockwise";
 import { CaretUpDownIcon } from "@phosphor-icons/react/dist/csr/CaretUpDown";
 import { CopyIcon } from "@phosphor-icons/react/dist/csr/Copy";
-import { LinkIcon, ListNumbersIcon, PaperclipIcon, CodeIcon, CodeBlockIcon } from "@phosphor-icons/react";
+import {
+	LinkIcon,
+	ListNumbersIcon,
+	PaperclipIcon,
+	CodeIcon,
+	CodeBlockIcon,
+} from "@phosphor-icons/react";
 import { ListBulletsIcon } from "@phosphor-icons/react/dist/csr/ListBullets";
 import { TextAlignCenterIcon } from "@phosphor-icons/react/dist/csr/TextAlignCenter";
 import { TextAlignLeftIcon } from "@phosphor-icons/react/dist/csr/TextAlignLeft";
@@ -71,11 +77,21 @@ export const Playground: Story = {
 					}
 				/>
 				<Toolbar.Button
-					render={<Toggle icon={<TextItalicIcon aria-hidden weight="regular" />} label="Italic" value="italic" />}
+					render={
+						<Toggle
+							icon={<TextItalicIcon aria-hidden weight="regular" />}
+							label="Italic"
+							value="italic"
+						/>
+					}
 				/>
 				<Toolbar.Button
 					render={
-						<Toggle icon={<TextUnderlineIcon aria-hidden weight="regular" />} label="Underline" value="underline" />
+						<Toggle
+							icon={<TextUnderlineIcon aria-hidden weight="regular" />}
+							label="Underline"
+							value="underline"
+						/>
 					}
 				/>
 				<Toolbar.Button
@@ -91,11 +107,21 @@ export const Playground: Story = {
 			<Toolbar.Separator />
 			<Toolbar.Group aria-label="Insert options">
 				<Toolbar.Button
-					render={<IconButton variant="ghost" icon={<LinkIcon aria-hidden weight="regular" />} label="Insert link" />}
+					render={
+						<IconButton
+							variant="ghost"
+							icon={<LinkIcon aria-hidden weight="regular" />}
+							label="Insert link"
+						/>
+					}
 				/>
 				<Toolbar.Button
 					render={
-						<IconButton variant="ghost" icon={<PaperclipIcon aria-hidden weight="regular" />} label="Attach file" />
+						<IconButton
+							variant="ghost"
+							icon={<PaperclipIcon aria-hidden weight="regular" />}
+							label="Attach file"
+						/>
 					}
 				/>
 			</Toolbar.Group>
@@ -103,23 +129,41 @@ export const Playground: Story = {
 			<Toolbar.Group aria-label="Actions" render={<ToggleGroup />}>
 				<Toolbar.Button
 					render={
-						<Toggle icon={<ListBulletsIcon aria-hidden weight="regular" />} label="Bulleted list" value="unordered" />
+						<Toggle
+							icon={<ListBulletsIcon aria-hidden weight="regular" />}
+							label="Bulleted list"
+							value="unordered"
+						/>
 					}
 				/>
 				<Toolbar.Button
 					render={
-						<Toggle icon={<ListNumbersIcon aria-hidden weight="regular" />} label="Numbered list" value="ordered" />
+						<Toggle
+							icon={<ListNumbersIcon aria-hidden weight="regular" />}
+							label="Numbered list"
+							value="ordered"
+						/>
 					}
 				/>
 			</Toolbar.Group>
 			<Toolbar.Separator />
 			<Toolbar.Group aria-label="Copy options">
 				<Toolbar.Button
-					render={<IconButton variant="ghost" icon={<CodeIcon aria-hidden weight="regular" />} label="Inline code" />}
+					render={
+						<IconButton
+							variant="ghost"
+							icon={<CodeIcon aria-hidden weight="regular" />}
+							label="Inline code"
+						/>
+					}
 				/>
 				<Toolbar.Button
 					render={
-						<IconButton variant="ghost" icon={<CodeBlockIcon aria-hidden weight="regular" />} label="Code block" />
+						<IconButton
+							variant="ghost"
+							icon={<CodeBlockIcon aria-hidden weight="regular" />}
+							label="Code block"
+						/>
 					}
 				/>
 			</Toolbar.Group>
@@ -201,16 +245,30 @@ function EditingToolbar() {
 			<Toolbar.Separator />
 			<Toolbar.Group aria-label="Text alignment" render={<ToggleGroup defaultValue={["left"]} />}>
 				<Toolbar.Button
-					render={<Toggle icon={<TextAlignLeftIcon aria-hidden weight="regular" />} label="Align left" value="left" />}
-				/>
-				<Toolbar.Button
 					render={
-						<Toggle icon={<TextAlignCenterIcon aria-hidden weight="regular" />} label="Align center" value="center" />
+						<Toggle
+							icon={<TextAlignLeftIcon aria-hidden weight="regular" />}
+							label="Align left"
+							value="left"
+						/>
 					}
 				/>
 				<Toolbar.Button
 					render={
-						<Toggle icon={<TextAlignRightIcon aria-hidden weight="regular" />} label="Align right" value="right" />
+						<Toggle
+							icon={<TextAlignCenterIcon aria-hidden weight="regular" />}
+							label="Align center"
+							value="center"
+						/>
+					}
+				/>
+				<Toolbar.Button
+					render={
+						<Toggle
+							icon={<TextAlignRightIcon aria-hidden weight="regular" />}
+							label="Align right"
+							value="right"
+						/>
 					}
 				/>
 			</Toolbar.Group>
@@ -224,7 +282,11 @@ function PopupToolbar() {
 	return (
 		<Toolbar.Root aria-label="Editor options">
 			<BaseSelect.Root defaultValue="balanced">
-				<Toolbar.Button aria-label="Response length" xstyle={storyParts.selectButton} render={<BaseSelect.Trigger />}>
+				<Toolbar.Button
+					aria-label="Response length"
+					xstyle={storyParts.selectButton}
+					render={<BaseSelect.Trigger />}
+				>
 					<BaseSelect.Value />
 					<BaseSelect.Icon>
 						<CaretUpDownIcon aria-hidden size={14} weight="regular" />

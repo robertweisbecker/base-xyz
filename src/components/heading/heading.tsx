@@ -10,7 +10,13 @@ import {
 	textTruncationStyles,
 	textWrapStyles,
 } from "@/components/text/text.stylex";
-import type { TypographyColor, TypographyFontFamily, TypographyFontWeight, TypographySize, TypographyWrap } from "@/components/text/text.types";
+import type {
+	TypographyColor,
+	TypographyFontFamily,
+	TypographyFontWeight,
+	TypographySize,
+	TypographyWrap,
+} from "@/components/text/text.types";
 import { attrJoin } from "@/utils/attr-join";
 
 export type HeadingProps = Omit<

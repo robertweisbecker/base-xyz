@@ -113,7 +113,8 @@ export const modalMotionStyles = stylex.create({
 		transform: {
 			"[data-ending-style]": "scale(0.96) translateY(8px)",
 			"[data-starting-style]": "scale(0.96) translateY(8px)",
-			default: "scale(calc(1 - (0.04 * var(--nested-dialogs, 0)))) translateY(calc(8px * var(--nested-dialogs, 0)))",
+			default:
+				"scale(calc(1 - (0.04 * var(--nested-dialogs, 0)))) translateY(calc(8px * var(--nested-dialogs, 0)))",
 		},
 		transformOrigin: "center center",
 		transitionDuration: tokens["--motion-duration-medium"],
@@ -166,10 +167,16 @@ export const alertBackdropStyles = [
 ] as const;
 
 /** Apply to a dialog viewport wrapper. */
-export const modalViewportStyles = [modalChromeStyles.viewport, modalChromeStyles.modalLayer] as const;
+export const modalViewportStyles = [
+	modalChromeStyles.viewport,
+	modalChromeStyles.modalLayer,
+] as const;
 
 /** Apply to an alert dialog viewport wrapper. */
-export const alertViewportStyles = [modalChromeStyles.viewport, modalChromeStyles.alertLayer] as const;
+export const alertViewportStyles = [
+	modalChromeStyles.viewport,
+	modalChromeStyles.alertLayer,
+] as const;
 
 /** Apply to a dialog `Popup` surface (chrome plus scale/fade motion). */
 export const modalPopupStyles = [modalChromeStyles.surface, modalMotionStyles.popup] as const;

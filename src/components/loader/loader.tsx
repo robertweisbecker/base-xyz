@@ -27,8 +27,14 @@ export function Loader({
 	...props
 }: LoaderProps) {
 	const { marginStyles, rest } = extractMarginProps(props);
-	const isDecorative = ariaHidden === true || ariaHidden === "true" || (ariaHidden == null && ariaLabel == null);
-	const sx = stylex.props(loaderParts.root, size !== undefined && loaderDynamicStyles.size(size), ...marginStyles, xstyle);
+	const isDecorative =
+		ariaHidden === true || ariaHidden === "true" || (ariaHidden == null && ariaLabel == null);
+	const sx = stylex.props(
+		loaderParts.root,
+		size !== undefined && loaderDynamicStyles.size(size),
+		...marginStyles,
+		xstyle,
+	);
 
 	return (
 		<svg
@@ -39,7 +45,8 @@ export function Loader({
 			role={role ?? (isDecorative ? undefined : "progressbar")}
 			style={mergeStyle(sx.style, style)}
 			viewBox="0 0 24 24"
-			{...rest}>
+			{...rest}
+		>
 			<circle {...stylex.props(loaderParts.track)} cx="12" cy="12" r="9" />
 			<circle {...stylex.props(loaderParts.indicator)} cx="12" cy="12" pathLength="100" r="9" />
 		</svg>

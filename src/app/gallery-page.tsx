@@ -120,11 +120,15 @@ function getComponentCells(): GalleryCell[] {
 			title: "AlertDialog",
 			content: (
 				<AlertDialog.Root>
-					<AlertDialog.Trigger render={<Button variant="secondary" />}>Delete item</AlertDialog.Trigger>
+					<AlertDialog.Trigger render={<Button variant="secondary" />}>
+						Delete item
+					</AlertDialog.Trigger>
 					<AlertDialog.Popup>
 						<AlertDialog.Header>
 							<AlertDialog.Title>Delete item?</AlertDialog.Title>
-							<AlertDialog.Description>This action can be cancelled from the dialog.</AlertDialog.Description>
+							<AlertDialog.Description>
+								This action can be cancelled from the dialog.
+							</AlertDialog.Description>
 						</AlertDialog.Header>
 						<AlertDialog.Footer>
 							<AlertDialog.Close render={<Button variant="ghost" />}>Cancel</AlertDialog.Close>
@@ -235,7 +239,11 @@ function getComponentCells(): GalleryCell[] {
 		},
 		{
 			title: "CodeBlock",
-			content: <CodeBlock xstyle={styles.codeSample}>{"const sum = (a, b) => {\n  return a + b;\n};"}</CodeBlock>,
+			content: (
+				<CodeBlock xstyle={styles.codeSample}>
+					{"const sum = (a, b) => {\n  return a + b;\n};"}
+				</CodeBlock>
+			),
 		},
 		{
 			title: "Collapsible",
@@ -265,7 +273,8 @@ function getComponentCells(): GalleryCell[] {
 				<CommandPalette.Root
 					inline
 					items={["Create project", "Search docs", "Open settings"]}
-					xstyle={styles.galleryWide}>
+					xstyle={styles.galleryWide}
+				>
 					<CommandPalette.Input placeholder="Search commands..." />
 					<CommandPalette.List>
 						{(item: string) => (
@@ -328,7 +337,11 @@ function getComponentCells(): GalleryCell[] {
 								</Drawer.Header>
 								<Drawer.Body>All checks passed.</Drawer.Body>
 								<Drawer.Footer>
-									<Drawer.Close render={<Button xstyle={styles.fullWidth} shape="pill" size="lg" />}>Done</Drawer.Close>
+									<Drawer.Close
+										render={<Button xstyle={styles.fullWidth} shape="pill" size="lg" />}
+									>
+										Done
+									</Drawer.Close>
 								</Drawer.Footer>
 							</Drawer.Popup>
 						</Drawer.Viewport>
@@ -343,7 +356,8 @@ function getComponentCells(): GalleryCell[] {
 					description="Create a project to get started."
 					icon={<FolderOpenIcon aria-hidden size="1em" weight="duotone" />}
 					size="sm"
-					title="No projects yet">
+					title="No projects yet"
+				>
 					<Button size="sm">Create project</Button>
 				</EmptyState>
 			),
@@ -358,7 +372,13 @@ function getComponentCells(): GalleryCell[] {
 		},
 		{
 			title: "IconButton",
-			content: <IconButton icon={<PlusIcon aria-hidden weight="bold" />} label="Add item" variant="secondary" />,
+			content: (
+				<IconButton
+					icon={<PlusIcon aria-hidden weight="bold" />}
+					label="Add item"
+					variant="secondary"
+				/>
+			),
 		},
 		{
 			title: "InfoTip",
@@ -528,7 +548,13 @@ function getComponentCells(): GalleryCell[] {
 			content: (
 				<ScrollArea label="Recent component updates" xstyle={styles.scrollAreaSample}>
 					<div {...stylex.props(styles.scrollAreaContent)}>
-						{["Button refined", "Menu grouped", "Toast anchored", "Dialog opened", "Tooltip tuned"].map((item) => (
+						{[
+							"Button refined",
+							"Menu grouped",
+							"Toast anchored",
+							"Dialog opened",
+							"Tooltip tuned",
+						].map((item) => (
 							<div key={item} {...stylex.props(styles.scrollItem)}>
 								{item}
 							</div>
@@ -669,7 +695,14 @@ function getComponentCells(): GalleryCell[] {
 		},
 		{
 			title: "Textarea",
-			content: <Textarea label="Message" placeholder="Enter your name" rows={2} xstyle={styles.compactField} />,
+			content: (
+				<Textarea
+					label="Message"
+					placeholder="Enter your name"
+					rows={2}
+					xstyle={styles.compactField}
+				/>
+			),
 		},
 		{
 			title: "TextField",
@@ -704,13 +737,17 @@ function getComponentCells(): GalleryCell[] {
 					<ToggleGroup defaultValue={["bold"]}>
 						<Toggle
 							icon={<ThumbsDownIcon aria-hidden weight="regular" />}
-							pressedIcon={<ThumbsDownIcon aria-hidden weight="duotone" color={tokens["--fg-error"]} />}
+							pressedIcon={
+								<ThumbsDownIcon aria-hidden weight="duotone" color={tokens["--fg-error"]} />
+							}
 							label="Bad response"
 							value="thumbs-down"
 						/>
 						<Toggle
 							icon={<ThumbsUpIcon aria-hidden weight="regular" />}
-							pressedIcon={<ThumbsUpIcon aria-hidden weight="duotone" color={tokens["--fg-success"]} />}
+							pressedIcon={
+								<ThumbsUpIcon aria-hidden weight="duotone" color={tokens["--fg-success"]} />
+							}
 							label="Good response"
 							value="thumbs-up"
 						/>
@@ -739,7 +776,12 @@ function getComponentCells(): GalleryCell[] {
 					<Tooltip.Root open={true}>
 						<Tooltip.Trigger
 							render={
-								<IconButton icon={<PlusIcon aria-hidden />} label="Add item" tooltip={false} variant="secondary" />
+								<IconButton
+									icon={<PlusIcon aria-hidden />}
+									label="Add item"
+									tooltip={false}
+									variant="secondary"
+								/>
 							}
 						/>
 						<Tooltip.Popup>Add</Tooltip.Popup>
@@ -753,7 +795,11 @@ function getComponentCells(): GalleryCell[] {
 function ComboboxGalleryExample({ multiple = false }: { multiple?: boolean }) {
 	if (multiple) {
 		return (
-			<Combobox.Root<string, true> items={componentNames} multiple defaultValue={["React", "Solid"]}>
+			<Combobox.Root<string, true>
+				items={componentNames}
+				multiple
+				defaultValue={["React", "Solid"]}
+			>
 				<Combobox.Label>Libraries</Combobox.Label>
 				<Combobox.InputGroup variant="chips">
 					<Combobox.Chips>
@@ -763,7 +809,8 @@ function ComboboxGalleryExample({ multiple = false }: { multiple?: boolean }) {
 									{value.map((item) => (
 										<Combobox.Chip
 											key={item}
-											endSlot={<Combobox.ChipRemove aria-label={`Remove ${item}`} />}>
+											endSlot={<Combobox.ChipRemove aria-label={`Remove ${item}`} />}
+										>
 											{item}
 										</Combobox.Chip>
 									))}
@@ -853,7 +900,9 @@ function getBlockCells(): GalleryCell[] {
 					<AsyncJobProgress.Header>
 						<AsyncJobProgress.Heading>
 							<AsyncJobProgress.Title>Publishing package</AsyncJobProgress.Title>
-							<AsyncJobProgress.Description>Bundling component artifacts.</AsyncJobProgress.Description>
+							<AsyncJobProgress.Description>
+								Bundling component artifacts.
+							</AsyncJobProgress.Description>
 						</AsyncJobProgress.Heading>
 						<AsyncJobProgress.Status />
 					</AsyncJobProgress.Header>
@@ -875,7 +924,8 @@ function getBlockCells(): GalleryCell[] {
 							Open confirmation
 						</Button>
 					}
-					successToast={false}>
+					successToast={false}
+				>
 					<ConfirmationDialog.Header>
 						<ConfirmationDialog.Visual>
 							<BlueprintIcon aria-hidden size={20} weight="duotone" />
@@ -922,7 +972,8 @@ function getBlockCells(): GalleryCell[] {
 					groups={exampleModelGroups}
 					effortOptions={exampleEffortOptions}
 					speedOptions={exampleSpeedOptions}
-					defaultValue={exampleDefaultValue}>
+					defaultValue={exampleDefaultValue}
+				>
 					<ModelSelector.Trigger size="sm" variant="secondary" />
 					<ModelSelector.Popup />
 				</ModelSelector.Root>
@@ -935,7 +986,9 @@ function getBlockCells(): GalleryCell[] {
 					title="Component library"
 					description="Primitives, blocks, and verification stories."
 					headingLevel={2}
-					startSlot={<Avatar icon={<GithubLogoIcon aria-hidden weight="fill" />} name="GitHub" size={8} />}
+					startSlot={
+						<Avatar icon={<GithubLogoIcon aria-hidden weight="fill" />} name="GitHub" size={8} />
+					}
 					breadcrumbs={
 						<Breadcrumbs.Root size="sm">
 							<Breadcrumbs.Link href="#">Docs</Breadcrumbs.Link>
@@ -974,7 +1027,8 @@ function getBlockCells(): GalleryCell[] {
 					defaultValue="Summarize the component API changes"
 					onSubmit={() => {}}
 					clearOnSubmit={false}
-					xstyle={styles.blockWide}>
+					xstyle={styles.blockWide}
+				>
 					<PromptComposer.Surface>
 						<PromptComposer.Input />
 						<PromptComposer.Footer>
@@ -998,7 +1052,8 @@ function getBlockCells(): GalleryCell[] {
 				<StreamingResponse.Root status="streaming">
 					<StreamingResponse.Status />
 					<StreamingResponse.Content>
-						The component grid now separates primitives from blocks and keeps larger compositions in a roomier layout.
+						The component grid now separates primitives from blocks and keeps larger compositions in
+						a roomier layout.
 					</StreamingResponse.Content>
 					<StreamingResponse.Actions>
 						<Toolbar.Button
@@ -1023,7 +1078,9 @@ function getBlockCells(): GalleryCell[] {
 						<WorkflowProgress.Content>
 							<WorkflowProgress.Header>
 								<WorkflowProgress.Title>Read exports</WorkflowProgress.Title>
-								<WorkflowProgress.Description>Mapped components and blocks.</WorkflowProgress.Description>
+								<WorkflowProgress.Description>
+									Mapped components and blocks.
+								</WorkflowProgress.Description>
 								<WorkflowProgress.Metadata>
 									<WorkflowProgress.Status />
 								</WorkflowProgress.Metadata>
@@ -1035,7 +1092,9 @@ function getBlockCells(): GalleryCell[] {
 						<WorkflowProgress.Content>
 							<WorkflowProgress.Header>
 								<WorkflowProgress.Title>Verify layout</WorkflowProgress.Title>
-								<WorkflowProgress.Description>Check desktop and mobile grids.</WorkflowProgress.Description>
+								<WorkflowProgress.Description>
+									Check desktop and mobile grids.
+								</WorkflowProgress.Description>
 								<WorkflowProgress.Metadata>
 									<WorkflowProgress.Status />
 								</WorkflowProgress.Metadata>
@@ -1072,7 +1131,8 @@ function ToastButton() {
 					title: "Changes saved",
 					description: "Your project settings are up to date.",
 				})
-			}>
+			}
+		>
 			Create toast
 		</Button>
 	);
@@ -1137,16 +1197,26 @@ function GallerySection({
 					<section
 						key={cell.title}
 						{...stylex.props(variant === "components" ? styles.componentCell : styles.blockCell)}
-						aria-label={cell.title}>
+						aria-label={cell.title}
+					>
 						<div {...stylex.props(styles.cellContent)}>{cell.content}</div>
 						<h3 {...stylex.props(styles.cellTitle)}>{cell.title}</h3>
 					</section>
 				))}
 				{variant === "components" ? (
 					<>
-						<div aria-hidden {...stylex.props(styles.componentFillerCell, styles.componentFillerOne)} />
-						<div aria-hidden {...stylex.props(styles.componentFillerCell, styles.componentFillerLarge)} />
-						<div aria-hidden {...stylex.props(styles.componentFillerCell, styles.componentFillerLarge)} />
+						<div
+							aria-hidden
+							{...stylex.props(styles.componentFillerCell, styles.componentFillerOne)}
+						/>
+						<div
+							aria-hidden
+							{...stylex.props(styles.componentFillerCell, styles.componentFillerLarge)}
+						/>
+						<div
+							aria-hidden
+							{...stylex.props(styles.componentFillerCell, styles.componentFillerLarge)}
+						/>
 					</>
 				) : null}
 			</div>

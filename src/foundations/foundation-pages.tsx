@@ -4,7 +4,14 @@ import { InfoIcon } from "@phosphor-icons/react/dist/csr/Info";
 import { MagnifyingGlassIcon } from "@phosphor-icons/react/dist/csr/MagnifyingGlass";
 import { PlusIcon } from "@phosphor-icons/react/dist/csr/Plus";
 import { WarningIcon } from "@phosphor-icons/react/dist/csr/Warning";
-import { ColorItem, ColorPalette, IconGallery, IconItem, Source, Typeset } from "@storybook/addon-docs/blocks";
+import {
+	ColorItem,
+	ColorPalette,
+	IconGallery,
+	IconItem,
+	Source,
+	Typeset,
+} from "@storybook/addon-docs/blocks";
 import * as stylex from "@stylexjs/stylex";
 import { useState, type ReactNode } from "react";
 import { breakpoints, zIndex } from "@/styles/constants.stylex";
@@ -18,7 +25,8 @@ export function DesignSystemPage() {
 	return (
 		<FoundationPage
 			title="Design system"
-			description="Tokens and foundations for color, typography, spacing, shape, depth, motion, and iconography.">
+			description="Tokens and foundations for color, typography, spacing, shape, depth, motion, and iconography."
+		>
 			<ColorsSection />
 			<TypographySection />
 			<SpacingAndShapeSection />
@@ -32,10 +40,12 @@ function ColorsSection() {
 	return (
 		<FoundationCategory
 			title="Color"
-			description="Semantic tokens describe a role instead of a fixed value, so the same component code adapts across light and dark themes.">
+			description="Semantic tokens describe a role instead of a fixed value, so the same component code adapts across light and dark themes."
+		>
 			<FoundationSection
 				title="Semantic palette"
-				description="Use these tokens in component styles. Each row groups colors that work together in a specific UI role.">
+				description="Use these tokens in component styles. Each row groups colors that work together in a specific UI role."
+			>
 				<div {...stylex.props(styles.themePalettes)}>
 					<ThemePalette mode="light" name="Light" />
 					<ThemePalette mode="dark" name="Dark" />
@@ -44,7 +54,8 @@ function ColorsSection() {
 
 			<FoundationSection
 				title="Primitive ramps"
-				description="Primitive values support the semantic layer. Prefer semantic tokens in product UI so themes can evolve independently.">
+				description="Primitive values support the semantic layer. Prefer semantic tokens in product UI so themes can evolve independently."
+			>
 				<div {...stylex.props(styles.paletteScroller)}>
 					<div {...stylex.props(styles.paletteContent)}>
 						<ColorPalette>
@@ -123,10 +134,12 @@ function TypographySection() {
 	return (
 		<FoundationCategory
 			title="Typography"
-			description="A compact semantic type scale pairs each font size with Radix-derived line-height and letter-spacing tokens.">
+			description="A compact semantic type scale pairs each font size with Radix-derived line-height and letter-spacing tokens."
+		>
 			<FoundationSection
 				title="Size scale"
-				description="Storybook’s Typeset block renders every supported size against the same sentence for a direct comparison.">
+				description="Storybook’s Typeset block renders every supported size against the same sentence for a direct comparison."
+			>
 				<Typeset
 					fontFamily={tokens["--font-family-sans"]}
 					fontSizes={[
@@ -147,14 +160,16 @@ function TypographySection() {
 
 			<FoundationSection
 				title="Family composites"
-				description="Compose a family style with a scale step to establish family, size, line-height, and letter-spacing together.">
+				description="Compose a family style with a scale step to establish family, size, line-height, and letter-spacing together."
+			>
 				<div {...stylex.props(styles.typeRoles)}>
 					<TypeRole
 						name="Sans 3"
 						token="fontFamilyStyles.sans · typescaleStyles.3"
 						description="Default interface and reading typography."
 						sampleFontFamily={tokens["--font-family-sans"]}
-						style={[fontFamilyStyles.sans, typescaleStyles["3"]]}>
+						style={[fontFamilyStyles.sans, typescaleStyles["3"]]}
+					>
 						Clear tools make complex work feel lighter.
 					</TypeRole>
 					<TypeRole
@@ -162,7 +177,8 @@ function TypographySection() {
 						token="fontFamilyStyles.serif · typescaleStyles.3"
 						description="Editorial or expressive supporting content."
 						sampleFontFamily={tokens["--font-family-serif"]}
-						style={[fontFamilyStyles.serif, typescaleStyles["3"]]}>
+						style={[fontFamilyStyles.serif, typescaleStyles["3"]]}
+					>
 						Clear tools make complex work feel lighter.
 					</TypeRole>
 					<TypeRole
@@ -170,7 +186,8 @@ function TypographySection() {
 						token="fontFamilyStyles.mono · typescaleStyles.3"
 						description="Code, identifiers, and tabular technical values."
 						sampleFontFamily={tokens["--font-family-mono"]}
-						style={[fontFamilyStyles.mono, typescaleStyles["3"]]}>
+						style={[fontFamilyStyles.mono, typescaleStyles["3"]]}
+					>
 						const clarity = system.compose();
 					</TypeRole>
 				</div>
@@ -178,41 +195,47 @@ function TypographySection() {
 
 			<FoundationSection
 				title="Semantic roles"
-				description="Choose a role by intent. Keep each semantic size paired with its matching line-height and letter-spacing step.">
+				description="Choose a role by intent. Keep each semantic size paired with its matching line-height and letter-spacing step."
+			>
 				<div {...stylex.props(styles.typeRoles)}>
 					<TypeRole
 						name="Display"
 						token='tokens["--font-size-5"] · tokens["--line-height-5"] · tokens["--letter-spacing-5"] · tokens["--font-weight-semibold"]'
 						description="Short, high-emphasis page or empty-state titles."
-						style={styles.typeDisplay}>
+						style={styles.typeDisplay}
+					>
 						Design systems, clearly expressed.
 					</TypeRole>
 					<TypeRole
 						name="Title"
 						token='tokens["--font-size-4"] · tokens["--line-height-4"] · tokens["--letter-spacing-4"] · tokens["--font-weight-semibold"]'
 						description="Section headings, dialog titles, and card titles."
-						style={styles.typeTitle}>
+						style={styles.typeTitle}
+					>
 						Workspace activity
 					</TypeRole>
 					<TypeRole
 						name="Control"
 						token='tokens["--font-size-3"] · tokens["--line-height-3"] · tokens["--letter-spacing-3"] · tokens["--font-weight-medium"]'
 						description="Prominent labels in buttons, inputs, and menu items."
-						style={styles.typeControl}>
+						style={styles.typeControl}
+					>
 						Create workspace
 					</TypeRole>
 					<TypeRole
 						name="Body"
 						token='tokens["--font-size-2"] · tokens["--line-height-2"] · tokens["--letter-spacing-2"] · tokens["--font-weight-regular"]'
 						description="Default reading size for descriptions and content."
-						style={styles.typeBody}>
+						style={styles.typeBody}
+					>
 						Invite collaborators and keep project decisions in one place.
 					</TypeRole>
 					<TypeRole
 						name="Small"
 						token='tokens["--font-size-1"] · tokens["--line-height-1"] · tokens["--letter-spacing-1"] · tokens["--font-weight-medium"]'
 						description="Metadata, helper text, compact labels, and status."
-						style={styles.typeSmall}>
+						style={styles.typeSmall}
+					>
 						Updated two minutes ago
 					</TypeRole>
 				</div>
@@ -220,7 +243,8 @@ function TypographySection() {
 
 			<FoundationSection
 				title="Weight scale"
-				description="Use regular for reading, medium for controls, and semibold for hierarchy.">
+				description="Use regular for reading, medium for controls, and semibold for hierarchy."
+			>
 				<div {...stylex.props(styles.weightGrid)}>
 					<Typeset
 						fontFamily={tokens["--font-family-sans"]}
@@ -258,10 +282,12 @@ function SpacingAndShapeSection() {
 	return (
 		<FoundationCategory
 			title="Spacing & shape"
-			description="A 0.25rem-based spacing scale and a restrained radius family for rhythm and concentricity">
+			description="A 0.25rem-based spacing scale and a restrained radius family for rhythm and concentricity"
+		>
 			<FoundationSection
 				title="Spacing scale"
-				description="The bars are rendered at their actual token width. Combine adjacent steps instead of introducing one-off values.">
+				description="The bars are rendered at their actual token width. Combine adjacent steps instead of introducing one-off values."
+			>
 				<div {...stylex.props(styles.tokenRows)}>
 					{spacingTokens.map((token) => (
 						<div key={token.name} {...stylex.props(styles.tokenRow)}>
@@ -278,19 +304,22 @@ function SpacingAndShapeSection() {
 						<span {...stylex.props(styles.exampleEyebrow)}>tokens["--space-3"] gap</span>
 						<strong {...stylex.props(styles.exampleTitle)}>A composed card</strong>
 						<p {...stylex.props(styles.exampleCopy)}>
-							The --space-6 inset gives content room to breathe while --space-3 keeps related text together.
+							The --space-6 inset gives content room to breathe while --space-3 keeps related text
+							together.
 						</p>
 					</div>
 					<p {...stylex.props(styles.exampleAnnotation)}>
-						This specimen uses <code>tokens["--space-6"]</code> for card padding, <code>tokens["--space-3"]</code>{" "}
-						between related items, and <code>tokens["--space-8"]</code> around the example.
+						This specimen uses <code>tokens["--space-6"]</code> for card padding,{" "}
+						<code>tokens["--space-3"]</code> between related items, and{" "}
+						<code>tokens["--space-8"]</code> around the example.
 					</p>
 				</div>
 			</FoundationSection>
 
 			<FoundationSection
 				title="Container sizes"
-				description="Named maximum widths keep common page and panel measures on the shared size scale.">
+				description="Named maximum widths keep common page and panel measures on the shared size scale."
+			>
 				<div {...stylex.props(styles.tokenRows)}>
 					{containerSizeTokens.map((token) => (
 						<div key={token.name} {...stylex.props(styles.tokenRow)}>
@@ -303,11 +332,14 @@ function SpacingAndShapeSection() {
 
 			<FoundationSection
 				title="Radius scale"
-				description="Small radii belong to controls and nested elements; larger radii give containers a distinct silhouette.">
+				description="Small radii belong to controls and nested elements; larger radii give containers a distinct silhouette."
+			>
 				<div {...stylex.props(styles.radiusGrid)}>
 					{radiusTokens.map((token) => (
 						<div key={token.name} {...stylex.props(styles.radiusToken)}>
-							<div {...stylex.props(styles.radiusSpecimen, styles.radiusSpecimenValue(token.value))} />
+							<div
+								{...stylex.props(styles.radiusSpecimen, styles.radiusSpecimenValue(token.value))}
+							/>
 							<TokenName name={token.name} value={token.value} />
 							<span {...stylex.props(styles.usage)}>{token.usage}</span>
 						</div>
@@ -338,13 +370,19 @@ function DepthAndMotionSection() {
 	return (
 		<FoundationCategory
 			title="Depth & motion"
-			description="Elevation and movement clarify hierarchy, continuity, and feedback without becoming the focus of the interface.">
+			description="Elevation and movement clarify hierarchy, continuity, and feedback without becoming the focus of the interface."
+		>
 			<FoundationSection
 				title="Elevation"
-				description="Apply the lowest shadow that communicates the required separation. Theme-aware rings keep edges legible.">
+				description="Apply the lowest shadow that communicates the required separation. Theme-aware rings keep edges legible."
+			>
 				<div {...stylex.props(styles.shadowGrid)}>
 					{[
-						{ name: 'tokens["--shadow-sm"]', usage: "Raised controls and compact cards", style: styles.shadowSmall },
+						{
+							name: 'tokens["--shadow-sm"]',
+							usage: "Raised controls and compact cards",
+							style: styles.shadowSmall,
+						},
 						{
 							name: 'tokens["--shadow-md"]',
 							usage: "Menus, popovers, and floating panels",
@@ -363,13 +401,15 @@ function DepthAndMotionSection() {
 
 			<FoundationSection
 				title="Duration and easing"
-				description="Play the specimens to compare durations. Reduced-motion preferences remove the travel automatically.">
+				description="Play the specimens to compare durations. Reduced-motion preferences remove the travel automatically."
+			>
 				<MotionSpecimens />
 			</FoundationSection>
 
 			<FoundationSection
 				title="Layering"
-				description="Named z-index tokens make the intended relationship between escaped surfaces explicit.">
+				description="Named z-index tokens make the intended relationship between escaped surfaces explicit."
+			>
 				<div {...stylex.props(styles.layerLayout)}>
 					<div {...stylex.props(styles.layerStage)}>
 						<div {...stylex.props(styles.layerCard, styles.layerModal)}>Modal · 300</div>
@@ -410,10 +450,12 @@ function IconographySection() {
 	return (
 		<FoundationCategory
 			title="Iconography"
-			description="Phosphor icons use a consistent optical language. Keep icons aligned to a clear action or state, and pair unfamiliar symbols with text.">
+			description="Phosphor icons use a consistent optical language. Keep icons aligned to a clear action or state, and pair unfamiliar symbols with text."
+		>
 			<FoundationSection
 				title="Core interface symbols"
-				description="Storybook’s IconGallery keeps names and specimens together so the approved set stays easy to scan.">
+				description="Storybook’s IconGallery keeps names and specimens together so the approved set stays easy to scan."
+			>
 				<IconGallery>
 					<IconItem name="Search">
 						<MagnifyingGlassIcon aria-label="Search" size={28} weight="regular" />
@@ -438,7 +480,8 @@ function IconographySection() {
 
 			<FoundationSection
 				title="Sizing and weight"
-				description="Use 16–20px icons inside controls, regular weight for utility, bold for directional actions, and fill for status.">
+				description="Use 16–20px icons inside controls, regular weight for utility, bold for directional actions, and fill for status."
+			>
 				<div {...stylex.props(styles.iconExamples)}>
 					<div {...stylex.props(styles.iconExample)}>
 						<MagnifyingGlassIcon aria-hidden size={16} />
@@ -467,7 +510,15 @@ import { Button } from "./components/button/button";
 	);
 }
 
-function FoundationPage({ children, description, title }: { children: ReactNode; description: string; title: string }) {
+function FoundationPage({
+	children,
+	description,
+	title,
+}: {
+	children: ReactNode;
+	description: string;
+	title: string;
+}) {
 	return (
 		<article {...stylex.props(styles.page)}>
 			<header {...stylex.props(styles.pageHeader)}>
@@ -527,7 +578,8 @@ function ThemePalette({ mode, name }: { mode: "light" | "dark"; name: string }) 
 				aria-label={`${name} theme palette`}
 				mode={mode}
 				render={<section />}
-				style={styles.paletteScroller}>
+				style={styles.paletteScroller}
+			>
 				<div {...stylex.props(styles.paletteContent)}>
 					<ColorPalette>
 						<ColorItem
@@ -613,7 +665,8 @@ function TypeRole({
 					styles.typeSample,
 					sampleFontFamily ? styles.typeSampleFontFamily(sampleFontFamily) : null,
 					style,
-				)}>
+				)}
+			>
 				{children}
 			</div>
 		</div>
@@ -629,7 +682,15 @@ function TokenName({ name, value }: { name: string; value: string }) {
 	);
 }
 
-function ShadowSpecimen({ name, style, usage }: { name: string; style: stylex.StyleXStyles; usage: string }) {
+function ShadowSpecimen({
+	name,
+	style,
+	usage,
+}: {
+	name: string;
+	style: stylex.StyleXStyles;
+	usage: string;
+}) {
 	return (
 		<div {...stylex.props(styles.shadowSpecimen, style)}>
 			<TokenName name={name} value={usage} />
@@ -644,9 +705,15 @@ function MotionSpecimens() {
 		<div {...stylex.props(styles.motionPanel)}>
 			<div {...stylex.props(styles.motionToolbar)}>
 				<p {...stylex.props(styles.motionHint)}>
-					{isPlaying ? "The same distance reveals the pacing difference." : "Play all four duration tokens together."}
+					{isPlaying
+						? "The same distance reveals the pacing difference."
+						: "Play all four duration tokens together."}
 				</p>
-				<button type="button" {...stylex.props(styles.playButton)} onClick={() => setIsPlaying((value) => !value)}>
+				<button
+					type="button"
+					{...stylex.props(styles.playButton)}
+					onClick={() => setIsPlaying((value) => !value)}
+				>
 					{isPlaying ? "Reset" : "Play motion"}
 					<ArrowRightIcon aria-hidden size={16} weight="bold" />
 				</button>
@@ -682,7 +749,10 @@ function MotionSpecimens() {
 				))}
 			</div>
 			<div {...stylex.props(styles.easingNotes)}>
-				<TokenName name='tokens["--motion-ease-out"]' value="General interaction · cubic-bezier(0.16, 1, 0.3, 1)" />
+				<TokenName
+					name='tokens["--motion-ease-out"]'
+					value="General interaction · cubic-bezier(0.16, 1, 0.3, 1)"
+				/>
 				<TokenName
 					name='tokens["--motion-ease-smooth-out"]'
 					value="Content movement · cubic-bezier(0.22, 1, 0.36, 1)"
@@ -720,7 +790,8 @@ function TokenSource({ code }: { code: string }) {
 	return (
 		<FoundationSection
 			title="Using the tokens"
-			description="Import the typed StyleX variables instead of spelling token values directly in component styles.">
+			description="Import the typed StyleX variables instead of spelling token values directly in component styles."
+		>
 			<Source code={code} language="tsx" />
 		</FoundationSection>
 	);

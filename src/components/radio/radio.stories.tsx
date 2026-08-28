@@ -62,7 +62,16 @@ export default meta;
 type Story = StoryObj<RadioStoryArgs>;
 
 export const Playground: Story = {
-	render: ({ _label, _description, defaultValue, disabled, readOnly, required, size, visuallyHideLabel }) => (
+	render: ({
+		_label,
+		_description,
+		defaultValue,
+		disabled,
+		readOnly,
+		required,
+		size,
+		visuallyHideLabel,
+	}) => (
 		<RadioGroup
 			key={defaultValue}
 			label="Notification channel"
@@ -71,10 +80,26 @@ export const Playground: Story = {
 			disabled={disabled}
 			readOnly={readOnly}
 			required={required}
-			size={size}>
-			<Radio value="email" label={_label} description={_description} visuallyHideLabel={visuallyHideLabel} />
-			<Radio value="push" label="Push" description="Show updates on this device." visuallyHideLabel={visuallyHideLabel} />
-			<Radio value="none" label="None" description="Do not send updates." visuallyHideLabel={visuallyHideLabel} />
+			size={size}
+		>
+			<Radio
+				value="email"
+				label={_label}
+				description={_description}
+				visuallyHideLabel={visuallyHideLabel}
+			/>
+			<Radio
+				value="push"
+				label="Push"
+				description="Show updates on this device."
+				visuallyHideLabel={visuallyHideLabel}
+			/>
+			<Radio
+				value="none"
+				label="None"
+				description="Do not send updates."
+				visuallyHideLabel={visuallyHideLabel}
+			/>
 		</RadioGroup>
 	),
 };
@@ -105,9 +130,14 @@ export const Groups: Story = {
 					label="Project visibility"
 					description="Choose who can access this project."
 					name="visibility"
-					defaultValue="team">
+					defaultValue="team"
+				>
 					<Radio value="private" label="Private" description="Only you can access this project." />
-					<Radio value="team" label="Team" description="Everyone in your workspace can access it." />
+					<Radio
+						value="team"
+						label="Team"
+						description="Everyone in your workspace can access it."
+					/>
 				</RadioGroup>
 			</Stack>
 			<Stack gap={4}>

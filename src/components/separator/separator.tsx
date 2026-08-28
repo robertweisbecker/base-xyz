@@ -14,7 +14,14 @@ export type SeparatorProps = Omit<
 		className?: string;
 	};
 
-export function Separator({ ref, className, orientation = "horizontal", style, xstyle, ...props }: SeparatorProps) {
+export function Separator({
+	ref,
+	className,
+	orientation = "horizontal",
+	style,
+	xstyle,
+	...props
+}: SeparatorProps) {
 	const { marginStyles, rest } = extractMarginProps(props);
 	const sx = stylex.props(
 		separatorParts.root,

@@ -40,14 +40,14 @@ export const popupMotionStyles = stylex.create({
 		[popupVars.easing]: tokens["--motion-ease-popup"],
 		opacity: {
 			"[data-ending-style]": 0,
-			"[data-starting-style]": 0,
 			"[data-side='none']": 1,
+			"[data-starting-style]": 0,
 			default: 1,
 		},
 		transform: {
 			"[data-ending-style]": "scale(0.98)",
-			"[data-starting-style]": "scale(0.98)",
 			"[data-side='none']": "scale(1)",
+			"[data-starting-style]": "scale(0.98)",
 			default: "scale(1)",
 		},
 		transformOrigin: "var(--transform-origin)",

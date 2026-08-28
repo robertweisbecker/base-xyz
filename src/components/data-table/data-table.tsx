@@ -80,7 +80,11 @@ const dataTableFeatures = tableFeatures({
 
 type DataTableFeatures = typeof dataTableFeatures;
 
-export type DataTableColumnDef<TData extends RowData, TValue = unknown> = ColumnDef<DataTableFeatures, TData, TValue> &
+export type DataTableColumnDef<TData extends RowData, TValue = unknown> = ColumnDef<
+	DataTableFeatures,
+	TData,
+	TValue
+> &
 	DataTableColumnNumeric;
 export type DataTableRow<TData extends RowData> = Row<DataTableFeatures, TData>;
 export type DataTableColumn<TData extends RowData> = Column<DataTableFeatures, TData, unknown>;
@@ -150,7 +154,9 @@ export function DataTable<TData extends RowData, TValue = unknown>({
 }: DataTableProps<TData, TValue>) {
 	const [sorting, setSorting] = useState<SortingState>([]);
 	const [globalFilter, setGlobalFilter] = useState("");
-	const [columnVisibility, setColumnVisibility] = useState<ColumnVisibilityState>(initialColumnVisibility ?? {});
+	const [columnVisibility, setColumnVisibility] = useState<ColumnVisibilityState>(
+		initialColumnVisibility ?? {},
+	);
 	const [rowSelectionState, setRowSelectionState] = useState<RowSelectionState>({});
 	const [expanded, setExpanded] = useState<ExpandedState>({});
 	const supportsExpansion = Boolean(renderExpandedRow);
@@ -279,9 +285,13 @@ export function DataTable<TData extends RowData, TValue = unknown>({
 			style={style}
 			xstyle={xstyle}
 			// Delegated: Table.Root owns margin resolution; do not resolve locally.
-			{...props}>
+			{...props}
+		>
 			<div {...stylex.props(dataTableParts.toolbar)}>
-				<ColumnVisibilityMenu tableColumns={table.getAllLeafColumns()} getColumnLabel={getColumnLabel} />
+				<ColumnVisibilityMenu
+					tableColumns={table.getAllLeafColumns()}
+					getColumnLabel={getColumnLabel}
+				/>
 				<InputGroup.Root {...stylex.props(dataTableParts.filter)}>
 					<InputGroup.Addon>
 						<MagnifyingGlassIcon aria-hidden size="1em" weight="bold" />
@@ -303,7 +313,9 @@ export function DataTable<TData extends RowData, TValue = unknown>({
 				<div {...stylex.props(dataTableParts.toolbarActions)}>
 					{filters?.map((filter) => {
 						const column = table.getColumn(filter.columnId);
-						return column ? <ColumnFilterMenu key={filter.columnId} column={column} filter={filter} /> : null;
+						return column ? (
+							<ColumnFilterMenu key={filter.columnId} column={column} filter={filter} />
+						) : null;
 					})}
 					{toolbarEndSlot}
 				</div>
@@ -324,7 +336,9 @@ export function DataTable<TData extends RowData, TValue = unknown>({
 												colSpan={header.colSpan}
 												scope={header.colSpan > 1 ? "colgroup" : "col"}
 												checked={table.getIsAllRowsSelected()}
-												indeterminate={table.getIsSomeRowsSelected() && !table.getIsAllRowsSelected()}
+												indeterminate={
+													table.getIsSomeRowsSelected() && !table.getIsAllRowsSelected()
+												}
 												label="Select all rows"
 												onCheckedChange={(checked) => table.toggleAllRowsSelected(checked)}
 											/>
@@ -336,8 +350,11 @@ export function DataTable<TData extends RowData, TValue = unknown>({
 											<Table.HeaderAction
 												key={header.id}
 												colSpan={header.colSpan}
-												scope={header.colSpan > 1 ? "colgroup" : "col"}>
-												{header.isPlaceholder ? null : flexRender(header.column.columnDef.header, header.getContext())}
+												scope={header.colSpan > 1 ? "colgroup" : "col"}
+											>
+												{header.isPlaceholder
+													? null
+													: flexRender(header.column.columnDef.header, header.getContext())}
 											</Table.HeaderAction>
 										);
 									}
@@ -353,7 +370,8 @@ export function DataTable<TData extends RowData, TValue = unknown>({
 											colSpan={header.colSpan}
 											scope={header.colSpan > 1 ? "colgroup" : "col"}
 											aria-sort={getAriaSort(header.column)}
-											numeric={numeric}>
+											numeric={numeric}
+										>
 											{content}
 										</Table.HeaderCell>
 									);
@@ -365,7 +383,10 @@ export function DataTable<TData extends RowData, TValue = unknown>({
 						{visibleRows.length > 0 ? (
 							visibleRows.map((row) => (
 								<Fragment key={row.id}>
-									<Table.Row data-expanded={row.getIsExpanded() ? "" : undefined} checked={row.getIsSelected()}>
+									<Table.Row
+										data-expanded={row.getIsExpanded() ? "" : undefined}
+										checked={row.getIsSelected()}
+									>
 										{row.getVisibleCells().map((cell) => {
 											const columnRole = getDataTableColumnRole(cell.column);
 
@@ -395,10 +416,14 @@ export function DataTable<TData extends RowData, TValue = unknown>({
 										})}
 									</Table.Row>
 									{renderExpandedRow && row.getIsExpanded() ? (
-										<Table.Row key={`${row.id}-expanded`} {...stylex.props(dataTableParts.expandedRow)}>
+										<Table.Row
+											key={`${row.id}-expanded`}
+											{...stylex.props(dataTableParts.expandedRow)}
+										>
 											<Table.Cell
 												colSpan={Math.max(1, row.getVisibleCells().length)}
-												{...stylex.props(dataTableParts.expandedCell)}>
+												{...stylex.props(dataTableParts.expandedCell)}
+											>
 												{renderExpandedRow(row)}
 											</Table.Cell>
 										</Table.Row>
@@ -406,7 +431,9 @@ export function DataTable<TData extends RowData, TValue = unknown>({
 								</Fragment>
 							))
 						) : (
-							<Table.Empty colSpan={Math.max(1, table.getVisibleLeafColumns().length)}>{emptyLabel}</Table.Empty>
+							<Table.Empty colSpan={Math.max(1, table.getVisibleLeafColumns().length)}>
+								{emptyLabel}
+							</Table.Empty>
 						)}
 					</Table.Body>
 				</Table.Content>
@@ -447,7 +474,8 @@ function HeaderContent<TData extends RowData>({
 				ms={numeric ? undefined : -2}
 				me={numeric ? -2 : undefined}
 				size="xs"
-				onClick={() => column.toggleSorting(sorted === "asc")}>
+				onClick={() => column.toggleSorting(sorted === "asc")}
+			>
 				<span {...stylex.props(dataTableParts.headerLabel)}>{content}</span>
 			</Button>
 		</span>
@@ -511,7 +539,8 @@ function ColumnFilterMenu<TData extends RowData>({
 								<Menu.TriggerIcon />
 							)
 						}
-						{...stylex.props(dataTableParts.filterTrigger)}>
+						{...stylex.props(dataTableParts.filterTrigger)}
+					>
 						<span {...stylex.props(dataTableParts.filterTriggerLabel)}>{filter.label}</span>
 					</Button>
 				}
@@ -523,7 +552,8 @@ function ColumnFilterMenu<TData extends RowData>({
 						<Menu.CheckboxItem
 							key={option.value}
 							checked={selectedSet.has(option.value)}
-							onCheckedChange={(checked) => toggleValue(option.value, checked)}>
+							onCheckedChange={(checked) => toggleValue(option.value, checked)}
+						>
 							<Menu.ItemLabel>{option.label}</Menu.ItemLabel>
 						</Menu.CheckboxItem>
 					))}
@@ -534,7 +564,9 @@ function ColumnFilterMenu<TData extends RowData>({
 }
 
 function normalizeSelectedFilterValues(value: unknown) {
-	return Array.isArray(value) ? value.filter((item): item is string => typeof item === "string") : [];
+	return Array.isArray(value)
+		? value.filter((item): item is string => typeof item === "string")
+		: [];
 }
 
 function RowActions<TData extends RowData>({
@@ -570,7 +602,8 @@ function RowActions<TData extends RowData>({
 							key={index}
 							disabled={action.disabled}
 							variant={action.variant === "danger" ? "error" : "default"}
-							onClick={() => action.onSelect?.(row)}>
+							onClick={() => action.onSelect?.(row)}
+						>
 							{action.icon && <Menu.ItemIcon>{action.icon}</Menu.ItemIcon>}
 							<Menu.ItemLabel>{action.label}</Menu.ItemLabel>
 						</Menu.Item>
@@ -597,7 +630,13 @@ function ColumnVisibilityMenu<TData extends RowData>({
 	return (
 		<Menu.Root>
 			<Menu.Trigger
-				render={<IconButton variant="neutral" icon={<SlidersHorizontalIcon aria-hidden />} label="Column settings" />}
+				render={
+					<IconButton
+						variant="neutral"
+						icon={<SlidersHorizontalIcon aria-hidden />}
+						label="Column settings"
+					/>
+				}
 			/>
 			<Menu.Popup positionerProps={{ align: "end" }}>
 				<Menu.Group>
@@ -606,7 +645,8 @@ function ColumnVisibilityMenu<TData extends RowData>({
 						<Menu.SwitchItem
 							key={column.id}
 							checked={column.getIsVisible()}
-							onCheckedChange={(checked) => column.toggleVisibility(checked)}>
+							onCheckedChange={(checked) => column.toggleVisibility(checked)}
+						>
 							<Menu.ItemLabel>{getColumnLabel(column)}</Menu.ItemLabel>
 						</Menu.SwitchItem>
 					))}
@@ -665,7 +705,11 @@ function getColumnDefId<TData extends RowData, TValue>(column: DataTableColumnDe
 	return undefined;
 }
 
-function dataTableFilter<TData extends RowData>(row: DataTableRow<TData>, columnId: string, filterValue: unknown) {
+function dataTableFilter<TData extends RowData>(
+	row: DataTableRow<TData>,
+	columnId: string,
+	filterValue: unknown,
+) {
 	const rowValue = row.getValue(columnId);
 
 	if (Array.isArray(filterValue)) {
@@ -733,7 +777,7 @@ const dataTableParts = stylex.create({
 	expandedRow: {
 		borderRadius: "inherit",
 		backgroundColor: {
-			default: tokens["--inset"],
+			default: tokens["--canvas"],
 			":hover": tokens["--inset"],
 		},
 	},

@@ -25,7 +25,11 @@ export const Examples: Story = {
 				title="base-stylex-lab"
 				description="React primitives and workflow blocks composed with Base UI and StyleX."
 				startSlot={
-					<Avatar icon={<GithubLogoIcon aria-hidden weight="fill" size={"inherit"} />} name="GitHub" size={8} />
+					<Avatar
+						icon={<GithubLogoIcon aria-hidden weight="fill" size={"inherit"} />}
+						name="GitHub"
+						size={8}
+					/>
 				}
 				breadcrumbs={
 					<Breadcrumbs.Root size="sm">
@@ -44,7 +48,11 @@ export const Examples: Story = {
 						<Button size="sm" variant="neutral" startSlot={<StarIcon aria-hidden weight="bold" />}>
 							Star
 						</Button>
-						<Button size="sm" variant="neutral" startSlot={<GitForkIcon aria-hidden weight="bold" />}>
+						<Button
+							size="sm"
+							variant="neutral"
+							startSlot={<GitForkIcon aria-hidden weight="bold" />}
+						>
 							Fork
 						</Button>
 					</>

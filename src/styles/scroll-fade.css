@@ -149,13 +149,19 @@
 		--scroll-fade-t: 0px;
 	}
 	to {
-		--scroll-fade-t: var(--_scroll-fade-size-t, var(--scroll-fade-size, min(12%, var(--space-10, 2.5rem))));
+		--scroll-fade-t: var(
+			--_scroll-fade-size-t,
+			var(--scroll-fade-size, min(12%, var(--space-10, 2.5rem)))
+		);
 	}
 }
 
 @keyframes scroll-fade-reveal-b {
 	from {
-		--scroll-fade-b: var(--_scroll-fade-size-b, var(--scroll-fade-size, min(12%, var(--space-10, 2.5rem))));
+		--scroll-fade-b: var(
+			--_scroll-fade-size-b,
+			var(--scroll-fade-size, min(12%, var(--space-10, 2.5rem)))
+		);
 	}
 	to {
 		--scroll-fade-b: 0px;
@@ -167,13 +173,19 @@
 		--scroll-fade-s: 0px;
 	}
 	to {
-		--scroll-fade-s: var(--_scroll-fade-size-s, var(--scroll-fade-size, min(12%, var(--space-10, 2.5rem))));
+		--scroll-fade-s: var(
+			--_scroll-fade-size-s,
+			var(--scroll-fade-size, min(12%, var(--space-10, 2.5rem)))
+		);
 	}
 }
 
 @keyframes scroll-fade-reveal-e {
 	from {
-		--scroll-fade-e: var(--_scroll-fade-size-e, var(--scroll-fade-size, min(12%, var(--space-10, 2.5rem))));
+		--scroll-fade-e: var(
+			--_scroll-fade-size-e,
+			var(--scroll-fade-size, min(12%, var(--space-10, 2.5rem)))
+		);
 	}
 	to {
 		--scroll-fade-e: 0px;
@@ -182,8 +194,14 @@
 
 .xyz-scroll-fade,
 .xyz-scroll-fade-y {
-	--_scroll-fade-size-t: var(--scroll-fade-t-size, var(--scroll-fade-size, min(12%, var(--space-10, 2.5rem))));
-	--_scroll-fade-size-b: var(--scroll-fade-b-size, var(--scroll-fade-size, min(12%, var(--space-10, 2.5rem))));
+	--_scroll-fade-size-t: var(
+		--scroll-fade-t-size,
+		var(--scroll-fade-size, min(12%, var(--space-10, 2.5rem)))
+	);
+	--_scroll-fade-size-b: var(
+		--scroll-fade-b-size,
+		var(--scroll-fade-size, min(12%, var(--space-10, 2.5rem)))
+	);
 	--scroll-fade-block: linear-gradient(
 		to bottom,
 		transparent 0,
@@ -222,8 +240,14 @@
 }
 
 .xyz-scroll-fade-x {
-	--_scroll-fade-size-s: var(--scroll-fade-s-size, var(--scroll-fade-size, min(12%, var(--space-10, 2.5rem))));
-	--_scroll-fade-size-e: var(--scroll-fade-e-size, var(--scroll-fade-size, min(12%, var(--space-10, 2.5rem))));
+	--_scroll-fade-size-s: var(
+		--scroll-fade-s-size,
+		var(--scroll-fade-size, min(12%, var(--space-10, 2.5rem)))
+	);
+	--_scroll-fade-size-e: var(
+		--scroll-fade-e-size,
+		var(--scroll-fade-size, min(12%, var(--space-10, 2.5rem)))
+	);
 	--scroll-fade-inline: linear-gradient(
 		to right,
 		transparent 0,
@@ -285,8 +309,16 @@
 }
 
 .xyz-scroll-fade-t {
-	--_scroll-fade-size-t: var(--scroll-fade-t-size, var(--scroll-fade-size, min(12%, var(--space-10, 2.5rem))));
-	--scroll-fade-mask: linear-gradient(to bottom, transparent 0, #000 var(--scroll-fade-t, 0px), #000 100%);
+	--_scroll-fade-size-t: var(
+		--scroll-fade-t-size,
+		var(--scroll-fade-size, min(12%, var(--space-10, 2.5rem)))
+	);
+	--scroll-fade-mask: linear-gradient(
+		to bottom,
+		transparent 0,
+		#000 var(--scroll-fade-t, 0px),
+		#000 100%
+	);
 }
 
 @supports (animation-timeline: scroll()) {
@@ -305,8 +337,16 @@
 }
 
 .xyz-scroll-fade-b {
-	--_scroll-fade-size-b: var(--scroll-fade-b-size, var(--scroll-fade-size, min(12%, var(--space-10, 2.5rem))));
-	--scroll-fade-mask: linear-gradient(to bottom, #000 0, #000 calc(100% - var(--scroll-fade-b, 0px)), transparent 100%);
+	--_scroll-fade-size-b: var(
+		--scroll-fade-b-size,
+		var(--scroll-fade-size, min(12%, var(--space-10, 2.5rem)))
+	);
+	--scroll-fade-mask: linear-gradient(
+		to bottom,
+		#000 0,
+		#000 calc(100% - var(--scroll-fade-b, 0px)),
+		transparent 100%
+	);
 }
 
 @supports (animation-timeline: scroll()) {
@@ -326,8 +366,16 @@
 
 .xyz-scroll-fade-l,
 .xyz-scroll-fade-s {
-	--_scroll-fade-size-s: var(--scroll-fade-s-size, var(--scroll-fade-size, min(12%, var(--space-10, 2.5rem))));
-	--scroll-fade-mask: linear-gradient(to right, transparent 0, #000 var(--scroll-fade-s, 0px), #000 100%);
+	--_scroll-fade-size-s: var(
+		--scroll-fade-s-size,
+		var(--scroll-fade-size, min(12%, var(--space-10, 2.5rem)))
+	);
+	--scroll-fade-mask: linear-gradient(
+		to right,
+		transparent 0,
+		#000 var(--scroll-fade-s, 0px),
+		#000 100%
+	);
 }
 
 @supports (animation-timeline: scroll()) {
@@ -348,8 +396,16 @@
 
 .xyz-scroll-fade-r,
 .xyz-scroll-fade-e {
-	--_scroll-fade-size-e: var(--scroll-fade-e-size, var(--scroll-fade-size, min(12%, var(--space-10, 2.5rem))));
-	--scroll-fade-mask: linear-gradient(to right, #000 0, #000 calc(100% - var(--scroll-fade-e, 0px)), transparent 100%);
+	--_scroll-fade-size-e: var(
+		--scroll-fade-e-size,
+		var(--scroll-fade-size, min(12%, var(--space-10, 2.5rem)))
+	);
+	--scroll-fade-mask: linear-gradient(
+		to right,
+		#000 0,
+		#000 calc(100% - var(--scroll-fade-e, 0px)),
+		transparent 100%
+	);
 }
 
 @supports (animation-timeline: scroll()) {
@@ -370,7 +426,12 @@
 
 [dir="rtl"] .xyz-scroll-fade-s,
 .xyz-scroll-fade-s[dir="rtl"] {
-	--scroll-fade-mask: linear-gradient(to left, transparent 0, #000 var(--scroll-fade-s, 0px), #000 100%);
+	--scroll-fade-mask: linear-gradient(
+		to left,
+		transparent 0,
+		#000 var(--scroll-fade-s, 0px),
+		#000 100%
+	);
 }
 
 @supports (animation-timeline: scroll()) {
@@ -384,7 +445,12 @@
 
 [dir="rtl"] .xyz-scroll-fade-e,
 .xyz-scroll-fade-e[dir="rtl"] {
-	--scroll-fade-mask: linear-gradient(to left, #000 0, #000 calc(100% - var(--scroll-fade-e, 0px)), transparent 100%);
+	--scroll-fade-mask: linear-gradient(
+		to left,
+		#000 0,
+		#000 calc(100% - var(--scroll-fade-e, 0px)),
+		transparent 100%
+	);
 }
 
 @supports (animation-timeline: scroll()) {

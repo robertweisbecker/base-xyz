@@ -52,14 +52,16 @@ export const Playground: Story = {
 					: orientation === "both"
 						? styles.playgroundFrameBoth
 						: styles.playgroundFrame
-			}>
+			}
+		>
 			<ScrollArea
 				disableFade={disableFade}
 				label={label}
 				orientation={orientation}
 				showScrollbar={showScrollbar}
 				size={size}
-				xstyle={styles.surface}>
+				xstyle={styles.surface}
+			>
 				<div {...stylex.props(x.padding(tokens["--space-3"]))}>
 					{orientation === "horizontal" ? (
 						<div {...stylex.props(styles.horizontalList)}>
@@ -130,10 +132,7 @@ export const Orientations: Story = {
 					Horizontal
 				</Text>
 				<Box xstyle={styles.horizontalFrame}>
-					<ScrollArea
-						label="Project milestones"
-						orientation="horizontal"
-						xstyle={styles.surface}>
+					<ScrollArea label="Project milestones" orientation="horizontal" xstyle={styles.surface}>
 						<div {...stylex.props(x.padding(tokens["--space-3"]))}>
 							<div {...stylex.props(styles.horizontalList)}>
 								{milestones.map((item) => (
@@ -202,7 +201,8 @@ export const Options: Story = {
 								<ScrollArea
 									label={`${mode.label} scrollbar visibility`}
 									showScrollbar={mode.value}
-									xstyle={styles.surface}>
+									xstyle={styles.surface}
+								>
 									<div {...stylex.props(x.padding(tokens["--space-3"]))}>
 										<div {...stylex.props(styles.list)}>
 											{items.slice(0, 8).map((item) => (
@@ -236,7 +236,8 @@ export const Options: Story = {
 								<ScrollArea
 									label={mode.label}
 									disableFade={mode.disableFade}
-									xstyle={styles.surface}>
+									xstyle={styles.surface}
+								>
 									<div {...stylex.props(x.padding(tokens["--space-3"]))}>
 										<div {...stylex.props(styles.list)}>
 											{items.map((item) => (

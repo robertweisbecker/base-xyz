@@ -12,13 +12,7 @@ import { attrJoin } from "@/utils/attr-join";
 
 export type TextFieldProps = Omit<
 	InputBase.Props,
-	| "className"
-	| "color"
-	| "height"
-	| "size"
-	| "style"
-	| "width"
-	| keyof MarginProps
+	"className" | "color" | "height" | "size" | "style" | "width" | keyof MarginProps
 > &
 	MarginProps &
 	BaseStyleProps & {
@@ -49,11 +43,7 @@ export function TextField({
 	const id = providedId ?? generatedId;
 	const descriptionId = description ? `${id}-description` : undefined;
 	const errorId = error ? `${id}-error` : undefined;
-	const rootSx = stylex.props(
-		fieldStyles.root,
-		...marginStyles,
-		xstyle,
-	);
+	const rootSx = stylex.props(fieldStyles.root, ...marginStyles, xstyle);
 
 	return (
 		<FieldBase.Root
@@ -61,10 +51,13 @@ export function TextField({
 			style={mergeStyle(rootSx.style, style)}
 			disabled={disabled}
 			invalid={Boolean(error)}
-			name={name}>
+			name={name}
+		>
 			<FieldBase.Label htmlFor={id} {...stylex.props(fieldStyles.label)}>
 				{label}
-				{info ? <InfoTip content={info} size="xs" my={-1} {...stylex.props(infoTipStyles.inline)} /> : null}
+				{info ? (
+					<InfoTip content={info} size="xs" my={-1} {...stylex.props(infoTipStyles.inline)} />
+				) : null}
 			</FieldBase.Label>
 			<InputBase
 				id={id}
@@ -90,10 +83,10 @@ export function TextField({
 
 const infoTipStyles = stylex.create({
 	inline: {
-		display: "inline",
 		paddingBlock: 2.5,
 		paddingInline: 2.5,
-		verticalAlign: "middle",
+		display: "inline",
 		lineHeight: "inherit",
+		verticalAlign: "middle",
 	},
 });

@@ -20,7 +20,10 @@ type SlotProps = {
 
 export type BreadcrumbsSize = "sm" | "md";
 
-export type BreadcrumbsRootProps = Omit<ComponentProps<"nav">, "className" | "style" | keyof MarginProps> &
+export type BreadcrumbsRootProps = Omit<
+	ComponentProps<"nav">,
+	"className" | "style" | keyof MarginProps
+> &
 	MarginProps &
 	BaseStyleProps & {
 		className?: string;
@@ -40,9 +43,13 @@ export type BreadcrumbsCurrentProps = Omit<ComponentProps<"span">, "className" |
 		loading?: boolean;
 	};
 
-export type BreadcrumbsSeparatorProps = Omit<ComponentProps<"li">, "className" | "style"> & PartStyleProps;
+export type BreadcrumbsSeparatorProps = Omit<ComponentProps<"li">, "className" | "style"> &
+	PartStyleProps;
 
-export type BreadcrumbsCopyProps = Omit<ComponentProps<"button">, "children" | "className" | "onClick" | "style"> &
+export type BreadcrumbsCopyProps = Omit<
+	ComponentProps<"button">,
+	"children" | "className" | "onClick" | "style"
+> &
 	PartStyleProps & {
 		label?: string;
 		text: string;
@@ -55,18 +62,13 @@ export function Root({
 	children,
 	className,
 	label = "Breadcrumbs",
-	size = "md",
+	size = "sm",
 	style,
 	xstyle,
 	...props
 }: BreadcrumbsRootProps) {
 	const { marginStyles, rest } = extractMarginProps(props);
-	const sx = stylex.props(
-		parts.root,
-		sizeStyles[size],
-		...marginStyles,
-		xstyle,
-	);
+	const sx = stylex.props(parts.root, breadcrumbSizes[size], ...marginStyles, xstyle);
 
 	return (
 		<nav
@@ -74,7 +76,8 @@ export function Root({
 			aria-label={label}
 			className={attrJoin(sx.className, className)}
 			style={mergeStyle(sx.style, style)}
-			{...rest}>
+			{...rest}
+		>
 			<ol {...stylex.props(parts.list)}>{children}</ol>
 		</nav>
 	);
@@ -101,7 +104,8 @@ export function Link({
 				style={mergeStyle(sx.style, style)}
 				data-component="breadcrumb-link"
 				data-color={color}
-				{...props}>
+				{...props}
+			>
 				{renderSlot(startSlot)}
 				<span {...stylex.props(parts.label)}>{children}</span>
 				{renderSlot(endSlot)}
@@ -131,7 +135,8 @@ export function Current({
 				aria-busy={loading ? true : undefined}
 				className={attrJoin(sx.className, className)}
 				style={mergeStyle(sx.style, style)}
-				{...props}>
+				{...props}
+			>
 				{renderSlot(startSlot)}
 				{loading ? (
 					<>
@@ -147,7 +152,14 @@ export function Current({
 	);
 }
 
-export function Separator({ ref, children, className, style, xstyle, ...props }: BreadcrumbsSeparatorProps) {
+export function Separator({
+	ref,
+	children,
+	className,
+	style,
+	xstyle,
+	...props
+}: BreadcrumbsSeparatorProps) {
 	const sx = stylex.props(parts.separator, xstyle);
 
 	return (
@@ -156,9 +168,17 @@ export function Separator({ ref, children, className, style, xstyle, ...props }:
 			aria-hidden
 			className={attrJoin(sx.className, className)}
 			style={mergeStyle(sx.style, style)}
-			{...props}>
+			{...props}
+		>
 			{children ?? (
-				<svg fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" width="1.25em" height="1.25em">
+				<svg
+					fill="none"
+					viewBox="0 0 24 24"
+					strokeWidth={2}
+					stroke="currentColor"
+					width="1.25em"
+					height="1.25em"
+				>
 					<path strokeLinecap="round" strokeLinejoin="round" d="m9 20.247 6-16.5" />
 				</svg>
 			)}
@@ -169,7 +189,14 @@ export function Separator({ ref, children, className, style, xstyle, ...props }:
 export function Copy({ label = "Copy breadcrumb link", text, ...props }: BreadcrumbsCopyProps) {
 	return (
 		<li {...stylex.props(parts.item)}>
-			<CopyButton {...props} aria-label={label} size="xs" tooltip={label} value={text} variant="ghost" />
+			<CopyButton
+				{...props}
+				aria-label={label}
+				size="xs"
+				tooltip={label}
+				value={text}
+				variant="ghost"
+			/>
 		</li>
 	);
 }
@@ -189,7 +216,7 @@ function renderSlot(slot: ReactNode) {
 
 const parts = stylex.create({
 	root: {
-		"--_breadcrumbs-gap": tokens["--space-1-5"],
+		"--_breadcrumbs-gap": tokens["--space-1"],
 		color: tokens["--fg-muted"],
 		minWidth: 0,
 	},
@@ -264,15 +291,15 @@ const parts = stylex.create({
 	},
 });
 
-const sizeStyles = stylex.create({
+const breadcrumbSizes = stylex.create({
 	sm: {
-		"--_breadcrumbs-gap": tokens["--space-1"],
+		"--_breadcrumbs-gap": tokens["--space-0-5"],
 		fontSize: tokens["--font-size-1"],
 		letterSpacing: tokens["--letter-spacing-1"],
 		lineHeight: tokens["--line-height-1"],
 	},
 	md: {
-		"--_breadcrumbs-gap": tokens["--space-1-5"],
+		"--_breadcrumbs-gap": tokens["--space-1"],
 		fontSize: tokens["--font-size-2"],
 		letterSpacing: tokens["--letter-spacing-2"],
 		lineHeight: tokens["--line-height-2"],

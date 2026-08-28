@@ -11,7 +11,12 @@ import { Kbd } from "@/components/kbd/kbd";
 import { Text } from "@/components/text/text";
 import { Code } from "@/components/code/code";
 import { tokens } from "@/theme/tokens.stylex";
-import { DataTable, type DataTableColumnDef, type DataTableFilter, type DataTableProps } from "./data-table";
+import {
+	DataTable,
+	type DataTableColumnDef,
+	type DataTableFilter,
+	type DataTableProps,
+} from "./data-table";
 import { Loader } from "@/components/loader";
 import { Button } from "@/components/button";
 import { CaretRightIcon } from "@phosphor-icons/react/dist/csr/CaretRight";
@@ -338,7 +343,11 @@ function DeploymentTable(args: Partial<DataTableProps<Deployment>>) {
 					icon: <CopyIcon weight="duotone" />,
 					onSelect: () => navigator.clipboard?.writeText(row.original.id),
 				},
-				{ label: "Redeploy", icon: <ArrowClockwiseIcon />, disabled: row.original.status === "Building" },
+				{
+					label: "Redeploy",
+					icon: <ArrowClockwiseIcon />,
+					disabled: row.original.status === "Building",
+				},
 				{ label: "Delete deployment", icon: <TrashIcon weight="duotone" />, variant: "danger" },
 			]}
 		/>
@@ -355,7 +364,8 @@ function DeploymentCommandPalette() {
 				</CommandPalette.Trigger>
 			}
 			items={commandGroups}
-			itemToStringValue={commandToStringValue}>
+			itemToStringValue={commandToStringValue}
+		>
 			<CommandPalette.Input placeholder="Search deployments and actions…" />
 			<CommandPalette.List>
 				{(group: DeploymentCommandGroup) => (
@@ -369,7 +379,8 @@ function DeploymentCommandPalette() {
 									startSlot={command.icon}
 									description={command.description}
 									shortcut={command.shortcut}
-									endSlot={!command.shortcut ? <CaretRightIcon aria-hidden /> : undefined}>
+									endSlot={!command.shortcut ? <CaretRightIcon aria-hidden /> : undefined}
+								>
 									{command.title}
 								</CommandPalette.Item>
 							)}

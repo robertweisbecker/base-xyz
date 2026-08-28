@@ -13,8 +13,8 @@ import { attrJoin } from "@/utils/attr-join";
 
 type StyledProps<T> = Omit<T, "className" | "style" | "xstyle"> &
 	BaseStyleProps & {
-	className?: string;
-};
+		className?: string;
+	};
 
 type PasswordFieldContextValue = {
 	value: string;
@@ -35,7 +35,10 @@ export type PasswordFieldRootProps = StyledProps<Field.Root.Props> & {
 };
 export type PasswordFieldLabelProps = StyledProps<Field.Label.Props>;
 export type PasswordFieldControlProps = ComponentProps<typeof InputGroup.Root>;
-export type PasswordFieldInputProps = Omit<ComponentProps<typeof InputGroup.Input>, "defaultValue" | "type" | "value">;
+export type PasswordFieldInputProps = Omit<
+	ComponentProps<typeof InputGroup.Input>,
+	"defaultValue" | "type" | "value"
+>;
 export type PasswordFieldActionsProps = ComponentProps<typeof InputGroup.Actions>;
 export type PasswordFieldVisibilityToggleProps = Omit<
 	ToggleIconButtonProps,
@@ -97,7 +100,8 @@ export function Root({
 				visible: currentVisible,
 				setValue,
 				setVisible,
-			}}>
+			}}
+		>
 			<Field.Root
 				className={attrJoin(rootSx.className, className)}
 				style={mergeStyle(rootSx.style, style)}
@@ -109,7 +113,13 @@ export function Root({
 
 export function Label({ className, style, xstyle, ...props }: PasswordFieldLabelProps) {
 	const sx = stylex.props(fieldStyles.label, xstyle);
-	return <Field.Label className={attrJoin(sx.className, className)} style={mergeStyle(sx.style, style)} {...props} />;
+	return (
+		<Field.Label
+			className={attrJoin(sx.className, className)}
+			style={mergeStyle(sx.style, style)}
+			{...props}
+		/>
+	);
 }
 
 export function Control({ className, ...props }: PasswordFieldControlProps) {
@@ -190,11 +200,21 @@ export function VisibilityToggle({
 export function Description({ className, style, xstyle, ...props }: PasswordFieldDescriptionProps) {
 	const sx = stylex.props(fieldStyles.description, xstyle);
 	return (
-		<Field.Description className={attrJoin(sx.className, className)} style={mergeStyle(sx.style, style)} {...props} />
+		<Field.Description
+			className={attrJoin(sx.className, className)}
+			style={mergeStyle(sx.style, style)}
+			{...props}
+		/>
 	);
 }
 
-export function Error({ className, match = true, style, xstyle, ...props }: PasswordFieldErrorProps) {
+export function Error({
+	className,
+	match = true,
+	style,
+	xstyle,
+	...props
+}: PasswordFieldErrorProps) {
 	const sx = stylex.props(fieldStyles.error, xstyle);
 	return (
 		<Field.Error
@@ -216,10 +236,20 @@ export function Meter({
 	...props
 }: PasswordFieldMeterProps) {
 	const { value } = usePasswordFieldContext("Meter");
-	const score = requirements.reduce((total, requirement) => total + Number(testRequirement(requirement, value)), 0);
+	const score = requirements.reduce(
+		(total, requirement) => total + Number(testRequirement(requirement, value)),
+		0,
+	);
 	const maximum = requirements.length;
 	const strengthLabel = getStrengthLabel(score, maximum);
-	const tone = score === 0 ? "neutral" : score === maximum ? "strong" : score <= maximum / 2 ? "weak" : "medium";
+	const tone =
+		score === 0
+			? "neutral"
+			: score === maximum
+				? "strong"
+				: score <= maximum / 2
+					? "weak"
+					: "medium";
 
 	return (
 		<MeterPrimitive.Root
@@ -230,7 +260,8 @@ export function Meter({
 			value={score}
 			{...props}
 			style={style}
-			xstyle={[parts.meter, xstyle]}>
+			xstyle={[parts.meter, xstyle]}
+		>
 			<MeterPrimitive.Track>
 				<MeterPrimitive.Indicator />
 			</MeterPrimitive.Track>

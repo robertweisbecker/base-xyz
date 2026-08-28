@@ -24,7 +24,8 @@ const meta = {
 	title: "Components/Empty state",
 	component: EmptyState,
 	args: {
-		description: "Create your first project to organize files, tasks, and collaborators in one place.",
+		description:
+			"Create your first project to organize files, tasks, and collaborators in one place.",
 		headingLevel: "h2",
 		icon: iconOptions.Folder,
 		_showSecondaryAction: true,
@@ -72,7 +73,13 @@ type Story = StoryObj<typeof meta>;
 
 export const Playground: Story = {
 	render: ({ description, headingLevel, icon, _showSecondaryAction, size, title }) => (
-		<EmptyState description={description} headingLevel={headingLevel} icon={icon} size={size} title={title}>
+		<EmptyState
+			description={description}
+			headingLevel={headingLevel}
+			icon={icon}
+			size={size}
+			title={title}
+		>
 			<Button size={size === "sm" ? "sm" : "md"}>Create project</Button>
 			{_showSecondaryAction ? (
 				<Button size={size === "sm" ? "sm" : "md"} variant="secondary">
@@ -97,7 +104,8 @@ export const Examples: Story = {
 					description="Create your first project to organize files, tasks, and collaborators in one place."
 					headingLevel="h3"
 					icon={<FolderOpenIcon aria-hidden size="1em" weight="duotone" />}
-					title="No projects yet">
+					title="No projects yet"
+				>
 					<Button>Create project</Button>
 					<Button variant="secondary">Import project</Button>
 				</EmptyState>
@@ -112,7 +120,8 @@ export const Examples: Story = {
 					headingLevel="h3"
 					icon={<MagnifyingGlassIcon aria-hidden size="1em" />}
 					size="sm"
-					title="No matching projects">
+					title="No matching projects"
+				>
 					<Button size="sm" variant="secondary">
 						Clear filters
 					</Button>

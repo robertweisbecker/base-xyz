@@ -18,18 +18,34 @@ const meta = {
 		justify: { control: "select", options: ["start", "center", "end", "stretch"] },
 		placeContent: {
 			control: "select",
-			options: ["start", "center", "end", "stretch", "space-between", "space-around", "space-evenly"],
+			options: [
+				"start",
+				"center",
+				"end",
+				"stretch",
+				"space-between",
+				"space-around",
+				"space-evenly",
+			],
 		},
 		placeItems: { control: "select", options: ["start", "center", "end", "stretch", "baseline"] },
 	},
 	parameters: {
-		controls: { include: ["align", "columns", "flow", "gap", "justify", "placeContent", "placeItems"] },
+		controls: {
+			include: ["align", "columns", "flow", "gap", "justify", "placeContent", "placeItems"],
+		},
 	},
 	render: (args) => (
 		<Grid {...args}>
-			<Box columnSpan={2} p={3} xstyle={styles.item}>Spans two columns</Box>
-			<Box p={3} xstyle={styles.item}>One column</Box>
-			<Box columnSpan="full" p={3} xstyle={styles.item}>Full row</Box>
+			<Box columnSpan={2} p={3} xstyle={styles.item}>
+				Spans two columns
+			</Box>
+			<Box p={3} xstyle={styles.item}>
+				One column
+			</Box>
+			<Box columnSpan="full" p={3} xstyle={styles.item}>
+				Full row
+			</Box>
 		</Grid>
 	),
 } satisfies Meta<typeof Grid>;
@@ -45,7 +61,9 @@ export const ResponsiveSpanStyle: Story = {
 	render: (args) => (
 		<Grid {...args}>
 			<Card.Root xstyle={styles.responsiveSpan}>
-				<Card.Content><Card.Title>Predeclared responsive span</Card.Title></Card.Content>
+				<Card.Content>
+					<Card.Title>Predeclared responsive span</Card.Title>
+				</Card.Content>
 			</Card.Root>
 			<Card.Root xstyle={x.gridColumn["span 6 / span 6"]}>
 				<Card.Content>Atom six-column span</Card.Content>
@@ -55,7 +73,13 @@ export const ResponsiveSpanStyle: Story = {
 };
 
 const styles = stylex.create({
-	item: { borderColor: tokens["--border"], borderRadius: tokens["--radius-sm"], borderStyle: "solid", borderWidth: 1, backgroundColor: tokens["--surface-subtle"] },
+	item: {
+		borderColor: tokens["--border"],
+		borderRadius: tokens["--radius-sm"],
+		borderStyle: "solid",
+		borderWidth: 1,
+		backgroundColor: tokens["--surface-subtle"],
+	},
 	responsiveSpan: {
 		gridColumn: {
 			default: "span 12 / span 12",

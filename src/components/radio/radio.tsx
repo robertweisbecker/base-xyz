@@ -37,10 +37,7 @@ export type RadioProps = Omit<
 
 export type RadioGroupProps = Omit<
 	BaseRadioGroup.Props,
-	| "className"
-	| "color"
-	| "style"
-	| keyof MarginProps
+	"className" | "color" | "style" | keyof MarginProps
 > &
 	MarginProps &
 	BaseStyleProps & {
@@ -81,11 +78,7 @@ export function Radio({
 	const generatedId = useId();
 	const id = providedId ?? `${generatedId}-control`;
 	const descriptionId = description ? `${generatedId}-description` : undefined;
-	const itemSx = stylex.props(
-		radioParts.item,
-		marginStyles,
-		xstyle,
-	);
+	const itemSx = stylex.props(radioParts.item, marginStyles, xstyle);
 	const itemClassName = attrJoin(itemSx.className, className);
 	const itemStyle = mergeStyle(itemSx.style, style);
 	const labelContent = (
@@ -104,12 +97,14 @@ export function Radio({
 			data-readonly={selfOrGroupReadOnly ? "" : undefined}
 			disabled={selfOrGroupDisabled}
 			className={itemClassName}
-			style={itemStyle}>
+			style={itemStyle}
+		>
 			<Field.Label
 				htmlFor={id}
 				data-disabled={selfOrGroupDisabled ? "" : undefined}
 				data-readonly={selfOrGroupReadOnly ? "" : undefined}
-				{...stylex.props(labelMarker, radioParts.labelRoot)}>
+				{...stylex.props(labelMarker, radioParts.labelRoot)}
+			>
 				<BaseRadio.Root
 					ref={ref}
 					id={id}
@@ -121,7 +116,8 @@ export function Radio({
 						focusRing.offset,
 						pressable.transition,
 					)}
-					{...rest}>
+					{...rest}
+				>
 					<BaseRadio.Indicator
 						{...stylex.props(
 							radioParts.indicator,
@@ -140,7 +136,12 @@ export function Radio({
 			{description ? (
 				<Field.Description
 					id={descriptionId}
-					{...stylex.props(fieldStyles.description, radioParts.description, radioDescriptionStyles[resolvedSize])}>
+					{...stylex.props(
+						fieldStyles.description,
+						radioParts.description,
+						radioDescriptionStyles[resolvedSize],
+					)}
+				>
 					{description}
 				</Field.Description>
 			) : null}
@@ -168,11 +169,7 @@ export function RadioGroup({
 	const { marginStyles, rest } = extractMarginProps(props);
 	const generatedId = useId();
 	const descriptionId = description ? `${generatedId}-description` : undefined;
-	const groupSx = stylex.props(
-		radioParts.fieldset,
-		marginStyles,
-		xstyle,
-	);
+	const groupSx = stylex.props(radioParts.fieldset, marginStyles, xstyle);
 
 	return (
 		<Field.Root
@@ -190,7 +187,8 @@ export function RadioGroup({
 				/>
 			}
 			className={attrJoin(groupSx.className, className)}
-			style={mergeStyle(groupSx.style, style)}>
+			style={mergeStyle(groupSx.style, style)}
+		>
 			<div {...stylex.props(radioParts.title)}>
 				<Fieldset.Legend {...stylex.props(fieldStyles.groupLabel)}>
 					{label}
@@ -206,8 +204,14 @@ export function RadioGroup({
 					</p>
 				) : null}
 			</div>
-			<RadioGroupStateContext.Provider value={{ disabled: Boolean(disabled), readOnly: Boolean(readOnly), size }}>
-				<div {...stylex.props(fieldChoiceGroupStyles.root, inline && fieldChoiceGroupStyles.inline)}>{children}</div>
+			<RadioGroupStateContext.Provider
+				value={{ disabled: Boolean(disabled), readOnly: Boolean(readOnly), size }}
+			>
+				<div
+					{...stylex.props(fieldChoiceGroupStyles.root, inline && fieldChoiceGroupStyles.inline)}
+				>
+					{children}
+				</div>
 			</RadioGroupStateContext.Provider>
 		</Field.Root>
 	);

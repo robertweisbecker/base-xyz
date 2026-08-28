@@ -5,7 +5,16 @@ import { PlayCircleIcon } from "@phosphor-icons/react/dist/csr/PlayCircle";
 import { TrashIcon } from "@phosphor-icons/react/dist/csr/Trash";
 import * as stylex from "@stylexjs/stylex";
 import { useState, type FormEvent } from "react";
-import { Button, IconButton, Collapsible, Dialog, ScrollArea, Textarea, Tooltip, Toolbar } from "@/components";
+import {
+	Button,
+	IconButton,
+	Collapsible,
+	Dialog,
+	ScrollArea,
+	Textarea,
+	Tooltip,
+	Toolbar,
+} from "@/components";
 import { iconSwapTransition } from "@/styles/recipes/transitions";
 import { tokens } from "@/theme/tokens.stylex";
 
@@ -15,7 +24,11 @@ type GoalToolbarProps = {
 	onActiveChange?: (active: boolean) => void;
 };
 
-export function GoalToolbar({ defaultActive, defaultDescription, onActiveChange }: GoalToolbarProps) {
+export function GoalToolbar({
+	defaultActive,
+	defaultDescription,
+	onActiveChange,
+}: GoalToolbarProps) {
 	const [currentActive, setCurrentActive] = useState(defaultActive);
 	const [currentDescription, setCurrentDescription] = useState(defaultDescription);
 	const [draftDescription, setDraftDescription] = useState(defaultDescription);
@@ -44,8 +57,16 @@ export function GoalToolbar({ defaultActive, defaultDescription, onActiveChange 
 	return (
 		<Tooltip.Provider>
 			<Dialog.Root open={editOpen} onOpenChange={handleEditOpenChange}>
-				<Collapsible.Root open={detailsOpen} onOpenChange={setDetailsOpen} {...stylex.props(parts.root)}>
-					<Toolbar.Root aria-label="Goal status" variant="unstyled" {...stylex.props(parts.summary)}>
+				<Collapsible.Root
+					open={detailsOpen}
+					onOpenChange={setDetailsOpen}
+					{...stylex.props(parts.root)}
+				>
+					<Toolbar.Root
+						aria-label="Goal status"
+						variant="unstyled"
+						{...stylex.props(parts.summary)}
+					>
 						<span {...stylex.props(parts.statusLabel)}>
 							<span aria-hidden {...stylex.props(parts.statusIcon)}>
 								<TargetIcon size={16} weight="regular" />
@@ -53,7 +74,11 @@ export function GoalToolbar({ defaultActive, defaultDescription, onActiveChange 
 							{currentActive ? "Pursuing goal" : "Goal paused"}
 						</span>
 
-						<span hidden={detailsOpen} title={currentDescription} {...stylex.props(parts.description)}>
+						<span
+							hidden={detailsOpen}
+							title={currentDescription}
+							{...stylex.props(parts.description)}
+						>
 							{currentDescription}
 						</span>
 						<span {...stylex.props(parts.elapsed)}>12m 24s</span>
@@ -61,7 +86,9 @@ export function GoalToolbar({ defaultActive, defaultDescription, onActiveChange 
 							<IconButton
 								icon={<PencilSimpleIcon aria-hidden weight="regular" />}
 								label="Edit goal"
-								render={<Dialog.Trigger render={<Toolbar.Button {...stylex.props(parts.wideAction)} />} />}
+								render={
+									<Dialog.Trigger render={<Toolbar.Button {...stylex.props(parts.wideAction)} />} />
+								}
 								nativeButton
 								variant="ghost"
 							/>
@@ -72,7 +99,8 @@ export function GoalToolbar({ defaultActive, defaultDescription, onActiveChange 
 											{...stylex.props(
 												iconSwapTransition.icon,
 												currentActive ? iconSwapTransition.visible : iconSwapTransition.hidden,
-											)}>
+											)}
+										>
 											<PauseCircleIcon aria-hidden weight="duotone" />
 										</span>
 										<span
@@ -80,7 +108,8 @@ export function GoalToolbar({ defaultActive, defaultDescription, onActiveChange 
 												iconSwapTransition.icon,
 												iconSwapTransition.to,
 												currentActive ? iconSwapTransition.hidden : iconSwapTransition.visible,
-											)}>
+											)}
+										>
 											<PlayCircleIcon aria-hidden weight="fill" />
 										</span>
 									</span>
@@ -102,7 +131,9 @@ export function GoalToolbar({ defaultActive, defaultDescription, onActiveChange 
 								icon={<Collapsible.Icon />}
 								label={detailsOpen ? "Collapse goal details" : "Expand goal details"}
 								nativeButton
-								render={<Collapsible.Trigger render={<Toolbar.Button />} shape="square" size="md" />}
+								render={
+									<Collapsible.Trigger render={<Toolbar.Button />} shape="square" size="md" />
+								}
 								variant="ghost"
 							/>
 						</Toolbar.Group>
@@ -112,12 +143,15 @@ export function GoalToolbar({ defaultActive, defaultDescription, onActiveChange 
 							<ScrollArea
 								label="Goal description"
 								size="content"
-								{...stylex.props(parts.descriptionScroll, parts.descriptionScrollMaxHeight)}>
+								{...stylex.props(parts.descriptionScroll, parts.descriptionScrollMaxHeight)}
+							>
 								<div {...stylex.props(parts.descriptionScrollContent)}>{currentDescription}</div>
 							</ScrollArea>
 							<Toolbar.Root aria-label="Additional goal actions" variant="unstyled">
 								<Toolbar.Group>
-									<Dialog.Trigger render={<Toolbar.Button {...stylex.props(parts.compactAction)} />}>
+									<Dialog.Trigger
+										render={<Toolbar.Button {...stylex.props(parts.compactAction)} />}
+									>
 										<PencilSimpleIcon aria-hidden size={16} weight="regular" /> Edit
 									</Dialog.Trigger>
 									<Toolbar.Button {...stylex.props(parts.compactAction)}>

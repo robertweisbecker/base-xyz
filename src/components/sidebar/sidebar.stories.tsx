@@ -42,13 +42,7 @@ const meta = {
 export default meta;
 type Story = StoryObj<StoryArgs>;
 
-function StoryShell({
-	children,
-	side = "start",
-}: {
-	children: ReactNode;
-	side?: SidebarSide;
-}) {
+function StoryShell({ children, side = "start" }: { children: ReactNode; side?: SidebarSide }) {
 	return (
 		<Box display="flex" xstyle={[storyParts.shell, side === "end" && storyParts.shellEnd]}>
 			{children}
@@ -70,7 +64,8 @@ export const Playground: Story = {
 			key={`${collapseMode}-${defaultCollapsed}-${side}`}
 			collapseMode={collapseMode}
 			defaultCollapsed={defaultCollapsed}
-			side={side}>
+			side={side}
+		>
 			<StoryShell side={side}>
 				<Sidebar.Panel>
 					<WorkspaceHeader />
@@ -83,8 +78,8 @@ export const Playground: Story = {
 				</Sidebar.Panel>
 				<StoryMain>
 					<Text color="muted" size="1">
-						The sidebar trigger lives in the footer here. The same trigger can still render elsewhere when the page owns
-						layout or mobile composition.
+						The sidebar trigger lives in the footer here. The same trigger can still render
+						elsewhere when the page owns layout or mobile composition.
 					</Text>
 				</StoryMain>
 			</StoryShell>
@@ -120,8 +115,8 @@ export const ChildPopovers: Story = {
 				</Sidebar.Panel>
 				<StoryMain>
 					<Text color="muted" size="1">
-						Top-level child-bearing rows in an icon rail require icons. Labels are exposed through tooltips or child
-						popovers.
+						Top-level child-bearing rows in an icon rail require icons. Labels are exposed through
+						tooltips or child popovers.
 					</Text>
 				</StoryMain>
 			</StoryShell>
@@ -189,7 +184,9 @@ function ModeExample({
 
 function WorkspaceHeader() {
 	return (
-		<Sidebar.Header startSlot={<Avatar aria-label="Acme workspace" initials="AC" shape="rounded" size={10} />}>
+		<Sidebar.Header
+			startSlot={<Avatar aria-label="Acme workspace" initials="AC" shape="rounded" size={10} />}
+		>
 			<Sidebar.Title>Acme</Sidebar.Title>
 			<Sidebar.Description>Production</Sidebar.Description>
 		</Sidebar.Header>
@@ -237,14 +234,21 @@ function PrimaryNavigation({ includeChildren = false }: { includeChildren?: bool
 					<NavList.Item label="Members" href="#members" icon={<UsersIcon weight="duotone" />} />
 					{includeChildren ? (
 						<NavList.CollapsibleGroup>
-							<NavList.CollapsibleGroupTrigger label="Deploy" icon={<CubeIcon weight="duotone" />} />
+							<NavList.CollapsibleGroupTrigger
+								label="Deploy"
+								icon={<CubeIcon weight="duotone" />}
+							/>
 							<NavList.CollapsibleGroupPanel>
 								<NavList.Item label="Deployments" href="#deployments" />
 								<NavList.Item label="Workers" href="#workers" />
 							</NavList.CollapsibleGroupPanel>
 						</NavList.CollapsibleGroup>
 					) : null}
-					<NavList.DrilldownTrigger to="settings" label="Settings" icon={<GearIcon weight="duotone" />} />
+					<NavList.DrilldownTrigger
+						to="settings"
+						label="Settings"
+						icon={<GearIcon weight="duotone" />}
+					/>
 				</NavList.Section>
 			</NavList.DrilldownPanel>
 			<NavList.DrilldownPanel value="settings" label="Settings">

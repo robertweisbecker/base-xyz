@@ -101,7 +101,8 @@ const agentBlockSections = [
 	{
 		id: "streaming-response",
 		title: "Streaming Response",
-		description: "Generated content with explicit streaming, completion, interruption, and failure states.",
+		description:
+			"Generated content with explicit streaming, completion, interruption, and failure states.",
 		Example: StreamingResponseExample,
 	},
 ] as const;
@@ -110,7 +111,8 @@ export function AgentBlocksPage() {
 	return (
 		<ExperimentPage
 			description="Agent workflows listed individually with their meaningful anatomy, states, and controls."
-			title="Agent Blocks">
+			title="Agent Blocks"
+		>
 			<Grid gap={8} xstyle={styles.pageLayout}>
 				<AgentBlocksTableOfContents />
 				<Stack gap={8} xstyle={styles.examples}>
@@ -152,8 +154,8 @@ function AgentActionApprovalExample({ description, id, title }: AgentBlockExampl
 	return (
 		<ExperimentSection description={description} id={id} title={title}>
 			<AnatomyNote>
-				Header explains the decision, Summary names the proposed action, Details expose its scope, and Actions keep
-				approval explicit.
+				Header explains the decision, Summary names the proposed action, Details expose its scope,
+				and Actions keep approval explicit.
 			</AnatomyNote>
 			<AgentActionApproval.Root>
 				<AgentActionApproval.Header>
@@ -276,8 +278,8 @@ function GoalToolbarExample({ description, id, title }: AgentBlockExampleProps) 
 	return (
 		<ExperimentSection description={description} id={id} title={title}>
 			<AnatomyNote>
-				The summary keeps status, goal text, elapsed time, and actions in one toolbar. Expand it for the full
-				description, or use its own controls to pause and edit the goal.
+				The summary keeps status, goal text, elapsed time, and actions in one toolbar. Expand it for
+				the full description, or use its own controls to pause and edit the goal.
 			</AnatomyNote>
 			<GoalToolbar
 				defaultActive
@@ -297,8 +299,11 @@ function ModelSelectorExample({ description, id, title }: AgentBlockExampleProps
 					defaultValue={agentDefaultModel}
 					effortOptions={agentEffortOptions}
 					groups={agentModelGroups}
-					onValueChange={(value) => setMessage(`${value.model} · ${value.effort} effort · ${value.speed} speed`)}
-					speedOptions={agentSpeedOptions}>
+					onValueChange={(value) =>
+						setMessage(`${value.model} · ${value.effort} effort · ${value.speed} speed`)
+					}
+					speedOptions={agentSpeedOptions}
+				>
 					<ModelSelector.Trigger variant="secondary" />
 					<ModelSelector.Popup />
 				</ModelSelector.Root>
@@ -316,13 +321,15 @@ function PromptComposerExample({ description, id, title }: AgentBlockExampleProp
 	return (
 		<ExperimentSection description={description} id={id} title={title}>
 			<AnatomyNote>
-				Surface owns the input and footer; Options holds prompt-scoped controls; Actions owns submit or stop.
+				Surface owns the input and footer; Options holds prompt-scoped controls; Actions owns submit
+				or stop.
 			</AnatomyNote>
 			<Stack gap={3} maxWidth="42rem">
 				<PromptComposer.Root
 					clearOnSubmit
 					defaultValue="Review the open Storybook gaps and propose the next three fixes."
-					onSubmit={(prompt) => setFeedback(`Submitted ${prompt.length} characters`)}>
+					onSubmit={(prompt) => setFeedback(`Submitted ${prompt.length} characters`)}
+				>
 					<PromptComposer.Surface>
 						<PromptComposer.Input placeholder="Ask about the current goal…" />
 						<PromptComposer.Footer>
@@ -354,7 +361,8 @@ function PromptComposerExample({ description, id, title }: AgentBlockExampleProp
 									effortOptions={agentEffortOptions}
 									groups={agentModelGroups}
 									onValueChange={() => setFeedback("Model settings updated")}
-									speedOptions={agentSpeedOptions}>
+									speedOptions={agentSpeedOptions}
+								>
 									<ModelSelector.Trigger shape="pill" variant="ghost" />
 									<ModelSelector.Popup />
 								</ModelSelector.Root>
@@ -363,7 +371,9 @@ function PromptComposerExample({ description, id, title }: AgentBlockExampleProp
 								<Toggle
 									icon={<MicrophoneIcon aria-hidden />}
 									label="Use microphone"
-									onPressedChange={(pressed) => setFeedback(pressed ? "Microphone enabled" : "Microphone disabled")}
+									onPressedChange={(pressed) =>
+										setFeedback(pressed ? "Microphone enabled" : "Microphone disabled")
+									}
 									shape="circle"
 								/>
 								<PromptComposer.Submit />
@@ -407,9 +417,16 @@ function StreamingResponseExample({ description, id, title }: AgentBlockExampleP
 				]}
 				value={status}
 			/>
-			<StreamingResponse.Root aria-label="Component audit response" elapsedSeconds={46} status={status}>
+			<StreamingResponse.Root
+				aria-label="Component audit response"
+				elapsedSeconds={46}
+				status={status}
+			>
 				<StreamingResponse.Status />
-				<StreamingResponse.Content streamKey={streamKey} onStreamingComplete={() => setStatus("complete")}>
+				<StreamingResponse.Content
+					streamKey={streamKey}
+					onStreamingComplete={() => setStatus("complete")}
+				>
 					{content}
 				</StreamingResponse.Content>
 				<StreamingResponse.Actions>
@@ -465,9 +482,15 @@ function StateControls<Value extends number | string>({
 				aria-label={label}
 				onValueChange={handleValueChange}
 				value={[selectedValue]}
-				xstyle={styles.stateControls}>
+				xstyle={styles.stateControls}
+			>
 				{options.map((option) => (
-					<Toggle key={String(option.value)} size="sm" value={String(option.value)} variant="secondary">
+					<Toggle
+						key={String(option.value)}
+						size="sm"
+						value={String(option.value)}
+						variant="secondary"
+					>
 						{option.label}
 					</Toggle>
 				))}

@@ -90,7 +90,9 @@ export const Overflow: Story = {
 						Without scrolling
 					</Text>
 					<Table.Root>
-						<Table.Content caption={<VisuallyHidden>Recent deployments without scrolling</VisuallyHidden>}>
+						<Table.Content
+							caption={<VisuallyHidden>Recent deployments without scrolling</VisuallyHidden>}
+						>
 							<Table.Header>
 								<Table.Row>
 									<Table.HeaderCell>URL</Table.HeaderCell>
@@ -121,8 +123,11 @@ export const Overflow: Story = {
 					<Table.Root>
 						<Table.Container>
 							<Table.Content
-								caption={<VisuallyHidden>Recent deployments with horizontal scrolling</VisuallyHidden>}
-								xstyle={storyParts.wideTable}>
+								caption={
+									<VisuallyHidden>Recent deployments with horizontal scrolling</VisuallyHidden>
+								}
+								xstyle={storyParts.wideTable}
+							>
 								<Table.Header>
 									<Table.Row>
 										<Table.HeaderCell>URL</Table.HeaderCell>
@@ -243,10 +248,13 @@ function ManualTable({
 		{ id: "preview", url: "preview.example.com", status: "Building" },
 	];
 	const displayedRows = empty ? [] : rows;
-	const allChecked = displayedRows.length > 0 && displayedRows.every((row) => checkedRows.includes(row.id));
+	const allChecked =
+		displayedRows.length > 0 && displayedRows.every((row) => checkedRows.includes(row.id));
 	const someChecked = displayedRows.some((row) => checkedRows.includes(row.id)) && !allChecked;
 	const updateRow = (id: string, checked: boolean) => {
-		const nextRows = checked ? [...new Set([...checkedRows, id])] : checkedRows.filter((rowId) => rowId !== id);
+		const nextRows = checked
+			? [...new Set([...checkedRows, id])]
+			: checkedRows.filter((rowId) => rowId !== id);
 		onCheckedRowsChange?.(nextRows);
 	};
 

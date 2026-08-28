@@ -8,7 +8,13 @@ import { IconButton, Select, Separator } from "@/components";
 import { textStyles } from "@/components/text/text.stylex";
 import { media, zIndex } from "@/styles/constants.stylex";
 import { focusRing } from "@/styles/recipes/focus";
-import { ThemeProvider, useTheme, type ResolvedThemeMode, type ThemeMode, type ThemeName } from "@/theme";
+import {
+	ThemeProvider,
+	useTheme,
+	type ResolvedThemeMode,
+	type ThemeMode,
+	type ThemeName,
+} from "@/theme";
 import { tokens } from "@/theme/tokens.stylex";
 
 const themeIconSize = 16;
@@ -83,7 +89,11 @@ function AppHeader({
 
 	return (
 		<header {...stylex.props(styles.header)}>
-			<RouterLink to="/" search={true} {...stylex.props(textStyles.supporting, styles.brand, focusRing.offset)}>
+			<RouterLink
+				to="/"
+				search={true}
+				{...stylex.props(textStyles.supporting, styles.brand, focusRing.offset)}
+			>
 				<span {...stylex.props(styles.brandMark)}>
 					<StairsIcon aria-hidden size={16} weight="duotone" />
 				</span>
@@ -95,13 +105,15 @@ function AppHeader({
 						to="/"
 						activeOptions={{ exact: true }}
 						search={true}
-						{...stylex.props(textStyles.supporting, styles.headerNavLink, focusRing.offset)}>
+						{...stylex.props(textStyles.supporting, styles.headerNavLink, focusRing.offset)}
+					>
 						Gallery
 					</RouterLink>
 					<RouterLink
 						to="/experiments"
 						search={true}
-						{...stylex.props(textStyles.supporting, styles.headerNavLink, focusRing.offset)}>
+						{...stylex.props(textStyles.supporting, styles.headerNavLink, focusRing.offset)}
+					>
 						Experiments
 					</RouterLink>
 				</nav>
@@ -112,7 +124,8 @@ function AppHeader({
 					items={themeBrandItems}
 					onValueChange={(value) => {
 						if (value) onThemeChange(value);
-					}}>
+					}}
+				>
 					<Select.Trigger aria-label="Theme" variant="inline" />
 					<Select.Popup>
 						<Select.List>
@@ -148,7 +161,9 @@ function AppHeader({
 function getStoredThemeMode(): ThemeMode {
 	if (typeof window === "undefined") return "system";
 	const storedMode = localStorage.getItem(themeModeStorageKey);
-	return storedMode === "light" || storedMode === "dark" || storedMode === "system" ? storedMode : "system";
+	return storedMode === "light" || storedMode === "dark" || storedMode === "system"
+		? storedMode
+		: "system";
 }
 
 function getStoredThemeBrand(): ThemeName {
@@ -168,13 +183,13 @@ const styles = stylex.create({
 		alignItems: "center",
 		// backgroundImage: `linear-gradient(to bottom, ${tokens["--canvas"]}, transparent)`,
 		backgroundColor: tokens["--surface"],
-		borderBottomWidth: tokens["--border-width"],
-		borderBottomStyle: "solid",
-		borderBottomColor: tokens["--border"],
 		display: "flex",
 		justifyContent: "space-between",
 		position: "sticky",
 		zIndex: zIndex.sticky,
+		borderBottomColor: tokens["--border"],
+		borderBottomStyle: "solid",
+		borderBottomWidth: tokens["--border-width"],
 		height: tokens["--size-navbar-height"],
 		top: 0,
 	},

@@ -71,17 +71,17 @@ The design system needs a smaller ownership boundary:
 
 The migration applies those rules as follows:
 
-| Surface | Common margins | Ownership |
-| --- | --- | --- |
-| `Box`, `Stack`, `Grid` | Yes | Part of the broad layout gateway. |
-| `Avatar`, `Badge`, `Button` family, `Checkbox`, `Code`, `Item`, `Kbd`, `KbdGroup`, `Link`, `Loader`, `MeterGauge`, `Radio`, `Separator`, `Switch` | Yes | Resolve once on the normal-flow public host. Badge positioning remains an `xstyle` concern. |
-| `Breadcrumbs.Root`, `Callout`, `Card.Root`, `CheckboxGroup`, `Collapsible.Root`, `EmptyState`, `Heading`, `InputGroup.Root`, `Meter.Root`, `NavList.Root`, `Progress.Root`, `RadioGroup`, `ScrollArea`, `Slider.Root`, `Table.Root`, `Tabs.Root`, `Text`, `ToggleGroup`, `Toolbar.Root` | Yes | Stable normal-flow semantic or compound root. |
-| `TextField`, `Textarea`, `NumberField`, `Select.Root`, `Combobox.Root` | Yes | Apply to the field wrapper. |
-| `CodeBlock`, `DataTable`, `InfoTip`, `Toggle` | Yes, by delegation | Forward raw `MarginProps` to `ScrollArea`, `Table.Root`, `IconButton`, or the `Button` family; do not resolve twice. |
-| `Card.Header`, `Card.Content`, `Card.Footer`, `Card.Title`, `Card.Description` | No | `Card.Root` is the external-layout boundary. |
-| Other compound parts under eligible roots | No by default | Preserve the part's existing component-specific contract. |
-| `Dialog`, `AlertDialog`, `Drawer`, `Popover`, `Tooltip`, `Menu`, `CommandPalette`, `LinkPreview`, `Toast`, and `AnchoredToast` controller/portal/backdrop/viewport/positioner/popup surfaces | No | Modal or Base UI positioning owns geometry. An eligible trigger component may have margins. |
-| `Sidebar`, `VisuallyHidden`, icon SVGs, and controller roots without a layout node | No | Specialized or non-layout surface. |
+| Surface                                                                                                                                                                                                                                                                                 | Common margins     | Ownership                                                                                                            |
+| --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------ | -------------------------------------------------------------------------------------------------------------------- |
+| `Box`, `Stack`, `Grid`                                                                                                                                                                                                                                                                  | Yes                | Part of the broad layout gateway.                                                                                    |
+| `Avatar`, `Badge`, `Button` family, `Checkbox`, `Code`, `Item`, `Kbd`, `KbdGroup`, `Link`, `Loader`, `MeterGauge`, `Radio`, `Separator`, `Switch`                                                                                                                                       | Yes                | Resolve once on the normal-flow public host. Badge positioning remains an `xstyle` concern.                          |
+| `Breadcrumbs.Root`, `Callout`, `Card.Root`, `CheckboxGroup`, `Collapsible.Root`, `EmptyState`, `Heading`, `InputGroup.Root`, `Meter.Root`, `NavList.Root`, `Progress.Root`, `RadioGroup`, `ScrollArea`, `Slider.Root`, `Table.Root`, `Tabs.Root`, `Text`, `ToggleGroup`, `Toolbar.Root` | Yes                | Stable normal-flow semantic or compound root.                                                                        |
+| `TextField`, `Textarea`, `NumberField`, `Select.Root`, `Combobox.Root`                                                                                                                                                                                                                  | Yes                | Apply to the field wrapper.                                                                                          |
+| `CodeBlock`, `DataTable`, `InfoTip`, `Toggle`                                                                                                                                                                                                                                           | Yes, by delegation | Forward raw `MarginProps` to `ScrollArea`, `Table.Root`, `IconButton`, or the `Button` family; do not resolve twice. |
+| `Card.Header`, `Card.Content`, `Card.Footer`, `Card.Title`, `Card.Description`                                                                                                                                                                                                          | No                 | `Card.Root` is the external-layout boundary.                                                                         |
+| Other compound parts under eligible roots                                                                                                                                                                                                                                               | No by default      | Preserve the part's existing component-specific contract.                                                            |
+| `Dialog`, `AlertDialog`, `Drawer`, `Popover`, `Tooltip`, `Menu`, `CommandPalette`, `LinkPreview`, `Toast`, and `AnchoredToast` controller/portal/backdrop/viewport/positioner/popup surfaces                                                                                            | No                 | Modal or Base UI positioning owns geometry. An eligible trigger component may have margins.                          |
+| `Sidebar`, `VisuallyHidden`, icon SVGs, and controller roots without a layout node                                                                                                                                                                                                      | No                 | Specialized or non-layout surface.                                                                                   |
 
 If live source contradicts a row's render ownership, implementation stops and
 the ownership is reviewed instead of silently changing the classification.
@@ -97,15 +97,26 @@ The public numeric spacing vocabulary is a direct, finite TypeScript contract,
 with CSS strings available for values outside the scale:
 
 ```ts
-export type SpaceStep =
-  | 0 | 0.5 | 1 | 1.5 | 2 | 3 | 3.5 | 4
-  | 5 | 6 | 7 | 8 | 9 | 10 | 12 | 16;
+export type SpaceStep = 0 | 0.5 | 1 | 1.5 | 2 | 3 | 3.5 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 12 | 16;
 
 export type SpaceValue =
-  | SpaceStep
-  | -0.5 | -1 | -1.5 | -2 | -3 | -3.5 | -4
-  | -5 | -6 | -7 | -8 | -9 | -10 | -12 | -16
-  | string;
+	| SpaceStep
+	| -0.5
+	| -1
+	| -1.5
+	| -2
+	| -3
+	| -3.5
+	| -4
+	| -5
+	| -6
+	| -7
+	| -8
+	| -9
+	| -10
+	| -12
+	| -16
+	| string;
 ```
 
 The numeric type remains explicit rather than being generated from token

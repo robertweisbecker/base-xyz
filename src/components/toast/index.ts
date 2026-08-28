@@ -11,7 +11,12 @@ import {
 	createAnchoredToastManager,
 	useAnchoredToastManager,
 } from "./anchored-toast-manager";
-import { AnchoredPositioner, AnchoredProvider, AnchoredToast, AnchoredViewport } from "./anchored-toast";
+import {
+	AnchoredPositioner,
+	AnchoredProvider,
+	AnchoredToast,
+	AnchoredViewport,
+} from "./anchored-toast";
 import {
 	Action,
 	Close,

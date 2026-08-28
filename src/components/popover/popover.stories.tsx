@@ -45,7 +45,9 @@ function PopoverViewportDemo() {
 	return (
 		<>
 			<Popover.Title>Notifications</Popover.Title>
-			<Popover.Description>You are all caught up. New activity will appear here.</Popover.Description>
+			<Popover.Description>
+				You are all caught up. New activity will appear here.
+			</Popover.Description>
 		</>
 	);
 }
@@ -58,7 +60,8 @@ export const Playground: Story = {
 				<Popover.Popup
 					arrowProps={_showArrow ? {} : undefined}
 					positionerProps={{ side: _side, align: _align }}
-					showClose={_showClose}>
+					showClose={_showClose}
+				>
 					<PopoverViewportDemo />
 				</Popover.Popup>
 			</Popover.Root>
@@ -139,7 +142,8 @@ export const SharedTriggers: Story = {
 						key={label}
 						handle={sharedPopover}
 						payload={{ title, description }}
-						render={<Button size="sm" variant="secondary" />}>
+						render={<Button size="sm" variant="secondary" />}
+					>
 						{label}
 					</Popover.Trigger>
 				))}
@@ -148,9 +152,14 @@ export const SharedTriggers: Story = {
 				{({ payload }) => (
 					<Popover.Popup
 						arrowProps={_showArrow ? {} : undefined}
-						positionerProps={{ side: _side, align: _align, xstyle: popupMotionStyles.movingPositioner }}
+						positionerProps={{
+							side: _side,
+							align: _align,
+							xstyle: popupMotionStyles.movingPositioner,
+						}}
 						showClose={_showClose}
-						xstyle={popupMotionStyles.movingPopup}>
+						xstyle={popupMotionStyles.movingPopup}
+					>
 						<Popover.Viewport>
 							<Popover.Title>{payload?.title}</Popover.Title>
 							<Popover.Description>{payload?.description}</Popover.Description>
@@ -165,8 +174,8 @@ export const SharedTriggers: Story = {
 const storyParts = stylex.create({
 	stage: {
 		alignItems: "center",
-		height: "360px",
 		justifyItems: "center",
+		height: "360px",
 		width: "min(720px, calc(100vw - 48px))",
 	},
 	positioningGrid: {

@@ -86,7 +86,9 @@ export function PopoverExample() {
 			<Popover.Trigger render={<Button variant="neutral" />}>Popover</Popover.Trigger>
 			<Popover.Popup positionerProps={{ align: "start" }} showClose>
 				<Popover.Title>Create a preview deployment</Popover.Title>
-				<Popover.Description>Mixed content combines supporting copy, form controls, and actions.</Popover.Description>
+				<Popover.Description>
+					Mixed content combines supporting copy, form controls, and actions.
+				</Popover.Description>
 				<Stack gap={3} mt={4}>
 					<TextField label="Branch" defaultValue="feature/popup-lab" />
 					<Checkbox defaultChecked label="Include environment variables" />
@@ -106,7 +108,8 @@ export function LinkPreviewExample() {
 				closeDelay={100}
 				delay={0}
 				xstyle={styles.linkPreviewButton}
-				render={<Button variant="neutral" />}>
+				render={<Button variant="neutral" />}
+			>
 				Link Preview
 			</LinkPreview.Trigger>
 			<LinkPreview.Popup positionerProps={{ align: "start" }}>
@@ -140,7 +143,8 @@ export function CommandPaletteExample() {
 			items={commandItems}
 			itemToStringValue={(item) => item}
 			label="Command palette example"
-			trigger={<Button variant="neutral">Command Palette</Button>}>
+			trigger={<Button variant="neutral">Command Palette</Button>}
+		>
 			<CommandPalette.Input placeholder="Search commands…" />
 			<CommandPalette.List>
 				<CommandPalette.Items>
@@ -163,7 +167,9 @@ export function AlertDialogExample() {
 			<AlertDialog.Popup>
 				<AlertDialog.Header>
 					<AlertDialog.Title>Discard the draft?</AlertDialog.Title>
-					<AlertDialog.Description>Your unsaved popup test notes will be permanently lost.</AlertDialog.Description>
+					<AlertDialog.Description>
+						Your unsaved popup test notes will be permanently lost.
+					</AlertDialog.Description>
 				</AlertDialog.Header>
 				<AlertDialog.Footer>
 					<AlertDialog.Close render={<Button variant="neutral" />}>Keep editing</AlertDialog.Close>
@@ -176,7 +182,10 @@ export function AlertDialogExample() {
 
 export function ConfirmationDialogExample() {
 	return (
-		<ConfirmationDialog.Root successToast={false} trigger={<Button variant="neutral">Confirmation Dialog</Button>}>
+		<ConfirmationDialog.Root
+			successToast={false}
+			trigger={<Button variant="neutral">Confirmation Dialog</Button>}
+		>
 			<ConfirmationDialog.Header>
 				<ConfirmationDialog.Title>Publish this project?</ConfirmationDialog.Title>
 				<ConfirmationDialog.Description>
@@ -210,13 +219,19 @@ export function NestedPopupsExample() {
 				<Dialog.Body>
 					<Stack gap={4} orientation="horizontal" wrap="wrap">
 						<Popover.Root>
-							<Popover.Trigger render={<Button variant="secondary" />}>Open nested popover</Popover.Trigger>
+							<Popover.Trigger render={<Button variant="secondary" />}>
+								Open nested popover
+							</Popover.Trigger>
 							<Popover.Popup positionerProps={{ align: "start" }}>
 								<Popover.Title>Nested popover</Popover.Title>
-								<Popover.Description>This anchored layer should sit above the modal dialog.</Popover.Description>
+								<Popover.Description>
+									This anchored layer should sit above the modal dialog.
+								</Popover.Description>
 								<Stack mt={4}>
 									<Menu.Root>
-										<Menu.Trigger render={<Button variant="secondary" />}>Open nested menu</Menu.Trigger>
+										<Menu.Trigger render={<Button variant="secondary" />}>
+											Open nested menu
+										</Menu.Trigger>
 										<Menu.Popup positionerProps={{ align: "start" }}>
 											<Menu.Item>
 												<Menu.ItemLabel>First nested action</Menu.ItemLabel>

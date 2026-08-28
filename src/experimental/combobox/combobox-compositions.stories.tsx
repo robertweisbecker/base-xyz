@@ -63,10 +63,13 @@ function SingleSelectPopupExample() {
 							xstyle={[styles.trigger, x.width["fit-content"]]}
 							endSlot={<CaretUpDownIcon aria-hidden weight="bold" />}
 						/>
-					}>
+					}
+				>
 					<BaseCombobox.Value>
 						{(selectedValue: string | null) =>
-							selectedValue ?? <span {...stylex.props(styles.triggerPlaceholder)}>Select framework</span>
+							selectedValue ?? (
+								<span {...stylex.props(styles.triggerPlaceholder)}>Select framework</span>
+							)
 						}
 					</BaseCombobox.Value>
 				</BaseCombobox.Trigger>
@@ -81,7 +84,8 @@ function MultipleSummaryPopupExample() {
 		<BaseCombobox.Root
 			items={[...summaryOptions]}
 			multiple
-			defaultValue={["Option X", "Option Y", "Option Z", "Option W"]}>
+			defaultValue={["Option X", "Option Y", "Option Z", "Option W"]}
+		>
 			<div {...stylex.props(fieldStyles.root, styles.fieldLayout)}>
 				<BaseCombobox.Label {...stylex.props(fieldStyles.label)}>Options</BaseCombobox.Label>
 				<BaseCombobox.Trigger
@@ -91,7 +95,8 @@ function MultipleSummaryPopupExample() {
 							xstyle={styles.trigger}
 							endSlot={<CaretUpDownIcon aria-hidden weight="bold" />}
 						/>
-					}>
+					}
+				>
 					<BaseCombobox.Value placeholder="Select">
 						{(selectedValue: string[]) => {
 							return selectedValue.length > 0 ? (
@@ -121,7 +126,8 @@ function FilterChipsPopupExample() {
 									<span {...stylex.props(styles.chipLabel)}>{item}</span>
 									<BaseCombobox.ChipRemove
 										aria-label={`Remove ${item}`}
-										{...stylex.props(styles.chipRemove, focusRing.offset, pressable.transition)}>
+										{...stylex.props(styles.chipRemove, focusRing.offset, pressable.transition)}
+									>
 										<XIcon aria-hidden size={12} weight="bold" />
 									</BaseCombobox.ChipRemove>
 								</BaseCombobox.Chip>
@@ -136,7 +142,8 @@ function FilterChipsPopupExample() {
 								shape="pill"
 								variant="plain"
 								xstyle={x.flexShrink._0}
-								startSlot={<PlusCircleIcon aria-hidden weight="bold" />}>
+								startSlot={<PlusCircleIcon aria-hidden weight="bold" />}
+							>
 								Add
 							</Button>
 						}
@@ -151,13 +158,25 @@ function FilterChipsPopupExample() {
 function PopupContent({ label }: { label: string }) {
 	return (
 		<BaseCombobox.Portal>
-			<BaseCombobox.Positioner align="start" sideOffset={6} {...stylex.props(popupPositionerStyles)}>
+			<BaseCombobox.Positioner
+				align="start"
+				sideOffset={6}
+				{...stylex.props(popupPositionerStyles)}
+			>
 				<BaseCombobox.Popup
 					aria-label={`Select ${label}`}
-					{...stylex.props(styles.panelSurface, styles.popup, popupMotionStyles.anchoredPopup)}>
+					{...stylex.props(styles.panelSurface, styles.popup, popupMotionStyles.anchoredPopup)}
+				>
 					<div {...stylex.props(styles.popupInputRegion)}>
-						<BaseCombobox.InputGroup {...stylex.props(fieldStyles.inputUnstyled, styles.popupInputControl)}>
-							<MagnifyingGlassIcon aria-hidden size={16} weight="bold" {...stylex.props(styles.searchIcon)} />
+						<BaseCombobox.InputGroup
+							{...stylex.props(fieldStyles.inputUnstyled, styles.popupInputControl)}
+						>
+							<MagnifyingGlassIcon
+								aria-hidden
+								size={16}
+								weight="bold"
+								{...stylex.props(styles.searchIcon)}
+							/>
 							<BaseCombobox.Input
 								aria-label={`Filter ${label}`}
 								placeholder={`Filter ${label}…`}
@@ -170,13 +189,16 @@ function PopupContent({ label }: { label: string }) {
 							/>
 						</BaseCombobox.InputGroup>
 					</div>
-					<BaseCombobox.Empty {...stylex.props(styles.empty)}>No matching options.</BaseCombobox.Empty>
+					<BaseCombobox.Empty {...stylex.props(styles.empty)}>
+						No matching options.
+					</BaseCombobox.Empty>
 					<BaseCombobox.List {...stylex.props(styles.list)}>
 						{(item: string) => (
 							<BaseCombobox.Item
 								key={item}
 								value={item}
-								{...stylex.props(menuItemStyles.item, menuItemVariantStyles.default)}>
+								{...stylex.props(menuItemStyles.item, menuItemVariantStyles.default)}
+							>
 								<BaseCombobox.ItemIndicator keepMounted {...stylex.props(menuItemStyles.indicator)}>
 									<Icon.Checkmark width="1em" height="1em" strokeWidth={3} />
 								</BaseCombobox.ItemIndicator>
@@ -191,7 +213,8 @@ function PopupContent({ label }: { label: string }) {
 							right: 12,
 							top: 6,
 							zIndex: 1,
-						}}>
+						}}
+					>
 						<Text render={<span />} size="1">
 							Clear
 						</Text>

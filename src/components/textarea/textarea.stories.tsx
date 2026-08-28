@@ -88,7 +88,9 @@ export const Resizing: Story = {
 					label="Project update"
 					rows={2}
 					minRows={3}
-					defaultValue={"The textarea grows with content and never becomes shorter than three rows."}
+					defaultValue={
+						"The textarea grows with content and never becomes shorter than three rows."
+					}
 				/>
 			</StateSpecimen>
 			<StateSpecimen label="Maximum rows only">
@@ -143,7 +145,11 @@ export const States: Story = {
 				<Textarea label="Project update" placeholder="What changed?" readOnly />
 			</StateSpecimen>
 			<StateSpecimen label="Disabled">
-				<Textarea label="Project update" defaultValue="Updates are disabled for archived projects." disabled />
+				<Textarea
+					label="Project update"
+					defaultValue="Updates are disabled for archived projects."
+					disabled
+				/>
 			</StateSpecimen>
 		</Grid>
 	),

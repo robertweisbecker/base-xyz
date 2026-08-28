@@ -74,47 +74,121 @@ export function Content({ xstyle, ...props }: AgentActionApprovalContentProps) {
 
 export function Summary({ className, style, xstyle, ...props }: AgentActionApprovalSummaryProps) {
 	const sx = stylex.props(parts.summary, xstyle);
-	return <div className={attrJoin(sx.className, className)} style={mergeStyle(sx.style, style)} {...props} />;
+	return (
+		<div
+			className={attrJoin(sx.className, className)}
+			style={mergeStyle(sx.style, style)}
+			{...props}
+		/>
+	);
 }
 
 export function Icon({ className, style, xstyle, ...props }: AgentActionApprovalIconProps) {
 	const sx = stylex.props(parts.icon, xstyle);
-	return <div className={attrJoin(sx.className, className)} style={mergeStyle(sx.style, style)} {...props} />;
+	return (
+		<div
+			className={attrJoin(sx.className, className)}
+			style={mergeStyle(sx.style, style)}
+			{...props}
+		/>
+	);
 }
 
-export function SummaryContent({ className, style, xstyle, ...props }: AgentActionApprovalSummaryContentProps) {
+export function SummaryContent({
+	className,
+	style,
+	xstyle,
+	...props
+}: AgentActionApprovalSummaryContentProps) {
 	const sx = stylex.props(parts.summaryContent, xstyle);
-	return <div className={attrJoin(sx.className, className)} style={mergeStyle(sx.style, style)} {...props} />;
+	return (
+		<div
+			className={attrJoin(sx.className, className)}
+			style={mergeStyle(sx.style, style)}
+			{...props}
+		/>
+	);
 }
 
 export function Action({ className, style, xstyle, ...props }: AgentActionApprovalActionProps) {
 	const sx = stylex.props(parts.action, xstyle);
-	return <div className={attrJoin(sx.className, className)} style={mergeStyle(sx.style, style)} {...props} />;
+	return (
+		<div
+			className={attrJoin(sx.className, className)}
+			style={mergeStyle(sx.style, style)}
+			{...props}
+		/>
+	);
 }
 
-export function ActionDescription({ className, style, xstyle, ...props }: AgentActionApprovalActionDescriptionProps) {
+export function ActionDescription({
+	className,
+	style,
+	xstyle,
+	...props
+}: AgentActionApprovalActionDescriptionProps) {
 	const sx = stylex.props(parts.actionDescription, xstyle);
-	return <div className={attrJoin(sx.className, className)} style={mergeStyle(sx.style, style)} {...props} />;
+	return (
+		<div
+			className={attrJoin(sx.className, className)}
+			style={mergeStyle(sx.style, style)}
+			{...props}
+		/>
+	);
 }
 
 export function Details({ className, style, xstyle, ...props }: AgentActionApprovalDetailsProps) {
 	const sx = stylex.props(parts.details, xstyle);
-	return <dl className={attrJoin(sx.className, className)} style={mergeStyle(sx.style, style)} {...props} />;
+	return (
+		<dl
+			className={attrJoin(sx.className, className)}
+			style={mergeStyle(sx.style, style)}
+			{...props}
+		/>
+	);
 }
 
 export function Detail({ className, style, xstyle, ...props }: AgentActionApprovalDetailProps) {
 	const sx = stylex.props(parts.detail, xstyle);
-	return <div className={attrJoin(sx.className, className)} style={mergeStyle(sx.style, style)} {...props} />;
+	return (
+		<div
+			className={attrJoin(sx.className, className)}
+			style={mergeStyle(sx.style, style)}
+			{...props}
+		/>
+	);
 }
 
-export function DetailLabel({ className, style, xstyle, ...props }: AgentActionApprovalDetailLabelProps) {
+export function DetailLabel({
+	className,
+	style,
+	xstyle,
+	...props
+}: AgentActionApprovalDetailLabelProps) {
 	const sx = stylex.props(parts.detailLabel, xstyle);
-	return <dt className={attrJoin(sx.className, className)} style={mergeStyle(sx.style, style)} {...props} />;
+	return (
+		<dt
+			className={attrJoin(sx.className, className)}
+			style={mergeStyle(sx.style, style)}
+			{...props}
+		/>
+	);
 }
 
-export function DetailValue({ className, style, xstyle, ...props }: AgentActionApprovalDetailValueProps) {
+export function DetailValue({
+	className,
+	style,
+	xstyle,
+	...props
+}: AgentActionApprovalDetailValueProps) {
 	const sx = stylex.props(parts.detailValue, xstyle);
-	return <dd className={attrJoin(sx.className, className)} style={mergeStyle(sx.style, style)} {...props} />;
+	return (
+		<dd
+			className={attrJoin(sx.className, className)}
+			style={mergeStyle(sx.style, style)}
+			{...props}
+		/>
+	);
 }
 
 export function Footer({ xstyle, ...props }: AgentActionApprovalFooterProps) {
@@ -123,7 +197,13 @@ export function Footer({ xstyle, ...props }: AgentActionApprovalFooterProps) {
 
 export function Actions({ className, style, xstyle, ...props }: AgentActionApprovalActionsProps) {
 	const sx = stylex.props(parts.actions, xstyle);
-	return <div className={attrJoin(sx.className, className)} style={mergeStyle(sx.style, style)} {...props} />;
+	return (
+		<div
+			className={attrJoin(sx.className, className)}
+			style={mergeStyle(sx.style, style)}
+			{...props}
+		/>
+	);
 }
 
 const parts = stylex.create({

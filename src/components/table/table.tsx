@@ -2,15 +2,20 @@ import * as stylex from "@stylexjs/stylex";
 import { createContext, useContext, type ComponentProps, type ReactNode } from "react";
 import { Checkbox, type CheckboxProps } from "@/components/checkbox/checkbox";
 import { ScrollArea } from "@/components/scroll-area/scroll-area";
-import { fontWeightStyles, textTabularStyles, typescaleStyles } from "@/components/text/text.stylex";
+import {
+	fontWeightStyles,
+	textTabularStyles,
+	typescaleStyles,
+} from "@/components/text/text.stylex";
 import { mergeStyle, type BaseStyleProps } from "@/styles/props/base";
 import { extractMarginProps, type MarginProps } from "@/styles/props/spacing.stylex";
 import { tokens } from "@/theme/tokens.stylex";
 import { attrJoin } from "@/utils/attr-join";
 
-type StyledProps<T> = Omit<T, "className" | "style" | "xstyle"> & BaseStyleProps & {
-	className?: string;
-};
+type StyledProps<T> = Omit<T, "className" | "style" | "xstyle"> &
+	BaseStyleProps & {
+		className?: string;
+	};
 
 type RootStyledProps<T> = Omit<T, "className" | "style" | "xstyle" | keyof MarginProps> &
 	MarginProps &
@@ -56,10 +61,16 @@ type TableCheckboxControlProps = Pick<
 	| "value"
 >;
 
-export type TableHeaderCheckboxProps = Omit<TableHeaderActionProps, "children" | keyof TableCheckboxControlProps> &
+export type TableHeaderCheckboxProps = Omit<
+	TableHeaderActionProps,
+	"children" | keyof TableCheckboxControlProps
+> &
 	TableCheckboxControlProps;
 
-export type TableCellCheckboxProps = Omit<TableCellActionProps, "children" | keyof TableCheckboxControlProps> &
+export type TableCellCheckboxProps = Omit<
+	TableCellActionProps,
+	"children" | keyof TableCheckboxControlProps
+> &
 	TableCheckboxControlProps;
 
 export type TableEmptyProps = Omit<TableRowProps, "checked"> & {
@@ -81,12 +92,7 @@ function invariantDev(condition: boolean, message: string) {
 
 export function Root({ ref, className, style, xstyle, children, ...props }: TableRootProps) {
 	const { marginStyles, rest } = extractMarginProps(props);
-	const sx = stylex.props(
-		tableParts.root,
-		typescaleStyles["2"],
-		marginStyles,
-		xstyle,
-	);
+	const sx = stylex.props(tableParts.root, typescaleStyles["2"], marginStyles, xstyle);
 
 	return (
 		<TableLevelContext.Provider value="root">
@@ -96,7 +102,8 @@ export function Root({ ref, className, style, xstyle, children, ...props }: Tabl
 						ref={ref}
 						className={attrJoin(sx.className, className)}
 						style={mergeStyle(sx.style, style)}
-						{...rest}>
+						{...rest}
+					>
 						{children}
 					</div>
 				</TableRowContext.Provider>
@@ -105,10 +112,20 @@ export function Root({ ref, className, style, xstyle, children, ...props }: Tabl
 	);
 }
 
-export function Container({ ref, className, style, xstyle, children, ...props }: TableContainerProps) {
+export function Container({
+	ref,
+	className,
+	style,
+	xstyle,
+	children,
+	...props
+}: TableContainerProps) {
 	const level = useContext(TableLevelContext);
 	const row = useContext(TableRowContext);
-	invariantDev(level === "root" && row == null, "Table.Container must be rendered inside Table.Root.");
+	invariantDev(
+		level === "root" && row == null,
+		"Table.Container must be rendered inside Table.Root.",
+	);
 
 	return (
 		<TableLevelContext.Provider value="container">
@@ -120,14 +137,23 @@ export function Container({ ref, className, style, xstyle, children, ...props }:
 				className={className}
 				style={style}
 				xstyle={[tableParts.container, xstyle]}
-				{...props}>
+				{...props}
+			>
 				{children}
 			</ScrollArea>
 		</TableLevelContext.Provider>
 	);
 }
 
-export function Content({ ref, caption, className, style, xstyle, children, ...props }: TableContentProps) {
+export function Content({
+	ref,
+	caption,
+	className,
+	style,
+	xstyle,
+	children,
+	...props
+}: TableContentProps) {
 	const level = useContext(TableLevelContext);
 	const section = useContext(TableSectionContext);
 	const row = useContext(TableRowContext);
@@ -143,8 +169,11 @@ export function Content({ ref, caption, className, style, xstyle, children, ...p
 				ref={ref}
 				className={attrJoin(sx.className, className)}
 				style={mergeStyle(sx.style, style)}
-				{...props}>
-				{caption != null ? <caption {...stylex.props(tableParts.caption)}>{caption}</caption> : null}
+				{...props}
+			>
+				{caption != null ? (
+					<caption {...stylex.props(tableParts.caption)}>{caption}</caption>
+				) : null}
 				{children}
 			</table>
 		</TableLevelContext.Provider>
@@ -167,7 +196,8 @@ export function Header({ ref, className, style, xstyle, children, ...props }: Ta
 				ref={ref}
 				className={attrJoin(sx.className, className)}
 				style={mergeStyle(sx.style, style)}
-				{...props}>
+				{...props}
+			>
 				{children}
 			</thead>
 		</TableSectionContext.Provider>
@@ -190,7 +220,8 @@ export function Body({ ref, className, style, xstyle, children, ...props }: Tabl
 				ref={ref}
 				className={attrJoin(sx.className, className)}
 				style={mergeStyle(sx.style, style)}
-				{...props}>
+				{...props}
+			>
 				{children}
 			</tbody>
 		</TableSectionContext.Provider>
@@ -213,21 +244,33 @@ export function Footer({ ref, className, style, xstyle, children, ...props }: Ta
 				ref={ref}
 				className={attrJoin(sx.className, className)}
 				style={mergeStyle(sx.style, style)}
-				{...props}>
+				{...props}
+			>
 				{children}
 			</tfoot>
 		</TableSectionContext.Provider>
 	);
 }
 
-export function Row({ ref, checked = false, className, style, xstyle, children, ...props }: TableRowProps) {
+export function Row({
+	ref,
+	checked = false,
+	className,
+	style,
+	xstyle,
+	children,
+	...props
+}: TableRowProps) {
 	const section = useContext(TableSectionContext);
 	const activeRow = useContext(TableRowContext);
 	invariantDev(
 		section != null && activeRow == null,
 		"Table.Row must be rendered inside Table.Header, Table.Body, or Table.Footer.",
 	);
-	invariantDev(!checked || section === "body", "Table.Row checked is only valid inside Table.Body.");
+	invariantDev(
+		!checked || section === "body",
+		"Table.Row checked is only valid inside Table.Body.",
+	);
 
 	const sx = stylex.props(
 		section === "body" && tableParts.bodyRow,
@@ -242,7 +285,8 @@ export function Row({ ref, checked = false, className, style, xstyle, children, 
 				ref={ref}
 				data-checked={section === "body" && checked ? "" : undefined}
 				className={attrJoin(sx.className, className)}
-				style={mergeStyle(sx.style, style)}>
+				style={mergeStyle(sx.style, style)}
+			>
 				{children}
 			</tr>
 		</TableRowContext.Provider>
@@ -285,28 +329,51 @@ export function HeaderCell({
 			ref={ref}
 			scope={scope ?? "col"}
 			className={attrJoin(sx.className, className)}
-			style={mergeStyle(sx.style, style)}>
+			style={mergeStyle(sx.style, style)}
+		>
 			{children}
 		</th>
 	);
 }
 
-export function Cell({ ref, className, numeric = false, style, xstyle, children, ...props }: TableCellProps) {
+export function Cell({
+	ref,
+	className,
+	numeric = false,
+	style,
+	xstyle,
+	children,
+	...props
+}: TableCellProps) {
 	useDataRow("Table.Cell must be rendered inside a body or footer Table.Row.");
-	const sx = stylex.props(tableParts.cell, numeric && tableParts.numeric, numeric && textTabularStyles.tabular, xstyle);
+	const sx = stylex.props(
+		tableParts.cell,
+		numeric && tableParts.numeric,
+		numeric && textTabularStyles.tabular,
+		xstyle,
+	);
 
 	return (
 		<td
 			{...props}
 			ref={ref}
 			className={attrJoin(sx.className, className)}
-			style={mergeStyle(sx.style, style)}>
+			style={mergeStyle(sx.style, style)}
+		>
 			{children}
 		</td>
 	);
 }
 
-export function HeaderAction({ ref, className, scope, style, xstyle, children, ...props }: TableHeaderActionProps) {
+export function HeaderAction({
+	ref,
+	className,
+	scope,
+	style,
+	xstyle,
+	children,
+	...props
+}: TableHeaderActionProps) {
 	useHeaderRow("Table.HeaderAction must be rendered inside a header Table.Row.");
 	const sx = stylex.props(
 		tableParts.headerCell,
@@ -322,13 +389,21 @@ export function HeaderAction({ ref, className, scope, style, xstyle, children, .
 			ref={ref}
 			scope={scope ?? "col"}
 			className={attrJoin(sx.className, className)}
-			style={mergeStyle(sx.style, style)}>
+			style={mergeStyle(sx.style, style)}
+		>
 			{children}
 		</th>
 	);
 }
 
-export function CellAction({ ref, className, style, xstyle, children, ...props }: TableCellActionProps) {
+export function CellAction({
+	ref,
+	className,
+	style,
+	xstyle,
+	children,
+	...props
+}: TableCellActionProps) {
 	useDataRow("Table.CellAction must be rendered inside a body or footer Table.Row.");
 	const sx = stylex.props(tableParts.cell, tableParts.actionCell, xstyle);
 
@@ -337,7 +412,8 @@ export function CellAction({ ref, className, style, xstyle, children, ...props }
 			{...props}
 			ref={ref}
 			className={attrJoin(sx.className, className)}
-			style={mergeStyle(sx.style, style)}>
+			style={mergeStyle(sx.style, style)}
+		>
 			{children}
 		</td>
 	);
@@ -404,7 +480,8 @@ export function HeaderCheckbox({
 			ref={ref}
 			scope={scope ?? "col"}
 			className={attrJoin(sx.className, className)}
-			style={mergeStyle(sx.style, style)}>
+			style={mergeStyle(sx.style, style)}
+		>
 			<CheckboxContent
 				checked={checked}
 				defaultChecked={defaultChecked}
@@ -446,7 +523,8 @@ export function CellCheckbox({
 			{...props}
 			ref={ref}
 			className={attrJoin(sx.className, className)}
-			style={mergeStyle(sx.style, style)}>
+			style={mergeStyle(sx.style, style)}
+		>
 			<CheckboxContent
 				checked={checked}
 				defaultChecked={defaultChecked}
@@ -463,11 +541,25 @@ export function CellCheckbox({
 	);
 }
 
-export function Empty({ ref, className, colSpan, style, xstyle, children, ...props }: TableEmptyProps) {
+export function Empty({
+	ref,
+	className,
+	colSpan,
+	style,
+	xstyle,
+	children,
+	...props
+}: TableEmptyProps) {
 	const section = useContext(TableSectionContext);
 	const row = useContext(TableRowContext);
-	invariantDev(section === "body" && row == null, "Table.Empty must be rendered directly inside Table.Body.");
-	invariantDev(Number.isInteger(colSpan) && colSpan > 0, "Table.Empty colSpan must be a positive integer.");
+	invariantDev(
+		section === "body" && row == null,
+		"Table.Empty must be rendered directly inside Table.Body.",
+	);
+	invariantDev(
+		Number.isInteger(colSpan) && colSpan > 0,
+		"Table.Empty colSpan must be a positive integer.",
+	);
 	const sx = stylex.props(xstyle);
 
 	return (
@@ -475,7 +567,8 @@ export function Empty({ ref, className, colSpan, style, xstyle, children, ...pro
 			ref={ref}
 			className={attrJoin(sx.className, className)}
 			style={mergeStyle(sx.style, style)}
-			{...props}>
+			{...props}
+		>
 			<td colSpan={colSpan} {...stylex.props(tableParts.cell, tableParts.emptyCell)}>
 				{children}
 			</td>
@@ -577,8 +670,8 @@ const tableParts = stylex.create({
 	},
 	checkboxCell: {
 		paddingBlock: tokens["--space-0-5"],
-		paddingInlineStart: tokens["--space-3"],
 		paddingInlineEnd: tokens["--space-1"],
+		paddingInlineStart: tokens["--space-3"],
 		whiteSpace: "nowrap",
 		width: "1%",
 	},

@@ -86,7 +86,12 @@ export const Examples: Story = {
 		<Box p={3} radius="lg" xstyle={storyParts.frame} width="18rem">
 			<NavList.Root aria-label="Workspace navigation">
 				<NavList.Section label="Main">
-					<NavList.Item label="Overview" href="#overview" icon={<HouseIcon weight="duotone" />} current="page" />
+					<NavList.Item
+						label="Overview"
+						href="#overview"
+						icon={<HouseIcon weight="duotone" />}
+						current="page"
+					/>
 					<NavList.Item label="Deploy" href="#deploy" icon={<CubeIcon weight="duotone" />} />
 					<NavList.Item
 						label="Deployments"
@@ -131,10 +136,17 @@ export const Collapsible: Story = {
 						</NavList.CollapsibleGroupPanel>
 					</NavList.CollapsibleGroup>
 					{Array.from({ length: 8 }, (_, index) => (
-						<NavList.Item key={index} label={`Project ${index + 1}`} href={`#project-${index + 1}`} />
+						<NavList.Item
+							key={index}
+							label={`Project ${index + 1}`}
+							href={`#project-${index + 1}`}
+						/>
 					))}
 					<NavList.CollapsibleGroup>
-						<NavList.CollapsibleGroupTrigger label="Bottom group" icon={<GearIcon weight="duotone" />} />
+						<NavList.CollapsibleGroupTrigger
+							label="Bottom group"
+							icon={<GearIcon weight="duotone" />}
+						/>
 						<NavList.CollapsibleGroupPanel>
 							<NavList.Item label="Audit logs" href="#audit" />
 							<NavList.Item label="Access" href="#access" />
@@ -165,9 +177,17 @@ export const CollapsedChildPopovers: Story = {
 			<NavList.NavListPresentationProvider presentation="icon">
 				<NavList.Root aria-label="Collapsed project navigation">
 					<NavList.Section label="Project" visuallyHideLabel>
-						<NavList.Item label="Overview" href="#overview" icon={<HouseIcon weight="duotone" />} current="page" />
+						<NavList.Item
+							label="Overview"
+							href="#overview"
+							icon={<HouseIcon weight="duotone" />}
+							current="page"
+						/>
 						<NavList.CollapsibleGroup>
-							<NavList.CollapsibleGroupTrigger label="Deploy" icon={<CubeIcon weight="duotone" />} />
+							<NavList.CollapsibleGroupTrigger
+								label="Deploy"
+								icon={<CubeIcon weight="duotone" />}
+							/>
 							<NavList.CollapsibleGroupPanel>
 								<NavList.Item label="Deployments" href="#deployments" />
 								<NavList.Item label="Workers" href="#workers" />
@@ -190,9 +210,21 @@ function DrilldownExample() {
 				<NavList.Drilldown value={value} defaultValue="account" onValueChange={setValue}>
 					<NavList.DrilldownPanel value="account" label="Account navigation">
 						<NavList.Section label="Account">
-							<NavList.Item label="Overview" icon={<HouseIcon weight="duotone" />} href="#account" />
-							<NavList.DrilldownTrigger to="project" label="Project settings" icon={<GearIcon weight="duotone" />} />
-							<NavList.DrilldownTrigger to="security" label="Security" icon={<ShieldChevronIcon weight="duotone" />} />
+							<NavList.Item
+								label="Overview"
+								icon={<HouseIcon weight="duotone" />}
+								href="#account"
+							/>
+							<NavList.DrilldownTrigger
+								to="project"
+								label="Project settings"
+								icon={<GearIcon weight="duotone" />}
+							/>
+							<NavList.DrilldownTrigger
+								to="security"
+								label="Security"
+								icon={<ShieldChevronIcon weight="duotone" />}
+							/>
 						</NavList.Section>
 					</NavList.DrilldownPanel>
 					<NavList.DrilldownPanel value="project" label="Project">

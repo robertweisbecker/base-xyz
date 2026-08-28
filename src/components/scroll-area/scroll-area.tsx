@@ -38,12 +38,7 @@ export function ScrollArea({
 	...props
 }: ScrollAreaProps) {
 	const { marginStyles, rest } = extractMarginProps(props);
-	const rootSx = stylex.props(
-		parts.root,
-		sizeVariants[size],
-		marginStyles,
-		xstyle,
-	);
+	const rootSx = stylex.props(parts.root, sizeVariants[size], marginStyles, xstyle);
 	const viewportSx = stylex.props(parts.viewport, !disableFade && parts.fade);
 	const contentSx = stylex.props(parts.content);
 	const verticalScrollbarSx = stylex.props(
@@ -61,7 +56,8 @@ export function ScrollArea({
 		<BaseScrollArea.Root
 			className={attrJoin(rootSx.className, className)}
 			style={mergeStyle(rootSx.style, style)}
-			{...rest}>
+			{...rest}
+		>
 			<BaseScrollArea.Viewport
 				ref={viewportRef}
 				aria-label={label}
@@ -70,10 +66,9 @@ export function ScrollArea({
 					overflowX: orientation !== "vertical" && state.hasOverflowX ? "scroll" : "hidden",
 					overflowY: orientation !== "horizontal" && state.hasOverflowY ? "scroll" : "hidden",
 				})}
-				className={viewportSx.className}>
-				<BaseScrollArea.Content
-					className={contentSx.className}
-					style={contentSx.style}>
+				className={viewportSx.className}
+			>
+				<BaseScrollArea.Content className={contentSx.className} style={contentSx.style}>
 					{children}
 				</BaseScrollArea.Content>
 			</BaseScrollArea.Viewport>
@@ -81,7 +76,8 @@ export function ScrollArea({
 				<BaseScrollArea.Scrollbar
 					orientation="vertical"
 					className={verticalScrollbarSx.className}
-					style={verticalScrollbarSx.style}>
+					style={verticalScrollbarSx.style}
+				>
 					<BaseScrollArea.Thumb {...stylex.props(parts.thumb, thumbOrientationVariants.vertical)} />
 				</BaseScrollArea.Scrollbar>
 			) : null}
@@ -89,8 +85,11 @@ export function ScrollArea({
 				<BaseScrollArea.Scrollbar
 					orientation="horizontal"
 					className={horizontalScrollbarSx.className}
-					style={horizontalScrollbarSx.style}>
-					<BaseScrollArea.Thumb {...stylex.props(parts.thumb, thumbOrientationVariants.horizontal)} />
+					style={horizontalScrollbarSx.style}
+				>
+					<BaseScrollArea.Thumb
+						{...stylex.props(parts.thumb, thumbOrientationVariants.horizontal)}
+					/>
 				</BaseScrollArea.Scrollbar>
 			) : null}
 			{orientation === "both" ? <BaseScrollArea.Corner {...stylex.props(parts.corner)} /> : null}

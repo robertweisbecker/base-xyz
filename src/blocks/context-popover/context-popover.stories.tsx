@@ -43,7 +43,10 @@ export const Examples: Story = {
 	render: () => (
 		<Stack gap={8} maxWidth="42rem">
 			<Example title="Prompt composer placement">
-				<PromptComposer.Root defaultValue="Summarize the open review comments." onSubmit={() => undefined}>
+				<PromptComposer.Root
+					defaultValue="Summarize the open review comments."
+					onSubmit={() => undefined}
+				>
 					<PromptComposer.Surface>
 						<PromptComposer.Input />
 						<PromptComposer.Footer>
@@ -63,7 +66,13 @@ export const Examples: Story = {
 			<Example title="Sizes">
 				<Stack align="center" gap={3} orientation="horizontal" wrap="wrap">
 					{sizes.map((size) => (
-						<ContextPopover key={size} size={size} total={258_000} usage={129_000} variant="secondary" />
+						<ContextPopover
+							key={size}
+							size={size}
+							total={258_000}
+							usage={129_000}
+							variant="secondary"
+						/>
 					))}
 				</Stack>
 			</Example>

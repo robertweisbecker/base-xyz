@@ -16,7 +16,10 @@ type PartStyleProps = BaseStyleProps & {
 	className?: string;
 };
 
-export type CollapsibleRootProps = Omit<BaseCollapsible.Root.Props, "className" | "style" | keyof MarginProps> &
+export type CollapsibleRootProps = Omit<
+	BaseCollapsible.Root.Props,
+	"className" | "style" | keyof MarginProps
+> &
 	MarginProps &
 	BaseStyleProps & {
 		className?: string;
@@ -33,8 +36,10 @@ export type CollapsibleTriggerProps = Omit<BaseCollapsible.Trigger.Props, "class
 		variant?: CollapsibleTriggerVariant;
 	};
 
-export type CollapsiblePanelProps = Omit<BaseCollapsible.Panel.Props, "className" | "style"> & PartStyleProps;
-export type CollapsibleContentProps = Omit<ComponentProps<"div">, "className" | "style"> & PartStyleProps;
+export type CollapsiblePanelProps = Omit<BaseCollapsible.Panel.Props, "className" | "style"> &
+	PartStyleProps;
+export type CollapsibleContentProps = Omit<ComponentProps<"div">, "className" | "style"> &
+	PartStyleProps;
 export type CollapsibleIconProps = Omit<ComponentProps<"span">, "className" | "style"> &
 	PartStyleProps & {
 		side?: "start" | "end";
@@ -42,11 +47,7 @@ export type CollapsibleIconProps = Omit<ComponentProps<"span">, "className" | "s
 
 export function Root({ ref, className, style, xstyle, ...props }: CollapsibleRootProps) {
 	const { marginStyles, rest } = extractMarginProps(props);
-	const sx = stylex.props(
-		collapsibleParts.root,
-		marginStyles,
-		xstyle,
-	);
+	const sx = stylex.props(collapsibleParts.root, marginStyles, xstyle);
 
 	return (
 		<BaseCollapsible.Root
@@ -118,7 +119,15 @@ export function Content({ ref, className, style, xstyle, ...props }: Collapsible
 	);
 }
 
-export function Icon({ ref, children, className, style, xstyle, side = "end", ...props }: CollapsibleIconProps) {
+export function Icon({
+	ref,
+	children,
+	className,
+	style,
+	xstyle,
+	side = "end",
+	...props
+}: CollapsibleIconProps) {
 	const sx = stylex.props(
 		collapsibleParts.icon,
 		side === "start" ? collapsibleParts.iconAtStart : collapsibleParts.iconAtEnd,
@@ -131,7 +140,8 @@ export function Icon({ ref, children, className, style, xstyle, side = "end", ..
 			aria-hidden
 			className={attrJoin(sx.className, className)}
 			style={mergeStyle(sx.style, style)}
-			{...props}>
+			{...props}
+		>
 			{children ?? <CaretDownIcon size="1em" weight="regular" />}
 		</span>
 	);

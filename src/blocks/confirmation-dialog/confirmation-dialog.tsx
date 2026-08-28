@@ -23,7 +23,10 @@ export type ConfirmationDialogSuccessToast = {
 	description?: ReactNode;
 };
 
-type DialogRootProps = Omit<ComponentProps<typeof Dialog.Root>, "children" | "disablePointerDismissal" | "modal">;
+type DialogRootProps = Omit<
+	ComponentProps<typeof Dialog.Root>,
+	"children" | "disablePointerDismissal" | "modal"
+>;
 
 export type ConfirmationDialogProps = DialogRootProps & {
 	/**
@@ -76,7 +79,10 @@ type ConfirmationDialogRootProps = DialogRootProps & {
 	failureToast: ConfirmationDialogSuccessToast | false;
 };
 
-type ConfirmationDialogActions = Exclude<NonNullable<DialogRootProps["actionsRef"]>["current"], null>;
+type ConfirmationDialogActions = Exclude<
+	NonNullable<DialogRootProps["actionsRef"]>["current"],
+	null
+>;
 
 type ConfirmationDialogContextValue = {
 	confirm: () => Promise<void>;
@@ -116,7 +122,8 @@ export function Root({
 				onConfirm={onConfirm}
 				onConfirmError={onConfirmError}
 				successToast={successToast}
-				failureToast={failureToast}>
+				failureToast={failureToast}
+			>
 				{children}
 			</ConfirmationDialogRoot>
 			<Toast.Portal>
@@ -183,7 +190,8 @@ function ConfirmationDialogRoot({
 				<Dialog.Popup
 					scrollBehavior="inside"
 					{...stylex.props(confirmationDialogParts.popup, dialogSizes[size])}
-					showClose={false}>
+					showClose={false}
+				>
 					{children}
 				</Dialog.Popup>
 			</Dialog.Root>
@@ -231,7 +239,8 @@ export function Body({
 			size="content"
 			className={className}
 			style={style}
-			xstyle={[confirmationDialogParts.body, confirmationDialogParts.bodyMaxHeight, xstyle]}>
+			xstyle={[confirmationDialogParts.body, confirmationDialogParts.bodyMaxHeight, xstyle]}
+		>
 			<div {...stylex.props(confirmationDialogParts.bodyContent)}>{children}</div>
 		</ScrollArea>
 	);
@@ -244,14 +253,25 @@ export function Footer({ xstyle, ...props }: ConfirmationDialogFooterProps) {
 export function Actions({ className, style, xstyle, ...props }: ConfirmationDialogActionsProps) {
 	const sx = stylex.props(confirmationDialogParts.footerActions, xstyle);
 
-	return <div className={attrJoin(sx.className, className)} style={mergeStyle(sx.style, style)} {...props} />;
+	return (
+		<div
+			className={attrJoin(sx.className, className)}
+			style={mergeStyle(sx.style, style)}
+			{...props}
+		/>
+	);
 }
 
 export function Cancel({ children, variant = "neutral", ...props }: ConfirmationDialogCancelProps) {
 	return <Dialog.Close render={<Button variant={variant} {...props} />}>{children}</Dialog.Close>;
 }
 
-export function Confirm({ children, onClick, variant = "primary", ...props }: ConfirmationDialogConfirmProps) {
+export function Confirm({
+	children,
+	onClick,
+	variant = "primary",
+	...props
+}: ConfirmationDialogConfirmProps) {
 	const context = useContext(ConfirmationDialogContext);
 
 	return (
@@ -264,7 +284,8 @@ export function Confirm({ children, onClick, variant = "primary", ...props }: Co
 				if (!event.defaultPrevented) {
 					void context?.confirm();
 				}
-			}}>
+			}}
+		>
 			{children}
 		</Button>
 	);

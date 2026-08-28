@@ -49,7 +49,10 @@ export function DemoPanel({
 	);
 }
 
-export type DemoCardProps = Omit<useRender.ComponentProps<"article">, "className" | "render" | "style"> & {
+export type DemoCardProps = Omit<
+	useRender.ComponentProps<"article">,
+	"className" | "render" | "style"
+> & {
 	className?: string;
 	render?: useRender.RenderProp;
 	style?: StyleXStyles;
@@ -108,20 +111,32 @@ export function DemoDropZone({
 }) {
 	return (
 		<>
-			<span {...stylex.props(demoStyles.dropZoneLabel, isInvalid && demoStyles.invalidLabel)}>{label}</span>
+			<span {...stylex.props(demoStyles.dropZoneLabel, isInvalid && demoStyles.invalidLabel)}>
+				{label}
+			</span>
 			<span {...stylex.props(demoStyles.dropZoneDescription)}>{description}</span>
 			{children}
 		</>
 	);
 }
 
-export type DemoHandleProps = Omit<useRender.ComponentProps<"button">, "children" | "className" | "style"> & {
+export type DemoHandleProps = Omit<
+	useRender.ComponentProps<"button">,
+	"children" | "className" | "style"
+> & {
 	label: string;
 	className?: string;
 	style?: StyleXStyles;
 };
 
-export function DemoHandle({ ref, label, className, style, type = "button", ...props }: DemoHandleProps) {
+export function DemoHandle({
+	ref,
+	label,
+	className,
+	style,
+	type = "button",
+	...props
+}: DemoHandleProps) {
 	const sx = stylex.props(demoStyles.handle, focusRing.offset, style);
 
 	return (
@@ -131,7 +146,8 @@ export function DemoHandle({ ref, label, className, style, type = "button", ...p
 			type={type}
 			aria-label={label}
 			className={attrJoin(sx.className, className)}
-			style={sx.style}>
+			style={sx.style}
+		>
 			<DotsSixVerticalIcon aria-hidden focusable="false" size={18} weight="bold" />
 		</button>
 	);

@@ -54,7 +54,16 @@ const meta = {
 	},
 	parameters: {
 		controls: {
-			include: ["children", "size", "fontFamily", "fontWeight", "color", "textAlign", "wrap", "truncate"],
+			include: [
+				"children",
+				"size",
+				"fontFamily",
+				"fontWeight",
+				"color",
+				"textAlign",
+				"wrap",
+				"truncate",
+			],
 		},
 	},
 	decorators: [
@@ -99,7 +108,12 @@ export const Styles: Story = {
 		<Grid columns={4} gap={4}>
 			{(["sans", "serif", "mono"] as const).flatMap((fontFamily) =>
 				(["regular", "medium", "semibold", "bold"] as const).map((fontWeight) => (
-					<Heading key={`${fontFamily}-${fontWeight}`} fontFamily={fontFamily} fontWeight={fontWeight} size="3">
+					<Heading
+						key={`${fontFamily}-${fontWeight}`}
+						fontFamily={fontFamily}
+						fontWeight={fontWeight}
+						size="3"
+					>
 						{fontFamily} {fontWeight}
 					</Heading>
 				)),
@@ -114,11 +128,13 @@ export const Colors: Story = {
 	},
 	render: () => (
 		<Stack gap={4}>
-			{(["default", "subtle", "muted", "accent", "error", "success", "warning"] as const).map((headingColor) => (
-				<Heading key={headingColor} color={headingColor} size="4">
-					{headingColor}
-				</Heading>
-			))}
+			{(["default", "subtle", "muted", "accent", "error", "success", "warning"] as const).map(
+				(headingColor) => (
+					<Heading key={headingColor} color={headingColor} size="4">
+						{headingColor}
+					</Heading>
+				),
+			)}
 		</Stack>
 	),
 };
@@ -142,7 +158,10 @@ export const SemanticLevels: Story = {
 				<Text>Update your public name and account details.</Text>
 			</Stack>
 			<Stack gap={2} mt={4}>
-				<Heading render={(props) => <h3 {...props} data-story-element="render-callback" />} size="4">
+				<Heading
+					render={(props) => <h3 {...props} data-story-element="render-callback" />}
+					size="4"
+				>
 					Notifications <Code>h3</Code>
 				</Heading>
 				<Text>Choose when the workspace should contact you.</Text>

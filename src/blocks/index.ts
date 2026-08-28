@@ -5,7 +5,11 @@ export { ContextPopover, type ContextPopoverProps } from "./context-popover/cont
 export { CopyButton, type CopyButtonProps } from "./copy-button/copy-button";
 export { GoalToolbar } from "./prompt-composer/goal-toolbar";
 export { ModelSelector } from "./model-selector/model-selector";
-export { PageHeader, type PageHeaderHeadingLevel, type PageHeaderProps } from "./page-header/page-header";
+export {
+	PageHeader,
+	type PageHeaderHeadingLevel,
+	type PageHeaderProps,
+} from "./page-header/page-header";
 export { PasswordField } from "./password-field/password-field";
 export { PromptComposer } from "./prompt-composer/prompt-composer";
 export { StreamingResponse } from "./streaming-response/streaming-response";

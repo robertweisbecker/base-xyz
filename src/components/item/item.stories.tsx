@@ -34,7 +34,11 @@ const endSlotOptions = {
 	),
 };
 
-const descriptionLayouts = ["stack", "inline", "inline-wrap"] as const satisfies readonly ItemDescriptionLayout[];
+const descriptionLayouts = [
+	"stack",
+	"inline",
+	"inline-wrap",
+] as const satisfies readonly ItemDescriptionLayout[];
 const itemVariants = ["default", "embedded"] as const satisfies readonly ItemVariant[];
 
 type ItemStoryArgs = ItemProps & {

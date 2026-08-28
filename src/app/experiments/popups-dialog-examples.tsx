@@ -22,7 +22,9 @@ export function DialogExample() {
 			<Dialog.Popup>
 				<Dialog.Header>
 					<Dialog.Title>Dialog variations</Dialog.Title>
-					<Dialog.Description>Open sizes and scroll behaviors without leaving the popup laboratory.</Dialog.Description>
+					<Dialog.Description>
+						Open sizes and scroll behaviors without leaving the popup laboratory.
+					</Dialog.Description>
 				</Dialog.Header>
 				<Dialog.Body>
 					<Stack gap={3} orientation="horizontal" wrap="wrap">
@@ -86,11 +88,15 @@ function LargeDialog() {
 function PopupScrollDialog() {
 	return (
 		<Dialog.Root>
-			<Dialog.Trigger render={<Button size="sm" variant="secondary" />}>Popup scroll</Dialog.Trigger>
+			<Dialog.Trigger render={<Button size="sm" variant="secondary" />}>
+				Popup scroll
+			</Dialog.Trigger>
 			<Dialog.Popup scrollBehavior="popup">
 				<Dialog.Header>
 					<Dialog.Title>Popup scrolling</Dialog.Title>
-					<Dialog.Description>The entire popup scrolls while staying within the viewport.</Dialog.Description>
+					<Dialog.Description>
+						The entire popup scrolls while staying within the viewport.
+					</Dialog.Description>
 				</Dialog.Header>
 				<Dialog.Body>
 					<LongDialogContent />
@@ -106,13 +112,21 @@ function PopupScrollDialog() {
 function InsideScrollDialog() {
 	return (
 		<Dialog.Root>
-			<Dialog.Trigger render={<Button size="sm" variant="secondary" />}>Inside scroll</Dialog.Trigger>
+			<Dialog.Trigger render={<Button size="sm" variant="secondary" />}>
+				Inside scroll
+			</Dialog.Trigger>
 			<Dialog.Popup scrollBehavior="inside" xstyle={styles.insideScrollDialog}>
 				<Dialog.Header>
 					<Dialog.Title>Inside scrolling</Dialog.Title>
-					<Dialog.Description>The header and footer stay fixed around a scrollable region.</Dialog.Description>
+					<Dialog.Description>
+						The header and footer stay fixed around a scrollable region.
+					</Dialog.Description>
 				</Dialog.Header>
-				<ScrollArea label="Inside-scroll dialog guidance" size="content" xstyle={styles.dialogScrollArea}>
+				<ScrollArea
+					label="Inside-scroll dialog guidance"
+					size="content"
+					xstyle={styles.dialogScrollArea}
+				>
 					<Dialog.Body>
 						<LongDialogContent />
 					</Dialog.Body>
@@ -130,11 +144,15 @@ function OutsideScrollDialog() {
 
 	return (
 		<Dialog.Root>
-			<Dialog.Trigger render={<Button size="sm" variant="secondary" />}>Outside scroll</Dialog.Trigger>
+			<Dialog.Trigger render={<Button size="sm" variant="secondary" />}>
+				Outside scroll
+			</Dialog.Trigger>
 			<Dialog.Popup initialFocus={popupRef} ref={popupRef} scrollBehavior="outside">
 				<Dialog.Header>
 					<Dialog.Title>Outside scrolling</Dialog.Title>
-					<Dialog.Description>The viewport scrolls around content taller than the screen.</Dialog.Description>
+					<Dialog.Description>
+						The viewport scrolls around content taller than the screen.
+					</Dialog.Description>
 				</Dialog.Header>
 				<Dialog.Body>
 					<LongDialogContent />

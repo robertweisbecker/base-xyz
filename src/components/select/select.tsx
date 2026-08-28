@@ -16,12 +16,17 @@ import { popupMotionStyles, popupPositionerStyles } from "@/components/popover/p
 import { popupVars } from "@/components/popover/popover-vars.stylex";
 import { tokens } from "@/theme/tokens.stylex";
 
-import { menuItemSizeStyles, menuItemStyles, menuItemVariantStyles } from "@/components/menu/menu-item.stylex";
+import {
+	menuItemSizeStyles,
+	menuItemStyles,
+	menuItemVariantStyles,
+} from "@/components/menu/menu-item.stylex";
 import type { MenuItemVariant } from "@/components/menu/menu.types";
 import { Icon } from "@/components/icons";
 import { attrJoin } from "@/utils/attr-join";
 
-const HOVER_WHEN_INACTIVE = ":hover:not([data-disabled]):not([data-popup-open]):not([data-pressed])";
+const HOVER_WHEN_INACTIVE =
+	":hover:not([data-disabled]):not([data-popup-open]):not([data-pressed])";
 const SelectSizeContext = createContext<FieldSize>("md");
 
 type SelectMultiple = boolean | undefined;
@@ -56,7 +61,8 @@ export function Root<Value, Multiple extends SelectMultiple = false>({
 			disabled={disabled}
 			invalid={invalid}
 			className={attrJoin(sx.className, className)}
-			style={mergeStyle(sx.style, style)}>
+			style={mergeStyle(sx.style, style)}
+		>
 			<SelectSizeContext.Provider value={size}>
 				<BaseSelect.Root disabled={disabled} {...rest}>
 					{children}
@@ -66,7 +72,8 @@ export function Root<Value, Multiple extends SelectMultiple = false>({
 	);
 }
 
-export type SelectLabelProps = Omit<BaseSelect.Label.Props, "className" | "style"> & SelectPartStyleProps;
+export type SelectLabelProps = Omit<BaseSelect.Label.Props, "className" | "style"> &
+	SelectPartStyleProps;
 
 export function Label({ ref, className, style, xstyle, ...props }: SelectLabelProps) {
 	const sx = stylex.props(fieldStyles.label, xstyle);
@@ -81,7 +88,10 @@ export function Label({ ref, className, style, xstyle, ...props }: SelectLabelPr
 	);
 }
 
-export type SelectTriggerProps = Omit<BaseSelect.Trigger.Props, "children" | "className" | "style"> &
+export type SelectTriggerProps = Omit<
+	BaseSelect.Trigger.Props,
+	"children" | "className" | "style"
+> &
 	SelectPartStyleProps & {
 		children?: BaseSelect.Value.Props["children"];
 		placeholder?: ReactNode;
@@ -115,7 +125,8 @@ export function Trigger({
 			ref={ref}
 			className={attrJoin(sx.className, className)}
 			style={mergeStyle(sx.style, style)}
-			{...props}>
+			{...props}
+		>
 			<BaseSelect.Value placeholder={placeholder} {...stylex.props(selectParts.value)}>
 				{children}
 			</BaseSelect.Value>
@@ -130,9 +141,11 @@ export function Trigger({
 	);
 }
 
-export type SelectBackdropProps = Omit<BaseSelect.Backdrop.Props, "className" | "style"> & SelectPartStyleProps;
+export type SelectBackdropProps = Omit<BaseSelect.Backdrop.Props, "className" | "style"> &
+	SelectPartStyleProps;
 
-export type SelectPositionerProps = Omit<BaseSelect.Positioner.Props, "className" | "style"> & SelectPartStyleProps;
+export type SelectPositionerProps = Omit<BaseSelect.Positioner.Props, "className" | "style"> &
+	SelectPartStyleProps;
 
 export type SelectPopupProps = Omit<BaseSelect.Popup.Props, "className" | "style"> &
 	SelectPartStyleProps & {
@@ -166,8 +179,17 @@ export function Popup({
 		...otherPositionerProps
 	} = positionerProps ?? {};
 
-	const sx = stylex.props(selectParts.panelSurface, selectParts.popup, popupMotionStyles.anchoredPopup, xstyle);
-	const positionerSx = stylex.props(popupPositionerStyles, selectParts.positioner, positionerXstyle);
+	const sx = stylex.props(
+		selectParts.panelSurface,
+		selectParts.popup,
+		popupMotionStyles.anchoredPopup,
+		xstyle,
+	);
+	const positionerSx = stylex.props(
+		popupPositionerStyles,
+		selectParts.positioner,
+		positionerXstyle,
+	);
 	const {
 		className: backdropClassName,
 		style: backdropStyle,
@@ -193,12 +215,14 @@ export function Popup({
 				sideOffset={sideOffset}
 				className={attrJoin(positionerSx.className, positionerClassName)}
 				style={mergeStyle(positionerSx.style, positionerStyle)}
-				{...otherPositionerProps}>
+				{...otherPositionerProps}
+			>
 				<BaseSelect.Popup
 					ref={ref}
 					className={attrJoin(sx.className, className)}
 					style={mergeStyle(sx.style, style)}
-					{...props}>
+					{...props}
+				>
 					{children}
 				</BaseSelect.Popup>
 			</BaseSelect.Positioner>
@@ -206,7 +230,8 @@ export function Popup({
 	);
 }
 
-export type SelectListProps = Omit<BaseSelect.List.Props, "className" | "style"> & SelectPartStyleProps;
+export type SelectListProps = Omit<BaseSelect.List.Props, "className" | "style"> &
+	SelectPartStyleProps;
 
 export function List({ ref, className, style, xstyle, ...props }: SelectListProps) {
 	const sx = stylex.props(selectParts.list, xstyle);
@@ -214,7 +239,12 @@ export function List({ ref, className, style, xstyle, ...props }: SelectListProp
 	return (
 		<>
 			<BaseSelect.ScrollUpArrow {...stylex.props(selectParts.scrollArrow, selectParts.scrollUp)}>
-				<CaretUpIcon aria-hidden size={14} weight="bold" {...stylex.props(selectParts.scrollArrowIcon)} />
+				<CaretUpIcon
+					aria-hidden
+					size={14}
+					weight="bold"
+					{...stylex.props(selectParts.scrollArrowIcon)}
+				/>
 			</BaseSelect.ScrollUpArrow>
 			<BaseSelect.List
 				ref={ref}
@@ -222,8 +252,15 @@ export function List({ ref, className, style, xstyle, ...props }: SelectListProp
 				style={mergeStyle(sx.style, style)}
 				{...props}
 			/>
-			<BaseSelect.ScrollDownArrow {...stylex.props(selectParts.scrollArrow, selectParts.scrollDown)}>
-				<CaretDownIcon aria-hidden size={14} weight="bold" {...stylex.props(selectParts.scrollArrowIcon)} />
+			<BaseSelect.ScrollDownArrow
+				{...stylex.props(selectParts.scrollArrow, selectParts.scrollDown)}
+			>
+				<CaretDownIcon
+					aria-hidden
+					size={14}
+					weight="bold"
+					{...stylex.props(selectParts.scrollArrowIcon)}
+				/>
 			</BaseSelect.ScrollDownArrow>
 		</>
 	);
@@ -237,7 +274,15 @@ export type SelectItemProps = Omit<BaseSelect.Item.Props, "children" | "classNam
 
 export type SelectItemVariant = MenuItemVariant;
 
-export function Item({ ref, children, className, style, xstyle, variant = "primary", ...props }: SelectItemProps) {
+export function Item({
+	ref,
+	children,
+	className,
+	style,
+	xstyle,
+	variant = "primary",
+	...props
+}: SelectItemProps) {
 	const size = useContext(SelectSizeContext);
 	const sx = stylex.props(
 		menuItemStyles.item,
@@ -252,7 +297,8 @@ export function Item({ ref, children, className, style, xstyle, variant = "prima
 			ref={ref}
 			className={attrJoin(sx.className, className)}
 			style={mergeStyle(sx.style, style)}
-			{...props}>
+			{...props}
+		>
 			<BaseSelect.ItemIndicator keepMounted {...stylex.props(menuItemStyles.indicator)}>
 				<Icon.Checkmark width="1em" height="1em" strokeWidth={3} />
 			</BaseSelect.ItemIndicator>
@@ -268,7 +314,15 @@ export type SelectGroupProps = Omit<BaseSelect.Group.Props, "className" | "style
 		label?: ReactNode;
 	};
 
-export function Group({ ref, children, className, label, style, xstyle, ...props }: SelectGroupProps) {
+export function Group({
+	ref,
+	children,
+	className,
+	label,
+	style,
+	xstyle,
+	...props
+}: SelectGroupProps) {
 	const sx = stylex.props(selectParts.group, xstyle);
 
 	return (
@@ -276,14 +330,20 @@ export function Group({ ref, children, className, label, style, xstyle, ...props
 			ref={ref}
 			className={attrJoin(sx.className, className)}
 			style={mergeStyle(sx.style, style)}
-			{...props}>
-			{label ? <BaseSelect.GroupLabel {...stylex.props(selectParts.groupLabel)}>{label}</BaseSelect.GroupLabel> : null}
+			{...props}
+		>
+			{label ? (
+				<BaseSelect.GroupLabel {...stylex.props(selectParts.groupLabel)}>
+					{label}
+				</BaseSelect.GroupLabel>
+			) : null}
 			{children}
 		</BaseSelect.Group>
 	);
 }
 
-export type SelectSeparatorProps = Omit<BaseSelect.Separator.Props, "className" | "style"> & SelectPartStyleProps;
+export type SelectSeparatorProps = Omit<BaseSelect.Separator.Props, "className" | "style"> &
+	SelectPartStyleProps;
 
 export function Separator({ ref, className, style, xstyle, ...props }: SelectSeparatorProps) {
 	const sx = stylex.props(selectParts.separator, xstyle);
@@ -305,11 +365,11 @@ const selectParts = stylex.create({
 		// [popupVars.foreground]: tokens["--fg"],
 		borderRadius: tokens["--radius-lg"],
 		cornerShape: "superellipse(1.3)",
-		backgroundColor: popupVars.background,
-		color: popupVars.foreground,
-		boxShadow: tokens["--shadow-md"],
-		minWidth: "calc(var(--anchor-width) + 1.75rem)",
 		overscrollBehavior: "contain",
+		backgroundColor: popupVars.background,
+		boxShadow: tokens["--shadow-md"],
+		color: popupVars.foreground,
+		minWidth: "calc(var(--anchor-width) + 1.75rem)",
 	},
 	root: {
 		gap: tokens["--space-1"],
@@ -405,18 +465,18 @@ const selectParts = stylex.create({
 	},
 	popup: {
 		outline: "0",
-		maxWidth: "min(24rem, var(--available-width))",
-		minWidth: {
-			"[data-side='none']": "calc(var(--anchor-width) + var(--size-control-md))",
-			default: "var(--anchor-width)",
+		opacity: {
+			"[data-side='none']": 1,
+			default: 1,
 		},
 		transitionDuration: {
 			"[data-side='none']": 0,
 			default: tokens["--motion-duration-content"],
 		},
-		opacity: {
-			"[data-side='none']": 1,
-			default: 1,
+		maxWidth: "min(24rem, var(--available-width))",
+		minWidth: {
+			"[data-side='none']": "calc(var(--anchor-width) + var(--size-control-md))",
+			default: "var(--anchor-width)",
 		},
 	},
 	list: {

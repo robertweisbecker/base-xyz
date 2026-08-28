@@ -54,12 +54,7 @@ export function Root({
 	...props
 }: TabsRootProps) {
 	const { marginStyles, rest } = extractMarginProps(props);
-	const sx = stylex.props(
-		tabsParts.root,
-		rootOrientationStyles[orientation],
-		marginStyles,
-		xstyle,
-	);
+	const sx = stylex.props(tabsParts.root, rootOrientationStyles[orientation], marginStyles, xstyle);
 	const contextValue = useMemo(
 		() => ({ orientation, size: tabsSize, variant }),
 		[orientation, tabsSize, variant],
@@ -73,7 +68,8 @@ export function Root({
 				data-size={tabsSize}
 				className={attrJoin(sx.className, className)}
 				style={mergeStyle(sx.style, style)}
-				{...rest}>
+				{...rest}
+			>
 				{children}
 			</BaseTabs.Root>
 		</TabsContext>
@@ -105,7 +101,11 @@ export function List({ ref, children, className, style, xstyle, ...props }: Tabs
 		const listElement = listRef.current;
 		const indicatorElement = indicatorRef.current;
 
-		if (listElement === null || indicatorElement === null || typeof ResizeObserver === "undefined") {
+		if (
+			listElement === null ||
+			indicatorElement === null ||
+			typeof ResizeObserver === "undefined"
+		) {
 			return;
 		}
 
@@ -120,7 +120,9 @@ export function List({ ref, children, className, style, xstyle, ...props }: Tabs
 		};
 		const resizeObserver = new ResizeObserver(snapIndicator);
 		resizeObserver.observe(listElement);
-		listElement.querySelectorAll<HTMLElement>('[role="tab"]').forEach((tab) => resizeObserver.observe(tab));
+		listElement
+			.querySelectorAll<HTMLElement>('[role="tab"]')
+			.forEach((tab) => resizeObserver.observe(tab));
 		snapIndicator();
 
 		return () => {
@@ -134,7 +136,8 @@ export function List({ ref, children, className, style, xstyle, ...props }: Tabs
 			ref={mergedRef}
 			className={attrJoin(sx.className, className)}
 			style={mergeStyle(sx.style, style)}
-			{...props}>
+			{...props}
+		>
 			{children}
 			<BaseTabs.Indicator
 				ref={indicatorRef}
@@ -154,7 +157,17 @@ export type TabsTabProps = Omit<BaseTabs.Tab.Props, "children" | "className" | "
 		endSlot?: ReactNode;
 	};
 
-export function Tab({ ref, children, className, endSlot, startSlot, style, xstyle, type = "button", ...props }: TabsTabProps) {
+export function Tab({
+	ref,
+	children,
+	className,
+	endSlot,
+	startSlot,
+	style,
+	xstyle,
+	type = "button",
+	...props
+}: TabsTabProps) {
 	const { orientation, size: tabsSize, variant } = useTabsContext();
 	const sx = stylex.props(
 		focusRing.offset,
@@ -173,7 +186,8 @@ export function Tab({ ref, children, className, endSlot, startSlot, style, xstyl
 			type={type}
 			className={attrJoin(sx.className, className)}
 			style={mergeStyle(sx.style, style)}
-			{...props}>
+			{...props}
+		>
 			{renderSlot(startSlot, "start", tabsSize)}
 			{children}
 			{renderSlot(endSlot, "end", tabsSize)}
@@ -181,7 +195,8 @@ export function Tab({ ref, children, className, endSlot, startSlot, style, xstyl
 	);
 }
 
-type TabsContentElementProps = Omit<ComponentPropsWithRef<"div">, "className" | "style"> & TabsPartStyleProps;
+type TabsContentElementProps = Omit<ComponentPropsWithRef<"div">, "className" | "style"> &
+	TabsPartStyleProps;
 
 export type TabsContentProps = TabsContentElementProps;
 
@@ -288,7 +303,7 @@ const tabsParts = stylex.create({
 		borderRadius: "calc(var(--_tabs-list-radius) - 1px)",
 		borderStyle: "none",
 		cornerShape: "superellipse(1.3)",
-		gap: tokens["--space-2"],
+		gap: tokens["--space-1-5"],
 		paddingBlock: 0,
 		alignItems: "center",
 		appearance: "none",
@@ -398,11 +413,11 @@ const underlineIndicatorOrientationStyles = stylex.create({
 	horizontal: {
 		translate: "var(--active-tab-left) 0",
 		bottom: `calc(0px - ${tokens["--border-width"]})`,
-		height: "2px",
-		left: 0,
+		height: 3,
+		left: 8,
 		right: "auto",
 		top: "auto",
-		width: "var(--active-tab-width)",
+		width: "calc(var(--active-tab-width) - 16px)",
 	},
 	vertical: {
 		translate: "0 var(--active-tab-top)",
@@ -411,7 +426,7 @@ const underlineIndicatorOrientationStyles = stylex.create({
 		left: "auto",
 		right: `calc(0px - ${tokens["--border-width"]})`,
 		top: 0,
-		width: "2px",
+		width: 3,
 	},
 });
 
@@ -476,17 +491,17 @@ const tabTextSizeStyles = {
 
 const tabSizeStyles = stylex.create({
 	sm: {
-		paddingInline: tokens["--space-3"],
+		paddingInline: tokens["--space-2"],
 		height: tokens["--size-control-sm"],
 		minWidth: tokens["--size-control-sm"],
 	},
 	md: {
-		paddingInline: tokens["--space-3"],
+		paddingInline: tokens["--space-2"],
 		height: tokens["--size-control-md"],
 		minWidth: tokens["--size-control-md"],
 	},
 	lg: {
-		paddingInline: tokens["--space-4"],
+		paddingInline: tokens["--space-3"],
 		height: tokens["--size-control-lg"],
 		minWidth: tokens["--size-control-lg"],
 	},

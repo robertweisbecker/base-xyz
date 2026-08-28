@@ -10,16 +10,25 @@ const meta = {
 	argTypes: {
 		align: { control: "select", options: ["start", "center", "end", "stretch", "baseline"] },
 		gap: { control: "select", options: [0, 1, 2, 3, 4, 5, 6, 8] },
-		justify: { control: "select", options: ["start", "center", "end", "space-between", "space-around", "space-evenly"] },
+		justify: {
+			control: "select",
+			options: ["start", "center", "end", "space-between", "space-around", "space-evenly"],
+		},
 		orientation: { control: "inline-radio", options: ["vertical", "horizontal"] },
 		reverse: { control: "boolean" },
 		wrap: { control: "select", options: ["nowrap", "wrap", "wrap-reverse"] },
 	},
 	render: (args) => (
 		<Stack {...args}>
-			<Box p={3} xstyle={styles.item}>First</Box>
-			<Box p={3} xstyle={styles.item}>Second</Box>
-			<Box p={3} xstyle={styles.item}>Third</Box>
+			<Box p={3} xstyle={styles.item}>
+				First
+			</Box>
+			<Box p={3} xstyle={styles.item}>
+				Second
+			</Box>
+			<Box p={3} xstyle={styles.item}>
+				Third
+			</Box>
 		</Stack>
 	),
 } satisfies Meta<typeof Stack>;
@@ -40,5 +49,11 @@ export const Reverse: Story = {
 };
 
 const styles = stylex.create({
-	item: { borderColor: tokens["--border"], borderRadius: tokens["--radius-sm"], borderStyle: "solid", borderWidth: 1, backgroundColor: tokens["--surface-subtle"] },
+	item: {
+		borderColor: tokens["--border"],
+		borderRadius: tokens["--radius-sm"],
+		borderStyle: "solid",
+		borderWidth: 1,
+		backgroundColor: tokens["--surface-subtle"],
+	},
 });

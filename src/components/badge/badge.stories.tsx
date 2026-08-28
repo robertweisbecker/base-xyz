@@ -164,7 +164,11 @@ export const Options: Story = {
 					<Badge hue="success" startSlot={<CheckCircleIcon aria-hidden weight="fill" />}>
 						Approved
 					</Badge>
-					<Badge endSlot={<WarningIcon aria-hidden weight="fill" />} hue="warning" startSlot={<Icon.Dot />}>
+					<Badge
+						endSlot={<WarningIcon aria-hidden weight="fill" />}
+						hue="warning"
+						startSlot={<Icon.Dot />}
+					>
 						Review requested
 					</Badge>
 				</Stack>
@@ -174,7 +178,11 @@ export const Options: Story = {
 					Icon only
 				</Text>
 				<Stack align="center" gap={3} orientation="horizontal" wrap="wrap">
-					<Badge label="Approved" shape="circle" startSlot={<CheckCircleIcon aria-hidden weight="fill" />} />
+					<Badge
+						label="Approved"
+						shape="circle"
+						startSlot={<CheckCircleIcon aria-hidden weight="fill" />}
+					/>
 					<Badge
 						hue="warning"
 						label="Needs attention"

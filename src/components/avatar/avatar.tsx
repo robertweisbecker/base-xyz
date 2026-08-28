@@ -31,7 +31,10 @@ export type AvatarResponsiveSize = Partial<Record<AvatarBreakpoint, AvatarSize>>
 };
 export type AvatarShape = keyof typeof shapeVariants;
 
-export type AvatarProps = Omit<BaseAvatar.Root.Props, "children" | "className" | "style" | keyof MarginProps> &
+export type AvatarProps = Omit<
+	BaseAvatar.Root.Props,
+	"children" | "className" | "style" | keyof MarginProps
+> &
 	MarginProps &
 	BaseStyleProps & {
 		className?: string;
@@ -73,7 +76,12 @@ export function Avatar({
 	const fallback =
 		icon ??
 		(resolvedInitials || (
-			<LegoSmileyIcon aria-hidden weight="duotone" size="100%" style={{ transform: "translateY(24%)" }} />
+			<LegoSmileyIcon
+				aria-hidden
+				weight="duotone"
+				size="100%"
+				style={{ transform: "translateY(24%)" }}
+			/>
 		));
 	const hasName = normalizedName.length > 0;
 	const sx = stylex.props(
@@ -94,9 +102,14 @@ export function Avatar({
 			role={role ?? (render == null && (ariaLabel || hasName) ? "img" : undefined)}
 			style={mergeStyle(sx.style, style)}
 			tabIndex={tabIndex ?? (render == null && hasName ? 0 : undefined)}
-			{...rest}>
+			{...rest}
+		>
 			{image ? (
-				<BaseAvatar.Image alt={hasName ? "" : (imageAlt ?? "")} src={image} {...stylex.props(avatarParts.image)} />
+				<BaseAvatar.Image
+					alt={hasName ? "" : (imageAlt ?? "")}
+					src={image}
+					{...stylex.props(avatarParts.image)}
+				/>
 			) : null}
 			<BaseAvatar.Fallback {...stylex.props(avatarParts.fallback)}>
 				{typeof fallback === "string" ? (
@@ -226,5 +239,13 @@ function responsiveSizeStyle(size: AvatarSize | AvatarResponsiveSize): StyleXSty
 		return avatarSizeTokens[current];
 	});
 
-	return responsiveSizeStyles.size(values[0], values[1], values[2], values[3], values[4], values[5], values[6]);
+	return responsiveSizeStyles.size(
+		values[0],
+		values[1],
+		values[2],
+		values[3],
+		values[4],
+		values[5],
+		values[6],
+	);
 }

@@ -6,7 +6,10 @@ import { tokens } from "@/theme/tokens.stylex";
 
 import { ScrollArea } from "@/components/scroll-area/scroll-area";
 
-export type CodeBlockProps = Omit<ComponentProps<"pre">, "className" | "style" | keyof MarginProps> &
+export type CodeBlockProps = Omit<
+	ComponentProps<"pre">,
+	"className" | "style" | keyof MarginProps
+> &
 	MarginProps &
 	BaseStyleProps & {
 		className?: string;
@@ -37,7 +40,8 @@ export function CodeBlock({
 			orientation="horizontal"
 			size="content"
 			style={style}
-			xstyle={[styles.root, xstyle]}>
+			xstyle={[styles.root, xstyle]}
+		>
 			<pre ref={ref} {...stylex.props(styles.pre)} {...preProps}>
 				<code>{children}</code>
 			</pre>

@@ -5,11 +5,21 @@ import { PlusIcon } from "@phosphor-icons/react/dist/csr/Plus";
 import { XCircleIcon } from "@phosphor-icons/react/dist/csr/XCircle";
 import { XIcon } from "@phosphor-icons/react/dist/csr/X";
 import * as stylex from "@stylexjs/stylex";
-import { createContext, useContext, type ComponentProps, type ReactNode, type RefObject } from "react";
+import {
+	createContext,
+	useContext,
+	type ComponentProps,
+	type ReactNode,
+	type RefObject,
+} from "react";
 import { fieldControlSizes, fieldStyles, fieldTextStyles } from "@/components/field/field.stylex";
 import type { FieldSize } from "@/components/field/field.types";
 import { Icon } from "@/components/icons";
-import { menuItemSizeStyles, menuItemStyles, menuItemVariantStyles } from "@/components/menu/menu-item.stylex";
+import {
+	menuItemSizeStyles,
+	menuItemStyles,
+	menuItemVariantStyles,
+} from "@/components/menu/menu-item.stylex";
 import type { MenuItemVariant } from "@/components/menu/menu.types";
 import { popupMotionStyles, popupPositionerStyles } from "@/components/popover/popover.stylex";
 import { Tooltip } from "@/components/tooltip/tooltip";
@@ -41,7 +51,11 @@ type ComboboxContextValue = {
 	size: FieldSize;
 };
 
-const ComboboxContext = createContext<ComboboxContextValue>({ multiple: false, readOnly: false, size: "md" });
+const ComboboxContext = createContext<ComboboxContextValue>({
+	multiple: false,
+	readOnly: false,
+	size: "md",
+});
 const ComboboxChipsContext = createContext(false);
 
 export type ComboboxRootProps<Value, Multiple extends ComboboxMultipleMode = false> = Omit<
@@ -75,7 +89,8 @@ export function Root<Value, Multiple extends ComboboxMultipleMode = false>({
 			disabled={disabled}
 			invalid={invalid}
 			className={attrJoin(sx.className, className)}
-			style={mergeStyle(sx.style, style)}>
+			style={mergeStyle(sx.style, style)}
+		>
 			<ComboboxContext.Provider value={{ multiple: multiple === true, readOnly, size }}>
 				<BaseCombobox.Root disabled={disabled} multiple={multiple} readOnly={readOnly} {...rest}>
 					{children}
@@ -136,7 +151,8 @@ export function InputGroup({
 				ref={ref}
 				className={attrJoin(sx.className, className)}
 				style={mergeStyle(sx.style, style)}
-				{...props}>
+				{...props}
+			>
 				{children}
 				<Actions />
 			</BaseCombobox.InputGroup>
@@ -175,7 +191,9 @@ function Actions() {
 	const action = multiple ? (
 		<Clear>Clear all</Clear>
 	) : (
-		<BaseCombobox.Value>{(value: unknown) => (value == null ? <Trigger /> : <Clear />)}</BaseCombobox.Value>
+		<BaseCombobox.Value>
+			{(value: unknown) => (value == null ? <Trigger /> : <Clear />)}
+		</BaseCombobox.Value>
 	);
 
 	return <div {...stylex.props(comboboxParts.actions)}>{action}</div>;
@@ -183,7 +201,15 @@ function Actions() {
 
 type ComboboxClearProps = StyledProps<BaseCombobox.Clear.Props>;
 
-function Clear({ ref, "aria-label": ariaLabel, children, className, style, xstyle, ...props }: ComboboxClearProps) {
+function Clear({
+	ref,
+	"aria-label": ariaLabel,
+	children,
+	className,
+	style,
+	xstyle,
+	...props
+}: ComboboxClearProps) {
 	const { size } = useContext(ComboboxContext);
 	const hasVisibleLabel = children != null;
 	const sx = stylex.props(
@@ -200,7 +226,8 @@ function Clear({ ref, "aria-label": ariaLabel, children, className, style, xstyl
 			aria-label={ariaLabel ?? (children == null ? "Clear selection" : undefined)}
 			className={attrJoin(sx.className, className)}
 			style={mergeStyle(sx.style, style)}
-			{...props}>
+			{...props}
+		>
 			{children ?? <XCircleIcon aria-hidden size="1.25em" weight="fill" />}
 		</BaseCombobox.Clear>
 	);
@@ -208,7 +235,15 @@ function Clear({ ref, "aria-label": ariaLabel, children, className, style, xstyl
 
 type ComboboxTriggerProps = StyledProps<BaseCombobox.Trigger.Props>;
 
-function Trigger({ ref, "aria-label": ariaLabel, children, className, style, xstyle, ...props }: ComboboxTriggerProps) {
+function Trigger({
+	ref,
+	"aria-label": ariaLabel,
+	children,
+	className,
+	style,
+	xstyle,
+	...props
+}: ComboboxTriggerProps) {
 	const { size } = useContext(ComboboxContext);
 	const sx = stylex.props(
 		comboboxParts.action,
@@ -224,7 +259,8 @@ function Trigger({ ref, "aria-label": ariaLabel, children, className, style, xst
 			aria-label={ariaLabel ?? (children == null ? "Show options" : undefined)}
 			className={attrJoin(sx.className, className)}
 			style={mergeStyle(sx.style, style)}
-			{...props}>
+			{...props}
+		>
 			{children ?? <CaretDownIcon aria-hidden size="1em" weight="bold" />}
 		</BaseCombobox.Trigger>
 	);
@@ -243,7 +279,8 @@ export function Chips({ ref, children, className, style, xstyle, ...props }: Com
 				ref={ref}
 				className={attrJoin(sx.className, className)}
 				style={mergeStyle(sx.style, style)}
-				{...props}>
+				{...props}
+			>
 				{children}
 			</BaseCombobox.Chips>
 		</ComboboxChipsContext.Provider>
@@ -257,7 +294,16 @@ export type ComboboxChipProps = StyledProps<BaseCombobox.Chip.Props> & {
 	endSlot?: ReactNode;
 };
 
-export function Chip({ children, className, endSlot, ref, startSlot, style, xstyle, ...props }: ComboboxChipProps) {
+export function Chip({
+	children,
+	className,
+	endSlot,
+	ref,
+	startSlot,
+	style,
+	xstyle,
+	...props
+}: ComboboxChipProps) {
 	const sx = stylex.props(comboboxParts.chip, comboboxMarker, xstyle);
 
 	return (
@@ -265,7 +311,8 @@ export function Chip({ children, className, endSlot, ref, startSlot, style, xsty
 			ref={ref}
 			className={attrJoin(sx.className, className)}
 			style={mergeStyle(sx.style, style)}
-			{...props}>
+			{...props}
+		>
 			{startSlot != null ? (
 				<span aria-hidden {...stylex.props(comboboxParts.chipSlot)}>
 					{startSlot}
@@ -300,11 +347,14 @@ export function ChipRemove({
 	return (
 		<BaseCombobox.ChipRemove
 			ref={ref}
-			aria-label={ariaLabel ?? (children == null && ariaLabelledBy == null ? "Remove selection" : undefined)}
+			aria-label={
+				ariaLabel ?? (children == null && ariaLabelledBy == null ? "Remove selection" : undefined)
+			}
 			aria-labelledby={ariaLabelledBy}
 			className={attrJoin(sx.className, className)}
 			style={mergeStyle(sx.style, style)}
-			{...props}>
+			{...props}
+		>
 			{children ?? <XIcon aria-hidden size={12} weight="bold" />}
 		</BaseCombobox.ChipRemove>
 	);
@@ -318,7 +368,13 @@ export type ComboboxChipOverflowProps = Omit<TooltipTriggerProps, "children"> & 
 	label: ReactNode;
 };
 
-export function ChipOverflow({ anchor, children, label, xstyle, ...props }: ComboboxChipOverflowProps) {
+export function ChipOverflow({
+	anchor,
+	children,
+	label,
+	xstyle,
+	...props
+}: ComboboxChipOverflowProps) {
 	return (
 		<Tooltip.Root>
 			<Tooltip.Trigger xstyle={[comboboxParts.chipOverflow, xstyle]} {...props}>
@@ -357,7 +413,12 @@ export function Popup({
 		xstyle: positionerXstyle,
 		...otherPositionerProps
 	} = positionerProps ?? {};
-	const sx = stylex.props(comboboxParts.panelSurface, comboboxParts.popup, popupMotionStyles.anchoredPopup, xstyle);
+	const sx = stylex.props(
+		comboboxParts.panelSurface,
+		comboboxParts.popup,
+		popupMotionStyles.anchoredPopup,
+		xstyle,
+	);
 	const positionerSx = stylex.props(popupPositionerStyles, positionerXstyle);
 
 	return (
@@ -368,12 +429,14 @@ export function Popup({
 				sideOffset={sideOffset}
 				className={attrJoin(positionerSx.className, positionerClassName)}
 				style={mergeStyle(positionerSx.style, positionerStyle)}
-				{...otherPositionerProps}>
+				{...otherPositionerProps}
+			>
 				<BaseCombobox.Popup
 					ref={ref}
 					className={attrJoin(sx.className, className)}
 					style={mergeStyle(sx.style, style)}
-					{...props}>
+					{...props}
+				>
 					{children}
 				</BaseCombobox.Popup>
 			</BaseCombobox.Positioner>
@@ -429,9 +492,13 @@ export function Item({
 			ref={ref}
 			className={attrJoin(sx.className, className)}
 			style={mergeStyle(sx.style, style)}
-			{...props}>
+			{...props}
+		>
 			{creatable ? (
-				<span aria-hidden {...stylex.props(menuItemStyles.indicator, comboboxParts.creatableIndicator)}>
+				<span
+					aria-hidden
+					{...stylex.props(menuItemStyles.indicator, comboboxParts.creatableIndicator)}
+				>
 					<PlusIcon aria-hidden size={16} weight="bold" />
 				</span>
 			) : (

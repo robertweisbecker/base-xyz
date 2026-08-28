@@ -35,7 +35,12 @@ test("preserves list semantics and differentiates nested markers", async ({ page
 			customItem.evaluate((item) => {
 				const marker = item.querySelector(":scope > span");
 				if (!(marker instanceof HTMLElement)) return false;
-				return Math.abs(marker.getBoundingClientRect().height - Number.parseFloat(getComputedStyle(item).lineHeight)) <= 1;
+				return (
+					Math.abs(
+						marker.getBoundingClientRect().height -
+							Number.parseFloat(getComputedStyle(item).lineHeight),
+					) <= 1
+				);
 			}),
 		)
 		.toBe(true);
@@ -47,13 +52,17 @@ test("preserves list semantics and differentiates nested markers", async ({ page
 				customItem.locator(":scope > div").boundingBox(),
 			]);
 			if (itemBox === null || markerBox === null || contentBox === null) return false;
-			return markerBox.x < contentBox.x && Math.abs(itemBox.x + markerBox.width - contentBox.x) <= 1;
+			return (
+				markerBox.x < contentBox.x && Math.abs(itemBox.x + markerBox.width - contentBox.x) <= 1
+			);
 		})
 		.toBe(true);
 });
 
 test("a custom item marker forces unordered semantics", async ({ page }) => {
-	await page.goto("/iframe.html?id=components-list--playground&viewMode=story&args=ordered:true;marker:Check");
+	await page.goto(
+		"/iframe.html?id=components-list--playground&viewMode=story&args=ordered:true;marker:Check",
+	);
 
 	await expect(page.getByTestId("list-playground")).toHaveJSProperty("tagName", "UL");
 });

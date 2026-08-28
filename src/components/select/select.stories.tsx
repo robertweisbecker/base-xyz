@@ -127,9 +127,14 @@ function PlaygroundExample({
 				{...sharedProps}
 				defaultValue={["React", "Svelte"]}
 				items={frameworkItems}
-				multiple>
+				multiple
+			>
 				{selectLabel ? <Select.Label>{selectLabel}</Select.Label> : null}
-				<Select.Trigger aria-label={selectLabel || "Framework"} placeholder={_placeholder} variant={_variant}>
+				<Select.Trigger
+					aria-label={selectLabel || "Framework"}
+					placeholder={_placeholder}
+					variant={_variant}
+				>
 					{formatMultipleFrameworks}
 				</Select.Trigger>
 				<FrameworkPopup itemVariant={_itemVariant} positioning={_positioning} />
@@ -140,7 +145,11 @@ function PlaygroundExample({
 	return (
 		<Select.Root<string> key="single" {...sharedProps} items={frameworkItems}>
 			{selectLabel ? <Select.Label>{selectLabel}</Select.Label> : null}
-			<Select.Trigger aria-label={selectLabel || "Framework"} placeholder={_placeholder} variant={_variant} />
+			<Select.Trigger
+				aria-label={selectLabel || "Framework"}
+				placeholder={_placeholder}
+				variant={_variant}
+			/>
 			<FrameworkPopup itemVariant={_itemVariant} positioning={_positioning} />
 		</Select.Root>
 	);
@@ -163,7 +172,11 @@ export const SelectionModes: Story = {
 				<Select.Trigger placeholder="Choose a framework" />
 				<FrameworkPopup />
 			</Select.Root>
-			<Select.Root<string, true> defaultValue={["TypeScript", "CSS"]} items={languageItems} multiple>
+			<Select.Root<string, true>
+				defaultValue={["TypeScript", "CSS"]}
+				items={languageItems}
+				multiple
+			>
 				<Select.Label>Multiple selection</Select.Label>
 				<Select.Trigger placeholder="Select languages">{formatMultipleLanguages}</Select.Trigger>
 				<Select.Popup positionerProps={{ alignItemWithTrigger: false }}>
@@ -188,7 +201,9 @@ export const Sizes: Story = {
 		<Stack gap={6}>
 			{(["sm", "md", "lg"] as const).map((size) => (
 				<Select.Root<string> key={size} defaultValue="React" items={frameworkItems} size={size}>
-					<Select.Label>{size === "sm" ? "Small" : size === "md" ? "Medium" : "Large"}</Select.Label>
+					<Select.Label>
+						{size === "sm" ? "Small" : size === "md" ? "Medium" : "Large"}
+					</Select.Label>
 					<Select.Trigger />
 					<FrameworkPopup />
 				</Select.Root>
@@ -331,7 +346,8 @@ function ComplexValueSelect() {
 			isItemEqualToValue={(item, value) => item.code === value.code}
 			itemToStringLabel={(country) => country.name}
 			itemToStringValue={(country) => country.code}
-			items={countryItems}>
+			items={countryItems}
+		>
 			<Select.Label>Country or region</Select.Label>
 			<Select.Trigger placeholder="Select a country">
 				{(country: Country | null) =>
@@ -460,7 +476,8 @@ export const UserSelection: Story = {
 			isItemEqualToValue={(item, value) => item.id === value.id}
 			itemToStringLabel={(user) => user.name}
 			itemToStringValue={(user) => user.id}
-			items={userSelectItems}>
+			items={userSelectItems}
+		>
 			<Select.Label>Assignee</Select.Label>
 			<Select.Trigger placeholder="Select a person" xstyle={storyParts.userSelect}>
 				{(user: UserOption | null) =>
@@ -571,7 +588,9 @@ function FrameworkPopup({
 	);
 }
 
-function getPositionerProps(positioning: Positioning): NonNullable<SelectPopupProps["positionerProps"]> {
+function getPositionerProps(
+	positioning: Positioning,
+): NonNullable<SelectPopupProps["positionerProps"]> {
 	switch (positioning) {
 		case "bottom-start":
 			return { align: "start", alignItemWithTrigger: false, side: "bottom" };

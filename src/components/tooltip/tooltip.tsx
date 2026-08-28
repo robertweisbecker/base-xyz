@@ -3,11 +3,16 @@ import { Tooltip as BaseTooltip } from "@base-ui/react/tooltip";
 import * as stylex from "@stylexjs/stylex";
 import { zIndex } from "@/styles/constants.stylex";
 import { mergeStyle, type BaseStyleProps } from "@/styles/props/base";
-import { popupArrowStyles, popupPositionerStyles, popupViewportStyles } from "@/components/popover/popover.stylex";
+import {
+	popupArrowStyles,
+	popupPositionerStyles,
+	popupViewportStyles,
+} from "@/components/popover/popover.stylex";
 import { tooltipStyles } from "./tooltip.stylex";
 import { attrJoin } from "@/utils/attr-join";
 
-type StyledProps<T> = Omit<T, "className" | "style" | "xstyle"> & BaseStyleProps & { className?: string };
+type StyledProps<T> = Omit<T, "className" | "style" | "xstyle"> &
+	BaseStyleProps & { className?: string };
 
 export type TooltipPositionerProps = StyledProps<BaseTooltip.Positioner.Props>;
 export type TooltipViewportProps = StyledProps<BaseTooltip.Viewport.Props>;
@@ -18,7 +23,14 @@ export type TooltipPopupProps = StyledProps<BaseTooltip.Popup.Props> & {
 	positionerProps?: TooltipPositionerProps;
 };
 
-function Positioner({ ref, className, style, xstyle, sideOffset = 4, ...props }: TooltipPositionerProps) {
+function Positioner({
+	ref,
+	className,
+	style,
+	xstyle,
+	sideOffset = 4,
+	...props
+}: TooltipPositionerProps) {
 	const { className: sxClassName, style: sxStyle } = stylex.props(
 		popupPositionerStyles,
 		tooltipParts.positioner,
@@ -47,7 +59,11 @@ export function Popup({
 	xstyle,
 	...props
 }: TooltipPopupProps) {
-	const { className: sxClassName, style: sxStyle } = stylex.props(tooltipStyles.popup, tooltipParts.popup, xstyle);
+	const { className: sxClassName, style: sxStyle } = stylex.props(
+		tooltipStyles.popup,
+		tooltipParts.popup,
+		xstyle,
+	);
 
 	return (
 		<BaseTooltip.Portal {...portalProps}>
@@ -56,7 +72,8 @@ export function Popup({
 					ref={ref}
 					className={attrJoin(sxClassName, className)}
 					style={mergeStyle(sxStyle, style)}
-					{...props}>
+					{...props}
+				>
 					{arrowProps ? <Arrow {...arrowProps} /> : null}
 					{children}
 				</BaseTooltip.Popup>

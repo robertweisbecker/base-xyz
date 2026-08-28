@@ -21,7 +21,12 @@ const percentageFormatter = new Intl.NumberFormat(undefined, {
 	style: "percent",
 });
 
-export function ContextPopover({ size = "md", total, usage, variant = "ghost" }: ContextPopoverProps) {
+export function ContextPopover({
+	size = "md",
+	total,
+	usage,
+	variant = "ghost",
+}: ContextPopoverProps) {
 	const normalizedUsage = normalizeTokenCount(usage);
 	const normalizedTotal = normalizeTokenCount(total);
 	const boundedUsage = Math.min(normalizedUsage, normalizedTotal);
@@ -36,8 +41,14 @@ export function ContextPopover({ size = "md", total, usage, variant = "ghost" }:
 				delay={150}
 				openOnHover
 				render={
-					<Button aria-label={`Context usage: ${percentageText}`} shape="circle" size={size} variant={variant} />
-				}>
+					<Button
+						aria-label={`Context usage: ${percentageText}`}
+						shape="circle"
+						size={size}
+						variant={variant}
+					/>
+				}
+			>
 				<MeterGauge
 					aria-hidden
 					fillColor="currentColor"
@@ -52,13 +63,15 @@ export function ContextPopover({ size = "md", total, usage, variant = "ghost" }:
 			<Popover.Popup
 				positionerProps={{ align: "center", side: "top" }}
 				showClose={false}
-				{...stylex.props(contextPopoverParts.popup)}>
+				{...stylex.props(contextPopoverParts.popup)}
+			>
 				<Popover.Title>Context usage</Popover.Title>
 				<Meter.Root
 					aria-valuetext={`${tokenFraction}, ${percentageText}`}
 					color={tokens["--fill-neutral"]}
 					max={normalizedTotal > 0 ? normalizedTotal : 1}
-					value={boundedUsage}>
+					value={boundedUsage}
+				>
 					<Meter.Label>{tokenFraction}</Meter.Label>
 					<Meter.Value>{() => percentageText}</Meter.Value>
 					<Meter.Track>

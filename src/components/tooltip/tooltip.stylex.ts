@@ -22,6 +22,11 @@ const styles = stylex.create({
 });
 
 export const tooltipStyles = {
-	popup: [textStyles.supporting, styles.surface, popupMotionStyles.anchoredPopup, popupMotionStyles.tooltipPopup],
+	popup: [
+		textStyles.supporting,
+		styles.surface,
+		popupMotionStyles.anchoredPopup,
+		popupMotionStyles.tooltipPopup,
+	],
 	chrome: [textStyles.supporting, styles.surface],
 } as const;

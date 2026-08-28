@@ -71,7 +71,16 @@ const meta = {
 	},
 	parameters: {
 		controls: {
-			include: ["activateOnFocus", "defaultValue", "disabled", "endSlot", "orientation", "size", "startSlot", "variant"],
+			include: [
+				"activateOnFocus",
+				"defaultValue",
+				"disabled",
+				"endSlot",
+				"orientation",
+				"size",
+				"startSlot",
+				"variant",
+			],
 		},
 	},
 	decorators: [
@@ -187,7 +196,8 @@ function ExampleTabs({
 			defaultValue={defaultValue}
 			orientation={orientation}
 			size={size}
-			variant={variant}>
+			variant={variant}
+		>
 			<Tabs.List activateOnFocus={activateOnFocus}>
 				<Tabs.Tab endSlot={endSlot} startSlot={startSlot} value="overview">
 					Overview

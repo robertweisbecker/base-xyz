@@ -18,7 +18,10 @@ import {
 } from "@/blocks/model-selector/model-selector.examples";
 import { PromptComposer, type PromptComposerRootProps } from "./prompt-composer";
 
-type ComposerDemoProps = Pick<PromptComposerRootProps, "clearOnSubmit" | "defaultValue" | "disabled">;
+type ComposerDemoProps = Pick<
+	PromptComposerRootProps,
+	"clearOnSubmit" | "defaultValue" | "disabled"
+>;
 
 const meta = {
 	title: "Blocks/Prompt composer",
@@ -51,7 +54,9 @@ export const Examples: Story = {
 			<Example label="Growing input">
 				<ComposerDemo
 					clearOnSubmit={false}
-					defaultValue={'Summarize the open review comments.\nInclude the affected components and the verification steps.'}
+					defaultValue={
+						"Summarize the open review comments.\nInclude the affected components and the verification steps."
+					}
 				/>
 			</Example>
 			<Separator />
@@ -126,13 +131,15 @@ function GeneratingDemo() {
 			<PromptComposer.Root
 				defaultValue="Summarize the open review comments."
 				onSubmit={(prompt) => setFeedback(`Submitted: ${prompt}`)}
-				submitting={submitting}>
+				submitting={submitting}
+			>
 				<ComposerSurface
 					submitting={submitting}
 					onStop={() => {
 						setSubmitting(false);
 						setFeedback("Generation stopped.");
-					}}>
+					}}
+				>
 					<Button
 						variant="neutral"
 						size="sm"
@@ -143,7 +150,8 @@ function GeneratingDemo() {
 						onClick={() => {
 							setWebSearch((enabled) => !enabled);
 							setFeedback(webSearch ? "Web search disabled." : "Web search enabled.");
-						}}>
+						}}
+					>
 						Search
 					</Button>
 				</ComposerSurface>
@@ -155,14 +163,20 @@ function GeneratingDemo() {
 
 function DisabledDemo() {
 	return (
-		<PromptComposer.Root defaultValue="Summarize the open review comments." disabled onSubmit={() => undefined}>
+		<PromptComposer.Root
+			defaultValue="Summarize the open review comments."
+			disabled
+			onSubmit={() => undefined}
+		>
 			<ComposerSurface />
 		</PromptComposer.Root>
 	);
 }
 
 function ComposerDemo({ clearOnSubmit, defaultValue, disabled }: ComposerDemoProps) {
-	const [feedback, setFeedback] = useState("Press Enter to send. Use Shift + Enter for a new line.");
+	const [feedback, setFeedback] = useState(
+		"Press Enter to send. Use Shift + Enter for a new line.",
+	);
 
 	return (
 		<Stack gap={3} maxWidth="42rem" width="full">
@@ -170,7 +184,8 @@ function ComposerDemo({ clearOnSubmit, defaultValue, disabled }: ComposerDemoPro
 				clearOnSubmit={clearOnSubmit}
 				defaultValue={defaultValue}
 				disabled={disabled}
-				onSubmit={(prompt) => setFeedback(`Submitted: ${prompt}`)}>
+				onSubmit={(prompt) => setFeedback(`Submitted: ${prompt}`)}
+			>
 				<ComposerSurface>
 					<AddMenu setFeedback={setFeedback} />
 
@@ -193,8 +208,14 @@ function ComposerDemo({ clearOnSubmit, defaultValue, disabled }: ComposerDemoPro
 								return;
 							}
 							setFeedback(`Speed changed to ${value.speed}.`);
-						}}>
-						<ModelSelector.Trigger variant="neutral" size="sm" shape="pill" xstyle={storyParts.modelTrigger} />
+						}}
+					>
+						<ModelSelector.Trigger
+							variant="neutral"
+							size="sm"
+							shape="pill"
+							xstyle={storyParts.modelTrigger}
+						/>
 						<ModelSelector.Popup />
 					</ModelSelector.Root>
 				</ComposerSurface>

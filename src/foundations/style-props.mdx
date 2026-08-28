@@ -8,11 +8,11 @@ The style contract follows [ADR 0011](../../docs/adr/0011-layout-primitives-comm
 
 ## Three surfaces
 
-| Surface | What it exposes | Use it for |
-| --- | --- | --- |
-| `Box`, `Stack`, `Grid` | Token-aware display, spacing, sizing, position, child layout, surfaces, typography, and flow as appropriate | Page and component composition where the caller owns layout |
-| Eligible semantic root | Scalar `m`, `mx`, `my`, `mt`, `mb`, `ms`, `me` plus `xstyle`, native `style`, and `className` | Parent-owned external spacing around a stable normal-flow node |
-| Positioned/controller surface | Component or Base UI geometry props; no common margins by default | Dialogs, portals, popups, positioners, collision-managed surfaces, and controller roots |
+| Surface                       | What it exposes                                                                                             | Use it for                                                                              |
+| ----------------------------- | ----------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------- |
+| `Box`, `Stack`, `Grid`        | Token-aware display, spacing, sizing, position, child layout, surfaces, typography, and flow as appropriate | Page and component composition where the caller owns layout                             |
+| Eligible semantic root        | Scalar `m`, `mx`, `my`, `mt`, `mb`, `ms`, `me` plus `xstyle`, native `style`, and `className`               | Parent-owned external spacing around a stable normal-flow node                          |
+| Positioned/controller surface | Component or Base UI geometry props; no common margins by default                                           | Dialogs, portals, popups, positioners, collision-managed surfaces, and controller roots |
 
 Not every component receives margins. An eligible compound root does not confer them on its parts. `Card.Root` has margins, for example, while `Card.Header`, `Card.Content`, `Card.Footer`, `Card.Title`, and `Card.Description` do not.
 
@@ -20,12 +20,12 @@ Not every component receives margins. An eligible compound root does not confer 
 
 Margin props are logical and scalar:
 
-| Prop | Logical edges |
-| --- | --- |
-| `m` | all |
-| `mx` | inline start and end |
-| `my` | block start and end |
-| `mt`, `mb` | block start, block end |
+| Prop       | Logical edges            |
+| ---------- | ------------------------ |
+| `m`        | all                      |
+| `mx`       | inline start and end     |
+| `my`       | block start and end      |
+| `mt`, `mb` | block start, block end   |
 | `ms`, `me` | inline start, inline end |
 
 Edge precedence is `side ?? axis ?? all`. Every spacing prop uses the same `SpaceValue`: the explicit steps `0, 0.5, 1, 1.5, 2, 3, 3.5, 4, 5, 6, 7, 8, 9, 10, 12, 16`, their negative forms except negative zero, or a CSS string such as `"auto"`, `"1rem"`, `"var(--local-gap)"`, or `"calc(...)"`. The resolver is uniform; property-specific validity belongs to CSS, which ignores invalid declarations.
@@ -48,12 +48,12 @@ A theme can override one existing step for a subtree, and the matching numeric m
 
 ```tsx
 const spacious = stylex.createTheme(tokens, {
-  "--space-4": "2rem",
+	"--space-4": "2rem",
 });
 
 <div {...stylex.props(spacious)}>
-  <Button m={4}>Uses 2rem margins here</Button>
-</div>
+	<Button m={4}>Uses 2rem margins here</Button>
+</div>;
 ```
 
 Field components apply margins to the wrapper containing the label, control, description, and error—not to the input or trigger itself.
@@ -64,10 +64,10 @@ Padding, dimensions, gaps, and optical alignment inside a semantic component sta
 
 ```tsx
 <Card.Root size="lg" mt={4}>
-  <Card.Header>
-    <Card.Title>Billing</Card.Title>
-  </Card.Header>
-  <Card.Content>Card padding comes from size="lg".</Card.Content>
+	<Card.Header>
+		<Card.Title>Billing</Card.Title>
+	</Card.Header>
+	<Card.Content>Card padding comes from size="lg".</Card.Content>
 </Card.Root>
 ```
 
@@ -75,10 +75,10 @@ When a composition needs broad layout vocabulary, use `Box`, `Stack`, or `Grid` 
 
 ```tsx
 <Stack gap={4} p={4}>
-  <Grid columns={12} gap={3}>
-    <Box columnSpan={8} bg="surface" radius="md" />
-    <Box columnSpan={4} />
-  </Grid>
+	<Grid columns={12} gap={3}>
+		<Box columnSpan={8} bg="surface" radius="md" />
+		<Box columnSpan={4} />
+	</Grid>
 </Stack>
 ```
 
@@ -91,18 +91,10 @@ import x from "@stylexjs/atoms";
 import * as stylex from "@stylexjs/stylex";
 
 const styles = stylex.create({
-  submit: { marginBlockStart: tokens["--space-2"] },
+	submit: { marginBlockStart: tokens["--space-2"] },
 });
 
-<Button
-  xstyle={[
-    styles.submit,
-    x.width["100%"],
-    submitting && x.opacity["0.5"],
-  ]}
->
-  Sign in
-</Button>
+<Button xstyle={[styles.submit, x.width["100%"], submitting && x.opacity["0.5"]]}>Sign in</Button>;
 ```
 
 Use static Atoms for compact one-off declarations. Use `stylex.create` for named, responsive, selector-based, or shared styles. Do not add an Atom-only component prop or call dynamic Atoms when a static Atom or created style expresses the value.
@@ -124,17 +116,17 @@ Named margins do not accept responsive objects. Keep every breakpoint value for 
 
 ```tsx
 const styles = stylex.create({
-  feature: {
-    gridColumn: {
-      default: "span 12 / span 12",
-      [breakpoints.md]: "span 6 / span 6",
-    },
-  },
+	feature: {
+		gridColumn: {
+			default: "span 12 / span 12",
+			[breakpoints.md]: "span 6 / span 6",
+		},
+	},
 });
 
 <Grid columns={12}>
-  <Card.Root xstyle={styles.feature}>Responsive span</Card.Root>
-</Grid>
+	<Card.Root xstyle={styles.feature}>Responsive span</Card.Root>
+</Grid>;
 ```
 
 Prefer fluid flex/grid behavior when it is sufficient. Promote a repeated responsive set into a named recipe or component variant rather than creating a runtime responsive resolver.
@@ -145,10 +137,10 @@ Dialogs and popups do not need normal-flow margin overrides. Their viewport, pos
 
 ```tsx
 <Popover.Root>
-  <Popover.Trigger render={<Button>Details</Button>} />
-  <Popover.Popup positionerProps={{ sideOffset: 8 }}>
-    Positioned by Base UI, not by margins.
-  </Popover.Popup>
+	<Popover.Trigger render={<Button>Details</Button>} />
+	<Popover.Popup positionerProps={{ sideOffset: 8 }}>
+		Positioned by Base UI, not by margins.
+	</Popover.Popup>
 </Popover.Root>
 ```
 

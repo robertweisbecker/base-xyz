@@ -24,22 +24,22 @@ export type MeterGaugeProps = Omit<
 > &
 	MarginProps &
 	BaseStyleProps & {
-	/** Controls how the gap is distributed between the primary and secondary arcs. */
-	arc?: MeterGaugeArc;
-	/** Replaces the value at the center of the gauge. */
-	children?: ReactNode;
-	className?: string;
-	/** Primary arc color. */
-	fillColor?: string;
-	/** Visible label associated with the meter. */
-	label?: ReactNode;
-	/** Secondary arc color. */
-	trackColor?: string;
-	/** Whether to show the numeric value when custom children are not provided. */
-	showValue?: boolean;
-	size?: MeterGaugeSize;
-	value: number;
-};
+		/** Controls how the gap is distributed between the primary and secondary arcs. */
+		arc?: MeterGaugeArc;
+		/** Replaces the value at the center of the gauge. */
+		children?: ReactNode;
+		className?: string;
+		/** Primary arc color. */
+		fillColor?: string;
+		/** Visible label associated with the meter. */
+		label?: ReactNode;
+		/** Secondary arc color. */
+		trackColor?: string;
+		/** Whether to show the numeric value when custom children are not provided. */
+		showValue?: boolean;
+		size?: MeterGaugeSize;
+		value: number;
+	};
 
 function clamp(value: number) {
 	if (Number.isNaN(value)) return 0;
@@ -74,11 +74,7 @@ export function MeterGauge({
 	const secondaryLength = secondaryPercentage * (circumference / 100);
 	const primaryRotation = -90 + gap * equalOffset * 3.6;
 	const secondaryRotation = 270 - gap * (1 - equalOffset) * 3.6;
-	const sx = stylex.props(
-		meterGaugeParts.root,
-		marginStyles,
-		xstyle,
-	);
+	const sx = stylex.props(meterGaugeParts.root, marginStyles, xstyle);
 
 	return (
 		<BaseMeter.Root
@@ -87,15 +83,19 @@ export function MeterGauge({
 			max={100}
 			min={0}
 			style={mergeStyle(sx.style, style)}
-			value={percentage}>
+			value={percentage}
+		>
 			{label != null ? (
-				<BaseMeter.Label {...stylex.props(textStyles.supporting, meterGaugeParts.label)}>{label}</BaseMeter.Label>
+				<BaseMeter.Label {...stylex.props(textStyles.supporting, meterGaugeParts.label)}>
+					{label}
+				</BaseMeter.Label>
 			) : null}
 
 			<span {...stylex.props(meterGaugeParts.gauge(size))}>
 				<BaseMeter.Track
 					{...stylex.props(meterGaugeParts.track)}
-					render={<svg aria-hidden fill="none" height={size} viewBox="0 0 100 100" width={size} />}>
+					render={<svg aria-hidden fill="none" height={size} viewBox="0 0 100 100" width={size} />}
+				>
 					<circle
 						{...stylex.props(
 							meterGaugeParts.arc,
@@ -118,7 +118,10 @@ export function MeterGauge({
 								{...stylex.props(
 									meterGaugeParts.arc,
 									meterGaugeParts.arcColor(fillColor),
-									meterGaugeParts.arcGeometry(`${primaryLength} ${circumference}`, `rotate(${primaryRotation}deg)`),
+									meterGaugeParts.arcGeometry(
+										`${primaryLength} ${circumference}`,
+										`rotate(${primaryRotation}deg)`,
+									),
 									primaryPercentage === 0 && meterGaugeParts.hidden,
 								)}
 								cx="50"
@@ -133,7 +136,11 @@ export function MeterGauge({
 				{children != null ? (
 					<span
 						aria-hidden
-						{...stylex.props(meterGaugeParts.content, meterGaugeParts.value(config.fontSize, config.fontWeight))}>
+						{...stylex.props(
+							meterGaugeParts.content,
+							meterGaugeParts.value(config.fontSize, config.fontWeight),
+						)}
+					>
 						{children}
 					</span>
 				) : showValue && size !== 16 ? (
@@ -142,7 +149,8 @@ export function MeterGauge({
 							meterGaugeParts.content,
 							meterGaugeParts.value(config.fontSize, config.fontWeight),
 							size === 20 && meterGaugeParts.compactValue,
-						)}>
+						)}
+					>
 						{(_, currentValue) => Math.round(clamp(currentValue))}
 					</BaseMeter.Value>
 				) : null}

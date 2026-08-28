@@ -9,7 +9,8 @@ import { tokens } from "@/theme/tokens.stylex";
 export const buttonMarker = stylex.defineMarker();
 
 const HOVER_NOT_PRESSED_OR_OPEN = ":hover:not([data-disabled],:active,[data-pressed])";
-const PRESSED = ':is([aria-pressed="true"],[data-active],[data-pressed]):not([data-panel-open],[data-disabled])';
+const PRESSED =
+	':is([aria-pressed="true"],[data-active],[data-pressed]):not([data-panel-open],[data-disabled])';
 
 const buttonParts = stylex.create({
 	root: {
@@ -368,6 +369,8 @@ export function getButtonSlotStyleProps(
 		iconOnly ? iconOnlySlotSizes[size] : slotSizes[size],
 		!iconOnly && role === "start" && startSlotOffsets[size],
 		!iconOnly && role === "end" && endSlotOffsets[size],
-		!iconOnly && (variant === "neutral" || variant === "secondary" || variant === "ghost") && slotParts.muted,
+		!iconOnly &&
+			(variant === "neutral" || variant === "secondary" || variant === "ghost") &&
+			slotParts.muted,
 	);
 }

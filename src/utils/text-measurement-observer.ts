@@ -66,7 +66,10 @@ function observeFontLoading(callback: MeasurementCallback): () => void {
 }
 
 /** Re-measure when an element, its contents, or loaded fonts can change text layout. */
-export function observeTextMeasurement(element: Element, callback: MeasurementCallback): () => void {
+export function observeTextMeasurement(
+	element: Element,
+	callback: MeasurementCallback,
+): () => void {
 	const stopObservingResize = observeResize(element, callback);
 	const mutationObserver =
 		typeof MutationObserver === "undefined" ? null : new MutationObserver(callback);

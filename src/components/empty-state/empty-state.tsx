@@ -39,26 +39,25 @@ export function EmptyState({
 	...props
 }: EmptyStateProps) {
 	const { marginStyles, rest } = extractMarginProps(props);
-	const rootSx = stylex.props(
-		emptyStateStyles.root,
-		rootSizeStyles[size],
-		...marginStyles,
-		xstyle,
-	);
+	const rootSx = stylex.props(emptyStateStyles.root, rootSizeStyles[size], ...marginStyles, xstyle);
 	const Title = headingLevel;
 
 	return (
 		<div
 			className={attrJoin(rootSx.className, className)}
 			style={mergeStyle(rootSx.style, style)}
-			{...rest}>
-			{icon ? <div {...stylex.props(emptyStateStyles.icon, iconSizeStyles[size])}>{icon}</div> : null}
+			{...rest}
+		>
+			{icon ? (
+				<div {...stylex.props(emptyStateStyles.icon, iconSizeStyles[size])}>{icon}</div>
+			) : null}
 			<div {...stylex.props(emptyStateStyles.message)}>
 				<Heading
 					textAlign="center"
 					render={<Title />}
 					size={size === "sm" ? "2" : size === "md" ? "4" : "5"}
-					{...stylex.props(emptyStateStyles.title)}>
+					{...stylex.props(emptyStateStyles.title)}
+				>
 					{title}
 				</Heading>
 				{description ? (
@@ -69,12 +68,15 @@ export function EmptyState({
 						size={size === "sm" ? "1" : size === "md" ? "2" : "3"}
 						{...stylex.props(emptyStateStyles.description)}
 						mt={size === "sm" ? 1 : size === "md" ? 2 : 3}
-						wrap="pretty">
+						wrap="pretty"
+					>
 						{description}
 					</Text>
 				) : null}
 			</div>
-			{children ? <div {...stylex.props(emptyStateStyles.actions, actionSizeStyles[size])}>{children}</div> : null}
+			{children ? (
+				<div {...stylex.props(emptyStateStyles.actions, actionSizeStyles[size])}>{children}</div>
+			) : null}
 		</div>
 	);
 }

@@ -174,7 +174,8 @@ function ShortcutArbitrationFixture() {
 				onOpenChange={handleFirstOpenChange}
 				shortcut
 				items={commandGroups}
-				itemToStringValue={commandToStringValue}>
+				itemToStringValue={commandToStringValue}
+			>
 				<CommandPalette.Input />
 				<CommandResults />
 				<CommandPalette.Empty />
@@ -186,7 +187,8 @@ function ShortcutArbitrationFixture() {
 					onOpenChange={handleSecondOpenChange}
 					shortcut
 					items={commandGroups}
-					itemToStringValue={commandToStringValue}>
+					itemToStringValue={commandToStringValue}
+				>
 					<CommandPalette.Input />
 					<CommandResults />
 					<CommandPalette.Empty />
@@ -207,9 +209,12 @@ function CommandPaletteExample({ shortcut = false }: { shortcut?: boolean }) {
 		<Stack align="start" gap={3}>
 			<CommandPalette.Root
 				shortcut={shortcut}
-				trigger={<CommandPalette.Trigger startSlot={<MagnifyingGlassIcon weight="bold" aria-hidden />} />}
+				trigger={
+					<CommandPalette.Trigger startSlot={<MagnifyingGlassIcon weight="bold" aria-hidden />} />
+				}
 				items={commandGroups}
-				itemToStringValue={commandToStringValue}>
+				itemToStringValue={commandToStringValue}
+			>
 				<CommandPalette.Input placeholder="Search actions, settings, and docs…" />
 				<CommandResults onSelect={handleSelect} />
 				<CommandPalette.Empty />
@@ -225,7 +230,9 @@ function CommandPaletteExample({ shortcut = false }: { shortcut?: boolean }) {
 				</CommandPalette.Footer>
 			</CommandPalette.Root>
 			<Text color="muted" size="2" aria-live="polite">
-				{selectedCommand ? `Last selected: ${selectedCommand}` : "Open the palette or press command K."}
+				{selectedCommand
+					? `Last selected: ${selectedCommand}`
+					: "Open the palette or press command K."}
 			</Text>
 		</Stack>
 	);
@@ -246,7 +253,8 @@ function CommandResults({ onSelect }: { onSelect?: (command: CommandAction) => v
 								description={command.description}
 								shortcut={command.shortcut}
 								endSlot={!command.shortcut ? "Recently visited" : undefined}
-								onClick={() => onSelect?.(command)}>
+								onClick={() => onSelect?.(command)}
+							>
 								{command.title}
 							</CommandPalette.Item>
 						)}

@@ -54,11 +54,19 @@ export const Examples: Story = {
 				<Loader aria-hidden /> Loading (12px)
 			</Text>
 
-			<Text size="3" render={<Stack align="center" gap={2} orientation="horizontal" />} color="accent">
+			<Text
+				size="3"
+				render={<Stack align="center" gap={2} orientation="horizontal" />}
+				color="accent"
+			>
 				<Loader aria-hidden /> Loading (16px)
 			</Text>
 
-			<Text size="6" render={<Stack align="center" gap={3} orientation="horizontal" />} color="error">
+			<Text
+				size="6"
+				render={<Stack align="center" gap={3} orientation="horizontal" />}
+				color="error"
+			>
 				<Loader aria-hidden /> Loading (24px)
 			</Text>
 		</Stack>

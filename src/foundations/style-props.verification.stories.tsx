@@ -55,11 +55,8 @@ function LoginForm() {
 						aria-pressed={submitting}
 						data-testid="atom-submit"
 						onClick={() => setSubmitting((value) => !value)}
-						xstyle={[
-							styles.submitButton,
-							x.width["100%"],
-							submitting && x.opacity["0.5"],
-						]}>
+						xstyle={[styles.submitButton, x.width["100%"], submitting && x.opacity["0.5"]]}
+					>
 						{submitting ? "Reset" : "Sign in"}
 					</Button>
 				</Stack>
@@ -77,7 +74,8 @@ function ChipOverflowFixture() {
 				anchor={anchor}
 				data-forwarded="true"
 				label="+3 more"
-				xstyle={x.marginInlineStart._8px}>
+				xstyle={x.marginInlineStart._8px}
+			>
 				Ada, Grace, Linus
 			</Combobox.ChipOverflow>
 		</div>
@@ -90,7 +88,9 @@ export const ConsumerContract: Story = {
 			<Heading mb={1} size="5">
 				Consumer contract
 			</Heading>
-			<Text mb={2}>Broad layout is explicit; semantic roots expose common margins and escape hatches.</Text>
+			<Text mb={2}>
+				Broad layout is explicit; semantic roots expose common margins and escape hatches.
+			</Text>
 
 			<Grid columns={4} gap={2} width="240px">
 				<Box columnSpan={2}>Two columns</Box>
@@ -132,7 +132,12 @@ export const ConsumerContract: Story = {
 			<Box data-testid="border-style-default" borderStyle="dashed">
 				Border style default
 			</Box>
-			<Box data-testid="border-width-override" borderColor="default" borderStyle="dashed" borderWidth={5}>
+			<Box
+				data-testid="border-width-override"
+				borderColor="default"
+				borderStyle="dashed"
+				borderWidth={5}
+			>
 				Border width override
 			</Box>
 			<Button data-testid="xstyle-margin-wins" m={4} xstyle={styles.zeroMargins}>
@@ -141,16 +146,23 @@ export const ConsumerContract: Story = {
 			<Button
 				data-testid="native-style-wins"
 				style={{ color: "rgb(0, 0, 255)" }}
-				xstyle={styles.redText}>
+				xstyle={styles.redText}
+			>
 				Native style wins
 			</Button>
 			<Dialog.Header
 				data-testid="compound-native-style-wins"
 				style={{ color: "rgb(0, 0, 255)" }}
-				xstyle={[styles.redText, x.width("123px")]}>
+				xstyle={[styles.redText, x.width("123px")]}
+			>
 				Compound native style wins
 			</Dialog.Header>
-			<CodeBlock aria-label="Example source" data-testid="code-block-pre" id="code-block-pre" mt={4}>
+			<CodeBlock
+				aria-label="Example source"
+				data-testid="code-block-pre"
+				id="code-block-pre"
+				mt={4}
+			>
 				{"const ready = true;"}
 			</CodeBlock>
 			<ChipOverflowFixture />

@@ -26,12 +26,20 @@ import {
 	type ReactNode,
 } from "react";
 import { Button, type ButtonProps } from "@/components/button/button";
-import { modalBackdropStyles, modalPopupStyles, modalViewportStyles } from "@/components/dialog/dialog.stylex";
+import {
+	modalBackdropStyles,
+	modalPopupStyles,
+	modalViewportStyles,
+} from "@/components/dialog/dialog.stylex";
 import { EmptyState } from "@/components/empty-state/empty-state";
 import { fieldStyles, fieldTextStyles } from "@/components/field/field.stylex";
 import { Kbd } from "@/components/kbd/kbd";
 import { Loader } from "@/components/loader/loader";
-import { menuItemSizeStyles, menuItemStyles, menuItemVariantStyles } from "@/components/menu/menu-item.stylex";
+import {
+	menuItemSizeStyles,
+	menuItemStyles,
+	menuItemVariantStyles,
+} from "@/components/menu/menu-item.stylex";
 import { ScrollArea } from "@/components/scroll-area/scroll-area";
 import { VisuallyHidden } from "@/components/visually-hidden/visually-hidden";
 import { tokens } from "@/theme/tokens.stylex";
@@ -39,7 +47,8 @@ import { SmileyMeltingIcon } from "@phosphor-icons/react";
 import { attrJoin } from "@/utils/attr-join";
 import { mergeStyle, type BaseStyleProps } from "@/styles/props/base";
 
-type StyledProps<T> = Omit<T, "className" | "style" | "xstyle"> & BaseStyleProps & { className?: string };
+type StyledProps<T> = Omit<T, "className" | "style" | "xstyle"> &
+	BaseStyleProps & { className?: string };
 
 type CommandPaletteContextValue = {
 	closeOnSelect: boolean;
@@ -196,7 +205,11 @@ export function Root<ItemValue = unknown>({
 		inline,
 		setOpen,
 	};
-	const panelSx = stylex.props(commandPaletteParts.panel, inline && commandPaletteParts.inlinePanel, xstyle);
+	const panelSx = stylex.props(
+		commandPaletteParts.panel,
+		inline && commandPaletteParts.inlinePanel,
+		xstyle,
+	);
 	// SAFETY: Base UI's grouped-items overload loses ItemValue through the rest spread; the root only forwards these props.
 	const rootProps = props as AutocompleteRootProps<unknown>;
 	const panel = (
@@ -205,13 +218,15 @@ export function Root<ItemValue = unknown>({
 			inline
 			open
 			autoHighlight={inline ? false : autoHighlight}
-			keepHighlight={!inline}>
+			keepHighlight={!inline}
+		>
 			<CommandPaletteContext.Provider value={contextValue}>
 				<div
 					aria-label={label}
 					role={inline ? "group" : undefined}
 					className={attrJoin(panelSx.className, className)}
-					style={mergeStyle(panelSx.style, style)}>
+					style={mergeStyle(panelSx.style, style)}
+				>
 					{children}
 				</div>
 			</CommandPaletteContext.Provider>
@@ -228,7 +243,10 @@ export function Root<ItemValue = unknown>({
 			<BaseDialog.Portal>
 				<BaseDialog.Backdrop {...stylex.props(modalBackdropStyles, commandPaletteParts.backdrop)} />
 				<BaseDialog.Viewport {...stylex.props(modalViewportStyles, commandPaletteParts.viewport)}>
-					<BaseDialog.Popup aria-label={label} {...stylex.props(modalPopupStyles, commandPaletteParts.popup)}>
+					<BaseDialog.Popup
+						aria-label={label}
+						{...stylex.props(modalPopupStyles, commandPaletteParts.popup)}
+					>
 						{panel}
 						<BaseDialog.Close>
 							<VisuallyHidden>Close command palette</VisuallyHidden>
@@ -240,9 +258,17 @@ export function Root<ItemValue = unknown>({
 	);
 }
 
-export function Trigger({ children = "Search", shortcut = "⌘K", ...props }: CommandPaletteTriggerProps) {
+export function Trigger({
+	children = "Search",
+	shortcut = "⌘K",
+	...props
+}: CommandPaletteTriggerProps) {
 	return (
-		<Button variant="neutral" endSlot={shortcut ? <Kbd size="sm">{shortcut}</Kbd> : props.endSlot} {...props}>
+		<Button
+			variant="neutral"
+			endSlot={shortcut ? <Kbd size="sm">{shortcut}</Kbd> : props.endSlot}
+			{...props}
+		>
 			{children}
 		</Button>
 	);
@@ -276,7 +302,8 @@ export function Input({
 	return (
 		<Autocomplete.InputGroup
 			className={attrJoin(inputGroupSx.className, className)}
-			style={mergeStyle(inputGroupSx.style, style)}>
+			style={mergeStyle(inputGroupSx.style, style)}
+		>
 			{startSlot ? (
 				<span aria-hidden {...stylex.props(commandPaletteParts.inputSlot)}>
 					{startSlot}
@@ -310,8 +337,13 @@ export function List({ children, className, style, xstyle, ...props }: CommandPa
 			label="Command results"
 			disableFade
 			showScrollbar="scroll"
-			{...stylex.props(commandPaletteParts.listArea)}>
-			<Autocomplete.List className={attrJoin(sx.className, className)} style={mergeStyle(sx.style, style)} {...props}>
+			{...stylex.props(commandPaletteParts.listArea)}
+		>
+			<Autocomplete.List
+				className={attrJoin(sx.className, className)}
+				style={mergeStyle(sx.style, style)}
+				{...props}
+			>
 				{children}
 			</Autocomplete.List>
 		</ScrollArea>
@@ -331,7 +363,13 @@ export function Group({ ref, className, style, xstyle, ...props }: CommandPalett
 	);
 }
 
-export function GroupLabel({ ref, className, style, xstyle, ...props }: CommandPaletteGroupLabelProps) {
+export function GroupLabel({
+	ref,
+	className,
+	style,
+	xstyle,
+	...props
+}: CommandPaletteGroupLabelProps) {
 	const sx = stylex.props(commandPaletteParts.groupLabel, xstyle);
 
 	return (
@@ -383,13 +421,16 @@ export function Item({
 					context.setOpen(false);
 				}
 			}}
-			{...props}>
+			{...props}
+		>
 			<span aria-hidden {...stylex.props(commandPaletteParts.itemIcon)}>
 				{startSlot}
 			</span>
 			<span {...stylex.props(commandPaletteParts.itemText)}>
 				<span {...stylex.props(commandPaletteParts.itemLabel)}>{children}</span>
-				{description ? <span {...stylex.props(commandPaletteParts.itemDescription)}>{description}</span> : null}
+				{description ? (
+					<span {...stylex.props(commandPaletteParts.itemDescription)}>{description}</span>
+				) : null}
 			</span>
 			<span {...stylex.props(commandPaletteParts.itemEndSlot)}>
 				{endSlot ?? (shortcut ? <Kbd size="sm">{shortcut}</Kbd> : null)}
@@ -421,7 +462,8 @@ export function Empty({
 			ref={ref}
 			className={attrJoin(sx.className, className)}
 			style={mergeStyle(sx.style, style)}
-			{...props}>
+			{...props}
+		>
 			{children}
 		</Autocomplete.Empty>
 	);
@@ -442,7 +484,8 @@ export function Loading({
 			ref={ref}
 			className={attrJoin(sx.className, className)}
 			style={mergeStyle(sx.style, style)}
-			{...props}>
+			{...props}
+		>
 			<Loader aria-hidden />
 			{children}
 		</Autocomplete.Status>
@@ -452,7 +495,13 @@ export function Loading({
 export function Footer({ className, style, xstyle, ...props }: CommandPaletteFooterProps) {
 	const sx = stylex.props(commandPaletteParts.footer, xstyle);
 
-	return <div className={attrJoin(sx.className, className)} style={mergeStyle(sx.style, style)} {...props} />;
+	return (
+		<div
+			className={attrJoin(sx.className, className)}
+			style={mergeStyle(sx.style, style)}
+			{...props}
+		/>
+	);
 }
 
 function useCommandPaletteContext() {

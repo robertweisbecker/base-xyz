@@ -96,7 +96,8 @@ function CopyButtonControl({
 				{...stylex.props(
 					iconSwapTransition.icon,
 					copied ? iconSwapTransition.hidden : iconSwapTransition.visible,
-				)}>
+				)}
+			>
 				<CopyIcon aria-hidden weight="regular" />
 			</span>
 			<span
@@ -104,7 +105,8 @@ function CopyButtonControl({
 					iconSwapTransition.icon,
 					iconSwapTransition.to,
 					copied ? iconSwapTransition.visible : iconSwapTransition.hidden,
-				)}>
+				)}
+			>
 				<Icon.Checkmark strokeWidth={props.size === "md" || props.size === "lg" ? 3 : 2} />
 			</span>
 		</span>
@@ -118,7 +120,8 @@ function CopyButtonControl({
 				endSlot={icon}
 				shape={shape ?? "default"}
 				onClick={handleClick}
-				{...props}>
+				{...props}
+			>
 				{children}
 			</Button>
 		);

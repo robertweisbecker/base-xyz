@@ -143,7 +143,12 @@ export const States: Story = {
 				<NumberField label="Seats" defaultValue={8} required />
 			</StateSpecimen>
 			<StateSpecimen label="Read-only">
-				<NumberField label="Seats" defaultValue={8} readOnly description="Your plan fixes this limit." />
+				<NumberField
+					label="Seats"
+					defaultValue={8}
+					readOnly
+					description="Your plan fixes this limit."
+				/>
 			</StateSpecimen>
 			<StateSpecimen label="Disabled">
 				<NumberField label="Seats" defaultValue={8} disabled />

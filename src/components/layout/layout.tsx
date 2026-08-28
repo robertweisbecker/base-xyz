@@ -4,7 +4,12 @@ import type { StyleXStyles } from "@stylexjs/stylex";
 import type { Ref } from "react";
 import { mergeStyle, type BaseStyleProps } from "@/styles/props/base";
 import { resolveChildLayout, type ChildLayoutProps } from "@/styles/props/child-layout.stylex";
-import { displayStyles, resolveFlexLayout, type DisplayProps, type FlexLayoutProps } from "@/styles/props/flex.stylex";
+import {
+	displayStyles,
+	resolveFlexLayout,
+	type DisplayProps,
+	type FlexLayoutProps,
+} from "@/styles/props/flex.stylex";
 import { resolveGridLayout, type GridLayoutProps } from "@/styles/props/grid.stylex";
 import { resolvePosition, type PositionProps } from "@/styles/props/position.stylex";
 import { resolveSizing, type SizingProps } from "@/styles/props/sizing.stylex";

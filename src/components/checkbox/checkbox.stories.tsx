@@ -126,7 +126,8 @@ export const Playground: Story = {
 					label="Notification methods"
 					defaultValue={_groupDefaultValue}
 					disabled={_groupDisabled}
-					size={size}>
+					size={size}
+				>
 					<Checkbox value="email" label="Email" visuallyHideLabel={visuallyHideLabel} />
 					<Checkbox value="push" label="Push" visuallyHideLabel={visuallyHideLabel} />
 					<Checkbox value="sms" label="SMS" visuallyHideLabel={visuallyHideLabel} />
@@ -161,7 +162,8 @@ export const Groups: Story = {
 				<CheckboxGroup
 					label="Notification methods"
 					description="Choose all the ways we may contact you."
-					defaultValue={["email", "push"]}>
+					defaultValue={["email", "push"]}
+				>
 					<Checkbox value="email" label="Email" description="Receive account updates by email." />
 					<Checkbox value="push" label="Push" description="Receive notifications on this device." />
 					<Checkbox value="sms" label="SMS" description="Receive urgent alerts by text message." />
@@ -226,7 +228,8 @@ const userManagementPermissions = ["create-user", "edit-user", "delete-user", "a
 function NestedParentCheckboxes() {
 	const [mainValue, setMainValue] = useState<string[]>([]);
 	const [managementValue, setManagementValue] = useState<string[]>([]);
-	const managementIsPartial = managementValue.length > 0 && managementValue.length !== userManagementPermissions.length;
+	const managementIsPartial =
+		managementValue.length > 0 && managementValue.length !== userManagementPermissions.length;
 
 	return (
 		<CheckboxGroup
@@ -241,7 +244,8 @@ function NestedParentCheckboxes() {
 
 				setMainValue(value);
 			}}
-			allValues={mainPermissions}>
+			allValues={mainPermissions}
+		>
 			<Checkbox parent indeterminate={managementIsPartial} label="User permissions" />
 			<Stack gap={3} xstyle={storyParts.permissionChildren}>
 				<Checkbox value="view-dashboard" label="View dashboard" />
@@ -253,12 +257,15 @@ function NestedParentCheckboxes() {
 						if (value.length === userManagementPermissions.length) {
 							setMainValue((current) => Array.from(new Set([...current, "manage-users"])));
 						} else {
-							setMainValue((current) => current.filter((permission) => permission !== "manage-users"));
+							setMainValue((current) =>
+								current.filter((permission) => permission !== "manage-users"),
+							);
 						}
 
 						setManagementValue(value);
 					}}
-					allValues={userManagementPermissions}>
+					allValues={userManagementPermissions}
+				>
 					<Checkbox parent label="Manage users" />
 					<Stack gap={3} xstyle={storyParts.permissionChildren}>
 						<Checkbox value="create-user" label="Create user" />

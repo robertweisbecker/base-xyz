@@ -18,7 +18,9 @@ test.afterEach(({ page }) => {
 async function openStory(page: Page) {
 	await page.clock.install();
 	await page.goto(storyPath);
-	await expect(page.getByRole("button", { name: "Resolve async action", exact: true })).toBeVisible();
+	await expect(
+		page.getByRole("button", { name: "Resolve async action", exact: true }),
+	).toBeVisible();
 }
 
 async function pauseClock(page: Page) {
@@ -32,7 +34,9 @@ async function openDialog(page: Page, triggerName: string) {
 	return dialog;
 }
 
-test("resolved confirmation stays pending until it closes and announces success", async ({ page }) => {
+test("resolved confirmation stays pending until it closes and announces success", async ({
+	page,
+}) => {
 	await openStory(page);
 	const dialog = await openDialog(page, "Resolve async action");
 	await pauseClock(page);
@@ -47,7 +51,9 @@ test("resolved confirmation stays pending until it closes and announces success"
 	await expect(page.getByText("Async action completed", { exact: true })).toBeVisible();
 });
 
-test("rejected confirmation stays open, restores the action, and announces failure", async ({ page }) => {
+test("rejected confirmation stays open, restores the action, and announces failure", async ({
+	page,
+}) => {
 	await openStory(page);
 	const dialog = await openDialog(page, "Reject async action");
 	await pauseClock(page);
@@ -66,7 +72,9 @@ test("rejected confirmation stays open, restores the action, and announces failu
 	await expect(page.getByTestId("confirmation-error-count")).toHaveText("1");
 });
 
-test("duplicate confirmation clicks start one operation and announce one success", async ({ page }) => {
+test("duplicate confirmation clicks start one operation and announce one success", async ({
+	page,
+}) => {
 	await openStory(page);
 	const dialog = await openDialog(page, "Resolve async action");
 	await pauseClock(page);
@@ -82,7 +90,9 @@ test("duplicate confirmation clicks start one operation and announce one success
 	await expect(page.getByTestId("confirmation-operation-count")).toHaveText("1");
 });
 
-test("a synchronously prevented confirmation does not start, close, or announce", async ({ page }) => {
+test("a synchronously prevented confirmation does not start, close, or announce", async ({
+	page,
+}) => {
 	await openStory(page);
 	const dialog = await openDialog(page, "Prevent confirmation");
 	await pauseClock(page);

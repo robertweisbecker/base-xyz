@@ -6,7 +6,8 @@ import { modalChromeStyles, modalTextStyles } from "@/components/dialog/dialog.s
 import { mergeStyle, type BaseStyleProps } from "@/styles/props/base";
 import { attrJoin } from "@/utils/attr-join";
 
-type StyledProps<T> = Omit<T, "className" | "style" | "xstyle"> & BaseStyleProps & { className?: string };
+type StyledProps<T> = Omit<T, "className" | "style" | "xstyle"> &
+	BaseStyleProps & { className?: string };
 
 type DrawerPopupProps = StyledProps<BaseDrawer.Popup.Props> & {
 	layout?: "default" | "snap-points";
@@ -16,7 +17,13 @@ type DrawerContentProps = StyledProps<BaseDrawer.Content.Props> & {
 	scrollable?: boolean;
 };
 
-export function Backdrop({ ref, className, style, xstyle, ...props }: StyledProps<BaseDrawer.Backdrop.Props>) {
+export function Backdrop({
+	ref,
+	className,
+	style,
+	xstyle,
+	...props
+}: StyledProps<BaseDrawer.Backdrop.Props>) {
 	const { className: sxClassName, style: sxStyle } = stylex.props(
 		modalChromeStyles.backdrop,
 		modalChromeStyles.modalBackdropLayer,
@@ -34,7 +41,13 @@ export function Backdrop({ ref, className, style, xstyle, ...props }: StyledProp
 	);
 }
 
-export function Viewport({ ref, className, style, xstyle, ...props }: StyledProps<BaseDrawer.Viewport.Props>) {
+export function Viewport({
+	ref,
+	className,
+	style,
+	xstyle,
+	...props
+}: StyledProps<BaseDrawer.Viewport.Props>) {
 	const { className: sxClassName, style: sxStyle } = stylex.props(
 		modalChromeStyles.viewport,
 		modalChromeStyles.modalLayer,
@@ -52,7 +65,14 @@ export function Viewport({ ref, className, style, xstyle, ...props }: StyledProp
 	);
 }
 
-export function Popup({ ref, className, style, xstyle, layout = "default", ...props }: DrawerPopupProps) {
+export function Popup({
+	ref,
+	className,
+	style,
+	xstyle,
+	layout = "default",
+	...props
+}: DrawerPopupProps) {
 	const { className: sxClassName, style: sxStyle } = stylex.props(
 		modalChromeStyles.surface,
 		drawerParts.popup,
@@ -71,7 +91,14 @@ export function Popup({ ref, className, style, xstyle, layout = "default", ...pr
 	);
 }
 
-export function Content({ ref, className, style, xstyle, scrollable = false, ...props }: DrawerContentProps) {
+export function Content({
+	ref,
+	className,
+	style,
+	xstyle,
+	scrollable = false,
+	...props
+}: DrawerContentProps) {
 	const { className: sxClassName, style: sxStyle } = stylex.props(
 		drawerParts.content,
 		scrollable && drawerParts.scrollableContent,
@@ -88,7 +115,13 @@ export function Content({ ref, className, style, xstyle, scrollable = false, ...
 	);
 }
 
-export function Title({ ref, className, style, xstyle, ...props }: StyledProps<BaseDrawer.Title.Props>) {
+export function Title({
+	ref,
+	className,
+	style,
+	xstyle,
+	...props
+}: StyledProps<BaseDrawer.Title.Props>) {
 	const { className: sxClassName, style: sxStyle } = stylex.props(modalTextStyles.title, xstyle);
 
 	return (
@@ -101,8 +134,17 @@ export function Title({ ref, className, style, xstyle, ...props }: StyledProps<B
 	);
 }
 
-export function Description({ ref, className, style, xstyle, ...props }: StyledProps<BaseDrawer.Description.Props>) {
-	const { className: sxClassName, style: sxStyle } = stylex.props(modalTextStyles.description, xstyle);
+export function Description({
+	ref,
+	className,
+	style,
+	xstyle,
+	...props
+}: StyledProps<BaseDrawer.Description.Props>) {
+	const { className: sxClassName, style: sxStyle } = stylex.props(
+		modalTextStyles.description,
+		xstyle,
+	);
 
 	return (
 		<BaseDrawer.Description
@@ -117,23 +159,50 @@ export function Description({ ref, className, style, xstyle, ...props }: StyledP
 export function Handle({ className, style, xstyle, ...props }: StyledProps<ComponentProps<"div">>) {
 	const { className: sxClassName, style: sxStyle } = stylex.props(drawerParts.handle, xstyle);
 
-	return <div aria-hidden className={attrJoin(sxClassName, className)} style={mergeStyle(sxStyle, style)} {...props} />;
+	return (
+		<div
+			aria-hidden
+			className={attrJoin(sxClassName, className)}
+			style={mergeStyle(sxStyle, style)}
+			{...props}
+		/>
+	);
 }
 
 export function Header({ className, style, xstyle, ...props }: StyledProps<ComponentProps<"div">>) {
 	const { className: sxClassName, style: sxStyle } = stylex.props(drawerParts.header, xstyle);
 
-	return <div className={attrJoin(sxClassName, className)} style={mergeStyle(sxStyle, style)} {...props} />;
+	return (
+		<div
+			className={attrJoin(sxClassName, className)}
+			style={mergeStyle(sxStyle, style)}
+			{...props}
+		/>
+	);
 }
 
 export function Body({ className, style, xstyle, ...props }: StyledProps<ComponentProps<"div">>) {
-	const { className: sxClassName, style: sxStyle } = stylex.props(modalTextStyles.body, drawerParts.body, xstyle);
+	const { className: sxClassName, style: sxStyle } = stylex.props(
+		modalTextStyles.body,
+		drawerParts.body,
+		xstyle,
+	);
 
-	return <div className={attrJoin(sxClassName, className)} style={mergeStyle(sxStyle, style)} {...props} />;
+	return (
+		<div
+			className={attrJoin(sxClassName, className)}
+			style={mergeStyle(sxStyle, style)}
+			{...props}
+		/>
+	);
 }
 
 export function Footer({ className, style, xstyle, ...props }: StyledProps<ComponentProps<"div">>) {
-	const { className: sxClassName, style: sxStyle } = stylex.props(modalTextStyles.footer, drawerParts.footer, xstyle);
+	const { className: sxClassName, style: sxStyle } = stylex.props(
+		modalTextStyles.footer,
+		drawerParts.footer,
+		xstyle,
+	);
 
 	return (
 		<div
@@ -191,7 +260,8 @@ const drawerParts = stylex.create({
 		"--_drawer-stack-progress": "clamp(0, var(--drawer-swipe-progress), 1)",
 		"--_drawer-stack-scale":
 			"calc(var(--_drawer-stack-scale-base) + (var(--_drawer-stack-step) * var(--_drawer-stack-progress)))",
-		"--_drawer-stack-scale-base": "max(0, calc(1 - (var(--nested-drawers) * var(--_drawer-stack-step))))",
+		"--_drawer-stack-scale-base":
+			"max(0, calc(1 - (var(--nested-drawers) * var(--_drawer-stack-step))))",
 		"--_drawer-stack-shrink": "calc(1 - var(--_drawer-stack-scale))",
 		"--_drawer-stack-step": 0.05,
 		"--_drawer-translate-y":
@@ -308,6 +378,7 @@ const drawerParts = stylex.create({
 		marginBlock: tokens["--space-1"],
 		marginInline: "auto",
 		backgroundColor: tokens["--border-input"],
+		cursor: "grab",
 		flexShrink: 0,
 		opacity: {
 			default: "1",
@@ -319,7 +390,6 @@ const drawerParts = stylex.create({
 		transitionTimingFunction: tokens["--motion-ease-out"],
 		height: "4px",
 		width: "58px",
-		cursor: "grab",
 	},
 	header: {
 		paddingInline: tokens["--space-5"],
@@ -337,15 +407,15 @@ const drawerParts = stylex.create({
 	footer: {
 		gap: tokens["--space-3"],
 		paddingInline: tokens["--space-5"],
+		backgroundColor: tokens["--surface"],
 		paddingBlockStart: tokens["--space-3"],
-		paddingBottom: "calc(1.5rem + env(safe-area-inset-bottom, 0px) + var(--_drawer-bleed))",
+		position: "sticky",
+		zIndex: 1,
 		borderTopColor: tokens["--border"],
 		borderTopStyle: "solid",
 		borderTopWidth: "0.5px",
-		position: "sticky",
 		bottom: 0,
-		backgroundColor: tokens["--surface"],
-		zIndex: 1,
+		paddingBottom: "calc(1.5rem + env(safe-area-inset-bottom, 0px) + var(--_drawer-bleed))",
 	},
 });
 

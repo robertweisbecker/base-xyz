@@ -1,4 +1,15 @@
-import { Button, Checkbox, Grid, Radio, RadioGroup, Select, Stack, Switch, Textarea, TextField } from "@/components";
+import {
+	Button,
+	Checkbox,
+	Grid,
+	Radio,
+	RadioGroup,
+	Select,
+	Stack,
+	Switch,
+	Textarea,
+	TextField,
+} from "@/components";
 import { inputsPageStyles as styles } from "./inputs-page.styles";
 
 const regionItems = [
@@ -34,8 +45,16 @@ export function EnvironmentForm() {
 					</Select.Root>
 				</Grid>
 				<RadioGroup defaultValue="preview" label="Environment visibility" name="visibility">
-					<Radio value="private" label="Private" description="Only invited workspace members can access it." />
-					<Radio value="preview" label="Preview" description="Anyone with a signed preview link can access it." />
+					<Radio
+						value="private"
+						label="Private"
+						description="Only invited workspace members can access it."
+					/>
+					<Radio
+						value="preview"
+						label="Preview"
+						description="Anyone with a signed preview link can access it."
+					/>
 				</RadioGroup>
 				<Textarea
 					description="Shown to teammates when they select this environment."

@@ -32,7 +32,8 @@ export const Examples: Story = {
 					successToast={{
 						title: "Project published",
 						description: "The project is now available to everyone with access.",
-					}}>
+					}}
+				>
 					<ConfirmationDialog.Header>
 						<ConfirmationDialog.Title>Publish this project?</ConfirmationDialog.Title>
 						<ConfirmationDialog.Description>
@@ -40,8 +41,8 @@ export const Examples: Story = {
 						</ConfirmationDialog.Description>
 					</ConfirmationDialog.Header>
 					<ConfirmationDialog.Body>
-						Publishing makes the current version available immediately. You can continue editing and publish another
-						version later.
+						Publishing makes the current version available immediately. You can continue editing and
+						publish another version later.
 					</ConfirmationDialog.Body>
 					<ConfirmationDialog.Footer>
 						<ConfirmationDialog.Actions>
@@ -61,7 +62,8 @@ export const Examples: Story = {
 					successToast={{
 						title: "App submitted",
 						description: "The review team has been notified.",
-					}}>
+					}}
+				>
 					<ConfirmationDialog.Header>
 						<ConfirmationDialog.Visual>
 							<PaperPlaneTiltIcon aria-hidden size={18} weight="duotone" />
@@ -91,7 +93,8 @@ export const Examples: Story = {
 					successToast={{
 						title: "Project archived",
 						description: "You can restore it from the archive.",
-					}}>
+					}}
+				>
 					<ConfirmationDialog.Header>
 						<ConfirmationDialog.Title>Archive this project?</ConfirmationDialog.Title>
 						<ConfirmationDialog.Description>
@@ -120,7 +123,8 @@ export const Examples: Story = {
 					successToast={{
 						title: "Project completed",
 						description: "The project and its milestones are now read-only.",
-					}}>
+					}}
+				>
 					<ConfirmationDialog.Header>
 						<ConfirmationDialog.Title>Complete this project?</ConfirmationDialog.Title>
 						<ConfirmationDialog.Description>
@@ -130,7 +134,13 @@ export const Examples: Story = {
 					<ConfirmationDialog.Body label="Project milestone status">
 						<Stack gap={3}>
 							{reviewItems.map((item) => (
-								<Stack key={item.label} align="center" gap={4} justify="space-between" orientation="horizontal">
+								<Stack
+									key={item.label}
+									align="center"
+									gap={4}
+									justify="space-between"
+									orientation="horizontal"
+								>
 									<Text size="2" fontWeight="medium">
 										{item.label}
 									</Text>
@@ -226,16 +236,21 @@ function AsyncSettlementDialog({
 			onConfirm={onConfirm}
 			onConfirmError={onConfirmError}
 			successToast={successToast}
-			failureToast={failureToast}>
+			failureToast={failureToast}
+		>
 			<ConfirmationDialog.Header>
 				<ConfirmationDialog.Title>Confirm async action?</ConfirmationDialog.Title>
-				<ConfirmationDialog.Description>The operation will settle before this dialog closes.</ConfirmationDialog.Description>
+				<ConfirmationDialog.Description>
+					The operation will settle before this dialog closes.
+				</ConfirmationDialog.Description>
 			</ConfirmationDialog.Header>
 			<ConfirmationDialog.Body>Review the operation before confirming it.</ConfirmationDialog.Body>
 			<ConfirmationDialog.Footer>
 				<ConfirmationDialog.Actions>
 					<ConfirmationDialog.Cancel>Cancel</ConfirmationDialog.Cancel>
-					<ConfirmationDialog.Confirm onClick={onConfirmClick}>{confirmLabel}</ConfirmationDialog.Confirm>
+					<ConfirmationDialog.Confirm onClick={onConfirmClick}>
+						{confirmLabel}
+					</ConfirmationDialog.Confirm>
 				</ConfirmationDialog.Actions>
 			</ConfirmationDialog.Footer>
 		</ConfirmationDialog.Root>

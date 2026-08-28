@@ -30,7 +30,7 @@
 - Evaluator and hook still live in `src/utils/` and `src/hooks/` so a future real consumer can adopt them without moving code.
 - `inputProps` is complete: `value`, `inputMode`, `disabled`, `readOnly`, `required`, `aria-invalid`, `onChange`, `onBlur`, `onKeyDown`. Consumers spread it and are done.
 - Enter commits a dirty draft and calls `preventDefault()` so a form cannot submit a stale hidden-input value; a second Enter submits. Escape reverts the draft.
-- Dirty means the committed *number* changed: committing `4 * 5` over an existing `20` replaces the draft with `20` but does not fire `onValueCommitted`.
+- Dirty means the committed _number_ changed: committing `4 * 5` over an existing `20` replaces the draft with `20` but does not fire `onValueCommitted`.
 - Committed results are float-noise-stripped via `toPrecision(12)` (so `0.1 + 0.2` commits as `0.3`) and `-0` normalizes to `0`.
 - The hook owns expression-validity errors (`invalidExpressionMessage`, `requiredMessage` options with defaults); a consumer with its own error prop merges as `expressionError ?? consumerError`.
 
@@ -39,10 +39,12 @@
 ### Task 1: Pure evaluator
 
 **Files:**
+
 - Create: `src/utils/evaluate-math-expression.ts`
 - Test: `tests/components/math-expression-evaluator.spec.ts`
 
 **Interfaces:**
+
 - Consumes: nothing.
 - Produces: `evaluateMathExpression(expression: string): MathExpressionResult` where `MathExpressionResult = { ok: true; value: number } | { ok: false; reason: MathExpressionFailureReason }` and `MathExpressionFailureReason = "empty" | "syntax" | "division-by-zero" | "non-finite"`. Task 2's hook imports the function from `@/utils/evaluate-math-expression`.
 
@@ -92,7 +94,10 @@ test("rejects malformed expressions", () => {
 test("rejects division by zero and non-finite results", () => {
 	expect(evaluateMathExpression("1 / 0")).toEqual({ ok: false, reason: "division-by-zero" });
 	expect(evaluateMathExpression("1 / (2 - 2)")).toEqual({ ok: false, reason: "division-by-zero" });
-	expect(evaluateMathExpression(`1${"0".repeat(309)}`)).toEqual({ ok: false, reason: "non-finite" });
+	expect(evaluateMathExpression(`1${"0".repeat(309)}`)).toEqual({
+		ok: false,
+		reason: "non-finite",
+	});
 });
 ```
 
@@ -108,7 +113,8 @@ Create `src/utils/evaluate-math-expression.ts`. Recursive descent over a token a
 ```ts
 export type MathExpressionFailureReason = "empty" | "syntax" | "division-by-zero" | "non-finite";
 
-export type MathExpressionResult = { ok: true; value: number } | { ok: false; reason: MathExpressionFailureReason };
+export type MathExpressionResult =
+	{ ok: true; value: number } | { ok: false; reason: MathExpressionFailureReason };
 
 type BinaryOperator = "+" | "-" | "*" | "/";
 
@@ -176,7 +182,8 @@ export function evaluateMathExpression(expression: string): MathExpressionResult
 		let left = parseTerm();
 		while (failure === null) {
 			const token = tokens[index];
-			if (!token || token.kind !== "operator" || (token.value !== "+" && token.value !== "-")) break;
+			if (!token || token.kind !== "operator" || (token.value !== "+" && token.value !== "-"))
+				break;
 			index += 1;
 			const right = parseTerm();
 			left = token.value === "+" ? left + right : left - right;
@@ -188,7 +195,8 @@ export function evaluateMathExpression(expression: string): MathExpressionResult
 		let left = parseFactor();
 		while (failure === null) {
 			const token = tokens[index];
-			if (!token || token.kind !== "operator" || (token.value !== "*" && token.value !== "/")) break;
+			if (!token || token.kind !== "operator" || (token.value !== "*" && token.value !== "/"))
+				break;
 			index += 1;
 			const right = parseFactor();
 			if (token.value === "*") {
@@ -254,10 +262,12 @@ git commit -m "Add math expression evaluator"
 ### Task 2: Hook and NumberField story harness
 
 **Files:**
+
 - Create: `src/hooks/use-math-expression-input.ts`
 - Modify: `src/components/number-field/number-field.stories.tsx` (additive: new imports, story-local harness components, one new `MathExpressions` story export after `States`; do not change `Playground`, `Formatting`, `Sizes`, `States`, `StateSpecimen`, or the existing `styles`)
 
 **Interfaces:**
+
 - Consumes: `evaluateMathExpression` from `@/utils/evaluate-math-expression` (Task 1); existing `fieldStyles`, `fieldInputStyles` from `@/components/field/field.stylex`; `focusRing` from `@/styles/recipes/focus`; `Button` from `@/components/button/button`; the stories file's existing `StateSpecimen` helper.
 - Produces: `useMathExpressionInput(options: UseMathExpressionInputOptions): UseMathExpressionInputReturn`; story id `components-number-field--math-expressions`; field labels `Amount`, `Clamped amount`, `Required amount`, `Read-only`, `Disabled`, `Quantity`, `Controlled amount`; status texts `Tick: N`, `Commits: N`, `Not submitted`, `Submitted: 42`; error messages `Enter a valid math expression`, `Enter a value`. Task 3's spec depends on these exactly.
 
@@ -269,7 +279,8 @@ Create `src/hooks/use-math-expression-input.ts`. Key invariants: `draft === null
 import { useState, type ChangeEvent, type FocusEvent, type KeyboardEvent } from "react";
 import { evaluateMathExpression } from "@/utils/evaluate-math-expression";
 
-export type MathExpressionCommitEvent = FocusEvent<HTMLInputElement> | KeyboardEvent<HTMLInputElement>;
+export type MathExpressionCommitEvent =
+	FocusEvent<HTMLInputElement> | KeyboardEvent<HTMLInputElement>;
 
 export type UseMathExpressionInputOptions = {
 	/** Controlled committed value. `null` means intentionally empty. */
@@ -285,7 +296,10 @@ export type UseMathExpressionInputOptions = {
 	/** Error shown when the draft is empty but a value is required. */
 	requiredMessage?: string;
 	/** Called once per user-initiated commit whose numeric result differs from the current value. */
-	onValueCommitted?: (value: number | null, details: { expression: string; event: MathExpressionCommitEvent }) => void;
+	onValueCommitted?: (
+		value: number | null,
+		details: { expression: string; event: MathExpressionCommitEvent },
+	) => void;
 };
 
 export type UseMathExpressionInputReturn = {
@@ -308,7 +322,11 @@ export type UseMathExpressionInputReturn = {
 	};
 };
 
-function clampCommitted(value: number | null, min: number | undefined, max: number | undefined): number | null {
+function clampCommitted(
+	value: number | null,
+	min: number | undefined,
+	max: number | undefined,
+): number | null {
 	if (value === null) return null;
 	let next = value;
 	if (min !== undefined) next = Math.max(next, min);
@@ -430,7 +448,10 @@ import { useEffect, useId, useState, type ReactNode } from "react";
 import { Button } from "@/components/button/button";
 import { fieldStyles, fieldInputStyles } from "@/components/field/field.stylex";
 import { focusRing } from "@/styles/recipes/focus";
-import { useMathExpressionInput, type UseMathExpressionInputOptions } from "@/hooks/use-math-expression-input";
+import {
+	useMathExpressionInput,
+	type UseMathExpressionInputOptions,
+} from "@/hooks/use-math-expression-input";
 import { tokens } from "@/theme/tokens.stylex";
 
 import { NumberField } from "./number-field";
@@ -457,7 +478,11 @@ function MathExpressionField({ label, description, name, ...options }: MathExpre
 	const errorId = error ? `${id}-error` : undefined;
 
 	return (
-		<Field.Root {...stylex.props(fieldStyles.root)} disabled={options.disabled} invalid={Boolean(error)}>
+		<Field.Root
+			{...stylex.props(fieldStyles.root)}
+			disabled={options.disabled}
+			invalid={Boolean(error)}
+		>
 			<Field.Label htmlFor={id} {...stylex.props(fieldStyles.label)}>
 				{label}
 			</Field.Label>
@@ -491,10 +516,13 @@ function MathExpressionFormExample() {
 				event.preventDefault();
 				const data = new FormData(event.currentTarget);
 				setSubmitted(String(data.get("quantity")));
-			}}>
+			}}
+		>
 			<MathExpressionField label="Quantity" name="quantity" defaultValue={4} />
 			<Button type="submit">Submit</Button>
-			<p {...stylex.props(styles.mathStatus)}>{submitted === null ? "Not submitted" : `Submitted: ${submitted}`}</p>
+			<p {...stylex.props(styles.mathStatus)}>
+				{submitted === null ? "Not submitted" : `Submitted: ${submitted}`}
+			</p>
 		</form>
 	);
 }
@@ -532,7 +560,11 @@ export const MathExpressions: Story = {
 	render: () => (
 		<div {...stylex.props(styles.stateGrid)}>
 			<StateSpecimen label="Evaluates on blur or Enter">
-				<MathExpressionField label="Amount" defaultValue={12} description="Type an expression such as 100 / 5." />
+				<MathExpressionField
+					label="Amount"
+					defaultValue={12}
+					description="Type an expression such as 100 / 5."
+				/>
 			</StateSpecimen>
 			<StateSpecimen label="Clamped between 0 and 50">
 				<MathExpressionField label="Clamped amount" defaultValue={10} min={0} max={50} />
@@ -598,9 +630,11 @@ git commit -m "Add math expression input hook with NumberField story harness"
 ### Task 3: Browser coverage and validation
 
 **Files:**
+
 - Test: `tests/components/number-field-math-expressions.spec.ts`
 
 **Interfaces:**
+
 - Consumes: story id `components-number-field--math-expressions`; labels `Amount`, `Clamped amount`, `Required amount`, `Read-only`, `Disabled`, `Quantity`, `Controlled amount`; messages `Enter a valid math expression`, `Enter a value`; status texts `Tick: N`, `Commits: N`, `Not submitted`, `Submitted: 42` (all defined in Task 2).
 - Produces: nothing new; final validation gate.
 
@@ -706,7 +740,9 @@ test("blocks committing an empty draft when required", async ({ page }) => {
 	await expect(page.getByText("Enter a value")).toBeVisible();
 });
 
-test("preserves the draft across controlled rerenders and skips unchanged commits", async ({ page }) => {
+test("preserves the draft across controlled rerenders and skips unchanged commits", async ({
+	page,
+}) => {
 	await page.goto(storyPath);
 	const input = page.getByRole("textbox", { name: "Controlled amount" });
 	const tick = page.getByText(/^Tick: /);

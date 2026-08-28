@@ -40,9 +40,11 @@ export function resolvePosition(props: PositionProps): StyleXStyles[] {
 	const blockEnd = resolveEdge(props.inset, props.insetY, props.insetBottom);
 	const inlineStart = resolveEdge(props.inset, props.insetX, props.insetStart);
 	const inlineEnd = resolveEdge(props.inset, props.insetX, props.insetEnd);
-	if (blockStart !== undefined) styles.push(dynamicStyles.blockStart(resolveSpacingValue(blockStart)));
+	if (blockStart !== undefined)
+		styles.push(dynamicStyles.blockStart(resolveSpacingValue(blockStart)));
 	if (blockEnd !== undefined) styles.push(dynamicStyles.blockEnd(resolveSpacingValue(blockEnd)));
-	if (inlineStart !== undefined) styles.push(dynamicStyles.inlineStart(resolveSpacingValue(inlineStart)));
+	if (inlineStart !== undefined)
+		styles.push(dynamicStyles.inlineStart(resolveSpacingValue(inlineStart)));
 	if (inlineEnd !== undefined) styles.push(dynamicStyles.inlineEnd(resolveSpacingValue(inlineEnd)));
 	if (props.zIndex !== undefined) {
 		// SAFETY: StyleX dynamic zIndex styles are valid StyleXStyles at runtime; TS widens the CSS property type.

@@ -17,7 +17,7 @@ const DEFAULT_PRESSED_ICON = <Icon.StarFilled width={24} height={24} />;
 export type RatingProps = Omit<
 	BaseRadioGroup.Props<number>,
 	"children" | "className" | "defaultValue" | "onValueChange" | "style" | "value"
-	> & {
+> & {
 	/** Number of selectable items. Values are normalized to the range 2–10. */
 	count?: number;
 	/** The initially selected number of items. */
@@ -58,10 +58,16 @@ export function Rating({
 	const itemValues = Array.from({ length: itemCount }, (_, index) => index + 1);
 	const selectedValue = value ?? uncontrolledValue;
 	const effectiveValue =
-		selectedValue === undefined ? undefined : Math.min(itemCount, Math.max(1, Math.floor(selectedValue)));
+		selectedValue === undefined
+			? undefined
+			: Math.min(itemCount, Math.max(1, Math.floor(selectedValue)));
 	const restingIcon = icon === undefined ? DEFAULT_ICON : icon;
 	const selectedIcon =
-		pressedIcon === undefined ? (icon === undefined ? DEFAULT_PRESSED_ICON : restingIcon) : pressedIcon;
+		pressedIcon === undefined
+			? icon === undefined
+				? DEFAULT_PRESSED_ICON
+				: restingIcon
+			: pressedIcon;
 	const groupSx = stylex.props(ratingStyles.group, style);
 
 	return (
@@ -83,7 +89,8 @@ export function Rating({
 				}
 			}}
 			className={attrJoin(groupSx.className, className)}
-			style={groupSx.style}>
+			style={groupSx.style}
+		>
 			{itemValues.map((starValue) => (
 				<BaseRadio.Root
 					key={starValue}
@@ -100,9 +107,12 @@ export function Rating({
 						ratingStyles.star,
 						starValue === 1 && ratingStyles.firstStar,
 						hoveredValue !== null && starValue <= hoveredValue && ratingStyles.starHover,
-						effectiveValue !== undefined && effectiveValue >= starValue && ratingStyles.starSelected,
+						effectiveValue !== undefined &&
+							effectiveValue >= starValue &&
+							ratingStyles.starSelected,
 						focusRing.offset,
-					)}>
+					)}
+				>
 					{effectiveValue !== undefined && effectiveValue >= starValue ? selectedIcon : restingIcon}
 				</BaseRadio.Root>
 			))}
@@ -131,7 +141,8 @@ const ratingStyles = stylex.create({
 		backgroundColor: {
 			"[data-rating-hovered]": tokens["--surface-subtle-hover"],
 			default: "transparent",
-			[stylex.when.siblingAfter("[data-rating-hovered]", ratingStarMarker)]: tokens["--surface-subtle-hover"],
+			[stylex.when.siblingAfter("[data-rating-hovered]", ratingStarMarker)]:
+				tokens["--surface-subtle-hover"],
 		},
 		borderEndEndRadius: {
 			"[data-rating-hovered]": tokens["--radius-full"],
@@ -159,12 +170,14 @@ const ratingStyles = stylex.create({
 		borderEndStartRadius: {
 			"[data-rating-hovered]": tokens["--radius-full"],
 			default: 0,
-			[stylex.when.siblingAfter("[data-rating-hovered]", ratingStarMarker)]: tokens["--radius-full"],
+			[stylex.when.siblingAfter("[data-rating-hovered]", ratingStarMarker)]:
+				tokens["--radius-full"],
 		},
 		borderStartStartRadius: {
 			"[data-rating-hovered]": tokens["--radius-full"],
 			default: 0,
-			[stylex.when.siblingAfter("[data-rating-hovered]", ratingStarMarker)]: tokens["--radius-full"],
+			[stylex.when.siblingAfter("[data-rating-hovered]", ratingStarMarker)]:
+				tokens["--radius-full"],
 		},
 	},
 	starHover: {

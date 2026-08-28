@@ -66,7 +66,9 @@ export const ReplacementReset: Story = {
 };
 
 function ReplacementResetExample() {
-	const [response, setResponse] = useState("The initial response contains enough words to expose stale reveal state");
+	const [response, setResponse] = useState(
+		"The initial response contains enough words to expose stale reveal state",
+	);
 	const [streamKey, setStreamKey] = useState(0);
 	const [completionCount, setCompletionCount] = useState(0);
 
@@ -80,7 +82,8 @@ function ReplacementResetExample() {
 				<StreamingResponse.Content
 					data-testid="streaming-replacement-content"
 					onStreamingComplete={() => setCompletionCount((count) => count + 1)}
-					streamKey={streamKey}>
+					streamKey={streamKey}
+				>
 					{response}
 				</StreamingResponse.Content>
 				<Text data-testid="streaming-completion-count">{completionCount}</Text>
@@ -113,7 +116,10 @@ function InteractiveResponseExample() {
 			</Text>
 			<StreamingResponse.Root aria-label="Streaming response" elapsedSeconds={131} status={status}>
 				<StreamingResponse.Status />
-				<StreamingResponse.Content streamKey={streamKey} onStreamingComplete={() => setStatus("complete")}>
+				<StreamingResponse.Content
+					streamKey={streamKey}
+					onStreamingComplete={() => setStatus("complete")}
+				>
 					{responseContent.streaming}
 				</StreamingResponse.Content>
 				{status === "streaming" ? (

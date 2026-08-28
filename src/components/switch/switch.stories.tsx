@@ -57,7 +57,9 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const Playground: Story = {
-	render: (args) => <Switch key={`${args.defaultChecked}-${args.readOnly}-${args.disabled}`} {...args} />,
+	render: (args) => (
+		<Switch key={`${args.defaultChecked}-${args.readOnly}-${args.disabled}`} {...args} />
+	),
 };
 
 export const Sizes: Story = {

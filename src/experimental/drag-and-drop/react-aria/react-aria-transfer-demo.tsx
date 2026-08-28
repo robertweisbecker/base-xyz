@@ -4,7 +4,13 @@ import { useButton } from "react-aria/useButton";
 import { useDrag } from "react-aria/useDrag";
 import { isTextDropItem, type TextDropItem, useDrop } from "react-aria/useDrop";
 import { focusRing } from "@/styles/recipes/focus";
-import { ASSET_TYPE, parseDemoItemString, TASK_TYPE, TRANSFER_DESTINATIONS, TRANSFER_ITEM } from "../demo-data";
+import {
+	ASSET_TYPE,
+	parseDemoItemString,
+	TASK_TYPE,
+	TRANSFER_DESTINATIONS,
+	TRANSFER_ITEM,
+} from "../demo-data";
 import { DemoCard, DemoDropZone, DemoHandle, DemoInstructions, DemoPanel } from "../demo-parts";
 import { demoStyles } from "../drag-and-drop-demo.stylex";
 import { EmptyState } from "@/components/empty-state/empty-state";
@@ -33,15 +39,20 @@ export function ReactAriaTransferDemo() {
 			description="Low-level hooks expose native drag data and target-focused keyboard navigation without an explicit provider."
 			instructions={
 				<DemoInstructions>
-					<li {...stylex.props(demoStyles.instructionItem)}>Drag the card surface to Planning queue with a pointer.</li>
+					<li {...stylex.props(demoStyles.instructionItem)}>
+						Drag the card surface to Planning queue with a pointer.
+					</li>
 					<li {...stylex.props(demoStyles.instructionItem)}>
 						Focus the handle, press Enter, Tab to a valid target, then press Enter to drop.
 					</li>
-					<li {...stylex.props(demoStyles.instructionItem)}>Press Escape during keyboard drag to cancel.</li>
+					<li {...stylex.props(demoStyles.instructionItem)}>
+						Press Escape during keyboard drag to cancel.
+					</li>
 				</DemoInstructions>
 			}
 			status={status}
-			onReset={reset}>
+			onReset={reset}
+		>
 			<div {...stylex.props(demoStyles.transferGrid)}>
 				<div {...stylex.props(demoStyles.sourceTray)} aria-label="Source tray">
 					{location === "source" ? (
@@ -63,7 +74,11 @@ export function ReactAriaTransferDemo() {
 
 								setIsInvalidHover(false);
 								lastTargetWasInvalidRef.current = false;
-								setStatus(operation === "cancel" ? "Drag cancelled. The item stayed put." : "Drag finished.");
+								setStatus(
+									operation === "cancel"
+										? "Drag cancelled. The item stayed put."
+										: "Drag finished.",
+								);
 							}}
 						/>
 					) : (
@@ -85,9 +100,14 @@ export function ReactAriaTransferDemo() {
 						setLocation("planning");
 						setIsRejected(false);
 						setStatus("Dropped Quarterly roadmap into Planning queue.");
-					}}>
+					}}
+				>
 					{location === "planning" ? (
-						<DemoCard label={TRANSFER_ITEM.label} meta="Dropped task" startSlot={<span aria-hidden />} />
+						<DemoCard
+							label={TRANSFER_ITEM.label}
+							meta="Dropped task"
+							startSlot={<span aria-hidden />}
+						/>
 					) : null}
 				</ReactAriaTransferDropZone>
 				<ReactAriaTransferDropZone
@@ -137,7 +157,9 @@ function ReactAriaTransferCard({
 			data-dragging={isDragging || undefined}
 			label={TRANSFER_ITEM.label}
 			meta="Task item"
-			endSlot={<DemoHandle {...handleProps} ref={buttonRef} label={`Move ${TRANSFER_ITEM.label}`} />}
+			endSlot={
+				<DemoHandle {...handleProps} ref={buttonRef} label={`Move ${TRANSFER_ITEM.label}`} />
+			}
 		/>
 	);
 }
@@ -164,7 +186,9 @@ function ReactAriaTransferDropZone({
 		ref,
 		getDropOperation: (types) => (types.has(accepts) ? "move" : "cancel"),
 		onDrop: async (event) => {
-			const item = event.items.find((dropItem): dropItem is TextDropItem => isTextDropItem(dropItem));
+			const item = event.items.find((dropItem): dropItem is TextDropItem =>
+				isTextDropItem(dropItem),
+			);
 			if (!item || !item.types.has(TASK_TYPE)) return;
 
 			const id = parseDemoItemString(await item.getText(TASK_TYPE), "id");
@@ -184,7 +208,8 @@ function ReactAriaTransferDropZone({
 				if (accepts !== TASK_TYPE) onInvalidHoverChange?.(true);
 			}}
 			onDragLeave={() => onInvalidHoverChange?.(false)}
-			{...stylex.props(demoStyles.dropZone, focusRing.within)}>
+			{...stylex.props(demoStyles.dropZone, focusRing.within)}
+		>
 			<DemoDropZone label={label} description={description} isInvalid={isInvalid}>
 				{children}
 			</DemoDropZone>

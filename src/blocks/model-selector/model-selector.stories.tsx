@@ -5,11 +5,7 @@ import { Button, type ButtonSize, type ButtonVariant } from "@/components";
 import { Stack } from "@/components/layout/layout";
 import { Text } from "@/components/text/text";
 
-import {
-	ModelSelector,
-	type ModelSelectorGroup,
-	type ModelSelectorValue,
-} from "./model-selector";
+import { ModelSelector, type ModelSelectorGroup, type ModelSelectorValue } from "./model-selector";
 import {
 	exampleDefaultValue,
 	exampleEffortOptions,
@@ -102,7 +98,10 @@ function NormalizationRegressionFixture() {
 					effortOptions={exampleEffortOptions}
 					speedOptions={exampleSpeedOptions}
 					defaultValue={{ model: "gpt-5.6-terra", effort: "Medium", speed: "Default" }}
-					onValueChange={(value, details) => setDynamicEvents((events) => [...events, { value, reason: details.reason }])}>
+					onValueChange={(value, details) =>
+						setDynamicEvents((events) => [...events, { value, reason: details.reason }])
+					}
+				>
 					<ModelSelector.Trigger aria-label="Dynamic model removal selector" />
 					<ModelSelector.Popup />
 				</ModelSelector.Root>
@@ -135,7 +134,10 @@ function NormalizationCase({
 				speedOptions={exampleSpeedOptions}
 				defaultValue={defaultValue ?? { model: "gpt-5.6-sol", effort: "Medium", speed: "Default" }}
 				value={value}
-				onValueChange={(nextValue, details) => setEvents((current) => [...current, { value: nextValue, reason: details.reason }])}>
+				onValueChange={(nextValue, details) =>
+					setEvents((current) => [...current, { value: nextValue, reason: details.reason }])
+				}
+			>
 				<ModelSelector.Trigger aria-label={`${label} selector`} />
 				<ModelSelector.Popup />
 			</ModelSelector.Root>
@@ -146,7 +148,13 @@ function NormalizationCase({
 
 type RegressionEvent = { value: ModelSelectorValue; reason: string };
 
-function RegressionStatus({ events, testId }: { events: readonly RegressionEvent[]; testId: string }) {
+function RegressionStatus({
+	events,
+	testId,
+}: {
+	events: readonly RegressionEvent[];
+	testId: string;
+}) {
 	const latest = events.at(-1);
 	return (
 		<Text aria-live="polite" data-testid={testId}>
@@ -187,7 +195,8 @@ function ModelSelectorSample({
 				groups={groups}
 				effortOptions={exampleEffortOptions}
 				speedOptions={exampleSpeedOptions}
-				defaultValue={defaultValue}>
+				defaultValue={defaultValue}
+			>
 				<ModelSelector.Trigger showEffort={showEffort} size={size} variant={variant} />
 				<ModelSelector.Popup />
 			</ModelSelector.Root>

@@ -111,7 +111,11 @@ export const AnchoredDeduplicated: Story = {
 		controls: { include: ["_side", "_align", "_limit", "_timeout"] },
 	},
 	render: ({ _side, _align, _limit, _timeout }) => (
-		<Toast.AnchoredProvider toastManager={deduplicatedToastManager} limit={_limit} timeout={_timeout}>
+		<Toast.AnchoredProvider
+			toastManager={deduplicatedToastManager}
+			limit={_limit}
+			timeout={_timeout}
+		>
 			<DeduplicatedAnchoredExample _side={_side} _align={_align} />
 		</Toast.AnchoredProvider>
 	),
@@ -237,7 +241,9 @@ function TooltipAnchoredExample({ _side, _align }: Pick<StoryArgs, "_side" | "_a
 					closeOnClick={false}
 					render={
 						<IconButton
-							icon={feedbackVisible ? <CheckIcon aria-hidden weight="bold" /> : <CopyIcon aria-hidden />}
+							icon={
+								feedbackVisible ? <CheckIcon aria-hidden weight="bold" /> : <CopyIcon aria-hidden />
+							}
 							label="Copy design system link"
 							onClick={copyLink}
 							tooltip={false}
@@ -303,7 +309,8 @@ function PopoverAnchoredExample({ _side, _align }: Pick<StoryArgs, "_side" | "_a
 				ref={anchorRef}
 				disabled={isSubmitting}
 				onClick={submitForm}
-				startSlot={isSubmitting ? <Loader aria-hidden /> : <PaperPlaneTiltIcon aria-hidden />}>
+				startSlot={isSubmitting ? <Loader aria-hidden /> : <PaperPlaneTiltIcon aria-hidden />}
+			>
 				{isSubmitting ? "Submitting…" : "Submit changes"}
 			</Button>
 		</AnchoredStage>
@@ -329,7 +336,8 @@ function EditingProgressGauge({ complete = false, value }: { complete?: boolean;
 			size={16}
 			xstyle={storyStyles.progressGauge}
 			trackColor="color-mix(in srgb, currentColor 25%, transparent)"
-			value={value}>
+			value={value}
+		>
 			{complete ? <Icon.Checkmark height={10} strokeWidth={3} width={10} /> : null}
 		</MeterGauge>
 	);
@@ -399,7 +407,10 @@ function PillAnchoredExample({ _side, _align }: Pick<StoryArgs, "_side" | "_alig
 		manager.add({
 			id: "agent-editing-progress",
 			title: nextStatus === "success" ? "Editing complete" : "Disconnected from agent",
-			description: nextStatus === "success" ? `${editingSteps[stepIndex].files} files updated` : "Editing paused",
+			description:
+				nextStatus === "success"
+					? `${editingSteps[stepIndex].files} files updated`
+					: "Editing paused",
 			timeout: 2200,
 			priority: nextStatus === "error" ? "high" : "low",
 			positionerProps: positionerProps(),
@@ -426,23 +437,30 @@ function PillAnchoredExample({ _side, _align }: Pick<StoryArgs, "_side" | "_alig
 					ref={anchorRef}
 					disabled={status === "ongoing"}
 					onClick={startGoal}
-					startSlot={<PencilSimpleIcon aria-hidden />}>
+					startSlot={<PencilSimpleIcon aria-hidden />}
+				>
 					Start goal
 				</Button>
 				<Button
 					variant="secondary"
 					disabled={status !== "ongoing" || stepIndex >= editingSteps.length - 1}
-					onClick={updateGoal}>
+					onClick={updateGoal}
+				>
 					Update
 				</Button>
-				<Button variant="secondary" disabled={status !== "ongoing"} onClick={() => finishGoal("success")}>
+				<Button
+					variant="secondary"
+					disabled={status !== "ongoing"}
+					onClick={() => finishGoal("success")}
+				>
 					Complete goal
 				</Button>
 				<Button
 					variant="error"
 					disabled={status !== "ongoing"}
 					onClick={() => finishGoal("error")}
-					startSlot={<PlugIcon aria-hidden />}>
+					startSlot={<PlugIcon aria-hidden />}
+				>
 					Disconnect
 				</Button>
 			</Stack>

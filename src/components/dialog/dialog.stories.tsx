@@ -62,7 +62,11 @@ function DialogFrame({
 	showClose?: boolean;
 }) {
 	return (
-		<Dialog.Popup backdropProps={showBackdrop ? {} : false} scrollBehavior={scrollBehavior} showClose={showClose}>
+		<Dialog.Popup
+			backdropProps={showBackdrop ? {} : false}
+			scrollBehavior={scrollBehavior}
+			showClose={showClose}
+		>
 			<Dialog.Header>
 				<Dialog.Title>Edit profile</Dialog.Title>
 				<Dialog.Description>Make changes to how your name appears to teammates.</Dialog.Description>
@@ -77,14 +81,26 @@ function DialogFrame({
 }
 
 export const Playground: Story = {
-	render: ({ defaultOpen, disablePointerDismissal, modal, _scrollBehavior, _showBackdrop, _showClose }) => (
+	render: ({
+		defaultOpen,
+		disablePointerDismissal,
+		modal,
+		_scrollBehavior,
+		_showBackdrop,
+		_showClose,
+	}) => (
 		<Dialog.Root
 			key={`${defaultOpen}-${disablePointerDismissal}-${modal}-${_scrollBehavior}-${_showBackdrop}-${_showClose}`}
 			defaultOpen={defaultOpen}
 			disablePointerDismissal={disablePointerDismissal}
-			modal={modal}>
+			modal={modal}
+		>
 			<Dialog.Trigger render={<Button />}>Edit profile</Dialog.Trigger>
-			<DialogFrame scrollBehavior={_scrollBehavior} showBackdrop={_showBackdrop} showClose={_showClose} />
+			<DialogFrame
+				scrollBehavior={_scrollBehavior}
+				showBackdrop={_showBackdrop}
+				showClose={_showClose}
+			/>
 		</Dialog.Root>
 	),
 };
@@ -158,10 +174,7 @@ function InsideScrollDialog() {
 						The popup stays on screen while the ScrollArea inside it holds the long content.
 					</Dialog.Description>
 				</Dialog.Header>
-				<ScrollArea
-					label="Dialog guidelines"
-					size="content"
-					xstyle={storyParts.insideScrollArea}>
+				<ScrollArea label="Dialog guidelines" size="content" xstyle={storyParts.insideScrollArea}>
 					<div {...stylex.props(x.padding(tokens["--space-5"]))}>
 						<DialogSections />
 					</div>
@@ -184,7 +197,8 @@ function OutsideScrollDialog() {
 				<Dialog.Header>
 					<Dialog.Title>Dialog guidelines</Dialog.Title>
 					<Dialog.Description>
-						The popup may extend past the screen while the surrounding ScrollArea provides scrolling.
+						The popup may extend past the screen while the surrounding ScrollArea provides
+						scrolling.
 					</Dialog.Description>
 				</Dialog.Header>
 				<Dialog.Body>
@@ -211,7 +225,9 @@ export const ScrollBehavior: Story = {
 			</Stack>
 			<Stack gap={1}>
 				<Heading size="2">Outside</Heading>
-				<Text color="muted">The surrounding viewport scrolls when the popup exceeds the screen.</Text>
+				<Text color="muted">
+					The surrounding viewport scrolls when the popup exceeds the screen.
+				</Text>
 				<OutsideScrollDialog />
 			</Stack>
 		</Stack>
@@ -239,13 +255,15 @@ function NonModalExample() {
 				<Dialog.Popup
 					backdropProps={false}
 					viewportProps={{ xstyle: storyParts.nonModalViewport }}
-					xstyle={storyParts.nonModalPopup}>
+					xstyle={storyParts.nonModalPopup}
+				>
 					<Dialog.Header>
 						<Dialog.Title>Selection inspector</Dialog.Title>
 						<Dialog.Description>A non-modal dialog for supporting controls.</Dialog.Description>
 					</Dialog.Header>
 					<Dialog.Body>
-						The popup animates independently while pointer and keyboard interaction remain available outside it.
+						The popup animates independently while pointer and keyboard interaction remain available
+						outside it.
 					</Dialog.Body>
 					<Dialog.Footer>
 						<Dialog.Close render={<Button variant="neutral" />}>Close inspector</Dialog.Close>
@@ -273,7 +291,9 @@ export const Nested: Story = {
 			<Dialog.Popup>
 				<Dialog.Header>
 					<Dialog.Title>Project settings</Dialog.Title>
-					<Dialog.Description>The parent scales and dims when its nested dialog opens.</Dialog.Description>
+					<Dialog.Description>
+						The parent scales and dims when its nested dialog opens.
+					</Dialog.Description>
 				</Dialog.Header>
 				<Dialog.Body>
 					<Dialog.Root>
@@ -283,7 +303,9 @@ export const Nested: Story = {
 								<Dialog.Title>Manage access</Dialog.Title>
 								<Dialog.Description>Invite collaborators to this project.</Dialog.Description>
 							</Dialog.Header>
-							<Dialog.Body>Nested dialogs retain their own focus scope and animated lifecycle.</Dialog.Body>
+							<Dialog.Body>
+								Nested dialogs retain their own focus scope and animated lifecycle.
+							</Dialog.Body>
 							<Dialog.Footer>
 								<Dialog.Close render={<Button variant="neutral" />}>Done</Dialog.Close>
 							</Dialog.Footer>
@@ -316,7 +338,8 @@ function CloseConfirmationDialog() {
 					setDraft("");
 				}
 				setDialogOpen(open);
-			}}>
+			}}
+		>
 			<Dialog.Trigger render={<Button />}>Compose note</Dialog.Trigger>
 			<Dialog.Popup>
 				<Dialog.Header>
@@ -328,7 +351,8 @@ function CloseConfirmationDialog() {
 						event.preventDefault();
 						setDraft("");
 						setDialogOpen(false);
-					}}>
+					}}
+				>
 					<Dialog.Body>
 						<Textarea
 							label="Note"
@@ -352,14 +376,17 @@ function CloseConfirmationDialog() {
 						<AlertDialog.Description>Your unsaved changes will be lost.</AlertDialog.Description>
 					</AlertDialog.Header>
 					<AlertDialog.Footer>
-						<AlertDialog.Close render={<Button variant="neutral" />}>Keep editing</AlertDialog.Close>
+						<AlertDialog.Close render={<Button variant="neutral" />}>
+							Keep editing
+						</AlertDialog.Close>
 						<Button
 							variant="error"
 							onClick={() => {
 								setConfirmationOpen(false);
 								setDraft("");
 								setDialogOpen(false);
-							}}>
+							}}
+						>
 							Discard note
 						</Button>
 					</AlertDialog.Footer>

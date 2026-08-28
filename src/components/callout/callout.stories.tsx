@@ -139,7 +139,11 @@ export const Variants: Story = {
 
 							return (
 								<Callout
-									action={variant === "banner" ? <CloseButton label={`Dismiss ${example.title}`} /> : undefined}
+									action={
+										variant === "banner" ? (
+											<CloseButton label={`Dismiss ${example.title}`} />
+										) : undefined
+									}
 									key={hue}
 									description={example.description}
 									hue={hue}
@@ -205,14 +209,16 @@ export const Positioning: Story = {
 					disableFade
 					label="Absolute banner example"
 					showScrollbar="always"
-					xstyle={storyStyles.positioningStage}>
+					xstyle={storyStyles.positioningStage}
+				>
 					<div
 						{...stylex.props(
 							x.paddingInline(tokens["--space-4"]),
 							x.paddingBottom(tokens["--space-4"]),
 							x.paddingTop(tokens["--space-12"]),
 							x.minHeight("24rem"),
-						)}>
+						)}
+					>
 						<Callout
 							action={<CloseButton label="Dismiss workspace notice" />}
 							description="This banner is anchored to the top of its containing surface."
@@ -245,14 +251,16 @@ export const Positioning: Story = {
 					disableFade
 					label="Sticky banner example"
 					showScrollbar="always"
-					xstyle={storyStyles.positioningStage}>
+					xstyle={storyStyles.positioningStage}
+				>
 					<div
 						{...stylex.props(
 							x.padding(tokens["--space-3"]),
 							x.gap(tokens["--space-3"]),
 							x.display.flex,
 							x.flexDirection.column,
-						)}>
+						)}
+					>
 						<Text size="2">Deployment log</Text>
 						<Callout
 							action={<CloseButton label="Dismiss live updates" />}
@@ -260,12 +268,7 @@ export const Positioning: Story = {
 							hue="neutral"
 							title="Live updates"
 							variant="banner"
-							xstyle={[
-								x.position.sticky,
-								x.top._0,
-								x.width["100%"],
-								x.zIndex._1,
-							]}
+							xstyle={[x.position.sticky, x.top._0, x.width["100%"], x.zIndex._1]}
 						/>
 						<Stack gap={3} xstyle={storyStyles.log}>
 							{Array.from({ length: 8 }, (_, index) => (
