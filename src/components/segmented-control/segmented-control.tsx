@@ -13,6 +13,10 @@ import { attrJoin } from "@/utils/attr-join";
 
 export type SegmentedControlSize = Extract<ButtonSize, "sm" | "md" | "lg">;
 
+const ENABLED_ACTIVE = ":active:not([data-disabled],[data-readonly])";
+const ENABLED_HOVER = ":hover:not([data-disabled],[data-readonly])";
+const UNSELECTED_ENABLED_HOVER = ":hover:not([data-checked],[data-disabled],[data-readonly])";
+
 type SegmentedControlContextValue = {
 	size: SegmentedControlSize;
 };
@@ -25,7 +29,7 @@ type SegmentedControlPartStyleProps = BaseStyleProps & {
 
 export type SegmentedControlRootProps = Omit<
 	BaseRadioGroup.Props,
-	"className" | "color" | "style" | keyof MarginProps
+	"className" | "color" | "orientation" | "style" | keyof MarginProps
 > &
 	MarginProps &
 	BaseStyleProps & {
@@ -159,13 +163,13 @@ const segmentedControlParts = stylex.create({
 		alignItems: "center",
 		appearance: "none",
 		backgroundColor: {
-			"[data-checked]": tokens["--elevated"],
-			default: "transparent",
-			":active:not([data-disabled],[data-readonly])": tokens["--surface-subtle-active"],
+			[ENABLED_ACTIVE]: tokens["--surface-subtle-active"],
 			// eslint-disable-next-line @stylexjs/valid-styles -- the compiler supports chained pseudo-class conditions; the lint rule is stricter than the compiler.
-			":hover:not([data-checked],[data-disabled],[data-readonly])": {
+			[UNSELECTED_ENABLED_HOVER]: {
 				[media.canHover]: tokens["--surface-subtle-hover"],
 			},
+			"[data-checked]": tokens["--elevated"],
+			default: "transparent",
 		},
 		boxShadow: {
 			"[data-checked]": tokens["--shadow-sm"],
@@ -174,10 +178,10 @@ const segmentedControlParts = stylex.create({
 		},
 		boxSizing: "border-box",
 		color: {
+			[ENABLED_HOVER]: tokens["--fg"],
 			"[data-checked]": tokens["--fg"],
 			"[data-disabled]": tokens["--fg-subtle"],
 			default: tokens["--fg-muted"],
-			":hover:not([data-disabled])": tokens["--fg"],
 		},
 		cursor: {
 			"[data-disabled]": "not-allowed",
@@ -194,8 +198,8 @@ const segmentedControlParts = stylex.create({
 		},
 		position: "relative",
 		transform: {
+			[ENABLED_ACTIVE]: "scale(0.98)",
 			default: "scale(1)",
-			":active:not([data-disabled],[data-readonly])": "scale(0.98)",
 		},
 		transitionDuration: {
 			default: tokens["--motion-duration-medium"],

@@ -2,6 +2,7 @@ import { expect, test, type Page } from "@playwright/test";
 
 const playgroundPath = "/iframe.html?id=components-segmented-control--playground&viewMode=story";
 const formPath = "/iframe.html?id=components-segmented-control--form&viewMode=story";
+const statesPath = "/iframe.html?id=components-segmented-control--states&viewMode=story";
 const consoleErrorsByPage = new WeakMap<Page, string[]>();
 
 test.beforeEach(({ page }) => {
@@ -68,4 +69,17 @@ test("participates in required form submission", async ({ page }) => {
 	await page.getByRole("radio", { name: "Week" }).click();
 	await page.getByRole("button", { name: "Apply range" }).click();
 	await expect(page.getByText("Submitted: week")).toBeVisible();
+});
+
+test("keeps read-only segments visually inert on hover", async ({ page }) => {
+	await page.goto(statesPath);
+
+	const group = page.getByRole("radiogroup", { name: "Read-only example" });
+	const unselected = group.getByRole("radio", { name: "Week" });
+	const restingColor = await unselected.evaluate((element) => getComputedStyle(element).color);
+
+	await unselected.hover();
+	await page.waitForTimeout(300);
+
+	await expect(unselected).toHaveCSS("color", restingColor);
 });
