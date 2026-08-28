@@ -14,6 +14,7 @@
 - **Data table** — A stateful, data-driven component that derives rows and columns from data and composes `Table` for presentation. It owns filtering, sorting, visibility, selection, expansion, and row actions.
 - **Action cell** — A compact table header or data cell reserved for a direct interactive control, such as a disclosure button or row-action menu trigger. Checkbox cells are specialized action cells that own the design-system Checkbox composition.
 - **Checked row** — A body row whose selection checkbox is checked and which receives the corresponding visual treatment. Use `checked`, not `selected`, in the presentation-only `Table` API.
+- **Math expression field** — Experimental unpublished text field that evaluates arithmetic on commit. Evaluator: `src/utils/evaluate-math-expression.ts`. Draft/commit hook: `src/hooks/use-math-expression-input.ts`. Field: `src/experimental/math-expression-field/`. Not a NumberField variant; Base UI NumberField filters expression characters. Not exported from `src/components/index.ts`.
 
 ## Tokens and themes
 

@@ -6,12 +6,11 @@ starting, honor its STOP conditions, and update its row when done.
 
 ## Execution order & status
 
-| Plan                                                           | Title                                                           | Priority | Effort | Depends on      | Status    |
-| -------------------------------------------------------------- | --------------------------------------------------------------- | -------: | -----: | --------------- | --------- |
-| [001](./001-stepper-component.md)                              | Add a presentational Stepper component                          |       P2 |      M | Base UI Tabs    | IN REVIEW |
-| [Stepper pagination](./stepper-pagination.md)                  | Evaluate shared Stepper pagination controls                     |       P3 |      S | Second consumer | TODO      |
-| [Math expression input](./2026-08-18-math-expression-input.md) | Add a private math-expression evaluation seam and story harness |        — |      — | —               | TODO      |
-| [Table primitives](./table-primitives-plan.md)                 | Add agnostic table primitive components                         |        — |      — | —               | DONE      |
+| Plan                                           | Title                                       | Priority | Effort | Depends on      | Status    |
+| ---------------------------------------------- | ------------------------------------------- | -------: | -----: | --------------- | --------- |
+| [001](./001-stepper-component.md)              | Add a presentational Stepper component      |       P2 |      M | Base UI Tabs    | IN REVIEW |
+| [Stepper pagination](./stepper-pagination.md)  | Evaluate shared Stepper pagination controls |       P3 |      S | Second consumer | TODO      |
+| [Table primitives](./table-primitives-plan.md) | Add agnostic table primitive components     |        — |      — | —               | DONE      |
 
 Status values: TODO | IN PROGRESS | DONE | BLOCKED (with one-line reason) |
 REJECTED (with one-line rationale — finding fixed independently or approach
@@ -19,7 +18,4 @@ abandoned)
 
 ## Dependency notes
 
-- `001-stepper-component.md` is independent and may execute without the legacy
-  math-expression plan.
-- `2026-08-18-math-expression-input.md` is an unrelated legacy active plan. It
-  is intentionally not renumbered or modified here.
+- `001-stepper-component.md` is independent.
