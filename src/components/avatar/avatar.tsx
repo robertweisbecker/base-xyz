@@ -73,6 +73,7 @@ export function Avatar({
 	const { marginStyles, rest } = extractMarginProps(props);
 	const normalizedName = name?.trim().replace(/\s+/gu, " ") ?? "";
 	const resolvedInitials = initials?.trim() || deriveInitials(normalizedName);
+	const hasName = normalizedName.length > 0;
 	const fallback =
 		icon ??
 		(resolvedInitials || (
@@ -83,7 +84,6 @@ export function Avatar({
 				style={{ transform: "translateY(24%)" }}
 			/>
 		));
-	const hasName = normalizedName.length > 0;
 	const sx = stylex.props(
 		avatarParts.root,
 		focusRing.offsetInteractive,
@@ -104,6 +104,29 @@ export function Avatar({
 			tabIndex={tabIndex ?? (render == null && hasName ? 0 : undefined)}
 			{...rest}
 		>
+			<AvatarContent fallback={fallback} hasName={hasName} image={image} imageAlt={imageAlt} />
+		</BaseAvatar.Root>
+	);
+
+	return (
+		<Tooltip.Root disabled={!hasName}>
+			<Tooltip.Trigger render={element} />
+			<Tooltip.Popup>{normalizedName}</Tooltip.Popup>
+		</Tooltip.Root>
+	);
+}
+
+function AvatarContent({
+	fallback,
+	hasName,
+	image,
+	imageAlt,
+}: Pick<AvatarProps, "image" | "imageAlt"> & {
+	fallback: ReactNode;
+	hasName: boolean;
+}) {
+	return (
+		<>
 			{image ? (
 				<BaseAvatar.Image
 					alt={hasName ? "" : (imageAlt ?? "")}
@@ -120,14 +143,7 @@ export function Avatar({
 					</span>
 				)}
 			</BaseAvatar.Fallback>
-		</BaseAvatar.Root>
-	);
-
-	return (
-		<Tooltip.Root disabled={!hasName}>
-			<Tooltip.Trigger render={element} />
-			<Tooltip.Popup>{normalizedName}</Tooltip.Popup>
-		</Tooltip.Root>
+		</>
 	);
 }
 
