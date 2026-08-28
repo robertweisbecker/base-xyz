@@ -65,6 +65,7 @@ export {
 	type MeterGaugeProps,
 	type MeterGaugeSize,
 } from "./meter/meter-gauge";
+export { Navbar, type NavbarProps, type NavbarPosition } from "./navbar/navbar";
 export { NavList, type NavListIndentLevel } from "./nav-list/nav-list";
 export { Progress } from "./progress/progress";
 export { Separator, type SeparatorProps } from "./separator/separator";
