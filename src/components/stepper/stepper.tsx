@@ -1,7 +1,9 @@
 import { Tabs as BaseTabs } from "@base-ui/react/tabs";
 import { useMediaQuery } from "@base-ui/react/unstable-use-media-query";
+import { WarningIcon } from "@phosphor-icons/react/dist/csr/Warning";
 import * as stylex from "@stylexjs/stylex";
-import { type ComponentPropsWithRef, type ReactNode } from "react";
+import { createContext, useContext, type ComponentPropsWithRef, type ReactNode } from "react";
+import { Icon } from "@/components/icons";
 import { fontWeightStyles, textStyles, textTruncationStyles } from "@/components/text/text.stylex";
 import { VisuallyHidden } from "@/components/visually-hidden/visually-hidden";
 import { mergeStyle, type BaseStyleProps } from "@/styles/props/base";
@@ -10,7 +12,7 @@ import { focusRing } from "@/styles/recipes/focus";
 import { media } from "@/styles/constants.stylex";
 import { tokens } from "@/theme/tokens.stylex";
 import { attrJoin } from "@/utils/attr-join";
-import { stepperRootMarker } from "./stepper.stylex";
+import { stepperRootMarker, stepperStepMarker } from "./stepper.stylex";
 
 const stepperParts = stylex.create({
 	root: {
@@ -56,28 +58,6 @@ const stepperParts = stylex.create({
 		"--_stepper-content-opacity": {
 			"[data-disabled]": 0.48,
 			default: 1,
-		},
-		"--_stepper-marker-background": {
-			'[data-active][data-status="incomplete"]': tokens["--bg-primary"],
-			'[data-status="completed"]': tokens["--bg-success-primary"],
-			'[data-status="invalid"]': tokens["--bg-error-primary"],
-			default: tokens["--canvas"],
-		},
-		"--_stepper-marker-border": {
-			'[data-active][data-status="incomplete"]': tokens["--bg-primary"],
-			'[data-status="completed"]': tokens["--bg-success-primary"],
-			'[data-status="invalid"]': tokens["--bg-error-primary"],
-			default: tokens["--border-strong"],
-		},
-		"--_stepper-marker-color": {
-			'[data-active][data-status="incomplete"]': tokens["--fg-accent-contrast"],
-			'[data-status="completed"]': tokens["--fg-success-contrast"],
-			'[data-status="invalid"]': tokens["--fg-error-contrast"],
-			default: tokens["--fg-muted"],
-		},
-		"--_stepper-marker-shadow": {
-			"[data-active]": `0 0 0 2px ${tokens["--canvas"]}, 0 0 0 4px ${tokens["--fill-accent"]}`,
-			default: "none",
 		},
 		"--_stepper-title-color": {
 			"[data-active]": tokens["--fg"],
@@ -206,16 +186,36 @@ const stepperParts = stylex.create({
 		},
 	},
 	marker: {
-		borderColor: "var(--_stepper-marker-border)",
+		borderColor: {
+			default: tokens["--border-strong"],
+			[stylex.when.ancestor('[data-active][data-status="incomplete"]', stepperStepMarker)]:
+				tokens["--fill-accent"],
+			[stylex.when.ancestor('[data-status="completed"]', stepperStepMarker)]:
+				tokens["--bg-primary"],
+			[stylex.when.ancestor('[data-status="invalid"]', stepperStepMarker)]: tokens["--fill-error"],
+		},
 		borderRadius: tokens["--radius-full"],
 		borderStyle: "solid",
 		borderWidth: tokens["--border-width"],
 		flex: "none",
 		alignItems: "center",
-		backgroundColor: "var(--_stepper-marker-background)",
-		boxShadow: "var(--_stepper-marker-shadow)",
+		backgroundColor: {
+			default: tokens["--canvas"],
+			[stylex.when.ancestor('[data-active][data-status="incomplete"]', stepperStepMarker)]:
+				tokens["--bg-accent"],
+			[stylex.when.ancestor('[data-status="completed"]', stepperStepMarker)]:
+				tokens["--bg-primary"],
+			[stylex.when.ancestor('[data-status="invalid"]', stepperStepMarker)]: tokens["--bg-error"],
+		},
 		boxSizing: "border-box",
-		color: "var(--_stepper-marker-color)",
+		color: {
+			default: tokens["--fg-muted"],
+			[stylex.when.ancestor('[data-active][data-status="incomplete"]', stepperStepMarker)]:
+				tokens["--fg-accent-strong"],
+			[stylex.when.ancestor('[data-status="completed"]', stepperStepMarker)]:
+				tokens["--fg-accent-contrast"],
+			[stylex.when.ancestor('[data-status="invalid"]', stepperStepMarker)]: tokens["--fg-error"],
+		},
 		display: "inline-flex",
 		fontSize: tokens["--font-size-2"],
 		fontVariantNumeric: "tabular-nums",
@@ -290,6 +290,8 @@ const rootOrientationStyles = stylex.create({
 export type StepperOrientation = BaseTabs.Root.Orientation;
 export type StepperStatus = "incomplete" | "completed" | "invalid";
 export type StepperValue = string;
+
+const StepperStatusContext = createContext<StepperStatus>("incomplete");
 
 type StepperPartStyleProps = BaseStyleProps & {
 	className?: string;
@@ -393,7 +395,7 @@ export function Step({
 	xstyle,
 	...props
 }: StepperStepProps) {
-	const sx = stylex.props(focusRing.offset, stepperParts.step, xstyle);
+	const sx = stylex.props(stepperStepMarker, focusRing.offset, stepperParts.step, xstyle);
 	const statusLabel =
 		status === "completed" ? "Completed" : status === "invalid" ? "Invalid" : null;
 
@@ -407,7 +409,7 @@ export function Step({
 			type={type}
 			value={value}
 		>
-			{children}
+			<StepperStatusContext value={status}>{children}</StepperStatusContext>
 			{statusLabel ? <VisuallyHidden>{statusLabel}</VisuallyHidden> : null}
 		</BaseTabs.Tab>
 	);
@@ -422,7 +424,16 @@ export type StepperMarkerProps = Omit<
 	};
 
 export function Marker({ children, className, style, xstyle, ...props }: StepperMarkerProps) {
+	const status = useContext(StepperStatusContext);
 	const sx = stylex.props(stepperParts.marker, fontWeightStyles.medium, xstyle);
+	const marker =
+		status === "completed" ? (
+			<Icon.Checkmark size="1em" strokeWidth={3} />
+		) : status === "invalid" ? (
+			<WarningIcon aria-hidden size="1em" weight="fill" />
+		) : (
+			children
+		);
 	return (
 		<span
 			{...props}
@@ -430,7 +441,7 @@ export function Marker({ children, className, style, xstyle, ...props }: Stepper
 			className={attrJoin(sx.className, className)}
 			style={mergeStyle(sx.style, style)}
 		>
-			{children}
+			{marker}
 		</span>
 	);
 }
