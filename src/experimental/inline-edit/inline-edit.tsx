@@ -202,8 +202,7 @@ function InlineEditRoot({
 	const confirm = useCallback(
 		async (restoreFocus = true) => {
 			if (!editingRef.current || disabled || pendingRef.current) return;
-			if (inputRef.current && !inputRef.current.checkValidity()) {
-				inputRef.current.reportValidity();
+			if (inputRef.current && !inputRef.current.reportValidity()) {
 				return;
 			}
 			pendingRef.current = true;
@@ -285,7 +284,13 @@ function InlineEditRoot({
 						return;
 					}
 					queueMicrotask(() => {
-						if (!rootRef.current?.contains(document.activeElement)) void confirm(false);
+						if (
+							mountedRef.current &&
+							rootRef.current &&
+							!rootRef.current.contains(document.activeElement)
+						) {
+							void confirm(false);
+						}
 					});
 				}}
 				onKeyDown={(event) => {
@@ -396,6 +401,10 @@ function InlineEditInput({
 			data-pending={context.pending ? "" : undefined}
 			className={attrJoin(sx.className, className)}
 			style={mergeStyle(sx.style, style)}
+			onInvalid={(event) => {
+				if (!context.editing) context.startEditing();
+				props.onInvalid?.(event);
+			}}
 		/>
 	);
 }

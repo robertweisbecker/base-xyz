@@ -93,7 +93,7 @@ export const Playground: Story = {
 		...rootProps
 	}) => (
 		<InlineEditDemo
-			key={_value}
+			key={`${_value}-${rootProps.defaultEditing}`}
 			initialValue={_value}
 			showActions={_showActions}
 			confirmOnBlur={confirmOnBlur}
@@ -275,6 +275,7 @@ function AsyncInlineEditDemo() {
 		<Stack gap={3} align="start">
 			<InlineEdit.Root
 				data-testid="async-inline-edit"
+				confirmOnBlur={false}
 				confirmOnEnter
 				onEditingChange={(_, details) => {
 					if (details.reason === "edit" || details.reason === "cancel") setDraft(value);
@@ -350,10 +351,17 @@ function FieldInlineEditDemo() {
 	return (
 		<Field.Root invalid {...stylex.props(fieldStyles.root)}>
 			<Field.Label {...stylex.props(fieldStyles.label)}>Workspace slug</Field.Label>
-			<InlineEdit.Root defaultEditing onConfirm={() => setValue(draft)}>
+			<InlineEdit.Root
+				defaultEditing
+				onConfirm={() => setValue(draft)}
+				onEditingChange={(_, details) => {
+					if (details.reason === "edit" || details.reason === "cancel") setDraft(value);
+				}}
+			>
 				<InlineEdit.Value label={`Edit workspace slug ${value}`}>{value}</InlineEdit.Value>
 				<InlineEdit.Input
 					required
+					minLength={3}
 					aria-invalid
 					value={draft}
 					onChange={(event) => setDraft(event.target.value)}
