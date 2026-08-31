@@ -26,6 +26,7 @@ import {
 	type ReactNode,
 	type SetStateAction,
 } from "react";
+import { menuItemStyles, menuItemVariantStyles } from "@/components/menu/menu-item.stylex";
 import {
 	morphingChildPopupMarker,
 	morphingMenuStyles,
@@ -285,6 +286,8 @@ export function Submenu({ children, label, renderRow, rowXstyle }: MorphingMenuS
 					openOnHover={false}
 					{...stylex.props(
 						morphingSubmenuTriggerMarker,
+						menuItemStyles.item,
+						menuItemVariantStyles.default,
 						morphingMenuStyles.row,
 						morphingMenuStyles.interactiveRow,
 						morphingMenuStyles.submenuTrigger,
@@ -329,6 +332,8 @@ export function Submenu({ children, label, renderRow, rowXstyle }: MorphingMenuS
 								closeOnClick={false}
 								onClick={() => actionsRef.current?.close()}
 								{...stylex.props(
+									menuItemStyles.item,
+									menuItemVariantStyles.default,
 									morphingMenuStyles.row,
 									morphingMenuStyles.interactiveRow,
 									morphingMenuStyles.submenuHeader,
@@ -360,7 +365,13 @@ export function Submenu({ children, label, renderRow, rowXstyle }: MorphingMenuS
 export function Item({ xstyle, ...props }: MorphingMenuItemProps) {
 	return (
 		<BaseMenu.Item
-			{...stylex.props(morphingMenuStyles.row, morphingMenuStyles.interactiveRow, xstyle)}
+			{...stylex.props(
+				menuItemStyles.item,
+				menuItemVariantStyles.default,
+				morphingMenuStyles.row,
+				morphingMenuStyles.interactiveRow,
+				xstyle,
+			)}
 			{...props}
 		/>
 	);
@@ -369,7 +380,13 @@ export function Item({ xstyle, ...props }: MorphingMenuItemProps) {
 export function RadioItem({ xstyle, ...props }: MorphingMenuRadioItemProps) {
 	return (
 		<BaseMenu.RadioItem
-			{...stylex.props(morphingMenuStyles.row, morphingMenuStyles.interactiveRow, xstyle)}
+			{...stylex.props(
+				menuItemStyles.item,
+				menuItemVariantStyles.default,
+				morphingMenuStyles.row,
+				morphingMenuStyles.interactiveRow,
+				xstyle,
+			)}
 			{...props}
 		/>
 	);

@@ -136,10 +136,7 @@ export const morphingMenuStyles = stylex.create({
 		fontSize: tokens["--font-size-2"],
 		fontWeight: tokens["--font-weight-regular"],
 		lineHeight: tokens["--line-height-2"],
-		pointerEvents: {
-			"[data-has-open-submenu]": "none",
-			default: "auto",
-		},
+		pointerEvents: "auto",
 		position: "relative",
 	},
 	popupWidth: {
@@ -162,13 +159,22 @@ export const morphingMenuStyles = stylex.create({
 			default: `calc(100% - ${tokens["--space-2"]} - ${tokens["--space-0-5"]})`,
 		},
 		padding: 0,
+		animationDuration: {
+			[media.reducedMotion]: "0s",
+			"[data-ending-style]": "280ms",
+			default: "0s",
+		},
+		animationName: {
+			[media.reducedMotion]: "none",
+			"[data-ending-style]": blockPointerEvents,
+			default: "none",
+		},
 		opacity: {
 			"[data-ending-style]": 0.99999,
 			default: 1,
 		},
 		pointerEvents: {
 			"[data-ending-style]": "none",
-			"[data-has-open-submenu]": "none",
 			default: "auto",
 		},
 		transform: {
@@ -201,10 +207,9 @@ export const morphingMenuStyles = stylex.create({
 		padding: "var(--_morph-menu-padding)",
 		borderRadius: {
 			default: tokens["--radius-md"],
-			[stylex.when.ancestor("[data-ending-style]", morphingRootPopupMarker)]:
-				tokens["--radius-full"],
+			[stylex.when.ancestor("[data-ending-style]", morphingRootPopupMarker)]: tokens["--radius-lg"],
 			[stylex.when.ancestor("[data-starting-style]", morphingRootPopupMarker)]:
-				tokens["--radius-full"],
+				tokens["--radius-lg"],
 		},
 		overflow: "hidden",
 		backgroundColor: tokens["--elevated"],
@@ -232,17 +237,13 @@ export const morphingMenuStyles = stylex.create({
 			[media.reducedMotion]: "0s",
 			"[data-morphing-closing]": {
 				[media.reducedMotion]: "0s",
-				default: "320ms",
+				default: "280ms",
 			},
-			default: "400ms",
+			default: "300ms",
 			[stylex.when.ancestor("[data-starting-style]", morphingRootPopupMarker)]: "0s",
 		},
 		transitionProperty: "top, width, height, border-radius, box-shadow",
-		transitionTimingFunction: {
-			default: "var(--_morph-bloom-enter-spring)",
-			[stylex.when.ancestor("[data-ending-style]", morphingRootPopupMarker)]:
-				"var(--_morph-bloom-close-ease)",
-		},
+		transitionTimingFunction: "var(--_morph-bloom-close-ease)",
 		willChange: "top, width, height",
 		zIndex: 0,
 		height: {
@@ -314,7 +315,6 @@ export const morphingMenuStyles = stylex.create({
 	},
 	row: {
 		padding: tokens["--space-2"],
-		borderRadius: tokens["--radius-sm"],
 		gap: tokens["--space-2"],
 		alignItems: "center",
 		boxSizing: "border-box",
@@ -329,11 +329,6 @@ export const morphingMenuStyles = stylex.create({
 		width: "100%",
 	},
 	interactiveRow: {
-		outline: "none",
-		backgroundColor: {
-			"[data-highlighted]": tokens["--surface-subtle-hover"],
-			default: "transparent",
-		},
 		opacity: "var(--_morph-inactive-opacity)",
 		position: "relative",
 		transitionDuration: {
@@ -383,12 +378,6 @@ export const morphingMenuStyles = stylex.create({
 			[stylex.when.ancestor("[data-ending-style]", morphingChildPopupMarker)]: "1.04167",
 			[stylex.when.ancestor("[data-open]", morphingChildPopupMarker)]: "1.04167",
 			[stylex.when.ancestor("[data-starting-style]", morphingChildPopupMarker)]: "1.04167",
-		},
-		backgroundColor: {
-			"[data-highlighted]:active": "transparent",
-			"[data-morphing]": "transparent",
-			"[data-popup-open]": "transparent",
-			default: "transparent",
 		},
 		justifyContent: "space-between",
 		opacity: {
