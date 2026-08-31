@@ -10,28 +10,21 @@ const stylexConstantsPath = fileURLToPath(
 );
 
 // The dev CSS endpoint can be requested before Vite has traversed a consumer's
-// imports. Register selector constants first so breakpoints never reach
-// Lightning CSS as unresolved `var(...)` selectors.
-const preloadStylexConstants = (): PluginOption => {
-	let preload: Promise<void> | undefined;
-
-	return {
-		name: "preload-stylex-constants",
-		apply: "serve",
-		enforce: "pre",
-		async transform(_code, id) {
-			if (id.split("?")[0] === stylexConstantsPath) return null;
-
-			preload ??= (async () => {
-				const constantsModule = await this.resolve(stylexConstantsPath);
-				if (constantsModule) await this.load(constantsModule);
-			})();
-			await preload;
-
-			return null;
+// imports. Register selector constants immediately before serving the document
+// so breakpoints never reach Lightning CSS as unresolved `var(...)` selectors.
+const preloadStylexConstants = (): PluginOption => ({
+	name: "preload-stylex-constants",
+	apply: "serve",
+	enforce: "pre",
+	transformIndexHtml: {
+		order: "pre",
+		async handler(_html, { server }) {
+			if (server) {
+				await server.transformRequest(stylexConstantsPath);
+			}
 		},
-	};
-};
+	},
+});
 
 export default defineConfig({
 	resolve: {
@@ -49,7 +42,6 @@ export default defineConfig({
 			aliases: {
 				"@/*": "/ROOT/src/*",
 			},
-			rewriteAliases: true,
 			useCSSLayers: {
 				before: ["reset"],
 			},
