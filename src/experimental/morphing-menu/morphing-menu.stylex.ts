@@ -37,6 +37,8 @@ export const morphingMenuStyles = stylex.create({
 		"--_morph-menu-width": width,
 	}),
 	rootRows: (rows: number) => ({
+		// The absolutely positioned root surface cannot provide intrinsic height to
+		// Base UI's initial measurement, so seed the target height from its rows.
 		"--_morph-root-menu-height": `calc(${rows} * var(--_morph-menu-row-height) + 2 * var(--_morph-menu-padding))`,
 	}),
 	root: {
@@ -116,7 +118,9 @@ export const morphingMenuStyles = stylex.create({
 		width: tokens["--space-5"],
 	},
 	positioner: {
+		height: "var(--positioner-height)",
 		outline: "0",
+		width: "var(--positioner-width)",
 		zIndex: zIndex.popup,
 	},
 	childPositioner: {
@@ -235,7 +239,7 @@ export const morphingMenuStyles = stylex.create({
 		},
 		transitionDuration: {
 			[media.reducedMotion]: "0s",
-			"[data-morphing-closing]": {
+			[stylex.when.ancestor("[data-ending-style]", morphingRootPopupMarker)]: {
 				[media.reducedMotion]: "0s",
 				default: "280ms",
 			},
@@ -298,7 +302,7 @@ export const morphingMenuStyles = stylex.create({
 		},
 		transitionDuration: {
 			[media.reducedMotion]: "0s",
-			"[data-morphing-closing]": {
+			[stylex.when.ancestor("[data-ending-style]", morphingRootPopupMarker)]: {
 				[media.reducedMotion]: "0s",
 				default: "200ms",
 			},
@@ -461,7 +465,7 @@ export const morphingMenuStyles = stylex.create({
 		},
 		transitionDuration: {
 			[media.reducedMotion]: "0s",
-			"[data-morphing-closing]": {
+			[stylex.when.ancestor("[data-ending-style]", morphingChildPopupMarker)]: {
 				[media.reducedMotion]: "0s",
 				default: "320ms",
 			},
@@ -553,7 +557,7 @@ export const morphingMenuStyles = stylex.create({
 		},
 		transitionDuration: {
 			[media.reducedMotion]: "0s",
-			"[data-morphing-closing]": {
+			[stylex.when.ancestor("[data-ending-style]", morphingChildPopupMarker)]: {
 				[media.reducedMotion]: "0s",
 				default: "150ms",
 			},
@@ -596,7 +600,7 @@ export const morphingMenuStyles = stylex.create({
 		},
 		transitionDuration: {
 			[media.reducedMotion]: "0s",
-			"[data-morphing-closing]": {
+			[stylex.when.ancestor("[data-ending-style]", morphingChildPopupMarker)]: {
 				[media.reducedMotion]: "0s",
 				default: "320ms, 150ms, 150ms",
 			},

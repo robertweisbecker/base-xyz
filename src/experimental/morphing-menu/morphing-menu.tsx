@@ -221,16 +221,8 @@ export function Root({
 								morphingMenuStyles.rootPopup,
 							)}
 						>
-							<div
-								data-morphing-closing={closing ? "" : undefined}
-								{...stylex.props(morphingMenuStyles.rootSurface)}
-							>
-								<div
-									data-morphing-closing={closing ? "" : undefined}
-									{...stylex.props(morphingMenuStyles.popupContent)}
-								>
-									{children}
-								</div>
+							<div {...stylex.props(morphingMenuStyles.rootSurface)}>
+								<div {...stylex.props(morphingMenuStyles.popupContent)}>{children}</div>
 							</div>
 						</BaseMenu.Popup>
 					</BaseMenu.Positioner>
@@ -323,11 +315,7 @@ export function Submenu({ children, label, renderRow, rowXstyle }: MorphingMenuS
 								morphingMenuStyles.childPopup,
 							)}
 						>
-							<div
-								aria-hidden
-								data-morphing-closing={closing ? "" : undefined}
-								{...stylex.props(morphingMenuStyles.childSurface)}
-							/>
+							<div aria-hidden {...stylex.props(morphingMenuStyles.childSurface)} />
 							<BaseMenu.Item
 								aria-label={`Back from ${label}`}
 								closeOnClick={false}
@@ -344,17 +332,8 @@ export function Submenu({ children, label, renderRow, rowXstyle }: MorphingMenuS
 								{renderRow(true)}
 							</BaseMenu.Item>
 							<div aria-hidden {...stylex.props(morphingMenuStyles.submenuHeaderSpacer)} />
-							<div
-								aria-hidden
-								data-morphing-closing={closing ? "" : undefined}
-								{...stylex.props(morphingMenuStyles.submenuSeparator)}
-							/>
-							<div
-								data-morphing-closing={closing ? "" : undefined}
-								{...stylex.props(morphingMenuStyles.childItems)}
-							>
-								{children}
-							</div>
+							<div aria-hidden {...stylex.props(morphingMenuStyles.submenuSeparator)} />
+							<div {...stylex.props(morphingMenuStyles.childItems)}>{children}</div>
 						</BaseMenu.Popup>
 					</BaseMenu.Positioner>
 				</BaseMenu.Portal>
