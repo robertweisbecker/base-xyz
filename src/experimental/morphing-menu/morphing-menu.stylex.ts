@@ -1,12 +1,6 @@
 import * as stylex from "@stylexjs/stylex";
-import { zIndex } from "@/styles/constants.stylex";
+import { media, zIndex } from "@/styles/constants.stylex";
 import { tokens } from "@/theme/tokens.stylex";
-
-// Keep these static in the dynamic story module. Imported defineConsts media
-// can reach the dev collector before their definitions and become invalid
-// `var(...)` selectors; production compilation is unaffected either way.
-const CAN_HOVER = "@media (hover: hover) and (pointer: fine)";
-const REDUCED_MOTION = "@media (prefers-reduced-motion: reduce)";
 
 const blockPointerEvents = stylex.keyframes({
 	from: { pointerEvents: "none" },
@@ -39,6 +33,12 @@ export const morphingMenuStyles = stylex.create({
 		"--_morph-submenu-enter-ease": tokens["--motion-ease-smooth-out"],
 		"--_morph-submenu-scale": "1.06",
 	},
+	menuWidth: (width: string) => ({
+		"--_morph-menu-width": width,
+	}),
+	rootRows: (rows: number) => ({
+		"--_morph-root-menu-height": `calc(${rows} * var(--_morph-menu-row-height) + 2 * var(--_morph-menu-padding))`,
+	}),
 	root: {
 		display: "inline-flex",
 	},
@@ -53,7 +53,7 @@ export const morphingMenuStyles = stylex.create({
 			"[data-popup-open]": "transparent",
 			default: tokens["--elevated"],
 			":hover": {
-				[CAN_HOVER]: tokens["--surface-subtle-hover"],
+				[media.canHover]: tokens["--surface-subtle-hover"],
 			},
 		},
 		boxShadow: {
@@ -65,12 +65,12 @@ export const morphingMenuStyles = stylex.create({
 		color: {
 			default: tokens["--fg-muted"],
 			":hover": {
-				[CAN_HOVER]: tokens["--fg"],
+				[media.canHover]: tokens["--fg"],
 			},
 		},
 		display: "grid",
 		filter: {
-			[REDUCED_MOTION]: "none",
+			[media.reducedMotion]: "none",
 			"[data-popup-open]": "blur(8px)",
 			default: "blur(0)",
 		},
@@ -95,7 +95,7 @@ export const morphingMenuStyles = stylex.create({
 		position: "relative",
 		transitionDelay: "var(--_morph-lead)",
 		transitionDuration: {
-			[REDUCED_MOTION]: "0s",
+			[media.reducedMotion]: "0s",
 			default: "210ms, 210ms",
 		},
 		transitionProperty: "opacity, filter",
@@ -114,17 +114,6 @@ export const morphingMenuStyles = stylex.create({
 	triggerIcon: {
 		height: tokens["--space-5"],
 		width: tokens["--space-5"],
-	},
-	visuallyHidden: {
-		margin: "-1px",
-		padding: 0,
-		borderWidth: 0,
-		overflow: "hidden",
-		clipPath: "inset(50%)",
-		position: "absolute",
-		whiteSpace: "nowrap",
-		height: "1px",
-		width: "1px",
 	},
 	positioner: {
 		outline: "0",
@@ -192,8 +181,11 @@ export const morphingMenuStyles = stylex.create({
 			default: "0s",
 		},
 		transitionDuration: {
-			[REDUCED_MOTION]: "0s",
-			"[data-ending-style]": "320ms, 320ms",
+			[media.reducedMotion]: "0s",
+			"[data-ending-style]": {
+				[media.reducedMotion]: "0s",
+				default: "320ms, 320ms",
+			},
 			"[data-starting-style]": "0s",
 			default: "400ms, 300ms",
 		},
@@ -237,9 +229,12 @@ export const morphingMenuStyles = stylex.create({
 			[stylex.when.ancestor("[data-ending-style]", morphingRootPopupMarker)]: "var(--_morph-lead)",
 		},
 		transitionDuration: {
-			[REDUCED_MOTION]: "0s",
+			[media.reducedMotion]: "0s",
+			"[data-morphing-closing]": {
+				[media.reducedMotion]: "0s",
+				default: "320ms",
+			},
 			default: "400ms",
-			[stylex.when.ancestor("[data-ending-style]", morphingRootPopupMarker)]: "320ms",
 			[stylex.when.ancestor("[data-starting-style]", morphingRootPopupMarker)]: "0s",
 		},
 		transitionProperty: "top, width, height, border-radius, box-shadow",
@@ -274,7 +269,7 @@ export const morphingMenuStyles = stylex.create({
 	popupContent: {
 		animationDuration: "120ms",
 		animationName: {
-			[REDUCED_MOTION]: "none",
+			[media.reducedMotion]: "none",
 			default: "none",
 			[stylex.when.ancestor("[data-open]", morphingRootPopupMarker)]: blockPointerEvents,
 		},
@@ -301,9 +296,12 @@ export const morphingMenuStyles = stylex.create({
 			[stylex.when.ancestor("[data-ending-style]", morphingRootPopupMarker)]: "var(--_morph-lead)",
 		},
 		transitionDuration: {
-			[REDUCED_MOTION]: "0s",
+			[media.reducedMotion]: "0s",
+			"[data-morphing-closing]": {
+				[media.reducedMotion]: "0s",
+				default: "200ms",
+			},
 			default: "210ms",
-			[stylex.when.ancestor("[data-ending-style]", morphingRootPopupMarker)]: "200ms",
 			[stylex.when.ancestor("[data-starting-style]", morphingRootPopupMarker)]: "0s",
 		},
 		transitionProperty: "opacity, filter, transform",
@@ -333,16 +331,13 @@ export const morphingMenuStyles = stylex.create({
 	interactiveRow: {
 		outline: "none",
 		backgroundColor: {
-			"[data-highlighted]": {
-				default: tokens["--surface-subtle-hover"],
-				"@media (pointer: coarse)": "transparent",
-			},
+			"[data-highlighted]": tokens["--surface-subtle-hover"],
 			default: "transparent",
 		},
 		opacity: "var(--_morph-inactive-opacity)",
 		position: "relative",
 		transitionDuration: {
-			[REDUCED_MOTION]: "0s",
+			[media.reducedMotion]: "0s",
 			default: "400ms",
 		},
 		transitionProperty: "opacity, transform",
@@ -371,7 +366,7 @@ export const morphingMenuStyles = stylex.create({
 			[stylex.when.ancestor("[data-popup-open]", morphingSubmenuTriggerMarker)]: "rotate(90deg)",
 		},
 		transitionDuration: {
-			[REDUCED_MOTION]: "0s",
+			[media.reducedMotion]: "0s",
 			default: tokens["--motion-duration-short"],
 		},
 		transitionProperty: "transform",
@@ -406,7 +401,7 @@ export const morphingMenuStyles = stylex.create({
 		},
 		transformOrigin: "center",
 		transitionDuration: {
-			[REDUCED_MOTION]: "0s",
+			[media.reducedMotion]: "0s",
 			default: "320ms",
 		},
 		transitionProperty: "opacity, transform",
@@ -443,8 +438,11 @@ export const morphingMenuStyles = stylex.create({
 			default: "0s",
 		},
 		transitionDuration: {
-			[REDUCED_MOTION]: "0s",
-			"[data-ending-style]": "320ms, 150ms",
+			[media.reducedMotion]: "0s",
+			"[data-ending-style]": {
+				[media.reducedMotion]: "0s",
+				default: "320ms, 150ms",
+			},
 			"[data-starting-style]": "0s",
 			default: "320ms, 150ms",
 		},
@@ -468,9 +466,12 @@ export const morphingMenuStyles = stylex.create({
 			[stylex.when.ancestor("[data-ending-style]", morphingChildPopupMarker)]: "var(--_morph-lead)",
 		},
 		transitionDuration: {
-			[REDUCED_MOTION]: "0s",
+			[media.reducedMotion]: "0s",
+			"[data-morphing-closing]": {
+				[media.reducedMotion]: "0s",
+				default: "320ms",
+			},
 			default: "400ms",
-			[stylex.when.ancestor("[data-ending-style]", morphingChildPopupMarker)]: "320ms",
 			[stylex.when.ancestor("[data-starting-style]", morphingChildPopupMarker)]: "0s",
 		},
 		transitionProperty: "height",
@@ -509,7 +510,7 @@ export const morphingMenuStyles = stylex.create({
 		position: "absolute",
 		textAlign: "start",
 		transitionDuration: {
-			[REDUCED_MOTION]: "0s",
+			[media.reducedMotion]: "0s",
 			default: "400ms",
 		},
 		transitionProperty: "opacity",
@@ -557,9 +558,12 @@ export const morphingMenuStyles = stylex.create({
 			[stylex.when.ancestor("[data-ending-style]", morphingChildPopupMarker)]: "var(--_morph-lead)",
 		},
 		transitionDuration: {
-			[REDUCED_MOTION]: "0s",
+			[media.reducedMotion]: "0s",
+			"[data-morphing-closing]": {
+				[media.reducedMotion]: "0s",
+				default: "150ms",
+			},
 			default: "210ms",
-			[stylex.when.ancestor("[data-ending-style]", morphingChildPopupMarker)]: "150ms",
 			[stylex.when.ancestor("[data-starting-style]", morphingChildPopupMarker)]: "0s",
 		},
 		transitionProperty: "opacity, filter",
@@ -597,10 +601,12 @@ export const morphingMenuStyles = stylex.create({
 			[stylex.when.ancestor("[data-ending-style]", morphingChildPopupMarker)]: "var(--_morph-lead)",
 		},
 		transitionDuration: {
-			[REDUCED_MOTION]: "0s",
+			[media.reducedMotion]: "0s",
+			"[data-morphing-closing]": {
+				[media.reducedMotion]: "0s",
+				default: "320ms, 150ms, 150ms",
+			},
 			default: "400ms, 210ms, 210ms",
-			[stylex.when.ancestor("[data-ending-style]", morphingChildPopupMarker)]:
-				"320ms, 150ms, 150ms",
 			[stylex.when.ancestor("[data-starting-style]", morphingChildPopupMarker)]: "0s",
 		},
 		transitionProperty: "clip-path, opacity, filter",

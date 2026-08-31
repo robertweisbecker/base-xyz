@@ -14,7 +14,18 @@ import { PencilSimpleIcon } from "@phosphor-icons/react/dist/csr/PencilSimple";
 import { PrinterIcon } from "@phosphor-icons/react/dist/csr/Printer";
 import { ShareNetworkIcon } from "@phosphor-icons/react/dist/csr/ShareNetwork";
 import * as stylex from "@stylexjs/stylex";
-import { useLayoutEffect, useRef, useState, type ReactNode } from "react";
+import type { StyleXStyles } from "@stylexjs/stylex";
+import {
+	createContext,
+	useContext,
+	useId,
+	useLayoutEffect,
+	useRef,
+	useState,
+	type Dispatch,
+	type ReactNode,
+	type SetStateAction,
+} from "react";
 import {
 	morphingChildPopupMarker,
 	morphingMenuStyles,
@@ -29,12 +40,29 @@ export type MorphingMenuProps = {
 	defaultOpen?: boolean;
 };
 
-type MorphingSubmenuProps = {
+type MorphingMenuRootProps = {
 	children: ReactNode;
-	hasOpenSubmenu?: boolean;
-	icon: ReactNode;
+	defaultOpen?: boolean;
+	menuWidth?: string;
+	rootRowCount?: number;
+	trigger: ReactNode;
+	triggerLabel: string;
+	triggerXstyle?: StyleXStyles;
+};
+
+type MorphingMenuSubmenuProps = {
+	children: ReactNode;
 	label: string;
-	onOpenChange: (open: boolean) => void;
+	renderRow: (back: boolean) => ReactNode;
+	rowXstyle?: StyleXStyles;
+};
+
+type MorphingMenuItemProps = Omit<BaseMenu.Item.Props, "className" | "style"> & {
+	xstyle?: StyleXStyles;
+};
+
+type MorphingMenuRadioItemProps = Omit<BaseMenu.RadioItem.Props, "className" | "style"> & {
+	xstyle?: StyleXStyles;
 };
 
 type MenuRowProps = {
@@ -44,156 +72,181 @@ type MenuRowProps = {
 	submenu?: boolean;
 };
 
+type MorphingMenuContextValue = {
+	menuWidth: string;
+	openSubmenuId: string | null;
+	setOpenSubmenuId: Dispatch<SetStateAction<string | null>>;
+};
+
+const MorphingMenuContext = createContext<MorphingMenuContextValue | null>(null);
+
 /**
- * Experimental iOS-style menu ported from Base UI PR #5335.
+ * Experimental iOS-style menu ported from a Base UI popup demo.
  *
- * The root trigger blooms into the menu surface. Submenu triggers then become
- * the header of the next popup so each level appears to morph in place.
+ * The private compound owns the morphing state machine and geometry. Examples
+ * provide their trigger and row content without duplicating focus or dismissal.
  */
-export function MorphingMenu({ label = "Document actions", defaultOpen }: MorphingMenuProps) {
-	const [rootClosing, setRootClosing] = useState(false);
-	const [shareOpen, setShareOpen] = useState(false);
-	const [moreOpen, setMoreOpen] = useState(false);
-
-	const handleRootOpenChange = (nextOpen: boolean) => {
-		if (!nextOpen) {
-			setRootClosing(true);
-			setShareOpen(false);
-			setMoreOpen(false);
-		}
-	};
-
-	const handleShareOpenChange = (nextOpen: boolean) => {
-		setShareOpen(nextOpen);
-		if (!nextOpen) setMoreOpen(false);
-	};
-
+export function MorphingMenuExample({
+	label = "Document actions",
+	defaultOpen,
+}: MorphingMenuProps) {
 	return (
-		<BaseMenu.Root
+		<Root
 			defaultOpen={defaultOpen}
-			onOpenChange={handleRootOpenChange}
-			onOpenChangeComplete={() => setRootClosing(false)}
+			rootRowCount={6}
+			trigger={
+				<DotsThreeIcon
+					aria-hidden
+					size={20}
+					weight="bold"
+					{...stylex.props(morphingMenuStyles.triggerIcon)}
+				/>
+			}
+			triggerLabel={label}
 		>
-			<span {...stylex.props(morphingMenuStyles.scope, morphingMenuStyles.root)}>
-				<BaseMenu.Trigger
-					data-morphing={rootClosing ? "" : undefined}
-					{...stylex.props(morphingMenuStyles.trigger)}
+			<Item>
+				<MenuRow icon={<PencilSimpleIcon />} label="Edit" />
+			</Item>
+			<Item>
+				<MenuRow icon={<CopyIcon />} label="Copy" />
+			</Item>
+
+			<Submenu
+				label="Share"
+				renderRow={(back) => (
+					<MenuRow back={back} icon={<ShareNetworkIcon />} label="Share" submenu />
+				)}
+			>
+				<Item>
+					<MenuRow icon={<ChatCircleIcon />} label="Messages" />
+				</Item>
+				<Item>
+					<MenuRow icon={<EnvelopeSimpleIcon />} label="Email" />
+				</Item>
+				<Item>
+					<MenuRow icon={<LinkSimpleIcon />} label="Copy link" />
+				</Item>
+				<Submenu
+					label="More"
+					renderRow={(back) => (
+						<MenuRow back={back} icon={<DotsThreeIcon />} label="More" submenu />
+					)}
 				>
-					<DotsThreeIcon
-						aria-hidden
-						size={20}
-						weight="bold"
-						{...stylex.props(morphingMenuStyles.triggerIcon)}
-					/>
-					<span {...stylex.props(morphingMenuStyles.visuallyHidden)}>{label}</span>
-				</BaseMenu.Trigger>
-			</span>
+					<Item>
+						<MenuRow icon={<BroadcastIcon />} label="AirDrop" />
+					</Item>
+					<Item>
+						<MenuRow icon={<FolderSimpleIcon />} label="Save to files" />
+					</Item>
+					<Item>
+						<MenuRow icon={<BookmarkSimpleIcon />} label="Add bookmark" />
+					</Item>
+				</Submenu>
+			</Submenu>
 
-			<BaseMenu.Portal>
-				<BaseMenu.Positioner
-					side="top"
-					align="start"
-					sideOffset={-10}
-					{...stylex.props(morphingMenuStyles.scope, morphingMenuStyles.positioner)}
-				>
-					<BaseMenu.Popup
-						data-has-open-submenu={shareOpen ? "" : undefined}
-						{...stylex.props(
-							morphingRootPopupMarker,
-							morphingMenuStyles.popup,
-							morphingMenuStyles.popupWidth,
-							morphingMenuStyles.rootPopup,
-						)}
-					>
-						<div {...stylex.props(morphingMenuStyles.rootSurface)}>
-							<div {...stylex.props(morphingMenuStyles.popupContent)}>
-								<BaseMenu.Item
-									{...stylex.props(morphingMenuStyles.row, morphingMenuStyles.interactiveRow)}
-								>
-									<MenuRow icon={<PencilSimpleIcon />} label="Edit" />
-								</BaseMenu.Item>
-								<BaseMenu.Item
-									{...stylex.props(morphingMenuStyles.row, morphingMenuStyles.interactiveRow)}
-								>
-									<MenuRow icon={<CopyIcon />} label="Copy" />
-								</BaseMenu.Item>
-
-								<MorphingSubmenu
-									hasOpenSubmenu={moreOpen}
-									icon={<ShareNetworkIcon />}
-									label="Share"
-									onOpenChange={handleShareOpenChange}
-								>
-									<BaseMenu.Item
-										{...stylex.props(morphingMenuStyles.row, morphingMenuStyles.interactiveRow)}
-									>
-										<MenuRow icon={<ChatCircleIcon />} label="Messages" />
-									</BaseMenu.Item>
-									<BaseMenu.Item
-										{...stylex.props(morphingMenuStyles.row, morphingMenuStyles.interactiveRow)}
-									>
-										<MenuRow icon={<EnvelopeSimpleIcon />} label="Email" />
-									</BaseMenu.Item>
-									<BaseMenu.Item
-										{...stylex.props(morphingMenuStyles.row, morphingMenuStyles.interactiveRow)}
-									>
-										<MenuRow icon={<LinkSimpleIcon />} label="Copy link" />
-									</BaseMenu.Item>
-									<MorphingSubmenu icon={<DotsThreeIcon />} label="More" onOpenChange={setMoreOpen}>
-										<BaseMenu.Item
-											{...stylex.props(morphingMenuStyles.row, morphingMenuStyles.interactiveRow)}
-										>
-											<MenuRow icon={<BroadcastIcon />} label="AirDrop" />
-										</BaseMenu.Item>
-										<BaseMenu.Item
-											{...stylex.props(morphingMenuStyles.row, morphingMenuStyles.interactiveRow)}
-										>
-											<MenuRow icon={<FolderSimpleIcon />} label="Save to files" />
-										</BaseMenu.Item>
-										<BaseMenu.Item
-											{...stylex.props(morphingMenuStyles.row, morphingMenuStyles.interactiveRow)}
-										>
-											<MenuRow icon={<BookmarkSimpleIcon />} label="Add bookmark" />
-										</BaseMenu.Item>
-									</MorphingSubmenu>
-								</MorphingSubmenu>
-
-								<BaseMenu.Item
-									{...stylex.props(morphingMenuStyles.row, morphingMenuStyles.interactiveRow)}
-								>
-									<MenuRow icon={<DownloadSimpleIcon />} label="Download" />
-								</BaseMenu.Item>
-								<BaseMenu.Item
-									{...stylex.props(morphingMenuStyles.row, morphingMenuStyles.interactiveRow)}
-								>
-									<MenuRow icon={<PrinterIcon />} label="Print" />
-								</BaseMenu.Item>
-								<BaseMenu.Item
-									{...stylex.props(morphingMenuStyles.row, morphingMenuStyles.interactiveRow)}
-								>
-									<MenuRow icon={<ArchiveIcon />} label="Archive" />
-								</BaseMenu.Item>
-							</div>
-						</div>
-					</BaseMenu.Popup>
-				</BaseMenu.Positioner>
-			</BaseMenu.Portal>
-		</BaseMenu.Root>
+			<Item>
+				<MenuRow icon={<DownloadSimpleIcon />} label="Download" />
+			</Item>
+			<Item>
+				<MenuRow icon={<PrinterIcon />} label="Print" />
+			</Item>
+			<Item>
+				<MenuRow icon={<ArchiveIcon />} label="Archive" />
+			</Item>
+		</Root>
 	);
 }
 
-function MorphingSubmenu({
+export function Root({
 	children,
-	hasOpenSubmenu,
-	icon,
-	label,
-	onOpenChange,
-}: MorphingSubmenuProps) {
+	defaultOpen,
+	menuWidth = "10rem",
+	rootRowCount = 6,
+	trigger,
+	triggerLabel,
+	triggerXstyle,
+}: MorphingMenuRootProps) {
+	const [closing, setClosing] = useState(false);
+	const [openSubmenuId, setOpenSubmenuId] = useState<string | null>(null);
+
+	return (
+		<MorphingMenuContext value={{ menuWidth, openSubmenuId, setOpenSubmenuId }}>
+			<BaseMenu.Root
+				defaultOpen={defaultOpen}
+				onOpenChange={(open) => {
+					if (!open) {
+						setClosing(true);
+						setOpenSubmenuId(null);
+					}
+				}}
+				onOpenChangeComplete={() => setClosing(false)}
+			>
+				<span
+					{...stylex.props(
+						morphingMenuStyles.scope,
+						morphingMenuStyles.menuWidth(menuWidth),
+						morphingMenuStyles.rootRows(rootRowCount),
+						morphingMenuStyles.root,
+					)}
+				>
+					<BaseMenu.Trigger
+						aria-label={triggerLabel}
+						data-morphing={closing ? "" : undefined}
+						{...stylex.props(morphingMenuStyles.trigger, triggerXstyle)}
+					>
+						{trigger}
+					</BaseMenu.Trigger>
+				</span>
+
+				<BaseMenu.Portal>
+					<BaseMenu.Positioner
+						side="top"
+						align="start"
+						sideOffset={-10}
+						{...stylex.props(
+							morphingMenuStyles.scope,
+							morphingMenuStyles.menuWidth(menuWidth),
+							morphingMenuStyles.rootRows(rootRowCount),
+							morphingMenuStyles.positioner,
+						)}
+					>
+						<BaseMenu.Popup
+							data-has-open-submenu={openSubmenuId ? "" : undefined}
+							{...stylex.props(
+								morphingRootPopupMarker,
+								morphingMenuStyles.popup,
+								morphingMenuStyles.popupWidth,
+								morphingMenuStyles.rootPopup,
+							)}
+						>
+							<div
+								data-morphing-closing={closing ? "" : undefined}
+								{...stylex.props(morphingMenuStyles.rootSurface)}
+							>
+								<div
+									data-morphing-closing={closing ? "" : undefined}
+									{...stylex.props(morphingMenuStyles.popupContent)}
+								>
+									{children}
+								</div>
+							</div>
+						</BaseMenu.Popup>
+					</BaseMenu.Positioner>
+				</BaseMenu.Portal>
+			</BaseMenu.Root>
+		</MorphingMenuContext>
+	);
+}
+
+export function Submenu({ children, label, renderRow, rowXstyle }: MorphingMenuSubmenuProps) {
+	const { menuWidth, setOpenSubmenuId: setParentOpenSubmenuId } = useMorphingMenuContext();
+	const submenuId = useId();
 	const actionsRef = useRef<BaseMenu.Root.Actions | null>(null);
 	const popupRef = useRef<HTMLDivElement | null>(null);
 	const focusPopupOnOpenRef = useRef(false);
 	const [open, setOpen] = useState(false);
 	const [closing, setClosing] = useState(false);
+	const [openSubmenuId, setOpenSubmenuId] = useState<string | null>(null);
 
 	useLayoutEffect(() => {
 		if (open && focusPopupOnOpenRef.current) {
@@ -207,74 +260,133 @@ function MorphingSubmenu({
 	}, [open]);
 
 	return (
-		<BaseMenu.SubmenuRoot
-			actionsRef={actionsRef}
-			onOpenChange={(nextOpen, eventDetails) => {
-				setOpen(nextOpen);
-				onOpenChange(nextOpen);
-				focusPopupOnOpenRef.current =
-					nextOpen &&
-					eventDetails.reason === "trigger-press" &&
-					isPhysicalPointerPress(eventDetails.event);
-				if (!nextOpen) setClosing(true);
-			}}
-			onOpenChangeComplete={() => setClosing(false)}
-		>
-			<BaseMenu.SubmenuTrigger
-				data-morphing={closing ? "" : undefined}
-				openOnHover={false}
-				{...stylex.props(
-					morphingSubmenuTriggerMarker,
-					morphingMenuStyles.row,
-					morphingMenuStyles.interactiveRow,
-					morphingMenuStyles.submenuTrigger,
-				)}
-			>
-				<MenuRow icon={icon} label={label} submenu />
-			</BaseMenu.SubmenuTrigger>
-
-			<BaseMenu.Portal>
-				<BaseMenu.Positioner
-					side="bottom"
-					align="center"
-					sideOffset={({ side, anchor }) =>
-						side === "top" || side === "bottom" ? -anchor.height : -anchor.width
+		<MorphingMenuContext value={{ menuWidth, openSubmenuId, setOpenSubmenuId }}>
+			<BaseMenu.SubmenuRoot
+				actionsRef={actionsRef}
+				onOpenChange={(nextOpen, eventDetails) => {
+					setOpen(nextOpen);
+					setParentOpenSubmenuId((currentId) =>
+						nextOpen ? submenuId : currentId === submenuId ? null : currentId,
+					);
+					focusPopupOnOpenRef.current =
+						nextOpen &&
+						eventDetails.reason === "trigger-press" &&
+						isPhysicalPointerPress(eventDetails.event);
+					if (!nextOpen) {
+						setClosing(true);
+						setOpenSubmenuId(null);
 					}
-					collisionAvoidance={{ side: "flip", align: "shift", fallbackAxisSide: "none" }}
+				}}
+				onOpenChangeComplete={() => setClosing(false)}
+			>
+				<BaseMenu.SubmenuTrigger
+					data-morphing={closing ? "" : undefined}
+					label={label}
+					openOnHover={false}
 					{...stylex.props(
-						morphingMenuStyles.scope,
-						morphingMenuStyles.positioner,
-						morphingMenuStyles.childPositioner,
+						morphingSubmenuTriggerMarker,
+						morphingMenuStyles.row,
+						morphingMenuStyles.interactiveRow,
+						morphingMenuStyles.submenuTrigger,
+						rowXstyle,
 					)}
 				>
-					<BaseMenu.Popup
-						ref={popupRef}
-						data-has-open-submenu={hasOpenSubmenu ? "" : undefined}
+					{renderRow(false)}
+				</BaseMenu.SubmenuTrigger>
+
+				<BaseMenu.Portal>
+					<BaseMenu.Positioner
+						side="bottom"
+						align="center"
+						sideOffset={({ side, anchor }) =>
+							side === "top" || side === "bottom" ? -anchor.height : -anchor.width
+						}
+						collisionAvoidance={{ side: "flip", align: "shift", fallbackAxisSide: "none" }}
 						{...stylex.props(
-							morphingChildPopupMarker,
-							morphingMenuStyles.popup,
-							morphingMenuStyles.popupWidth,
-							morphingMenuStyles.childPopup,
+							morphingMenuStyles.scope,
+							morphingMenuStyles.menuWidth(menuWidth),
+							morphingMenuStyles.positioner,
+							morphingMenuStyles.childPositioner,
 						)}
 					>
-						<div aria-hidden {...stylex.props(morphingMenuStyles.childSurface)} />
-						<button
-							type="button"
-							tabIndex={-1}
-							aria-hidden="true"
-							onClick={() => actionsRef.current?.close()}
-							{...stylex.props(morphingMenuStyles.row, morphingMenuStyles.submenuHeader)}
+						<BaseMenu.Popup
+							ref={popupRef}
+							data-has-open-submenu={openSubmenuId ? "" : undefined}
+							{...stylex.props(
+								morphingChildPopupMarker,
+								morphingMenuStyles.popup,
+								morphingMenuStyles.popupWidth,
+								morphingMenuStyles.childPopup,
+							)}
 						>
-							<MenuRow back icon={icon} label={label} submenu />
-						</button>
-						<div aria-hidden {...stylex.props(morphingMenuStyles.submenuHeaderSpacer)} />
-						<div aria-hidden {...stylex.props(morphingMenuStyles.submenuSeparator)} />
-						<div {...stylex.props(morphingMenuStyles.childItems)}>{children}</div>
-					</BaseMenu.Popup>
-				</BaseMenu.Positioner>
-			</BaseMenu.Portal>
-		</BaseMenu.SubmenuRoot>
+							<div
+								aria-hidden
+								data-morphing-closing={closing ? "" : undefined}
+								{...stylex.props(morphingMenuStyles.childSurface)}
+							/>
+							<BaseMenu.Item
+								aria-label={`Back from ${label}`}
+								closeOnClick={false}
+								onClick={() => actionsRef.current?.close()}
+								{...stylex.props(
+									morphingMenuStyles.row,
+									morphingMenuStyles.interactiveRow,
+									morphingMenuStyles.submenuHeader,
+									rowXstyle,
+								)}
+							>
+								{renderRow(true)}
+							</BaseMenu.Item>
+							<div aria-hidden {...stylex.props(morphingMenuStyles.submenuHeaderSpacer)} />
+							<div
+								aria-hidden
+								data-morphing-closing={closing ? "" : undefined}
+								{...stylex.props(morphingMenuStyles.submenuSeparator)}
+							/>
+							<div
+								data-morphing-closing={closing ? "" : undefined}
+								{...stylex.props(morphingMenuStyles.childItems)}
+							>
+								{children}
+							</div>
+						</BaseMenu.Popup>
+					</BaseMenu.Positioner>
+				</BaseMenu.Portal>
+			</BaseMenu.SubmenuRoot>
+		</MorphingMenuContext>
 	);
+}
+
+export function Item({ xstyle, ...props }: MorphingMenuItemProps) {
+	return (
+		<BaseMenu.Item
+			{...stylex.props(morphingMenuStyles.row, morphingMenuStyles.interactiveRow, xstyle)}
+			{...props}
+		/>
+	);
+}
+
+export function RadioItem({ xstyle, ...props }: MorphingMenuRadioItemProps) {
+	return (
+		<BaseMenu.RadioItem
+			{...stylex.props(morphingMenuStyles.row, morphingMenuStyles.interactiveRow, xstyle)}
+			{...props}
+		/>
+	);
+}
+
+export function RadioGroup(props: BaseMenu.RadioGroup.Props) {
+	return <BaseMenu.RadioGroup {...props} />;
+}
+
+export function RadioItemIndicator(props: BaseMenu.RadioItemIndicator.Props) {
+	return <BaseMenu.RadioItemIndicator {...props} />;
+}
+
+function useMorphingMenuContext() {
+	const context = useContext(MorphingMenuContext);
+	if (!context) throw new Error("MorphingMenu parts must be rendered inside MorphingMenu.Root.");
+	return context;
 }
 
 function isPhysicalPointerPress(event: Event) {
