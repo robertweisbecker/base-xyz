@@ -338,6 +338,11 @@ export const morphingMenuStyles = stylex.create({
 		transitionProperty: "opacity, transform",
 		transitionTimingFunction: "var(--_morph-bloom-open-spring)",
 	},
+	radioIndicator: {
+		gridColumn: "auto",
+		alignSelf: "center",
+		marginInlineStart: "auto",
+	},
 	itemIcon: {
 		alignItems: "center",
 		color: tokens["--fg-subtle"],

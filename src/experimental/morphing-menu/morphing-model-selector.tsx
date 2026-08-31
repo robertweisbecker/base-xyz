@@ -1,5 +1,4 @@
 import { CaretRightIcon } from "@phosphor-icons/react/dist/csr/CaretRight";
-import { CheckIcon } from "@phosphor-icons/react/dist/csr/Check";
 import { GaugeIcon } from "@phosphor-icons/react/dist/csr/Gauge";
 import { LightningIcon } from "@phosphor-icons/react/dist/csr/Lightning";
 import { SlidersHorizontalIcon } from "@phosphor-icons/react/dist/csr/SlidersHorizontal";
@@ -28,7 +27,6 @@ export type MorphingModelSelectorProps = {
 type SelectorRowProps = {
 	back?: boolean;
 	icon: ReactNode;
-	indicator?: ReactNode;
 	label: string;
 	submenu?: boolean;
 	value?: string;
@@ -162,24 +160,12 @@ function SelectorSubmenu({
 function SelectorOption({ icon, label, value }: { icon: ReactNode; label: string; value: string }) {
 	return (
 		<MorphingMenu.RadioItem value={value} xstyle={morphingModelSelectorStyles.row}>
-			<SelectorRow
-				icon={icon}
-				label={label}
-				indicator={
-					<MorphingMenu.RadioItemIndicator>
-						<CheckIcon
-							aria-hidden
-							weight="bold"
-							{...stylex.props(morphingModelSelectorStyles.check)}
-						/>
-					</MorphingMenu.RadioItemIndicator>
-				}
-			/>
+			<SelectorRow icon={icon} label={label} />
 		</MorphingMenu.RadioItem>
 	);
 }
 
-function SelectorRow({ back, icon, indicator, label, submenu, value }: SelectorRowProps) {
+function SelectorRow({ back, icon, label, submenu, value }: SelectorRowProps) {
 	return (
 		<>
 			<span {...stylex.props(morphingModelSelectorStyles.rowCopy)}>
@@ -188,20 +174,21 @@ function SelectorRow({ back, icon, indicator, label, submenu, value }: SelectorR
 				</span>
 				<span {...stylex.props(morphingModelSelectorStyles.rowLabel)}>{label}</span>
 			</span>
-			<span {...stylex.props(morphingModelSelectorStyles.rowEnd)}>
-				{value ? (
-					<span {...stylex.props(morphingModelSelectorStyles.rowValue)}>{value}</span>
-				) : null}
-				{indicator}
-				{submenu ? (
-					<CaretRightIcon
-						aria-hidden
-						size={16}
-						weight="bold"
-						{...stylex.props(morphingMenuStyles.chevron, back && morphingMenuStyles.chevronBack)}
-					/>
-				) : null}
-			</span>
+			{value || submenu ? (
+				<span {...stylex.props(morphingModelSelectorStyles.rowEnd)}>
+					{value ? (
+						<span {...stylex.props(morphingModelSelectorStyles.rowValue)}>{value}</span>
+					) : null}
+					{submenu ? (
+						<CaretRightIcon
+							aria-hidden
+							size={16}
+							weight="bold"
+							{...stylex.props(morphingMenuStyles.chevron, back && morphingMenuStyles.chevronBack)}
+						/>
+					) : null}
+				</span>
+			) : null}
 		</>
 	);
 }

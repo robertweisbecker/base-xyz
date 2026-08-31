@@ -26,6 +26,7 @@ import {
 	type ReactNode,
 	type SetStateAction,
 } from "react";
+import { Icon } from "@/components/icons";
 import { menuItemStyles, menuItemVariantStyles } from "@/components/menu/menu-item.stylex";
 import {
 	morphingChildPopupMarker,
@@ -377,7 +378,7 @@ export function Item({ xstyle, ...props }: MorphingMenuItemProps) {
 	);
 }
 
-export function RadioItem({ xstyle, ...props }: MorphingMenuRadioItemProps) {
+export function RadioItem({ children, xstyle, ...props }: MorphingMenuRadioItemProps) {
 	return (
 		<BaseMenu.RadioItem
 			{...stylex.props(
@@ -388,16 +389,20 @@ export function RadioItem({ xstyle, ...props }: MorphingMenuRadioItemProps) {
 				xstyle,
 			)}
 			{...props}
-		/>
+		>
+			{children}
+			<BaseMenu.RadioItemIndicator
+				keepMounted
+				{...stylex.props(menuItemStyles.indicator, morphingMenuStyles.radioIndicator)}
+			>
+				<Icon.Checkmark aria-hidden height="1em" strokeWidth={3} width="1em" />
+			</BaseMenu.RadioItemIndicator>
+		</BaseMenu.RadioItem>
 	);
 }
 
 export function RadioGroup(props: BaseMenu.RadioGroup.Props) {
 	return <BaseMenu.RadioGroup {...props} />;
-}
-
-export function RadioItemIndicator(props: BaseMenu.RadioItemIndicator.Props) {
-	return <BaseMenu.RadioItemIndicator {...props} />;
 }
 
 function useMorphingMenuContext() {

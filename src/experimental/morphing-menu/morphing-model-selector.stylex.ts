@@ -69,9 +69,4 @@ export const morphingModelSelectorStyles = stylex.create({
 		display: "flex",
 		flexShrink: 0,
 	},
-	check: {
-		color: tokens["--fg-accent"],
-		height: tokens["--space-4"],
-		width: tokens["--space-4"],
-	},
 });
