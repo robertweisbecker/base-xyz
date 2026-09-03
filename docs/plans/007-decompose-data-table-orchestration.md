@@ -34,7 +34,8 @@ semantic table rendering, selection, expansion, row actions, filtering, and
 metadata. React Doctor identifies the public function as a giant component.
 Split those responsibilities behind private module boundaries while keeping
 one obvious controller for state and cross-feature decisions. The result should
-be easier to review and test without enlarging or changing the public API.
+be easier to review and test without broadly exposing the table controller. A
+narrow toolbar-composition seam is the only intentional public addition.
 
 ## Current state
 
@@ -107,17 +108,28 @@ Use these private module boundaries:
   normalization, and the DataTable filter function.
 - `data-table-columns.tsx` — the memoized construction of selection, expansion,
   consumer, and row-action columns, including the private row-action menu.
-- `data-table-toolbar.tsx` — search input, column visibility, facet filter menus,
-  and toolbar end slot.
-- `data-table-content.tsx` — semantic Table header/body/empty/expanded-row
-  rendering, sortable header content, and selection/visibility metadata.
+- `data-table-search.tsx` — the wired search input.
+- `data-table-filters.tsx` — facet filter menus and the opaque controls passed to
+  `renderToolbar`.
+- `data-table-column-visibility.tsx` — the column-visibility menu.
+- `data-table-header.tsx` — semantic header rendering and sortable header
+  content.
+- `data-table-body.tsx` — semantic body, empty-state, and expanded-row rendering.
+- `data-table-content.tsx` — composition of header, body, and
+  selection/visibility metadata.
 - `data-table.stylex.ts` — the component-owned styles shared by those private
   modules.
 - `data-table.tsx` — public `DataTable`, public type re-exports, state,
   `useTable`, cross-feature derivation, and composition of the private owners.
 
 These are private file boundaries, not new public parts. Do not export them from
-either barrel and do not create a `DataTable.*` compound namespace.
+either barrel and do not create a `DataTable.*` compound namespace. The toolbar
+has one deliberately narrow public escape hatch: `renderToolbar` receives
+already-wired opaque controls (`search`, `columnVisibility`, `endSlot`, and
+filter nodes keyed by stable `columnId`) so consumers can rearrange the default
+controls or insert their own controls without receiving the table instance.
+When `renderToolbar` is omitted, the existing DOM and StyleX layout remain
+unchanged.
 
 ### Supported behavior and test baseline
 
@@ -167,8 +179,12 @@ as documented in AGENTS.md.
 - `src/components/data-table/data-table.tsx`
 - `src/components/data-table/data-table-model.ts` (create)
 - `src/components/data-table/data-table-columns.tsx` (create)
-- `src/components/data-table/data-table-toolbar.tsx` (create)
+- `src/components/data-table/data-table-search.tsx` (create)
+- `src/components/data-table/data-table-filters.tsx` (create)
+- `src/components/data-table/data-table-column-visibility.tsx` (create)
 - `src/components/data-table/data-table-content.tsx` (create)
+- `src/components/data-table/data-table-header.tsx` (create)
+- `src/components/data-table/data-table-body.tsx` (create)
 - `src/components/data-table/data-table.stylex.ts` (create)
 - `src/components/data-table/data-table.stories.tsx`
 - `tests/components/data-table.spec.ts`
@@ -180,7 +196,8 @@ as documented in AGENTS.md.
 **Out of scope**:
 
 - Any public export, prop, generic, default, callback, or behavior change beyond
-  Plan 006's already-landed required row-action ID.
+  Plan 006's already-landed required row-action ID and the user-requested
+  `renderToolbar` composition seam.
 - New public DataTable parts, a public controller/hook, a public table-instance
   prop, or a React context for private file communication.
 - Changes to semantic `Table`, Menu, Checkbox, Toggle, InputGroup, Button, or
@@ -239,7 +256,8 @@ silently fixing it inside the refactor.
 Create `data-table-model.ts` and move the TanStack feature registry, feature and
 column metadata types, public type definitions, column-role/numeric helpers,
 and filter function without semantic changes. Re-export the existing public
-type names from `data-table.tsx` so both barrel files remain unchanged.
+type names plus the intentionally added `DataTableToolbarControls` type from
+`data-table.tsx` and both public barrels.
 
 Preserve:
 
@@ -272,10 +290,15 @@ and `getDataTableColumnRole(column)` for writing and reading the symbol-backed
 metadata; do not export the symbol itself or surface any helper from a public
 barrel.
 
-Move the toolbar, `ColumnFilterMenu`, `ColumnVisibilityMenu`, and selected-value
-normalization into `data-table-toolbar.tsx`. Pass the TanStack table instance
-and focused public inputs rather than every state setter individually. Keep the
+Move the search input, filter menus, column-visibility menu, and selected-value
+normalization into focused private modules. Pass the TanStack table instance and
+focused public inputs rather than every state setter individually. Keep the
 search input controlled by the single controller through the table model.
+Expose only a `renderToolbar` callback whose `DataTableToolbarControls` contains
+opaque, already-wired nodes; represent filters as `{ columnId, control }`
+entries so callers can reorder them and insert arbitrary controls. Preserve
+`toolbarEndSlot` through the `endSlot` control and preserve the existing default
+toolbar DOM when the callback is absent.
 
 Do not move TanStack state cells or `useTable` out of `DataTable`. Do not create
 a private context solely to hide props.
@@ -299,9 +322,8 @@ horizontal-overflow owner and `Table.Root` remains the only public margin and
 style-prop recipient.
 
 After extraction, `data-table.tsx` should read as the public contract plus one
-controller: initialize state, build columns, create the table, derive the
-active filter column/counts needed by children, and compose the three private
-owners.
+controller: initialize state, build columns, create the table, prepare the
+opaque toolbar controls, and compose the focused private owners.
 
 **Verify**:
 `npm run typecheck && npx oxlint src/components/data-table tests/components/data-table.spec.ts && npx prettier --check src/components/data-table tests/components/data-table.spec.ts && npm run build-storybook && npx playwright test tests/components/data-table.spec.ts`
@@ -329,6 +351,8 @@ diff for public surface, rendered markup, and StyleX value drift.
   accessible empty text.
 - Verify the accessible horizontal viewport remains the overflow owner using
   only the smallest contract-level width/scroll measurements.
+- Verify a custom toolbar can reorder a filter and that the reordered filter
+  still changes the displayed rows.
 - Use a stable row ID in callback assertions so sorting/filtering cannot make a
   row-index assertion accidentally pass.
 - Rely on `tests/playwright.ts` for console and page-error capture.
@@ -337,13 +361,17 @@ diff for public surface, rendered markup, and StyleX value drift.
 
 ## Done criteria
 
-- [ ] Public DataTable types, exports, defaults, generic inference, and rendered
-      behavior are unchanged from the Plan 006 base.
+- [ ] Existing DataTable types, exports, defaults, generic inference, and default
+      rendered behavior remain source-compatible with the Plan 006 base; only
+      `renderToolbar` and its controls type are added.
+- [ ] `renderToolbar` exposes only opaque, already-wired controls and keeps
+      filters addressable by stable column ID without exposing TanStack state.
 - [ ] One identifiable `DataTable` controller owns all state cells, `useTable`,
       and cross-feature decisions.
 - [ ] Model/column construction, toolbar controls, semantic content, and shared
       styles have coherent private module owners.
-- [ ] No private owner is exported through either public barrel.
+- [ ] No private owner is exported through either public barrel; only the
+      toolbar controls type crosses the public seam.
 - [ ] Filtering, sorting, visibility, selection, expansion, row actions, empty
       state, overflow, and a combined multi-feature flow pass focused tests.
 - [ ] No pagination surface was introduced.

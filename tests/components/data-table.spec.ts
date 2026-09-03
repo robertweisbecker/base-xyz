@@ -3,6 +3,8 @@ import { expect, test } from "../playwright";
 const storyPath = "/iframe.html?id=components-data-table--playground&viewMode=story";
 const actionIdentityStoryPath =
 	"/iframe.html?id=components-data-table--action-identity&viewMode=story";
+const toolbarCompositionStoryPath =
+	"/iframe.html?id=components-data-table--toolbar-composition&viewMode=story";
 
 test("row expansion toggles keep contextual accessible names and pressed state", async ({
 	page,
@@ -30,6 +32,9 @@ test("row actions retain focus, identity, and callbacks while mounted actions ch
 	await page.goto(actionIdentityStoryPath);
 
 	const fixture = page.getByTestId("data-table-action-identity-fixture");
+	const rowSelection = fixture.getByRole("checkbox", { name: "Select row 1" });
+	await rowSelection.click();
+	await expect(rowSelection).toBeChecked();
 	const rowActions = fixture.getByRole("button", { name: "Open actions for row 1" });
 	await rowActions.click();
 
@@ -71,4 +76,96 @@ test("row actions retain focus, identity, and callbacks while mounted actions ch
 		button.click();
 	});
 	await expect(page.getByRole("menuitem", { name: "Delete record" })).toBeDisabled();
+});
+
+test("filtering, sorting, visibility, selection, and empty results remain observable", async ({
+	page,
+}) => {
+	await page.setViewportSize({ width: 640, height: 720 });
+	await page.goto(storyPath);
+
+	const table = page.getByRole("table");
+	const filter = page.getByRole("textbox", { name: "Search by URL…" });
+	const scrollViewport = page.getByLabel("Scrollable table");
+	await expect
+		.poll(() => scrollViewport.evaluate((element) => element.scrollWidth > element.clientWidth))
+		.toBe(true);
+	await scrollViewport.evaluate((element) => {
+		element.scrollLeft = 16;
+	});
+	await expect
+		.poll(() => scrollViewport.evaluate((element) => element.scrollLeft))
+		.toBeGreaterThan(0);
+
+	await filter.fill("feature-auth");
+	await expect(table.locator("tbody tr")).toHaveCount(1);
+	await expect(table.locator("tbody tr").first()).toContainText("feature-auth.example.com");
+	await expect(page.getByText("0 of 1 row(s) selected.")).toBeVisible();
+
+	await filter.fill("");
+	const sortButton = page.getByRole("button", { name: "Sort URL ascending" });
+	await sortButton.click();
+	await expect(table.getByRole("columnheader", { name: /URL/ })).toHaveAttribute(
+		"aria-sort",
+		"ascending",
+	);
+	await page.getByRole("button", { name: "Sort URL descending" }).click();
+	await expect(table.getByRole("columnheader", { name: /URL/ })).toHaveAttribute(
+		"aria-sort",
+		"descending",
+	);
+	await expect(table.locator("tbody tr").first()).toContainText("staging.example.com");
+	await expect(table.locator("tbody tr").last()).toContainText("app.example.com");
+
+	await page.getByRole("button", { name: "Column settings" }).click();
+	const updatedColumn = page.getByRole("menuitemcheckbox", { name: "Updated" });
+	await expect(updatedColumn).toBeChecked();
+	await updatedColumn.click();
+	await expect(table.getByRole("columnheader", { name: /Updated/ })).toHaveCount(0);
+	await expect(page.getByText("7 column(s) visible.")).toBeVisible();
+
+	await filter.fill("no-such-deployment");
+	await expect(table.getByText("No results.")).toBeVisible();
+});
+
+test("selection and expansion compose on a stable row", async ({ page }) => {
+	await page.goto(storyPath);
+
+	const table = page.getByRole("table");
+	const firstRow = table.locator("tbody tr").first();
+	await firstRow.getByRole("checkbox", { name: "Select row 1" }).click();
+	await expect(firstRow.getByRole("checkbox", { name: "Select row 1" })).toBeChecked();
+
+	const expand = firstRow.getByRole("button", { name: "Expand row 1" });
+	await expand.click();
+	await expect(firstRow.locator("button[aria-pressed]")).toHaveAttribute("aria-pressed", "true");
+	await expect(table.getByText(/Deployment dep_/)).toBeVisible();
+
+	await expect(page.getByText("1 of 5 row(s) selected.")).toBeVisible();
+});
+
+test("custom toolbar content renders and reordered filters remain functional", async ({ page }) => {
+	await page.goto(toolbarCompositionStoryPath);
+
+	const fixture = page.getByTestId("data-table-toolbar-composition-fixture");
+	const customAction = fixture.getByTestId("data-table-toolbar-custom-action");
+	const toolbar = customAction.locator("..");
+	await customAction.click();
+	await expect(fixture.getByRole("status")).toHaveText("Refreshed deployments");
+
+	const environmentFilter = fixture.getByRole("button", { name: "Environment", exact: true });
+	const filterOrder = await toolbar
+		.getByRole("button")
+		.evaluateAll((buttons) =>
+			buttons
+				.map((button) => button.textContent?.trim())
+				.filter((label) => label === "Environment" || label === "Status"),
+		);
+	expect(filterOrder).toEqual(["Environment", "Status"]);
+
+	await environmentFilter.click();
+	await page.getByRole("menuitemcheckbox", { name: "Preview" }).click();
+
+	await expect(fixture.getByRole("table").locator("tbody tr")).toHaveCount(2);
+	await expect(fixture.getByRole("cell", { name: "Preview", exact: true })).toHaveCount(2);
 });

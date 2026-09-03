@@ -17,6 +17,7 @@ import {
 	type DataTableFilter,
 	type DataTableProps,
 	type DataTableRow,
+	type DataTableToolbarControls,
 } from "./data-table";
 import { Loader } from "@/components/loader";
 import { Button } from "@/components/button";
@@ -259,6 +260,7 @@ const meta = {
 		getRowId: { table: { disable: true } },
 		initialColumnVisibility: { control: "object" },
 		renderExpandedRow: { table: { disable: true } },
+		renderToolbar: { table: { disable: true } },
 		showExpandColumn: { table: { disable: true } },
 		style: { table: { disable: true } },
 		toolbarEndSlot: { table: { disable: true } },
@@ -438,6 +440,58 @@ export const Composition: Story = {
 		</Stack>
 	),
 };
+
+export const ToolbarComposition: Story = {
+	parameters: {
+		controls: { disable: true },
+	},
+	render: () => <ToolbarCompositionFixture />,
+};
+
+function ToolbarCompositionFixture() {
+	const [status, setStatus] = useState("No toolbar action yet");
+
+	return (
+		<Stack gap={3} data-testid="data-table-toolbar-composition-fixture">
+			<DeploymentTable
+				filterColumnId="url"
+				filterPlaceholder="Search by URL…"
+				renderToolbar={(controls) => (
+					<ToolbarCompositionContent
+						controls={controls}
+						onRefresh={() => setStatus("Refreshed deployments")}
+					/>
+				)}
+				rowSelection
+			/>
+			<Text role="status">{status}</Text>
+		</Stack>
+	);
+}
+
+function ToolbarCompositionContent({
+	controls,
+	onRefresh,
+}: {
+	controls: DataTableToolbarControls;
+	onRefresh: () => void;
+}) {
+	const environmentFilter = controls.filters.find(({ columnId }) => columnId === "environment");
+	const statusFilter = controls.filters.find(({ columnId }) => columnId === "status");
+
+	return (
+		<>
+			{controls.search}
+			{environmentFilter?.control}
+			<Button data-testid="data-table-toolbar-custom-action" onClick={onRefresh}>
+				Refresh data
+			</Button>
+			{statusFilter?.control}
+			{controls.columnVisibility}
+			{controls.endSlot}
+		</>
+	);
+}
 
 function DeploymentTable(args: Partial<DataTableProps<Deployment>>) {
 	return (
