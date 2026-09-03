@@ -59,6 +59,7 @@
 
 ## Validation
 
+- Before adding or expanding permanent test coverage, read [ADR 0012](docs/adr/0012-test-durable-behavior-not-incidental-fixes.md). A bug fix, tool finding, refactor, or review comment does not automatically require a new test; protect durable user-facing behavior, public contracts, and explicitly documented mechanics with evidence proportional to risk.
 - Inspect the intended checkout before editing; files may be untracked and local copies may diverge.
 - Use `npm run verify:quick` for the standard TypeScript, blocking lint, advisory complexity and React Compiler diagnostics, and formatting gate. Run `npm run verify:full` when app and Storybook builds plus browser and bundle tests are required.
 - Run `npm run doctor` as an advisory React-specific audit after substantial React work. Vet every diagnostic against source, ADRs, and browser evidence before changing code or logging an issue; do not treat the score or severity as proof. Preserve the `only-export-components` waiver in `doctor.config.jsonc`: StyleX and the repository's compound namespace API require colocated non-component exports.
@@ -66,6 +67,7 @@
 - If another checkout owns Playwright's default ports, leave its server running and set `PLAYWRIGHT_STORYBOOK_PORT` or `PLAYWRIGHT_APP_PORT` on the designated validation command. Do not reuse another checkout's preview server.
 - Playwright discovers the full `tests/` tree. For interaction changes, run the focused browser spec with console-error capture after building Storybook.
 - Keep blocking tests focused on durable contracts: native semantics, accessible names and relationships, keyboard and focus behavior, state, callbacks, forms, routing, and explicitly documented component mechanics. Do not gate on showcase copy, exact colors or spacing, incidental geometry, SVG internals, or the current CSS implementation.
+- Do not add a dedicated story or fixture solely to expose private ref synchronization, memoization, render counts, effect ordering, or another one-off bug mechanism. Prefer existing realistic surfaces and assert whether the component works; keep review-time diagnostics and visual checks out of the permanent suite unless they represent a durable contract.
 - Target evolving stories and prototypes through stable fixture hooks, then assert roles, ARIA state, relationships, and behavior. Use exact text only when the wording itself is the contract. Assert computed style or geometry only when that visual mechanism is an explicit contract; keep the assertion to the smallest relevant boundary, such as an indicator's thickness and anchored edge.
 - Treat Storybook and manual visual review as the design-change feedback loop. Do not turn screenshots or paint details into blocking regression tests for in-progress components.
 - For StyleX selector, popup, responsive, or interaction changes, also verify live Storybook after optimization finishes. A production build does not prove dev-transform behavior.

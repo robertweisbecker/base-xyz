@@ -123,6 +123,7 @@ manually maintained component catalog here.
 - [ADR 0009: Normalize effective values without unsolicited callbacks](docs/adr/0009-normalize-effective-values-without-unsolicited-callbacks.md)
 - [ADR 0010: Static style-prop maps, tiered component surfaces, and the xstyle escape hatch](docs/adr/archive/0010-static-style-prop-maps-tiered-surfaces-and-xstyle.md) (superseded by ADR 0011)
 - [ADR 0011: Layout primitives, common margins, and StyleX overrides](docs/adr/0011-layout-primitives-common-margins-and-stylex-overrides.md)
+- [ADR 0012: Test durable behavior, not incidental fixes](docs/adr/0012-test-durable-behavior-not-incidental-fixes.md)
 
 Repository terminology lives in [`CONTEXT.md`](CONTEXT.md). Agent-facing
 working rules live in [`AGENTS.md`](AGENTS.md); durable architectural rationale
