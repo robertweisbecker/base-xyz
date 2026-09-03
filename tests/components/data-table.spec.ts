@@ -126,7 +126,7 @@ test("filtering, sorting, visibility, selection, and empty results remain observ
 	await expect(table.getByText("No results.")).toBeVisible();
 });
 
-test("selection and expansion compose on a stable row before actions run", async ({ page }) => {
+test("selection and expansion compose on a stable row", async ({ page }) => {
 	await page.goto(storyPath);
 
 	const table = page.getByRole("table");
