@@ -24,7 +24,7 @@
 - **Category**: tech-debt
 - **Planned at**: commit `e2910dd`, 2026-09-02
 - **Issue**: [#26](https://github.com/robertweisbecker/base-xyz/issues/26)
-- **Status**: TODO
+- **Status**: IN PROGRESS
 
 ## Why this matters
 

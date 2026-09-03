@@ -8,7 +8,7 @@ starting, honor its STOP conditions, and update its row when done.
 
 | Plan                                               | Title                                       | Priority | Effort | Depends on      | Status        |
 | -------------------------------------------------- | ------------------------------------------- | -------: | -----: | --------------- | ------------- |
-| [007](./007-decompose-data-table-orchestration.md) | Decompose DataTable orchestration           |       P1 |      M | —               | TODO          |
+| [007](./007-decompose-data-table-orchestration.md) | Decompose DataTable orchestration           |       P1 |      M | —               | IN PROGRESS   |
 | [003](./003-description-list-component.md)         | Add a semantic Description list component   |       P1 |      M | —               | TODO          |
 | [004](./004-form-field-primitives.md)              | Add composable form and field primitives    |       P1 |      L | Issue #22       | BLOCKED (#22) |
 | [005](./005-autocomplete-component.md)             | Add a free-form Autocomplete component      |       P2 |      M | 004             | TODO          |
