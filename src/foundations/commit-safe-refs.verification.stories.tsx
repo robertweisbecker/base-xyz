@@ -82,25 +82,12 @@ function TextareaFixture() {
 	const [enabled, setEnabled] = useState(false);
 	const [minRows, setMinRows] = useState(1);
 	const [maxRows, setMaxRows] = useState<number | undefined>(undefined);
-	const { ref: autoResizeRef, resize: autoResize } = useTextareaAutoResize({
+	const { ref, resize } = useTextareaAutoResize({
 		enabled,
 		rows: 1,
 		minRows,
 		maxRows,
 	});
-	const textareaRef = useRef<HTMLTextAreaElement | null>(null);
-	const resizeTextarea = useCallback(() => autoResize(), [autoResize]);
-	const setTextareaRef = useCallback(
-		(element: HTMLTextAreaElement | null) => {
-			textareaRef.current = element;
-			autoResizeRef(element);
-			return () => {
-				autoResizeRef(null);
-				textareaRef.current = null;
-			};
-		},
-		[autoResizeRef],
-	);
 
 	return (
 		<section aria-label="Textarea auto-resize verification">
@@ -125,10 +112,10 @@ function TextareaFixture() {
 				Disable resizing
 			</button>
 			<textarea
-				ref={setTextareaRef}
+				ref={ref}
 				data-testid="textarea-target"
 				defaultValue="First line"
-				onChange={resizeTextarea}
+				onChange={resize}
 				rows={1}
 			/>
 		</section>
