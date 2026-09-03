@@ -355,7 +355,8 @@ diff for public surface, rendered markup, and StyleX value drift.
       executor reports the exact evidence for the operator to post.
 - [ ] The final Plan 007 is copied to
       `.scratch/plans/completed/007-decompose-data-table-orchestration.md`, then
-      the tracked Plan 007 file and its index row are removed. Git history and
+      the tracked Plan 007 file is removed and its compact DONE row moves to the
+      public retired-plan ledger. Its number remains reserved; Git history and
       issue #26 remain the durable public record.
 
 ## STOP conditions

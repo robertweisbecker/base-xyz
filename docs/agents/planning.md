@@ -21,7 +21,7 @@ Inline the relevant paths, symbols, short current-state excerpts, repository con
 
 ## Backlog index
 
-Use `docs/plans/README.md` as the active index. Keep plan numbering monotonic and record execution order, dependencies, and current status. Record considered-and-rejected findings only while they remain useful to the active backlog.
+Use `docs/plans/README.md` as the active index and public numbering ledger. Keep plan numbering monotonic and never reuse an allocated number, even after its tracked plan file moves to ignored scratch. Record active execution order, dependencies, current status, the highest allocated number, and the next available number. Record considered-and-rejected findings only while they remain useful to the active backlog.
 
 ## Relationship to GitHub issues
 
@@ -39,13 +39,14 @@ When implementation begins, retain the issue's `ready-for-agent` or `ready-for-h
 
 ## Repository lifecycle override
 
-The repository's documentation lifecycle in `AGENTS.md` remains authoritative over Improve's default index history: keep only active plans in `docs/plans/`.
+The repository's documentation lifecycle in `AGENTS.md` remains authoritative over Improve's default index history: keep only active plan files in `docs/plans/`, while the public index retains compact final-status rows for plans retired on or after 2026-09-03.
 
 After a plan is done or rejected:
 
 1. Update and close the linked issue with the implementing commit or pull request, verification results, or rejection rationale.
 2. Distill any durable result into an ADR, glossary entry, or implementation guide.
 3. Copy the final plan to `.scratch/plans/completed/` when a locally readable reference would be useful.
-4. Remove the tracked plan and its status history from the active backlog.
+4. Remove the tracked plan file and move its row from the active table to the public retired-plan ledger with its final DONE or REJECTED status and durable issue, pull-request, or commit evidence.
+5. Keep the plan number reserved and advance the index's explicit next-number marker. Never renumber an existing plan to close a historical gap.
 
-The entire `.scratch/` tree is ignored and must never be force-added. Its completed-plan copies are disposable local conveniences, not a second documentation source of truth. Git history remains the durable shared archive.
+The entire `.scratch/` tree is ignored and must never be force-added. Its completed-plan copies are disposable local conveniences, not a second documentation source of truth. The public ledger is intentionally compact rather than a replacement for the retired plan; Git history and linked issues remain the durable shared evidence.
