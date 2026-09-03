@@ -8,6 +8,7 @@ import {
 	useCallback,
 	useContext,
 	useEffect,
+	useLayoutEffect,
 	useMemo,
 	useRef,
 	useState,
@@ -39,6 +40,8 @@ import { media } from "@/styles/constants.stylex";
 import { tokens } from "@/theme/tokens.stylex";
 import { attrJoin } from "@/utils/attr-join";
 import { Tooltip } from "@/components";
+
+const useIsomorphicLayoutEffect = typeof window === "undefined" ? useEffect : useLayoutEffect;
 
 export type InlineEditChangeReason = "edit" | "confirm" | "cancel";
 
@@ -160,8 +163,10 @@ function InlineEditRoot({
 	const { marginStyles, rest } = extractMarginProps(props);
 	const [uncontrolledEditing, setUncontrolledEditing] = useState(defaultEditing);
 	const [pending, setPending] = useState(false);
-	const controlledModeRef = useRef(controlledEditing !== undefined);
-	const editing = controlledModeRef.current ? (controlledEditing ?? false) : uncontrolledEditing;
+	// The control mode is chosen once for the component lifetime. This predictable
+	// initialization must not be changed when the optional prop is added or removed.
+	const [controlledMode] = useState(() => controlledEditing !== undefined);
+	const editing = controlledMode ? (controlledEditing ?? false) : uncontrolledEditing;
 	const rootRef = useRef<HTMLSpanElement | null>(null);
 	const inputRef = useRef<HTMLInputElement | null>(null);
 	const valueRef = useRef<HTMLButtonElement | null>(null);
@@ -171,9 +176,17 @@ function InlineEditRoot({
 	const previousEditingRef = useRef(false);
 	const editingRef = useRef(editing);
 	const onEditingChangeRef = useRef(onEditingChange);
+	const disabledRef = useRef(disabled);
+	const onConfirmRef = useRef(onConfirm);
+	const onConfirmErrorRef = useRef(onConfirmError);
 
-	editingRef.current = editing;
-	onEditingChangeRef.current = onEditingChange;
+	useIsomorphicLayoutEffect(() => {
+		editingRef.current = editing;
+		onEditingChangeRef.current = onEditingChange;
+		disabledRef.current = disabled;
+		onConfirmRef.current = onConfirm;
+		onConfirmErrorRef.current = onConfirmError;
+	}, [disabled, editing, onConfirm, onConfirmError, onEditingChange]);
 
 	useEffect(() => {
 		mountedRef.current = true;
@@ -182,40 +195,43 @@ function InlineEditRoot({
 		};
 	}, []);
 
-	const requestEditing = useCallback((nextEditing: boolean, reason: InlineEditChangeReason) => {
-		if (editingRef.current === nextEditing) return;
-		if (!controlledModeRef.current) setUncontrolledEditing(nextEditing);
-		onEditingChangeRef.current?.(nextEditing, { reason });
-	}, []);
+	const requestEditing = useCallback(
+		(nextEditing: boolean, reason: InlineEditChangeReason) => {
+			if (editingRef.current === nextEditing) return;
+			if (!controlledMode) setUncontrolledEditing(nextEditing);
+			onEditingChangeRef.current?.(nextEditing, { reason });
+		},
+		[controlledMode],
+	);
 
 	const startEditing = useCallback(() => {
-		if (disabled || pendingRef.current) return;
+		if (disabledRef.current || pendingRef.current) return;
 		restoreFocusRef.current = false;
 		requestEditing(true, "edit");
-	}, [disabled, requestEditing]);
+	}, [requestEditing]);
 
 	const cancel = useCallback(() => {
-		if (!editingRef.current || disabled || pendingRef.current) return;
+		if (!editingRef.current || disabledRef.current || pendingRef.current) return;
 		restoreFocusRef.current = true;
 		requestEditing(false, "cancel");
-	}, [disabled, requestEditing]);
+	}, [requestEditing]);
 
 	const confirm = useCallback(
 		async (restoreFocus = true) => {
-			if (!editingRef.current || disabled || pendingRef.current) return;
+			if (!editingRef.current || disabledRef.current || pendingRef.current) return;
 			if (inputRef.current && !inputRef.current.reportValidity()) {
 				return;
 			}
 			pendingRef.current = true;
 			setPending(true);
 			try {
-				await onConfirm?.();
+				await onConfirmRef.current?.();
 				if (!mountedRef.current) return;
 				restoreFocusRef.current = restoreFocus;
 				requestEditing(false, "confirm");
 			} catch (error) {
 				if (mountedRef.current) {
-					onConfirmError?.(error);
+					onConfirmErrorRef.current?.(error);
 					if (mountedRef.current) queueMicrotask(() => inputRef.current?.focus());
 				}
 			} finally {
@@ -223,7 +239,7 @@ function InlineEditRoot({
 				if (mountedRef.current) setPending(false);
 			}
 		},
-		[disabled, onConfirm, onConfirmError, requestEditing],
+		[requestEditing],
 	);
 
 	useEffect(() => {
