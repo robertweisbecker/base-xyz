@@ -33,36 +33,36 @@ test("row actions retain focus, identity, and callbacks while mounted actions ch
 	const rowActions = fixture.getByRole("button", { name: "Open actions for row 1" });
 	await rowActions.click();
 
-	const viewAction = page.getByRole("menuitem", { name: "View record" });
-	await viewAction.focus();
-	await expect(viewAction).toBeFocused();
+	const deleteAction = page.getByRole("menuitem", { name: "Delete record" });
+	await deleteAction.focus();
+	await expect(deleteAction).toBeFocused();
 
 	await fixture.getByRole("button", { name: "Reorder actions" }).evaluate((button) => {
 		if (!(button instanceof HTMLButtonElement)) throw new Error("Expected a story control button");
 		button.click();
 	});
-	await expect(page.getByRole("menuitem", { name: "View record" })).toBeFocused();
+	await expect(page.getByRole("menuitem", { name: "Delete record" })).toBeFocused();
 
-	await page.getByRole("menuitem", { name: "View record" }).press("Enter");
-	await expect(fixture.getByRole("status")).toHaveText("view:row-1");
+	await page.getByRole("menuitem", { name: "Delete record" }).press("Enter");
+	await expect(fixture.getByRole("status")).toHaveText("delete:row-1");
 
 	await rowActions.click();
-	await page.getByRole("menuitem", { name: "View record" }).focus();
+	await page.getByRole("menuitem", { name: "Delete record" }).focus();
 	await fixture.getByRole("button", { name: "Insert action" }).evaluate((button) => {
 		if (!(button instanceof HTMLButtonElement)) throw new Error("Expected a story control button");
 		button.click();
 	});
-	await expect(page.getByRole("menuitem", { name: "View record" })).toBeFocused();
+	await expect(page.getByRole("menuitem", { name: "Delete record" })).toBeFocused();
 	await fixture.getByRole("button", { name: "Remove action" }).evaluate((button) => {
 		if (!(button instanceof HTMLButtonElement)) throw new Error("Expected a story control button");
 		button.click();
 	});
-	await expect(page.getByRole("menuitem", { name: "View record" })).toBeFocused();
-	await page.getByRole("menuitem", { name: "View record" }).press("Enter");
-	await expect(fixture.getByRole("status")).toHaveText("view:row-1");
+	await expect(page.getByRole("menuitem", { name: "Delete record" })).toBeFocused();
+	await page.getByRole("menuitem", { name: "Delete record" }).press("Enter");
+	await expect(fixture.getByRole("status")).toHaveText("delete:row-1");
 
 	await rowActions.click();
-	await fixture.getByRole("button", { name: "Disable view action" }).evaluate((button) => {
+	await fixture.getByRole("button", { name: "Disable delete action" }).evaluate((button) => {
 		if (!(button instanceof HTMLButtonElement)) throw new Error("Expected a story control button");
 		button.click();
 	});
@@ -70,5 +70,5 @@ test("row actions retain focus, identity, and callbacks while mounted actions ch
 		if (!(button instanceof HTMLButtonElement)) throw new Error("Expected a story control button");
 		button.click();
 	});
-	await expect(page.getByRole("menuitem", { name: "View record" })).toBeDisabled();
+	await expect(page.getByRole("menuitem", { name: "Delete record" })).toBeDisabled();
 });

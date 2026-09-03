@@ -363,7 +363,7 @@ function ActionIdentityFixture() {
 				<Button
 					onClick={(event) => {
 						event.stopPropagation();
-						updateActionOrder(["archive", "view", "delete"]);
+						updateActionOrder(["archive", "delete", "view"]);
 					}}
 				>
 					Reorder actions
@@ -389,10 +389,10 @@ function ActionIdentityFixture() {
 				<Button
 					onClick={(event) => {
 						event.stopPropagation();
-						updateDisabledAction("view");
+						updateDisabledAction("delete");
 					}}
 				>
-					Disable view action
+					Disable delete action
 				</Button>
 			</Stack>
 			<DataTable
