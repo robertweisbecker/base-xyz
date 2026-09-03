@@ -57,6 +57,7 @@ const checkboxParts = stylex.create({
 		padding: 0,
 	},
 	groupDescription: {
+		color: tokens["--fg-muted"],
 		marginBlockEnd: tokens["--space-2"],
 	},
 	item: {
@@ -178,6 +179,7 @@ const checkboxParts = stylex.create({
 	},
 	description: {
 		margin: 0,
+		color: tokens["--fg-muted"],
 	},
 	requiredIndicator: {
 		color: tokens["--fg-error"],
