@@ -12,9 +12,13 @@ const UNSELECTED_HOVER =
 const UNSELECTED_ACTIVE =
 	":active:not([data-disabled],[data-readonly]):not(:has([data-checked],[data-indeterminate],[data-invalid]))";
 const ENABLED_SELECTED_HOVER =
-	":hover:not([data-disabled],[data-readonly]):has([data-checked]:not([data-invalid]), [data-indeterminate]:not([data-invalid]))";
+	":hover:not([data-disabled],[data-readonly]):has([data-checked]:not([data-invalid]))";
 const ENABLED_SELECTED_ACTIVE =
-	":active:not([data-disabled],[data-readonly]):has([data-checked]:not([data-invalid]), [data-indeterminate]:not([data-invalid]))";
+	":active:not([data-disabled],[data-readonly]):has([data-checked]:not([data-invalid]))";
+const ENABLED_INDETERMINATE_HOVER =
+	":hover:not([data-disabled],[data-readonly]):has([data-indeterminate]:not([data-invalid]))";
+const ENABLED_INDETERMINATE_ACTIVE =
+	":active:not([data-disabled],[data-readonly]):has([data-indeterminate]:not([data-invalid]))";
 
 /** Marker for Checkbox labels so their interaction styles remain component-owned. */
 export const checkboxLabelMarker = stylex.defineMarker();
@@ -67,6 +71,20 @@ const checkboxParts = stylex.create({
 		color: tokens["--fg-muted"],
 		marginBlockEnd: tokens["--space-2"],
 	},
+	groupOptions: {
+		alignItems: "stretch",
+		columnGap: tokens["--space-3"],
+		display: "flex",
+		flexDirection: "column",
+		flexWrap: "nowrap",
+		rowGap: tokens["--space-3"],
+	},
+	groupOptionsInline: {
+		alignItems: "start",
+		columnGap: tokens["--space-6"],
+		flexDirection: "row",
+		flexWrap: "wrap",
+	},
 	item: {
 		gap: 0,
 		color: {
@@ -110,6 +128,12 @@ const checkboxParts = stylex.create({
 			},
 			[stylex.when.ancestor(UNSELECTED_ACTIVE, checkboxLabelMarker)]:
 				tokens["--border-input-hover"],
+			// eslint-disable-next-line @stylexjs/valid-styles -- the compiler supports ancestor conditions; the lint rule is stricter than the compiler.
+			[stylex.when.ancestor(ENABLED_INDETERMINATE_HOVER, checkboxLabelMarker)]: {
+				[media.canHover]: tokens["--bg-primary-hover"],
+			},
+			[stylex.when.ancestor(ENABLED_INDETERMINATE_ACTIVE, checkboxLabelMarker)]:
+				tokens["--bg-primary"],
 		},
 		borderRadius: tokens["--radius-xs"],
 		borderStyle: "solid",
@@ -134,6 +158,12 @@ const checkboxParts = stylex.create({
 				[media.canHover]: tokens["--bg-primary-hover"],
 			},
 			[stylex.when.ancestor(ENABLED_SELECTED_ACTIVE, checkboxLabelMarker)]: tokens["--bg-primary"],
+			// eslint-disable-next-line @stylexjs/valid-styles -- the compiler supports ancestor conditions; the lint rule is stricter than the compiler.
+			[stylex.when.ancestor(ENABLED_INDETERMINATE_HOVER, checkboxLabelMarker)]: {
+				[media.canHover]: tokens["--surface"],
+			},
+			[stylex.when.ancestor(ENABLED_INDETERMINATE_ACTIVE, checkboxLabelMarker)]:
+				tokens["--surface"],
 		},
 		display: "inline-flex",
 		flexShrink: 0,
@@ -164,6 +194,12 @@ const checkboxParts = stylex.create({
 			"[data-invalid]": tokens["--fg-accent-contrast"],
 			"[data-readonly]": tokens["--fg"],
 			default: tokens["--fg-accent-contrast"],
+			// eslint-disable-next-line @stylexjs/valid-styles -- the compiler supports ancestor conditions; the lint rule is stricter than the compiler.
+			[stylex.when.ancestor(ENABLED_INDETERMINATE_HOVER, checkboxLabelMarker)]: {
+				[media.canHover]: tokens["--bg-primary-hover"],
+			},
+			[stylex.when.ancestor(ENABLED_INDETERMINATE_ACTIVE, checkboxLabelMarker)]:
+				tokens["--bg-primary"],
 		},
 		display: "flex",
 		filter: {
@@ -206,6 +242,8 @@ export const checkboxStyles = {
 	groupLabel: [textStyles.body, fontWeightStyles.semibold, checkboxParts.groupLabel],
 	legend: checkboxParts.legend,
 	groupDescription: [textStyles.supporting, checkboxParts.groupDescription],
+	groupOptions: checkboxParts.groupOptions,
+	groupOptionsInline: checkboxParts.groupOptionsInline,
 	item: checkboxParts.item,
 	labelRoot: [checkboxLabelMarker, checkboxParts.labelRoot],
 	control: checkboxParts.control,

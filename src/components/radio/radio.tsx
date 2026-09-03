@@ -18,7 +18,6 @@ import {
 	radioStyles,
 	type RadioSize,
 } from "./radio.stylex";
-import { choiceGroupStyles } from "../choice/choice.stylex";
 
 export type { RadioSize } from "./radio.stylex";
 
@@ -181,6 +180,9 @@ export function RadioGroup({
 						<BaseRadioGroup
 							ref={ref}
 							name={name}
+							disabled={disabled}
+							readOnly={readOnly}
+							required={required}
 							aria-describedby={attrJoin(ariaDescribedBy, descriptionId) || undefined}
 							{...rest}
 						/>
@@ -206,7 +208,7 @@ export function RadioGroup({
 				) : null}
 			</div>
 			<RadioGroupStateContext.Provider value={groupValue}>
-				<div {...stylex.props(choiceGroupStyles.root, inline && choiceGroupStyles.inline)}>
+				<div {...stylex.props(radioStyles.groupOptions, inline && radioStyles.groupOptionsInline)}>
 					{children}
 				</div>
 			</RadioGroupStateContext.Provider>

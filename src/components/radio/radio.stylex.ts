@@ -76,6 +76,20 @@ const radioParts = stylex.create({
 		margin: 0,
 		color: tokens["--fg-muted"],
 	},
+	groupOptions: {
+		alignItems: "stretch",
+		columnGap: tokens["--space-3"],
+		display: "flex",
+		flexDirection: "column",
+		flexWrap: "nowrap",
+		rowGap: tokens["--space-3"],
+	},
+	groupOptionsInline: {
+		alignItems: "start",
+		columnGap: tokens["--space-6"],
+		flexDirection: "row",
+		flexWrap: "wrap",
+	},
 	item: {
 		gap: tokens["--space-1"],
 		cursor: {
@@ -95,7 +109,6 @@ const radioParts = stylex.create({
 		gap: tokens["--space-2"],
 		alignItems: "flex-start",
 		color: {
-			"[data-disabled]": tokens["--fg-subtle"],
 			"[data-readonly]": tokens["--fg-muted"],
 			default: tokens["--fg"],
 		},
@@ -104,7 +117,7 @@ const radioParts = stylex.create({
 	},
 	control: {
 		borderColor: {
-			"[data-checked]": tokens["--bg-primary-highlight"],
+			"[data-checked]": tokens["--bg-primary"],
 			"[data-checked][data-disabled]": tokens["--bg-neutral"],
 			"[data-checked][data-readonly]": tokens["--fg-muted"],
 			"[data-disabled]": tokens["--border-disabled"],
@@ -201,6 +214,8 @@ export const radioStyles = {
 	title: radioParts.title,
 	groupLabel: [textStyles.body, fontWeightStyles.semibold, radioParts.groupLabel],
 	groupDescription: [textStyles.supporting, radioParts.groupDescription],
+	groupOptions: radioParts.groupOptions,
+	groupOptionsInline: radioParts.groupOptionsInline,
 	item: radioParts.item,
 	labelRoot: [radioLabelMarker, radioParts.labelRoot],
 	control: radioParts.control,

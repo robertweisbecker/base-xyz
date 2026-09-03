@@ -18,7 +18,6 @@ import {
 	checkboxStyles,
 	type CheckboxSize,
 } from "./checkbox.stylex";
-import { choiceGroupStyles } from "../choice/choice.stylex";
 
 export type { CheckboxSize } from "./checkbox.stylex";
 
@@ -230,7 +229,12 @@ export function CheckboxGroup({
 				</p>
 			) : null}
 			<CheckboxGroupFieldContext.Provider value={groupValue}>
-				<div {...stylex.props(choiceGroupStyles.root, inline && choiceGroupStyles.inline)}>
+				<div
+					{...stylex.props(
+						checkboxStyles.groupOptions,
+						inline && checkboxStyles.groupOptionsInline,
+					)}
+				>
 					{children}
 				</div>
 			</CheckboxGroupFieldContext.Provider>
