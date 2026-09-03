@@ -15,7 +15,7 @@ plans are not renumbered to fill gaps. The highest allocated identifier is
 | [003](./003-description-list-component.md)    | Add a semantic Description list component   |       P1 |      M | —                             | TODO   |
 | [004](./004-form-field-primitives.md)         | Add composable form and field primitives    |       P1 |      L | Completed #22                 | TODO   |
 | [005](./005-autocomplete-component.md)        | Add a free-form Autocomplete component      |       P2 |      M | 004                           | TODO   |
-| [009](./009-relative-time-helper.md)          | Add a RelativeTime helper component         |       P2 |      M | —                             | TODO   |
+| [009](./009-relative-time-helper.md)          | Investigate a relative-time helper          |       P2 |      S | —                             | TODO   |
 | [008](./008-migrate-from-npm-to-pnpm.md)      | Migrate repository workflows to pnpm 11     |       P2 |      M | Completed #34/#47; idle queue | TODO   |
 | [Stepper pagination](./stepper-pagination.md) | Evaluate shared Stepper pagination controls |       P3 |      S | Second consumer               | TODO   |
 
@@ -62,12 +62,12 @@ are intentionally not reconstructed here.
 - `005-autocomplete-component.md` requires Plan 004's public `Field` and `Label`
   wrappers. Execute them serially: they also share `src/components/index.ts`,
   ADR 0011, `src/styles/README.md`, and this index.
-- `009-relative-time-helper.md` is independent. It shares
-  `src/components/index.ts`, `src/app/gallery-page.tsx`, ADR 0011, `CONTEXT.md`,
-  and this index with other component plans, and it shares `package.json` /
-  `package-lock.json` with Plan 008. Parallel executors must reconcile those
-  files without dropping public exports, plan rows, or the pnpm migration
-  surface. Do not start Plan 009 while Plan 008 is IN PROGRESS.
+- `009-relative-time-helper.md` is an investigation, not an implementation.
+  It should not land public exports or lockfile changes. A wrapper *spike*
+  may install `@github/relative-time-element` only locally; do not commit
+  that while Plan 008 owns `package.json`. The follow-up implementation
+  plan will share `src/components/index.ts` / gallery / this index with
+  Plans 003–005.
 - Issue #27 / PR #34 and Plan 007 / PR #47 are complete, satisfying Plan 008's
   implementation prerequisites. Plan 008 remains TODO and may begin only when
   no other plan is IN PROGRESS because it changes the installation and
