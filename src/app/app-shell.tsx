@@ -3,7 +3,7 @@ import { MoonIcon } from "@phosphor-icons/react/dist/csr/Moon";
 import { StairsIcon } from "@phosphor-icons/react/dist/csr/Stairs";
 import { SunIcon } from "@phosphor-icons/react/dist/csr/Sun";
 import * as stylex from "@stylexjs/stylex";
-import { useLayoutEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { IconButton, Select, Separator } from "@/components";
 import { textStyles } from "@/components/text/text.stylex";
 import { media, zIndex } from "@/styles/constants.stylex";
@@ -29,42 +29,61 @@ const themeBrandItems: { label: string; value: ThemeName }[] = [
 export function AppShell() {
 	const navigate = useNavigate();
 	const search = useSearch({ from: "__root__" });
-	const [preferredMode, setPreferredMode] = useState<ThemeMode>(getStoredThemeMode);
-	const [preferredTheme, setPreferredTheme] = useState<ThemeName>(getStoredThemeBrand);
-	const mode = search.mode ?? preferredMode;
-	const theme = search.theme ?? preferredTheme;
+	const [preferences, setPreferences] = useState(() => ({
+		mode: search.mode ?? getStoredThemeMode(),
+		sourceMode: search.mode,
+		sourceTheme: search.theme,
+		theme: search.theme ?? getStoredThemeBrand(),
+	}));
+	let currentPreferences = preferences;
 
-	useLayoutEffect(() => {
-		if (search.mode) setPreferredMode(search.mode);
-		localStorage.setItem(themeModeStorageKey, mode);
-	}, [mode, search.mode]);
+	// Retain new URL preferences before children commit, without a state-setting effect.
+	if (preferences.sourceMode !== search.mode || preferences.sourceTheme !== search.theme) {
+		currentPreferences = {
+			mode: search.mode ?? preferences.mode,
+			sourceMode: search.mode,
+			sourceTheme: search.theme,
+			theme: search.theme ?? preferences.theme,
+		};
+		setPreferences(currentPreferences);
+	}
 
-	useLayoutEffect(() => {
-		if (search.theme) setPreferredTheme(search.theme);
-		localStorage.setItem(themeBrandStorageKey, theme);
-	}, [search.theme, theme]);
+	const mode = search.mode ?? currentPreferences.mode;
+	const theme = search.theme ?? currentPreferences.theme;
 
-	function updateThemeSearch(nextTheme: ThemeName, nextMode: ThemeMode) {
+	useEffect(() => {
+		setStoredThemeMode(mode);
+		setStoredThemeBrand(theme);
+	}, [mode, theme]);
+
+	function updateThemeSearch(nextPreference: { mode?: ThemeMode; theme?: ThemeName }) {
 		void navigate({
 			replace: true,
 			resetScroll: false,
 			to: ".",
-			search: (previous) => ({
-				...previous,
-				mode: nextMode === "system" ? undefined : nextMode,
-				theme: nextTheme === "default" ? undefined : nextTheme,
-			}),
+			search: (previous) => {
+				const nextMode = nextPreference.mode ?? previous.mode ?? getStoredThemeMode();
+				const nextTheme = nextPreference.theme ?? previous.theme ?? getStoredThemeBrand();
+
+				return {
+					...previous,
+					mode: nextMode === "system" ? undefined : nextMode,
+					theme: nextTheme === "default" ? undefined : nextTheme,
+				};
+			},
 		});
 	}
 
 	const handleModeChange = (nextMode: ThemeMode) => {
-		setPreferredMode(nextMode);
-		updateThemeSearch(theme, nextMode);
+		setPreferences((current) => ({ ...current, mode: nextMode }));
+		setStoredThemeMode(nextMode);
+		updateThemeSearch({ mode: nextMode });
 	};
 
 	const handleThemeChange = (nextTheme: ThemeName) => {
-		setPreferredTheme(nextTheme);
-		updateThemeSearch(nextTheme, mode);
+		setPreferences((current) => ({ ...current, theme: nextTheme }));
+		setStoredThemeBrand(nextTheme);
+		updateThemeSearch({ theme: nextTheme });
 	};
 
 	return (
@@ -179,6 +198,14 @@ function getStoredThemeBrand(): ThemeName {
 	if (typeof window === "undefined") return "default";
 	const storedTheme = localStorage.getItem(themeBrandStorageKey);
 	return storedTheme === "default" || storedTheme === "mp" ? storedTheme : "default";
+}
+
+function setStoredThemeMode(mode: ThemeMode) {
+	if (typeof window !== "undefined") localStorage.setItem(themeModeStorageKey, mode);
+}
+
+function setStoredThemeBrand(theme: ThemeName) {
+	if (typeof window !== "undefined") localStorage.setItem(themeBrandStorageKey, theme);
 }
 
 const styles = stylex.create({
