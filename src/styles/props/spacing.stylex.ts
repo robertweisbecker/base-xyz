@@ -2,13 +2,15 @@ import * as stylex from "@stylexjs/stylex";
 import type { StyleXStyles } from "@stylexjs/stylex";
 import { tokens } from "@/theme/tokens.stylex";
 
-export type SpaceStep = 0 | 0.5 | 1 | 1.5 | 2 | 3 | 3.5 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 12 | 16;
+export type SpaceStep =
+	0 | 0.5 | 1 | 1.5 | 2 | 2.5 | 3 | 3.5 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 12 | 16;
 export type SpaceValue =
 	| SpaceStep
 	| -0.5
 	| -1
 	| -1.5
 	| -2
+	| -2.5
 	| -3
 	| -3.5
 	| -4
@@ -28,6 +30,7 @@ const spaceValues = {
 	1: tokens["--space-1"],
 	1.5: tokens["--space-1-5"],
 	2: tokens["--space-2"],
+	2.5: tokens["--space-2-5"],
 	3: tokens["--space-3"],
 	3.5: tokens["--space-3-5"],
 	4: tokens["--space-4"],
@@ -43,6 +46,7 @@ const spaceValues = {
 	[-1]: `calc(0rem - ${tokens["--space-1"]})`,
 	[-1.5]: `calc(0rem - ${tokens["--space-1-5"]})`,
 	[-2]: `calc(0rem - ${tokens["--space-2"]})`,
+	[-2.5]: `calc(0rem - ${tokens["--space-2-5"]})`,
 	[-3]: `calc(0rem - ${tokens["--space-3"]})`,
 	[-3.5]: `calc(0rem - ${tokens["--space-3-5"]})`,
 	[-4]: `calc(0rem - ${tokens["--space-4"]})`,

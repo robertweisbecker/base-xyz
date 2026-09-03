@@ -23,14 +23,14 @@ test("margin props preserve shorthand precedence, logical edges, negatives, and 
 
 	const precedence = page.getByTestId("margin-precedence");
 	await expect(precedence).toHaveCSS("margin-top", "12px");
-	await expect(precedence).toHaveCSS("margin-right", "8px");
+	await expect(precedence).toHaveCSS("margin-right", "10px");
 	await expect(precedence).toHaveCSS("margin-bottom", "4px");
-	await expect(precedence).toHaveCSS("margin-left", "8px");
+	await expect(precedence).toHaveCSS("margin-left", "10px");
 
 	const logical = page.getByTestId("logical-margin");
 	await expect(logical).toHaveCSS("margin-inline-start", "8px");
 	await expect(logical).toHaveCSS("margin-inline-end", "16px");
-	await expect(page.getByTestId("negative-margin")).toHaveCSS("margin-top", "-8px");
+	await expect(page.getByTestId("negative-margin")).toHaveCSS("margin-top", "-10px");
 
 	const pushedButton = page.getByTestId("auto-margin");
 	const inlineEndGap = await pushedButton.evaluate((button) => {

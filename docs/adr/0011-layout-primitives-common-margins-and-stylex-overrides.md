@@ -97,7 +97,8 @@ The public numeric spacing vocabulary is a direct, finite TypeScript contract,
 with CSS strings available for values outside the scale:
 
 ```ts
-export type SpaceStep = 0 | 0.5 | 1 | 1.5 | 2 | 3 | 3.5 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 12 | 16;
+export type SpaceStep =
+	0 | 0.5 | 1 | 1.5 | 2 | 2.5 | 3 | 3.5 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 12 | 16;
 
 export type SpaceValue =
 	| SpaceStep
@@ -105,6 +106,7 @@ export type SpaceValue =
 	| -1
 	| -1.5
 	| -2
+	| -2.5
 	| -3
 	| -3.5
 	| -4
