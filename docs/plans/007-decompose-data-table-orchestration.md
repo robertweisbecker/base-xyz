@@ -127,9 +127,9 @@ selection, expansion, row actions, empty results, and horizontal overflow via
 pagination wording is stale; this refactor must neither add pagination nor
 invent pagination ownership.
 
-`tests/components/data-table.spec.ts` currently covers only expansion. Plan 006
-adds a row-action identity fixture/test. Before moving implementation, add
-behavioral characterization for the remaining supported combinations so file
+`tests/components/data-table.spec.ts` covers expansion and Plan 006's mounted
+stable row-action fixture/test at this branch head. Before moving implementation,
+add behavioral characterization for the remaining supported combinations so file
 motion cannot hide a regression.
 
 ## Commands you will need
@@ -208,8 +208,9 @@ as documented in AGENTS.md.
 
 ### Step 1: Characterize the current public behavior
 
-Extend the Plan 006 DataTable story fixture and browser spec before moving code.
-Cover at least these observable contracts:
+The Plan 006 DataTable story fixture and browser spec already cover mounted
+stable row-action identity. Before moving code, add characterization for the
+remaining observable contracts:
 
 1. filtering changes visible rows and the selected/filtered metadata;
 2. sorting updates `aria-sort` and visible row order;
