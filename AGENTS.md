@@ -54,7 +54,7 @@
 - Keep `CONTEXT.md` as the concise repository glossary.
 - Keep this file limited to executable agent rules. Record durable architectural choices and rationale in the next numbered file under `docs/adr/`, then link it from the README and the relevant rule here.
 - Update an existing ADR when clarifying the same decision. Add a new ADR only for a distinct decision or when superseding an earlier one; never silently rewrite historical status or rationale. When an ADR is superseded, set its status line to point at the successor and move the file to `docs/adr/archive/`, updating inbound links; numbering is never reused.
-- Keep `docs/plans/` as the active implementation backlog; do not create a root-level `plans/` directory. After a plan is DONE or REJECTED, distill any durable outcome into an ADR, glossary, or implementation guide, then remove the inactive plan and its status history. Git history is the archive; do not keep execution transcripts in the public tree.
+- Keep `docs/plans/` as the active implementation backlog; do not create a root-level `plans/` directory. After a plan is DONE or REJECTED, distill any durable outcome into an ADR, glossary, or implementation guide, copy the final plan to the ignored `.scratch/plans/completed/` directory for optional local reference, then remove the tracked plan and its status history. Never force-add the scratch archive; Git history is the durable shared archive, and execution transcripts do not belong in the public tree.
 - Record grievances, tooling friction, and workaround needs in `.agents/PAPERCUTS.md` (committed) as you encounter them: one dated bullet per papercut with file/tool context and the workaround taken. Do not silently absorb repeated friction.
 
 ## Validation
@@ -70,3 +70,23 @@
 - For StyleX selector, popup, responsive, or interaction changes, also verify live Storybook after optimization finishes. A production build does not prove dev-transform behavior.
 - If Storybook reports a transient missing story or `Invalid empty selector`, reload/restart and reacquire browser references before changing valid code.
 - Report unrelated failures instead of modifying concurrent work.
+
+## Agent skills
+
+### Issue tracker
+
+Issues and PRDs are tracked in GitHub Issues; external pull requests are not a triage surface. See `docs/agents/issue-tracker.md`.
+
+For `ready-for-agent` and `ready-for-human` issues, the label identifies the execution path, the GitHub assignee identifies who has claimed the work, and a linked plan marked IN PROGRESS records active execution. Keep the ready label while work is underway, and offer only unassigned ready issues for pickup.
+
+### Triage labels
+
+Use the canonical `needs-triage`, `needs-info`, `ready-for-agent`, `ready-for-human`, and `wontfix` labels. See `docs/agents/triage-labels.md`.
+
+### Planning
+
+When producing an implementation-plan artifact, prefer the Improve skill's self-contained handoff structure over alternative formats. Treat the GitHub issue as the durable work record and the plan as its temporary execution specification; substantial active plans should normally link to one issue, but never publish an issue without explicit authorization. Keep active plans in `docs/plans/` and follow this file's documentation-lifecycle rules. See `docs/agents/planning.md`.
+
+### Domain docs
+
+This is a single-context repository with a root `CONTEXT.md` and `docs/adr/`. See `docs/agents/domain.md`.

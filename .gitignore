@@ -21,6 +21,7 @@ src/assets/hero.png
 
 # Agent scratch (keep .agents/PAPERCUTS.md tracked)
 .agents/.SCRATCHPAD.md
+.scratch/
 
 # Editor directories and files
 .vscode/*

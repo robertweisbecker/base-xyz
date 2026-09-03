@@ -6,16 +6,30 @@ starting, honor its STOP conditions, and update its row when done.
 
 ## Execution order & status
 
-| Plan                                           | Title                                       | Priority | Effort | Depends on      | Status |
-| ---------------------------------------------- | ------------------------------------------- | -------: | -----: | --------------- | ------ |
-| [003](./003-description-list-component.md)     | Add a semantic Description list component   |       P1 |      M | —               | TODO   |
-| [004](./004-form-field-primitives.md)          | Add composable form and field primitives    |       P1 |      L | —               | TODO   |
-| [Stepper pagination](./stepper-pagination.md)  | Evaluate shared Stepper pagination controls |       P3 |      S | Second consumer | TODO   |
-| [Table primitives](./table-primitives-plan.md) | Add agnostic table primitive components     |        — |      — | —               | DONE   |
+| Plan                                          | Title                                       | Priority | Effort | Depends on      | Status |
+| --------------------------------------------- | ------------------------------------------- | -------: | -----: | --------------- | ------ |
+| [003](./003-description-list-component.md)    | Add a semantic Description list component   |       P1 |      M | —               | TODO   |
+| [004](./004-form-field-primitives.md)         | Add composable form and field primitives    |       P1 |      L | —               | TODO   |
+| [005](./005-autocomplete-component.md)        | Add a free-form Autocomplete component      |       P2 |      M | 004             | TODO   |
+| [Stepper pagination](./stepper-pagination.md) | Evaluate shared Stepper pagination controls |       P3 |      S | Second consumer | TODO   |
 
 Status values: TODO | IN PROGRESS | DONE | BLOCKED (with one-line reason) |
 REJECTED (with one-line rationale — finding fixed independently or approach
 abandoned)
+
+## Issues and plans
+
+GitHub issues are the durable shared work records; plans in this directory are temporary execution specifications. The issue owns what is wanted, why it matters, priority, discussion, ownership, and resolution. The plan owns current-state evidence, exact scope, implementation steps, tests, verification, and STOP conditions.
+
+Not every issue requires a plan. Every substantial active plan should normally link to one issue in its status metadata, and that issue should link back to the plan. Prefer one issue per independently executable plan; split large initiatives into an umbrella issue with child issues and plans. Creating or publishing an issue always requires explicit user authorization.
+
+GitHub labels own queue state. This index owns active execution order, dependencies, and plan status. Keep them consistent while work is active. When implementation begins, keep the issue's `ready-for-agent` or `ready-for-human` label, assign the accountable GitHub user, and mark the plan IN PROGRESS. Only open, unassigned ready issues are available for pickup.
+
+## Lifecycle
+
+This index and directory contain only the active implementation backlog. When a plan becomes DONE or REJECTED, update and close its linked issue with the implementation and verification evidence or rejection rationale, then distill any durable outcome into the appropriate ADR, glossary entry, or implementation guide. Copy the final plan to `.scratch/plans/completed/<original-filename>` for optional local reference and remove its tracked file and status row from this index.
+
+The `.scratch/` archive is ignored and local to the checkout; never force-add it. Git history remains the durable shared archive.
 
 ## Dependency notes
 
@@ -26,3 +40,6 @@ abandoned)
 - `004-form-field-primitives.md` is independent and was planned from `main` at
   `bf25e43`. It shares `src/components/index.ts` and this index with Plan 003,
   so executors must preserve all public exports and plan rows.
+- `005-autocomplete-component.md` requires Plan 004's public `Field` and `Label`
+  wrappers. Execute them serially: they also share `src/components/index.ts`,
+  ADR 0011, `src/styles/README.md`, and this index.
