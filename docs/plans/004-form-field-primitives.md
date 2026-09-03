@@ -23,7 +23,7 @@
 - **Planned at**: commit `bf25e43`, 2026-08-27
 - **Reconciled at**: commit `1569440`, 2026-09-03
 - **Issue**: [#19](https://github.com/robertweisbecker/base-xyz/issues/19)
-- **Status**: IN PROGRESS
+- **Status**: TODO
 
 ## Why this matters
 

@@ -10,13 +10,13 @@ plans are not renumbered to fill gaps. The highest allocated identifier is
 
 ## Execution order & status
 
-| Plan                                          | Title                                       | Priority | Effort | Depends on                    | Status      |
-| --------------------------------------------- | ------------------------------------------- | -------: | -----: | ----------------------------- | ----------- |
-| [004](./004-form-field-primitives.md)         | Add composable form and field primitives    |       P1 |      L | Completed #22                 | IN PROGRESS |
-| [003](./003-description-list-component.md)    | Add a semantic Description list component   |       P1 |      M | —                             | TODO        |
-| [005](./005-autocomplete-component.md)        | Add a free-form Autocomplete component      |       P2 |      M | 004                           | TODO        |
-| [008](./008-migrate-from-npm-to-pnpm.md)      | Migrate repository workflows to pnpm 11     |       P2 |      M | Completed #34/#47; idle queue | TODO        |
-| [Stepper pagination](./stepper-pagination.md) | Evaluate shared Stepper pagination controls |       P3 |      S | Second consumer               | TODO        |
+| Plan                                          | Title                                       | Priority | Effort | Depends on                    | Status |
+| --------------------------------------------- | ------------------------------------------- | -------: | -----: | ----------------------------- | ------ |
+| [003](./003-description-list-component.md)    | Add a semantic Description list component   |       P1 |      M | —                             | TODO   |
+| [004](./004-form-field-primitives.md)         | Add composable form and field primitives    |       P1 |      L | Completed #22                 | TODO   |
+| [005](./005-autocomplete-component.md)        | Add a free-form Autocomplete component      |       P2 |      M | 004                           | TODO   |
+| [008](./008-migrate-from-npm-to-pnpm.md)      | Migrate repository workflows to pnpm 11     |       P2 |      M | Completed #34/#47; idle queue | TODO   |
+| [Stepper pagination](./stepper-pagination.md) | Evaluate shared Stepper pagination controls |       P3 |      S | Second consumer               | TODO   |
 
 Status values: TODO | IN PROGRESS | DONE | BLOCKED (with one-line reason) |
 REJECTED (with one-line rationale — finding fixed independently or approach
@@ -55,9 +55,9 @@ are intentionally not reconstructed here.
   other component plans, so parallel executors must reconcile those files
   without dropping public exports or plan rows.
 - Issue #22 and PR #36 established independent Checkbox and Radio visual
-  ownership, satisfying Plan 004's prerequisite. Plan 004 is now IN PROGRESS
-  for issue #19 and shares `src/components/index.ts` and this index with Plan
-  003, so executors must preserve all public exports and plan rows.
+  ownership, satisfying Plan 004's prerequisite. Plan 004 remains TODO and
+  shares `src/components/index.ts` and this index with Plan 003, so executors
+  must preserve all public exports and plan rows.
 - `005-autocomplete-component.md` requires Plan 004's public `Field` and `Label`
   wrappers. Execute them serially: they also share `src/components/index.ts`,
   ADR 0011, `src/styles/README.md`, and this index.
