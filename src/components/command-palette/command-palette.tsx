@@ -19,6 +19,7 @@ import {
 	useContext,
 	useEffect,
 	useEffectEvent,
+	useMemo,
 	useState,
 	type ComponentProps,
 	type KeyboardEvent,
@@ -193,11 +194,10 @@ export function Root<ItemValue = unknown>({
 
 	useCommandPaletteShortcut(shortcut, inline, () => setOpen(!actualOpen));
 
-	const contextValue: CommandPaletteContextValue = {
-		closeOnSelect,
-		inline,
-		setOpen,
-	};
+	const contextValue = useMemo(
+		() => ({ closeOnSelect, inline, setOpen }),
+		[closeOnSelect, inline, setOpen],
+	);
 	const panelSx = stylex.props(
 		commandPaletteParts.panel,
 		inline && commandPaletteParts.inlinePanel,

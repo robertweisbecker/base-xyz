@@ -1,5 +1,5 @@
 import * as stylex from "@stylexjs/stylex";
-import { createContext, type ComponentProps, useContext, useId } from "react";
+import { createContext, type ComponentProps, useContext, useId, useMemo } from "react";
 import { Card } from "@/components";
 import { tokens } from "@/theme/tokens.stylex";
 import { mergeStyle, type BaseStyleProps } from "@/styles/props/base";
@@ -40,9 +40,10 @@ export function Root({
 	...props
 }: AgentActionApprovalRootProps) {
 	const titleId = useId();
+	const contextValue = useMemo(() => ({ titleId }), [titleId]);
 
 	return (
-		<AgentActionApprovalContext.Provider value={{ titleId }}>
+		<AgentActionApprovalContext.Provider value={contextValue}>
 			<Card.Root
 				aria-labelledby={ariaLabelledBy ?? titleId}
 				role={role}

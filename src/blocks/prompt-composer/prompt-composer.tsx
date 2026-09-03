@@ -10,6 +10,8 @@ import {
 	type KeyboardEvent,
 	type RefObject,
 	useContext,
+	useCallback,
+	useMemo,
 	useRef,
 	useState,
 } from "react";
@@ -83,32 +85,38 @@ export function Root({
 	const currentValue = isControlled ? value : uncontrolledValue;
 	const canSubmit = currentValue.trim().length > 0 && !disabled && !submitting;
 
-	function updateValue(nextValue: string) {
-		if (!isControlled) setUncontrolledValue(nextValue);
-		onValueChange?.(nextValue);
-	}
+	const updateValue = useCallback(
+		(nextValue: string) => {
+			if (!isControlled) setUncontrolledValue(nextValue);
+			onValueChange?.(nextValue);
+		},
+		[isControlled, onValueChange],
+	);
 
-	function submit() {
+	const submit = useCallback(() => {
 		const prompt = currentValue.trim();
 		if (!prompt || disabled || submitting) return;
 		onSubmit(prompt);
 		if (clearOnSubmit) updateValue("");
-	}
+	}, [clearOnSubmit, currentValue, disabled, onSubmit, submitting, updateValue]);
+
+	const contextValue = useMemo(
+		() => ({
+			canSubmit,
+			disabled,
+			submitting,
+			surfaceRef,
+			value: currentValue,
+			updateValue,
+			submit,
+		}),
+		[canSubmit, currentValue, disabled, submit, submitting, updateValue],
+	);
 
 	const sx = stylex.props(parts.root, xstyle);
 
 	return (
-		<PromptComposerContext.Provider
-			value={{
-				canSubmit,
-				disabled,
-				submitting,
-				surfaceRef,
-				value: currentValue,
-				updateValue,
-				submit,
-			}}
-		>
+		<PromptComposerContext.Provider value={contextValue}>
 			<Form
 				className={attrJoin(sx.className, className)}
 				onFormSubmit={submit}

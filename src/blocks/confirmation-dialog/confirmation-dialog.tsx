@@ -8,6 +8,8 @@ import {
 	useContext,
 	useEffect,
 	useRef,
+	useCallback,
+	useMemo,
 	useState,
 } from "react";
 import { Box, Button, Dialog, ScrollArea, Toast } from "@/components";
@@ -146,7 +148,7 @@ function ConfirmationDialogRoot({
 	failureToast,
 	...rootProps
 }: ConfirmationDialogRootProps) {
-	const toastManager = Toast.useToastManager();
+	const { add: addToast } = Toast.useToastManager();
 	const internalActionsRef = useRef<ConfirmationDialogActions | null>(null);
 	const resolvedActionsRef = actionsRef ?? internalActionsRef;
 	const pendingRef = useRef(false);
@@ -160,7 +162,7 @@ function ConfirmationDialogRoot({
 		};
 	}, []);
 
-	async function confirm() {
+	const confirm = useCallback(async () => {
 		if (pendingRef.current) return;
 
 		pendingRef.current = true;
@@ -169,11 +171,11 @@ function ConfirmationDialogRoot({
 		try {
 			await onConfirm?.();
 			if (!mountedRef.current) return;
-			if (successToast) toastManager.add(successToast);
+			if (successToast) addToast(successToast);
 			resolvedActionsRef.current?.close();
 		} catch (error) {
 			if (!mountedRef.current) return;
-			if (failureToast) toastManager.add(failureToast);
+			if (failureToast) addToast(failureToast);
 			onConfirmError?.(error);
 		} finally {
 			pendingRef.current = false;
@@ -181,10 +183,11 @@ function ConfirmationDialogRoot({
 				setPending(false);
 			}
 		}
-	}
+	}, [addToast, failureToast, onConfirm, onConfirmError, resolvedActionsRef, successToast]);
+	const contextValue = useMemo(() => ({ confirm, pending }), [confirm, pending]);
 
 	return (
-		<ConfirmationDialogContext.Provider value={{ confirm, pending }}>
+		<ConfirmationDialogContext.Provider value={contextValue}>
 			<Dialog.Root {...rootProps} actionsRef={resolvedActionsRef} modal disablePointerDismissal>
 				{trigger ? <Dialog.Trigger render={trigger} /> : null}
 				<Dialog.Popup

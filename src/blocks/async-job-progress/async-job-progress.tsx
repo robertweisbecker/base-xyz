@@ -1,7 +1,14 @@
 import { ClockIcon } from "@phosphor-icons/react/dist/csr/Clock";
 import { WarningIcon } from "@phosphor-icons/react/dist/csr/Warning";
 import * as stylex from "@stylexjs/stylex";
-import { createContext, type ComponentProps, createElement, useContext, useId } from "react";
+import {
+	createContext,
+	type ComponentProps,
+	createElement,
+	useContext,
+	useId,
+	useMemo,
+} from "react";
 import {
 	Badge,
 	type BadgeHue,
@@ -99,10 +106,14 @@ export function Root({
 }: AsyncJobProgressRootProps) {
 	const titleId = useId();
 	const progressValue = getProgressValue(status, value);
+	const contextValue = useMemo(
+		() => ({ status, titleId, value: progressValue, valueText }),
+		[progressValue, status, titleId, valueText],
+	);
 	const sx = stylex.props(parts.root, xstyle);
 
 	return (
-		<AsyncJobProgressContext.Provider value={{ status, titleId, value: progressValue, valueText }}>
+		<AsyncJobProgressContext.Provider value={contextValue}>
 			<section
 				className={attrJoin(sx.className, className)}
 				style={mergeStyle(sx.style, style)}

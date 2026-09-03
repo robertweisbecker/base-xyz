@@ -8,6 +8,7 @@ import * as stylex from "@stylexjs/stylex";
 import {
 	createContext,
 	useContext,
+	useMemo,
 	type ComponentProps,
 	type ReactNode,
 	type RefObject,
@@ -83,6 +84,10 @@ export function Root<Value, Multiple extends ComboboxMultipleMode = false>({
 }: ComboboxRootProps<Value, Multiple>) {
 	const { marginStyles, rest } = extractMarginProps(props);
 	const sx = stylex.props(fieldStyles.root, marginStyles, xstyle);
+	const contextValue = useMemo(
+		() => ({ multiple: multiple === true, readOnly, size }),
+		[multiple, readOnly, size],
+	);
 
 	return (
 		<Field.Root
@@ -91,7 +96,7 @@ export function Root<Value, Multiple extends ComboboxMultipleMode = false>({
 			className={attrJoin(sx.className, className)}
 			style={mergeStyle(sx.style, style)}
 		>
-			<ComboboxContext.Provider value={{ multiple: multiple === true, readOnly, size }}>
+			<ComboboxContext.Provider value={contextValue}>
 				<BaseCombobox.Root disabled={disabled} multiple={multiple} readOnly={readOnly} {...rest}>
 					{children}
 				</BaseCombobox.Root>

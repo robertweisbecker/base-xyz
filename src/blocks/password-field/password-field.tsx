@@ -2,7 +2,14 @@ import { Field } from "@base-ui/react/field";
 import { EyeIcon } from "@phosphor-icons/react/dist/csr/Eye";
 import { EyeClosedIcon } from "@phosphor-icons/react/dist/csr/EyeClosed";
 import * as stylex from "@stylexjs/stylex";
-import { createContext, type ComponentProps, useContext, useState } from "react";
+import {
+	createContext,
+	type ComponentProps,
+	useCallback,
+	useContext,
+	useMemo,
+	useState,
+} from "react";
 import { fieldStyles } from "@/components/field/field.stylex";
 import { InputGroup, Meter as MeterPrimitive, Toggle } from "@/components";
 import type { ToggleIconButtonProps } from "@/components";
@@ -77,31 +84,35 @@ export function Root({
 	const isControlled = visible !== undefined;
 	const currentVisible = isControlled ? visible : uncontrolledVisible;
 
-	function setValue(nextValue: string) {
-		if (!isValueControlled) {
-			setUncontrolledValue(nextValue);
-		}
-		onValueChange?.(nextValue);
-	}
+	const setValue = useCallback(
+		(nextValue: string) => {
+			if (!isValueControlled) {
+				setUncontrolledValue(nextValue);
+			}
+			onValueChange?.(nextValue);
+		},
+		[isValueControlled, onValueChange],
+	);
 
-	function setVisible(nextVisible: boolean) {
-		if (!isControlled) {
-			setUncontrolledVisible(nextVisible);
-		}
-		onVisibleChange?.(nextVisible);
-	}
+	const setVisible = useCallback(
+		(nextVisible: boolean) => {
+			if (!isControlled) {
+				setUncontrolledVisible(nextVisible);
+			}
+			onVisibleChange?.(nextVisible);
+		},
+		[isControlled, onVisibleChange],
+	);
+
+	const contextValue = useMemo(
+		() => ({ value: currentValue, visible: currentVisible, setValue, setVisible }),
+		[currentValue, currentVisible, setValue, setVisible],
+	);
 
 	const rootSx = stylex.props(fieldStyles.root, xstyle);
 
 	return (
-		<PasswordFieldContext.Provider
-			value={{
-				value: currentValue,
-				visible: currentVisible,
-				setValue,
-				setVisible,
-			}}
-		>
+		<PasswordFieldContext.Provider value={contextValue}>
 			<Field.Root
 				className={attrJoin(rootSx.className, className)}
 				style={mergeStyle(rootSx.style, style)}

@@ -20,6 +20,7 @@ import {
 	useContext,
 	useId,
 	useLayoutEffect,
+	useMemo,
 	useRef,
 	useState,
 	type Dispatch,
@@ -170,9 +171,13 @@ export function Root({
 }: MorphingMenuRootProps) {
 	const [closing, setClosing] = useState(false);
 	const [openSubmenuId, setOpenSubmenuId] = useState<string | null>(null);
+	const contextValue = useMemo(
+		() => ({ menuWidth, openSubmenuId, setOpenSubmenuId }),
+		[menuWidth, openSubmenuId],
+	);
 
 	return (
-		<MorphingMenuContext value={{ menuWidth, openSubmenuId, setOpenSubmenuId }}>
+		<MorphingMenuContext value={contextValue}>
 			<BaseMenu.Root
 				defaultOpen={defaultOpen}
 				onOpenChange={(open) => {
@@ -241,6 +246,10 @@ export function Submenu({ children, label, renderRow, rowXstyle }: MorphingMenuS
 	const [open, setOpen] = useState(false);
 	const [closing, setClosing] = useState(false);
 	const [openSubmenuId, setOpenSubmenuId] = useState<string | null>(null);
+	const contextValue = useMemo(
+		() => ({ menuWidth, openSubmenuId, setOpenSubmenuId }),
+		[menuWidth, openSubmenuId],
+	);
 
 	useLayoutEffect(() => {
 		if (open && focusPopupOnOpenRef.current) {
@@ -254,7 +263,7 @@ export function Submenu({ children, label, renderRow, rowXstyle }: MorphingMenuS
 	}, [open]);
 
 	return (
-		<MorphingMenuContext value={{ menuWidth, openSubmenuId, setOpenSubmenuId }}>
+		<MorphingMenuContext value={contextValue}>
 			<BaseMenu.SubmenuRoot
 				actionsRef={actionsRef}
 				onOpenChange={(nextOpen, eventDetails) => {
