@@ -94,7 +94,10 @@ export const Examples: Story = {
 								<InputGroup.Addon>
 									<MagnifyingGlassIcon aria-hidden />
 								</InputGroup.Addon>
-								<InputGroup.Input />
+								<InputGroup.Input
+									aria-label="Search pull requests"
+									placeholder="Search pull requests"
+								/>
 							</InputGroup.Root>
 						</Stack>
 					</Tabs.Root>
