@@ -12,6 +12,7 @@ import { useTextareaAutoResize } from "@/hooks/use-textarea-auto-resize";
 import { attrJoin } from "@/utils/attr-join";
 import { mergeStyle, type BaseStyleProps } from "@/styles/props/base";
 import { extractMarginProps, type MarginProps } from "@/styles/props/spacing.stylex";
+import { Tooltip } from "@/components/tooltip/tooltip";
 
 /** Disabled chrome follows a nested input/textarea, not addon action buttons. */
 const GROUP_HAS_DISABLED = ":has(:is(input, textarea):is([data-disabled], :disabled))";
@@ -207,12 +208,14 @@ export function Actions({
 	);
 
 	return (
-		<div
-			ref={ref}
-			className={attrJoin(sx.className, className)}
-			style={mergeStyle(sx.style, style)}
-			{...props}
-		/>
+		<Tooltip.Group>
+			<div
+				ref={ref}
+				className={attrJoin(sx.className, className)}
+				style={mergeStyle(sx.style, style)}
+				{...props}
+			/>
+		</Tooltip.Group>
 	);
 }
 

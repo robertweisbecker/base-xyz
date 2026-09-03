@@ -145,6 +145,7 @@ export function Root({
 	const localScrollRef = useRef<HTMLDivElement>(null);
 	const {
 		presentation,
+		popoverSide,
 		scrollMode,
 		scrollRef: externalScrollRef,
 	} = useContext(NavListPresentationContext);
@@ -163,28 +164,36 @@ export function Root({
 		console.error("NavList.Root requires aria-label or aria-labelledby.");
 	}
 
+	const navigation = (
+		<nav
+			ref={ref}
+			className={attrJoin(sx.className, className)}
+			style={mergeStyle(sx.style, style)}
+			data-presentation={presentation}
+			data-scroll-mode={scrollMode}
+			data-size={size}
+			{...rest}
+		>
+			<div
+				ref={localScrollRef}
+				{...stylex.props(
+					navListParts.scroller,
+					scrollMode === "external" && navListParts.scrollerExternal,
+				)}
+			>
+				{children}
+			</div>
+		</nav>
+	);
+
 	return (
 		<NavListContext.Provider value={context}>
 			<ScrollContext.Provider value={scrollContext}>
-				<nav
-					ref={ref}
-					className={attrJoin(sx.className, className)}
-					style={mergeStyle(sx.style, style)}
-					data-presentation={presentation}
-					data-scroll-mode={scrollMode}
-					data-size={size}
-					{...rest}
-				>
-					<div
-						ref={localScrollRef}
-						{...stylex.props(
-							navListParts.scroller,
-							scrollMode === "external" && navListParts.scrollerExternal,
-						)}
-					>
-						{children}
-					</div>
-				</nav>
+				{presentation === "icon" ? (
+					<Tooltip.Group positionerProps={{ side: popoverSide }}>{navigation}</Tooltip.Group>
+				) : (
+					navigation
+				)}
 			</ScrollContext.Provider>
 		</NavListContext.Provider>
 	);
@@ -288,7 +297,7 @@ function Row({
 	xstyle,
 }: RowProps) {
 	const navList = useContext(NavListContext);
-	const { presentation, popoverSide } = useContext(NavListPresentationContext);
+	const { presentation } = useContext(NavListPresentationContext);
 	const size = navList?.size ?? "md";
 	const rowModel = resolveRowModel({
 		ariaLabel,
@@ -351,7 +360,6 @@ function Row({
 			asListItem={asListItem}
 			indentLevel={indentLevel}
 			label={label}
-			popoverSide={popoverSide}
 			row={row}
 			rowModel={rowModel}
 			tooltip={tooltip}
@@ -403,7 +411,7 @@ function resolveRowModel({
 		isStatic: !isLink && !isAction,
 		resolvedAriaLabel: isIconMode ? (ariaLabel ?? label) : ariaLabel,
 		resolvedEndSlot: endSlot ?? badge,
-		showTooltip: isIconMode && (tooltip ?? label) !== false,
+		showTooltip: isIconMode && !disclosure && (tooltip ?? label) !== false,
 		visualIcon: icon || startSlot || <FileIcon weight="duotone" />,
 	};
 }
@@ -560,20 +568,15 @@ function RowPresentation({
 	asListItem,
 	indentLevel,
 	label,
-	popoverSide,
 	row,
 	rowModel,
 	tooltip,
 }: Pick<RowProps, "asListItem" | "indentLevel" | "label" | "tooltip"> & {
-	popoverSide: PresentationContextValue["popoverSide"];
 	row: ReactElement;
 	rowModel: ResolvedRowModel;
 }) {
 	const rowWithTooltip = rowModel.showTooltip ? (
-		<Tooltip.Root>
-			<Tooltip.Trigger render={row} />
-			<Tooltip.Popup positionerProps={{ side: popoverSide }}>{tooltip ?? label}</Tooltip.Popup>
-		</Tooltip.Root>
+		<Tooltip.Trigger payload={tooltip ?? label} render={row} />
 	) : (
 		row
 	);

@@ -6,7 +6,7 @@ import { extractMarginProps, type MarginProps } from "@/styles/props/spacing.sty
 import { tokens } from "@/theme/tokens.stylex";
 
 import { Loader } from "@/components/loader/loader";
-import { Tooltip } from "@/components/tooltip/tooltip";
+import { Tooltip, useTooltipGroup } from "@/components/tooltip/tooltip";
 import { attrJoin } from "@/utils/attr-join";
 import { renderButtonSlot } from "./button-slot";
 import {
@@ -102,6 +102,7 @@ export function IconButton({
 	tooltip = label,
 	...props
 }: IconButtonProps) {
+	const inTooltipGroup = useTooltipGroup();
 	const button = (
 		<ButtonRoot
 			{...props}
@@ -114,6 +115,10 @@ export function IconButton({
 
 	if (tooltip === false) {
 		return button;
+	}
+
+	if (inTooltipGroup) {
+		return <Tooltip.Trigger payload={tooltip} render={button} closeOnClick={closeTooltipOnClick} />;
 	}
 
 	return (

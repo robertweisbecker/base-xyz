@@ -38,6 +38,7 @@ import { focusRing } from "@/styles/recipes/focus";
 import { media } from "@/styles/constants.stylex";
 import { tokens } from "@/theme/tokens.stylex";
 import { attrJoin } from "@/utils/attr-join";
+import { Tooltip } from "@/components";
 
 export type InlineEditChangeReason = "edit" | "confirm" | "cancel";
 
@@ -414,12 +415,14 @@ function InlineEditActions({ ref, className, style, xstyle, ...props }: InlineEd
 	if (!context.editing) return null;
 	const sx = stylex.props(inlineEditStyles.actions, xstyle);
 	return (
-		<span
-			ref={ref}
-			{...props}
-			className={attrJoin(sx.className, className)}
-			style={mergeStyle(sx.style, style)}
-		/>
+		<Tooltip.Provider>
+			<span
+				ref={ref}
+				{...props}
+				className={attrJoin(sx.className, className)}
+				style={mergeStyle(sx.style, style)}
+			/>
+		</Tooltip.Provider>
 	);
 }
 

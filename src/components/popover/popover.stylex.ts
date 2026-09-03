@@ -62,6 +62,11 @@ export const popupMotionStyles = stylex.create({
 		width: "var(--popup-width, auto)",
 	},
 	tooltipPopup: {
+		scale: {
+			"[data-ending-style]": 0.9,
+			"[data-starting-style]": 1,
+			default: 1,
+		},
 		transform: "none",
 		transitionProperty: {
 			"[data-instant]": "none",

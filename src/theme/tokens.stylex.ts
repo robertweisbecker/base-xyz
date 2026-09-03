@@ -130,7 +130,7 @@ export const tokens = stylex.defineVars({
 	"--elevated": "light-dark(var(--color-white), var(--color-gray-s3))",
 	"--elevated-2": "color-mix(in srgb, var(--elevated), var(--fg) 5%)",
 	"--overlay": "light-dark(rgb(0 0 0 / 20%), rgb(0 0 0 / 48%))",
-	"--tooltip": "light-dark(var(--color-white), var(--color-gray-c2))",
+	"--tooltip": "light-dark(var(--color-gray-s1), var(--color-gray-c3))",
 
 	"--inset": "color-mix(in srgb, var(--surface), black 5%)",
 	"--surface-subtle": "var(--color-gray-a1)",

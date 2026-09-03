@@ -4,9 +4,9 @@ import { InfoIcon } from "@phosphor-icons/react/dist/csr/Info";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { Stack } from "@/components/layout/layout";
 import { Button, IconButton } from "@/components/button/button";
-import { createTooltipHandle } from "@/components/popup-handles";
 import { Text } from "@/components/text/text";
 import { Tooltip } from "./tooltip";
+import { Code } from "../code";
 
 type PopupSide = "top" | "right" | "bottom" | "left";
 type PopupAlign = "start" | "center" | "end";
@@ -50,9 +50,9 @@ type Story = StoryObj<StoryArgs>;
 
 export const Playground: Story = {
 	render: ({ _side, _align, _closeDelay, _delay, disabled, _showArrow }) => (
-		<Stack align="center" height="320px" justify="center" width="min(640px, calc(100vw - 48px))">
+		<Stack align="center" p={12} justify="center">
 			<Tooltip.Provider>
-				<Tooltip.Root disabled={disabled}>
+				<Tooltip.Root disabled={disabled} open>
 					<Tooltip.Trigger
 						closeDelay={_closeDelay}
 						delay={_delay}
@@ -78,33 +78,34 @@ export const Playground: Story = {
 	),
 };
 
-const popupSides: PopupSide[] = ["top", "right", "bottom", "left"];
+const popupSides: PopupSide[] = ["top", "bottom", "left", "right"];
 
 export const Positioning: Story = {
 	parameters: {
 		controls: { disable: true },
 	},
 	render: () => (
-		<Stack align="center" justify="center" minHeight="320px" width="min(720px, calc(100vw - 48px))">
+		<Stack>
 			<Tooltip.Provider>
-				<Stack align="center" gap={6} orientation="horizontal" justify="center">
+				<Stack align="center" gap={8} orientation="horizontal" p={12}>
 					{popupSides.map((side) => (
-						<Stack key={side} align="center" justify="center" minHeight="5rem" minWidth="5rem">
-							<Tooltip.Root>
-								<Tooltip.Trigger render={<Button size="sm" variant="neutral" />}>
-									{capitalize(side)}
-								</Tooltip.Trigger>
-								<Tooltip.Popup positionerProps={{ side }}>{capitalize(side)} tooltip</Tooltip.Popup>
-							</Tooltip.Root>
-						</Stack>
+						<Tooltip.Root key={side} disableHoverablePopup>
+							<Tooltip.Trigger render={<Button variant="secondary" />}>
+								{capitalize(side)}
+							</Tooltip.Trigger>
+							<Tooltip.Popup positionerProps={{ side }}>{capitalize(side)} tooltip</Tooltip.Popup>
+						</Tooltip.Root>
 					))}
 				</Stack>
 			</Tooltip.Provider>
+			<Text color="muted" size="2">
+				<strong>Note:</strong> <Code>disableHoverablePopup</Code> is enabled to allow moving between
+				tooltips in sequence. The current tooltip will close when moving to the next one.
+			</Text>
 		</Stack>
 	),
 };
 
-const sharedTooltip = createTooltipHandle<string>();
 const tooltipActions = [
 	{ label: "Notifications", copy: "Review notifications", Icon: BellIcon },
 	{ label: "Information", copy: "Read product information", Icon: InfoIcon },
@@ -113,43 +114,30 @@ const tooltipActions = [
 
 export const SharedGroup: Story = {
 	render: ({ _side, _align, _closeDelay, _delay, disabled, _showArrow }) => (
-		<Tooltip.Provider>
+		<Tooltip.Group
+			arrowProps={_showArrow ? {} : undefined}
+			disabled={disabled}
+			positionerProps={{ side: _side, align: _align }}
+			providerProps={{ closeDelay: _closeDelay, delay: _delay }}
+		>
 			<Stack align="center" gap={3}>
 				<Text color="muted" size="1">
 					Move focus or pointer between actions to see content cross-transition.
 				</Text>
 				<Stack gap={2} orientation="horizontal">
 					{tooltipActions.map(({ label, copy, Icon }) => (
-						<Tooltip.Trigger
+						<IconButton
 							key={label}
-							closeDelay={_closeDelay}
-							delay={_delay}
-							handle={sharedTooltip}
-							payload={copy}
-							render={
-								<IconButton
-									icon={<Icon aria-hidden />}
-									label={label}
-									shape="circle"
-									tooltip={false}
-									variant="ghost"
-								/>
-							}
+							icon={<Icon aria-hidden />}
+							label={label}
+							shape="circle"
+							tooltip={copy}
+							variant="ghost"
 						/>
 					))}
 				</Stack>
-				<Tooltip.Root disabled={disabled} handle={sharedTooltip}>
-					{({ payload }) => (
-						<Tooltip.Popup
-							arrowProps={_showArrow ? {} : undefined}
-							positionerProps={{ side: _side, align: _align }}
-						>
-							<Tooltip.Viewport>{payload}</Tooltip.Viewport>
-						</Tooltip.Popup>
-					)}
-				</Tooltip.Root>
 			</Stack>
-		</Tooltip.Provider>
+		</Tooltip.Group>
 	),
 };
 
