@@ -8,7 +8,7 @@ starting, honor its STOP conditions, and update its row when done.
 
 | Plan                                               | Title                                       | Priority | Effort | Depends on      | Status        |
 | -------------------------------------------------- | ------------------------------------------- | -------: | -----: | --------------- | ------------- |
-| [006](./006-data-table-row-action-identities.md)   | Stabilize DataTable row-action identity     |       P1 |      S | —               | TODO          |
+| [006](./006-data-table-row-action-identities.md)   | Stabilize DataTable row-action identity     |       P1 |      S | —               | IN PROGRESS   |
 | [007](./007-decompose-data-table-orchestration.md) | Decompose DataTable orchestration           |       P1 |      M | 006 / Issue #24 | BLOCKED (#24) |
 | [003](./003-description-list-component.md)         | Add a semantic Description list component   |       P1 |      M | —               | TODO          |
 | [004](./004-form-field-primitives.md)              | Add composable form and field primitives    |       P1 |      L | Issue #22       | BLOCKED (#22) |
