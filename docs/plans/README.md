@@ -6,12 +6,14 @@ starting, honor its STOP conditions, and update its row when done.
 
 ## Execution order & status
 
-| Plan                                          | Title                                       | Priority | Effort | Depends on      | Status        |
-| --------------------------------------------- | ------------------------------------------- | -------: | -----: | --------------- | ------------- |
-| [003](./003-description-list-component.md)    | Add a semantic Description list component   |       P1 |      M | —               | TODO          |
-| [004](./004-form-field-primitives.md)         | Add composable form and field primitives    |       P1 |      L | Issue #22       | BLOCKED (#22) |
-| [005](./005-autocomplete-component.md)        | Add a free-form Autocomplete component      |       P2 |      M | 004             | TODO          |
-| [Stepper pagination](./stepper-pagination.md) | Evaluate shared Stepper pagination controls |       P3 |      S | Second consumer | TODO          |
+| Plan                                               | Title                                       | Priority | Effort | Depends on      | Status        |
+| -------------------------------------------------- | ------------------------------------------- | -------: | -----: | --------------- | ------------- |
+| [006](./006-data-table-row-action-identities.md)   | Stabilize DataTable row-action identity     |       P1 |      S | —               | TODO          |
+| [007](./007-decompose-data-table-orchestration.md) | Decompose DataTable orchestration           |       P1 |      M | 006 / Issue #24 | BLOCKED (#24) |
+| [003](./003-description-list-component.md)         | Add a semantic Description list component   |       P1 |      M | —               | TODO          |
+| [004](./004-form-field-primitives.md)              | Add composable form and field primitives    |       P1 |      L | Issue #22       | BLOCKED (#22) |
+| [005](./005-autocomplete-component.md)             | Add a free-form Autocomplete component      |       P2 |      M | 004             | TODO          |
+| [Stepper pagination](./stepper-pagination.md)      | Evaluate shared Stepper pagination controls |       P3 |      S | Second consumer | TODO          |
 
 Status values: TODO | IN PROGRESS | DONE | BLOCKED (with one-line reason) |
 REJECTED (with one-line rationale — finding fixed independently or approach
@@ -33,6 +35,14 @@ The `.scratch/` archive is ignored and local to the checkout; never force-add it
 
 ## Dependency notes
 
+- `006-data-table-row-action-identities.md` establishes a stable public action
+  identity and regression fixture before DataTable internals move. It is
+  independent of the other active plans.
+- `007-decompose-data-table-orchestration.md` starts only after Plan 006 / issue
+  #24 lands. Keeping these serial avoids two agents changing the same DataTable
+  owner and ensures the private row-action module carries the corrected identity
+  contract. Issue #26 remains blocked rather than appearing in the ready queue
+  prematurely.
 - `003-description-list-component.md` is independent. It shares
   `src/components/index.ts`, `src/app/gallery-page.tsx`, and this index with
   other component plans, so parallel executors must reconcile those files
