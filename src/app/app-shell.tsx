@@ -3,7 +3,7 @@ import { MoonIcon } from "@phosphor-icons/react/dist/csr/Moon";
 import { StairsIcon } from "@phosphor-icons/react/dist/csr/Stairs";
 import { SunIcon } from "@phosphor-icons/react/dist/csr/Sun";
 import * as stylex from "@stylexjs/stylex";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { IconButton, Select, Separator } from "@/components";
 import { textStyles } from "@/components/text/text.stylex";
 import { media, zIndex } from "@/styles/constants.stylex";
@@ -29,10 +29,27 @@ const themeBrandItems: { label: string; value: ThemeName }[] = [
 export function AppShell() {
 	const navigate = useNavigate();
 	const search = useSearch({ from: "__root__" });
-	const preferredMode = getStoredThemeMode();
-	const preferredTheme = getStoredThemeBrand();
-	const mode = search.mode ?? preferredMode;
-	const theme = search.theme ?? preferredTheme;
+	const [preferences, setPreferences] = useState(() => ({
+		mode: search.mode ?? getStoredThemeMode(),
+		sourceMode: search.mode,
+		sourceTheme: search.theme,
+		theme: search.theme ?? getStoredThemeBrand(),
+	}));
+	let currentPreferences = preferences;
+
+	// Retain new URL preferences before children commit, without a state-setting effect.
+	if (preferences.sourceMode !== search.mode || preferences.sourceTheme !== search.theme) {
+		currentPreferences = {
+			mode: search.mode ?? preferences.mode,
+			sourceMode: search.mode,
+			sourceTheme: search.theme,
+			theme: search.theme ?? preferences.theme,
+		};
+		setPreferences(currentPreferences);
+	}
+
+	const mode = search.mode ?? currentPreferences.mode;
+	const theme = search.theme ?? currentPreferences.theme;
 
 	useEffect(() => {
 		setStoredThemeMode(mode);
@@ -58,11 +75,13 @@ export function AppShell() {
 	}
 
 	const handleModeChange = (nextMode: ThemeMode) => {
+		setPreferences((current) => ({ ...current, mode: nextMode }));
 		setStoredThemeMode(nextMode);
 		updateThemeSearch({ mode: nextMode });
 	};
 
 	const handleThemeChange = (nextTheme: ThemeName) => {
+		setPreferences((current) => ({ ...current, theme: nextTheme }));
 		setStoredThemeBrand(nextTheme);
 		updateThemeSearch({ theme: nextTheme });
 	};

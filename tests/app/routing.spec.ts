@@ -143,15 +143,23 @@ test("uses the latest explicit theme when history returns to a queryless route",
 });
 
 test("uses persisted explicit preferences on direct queryless navigation", async ({ page }) => {
-	await page.goto("/experiments?theme=mp&mode=dark");
+	await page.goto("/experiments?theme=mp&mode=system");
 	await expect(page.locator("html")).toHaveAttribute("data-theme", "mp");
-	await expect(page.locator("html")).toHaveAttribute("data-mode", "dark");
+	await expect(page.locator("html")).toHaveAttribute("data-mode", "system");
 
 	await page.goto("/experiments");
 	await expect(page.locator("html")).toHaveAttribute("data-theme", "mp");
-	await expect(page.locator("html")).toHaveAttribute("data-mode", "dark");
+	await expect(page.locator("html")).toHaveAttribute("data-mode", "system");
 
 	await page.reload();
 	await expect(page.locator("html")).toHaveAttribute("data-theme", "mp");
-	await expect(page.locator("html")).toHaveAttribute("data-mode", "dark");
+	await expect(page.locator("html")).toHaveAttribute("data-mode", "system");
+
+	await page.getByTestId("theme-trigger").click();
+	await page.getByTestId("theme-option-default").click();
+	await expect(page).toHaveURL(/\/experiments$/);
+	await expect(page.locator("html")).toHaveAttribute("data-theme", "default");
+
+	await page.reload();
+	await expect(page.locator("html")).toHaveAttribute("data-theme", "default");
 });
