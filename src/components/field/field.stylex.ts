@@ -151,24 +151,6 @@ export const fieldStyles = {
 	inputDefault: parts.inputDefault,
 } as const;
 
-/** Shared row/column layout for CheckboxGroup and RadioGroup. */
-export const fieldChoiceGroupStyles = stylex.create({
-	root: {
-		alignItems: "stretch",
-		columnGap: tokens["--space-3"],
-		display: "flex",
-		flexDirection: "column",
-		flexWrap: "nowrap",
-		rowGap: tokens["--space-3"],
-	},
-	inline: {
-		alignItems: "start",
-		columnGap: tokens["--space-6"],
-		flexDirection: "row",
-		flexWrap: "wrap",
-	},
-});
-
 export const fieldControlSizes = stylex.create({
 	sm: {
 		borderRadius: tokens["--radius-md"],

@@ -14,11 +14,11 @@ import { Icon } from "@/components/icons";
 import {
 	checkboxControlSizeStyles,
 	checkboxDescriptionStyles,
-	checkboxGroupStyles,
 	checkboxLabelStyles,
 	checkboxStyles,
 	type CheckboxSize,
 } from "./checkbox.stylex";
+import { choiceGroupStyles } from "../choice/choice.stylex";
 
 export type { CheckboxSize } from "./checkbox.stylex";
 
@@ -230,7 +230,7 @@ export function CheckboxGroup({
 				</p>
 			) : null}
 			<CheckboxGroupFieldContext.Provider value={groupValue}>
-				<div {...stylex.props(checkboxGroupStyles.root, inline && checkboxGroupStyles.inline)}>
+				<div {...stylex.props(choiceGroupStyles.root, inline && choiceGroupStyles.inline)}>
 					{children}
 				</div>
 			</CheckboxGroupFieldContext.Provider>

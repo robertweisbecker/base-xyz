@@ -6,13 +6,14 @@ import { tokens } from "@/theme/tokens.stylex";
 
 export type RadioSize = "sm" | "md";
 
-/** Marker for Radio labels so their interaction styles remain component-owned. */
-export const radioLabelMarker = stylex.defineMarker();
-
-const ENABLED_HOVER = ":hover:not([data-disabled],[data-readonly])";
 const ENABLED_ACTIVE = ":active:not([data-disabled],[data-readonly])";
+const UNSELECTED_HOVER = ":hover:not([data-disabled],[data-readonly]):not(:has([data-checked]))";
+const UNSELECTED_ACTIVE = ":active:not([data-disabled],[data-readonly]):not(:has([data-checked]))";
 const ENABLED_SELECTED_HOVER = ":hover:not([data-disabled],[data-readonly]):has([data-checked])";
 const ENABLED_SELECTED_ACTIVE = ":active:not([data-disabled],[data-readonly]):has([data-checked])";
+
+/** Marker for Radio labels so their interaction styles remain component-owned. */
+export const radioLabelMarker = stylex.defineMarker();
 
 export const radioControlSizeStyles = stylex.create({
 	sm: {
@@ -110,10 +111,16 @@ const radioParts = stylex.create({
 			"[data-readonly]": tokens["--border"],
 			default: tokens["--border-input"],
 			// eslint-disable-next-line @stylexjs/valid-styles -- the compiler supports ancestor conditions; the lint rule is stricter than the compiler.
-			[stylex.when.ancestor(ENABLED_HOVER, radioLabelMarker)]: {
+			[stylex.when.ancestor(UNSELECTED_HOVER, radioLabelMarker)]: {
 				[media.canHover]: tokens["--border-input-hover"],
 			},
-			[stylex.when.ancestor(ENABLED_ACTIVE, radioLabelMarker)]: tokens["--bg-primary-highlight"],
+			[stylex.when.ancestor(UNSELECTED_ACTIVE, radioLabelMarker)]: tokens["--bg-primary-highlight"],
+			// eslint-disable-next-line @stylexjs/valid-styles -- the compiler supports ancestor conditions; the lint rule is stricter than the compiler.
+			[stylex.when.ancestor(ENABLED_SELECTED_HOVER, radioLabelMarker)]: {
+				[media.canHover]: tokens["--bg-primary-hover"],
+			},
+			[stylex.when.ancestor(ENABLED_SELECTED_ACTIVE, radioLabelMarker)]:
+				tokens["--bg-primary-hover"],
 		},
 		borderRadius: tokens["--radius-full"],
 		borderStyle: "solid",
@@ -125,10 +132,11 @@ const radioParts = stylex.create({
 			"[data-checked][data-readonly]": tokens["--bg-neutral"],
 			default: tokens["--surface"],
 			// eslint-disable-next-line @stylexjs/valid-styles -- the compiler supports ancestor conditions; the lint rule is stricter than the compiler.
-			[stylex.when.ancestor(ENABLED_HOVER, radioLabelMarker)]: {
+			[stylex.when.ancestor(UNSELECTED_HOVER, radioLabelMarker)]: {
 				[media.canHover]: tokens["--surface-subtle"],
 			},
-			[stylex.when.ancestor(ENABLED_ACTIVE, radioLabelMarker)]: tokens["--surface-subtle-active"],
+			[stylex.when.ancestor(UNSELECTED_ACTIVE, radioLabelMarker)]:
+				tokens["--surface-subtle-active"],
 			// eslint-disable-next-line @stylexjs/valid-styles -- the compiler supports ancestor conditions; the lint rule is stricter than the compiler.
 			[stylex.when.ancestor(ENABLED_SELECTED_HOVER, radioLabelMarker)]: {
 				[media.canHover]: tokens["--bg-primary-hover"],
@@ -201,21 +209,3 @@ export const radioStyles = {
 	description: [textStyles.supporting, radioParts.description],
 	requiredIndicator: radioParts.requiredIndicator,
 } as const;
-
-/** Shared RadioGroup layout, including the optional wrapped inline mode. */
-export const radioGroupStyles = stylex.create({
-	root: {
-		alignItems: "stretch",
-		columnGap: tokens["--space-3"],
-		display: "flex",
-		flexDirection: "column",
-		flexWrap: "nowrap",
-		rowGap: tokens["--space-3"],
-	},
-	inline: {
-		alignItems: "start",
-		columnGap: tokens["--space-6"],
-		flexDirection: "row",
-		flexWrap: "wrap",
-	},
-});

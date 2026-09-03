@@ -13,12 +13,12 @@ import { extractMarginProps, type MarginProps } from "@/styles/props/spacing.sty
 import {
 	radioControlSizeStyles,
 	radioDescriptionStyles,
-	radioGroupStyles,
 	radioIndicatorSizeStyles,
 	radioLabelStyles,
 	radioStyles,
 	type RadioSize,
 } from "./radio.stylex";
+import { choiceGroupStyles } from "../choice/choice.stylex";
 
 export type { RadioSize } from "./radio.stylex";
 
@@ -206,7 +206,7 @@ export function RadioGroup({
 				) : null}
 			</div>
 			<RadioGroupStateContext.Provider value={groupValue}>
-				<div {...stylex.props(radioGroupStyles.root, inline && radioGroupStyles.inline)}>
+				<div {...stylex.props(choiceGroupStyles.root, inline && choiceGroupStyles.inline)}>
 					{children}
 				</div>
 			</RadioGroupStateContext.Provider>
