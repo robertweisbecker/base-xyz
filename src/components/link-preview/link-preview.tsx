@@ -3,6 +3,7 @@ import * as stylex from "@stylexjs/stylex";
 import { type ComponentProps } from "react";
 import { focusRing } from "@/styles/recipes/focus";
 import { mergeStyle, type BaseStyleProps } from "@/styles/props/base";
+import type { MarginProps } from "@/styles/props/spacing.stylex";
 import {
 	popupArrowStyles,
 	popupMotionStyles,
@@ -12,6 +13,7 @@ import {
 import { popupVars } from "@/components/popover/popover-vars.stylex";
 import { tokens } from "@/theme/tokens.stylex";
 import { attrJoin } from "@/utils/attr-join";
+import { Text } from "@/components/text/text";
 
 type StyledProps<T> = Omit<T, "className" | "style" | "xstyle"> &
 	BaseStyleProps & { className?: string };
@@ -86,7 +88,6 @@ export function Popup({
 	...props
 }: LinkPreviewPopupProps) {
 	const { className: sxClassName, style: sxStyle } = stylex.props(
-		linkPreviewParts.panelSurface,
 		linkPreviewParts.popup,
 		popupMotionStyles.anchoredPopup,
 		xstyle,
@@ -95,7 +96,7 @@ export function Popup({
 	return (
 		<BaseLinkPreview.Portal {...portalProps}>
 			{backdropProps ? <Backdrop {...backdropProps} /> : null}
-			<Positioner {...positionerProps}>
+			<Positioner {...positionerProps} alignOffset={positionerProps?.alignOffset ?? -12}>
 				<BaseLinkPreview.Popup
 					ref={ref}
 					className={attrJoin(sxClassName, className)}
@@ -179,42 +180,44 @@ export function Title({ className, style, xstyle, ...props }: StyledProps<Compon
 }
 
 export function Description({
+	color = "muted",
+	size = "1",
 	className,
 	style,
 	xstyle,
 	...props
-}: StyledProps<ComponentProps<"p">>) {
-	const { className: sxClassName, style: sxStyle } = stylex.props(
-		linkPreviewParts.description,
-		xstyle,
-	);
-
+}: Omit<ComponentProps<typeof Text>, "className" | "style" | "xstyle" | keyof MarginProps> &
+	BaseStyleProps & { className?: string }) {
 	return (
-		<p className={attrJoin(sxClassName, className)} style={mergeStyle(sxStyle, style)} {...props} />
+		<Text
+			{...props}
+			size={size}
+			color={color}
+			className={className}
+			style={style}
+			xstyle={xstyle}
+		/>
 	);
 }
 
 export const Root = BaseLinkPreview.Root;
 
 const linkPreviewParts = stylex.create({
-	panelSurface: {
-		[popupVars.background]: tokens["--elevated"],
-		[popupVars.border]: tokens["--border"],
-		[popupVars.foreground]: tokens["--fg"],
-		borderRadius: tokens["--radius-lg"],
-		backgroundColor: popupVars.background,
-		boxShadow: tokens["--shadow-md"],
-		color: popupVars.foreground,
-	},
 	trigger: {
 		borderRadius: tokens["--radius-xxs"],
 		textDecoration: "underline",
 		textUnderlineOffset: "3px",
 	},
 	popup: {
+		[popupVars.background]: tokens["--elevated"],
+		[popupVars.border]: tokens["--border"],
+		[popupVars.foreground]: tokens["--fg"],
+		borderRadius: tokens["--radius-lg"],
 		overflow: "hidden",
-		maxWidth: "calc(100vw - 32px)",
-		width: "320px",
+		backgroundColor: popupVars.background,
+		boxShadow: tokens["--shadow-md"],
+		color: popupVars.foreground,
+		maxWidth: "min(calc(100vw - 32px), 18rem)",
 	},
 	content: {
 		padding: tokens["--space-3"],
@@ -230,10 +233,6 @@ const linkPreviewParts = stylex.create({
 		fontWeight: tokens["--font-weight-semibold"],
 		letterSpacing: tokens["--letter-spacing-2"],
 		lineHeight: tokens["--line-height-2"],
-	},
-	description: {
-		margin: 0,
-		color: tokens["--fg-muted"],
 	},
 });
 

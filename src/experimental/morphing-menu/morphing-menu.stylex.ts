@@ -22,7 +22,7 @@ export const morphingMenuStyles = stylex.create({
 			"linear(0, 0.0534 4%, 0.1757 8%, 0.3248 12%, 0.4744 16%, 0.6097 20%, 0.7238 24%, 0.8149 28%, 0.8841 32%, 0.9343 36%, 0.969 40%, 0.9915 44%, 1.0049 48%, 1.012 52%, 1.0148 56%, 1.015 60%, 1.0136 64%, 1.0115 68%, 1.0092 72%, 1.007 76%, 1.0051 80%, 1.0035 84%, 1.0023 88%, 1.0014 92%, 1.0007 96%, 1.0003)",
 		"--_morph-bloom-open-spring":
 			"linear(0, 0.0461 4%, 0.154 8%, 0.2892 12%, 0.4289 16%, 0.5594 20%, 0.6734 24%, 0.7682 28%, 0.8435 32%, 0.901 36%, 0.9433 40%, 0.9729 44%, 0.9926 48%, 1.0048 52%, 1.0116 56%, 1.0146 60%, 1.0151 64%, 1.0142 68%, 1.0124 72%, 1.0103 76%, 1.0082 80%, 1.0063 84%, 1.0046 88%, 1.0032 92%, 1.0022 96%, 1.0013)",
-		"--_morph-inactive-opacity": "1",
+		"--_morph-inactive-opacity": ".5",
 		"--_morph-lead": "-8ms",
 		"--_morph-menu-padding": tokens["--space-1"],
 		"--_morph-menu-row-height": `calc(${tokens["--size-control-md"]} + ${tokens["--space-1"]})`,
@@ -100,9 +100,9 @@ export const morphingMenuStyles = stylex.create({
 			[media.reducedMotion]: "0s",
 			default: "210ms, 210ms",
 		},
-		transitionProperty: "opacity, filter",
+		transitionProperty: "opacity, filter, border-radius",
 		transitionTimingFunction:
-			"var(--_morph-bloom-content-spring), var(--_morph-bloom-content-spring)",
+			"var(--_morph-bloom-content-spring), var(--_morph-bloom-content-spring), var(--_morph-bloom-close-ease)",
 		zIndex: {
 			"[data-morphing]": zIndex.popup,
 			"[data-popup-open]": zIndex.popup,
@@ -118,10 +118,10 @@ export const morphingMenuStyles = stylex.create({
 		width: tokens["--space-5"],
 	},
 	positioner: {
-		height: "var(--positioner-height)",
 		outline: "0",
-		width: "var(--positioner-width)",
 		zIndex: zIndex.popup,
+		height: "var(--positioner-height)",
+		width: "var(--positioner-width)",
 	},
 	childPositioner: {
 		pointerEvents: "none",
@@ -239,16 +239,17 @@ export const morphingMenuStyles = stylex.create({
 		},
 		transitionDuration: {
 			[media.reducedMotion]: "0s",
+			default: "300ms",
+			// eslint-disable-next-line @stylexjs/valid-styles -- the compiler supports nested media and ancestor conditions.
 			[stylex.when.ancestor("[data-ending-style]", morphingRootPopupMarker)]: {
 				[media.reducedMotion]: "0s",
 				default: "280ms",
 			},
-			default: "300ms",
 			[stylex.when.ancestor("[data-starting-style]", morphingRootPopupMarker)]: "0s",
 		},
 		transitionProperty: "top, width, height, border-radius, box-shadow",
 		transitionTimingFunction: "var(--_morph-bloom-close-ease)",
-		willChange: "top, width, height",
+		willChange: "top, width, height, border-radius, box-shadow",
 		zIndex: 0,
 		height: {
 			default: "var(--_morph-root-menu-height)",
@@ -302,11 +303,12 @@ export const morphingMenuStyles = stylex.create({
 		},
 		transitionDuration: {
 			[media.reducedMotion]: "0s",
+			default: "210ms",
+			// eslint-disable-next-line @stylexjs/valid-styles -- the compiler supports nested media and ancestor conditions.
 			[stylex.when.ancestor("[data-ending-style]", morphingRootPopupMarker)]: {
 				[media.reducedMotion]: "0s",
 				default: "200ms",
 			},
-			default: "210ms",
 			[stylex.when.ancestor("[data-starting-style]", morphingRootPopupMarker)]: "0s",
 		},
 		transitionProperty: "opacity, filter, transform",
@@ -327,6 +329,7 @@ export const morphingMenuStyles = stylex.create({
 		fontSize: "inherit",
 		fontWeight: "inherit",
 		lineHeight: "inherit",
+		opacity: "var(--_morph-inactive-opacity)",
 		userSelect: "none",
 		height: "var(--_morph-menu-row-height)",
 		minHeight: "var(--_morph-menu-row-height)",
@@ -465,11 +468,12 @@ export const morphingMenuStyles = stylex.create({
 		},
 		transitionDuration: {
 			[media.reducedMotion]: "0s",
+			default: "400ms",
+			// eslint-disable-next-line @stylexjs/valid-styles -- the compiler supports nested media and ancestor conditions.
 			[stylex.when.ancestor("[data-ending-style]", morphingChildPopupMarker)]: {
 				[media.reducedMotion]: "0s",
 				default: "320ms",
 			},
-			default: "400ms",
 			[stylex.when.ancestor("[data-starting-style]", morphingChildPopupMarker)]: "0s",
 		},
 		transitionProperty: "height",
@@ -557,11 +561,12 @@ export const morphingMenuStyles = stylex.create({
 		},
 		transitionDuration: {
 			[media.reducedMotion]: "0s",
+			default: "210ms",
+			// eslint-disable-next-line @stylexjs/valid-styles -- the compiler supports nested media and ancestor conditions.
 			[stylex.when.ancestor("[data-ending-style]", morphingChildPopupMarker)]: {
 				[media.reducedMotion]: "0s",
 				default: "150ms",
 			},
-			default: "210ms",
 			[stylex.when.ancestor("[data-starting-style]", morphingChildPopupMarker)]: "0s",
 		},
 		transitionProperty: "opacity, filter",
@@ -600,11 +605,12 @@ export const morphingMenuStyles = stylex.create({
 		},
 		transitionDuration: {
 			[media.reducedMotion]: "0s",
+			default: "400ms, 210ms, 210ms",
+			// eslint-disable-next-line @stylexjs/valid-styles -- the compiler supports nested media and ancestor conditions.
 			[stylex.when.ancestor("[data-ending-style]", morphingChildPopupMarker)]: {
 				[media.reducedMotion]: "0s",
 				default: "320ms, 150ms, 150ms",
 			},
-			default: "400ms, 210ms, 210ms",
 			[stylex.when.ancestor("[data-starting-style]", morphingChildPopupMarker)]: "0s",
 		},
 		transitionProperty: "clip-path, opacity, filter",

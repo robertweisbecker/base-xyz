@@ -403,7 +403,7 @@ const underlineListOrientationStyles = stylex.create({
 
 const underlineIndicatorStyles = stylex.create({
 	base: {
-		borderRadius: 0,
+		borderRadius: tokens["--radius-full"],
 		backgroundColor: tokens["--fill-accent"],
 		boxShadow: "none",
 	},
@@ -478,7 +478,7 @@ const tabOrientationStyles = stylex.create({
 });
 
 const tabsRadiusStyles = stylex.create({
-	sm: { "--_tabs-list-radius": tokens["--radius-sm"] },
+	sm: { "--_tabs-list-radius": tokens["--radius-md"] },
 	md: { "--_tabs-list-radius": tokens["--radius-md"] },
 	lg: { "--_tabs-list-radius": tokens["--radius-lg"] },
 });
@@ -492,18 +492,18 @@ const tabTextSizeStyles = {
 const tabSizeStyles = stylex.create({
 	sm: {
 		paddingInline: tokens["--space-2"],
-		height: tokens["--size-control-sm"],
-		minWidth: tokens["--size-control-sm"],
+		height: `calc(${tokens["--size-control-sm"]} - 2px)`,
+		minWidth: `calc(${tokens["--size-control-sm"]} - 2px)`,
 	},
 	md: {
-		paddingInline: tokens["--space-2"],
-		height: tokens["--size-control-md"],
-		minWidth: tokens["--size-control-md"],
+		paddingInline: tokens["--space-3"],
+		height: `calc(${tokens["--size-control-md"]} - 2px)`,
+		minWidth: `calc(${tokens["--size-control-md"]} - 2px)`,
 	},
 	lg: {
-		paddingInline: tokens["--space-3"],
-		height: tokens["--size-control-lg"],
-		minWidth: tokens["--size-control-lg"],
+		paddingInline: tokens["--space-3-5"],
+		height: `calc(${tokens["--size-control-lg"]} - 2px)`,
+		minWidth: `calc(${tokens["--size-control-lg"]} - 2px)`,
 	},
 });
 

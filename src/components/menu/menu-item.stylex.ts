@@ -82,7 +82,7 @@ export const menuItemStyles = {
 
 /** Selectable-row typography and height aligned with the shared field-control sizes. */
 export const menuItemSizeStyles = {
-	sm: [typescaleStyles["2"], menuItemParts.itemSm],
+	sm: [typescaleStyles["1"], menuItemParts.itemSm],
 	md: [typescaleStyles["2"], menuItemParts.itemMd],
 	lg: [typescaleStyles["3"], menuItemParts.itemLg],
 } as const satisfies Record<MenuItemSize, unknown>;

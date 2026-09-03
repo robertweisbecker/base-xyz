@@ -147,7 +147,6 @@ const switchParts = stylex.create({
 		color: tokens["--fg-muted"],
 	},
 	track: {
-		padding: "calc(var(--_switch-track-height) / 14)",
 		borderColor: {
 			"[data-checked]": "var(--_switch-selected-color)",
 			"[data-checked][data-disabled]": tokens["--border-disabled"],
@@ -177,6 +176,10 @@ const switchParts = stylex.create({
 			default: "default",
 		},
 		display: "flex",
+		paddingBlockEnd: "round(calc(var(--_switch-track-height) / 14), 1px)",
+		paddingBlockStart: "round(calc(var(--_switch-track-height) / 14), 1px)",
+		paddingInlineEnd: "round(calc(var(--_switch-track-height) / 14), 1px)",
+		paddingInlineStart: "round(calc(var(--_switch-track-height) / 14), 1px)",
 		transform: {
 			"[data-disabled]": "scale(1)",
 			"[data-readonly]": "scale(1)",
@@ -204,7 +207,7 @@ const switchParts = stylex.create({
 		flexShrink: 0,
 		justifyContent: "center",
 		transform: {
-			"[data-checked]": "translateX(calc(var(--_switch-track-height) / 2 + 0.25px))",
+			"[data-checked]": "translateX(calc(var(--_switch-track-height) / 2))",
 			default: "translateX(0)",
 		},
 		transitionDuration: tokens["--motion-duration-short"],
@@ -216,7 +219,7 @@ const switchParts = stylex.create({
 
 const sizeVariants = stylex.create({
 	sm: {
-		"--_switch-track-height": tokens["--space-5"],
+		"--_switch-track-height": tokens["--space-4"],
 	},
 	md: {
 		"--_switch-track-height": tokens["--space-6"],

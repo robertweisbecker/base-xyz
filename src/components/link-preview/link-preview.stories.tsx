@@ -1,5 +1,4 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import * as stylex from "@stylexjs/stylex";
 import { Link } from "@/components/link/link";
 import { Box, Stack } from "@/components/layout";
 import { createLinkPreviewHandle } from "@/components/popup-handles";
@@ -54,28 +53,49 @@ function PreviewContent({ title, description }: PreviewPayload) {
 
 export const Playground: Story = {
 	render: ({ _side, _align, _delay, _showArrow }) => (
-		<Box height="360px" xstyle={storyParts.stage} width="min(720px, calc(100vw - 48px))">
-			<Text>
-				Read more about{" "}
-				<LinkPreview.Root>
+		<Box
+			p={10}
+			maxWidth="min(600px, 100vw - 32px)"
+			mx="auto"
+			minHeight="min(600px, 100vh - 32px)"
+			display="flex"
+			orientation="vertical"
+			align="center"
+			justify="center"
+		>
+			<LinkPreview.Root>
+				<Text>
+					Edgar Degas's{" "}
 					<LinkPreview.Trigger
 						delay={_delay}
-						render={<Link href="https://base-ui.com/react/overview/about" external />}
+						render={<Link href="https://www.nga.gov/artworks/164915-riders" external />}
 					>
-						Base UI
+						The Riders
 					</LinkPreview.Trigger>
 					<LinkPreview.Popup
 						arrowProps={_showArrow ? {} : undefined}
 						positionerProps={{ side: _side, align: _align }}
+						style={{ width: "300px" }}
 					>
-						<PreviewContent
-							title="Base UI"
-							description="An unstyled React component library for building accessible interfaces."
+						<img
+							src="https://images.unsplash.com/photo-1766170449400-be0022117c24?q=80&w=2062&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+							alt="The Riders oil on canvas painting"
+							style={{ aspectRatio: "2/1", objectFit: "cover" }}
 						/>
-					</LinkPreview.Popup>
-				</LinkPreview.Root>{" "}
-				and its primitives.
-			</Text>
+						<LinkPreview.Content>
+							<LinkPreview.Title>
+								The Riders{" "}
+								<Text render={<span />} color="muted">
+									∙ c. 1885
+								</Text>
+							</LinkPreview.Title>
+							<LinkPreview.Description>Oil on canvas (28 3/4 × 35 3/4 in.)</LinkPreview.Description>
+						</LinkPreview.Content>
+					</LinkPreview.Popup>{" "}
+					is an Impressionist oil on canvas painting created between 1875 and 1885 that portrays six
+					men on horseback in jockey uniforms lining up on a grassy field.
+				</Text>
+			</LinkPreview.Root>
 		</Box>
 	),
 };
@@ -143,11 +163,3 @@ export const SharedPreviews: Story = {
 		</Stack>
 	),
 };
-
-const storyParts = stylex.create({
-	stage: {
-		alignItems: "center",
-		display: "grid",
-		justifyItems: "center",
-	},
-});

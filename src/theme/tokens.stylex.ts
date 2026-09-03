@@ -13,7 +13,7 @@ export const tokens = stylex.defineVars({
 	"--color-white": "#ffffff",
 	"--color-black": "#000000",
 
-	"--color-white-a1": "oklch(100% 0 0deg / 0.08)",
+	"--color-white-a1": "oklch(100% 0 0deg / 0.06)",
 	"--color-white-a2": "oklch(100% 0 0deg / 0.11)",
 	"--color-white-a3": "oklch(100% 0 0deg / 0.19)",
 	"--color-white-a4": "oklch(100% 0 0deg / 0.30)",
@@ -27,7 +27,7 @@ export const tokens = stylex.defineVars({
 	"--color-black-a5": "oklch(0 0 0 / 0.60)",
 	"--color-black-a6": "oklch(0 0 0 / 0.80)",
 
-	"--color-gray-s1": "light-dark(oklch(98.75% 0 0deg), oklch(20% 0 0deg))",
+	"--color-gray-s1": "light-dark(oklch(98.75% 0 0deg), oklch(18% 0 0deg))",
 	"--color-gray-s2": "light-dark(oklch(97.5% 0 0deg), oklch(21% 0 0deg))",
 	"--color-gray-s3": "light-dark(oklch(96% 0 0deg), oklch(24% 0 0deg))",
 
@@ -66,9 +66,9 @@ export const tokens = stylex.defineVars({
 	// Linear blue: oklch(0.74 0.15 249.88)
 
 	// "--color-accent-p1": "light-dark(hsl(214deg 98% 50%), #0169CC)",
-	"--color-accent-p1": "light-dark(#0078F0, #0091FF)",
-	"--color-accent-p2": "light-dark(#1470f4, #0169CC)",
-	"--color-accent-t1": "light-dark(oklch(53.072% 0.20334 262.925), oklch(69.483% 0.15223 255.815))",
+	"--color-accent-p1": "light-dark(#0078F0, #0169CC)",
+	"--color-accent-p2": "light-dark(#1470f4, oklch(48.072% 0.20334 254.925))",
+	"--color-accent-t1": "light-dark(oklch(48.072% 0.20334 262.925), oklch(69.483% 0.15223 255.815))",
 	"--color-accent-t2": "light-dark(oklch(28.072% 0.09716 262.82), oklch(87.811% 0.0624 249.313))",
 
 	"--color-success-s1": "light-dark(hsl(137 85% 98.5%), oklch(19.814% 0.07179 148.353))",
@@ -213,6 +213,7 @@ export const tokens = stylex.defineVars({
 	"--space-1": `${SPACE_UNIT_REM * 1}rem`,
 	"--space-1-5": `${SPACE_UNIT_REM * 1.5}rem`,
 	"--space-2": `${SPACE_UNIT_REM * 2}rem`,
+	"--space-2-5": `${SPACE_UNIT_REM * 2.5}rem`,
 	"--space-3": `${SPACE_UNIT_REM * 3}rem`,
 	"--space-3-5": `${SPACE_UNIT_REM * 3.5}rem`,
 	"--space-4": `${SPACE_UNIT_REM * 4}rem`,
@@ -264,13 +265,13 @@ export const tokens = stylex.defineVars({
 	"--shadow-color-outer-ring": "light-dark(var(--color-black-a1), var(--color-black-a3))",
 
 	"--shadow-ring-inset":
-		"inset 0 0 0 .5px light-dark(rgb(20 20 24 / 9%), rgb(255 255 255 / 10%)), inset 0 -.5px 0 light-dark(transparent, rgb(255 255 255 / 5%))",
+		"inset 0 0 0 .5px light-dark(rgb(0 0 0 / 16%), rgb(255 255 255 / 10%)), inset 0 -.5px 0 light-dark(transparent, rgb(255 255 255 / 5%))",
 	"--shadow-ring":
 		"inset 0 1px light-dark(transparent, rgb(255 255 255 / 5%)), inset 0 0 0 1px light-dark(transparent, var(--color-gray-a1)), 0 0 0 1px light-dark(var(--color-gray-a1), transparent), 0 0 0 0.5px light-dark(transparent, rgb(0 0 0 / 40%))",
 	"--shadow-inset":
 		"var(--shadow-ring-inset),  0 0 0 .5px var(--shadow-color-outer-ring), inset 0 3px 2px -1.5px var(--shadow-color-1), inset 0 1px 3px 1px var(--shadow-color-2)",
 	"--shadow-xs":
-		"0 2px 2px -1px light-dark(var(--color-black-a1), var(--color-black-a4)), 0 1px var(--color-black-a1), 0 -1px var(--color-white-a3), 0 0 0 1px var(--color-gray-a1)",
+		"0 2px 2px -1px light-dark(var(--color-black-a1), var(--color-black-a4)), 0 1px var(--color-black-a1), 0 -1px var(--color-white-a1), 0 0 0 1px var(--color-gray-a1)",
 	"--shadow-xs-2":
 		"inset 0 1px var(--color-white-a1), inset 0 0 1px 0.5px var(--color-white-a3), 0 1px 0.5px var(--color-black-a1), 0 0 3px -1px var(--shadow-color-2)",
 	"--shadow-sm":

@@ -84,15 +84,7 @@ export function GoalToolbar({
 						<span {...stylex.props(parts.elapsed)}>12m 24s</span>
 						<Toolbar.Group aria-label="Goal actions" {...stylex.props(parts.actions)}>
 							<IconButton
-								icon={<PencilSimpleIcon aria-hidden weight="regular" />}
-								label="Edit goal"
-								render={
-									<Dialog.Trigger render={<Toolbar.Button {...stylex.props(parts.wideAction)} />} />
-								}
-								nativeButton
-								variant="ghost"
-							/>
-							<IconButton
+								size="sm"
 								icon={
 									<span aria-hidden {...stylex.props(iconSwapTransition.slot)}>
 										<span
@@ -101,7 +93,7 @@ export function GoalToolbar({
 												currentActive ? iconSwapTransition.visible : iconSwapTransition.hidden,
 											)}
 										>
-											<PauseCircleIcon aria-hidden weight="duotone" />
+											<PauseCircleIcon aria-hidden weight="fill" />
 										</span>
 										<span
 											{...stylex.props(
@@ -121,6 +113,18 @@ export function GoalToolbar({
 								variant="ghost"
 							/>
 							<IconButton
+								icon={<PencilSimpleIcon aria-hidden weight="duotone" />}
+								label="Edit goal"
+								size="sm"
+								render={
+									<Dialog.Trigger render={<Toolbar.Button {...stylex.props(parts.wideAction)} />} />
+								}
+								nativeButton
+								variant="ghost"
+							/>
+
+							<IconButton
+								size="sm"
 								icon={<TrashIcon aria-hidden weight="regular" />}
 								label="Delete goal"
 								nativeButton
@@ -128,12 +132,11 @@ export function GoalToolbar({
 								variant="ghost"
 							/>
 							<IconButton
+								size="sm"
 								icon={<Collapsible.Icon />}
 								label={detailsOpen ? "Collapse goal details" : "Expand goal details"}
 								nativeButton
-								render={
-									<Collapsible.Trigger render={<Toolbar.Button />} shape="square" size="md" />
-								}
+								render={<Collapsible.Trigger render={<Toolbar.Button />} shape="square" />}
 								variant="ghost"
 							/>
 						</Toolbar.Group>

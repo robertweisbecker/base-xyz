@@ -47,7 +47,7 @@ export function Root({
 	...props
 }: SegmentedControlRootProps) {
 	const { marginStyles, rest } = extractMarginProps(props);
-	const sx = stylex.props(segmentedControlParts.root, rootRadiusStyles[size], marginStyles, xstyle);
+	const sx = stylex.props(segmentedControlParts.root, rootSizeStyles[size], marginStyles, xstyle);
 	const contextValue = useMemo(() => ({ size }), [size]);
 
 	return (
@@ -140,15 +140,18 @@ function renderSlot(slot: ReactNode, role: "start" | "end", size: SegmentedContr
 const segmentedControlParts = stylex.create({
 	root: {
 		margin: 0,
-		padding: tokens["--space-0-5"],
+		padding: 1,
 		borderWidth: 0,
 		cornerShape: "superellipse(1.3)",
 		gap: tokens["--space-0-5"],
-		backgroundColor: tokens["--surface-subtle"],
+		backgroundColor: {
+			"[data-disabled]": "transparent",
+			default: tokens["--inset"],
+		},
 		boxSizing: "border-box",
 		display: "inline-flex",
 		isolation: "isolate",
-		outlineColor: tokens["--border-disabled"],
+		outlineColor: tokens["--border"],
 		outlineOffset: -1,
 		outlineStyle: "solid",
 		outlineWidth: 1,
@@ -169,11 +172,15 @@ const segmentedControlParts = stylex.create({
 				[media.canHover]: tokens["--surface-subtle-hover"],
 			},
 			"[data-checked]": tokens["--elevated"],
+			"[data-checked][data-disabled]": tokens["--bg-disabled"],
 			default: "transparent",
 		},
 		boxShadow: {
 			"[data-checked]": tokens["--shadow-sm"],
+			"[data-checked][data-disabled]": "none",
+			"[data-checked][data-readonly]": "none",
 			"[data-disabled]": "none",
+			"[data-readonly]": "none",
 			default: "none",
 		},
 		boxSizing: "border-box",
@@ -197,10 +204,6 @@ const segmentedControlParts = stylex.create({
 			default: 1,
 		},
 		position: "relative",
-		transform: {
-			[ENABLED_ACTIVE]: "scale(0.98)",
-			default: "scale(1)",
-		},
 		transitionDuration: {
 			default: tokens["--motion-duration-medium"],
 			[media.reducedMotion]: "0ms",
@@ -225,44 +228,41 @@ const segmentedControlParts = stylex.create({
 	},
 });
 
-const rootRadiusStyles = stylex.create({
-	sm: { borderRadius: tokens["--radius-sm"] },
-	md: { borderRadius: tokens["--radius-md"] },
-	lg: { borderRadius: tokens["--radius-lg"] },
+const rootSizeStyles = stylex.create({
+	sm: { borderRadius: tokens["--radius-md"], height: tokens["--size-control-sm"] },
+	md: { borderRadius: tokens["--radius-md"], height: tokens["--size-control-md"] },
+	lg: { borderRadius: tokens["--radius-lg"], height: tokens["--size-control-lg"] },
 });
 
 const itemRadiusStyles = stylex.create({
 	sm: {
-		borderRadius: `calc(${tokens["--radius-sm"]} - ${tokens["--space-0-5"]})`,
+		borderRadius: `calc(${tokens["--radius-md"]} - 1px)`,
 	},
 	md: {
-		borderRadius: `calc(${tokens["--radius-md"]} - ${tokens["--space-0-5"]})`,
+		borderRadius: `calc(${tokens["--radius-md"]} - 1px)`,
 	},
 	lg: {
-		borderRadius: `calc(${tokens["--radius-lg"]} - ${tokens["--space-0-5"]})`,
+		borderRadius: `calc(${tokens["--radius-lg"]} - 1px)`,
 	},
 });
 
 const itemTextSizeStyles = {
 	sm: typescaleStyles["1"],
 	md: typescaleStyles["2"],
-	lg: typescaleStyles["2"],
+	lg: typescaleStyles["3"],
 } as const;
 
 const itemSizeStyles = stylex.create({
 	sm: {
-		paddingInline: tokens["--space-2"],
-		height: tokens["--size-control-sm"],
+		paddingInline: tokens["--space-3"],
 		minWidth: tokens["--size-control-sm"],
 	},
 	md: {
 		paddingInline: tokens["--space-3"],
-		height: tokens["--size-control-md"],
 		minWidth: tokens["--size-control-md"],
 	},
 	lg: {
 		paddingInline: tokens["--space-4"],
-		height: tokens["--size-control-lg"],
 		minWidth: tokens["--size-control-lg"],
 	},
 });

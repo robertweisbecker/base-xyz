@@ -318,7 +318,7 @@ const checkboxParts = stylex.create({
 			default: tokens["--bg-primary"],
 		},
 		"--_checkbox-border": {
-			[ENABLED_ACTIVE]: tokens["--bg-primary-highlight"],
+			[ENABLED_ACTIVE]: tokens["--border-input-hover"],
 			// eslint-disable-next-line @stylexjs/valid-styles -- the compiler supports chained pseudo-class conditions; the lint rule is stricter than the compiler.
 			[ENABLED_HOVER]: {
 				[media.canHover]: tokens["--border-input-hover"],
@@ -345,7 +345,7 @@ const checkboxParts = stylex.create({
 	control: {
 		padding: 2,
 		borderColor: {
-			"[data-checked]": tokens["--fg-accent"],
+			"[data-checked]": tokens["--border"],
 			"[data-checked][data-disabled]": tokens["--border"],
 			"[data-disabled]": tokens["--border-disabled"],
 			"[data-indeterminate]": "var(--_checkbox-bg-checked)",
@@ -377,6 +377,7 @@ const checkboxParts = stylex.create({
 			"[data-readonly]": "scale(1)",
 			default: "scale(var(--_checkbox-press-scale))",
 		},
+		willChange: "transform",
 		"::after": {
 			inset: 0,
 			borderRadius: "calc(var(--_checkbox-radius) - 1px)",
@@ -401,6 +402,7 @@ const checkboxParts = stylex.create({
 			default: `drop-shadow(0 1px 1px ${tokens["--color-black-a3"]})`,
 		},
 		justifyContent: "center",
+		marginInlineStart: 0.5,
 		height: "100%",
 		width: "100%",
 	},
@@ -418,6 +420,7 @@ const checkboxParts = stylex.create({
 		transitionDuration: tokens["--motion-duration-medium"],
 		transitionProperty: "transform, opacity",
 		transitionTimingFunction: tokens["--motion-ease-out"],
+		willChange: "transform, opacity",
 	},
 	description: {
 		margin: 0,

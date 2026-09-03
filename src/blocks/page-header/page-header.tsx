@@ -1,6 +1,6 @@
 import * as stylex from "@stylexjs/stylex";
 import { createElement, type ComponentProps, type ReactNode } from "react";
-import { Box, Heading, Stack, Text } from "@/components";
+import { Box, Heading, Separator, Stack, Text } from "@/components";
 import { mergeStyle, type BaseStyleProps } from "@/styles/props/base";
 import { tokens } from "@/theme/tokens.stylex";
 import { attrJoin } from "@/utils/attr-join";
@@ -52,9 +52,9 @@ export function PageHeader({
 						<Stack gap={1} {...stylex.props(parts.textWrapper)}>
 							<Box {...stylex.props(parts.titleRow)}>
 								{startSlot}
-								<Heading render={titleNode} size="7" />
+								<Heading render={titleNode} size="6" />
 								{titleAddon ? (
-									<Text color="muted" size="6" {...stylex.props(parts.titleAddon)}>
+									<Text color="muted" size="5" {...stylex.props(parts.titleAddon)}>
 										{titleAddon}
 									</Text>
 								) : null}
@@ -71,7 +71,7 @@ export function PageHeader({
 					</Box>
 					{actions ? <Box {...stylex.props(parts.actions)}>{actions}</Box> : null}
 				</Box>
-				{navSlot ? <Box {...stylex.props(parts.navSlot)}>{navSlot}</Box> : null}
+				{navSlot ? <Box {...stylex.props(parts.navSlot)}>{navSlot}</Box> : <Separator />}
 			</Stack>
 		</section>
 	);
@@ -80,9 +80,6 @@ export function PageHeader({
 const parts = stylex.create({
 	root: {
 		paddingBlock: tokens["--space-5"],
-		borderBlockEndColor: tokens["--border"],
-		borderBlockEndStyle: "solid",
-		borderBlockEndWidth: "1px",
 		color: tokens["--fg"],
 		width: "100%",
 	},
@@ -151,6 +148,7 @@ const parts = stylex.create({
 		justifyContent: "flex-end",
 	},
 	navSlot: {
+		flexGrow: 1,
 		minWidth: 0,
 	},
 });

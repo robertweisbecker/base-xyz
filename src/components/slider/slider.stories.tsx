@@ -471,7 +471,7 @@ function ControlledExamples() {
 							icon={<MinusIcon aria-hidden />}
 							label="Decrease zoom"
 							onClick={() => setIncrementValue((value) => Math.max(min, value - step))}
-							size="sm"
+							size="xs"
 							tooltip={false}
 							shape="circle"
 							variant="secondary"
@@ -484,7 +484,7 @@ function ControlledExamples() {
 							icon={<PlusIcon aria-hidden />}
 							label="Increase zoom"
 							onClick={() => setIncrementValue((value) => Math.min(max, value + step))}
-							size="sm"
+							size="xs"
 							tooltip={false}
 							shape="circle"
 							variant="secondary"

@@ -113,19 +113,19 @@ function AlignmentToggles({ variant }: { variant?: ToggleVariant }) {
 	return (
 		<>
 			<Toggle
-				icon={<TextAlignLeftIcon aria-hidden weight="bold" />}
+				icon={<TextAlignLeftIcon aria-hidden />}
 				label="Align left"
 				value="left"
 				variant={variant}
 			/>
 			<Toggle
-				icon={<TextAlignCenterIcon aria-hidden weight="bold" />}
+				icon={<TextAlignCenterIcon aria-hidden />}
 				label="Align center"
 				value="center"
 				variant={variant}
 			/>
 			<Toggle
-				icon={<TextAlignRightIcon aria-hidden weight="bold" />}
+				icon={<TextAlignRightIcon aria-hidden />}
 				label="Align right"
 				value="right"
 				variant={variant}
@@ -144,13 +144,13 @@ function FormattingToggles({ variant }: { variant?: ToggleVariant }) {
 				variant={variant}
 			/>
 			<Toggle
-				icon={<TextItalicIcon aria-hidden weight="bold" />}
+				icon={<TextItalicIcon aria-hidden />}
 				label="Italic"
 				value="italic"
 				variant={variant}
 			/>
 			<Toggle
-				icon={<TextUnderlineIcon aria-hidden weight="bold" />}
+				icon={<TextUnderlineIcon aria-hidden />}
 				label="Underline"
 				value="underline"
 				variant={variant}

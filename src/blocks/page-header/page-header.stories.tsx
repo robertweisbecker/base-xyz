@@ -3,9 +3,10 @@ import { GitForkIcon } from "@phosphor-icons/react/dist/csr/GitFork";
 import { LockIcon } from "@phosphor-icons/react/dist/csr/Lock";
 import { StarIcon } from "@phosphor-icons/react/dist/csr/Star";
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { Avatar, Badge, Breadcrumbs, Button, Separator, Tabs } from "@/components";
+import { Avatar, Badge, Breadcrumbs, Button, InputGroup, Tabs } from "@/components";
 import { Stack } from "@/components/layout/layout";
 import { PageHeader } from "./page-header";
+import { MagnifyingGlassIcon } from "@phosphor-icons/react";
 
 const meta = {
 	title: "Blocks/Page header",
@@ -25,11 +26,7 @@ export const Examples: Story = {
 				title="base-stylex-lab"
 				description="React primitives and workflow blocks composed with Base UI and StyleX."
 				startSlot={
-					<Avatar
-						icon={<GithubLogoIcon aria-hidden weight="fill" size={"inherit"} />}
-						name="GitHub"
-						size={8}
-					/>
+					<Avatar icon={<GithubLogoIcon aria-hidden weight="fill" />} name="GitHub" size={8} />
 				}
 				breadcrumbs={
 					<Breadcrumbs.Root size="sm">
@@ -58,7 +55,7 @@ export const Examples: Story = {
 					</>
 				}
 				navSlot={
-					<Tabs.Root defaultValue="code" size="sm">
+					<Tabs.Root defaultValue="code" variant="underline">
 						<Tabs.List aria-label="Repository sections">
 							<Tabs.Tab value="code">Code</Tabs.Tab>
 							<Tabs.Tab value="issues">Issues</Tabs.Tab>
@@ -68,8 +65,6 @@ export const Examples: Story = {
 					</Tabs.Root>
 				}
 			/>
-
-			<Separator />
 
 			<PageHeader
 				title="Pull requests"
@@ -88,12 +83,20 @@ export const Examples: Story = {
 					</Button>
 				}
 				navSlot={
-					<Tabs.Root defaultValue="open" size="sm">
-						<Tabs.List aria-label="Pull request states">
-							<Tabs.Tab value="open">Open</Tabs.Tab>
-							<Tabs.Tab value="merged">Merged</Tabs.Tab>
-							<Tabs.Tab value="closed">Closed</Tabs.Tab>
-						</Tabs.List>
+					<Tabs.Root defaultValue="open">
+						<Stack orientation="horizontal" gap={2} align="start">
+							<Tabs.List aria-label="Pull request states">
+								<Tabs.Tab value="open">Open</Tabs.Tab>
+								<Tabs.Tab value="merged">Merged</Tabs.Tab>
+								<Tabs.Tab value="closed">Closed</Tabs.Tab>
+							</Tabs.List>
+							<InputGroup.Root>
+								<InputGroup.Addon>
+									<MagnifyingGlassIcon aria-hidden />
+								</InputGroup.Addon>
+								<InputGroup.Input />
+							</InputGroup.Root>
+						</Stack>
 					</Tabs.Root>
 				}
 			/>

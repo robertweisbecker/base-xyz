@@ -8,7 +8,7 @@ import { tokens } from "@/theme/tokens.stylex";
 import { Loader } from "@/components/loader/loader";
 import { Tooltip } from "@/components/tooltip/tooltip";
 import { attrJoin } from "@/utils/attr-join";
-import { renderButtonSlot } from "./button-presentation";
+import { renderButtonSlot } from "./button-slot";
 import {
 	getButtonRootStyleProps,
 	type ButtonShape,

@@ -255,8 +255,8 @@ function InlineEditDemo({
 			/>
 			{showActions ? (
 				<InlineEdit.Actions>
-					<InlineEdit.Confirm label="Save editable value" />
-					<InlineEdit.Cancel label="Cancel editing value" />
+					<InlineEdit.Confirm />
+					<InlineEdit.Cancel />
 				</InlineEdit.Actions>
 			) : null}
 		</InlineEdit.Root>
@@ -301,8 +301,8 @@ function AsyncInlineEditDemo() {
 					onChange={(event) => setDraft(event.target.value)}
 				/>
 				<InlineEdit.Actions>
-					<InlineEdit.Confirm label="Save report name" />
-					<InlineEdit.Cancel label="Cancel editing report name" />
+					<InlineEdit.Confirm />
+					<InlineEdit.Cancel />
 				</InlineEdit.Actions>
 			</InlineEdit.Root>
 			<label>
@@ -367,8 +367,8 @@ function FieldInlineEditDemo() {
 					onChange={(event) => setDraft(event.target.value)}
 				/>
 				<InlineEdit.Actions>
-					<InlineEdit.Confirm label="Save workspace slug" />
-					<InlineEdit.Cancel label="Cancel editing workspace slug" />
+					<InlineEdit.Confirm />
+					<InlineEdit.Cancel />
 				</InlineEdit.Actions>
 			</InlineEdit.Root>
 			<Field.Description {...stylex.props(fieldStyles.description)}>

@@ -1,6 +1,6 @@
 import { Field } from "@base-ui/react/field";
 import { EyeIcon } from "@phosphor-icons/react/dist/csr/Eye";
-import { EyeSlashIcon } from "@phosphor-icons/react/dist/csr/EyeSlash";
+import { EyeClosedIcon } from "@phosphor-icons/react/dist/csr/EyeClosed";
 import * as stylex from "@stylexjs/stylex";
 import { createContext, type ComponentProps, useContext, useState } from "react";
 import { fieldStyles } from "@/components/field/field.stylex";
@@ -164,20 +164,16 @@ export function VisibilityToggle({
 			icon={
 				icon ?? (
 					<span aria-hidden {...stylex.props(iconSwapTransition.slot)}>
-						<EyeIcon
+						<EyeClosedIcon
 							aria-hidden
-							size={"16"}
-							weight="bold"
 							{...stylex.props(
 								iconSwapTransition.icon,
 								visible ? iconSwapTransition.hidden : iconSwapTransition.visible,
 							)}
 						/>
 
-						<EyeSlashIcon
+						<EyeIcon
 							aria-hidden
-							size={"16"}
-							weight="bold"
 							{...stylex.props(
 								iconSwapTransition.icon,
 								iconSwapTransition.to,

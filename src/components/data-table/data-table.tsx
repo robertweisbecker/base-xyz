@@ -489,7 +489,7 @@ function getSortIcon(sorted: false | "asc" | "desc") {
 	if (sorted === "desc") {
 		return <SortDescendingIcon aria-hidden />;
 	}
-	return <ArrowsDownUpIcon aria-hidden />;
+	return <ArrowsDownUpIcon aria-hidden mirrored={true} />;
 }
 
 function getSortLabel(content: ReactNode, sorted: false | "asc" | "desc") {

@@ -1,6 +1,6 @@
 import { useRender } from "@base-ui/react/use-render";
 import type { ReactNode } from "react";
-import { renderButtonSlot } from "@/components/button/button-presentation";
+import { renderButtonSlot } from "@/components/button/button-slot";
 import {
 	getButtonRootStyleProps,
 	type ButtonShape,

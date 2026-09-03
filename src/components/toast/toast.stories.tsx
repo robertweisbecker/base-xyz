@@ -334,11 +334,10 @@ function EditingProgressGauge({ complete = false, value }: { complete?: boolean;
 			fillColor="currentColor"
 			showValue={false}
 			size={16}
-			xstyle={storyStyles.progressGauge}
 			trackColor="color-mix(in srgb, currentColor 25%, transparent)"
 			value={value}
 		>
-			{complete ? <Icon.Checkmark height={10} strokeWidth={3} width={10} /> : null}
+			{complete ? <Icon.Checkmark height={8} strokeWidth={4} width={8} /> : null}
 		</MeterGauge>
 	);
 }
@@ -545,8 +544,5 @@ const storyStyles = stylex.create({
 			default: "repeat(2, minmax(0, 1fr))",
 			"@media (max-width: 900px)": "1fr",
 		},
-	},
-	progressGauge: {
-		color: "inherit",
 	},
 });

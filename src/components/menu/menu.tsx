@@ -231,7 +231,7 @@ export function CheckboxItem({
 			{...props}
 		>
 			<BaseMenu.CheckboxItemIndicator keepMounted {...stylex.props(menuItemStyles.indicator)}>
-				<Icon.Checkmark width="1em" height="1em" strokeWidth={2.5} />
+				<Icon.Checkmark width="1em" height="1lh" strokeWidth={3} />
 			</BaseMenu.CheckboxItemIndicator>
 			{children}
 		</BaseMenu.CheckboxItem>
@@ -554,8 +554,9 @@ const menuParts = stylex.create({
 		alignItems: "center",
 		display: "inline-flex",
 		justifyContent: "center",
-		height: tokens["--space-4"],
-		width: tokens["--space-4"],
+		opacity: 0.72,
+		height: "1lh",
+		width: "1em",
 	},
 	triggerIcon: {
 		alignItems: "center",
@@ -668,9 +669,10 @@ const menuParts = stylex.create({
 		height: "calc(100% - 0.25rem)",
 	},
 	groupLabel: {
-		paddingBlock: tokens["--space-1"],
-		paddingInline: tokens["--space-2"],
 		color: tokens["--fg-subtle"],
+		marginBlockEnd: tokens["--space-1"],
+		marginBlockStart: tokens["--space-2"],
+		paddingInlineStart: tokens["--space-3"],
 	},
 	separator: {
 		marginBlock: tokens["--space-1"],

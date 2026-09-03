@@ -142,7 +142,7 @@ export function Icon({
 			style={mergeStyle(sx.style, style)}
 			{...props}
 		>
-			{children ?? <CaretDownIcon size="1em" weight="regular" />}
+			{children ?? <CaretDownIcon size="1em" weight="bold" />}
 		</span>
 	);
 }

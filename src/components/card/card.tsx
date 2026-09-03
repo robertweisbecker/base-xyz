@@ -192,10 +192,10 @@ const cardVariants = stylex.create({
 		boxShadow: tokens["--shadow-sm"],
 	},
 	outline: {
-		borderColor: tokens["--border"],
+		borderColor: tokens["--border-opaque"],
 		borderStyle: "solid",
 		borderWidth: "1px",
-		backgroundColor: tokens["--surface"],
+		backgroundColor: tokens["--page"],
 		boxShadow: "none",
 	},
 	muted: {

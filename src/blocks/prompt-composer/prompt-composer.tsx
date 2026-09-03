@@ -297,7 +297,7 @@ export function AddTrigger({ children, render, ...props }: PromptComposerAddTrig
 						tooltip={
 							<>
 								Add files and more
-								<Kbd variant="inverse" size="sm" ms={1}>
+								<Kbd size="sm" ms={1}>
 									@
 								</Kbd>
 							</>

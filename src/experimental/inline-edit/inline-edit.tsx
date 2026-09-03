@@ -105,9 +105,9 @@ export type InlineEditActionsProps = Omit<
 		className?: string;
 	};
 
-export type InlineEditConfirmProps = Omit<IconButtonProps, "icon" | "loading" | "shape">;
+export type InlineEditConfirmProps = Omit<IconButtonProps, "icon" | "loading" | "shape" | "label">;
 
-export type InlineEditCancelProps = Omit<IconButtonProps, "icon" | "loading" | "shape">;
+export type InlineEditCancelProps = Omit<IconButtonProps, "icon" | "loading" | "shape" | "label">;
 
 type InlineEditContextValue = {
 	disabled: boolean;
@@ -424,7 +424,6 @@ function InlineEditActions({ ref, className, style, xstyle, ...props }: InlineEd
 }
 
 function InlineEditConfirm({
-	label,
 	onClick,
 	size = "xs",
 	variant = "ghost",
@@ -435,8 +434,8 @@ function InlineEditConfirm({
 		<IconButton
 			{...props}
 			type="button"
-			icon={<Icon.Checkmark strokeWidth={3} />}
-			label={label}
+			icon={<Icon.Checkmark strokeWidth={2} />}
+			label="Save"
 			loading={context.pending}
 			disabled={context.disabled || props.disabled}
 			size={size}
@@ -451,7 +450,6 @@ function InlineEditConfirm({
 }
 
 function InlineEditCancel({
-	label,
 	onClick,
 	size = "xs",
 	variant = "ghost",
@@ -463,7 +461,7 @@ function InlineEditCancel({
 			{...props}
 			type="button"
 			icon={<XIcon aria-hidden weight="bold" />}
-			label={label}
+			label="Cancel"
 			disabled={context.disabled || context.pending || props.disabled}
 			size={size}
 			shape="square"
@@ -532,34 +530,43 @@ const inlineEditStyles = stylex.create({
 		borderRadius: tokens["--radius-sm"],
 		borderStyle: "solid",
 		borderWidth: "1px",
+		marginBlock: `calc((${tokens["--space-0-5"]} + 1px) * -1)`,
 		paddingBlock: tokens["--space-0-5"],
-		paddingInline: tokens["--space-1"],
+		paddingInline: tokens["--space-1-5"],
 		alignItems: "center",
 		backgroundColor: tokens["--surface"],
 		columnGap: tokens["--space-1"],
 		display: "inline-flex",
+		marginInlineStart: `calc((${tokens["--space-1-5"]} + 1px) * -1)`,
+		paddingInlineEnd: `calc(${tokens["--space-0-5"]} + 1px)`,
 	},
 	value: {
 		font: "inherit",
 		margin: 0,
-		padding: 0,
 		borderColor: "transparent",
-		borderRadius: tokens["--radius-xxs"],
+		borderRadius: ".25em",
 		borderStyle: "solid",
 		borderWidth: 0,
+		marginBlock: `calc(${tokens["--space-0-5"]} * -1)`,
+		marginInline: `calc(${tokens["--space-1"]} * -1)`,
+		paddingBlock: tokens["--space-0-5"],
+		paddingInline: tokens["--space-1"],
 		appearance: "none",
 		backgroundColor: "transparent",
 		boxSizing: "border-box",
 		color: "inherit",
 		cursor: {
 			"[data-disabled]": "not-allowed",
-			default: "default",
+			default: "text",
 		},
 		display: "inline",
 		fontVariantNumeric: "inherit",
 		letterSpacing: "inherit",
 		lineHeight: "inherit",
-		opacity: 1,
+		opacity: {
+			"[data-disabled]": 0.5,
+			default: 1,
+		},
 		textAlign: "inherit",
 		textTransform: "inherit",
 		transform: "none",
@@ -577,6 +584,7 @@ const inlineEditStyles = stylex.create({
 		},
 	},
 	input: {
+		fieldSizing: "content",
 		font: "inherit",
 		padding: 0,
 		borderWidth: 0,
@@ -591,7 +599,6 @@ const inlineEditStyles = stylex.create({
 		textAlign: "inherit",
 		textTransform: "inherit",
 		minWidth: "8ch",
-		width: "20ch",
 	},
 	inputIdle: {
 		margin: "-1px",

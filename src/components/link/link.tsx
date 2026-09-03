@@ -76,7 +76,7 @@ const linkColors = stylex.create({
 	accent: {
 		color: {
 			default: tokens["--fg-accent"],
-			":hover": tokens["--bg-primary"],
+			":hover": tokens["--fg-accent-strong"],
 		},
 	},
 	neutral: {

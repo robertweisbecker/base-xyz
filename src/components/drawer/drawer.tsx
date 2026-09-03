@@ -407,7 +407,6 @@ const drawerParts = stylex.create({
 	footer: {
 		gap: tokens["--space-3"],
 		paddingInline: tokens["--space-5"],
-		backgroundColor: tokens["--surface"],
 		paddingBlockStart: tokens["--space-3"],
 		position: "sticky",
 		zIndex: 1,

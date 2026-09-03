@@ -99,7 +99,7 @@ const endSlotOffsets = stylex.create({
 const variantAppearance = stylex.create({
 	elevated: {
 		backgroundColor: tokens["--surface"],
-		boxShadow: tokens["--shadow-xs-2"],
+		boxShadow: tokens["--shadow-xs"],
 	},
 });
 

@@ -11,6 +11,6 @@
 }
 
 ::selection {
-	background-color: var(--focus);
-	color: var(--canvas);
+	background-color: var(--color-gray-a3);
+	color: var(--color-gray-t3);
 }

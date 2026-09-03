@@ -203,6 +203,7 @@ const calloutContentVariantStyles = stylex.create({
 const calloutIconVariantStyles = stylex.create({
 	default: {
 		height: "1lh",
+		width: "1em",
 	},
 	banner: {
 		marginBlockStart: 0,
@@ -236,7 +237,7 @@ const calloutHueStyles = stylex.create({
 		color: tokens["--color-success-t2"],
 	},
 	neutral: {
-		backgroundColor: tokens["--surface-subtle"],
+		backgroundColor: tokens["--color-gray-c2"],
 		color: tokens["--color-gray-t3"],
 	},
 });
