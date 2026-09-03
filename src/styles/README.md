@@ -114,7 +114,7 @@ element roles in a header comment.
 | Modal backdrop, viewport, surface, text | `components/dialog/dialog.stylex.ts`   | Dialog owns modal behavior; alert dialogs and drawers compose it                                                    |
 | Focus rings                             | `focus.ts`                             | `focusRing.inset` on bordered controls, `focusRing.offset` on buttons/links, `focusRing.within` on composite shells |
 | Press / icon-swap feedback              | `transitions.ts`                       | Buttons, toggles, close controls                                                                                    |
-| Checkbox, Radio, and Switch             | **component files**                    | Each control owns its marker, state styles, sizing, and indicator treatment                                         |
+| Checkbox, Radio, and Switch             | **component files**                    | Each family owns its group layout, supporting text, marker, state, sizing, and indicator treatment                  |
 | Text styles                             | `components/text/text.stylex.ts`       | Components, headings, body copy, and specimens                                                                      |
 
 ### Popup composition
@@ -257,6 +257,10 @@ stylex.props(modalChromeStyles.surface, drawerParts.popup);
 - Component-family files hold values shared only by sibling implementations,
   such as stacked and anchored toasts. Single-component values stay in that
   component instead of creating a one-consumer module.
+- Checkbox and Radio are separate control families. Similar group-layout or
+  supporting-text values are not a shared choice-family contract; keep them in
+  their respective component style modules so either family can evolve
+  independently.
 - Use CSS selector bridges only when StyleX cannot express a relationship that
   the component must own. Prefer component-owned slots when the relationship is
   part of the public composition API; Button and Badge size and align their
