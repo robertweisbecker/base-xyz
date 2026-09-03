@@ -3,7 +3,7 @@ import { MoonIcon } from "@phosphor-icons/react/dist/csr/Moon";
 import { StairsIcon } from "@phosphor-icons/react/dist/csr/Stairs";
 import { SunIcon } from "@phosphor-icons/react/dist/csr/Sun";
 import * as stylex from "@stylexjs/stylex";
-import { useLayoutEffect, useState } from "react";
+import { useLayoutEffect, useSyncExternalStore } from "react";
 import { IconButton, Select, Separator } from "@/components";
 import { textStyles } from "@/components/text/text.stylex";
 import { media, zIndex } from "@/styles/constants.stylex";
@@ -29,20 +29,23 @@ const themeBrandItems: { label: string; value: ThemeName }[] = [
 export function AppShell() {
 	const navigate = useNavigate();
 	const search = useSearch({ from: "__root__" });
-	const [preferredMode, setPreferredMode] = useState<ThemeMode>(getStoredThemeMode);
-	const [preferredTheme, setPreferredTheme] = useState<ThemeName>(getStoredThemeBrand);
+	const preferredMode = useSyncExternalStore(
+		themeModeStore.subscribe,
+		themeModeStore.getSnapshot,
+		themeModeStore.getServerSnapshot,
+	);
+	const preferredTheme = useSyncExternalStore(
+		themeBrandStore.subscribe,
+		themeBrandStore.getSnapshot,
+		themeBrandStore.getServerSnapshot,
+	);
 	const mode = search.mode ?? preferredMode;
 	const theme = search.theme ?? preferredTheme;
 
 	useLayoutEffect(() => {
-		if (search.mode) setPreferredMode(search.mode);
-		localStorage.setItem(themeModeStorageKey, mode);
-	}, [mode, search.mode]);
-
-	useLayoutEffect(() => {
-		if (search.theme) setPreferredTheme(search.theme);
-		localStorage.setItem(themeBrandStorageKey, theme);
-	}, [search.theme, theme]);
+		themeModeStore.set(mode);
+		themeBrandStore.set(theme);
+	}, [mode, theme]);
 
 	function updateThemeSearch(nextTheme: ThemeName, nextMode: ThemeMode) {
 		void navigate({
@@ -58,12 +61,12 @@ export function AppShell() {
 	}
 
 	const handleModeChange = (nextMode: ThemeMode) => {
-		setPreferredMode(nextMode);
+		themeModeStore.set(nextMode);
 		updateThemeSearch(theme, nextMode);
 	};
 
 	const handleThemeChange = (nextTheme: ThemeName) => {
-		setPreferredTheme(nextTheme);
+		themeBrandStore.set(nextTheme);
 		updateThemeSearch(nextTheme, mode);
 	};
 
@@ -179,6 +182,52 @@ function getStoredThemeBrand(): ThemeName {
 	if (typeof window === "undefined") return "default";
 	const storedTheme = localStorage.getItem(themeBrandStorageKey);
 	return storedTheme === "default" || storedTheme === "mp" ? storedTheme : "default";
+}
+
+const themePreferenceEvent = "base-stylex-theme-preference-change";
+
+const themeModeStore = createThemePreferenceStore(
+	themeModeStorageKey,
+	getStoredThemeMode,
+	() => "system" as const,
+);
+
+const themeBrandStore = createThemePreferenceStore(
+	themeBrandStorageKey,
+	getStoredThemeBrand,
+	() => "default" as const,
+);
+
+function createThemePreferenceStore<T extends string>(
+	key: string,
+	getSnapshot: () => T,
+	getServerSnapshot: () => T,
+) {
+	return {
+		getServerSnapshot,
+		getSnapshot,
+		set(value: T) {
+			if (typeof window === "undefined" || localStorage.getItem(key) === value) return;
+			localStorage.setItem(key, value);
+			window.dispatchEvent(new CustomEvent(themePreferenceEvent, { detail: key }));
+		},
+		subscribe(onStoreChange: () => void) {
+			if (typeof window === "undefined") return () => {};
+			const handleStorage = (event: StorageEvent) => {
+				if (event.key === key || event.key === null) onStoreChange();
+			};
+			const handlePreferenceChange = (event: Event) => {
+				if (event instanceof CustomEvent && event.detail === key) onStoreChange();
+			};
+
+			window.addEventListener("storage", handleStorage);
+			window.addEventListener(themePreferenceEvent, handlePreferenceChange);
+			return () => {
+				window.removeEventListener("storage", handleStorage);
+				window.removeEventListener(themePreferenceEvent, handlePreferenceChange);
+			};
+		},
+	};
 }
 
 const styles = stylex.create({
