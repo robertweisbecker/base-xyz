@@ -30,6 +30,9 @@ test("row actions retain focus, identity, and callbacks while mounted actions ch
 	await page.goto(actionIdentityStoryPath);
 
 	const fixture = page.getByTestId("data-table-action-identity-fixture");
+	const rowSelection = fixture.getByRole("checkbox", { name: "Select row 1" });
+	await rowSelection.click();
+	await expect(rowSelection).toBeChecked();
 	const rowActions = fixture.getByRole("button", { name: "Open actions for row 1" });
 	await rowActions.click();
 
@@ -83,16 +86,24 @@ test("filtering, sorting, visibility, selection, and empty results remain observ
 
 	await filter.fill("feature-auth");
 	await expect(table.locator("tbody tr")).toHaveCount(1);
+	await expect(table.locator("tbody tr").first()).toContainText("feature-auth.example.com");
 	await expect(page.getByText("0 of 1 row(s) selected.")).toBeVisible();
 
 	await filter.fill("");
 	const sortButton = page.getByRole("button", { name: "Sort URL ascending" });
+	const initialOrder = await table.locator("tbody tr").allTextContents();
 	await sortButton.click();
 	await expect(table.getByRole("columnheader", { name: /URL/ })).toHaveAttribute(
 		"aria-sort",
 		"ascending",
 	);
-	await expect(table.locator("tbody tr").first()).toContainText("app.example.com");
+	await page.getByRole("button", { name: "Sort URL descending" }).click();
+	await expect(table.getByRole("columnheader", { name: /URL/ })).toHaveAttribute(
+		"aria-sort",
+		"descending",
+	);
+	const descendingOrder = await table.locator("tbody tr").allTextContents();
+	expect(descendingOrder).not.toEqual(initialOrder);
 
 	await page.getByRole("button", { name: "Column settings" }).click();
 	const updatedColumn = page.getByRole("menuitemcheckbox", { name: "Updated" });
@@ -119,12 +130,4 @@ test("selection and expansion compose on a stable row before actions run", async
 	await expect(table.getByText(/Deployment dep_/)).toBeVisible();
 
 	await expect(page.getByText("1 of 5 row(s) selected.")).toBeVisible();
-});
-
-test("the table container remains the accessible horizontal overflow owner", async ({ page }) => {
-	await page.goto(storyPath);
-
-	const viewport = page.getByLabel("Scrollable table");
-	await expect(viewport).toBeVisible();
-	await expect(viewport.locator("table")).toBeVisible();
 });

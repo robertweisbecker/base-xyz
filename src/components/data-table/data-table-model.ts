@@ -24,13 +24,13 @@ import type { BaseStyleProps } from "@/styles/props/base";
 import type { MarginProps } from "@/styles/props/spacing.stylex";
 
 const dataTableColumnRole = Symbol("data-table-column-role");
-export type DataTableColumnRole = "selection" | "action";
-export type DataTableColumnMeta = Record<string, unknown> & {
+type DataTableColumnRole = "selection" | "action";
+type DataTableColumnMeta = Record<string, unknown> & {
 	[dataTableColumnRole]?: DataTableColumnRole;
 	numeric?: boolean;
 };
 
-export type DataTableColumnNumeric = {
+type DataTableColumnNumeric = {
 	/** End-aligns header and body cells and applies tabular numbers. */
 	numeric?: boolean;
 };
