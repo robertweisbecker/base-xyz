@@ -51,10 +51,6 @@ export function useScrollFade<ElementType extends HTMLElement = HTMLElement>({
 	const frameRef = useRef<number | null>(null);
 	const axisRef = useRef(axis);
 
-	useIsomorphicLayoutEffect(() => {
-		axisRef.current = axis;
-	}, [axis]);
-
 	const scheduleMeasure = useCallback(() => {
 		if (frameRef.current != null) return;
 		frameRef.current = requestAnimationFrame(() => {
@@ -67,6 +63,11 @@ export function useScrollFade<ElementType extends HTMLElement = HTMLElement>({
 			setOverflowing(hasOverflow(element, axisRef.current));
 		});
 	}, []);
+
+	useIsomorphicLayoutEffect(() => {
+		axisRef.current = axis;
+		scheduleMeasure();
+	}, [axis, scheduleMeasure]);
 
 	useEffect(() => {
 		scheduleMeasure();
