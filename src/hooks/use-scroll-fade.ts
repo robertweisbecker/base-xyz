@@ -1,4 +1,4 @@
-import { type RefCallback, useCallback, useEffect, useRef, useState } from "react";
+import { type RefCallback, useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
 
 export type ScrollFadeAxis = "x" | "y";
 
@@ -25,6 +25,8 @@ const SCROLL_FADE_CLASS = {
 	y: "xyz-scroll-fade-y",
 } satisfies Record<ScrollFadeAxis, string>;
 
+const useIsomorphicLayoutEffect = typeof window === "undefined" ? useEffect : useLayoutEffect;
+
 /** Subpixel layouts can report 1px of false overflow. */
 const OVERFLOW_EPSILON_PX = 1;
 
@@ -48,7 +50,10 @@ export function useScrollFade<ElementType extends HTMLElement = HTMLElement>({
 	const elementRef = useRef<ElementType | null>(null);
 	const frameRef = useRef<number | null>(null);
 	const axisRef = useRef(axis);
-	axisRef.current = axis;
+
+	useIsomorphicLayoutEffect(() => {
+		axisRef.current = axis;
+	}, [axis]);
 
 	const scheduleMeasure = useCallback(() => {
 		if (frameRef.current != null) return;
@@ -59,8 +64,7 @@ export function useScrollFade<ElementType extends HTMLElement = HTMLElement>({
 				setOverflowing(false);
 				return;
 			}
-			const next = hasOverflow(element, axisRef.current);
-			setOverflowing(next);
+			setOverflowing(hasOverflow(element, axisRef.current));
 		});
 	}, []);
 

@@ -41,9 +41,12 @@ export function useTextareaAutoResize({
 	const enabledRef = useRef(enabled);
 	const minRowsRef = useRef(minRows);
 	const maxRowsRef = useRef(maxRows);
-	enabledRef.current = enabled;
-	minRowsRef.current = minRows;
-	maxRowsRef.current = maxRows;
+
+	useIsomorphicLayoutEffect(() => {
+		enabledRef.current = enabled;
+		minRowsRef.current = minRows;
+		maxRowsRef.current = maxRows;
+	}, [enabled, maxRows, minRows]);
 
 	const resize = useCallback(() => {
 		const textarea = textareaRef.current;
