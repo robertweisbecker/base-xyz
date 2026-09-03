@@ -15,6 +15,21 @@ async function computedControlStyle(
 	}, cssProperty);
 }
 
+async function resolvedControlToken(
+	page: Page,
+	role: "checkbox" | "radio",
+	name: string,
+	token: string,
+) {
+	return page.getByRole(role, { name, exact: true }).evaluate((element, tokenName) => {
+		const previousBackground = element.style.backgroundColor;
+		element.style.backgroundColor = `var(${tokenName})`;
+		const value = getComputedStyle(element).backgroundColor;
+		element.style.backgroundColor = previousBackground;
+		return value;
+	}, token);
+}
+
 test("Checkbox label hover and press feedback reaches the control", async ({ page }) => {
 	await page.goto(checkboxStates);
 
@@ -37,6 +52,20 @@ test("Checkbox label hover and press feedback reaches the control", async ({ pag
 		.poll(() => computedControlStyle(page, "checkbox", "Unchecked", "transform"))
 		.not.toBe(restingTransform);
 	await page.mouse.up();
+});
+
+test("Selected Checkbox and indeterminate controls retain the primary hover fill", async ({
+	page,
+}) => {
+	await page.goto(checkboxStates);
+
+	for (const name of ["Checked", "Indeterminate"]) {
+		const primaryHover = await resolvedControlToken(page, "checkbox", name, "--bg-primary-hover");
+		await page.getByText(name, { exact: true }).hover();
+		await expect
+			.poll(() => computedControlStyle(page, "checkbox", name, "backgroundColor"))
+			.toBe(primaryHover);
+	}
 });
 
 test("Checkbox disabled and read-only labels stay visually inert", async ({ page }) => {
@@ -77,6 +106,15 @@ test("Radio label hover and press feedback reaches the control", async ({ page }
 		.poll(() => radio.evaluate((element) => getComputedStyle(element).transform))
 		.not.toBe(restingTransform);
 	await page.mouse.up();
+});
+
+test("Selected Radio retains the primary hover fill", async ({ page }) => {
+	await page.goto(radioStates);
+	const primaryHover = await resolvedControlToken(page, "radio", "Free", "--bg-primary-hover");
+	await page.getByText("Free", { exact: true }).hover();
+	await expect
+		.poll(() => computedControlStyle(page, "radio", "Free", "backgroundColor"))
+		.toBe(primaryHover);
 });
 
 test("Radio disabled and read-only labels stay visually inert", async ({ page }) => {

@@ -11,6 +11,8 @@ export const radioLabelMarker = stylex.defineMarker();
 
 const ENABLED_HOVER = ":hover:not([data-disabled],[data-readonly])";
 const ENABLED_ACTIVE = ":active:not([data-disabled],[data-readonly])";
+const ENABLED_SELECTED_HOVER = ":hover:not([data-disabled],[data-readonly]):has([data-checked])";
+const ENABLED_SELECTED_ACTIVE = ":active:not([data-disabled],[data-readonly]):has([data-checked])";
 
 export const radioControlSizeStyles = stylex.create({
 	sm: {
@@ -127,6 +129,12 @@ const radioParts = stylex.create({
 				[media.canHover]: tokens["--surface-subtle"],
 			},
 			[stylex.when.ancestor(ENABLED_ACTIVE, radioLabelMarker)]: tokens["--surface-subtle-active"],
+			// eslint-disable-next-line @stylexjs/valid-styles -- the compiler supports ancestor conditions; the lint rule is stricter than the compiler.
+			[stylex.when.ancestor(ENABLED_SELECTED_HOVER, radioLabelMarker)]: {
+				[media.canHover]: tokens["--bg-primary-hover"],
+			},
+			[stylex.when.ancestor(ENABLED_SELECTED_ACTIVE, radioLabelMarker)]:
+				tokens["--bg-primary-hover"],
 		},
 		display: "inline-flex",
 		flexShrink: 0,

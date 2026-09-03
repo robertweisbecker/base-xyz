@@ -162,6 +162,7 @@ export const tokens = stylex.defineVars({
 	"--fg-accent-strong": "var(--color-accent-t2)",
 	"--fg-accent-hover": "var(--color-accent-t1)",
 	"--bg-primary": "var(--color-accent-p1)",
+	"--bg-primary-hover": "var(--color-accent-p2)",
 	"--bg-primary-highlight": "var(--color-accent-p2)",
 	"--bg-accent": "var(--color-accent-c1)",
 	"--bg-accent-hover": "var(--color-accent-c2)",

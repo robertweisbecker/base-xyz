@@ -11,6 +11,10 @@ export const checkboxLabelMarker = stylex.defineMarker();
 
 const ENABLED_HOVER = ":hover:not([data-disabled],[data-readonly])";
 const ENABLED_ACTIVE = ":active:not([data-disabled],[data-readonly])";
+const ENABLED_SELECTED_HOVER =
+	":hover:not([data-disabled],[data-readonly]):has([data-checked]:not([data-invalid]), [data-indeterminate]:not([data-invalid]))";
+const ENABLED_SELECTED_ACTIVE =
+	":active:not([data-disabled],[data-readonly]):has([data-checked]:not([data-invalid]), [data-indeterminate]:not([data-invalid]))";
 
 export const checkboxControlSizeStyles = stylex.create({
 	sm: {
@@ -120,6 +124,11 @@ const checkboxParts = stylex.create({
 			},
 			[stylex.when.ancestor(ENABLED_ACTIVE, checkboxLabelMarker)]:
 				tokens["--surface-subtle-active"],
+			// eslint-disable-next-line @stylexjs/valid-styles -- the compiler supports ancestor conditions; the lint rule is stricter than the compiler.
+			[stylex.when.ancestor(ENABLED_SELECTED_HOVER, checkboxLabelMarker)]: {
+				[media.canHover]: tokens["--bg-primary-hover"],
+			},
+			[stylex.when.ancestor(ENABLED_SELECTED_ACTIVE, checkboxLabelMarker)]: tokens["--bg-primary"],
 		},
 		display: "inline-flex",
 		flexShrink: 0,
