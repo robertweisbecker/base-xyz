@@ -148,10 +148,21 @@ test("custom toolbar content renders and reordered filters remain functional", a
 	await page.goto(toolbarCompositionStoryPath);
 
 	const fixture = page.getByTestId("data-table-toolbar-composition-fixture");
-	await fixture.getByTestId("data-table-toolbar-custom-action").click();
+	const customAction = fixture.getByTestId("data-table-toolbar-custom-action");
+	const toolbar = customAction.locator("..");
+	await customAction.click();
 	await expect(fixture.getByRole("status")).toHaveText("Refreshed deployments");
 
 	const environmentFilter = fixture.getByRole("button", { name: "Environment", exact: true });
+	const filterOrder = await toolbar
+		.getByRole("button")
+		.evaluateAll((buttons) =>
+			buttons
+				.map((button) => button.textContent?.trim())
+				.filter((label) => label === "Environment" || label === "Status"),
+		);
+	expect(filterOrder).toEqual(["Environment", "Status"]);
+
 	await environmentFilter.click();
 	await page.getByRole("menuitemcheckbox", { name: "Preview" }).click();
 
