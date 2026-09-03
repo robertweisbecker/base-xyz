@@ -8,6 +8,8 @@ import {
 	useContext,
 	useEffect,
 	useRef,
+	useCallback,
+	useMemo,
 	useState,
 } from "react";
 import { Box, Button, Dialog, ScrollArea, Toast } from "@/components";
@@ -160,7 +162,7 @@ function ConfirmationDialogRoot({
 		};
 	}, []);
 
-	async function confirm() {
+	const confirm = useCallback(async () => {
 		if (pendingRef.current) return;
 
 		pendingRef.current = true;
@@ -181,10 +183,11 @@ function ConfirmationDialogRoot({
 				setPending(false);
 			}
 		}
-	}
+	}, [failureToast, onConfirm, onConfirmError, resolvedActionsRef, successToast, toastManager]);
+	const contextValue = useMemo(() => ({ confirm, pending }), [confirm, pending]);
 
 	return (
-		<ConfirmationDialogContext.Provider value={{ confirm, pending }}>
+		<ConfirmationDialogContext.Provider value={contextValue}>
 			<Dialog.Root {...rootProps} actionsRef={resolvedActionsRef} modal disablePointerDismissal>
 				{trigger ? <Dialog.Trigger render={trigger} /> : null}
 				<Dialog.Popup

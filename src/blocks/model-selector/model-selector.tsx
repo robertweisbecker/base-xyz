@@ -7,6 +7,8 @@ import {
 	type ComponentProps,
 	type ReactNode,
 	useContext,
+	useCallback,
+	useMemo,
 	useRef,
 	useState,
 } from "react";
@@ -98,29 +100,43 @@ export function Root({
 	const normalizedValue = normalizeModelValue(groups, currentValue);
 	const normalizedDefaultValue = normalizeModelValue(groups, defaultValue).value;
 
-	function latchSubmenu() {
+	const latchSubmenu = useCallback(() => {
 		submenuOpen.current = true;
-	}
+	}, []);
 
-	function updateValue(nextValue: ModelSelectorValue, reason: ModelSelectorChangeReason) {
-		const normalizedNextValue = normalizeModelValue(groups, nextValue).value;
-		if (value === undefined) setUncontrolledValue(normalizedNextValue);
-		onValueChange?.(normalizedNextValue, { reason });
-	}
+	const updateValue = useCallback(
+		(nextValue: ModelSelectorValue, reason: ModelSelectorChangeReason) => {
+			const normalizedNextValue = normalizeModelValue(groups, nextValue).value;
+			if (value === undefined) setUncontrolledValue(normalizedNextValue);
+			onValueChange?.(normalizedNextValue, { reason });
+		},
+		[groups, onValueChange, value],
+	);
+	const contextValue = useMemo(
+		() => ({
+			defaultValue: normalizedDefaultValue,
+			effortOptions,
+			groups,
+			latchSubmenu,
+			selectedModel: normalizedValue.model,
+			speedOptions,
+			updateValue,
+			value: normalizedValue.value,
+		}),
+		[
+			effortOptions,
+			groups,
+			latchSubmenu,
+			normalizedDefaultValue,
+			normalizedValue.model,
+			normalizedValue.value,
+			speedOptions,
+			updateValue,
+		],
+	);
 
 	return (
-		<ModelSelectorContext.Provider
-			value={{
-				defaultValue: normalizedDefaultValue,
-				effortOptions,
-				groups,
-				latchSubmenu,
-				selectedModel: normalizedValue.model,
-				speedOptions,
-				updateValue,
-				value: normalizedValue.value,
-			}}
-		>
+		<ModelSelectorContext.Provider value={contextValue}>
 			<Menu.Root
 				{...props}
 				onOpenChange={(open, details) => {

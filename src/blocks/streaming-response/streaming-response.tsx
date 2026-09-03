@@ -64,8 +64,9 @@ export function Root({
 	...props
 }: StreamingResponseRootProps) {
 	const sx = stylex.props(parts.root, xstyle);
+	const contextValue = useMemo(() => ({ elapsedSeconds, status }), [elapsedSeconds, status]);
 	return (
-		<StreamingResponseContext.Provider value={{ elapsedSeconds, status }}>
+		<StreamingResponseContext.Provider value={contextValue}>
 			<article
 				aria-label={ariaLabel}
 				className={attrJoin(sx.className, className)}
