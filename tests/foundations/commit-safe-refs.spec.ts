@@ -50,10 +50,10 @@ test("preserves InlineEdit lifetime modes and latest delayed callbacks", async (
 	await expect(uncontrolled).toHaveAttribute("data-editing", "");
 
 	const controlled = page.getByTestId("inline-controlled-root");
-	await page.getByTestId("inline-replace-callback").click();
 	await controlled.getByRole("button", { name: "Edit controlled value" }).click();
 	await controlled.getByRole("button", { name: "Save" }).click();
 	await expect(controlled).toHaveAttribute("data-pending", "");
+	await page.getByTestId("inline-replace-callback").click();
 	await expect(page.getByTestId("inline-last-callback")).toHaveText("2:confirm", {
 		timeout: 30_000,
 	});
@@ -68,9 +68,14 @@ test("does not settle an unmounted InlineEdit confirmation", async ({ page }) =>
 
 	const controlled = page.getByTestId("inline-controlled-root");
 	await controlled.getByRole("button", { name: "Edit controlled value" }).click();
+	const callbackBeforeConfirm = page.getByTestId("inline-last-callback");
+	await expect(callbackBeforeConfirm).toHaveText("1:edit");
 	await controlled.getByRole("button", { name: "Save" }).click();
 	await expect(controlled).toHaveAttribute("data-pending", "");
 	await page.getByTestId("inline-unmount").click();
 	await expect(controlled).toHaveCount(0);
-	await page.waitForTimeout(250);
+	await expect(page.getByTestId("inline-confirmation-settled")).toHaveText("settled", {
+		timeout: 30_000,
+	});
+	await expect(callbackBeforeConfirm).toHaveText("1:edit");
 });

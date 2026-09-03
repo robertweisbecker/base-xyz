@@ -1,6 +1,5 @@
-/* eslint-disable react/refs -- Verification fixtures intentionally consume imperative hook refs. */
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { StrictMode, useCallback, useState } from "react";
+import { StrictMode, useCallback, useEffect, useRef, useState } from "react";
 import { InlineEdit } from "@/experimental/inline-edit/inline-edit";
 import { useScrollFade, type ScrollFadeAxis } from "@/hooks/use-scroll-fade";
 import { useTextareaAutoResize } from "@/hooks/use-textarea-auto-resize";
@@ -28,7 +27,26 @@ export const Playground: Story = {
 function ScrollFadeFixture() {
 	const [axis, setAxis] = useState<ScrollFadeAxis>("y");
 	const [content, setContent] = useState<"short" | "wide">("short");
-	const scrollFade = useScrollFade({ axis, contentKey: content });
+	const { ref: scrollFadeRef, overflowing: scrollFadeOverflowing } = useScrollFade({
+		axis,
+		contentKey: content,
+	});
+	const targetRef = useRef<HTMLDivElement | null>(null);
+	const setTargetRef = useCallback(
+		(element: HTMLDivElement | null) => {
+			targetRef.current = element;
+			const cleanup = scrollFadeRef(element);
+			return () => {
+				cleanup?.();
+				targetRef.current = null;
+			};
+		},
+		[scrollFadeRef],
+	);
+
+	useEffect(() => {
+		targetRef.current?.setAttribute("data-overflowing", String(scrollFadeOverflowing));
+	}, [scrollFadeOverflowing]);
 
 	return (
 		<section aria-label="Scroll fade verification">
@@ -43,10 +61,10 @@ function ScrollFadeFixture() {
 				Make content wide
 			</button>
 			<div
-				ref={scrollFade.ref}
+				ref={setTargetRef}
 				data-testid="scroll-fade-target"
 				data-axis={axis}
-				data-overflowing={String(scrollFade.overflowing)}
+				data-overflowing="false"
 				style={{ height: "50px", overflow: "auto", width: "100px" }}
 			>
 				<div
@@ -64,7 +82,25 @@ function TextareaFixture() {
 	const [enabled, setEnabled] = useState(false);
 	const [minRows, setMinRows] = useState(1);
 	const [maxRows, setMaxRows] = useState<number | undefined>(undefined);
-	const autoResize = useTextareaAutoResize({ enabled, rows: 1, minRows, maxRows });
+	const { ref: autoResizeRef, resize: autoResize } = useTextareaAutoResize({
+		enabled,
+		rows: 1,
+		minRows,
+		maxRows,
+	});
+	const textareaRef = useRef<HTMLTextAreaElement | null>(null);
+	const resizeTextarea = useCallback(() => autoResize(), [autoResize]);
+	const setTextareaRef = useCallback(
+		(element: HTMLTextAreaElement | null) => {
+			textareaRef.current = element;
+			autoResizeRef(element);
+			return () => {
+				autoResizeRef(null);
+				textareaRef.current = null;
+			};
+		},
+		[autoResizeRef],
+	);
 
 	return (
 		<section aria-label="Textarea auto-resize verification">
@@ -89,10 +125,10 @@ function TextareaFixture() {
 				Disable resizing
 			</button>
 			<textarea
-				ref={autoResize.ref}
+				ref={setTextareaRef}
 				data-testid="textarea-target"
 				defaultValue="First line"
-				onChange={autoResize.resize}
+				onChange={resizeTextarea}
 				rows={1}
 			/>
 		</section>
@@ -106,6 +142,7 @@ function InlineEditFixture() {
 	const [callbackVersion, setCallbackVersion] = useState(1);
 	const [lastCallback, setLastCallback] = useState("none");
 	const [showControlled, setShowControlled] = useState(true);
+	const [confirmationSettled, setConfirmationSettled] = useState(false);
 
 	const onEditingChange = useCallback(
 		(editing: boolean, details: { reason: string }) => {
@@ -141,6 +178,9 @@ function InlineEditFixture() {
 				Unmount controlled editor
 			</button>
 			<div data-testid="inline-last-callback">{lastCallback}</div>
+			<div data-testid="inline-confirmation-settled" data-settled={confirmationSettled}>
+				{confirmationSettled ? "settled" : "pending"}
+			</div>
 			<div data-testid="inline-uncontrolled-editor">
 				<InlineEdit.Root
 					data-testid="inline-uncontrolled-root"
@@ -160,7 +200,14 @@ function InlineEditFixture() {
 							setLastCallback(`${callbackVersion}:${editing ? "edit" : details.reason}`);
 							setControlledEditing(editing);
 						}}
-						onConfirm={() => new Promise<void>((resolve) => window.setTimeout(resolve, 150))}
+						onConfirm={() =>
+							new Promise<void>((resolve) =>
+								window.setTimeout(() => {
+									setConfirmationSettled(true);
+									resolve();
+								}, 150),
+							)
+						}
 					>
 						<InlineEdit.Value label="Edit controlled value">Controlled value</InlineEdit.Value>
 						<InlineEdit.Input aria-label="Controlled input" defaultValue="Controlled value" />
