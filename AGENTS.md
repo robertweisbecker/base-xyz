@@ -60,7 +60,8 @@
 ## Validation
 
 - Inspect the intended checkout before editing; files may be untracked and local copies may diverge.
-- Use `npm run verify:quick` for the standard TypeScript, blocking lint, advisory complexity, and formatting gate. Run `npm run verify:full` when app and Storybook builds plus browser and bundle tests are required.
+- Use `npm run verify:quick` for the standard TypeScript, blocking lint, advisory complexity and React Compiler diagnostics, and formatting gate. Run `npm run verify:full` when app and Storybook builds plus browser and bundle tests are required.
+- Run `npm run doctor` as an advisory React-specific audit after substantial React work. Vet every diagnostic against source, ADRs, and browser evidence before changing code or logging an issue; do not treat the score or severity as proof. Preserve the `only-export-components` waiver in `doctor.config.jsonc`: StyleX and the repository's compound namespace API require colocated non-component exports.
 - During parallel work, only the primary or explicitly designated validator runs `verify:full`; other workers run focused checks and report their evidence.
 - If another checkout owns Playwright's default ports, leave its server running and set `PLAYWRIGHT_STORYBOOK_PORT` or `PLAYWRIGHT_APP_PORT` on the designated validation command. Do not reuse another checkout's preview server.
 - Playwright discovers the full `tests/` tree. For interaction changes, run the focused browser spec with console-error capture after building Storybook.

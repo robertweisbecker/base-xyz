@@ -133,16 +133,24 @@ belongs in an ADR instead of either onboarding document.
 ```sh
 npm run verify:quick
 npm run verify:full
+npm run doctor
 ```
 
-`verify:quick` runs TypeScript, Oxlint (including StyleX, anti-slop, and
-advisory complexity rules), and the Prettier check. All lint findings are
-blocking except complexity, which warns at the default maximum of 20 so
-existing hotspots can be reduced incrementally. `verify:full` repeats that
-gate, then builds and exercises the app and Storybook independently, including
-the StyleX bundle-boundary test. Focused checks remain available as
-`typecheck`, `lint`, `format:check`, `build`, `build-storybook`, `test:app`,
-`test:storybook`, and `test:style-props`.
+`verify:quick` runs TypeScript, Oxlint (including StyleX, anti-slop, complexity,
+and React Compiler diagnostics), and the Prettier check. Error-severity lint
+findings are blocking; complexity and the current React Compiler diagnostics
+remain advisory warnings so existing hotspots can be reduced incrementally.
+`verify:full` repeats that gate, then builds and exercises the app and Storybook
+independently, including the StyleX bundle-boundary test. Focused checks remain
+available as `typecheck`, `lint`, `format:check`, `build`, `build-storybook`,
+`test:app`, `test:storybook`, and `test:style-props`.
+
+`doctor` runs the advisory React Doctor scan with telemetry disabled. Treat its
+diagnostics as investigation leads and verify them against the source, ADRs,
+and browser behavior before changing code or publishing an issue. Repository
+exceptions and non-React scan exclusions live in `doctor.config.jsonc`; React
+Doctor is intentionally not part of the blocking verification gate while the
+existing baseline is being triaged.
 
 Playwright defaults to ports `6107` for the app and `6106` for Storybook. Set
 `PLAYWRIGHT_APP_PORT` or `PLAYWRIGHT_STORYBOOK_PORT` when another checkout owns

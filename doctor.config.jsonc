@@ -1,0 +1,18 @@
+{
+	"$schema": "https://react.doctor/schema/config.json",
+	"blocking": "none",
+	"ignore": {
+		"files": [
+			// The local Oxlint plugin is tooling implementation, not React source,
+			// and intentionally does not lint itself in the blocking lint command.
+			"tools/oxlint/anti-slop/**",
+			"src/routeTree.gen.ts",
+		],
+		"rules": [
+			// StyleX and the repository's compound namespace API require colocated
+			// non-component exports; splitting them would violate public ownership.
+			"react/only-export-components",
+			"react-doctor/only-export-components",
+		],
+	},
+}
