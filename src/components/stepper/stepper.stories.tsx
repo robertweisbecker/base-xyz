@@ -1,7 +1,7 @@
 import { ShieldCheckIcon } from "@phosphor-icons/react/dist/csr/ShieldCheck";
 import { UserIcon } from "@phosphor-icons/react/dist/csr/User";
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { useState, type ReactNode } from "react";
+import { Fragment, useState, type ReactNode } from "react";
 import { Button } from "@/components/button/button";
 import { Box, Stack } from "@/components/layout/layout";
 import { Separator } from "@/components/separator/separator";
@@ -15,6 +15,7 @@ const markerOptions = {
 };
 
 type StepperPlaygroundArgs = {
+	_completeOnVisit: boolean;
 	_locked: boolean;
 	_marker: ReactNode;
 	_status: StepperStatus;
@@ -26,6 +27,7 @@ const meta = {
 	title: "Components/Stepper",
 	component: Stepper.Root,
 	args: {
+		_completeOnVisit: false,
 		_locked: false,
 		_marker: null,
 		_status: "incomplete",
@@ -33,6 +35,7 @@ const meta = {
 		orientation: "horizontal",
 	},
 	argTypes: {
+		_completeOnVisit: { control: "boolean", name: "_completeOnVisit" },
 		_locked: { control: "boolean", name: "_locked" },
 		_marker: {
 			control: "select",
@@ -56,7 +59,7 @@ const meta = {
 	},
 	parameters: {
 		controls: {
-			include: ["defaultValue", "orientation", "_status", "_locked", "_marker"],
+			include: ["defaultValue", "orientation", "_status", "_locked", "_completeOnVisit", "_marker"],
 		},
 	},
 	decorators: [
@@ -80,6 +83,7 @@ export const Playground: Story = {
 		>
 			<Stepper.List aria-label="Account setup progress">
 				<AccountStep
+					completeOnVisit={args._completeOnVisit}
 					description="Add your personal details."
 					marker={1}
 					status="completed"
@@ -87,6 +91,7 @@ export const Playground: Story = {
 					value="profile"
 				/>
 				<AccountStep
+					completeOnVisit={args._completeOnVisit}
 					description="Choose authentication options."
 					marker={args._marker ?? 2}
 					status={args._status}
@@ -94,6 +99,7 @@ export const Playground: Story = {
 					value="security"
 				/>
 				<AccountStep
+					completeOnVisit={args._completeOnVisit}
 					description="Add a payment method."
 					disabled={args._locked}
 					marker={3}
@@ -117,6 +123,34 @@ export const Orientations: Story = {
 				<ExampleStepper />
 			</Stack>
 			<Separator />
+			<Stack data-testid="two-step-stepper" gap={2} minWidth={0}>
+				<Text color="muted" size="1">
+					Two steps
+				</Text>
+				<Stepper.Root defaultValue="profile">
+					<Stepper.List aria-label="Two-step setup">
+						<AccountStep
+							description="Add your personal details."
+							marker={1}
+							title="Profile"
+							value="profile"
+						/>
+						<AccountStep
+							description="Choose how this workspace will be billed going forward."
+							marker={2}
+							title="Billing and invoices"
+							value="billing"
+						/>
+					</Stepper.List>
+					<Stepper.Content>
+						<Stepper.Panel value="profile">
+							Enter the name and contact details that should appear on the account.
+						</Stepper.Panel>
+						<Stepper.Panel value="billing">Choose how this workspace will be billed.</Stepper.Panel>
+					</Stepper.Content>
+				</Stepper.Root>
+			</Stack>
+			<Separator />
 			<Stack data-testid="vertical-stepper" gap={2} minWidth={0}>
 				<Text color="muted" size="1">
 					Vertical
@@ -130,55 +164,104 @@ export const Orientations: Story = {
 export const States: Story = {
 	parameters: { controls: { disable: true } },
 	render: () => (
-		<Stack data-testid="states-stepper" gap={2} minWidth={0}>
-			<Text color="muted" size="1">
-				Completed, current, incomplete, invalid, and locked
-			</Text>
-			<Stepper.Root defaultValue="review">
-				<Stepper.List aria-label="Verification progress">
-					<AccountStep
-						description="Saved contact details."
-						marker={1}
-						markerTestId="completed-step-marker"
-						status="completed"
-						title="Account"
-						value="account"
-					/>
-					<AccountStep
-						description="Confirm the submitted information."
-						marker={2}
-						title="Review"
-						value="review"
-					/>
-					<AccountStep description="Not started yet." marker={3} title="Billing" value="billing" />
-					<AccountStep
-						description="A required document is missing."
-						marker={4}
-						markerTestId="invalid-step-marker"
-						status="invalid"
-						title="Documents"
-						value="documents"
-					/>
-					<AccountStep
-						description="Unlocks after billing is complete."
-						disabled
-						marker={5}
-						title="Finish"
-						value="finish"
-					/>
-				</Stepper.List>
-				<Stepper.Content>
-					<Stepper.Panel value="account">Account details are complete.</Stepper.Panel>
-					<Stepper.Panel value="review">
-						Review the submitted profile before continuing.
-					</Stepper.Panel>
-					<Stepper.Panel value="billing">Billing is still incomplete.</Stepper.Panel>
-					<Stepper.Panel value="documents">Upload the missing identity document.</Stepper.Panel>
-					<Stepper.Panel value="finish">
-						This step stays locked until billing is complete.
-					</Stepper.Panel>
-				</Stepper.Content>
-			</Stepper.Root>
+		<Stack gap={8} minWidth={0}>
+			<Stack data-testid="states-stepper" gap={2} minWidth={0}>
+				<Text color="muted" size="1">
+					Completed, current, incomplete, invalid, and locked
+				</Text>
+				<Stepper.Root defaultValue="review">
+					<Stepper.List aria-label="Verification progress">
+						<AccountStep
+							description="Saved contact details."
+							marker={1}
+							markerTestId="completed-step-marker"
+							status="completed"
+							title="Account"
+							value="account"
+						/>
+						<AccountStep
+							description="Confirm the submitted information matches the saved account profile."
+							marker={2}
+							title="Review submitted account information"
+							value="review"
+						/>
+						<AccountStep
+							description="Not started yet."
+							marker={3}
+							title="Billing"
+							value="billing"
+						/>
+						<AccountStep
+							description="A required document is missing from the verification packet."
+							marker={4}
+							markerTestId="invalid-step-marker"
+							status="invalid"
+							title="Supporting documents checklist"
+							value="documents"
+						/>
+						<AccountStep
+							description="Unlocks after billing is complete."
+							disabled
+							marker={5}
+							title="Finish"
+							value="finish"
+						/>
+					</Stepper.List>
+					<Stepper.Content>
+						<Stepper.Panel value="account">Account details are complete.</Stepper.Panel>
+						<Stepper.Panel value="review">
+							Review the submitted profile before continuing.
+						</Stepper.Panel>
+						<Stepper.Panel value="billing">Billing is still incomplete.</Stepper.Panel>
+						<Stepper.Panel value="documents">Upload the missing identity document.</Stepper.Panel>
+						<Stepper.Panel value="finish">
+							This step stays locked until billing is complete.
+						</Stepper.Panel>
+					</Stepper.Content>
+				</Stepper.Root>
+			</Stack>
+			<Separator />
+			<Stack data-testid="complete-on-visit-stepper" gap={2} minWidth={0}>
+				<Text color="muted" size="1">
+					Informational steps complete on visit
+				</Text>
+				<Stepper.Root defaultValue="overview">
+					<Stepper.List aria-label="Guide progress">
+						<Fragment>
+							<AccountStep
+								completeOnVisit
+								description="Read the workspace overview."
+								marker={1}
+								markerTestId="visited-overview-marker"
+								title="Overview"
+								value="overview"
+							/>
+							<AccountStep
+								completeOnVisit
+								description="Review the required permissions."
+								marker={2}
+								markerTestId="unvisited-permissions-marker"
+								title="Permissions"
+								value="permissions"
+							/>
+							<AccountStep
+								completeOnVisit
+								description="Finish the setup checklist."
+								marker={3}
+								title="Done"
+								value="done"
+							/>
+						</Fragment>
+					</Stepper.List>
+					<Stepper.Content>
+						<Stepper.Panel value="overview">This guide step completes when opened.</Stepper.Panel>
+						<Stepper.Panel value="permissions">
+							Permission details complete after this visit.
+						</Stepper.Panel>
+						<Stepper.Panel value="done">The last informational step.</Stepper.Panel>
+					</Stepper.Content>
+				</Stepper.Root>
+			</Stack>
 		</Stack>
 	),
 };
@@ -187,6 +270,48 @@ export const Controlled: Story = {
 	parameters: { controls: { disable: true } },
 	render: () => <ControlledStepper />,
 };
+
+export const VisitGuards: Story = {
+	parameters: { controls: { disable: true } },
+	render: () => (
+		<Stack gap={6}>
+			<Stepper.Root
+				defaultValue="profile"
+				onValueChange={(_, eventDetails) => eventDetails.cancel()}
+			>
+				<Stepper.List aria-label="Canceled visit guard">
+					<VisitGuardSteps />
+				</Stepper.List>
+			</Stepper.Root>
+			<Stepper.Root onValueChange={() => {}} value="profile">
+				<Stepper.List aria-label="Controlled visit guard">
+					<VisitGuardSteps />
+				</Stepper.List>
+			</Stepper.Root>
+		</Stack>
+	),
+};
+
+function VisitGuardSteps() {
+	return (
+		<>
+			<AccountStep
+				completeOnVisit
+				description="The accepted step."
+				marker={1}
+				title="Profile"
+				value="profile"
+			/>
+			<AccountStep
+				completeOnVisit
+				description="The rejected step."
+				marker={2}
+				title="Security"
+				value="security"
+			/>
+		</>
+	);
+}
 
 function ControlledStepper() {
 	const values = ["profile", "security", "billing"] as const;
@@ -292,6 +417,7 @@ function ExampleStepper({
 }
 
 function AccountStep({
+	completeOnVisit,
 	description,
 	disabled,
 	marker,
@@ -300,6 +426,7 @@ function AccountStep({
 	title,
 	value,
 }: {
+	completeOnVisit?: boolean;
 	description: string;
 	disabled?: boolean;
 	marker: ReactNode;
@@ -309,7 +436,12 @@ function AccountStep({
 	value: StepperValue;
 }) {
 	return (
-		<Stepper.Step disabled={disabled} status={status} value={value}>
+		<Stepper.Step
+			completeOnVisit={completeOnVisit}
+			disabled={disabled}
+			status={status}
+			value={value}
+		>
 			<Stepper.Marker data-testid={markerTestId}>{marker}</Stepper.Marker>
 			<Stepper.Heading>
 				<Stepper.Title>{title}</Stepper.Title>

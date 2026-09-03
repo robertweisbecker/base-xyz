@@ -1,8 +1,18 @@
+import {
+	Children,
+	createContext,
+	Fragment,
+	isValidElement,
+	useContext,
+	useState,
+	type CSSProperties,
+	type ComponentPropsWithRef,
+	type ReactNode,
+} from "react";
+import * as stylex from "@stylexjs/stylex";
 import { Tabs as BaseTabs } from "@base-ui/react/tabs";
 import { useMediaQuery } from "@base-ui/react/unstable-use-media-query";
 import { WarningIcon } from "@phosphor-icons/react/dist/csr/Warning";
-import * as stylex from "@stylexjs/stylex";
-import { createContext, useContext, type ComponentPropsWithRef, type ReactNode } from "react";
 import { Icon } from "@/components/icons";
 import { fontWeightStyles, textStyles, textTruncationStyles } from "@/components/text/text.stylex";
 import { VisuallyHidden } from "@/components/visually-hidden/visually-hidden";
@@ -14,11 +24,15 @@ import { tokens } from "@/theme/tokens.stylex";
 import { attrJoin } from "@/utils/attr-join";
 import { stepperRootMarker, stepperStepMarker } from "./stepper.stylex";
 
+const ENABLED_HOVER = ":hover:not([data-disabled])";
+const LAST_STEP = ":last-of-type:not(:first-of-type)";
+const FIRST_TAB_ACTIVE = ':has([role="tab"][data-active]:first-of-type)';
+const LAST_TAB_ACTIVE = ':has([role="tab"][data-active]:last-of-type:not(:first-of-type))';
+
 const stepperParts = stylex.create({
 	root: {
 		"--_stepper-connector-thickness": "0.125rem",
-		"--_stepper-list-padding": tokens["--space-2"],
-		"--_stepper-marker-size": tokens["--size-control-md"],
+		"--_stepper-marker-size": tokens["--size-control-xs"],
 		boxSizing: "border-box",
 		display: "grid",
 		minWidth: 0,
@@ -26,19 +40,9 @@ const stepperParts = stylex.create({
 	},
 	list: {
 		gap: 0,
-		paddingBlock: "var(--_stepper-list-padding)",
-		paddingInline: "var(--_stepper-list-padding)",
-		alignItems: {
-			default: "flex-start",
-			[stylex.when.ancestor("[data-orientation=vertical]", stepperRootMarker)]: "stretch",
-		},
 		alignSelf: "stretch",
 		boxSizing: "border-box",
 		display: "flex",
-		flexDirection: {
-			default: "row",
-			[stylex.when.ancestor("[data-orientation=vertical]", stepperRootMarker)]: "column",
-		},
 		flexWrap: "nowrap",
 		gridColumnEnd: "steps",
 		gridColumnStart: "steps",
@@ -46,110 +50,54 @@ const stepperParts = stylex.create({
 		gridRowStart: "steps",
 		isolation: "isolate",
 		position: "relative",
-		maxWidth: {
-			default: null,
-			[stylex.when.ancestor("[data-orientation=vertical]", stepperRootMarker)]: "24rem",
-		},
 		minHeight: 0,
 		minWidth: 0,
 		width: "100%",
+		"::before": {
+			borderRadius: tokens["--radius-full"],
+			backgroundColor: tokens["--fill-track"],
+			content: '""',
+			insetBlockStart:
+				"calc(var(--_stepper-marker-size) / 2 - var(--_stepper-connector-thickness) / 2)",
+			insetInlineEnd: "calc(var(--_stepper-marker-size) / 2)",
+			insetInlineStart: "calc(var(--_stepper-marker-size) / 2)",
+			pointerEvents: "none",
+			position: "absolute",
+			zIndex: 0,
+			height: "var(--_stepper-connector-thickness)",
+		},
 	},
 	step: {
-		"--_stepper-content-opacity": {
-			"[data-disabled]": 0.48,
-			default: 1,
-		},
-		"--_stepper-title-color": {
-			"[data-active]": tokens["--fg"],
-			"[data-disabled]": tokens["--fg-subtle"],
-			default: tokens["--fg-muted"],
-		},
 		margin: 0,
 		padding: 0,
 		borderStyle: "none",
 		gap: tokens["--space-2"],
-		alignItems: {
-			default: null,
-			[stylex.when.ancestor("[data-orientation=vertical]", stepperRootMarker)]: "start",
-		},
 		appearance: "none",
 		backgroundColor: "transparent",
 		boxSizing: "border-box",
-		color: tokens["--fg-muted"],
+		color: {
+			// eslint-disable-next-line @stylexjs/valid-styles -- the compiler supports chained pseudo-class conditions; the lint rule is stricter than the compiler.
+			[ENABLED_HOVER]: {
+				[media.canHover]: tokens["--fg"],
+			},
+			"[data-active]": tokens["--fg"],
+			"[data-disabled]": tokens["--fg-subtle"],
+			default: tokens["--fg-muted"],
+		},
 		cursor: "default",
 		display: "grid",
-		flexBasis: {
-			default: 0,
-			[stylex.when.ancestor("[data-orientation=vertical]", stepperRootMarker)]: "auto",
-		},
-		flexGrow: {
-			default: 1,
-			[stylex.when.ancestor("[data-orientation=vertical]", stepperRootMarker)]: 0,
-		},
-		flexShrink: 1,
+		flexGrow: 0,
+		flexShrink: 0,
 		fontFamily: "inherit",
-		gridTemplateColumns: {
-			default: "minmax(0, 1fr)",
-			[stylex.when.ancestor("[data-orientation=vertical]", stepperRootMarker)]:
-				"var(--_stepper-marker-size) minmax(0, 1fr)",
-		},
-		justifyItems: {
-			default: "start",
-			[stylex.when.ancestor("[data-orientation=vertical]", stepperRootMarker)]: null,
-		},
-		paddingBlockEnd: {
-			default: 0,
-			[stylex.when.ancestor("[data-orientation=vertical]", stepperRootMarker)]: tokens["--space-6"],
-			":last-of-type": 0,
-		},
-		paddingInlineEnd: {
-			default: tokens["--space-6"],
-			[stylex.when.ancestor("[data-orientation=vertical]", stepperRootMarker)]: 0,
-			":last-of-type": 0,
-		},
 		pointerEvents: {
 			"[data-disabled]": "none",
 			default: "auto",
 		},
 		position: "relative",
-		textAlign: "start",
+		transitionDuration: tokens["--motion-duration-medium"],
+		transitionProperty: "color",
+		transitionTimingFunction: tokens["--motion-ease-smooth-out"],
 		userSelect: "none",
-		minWidth: 0,
-		width: {
-			default: null,
-			[stylex.when.ancestor("[data-orientation=vertical]", stepperRootMarker)]: "100%",
-		},
-		"::after": {
-			borderRadius: tokens["--radius-full"],
-			backgroundColor: tokens["--fill-track"],
-			content: '""',
-			display: {
-				default: "block",
-				":last-of-type": "none",
-			},
-			insetBlockStart: {
-				default: "calc(var(--_stepper-marker-size) / 2 - var(--_stepper-connector-thickness) / 2)",
-				[stylex.when.ancestor("[data-orientation=vertical]", stepperRootMarker)]:
-					"calc(var(--_stepper-marker-size) / 2)",
-			},
-			insetInlineStart: {
-				default: "calc(var(--_stepper-marker-size) / 2)",
-				[stylex.when.ancestor("[data-orientation=vertical]", stepperRootMarker)]:
-					"calc(var(--_stepper-marker-size) / 2 - var(--_stepper-connector-thickness) / 2)",
-			},
-			pointerEvents: "none",
-			position: "absolute",
-			zIndex: 0,
-			height: {
-				default: "var(--_stepper-connector-thickness)",
-				[stylex.when.ancestor("[data-orientation=vertical]", stepperRootMarker)]: "100%",
-			},
-			width: {
-				default: "100%",
-				[stylex.when.ancestor("[data-orientation=vertical]", stepperRootMarker)]:
-					"var(--_stepper-connector-thickness)",
-			},
-		},
 	},
 	indicator: {
 		borderRadius: tokens["--radius-full"],
@@ -163,27 +111,6 @@ const stepperParts = stylex.create({
 		transitionProperty: "width, height",
 		transitionTimingFunction: tokens["--motion-ease-smooth-out"],
 		zIndex: 1,
-		height: {
-			default: "var(--_stepper-connector-thickness)",
-			[stylex.when.ancestor("[data-orientation=vertical]", stepperRootMarker)]:
-				"calc(var(--active-tab-top) - var(--_stepper-list-padding))",
-		},
-		left: {
-			default: "calc(var(--_stepper-list-padding) + var(--_stepper-marker-size) / 2)",
-			[stylex.when.ancestor("[data-orientation=vertical]", stepperRootMarker)]:
-				"calc(var(--active-tab-left) + var(--_stepper-marker-size) / 2 - var(--_stepper-connector-thickness) / 2)",
-		},
-		top: {
-			default:
-				"calc(var(--active-tab-top) + var(--_stepper-marker-size) / 2 - var(--_stepper-connector-thickness) / 2)",
-			[stylex.when.ancestor("[data-orientation=vertical]", stepperRootMarker)]:
-				"calc(var(--_stepper-list-padding) + var(--_stepper-marker-size) / 2)",
-		},
-		width: {
-			default: "calc(var(--active-tab-left) - var(--_stepper-list-padding))",
-			[stylex.when.ancestor("[data-orientation=vertical]", stepperRootMarker)]:
-				"var(--_stepper-connector-thickness)",
-		},
 	},
 	marker: {
 		borderColor: {
@@ -209,7 +136,7 @@ const stepperParts = stylex.create({
 		},
 		boxSizing: "border-box",
 		color: {
-			default: tokens["--fg-muted"],
+			default: tokens["--fg"],
 			[stylex.when.ancestor('[data-active][data-status="incomplete"]', stepperStepMarker)]:
 				tokens["--fg-accent-strong"],
 			[stylex.when.ancestor('[data-status="completed"]', stepperStepMarker)]:
@@ -222,7 +149,10 @@ const stepperParts = stylex.create({
 		justifyContent: "center",
 		letterSpacing: tokens["--letter-spacing-2"],
 		lineHeight: tokens["--line-height-2"],
-		opacity: "var(--_stepper-content-opacity)",
+		opacity: {
+			default: 1,
+			[stylex.when.ancestor("[data-disabled]", stepperStepMarker)]: 0.48,
+		},
 		position: "relative",
 		transitionDuration: tokens["--motion-duration-medium"],
 		transitionProperty: "background-color, border-color, box-shadow, color",
@@ -235,18 +165,23 @@ const stepperParts = stylex.create({
 		gap: tokens["--space-0-5"],
 		display: "flex",
 		flexDirection: "column",
-		opacity: "var(--_stepper-content-opacity)",
+		opacity: {
+			default: 1,
+			[stylex.when.ancestor("[data-disabled]", stepperStepMarker)]: 0.48,
+		},
 		position: "relative",
 		zIndex: 2,
 		minWidth: 0,
 	},
 	title: {
-		color: "var(--_stepper-title-color)",
+		color: "inherit",
 		minWidth: 0,
+		width: "100%",
 	},
 	description: {
 		color: tokens["--fg-subtle"],
 		minWidth: 0,
+		width: "100%",
 	},
 	content: {
 		display: "grid",
@@ -287,11 +222,171 @@ const rootOrientationStyles = stylex.create({
 	},
 });
 
+const listLayoutStyles = stylex.create({
+	horizontal: {
+		alignItems: "flex-start",
+		containerType: "inline-size",
+		flexDirection: "row",
+		justifyContent: "space-between",
+		"::before": {
+			display: "block",
+		},
+	},
+	vertical: {
+		alignItems: "stretch",
+		flexDirection: "column",
+		justifyContent: "flex-start",
+		maxWidth: "24rem",
+		"::before": {
+			display: "none",
+		},
+	},
+});
+
+const stepLayoutStyles = stylex.create({
+	horizontal: {
+		flexBasis: "var(--_stepper-marker-size)",
+		gridTemplateColumns: "var(--_stepper-marker-size)",
+		justifyItems: {
+			[LAST_STEP]: "end",
+			default: "center",
+			":first-of-type": "start",
+		},
+		textAlign: {
+			[LAST_STEP]: "end",
+			default: "center",
+			":first-of-type": "start",
+		},
+		maxWidth: "var(--_stepper-marker-size)",
+		minWidth: "var(--_stepper-marker-size)",
+		width: "var(--_stepper-marker-size)",
+	},
+	vertical: {
+		alignItems: "start",
+		flexBasis: "auto",
+		gridTemplateColumns: "var(--_stepper-marker-size) minmax(0, 1fr)",
+		justifyItems: "start",
+		paddingBlockEnd: {
+			default: tokens["--space-6"],
+			":last-of-type": 0,
+		},
+		textAlign: "start",
+		minWidth: 0,
+		width: "100%",
+		"::after": {
+			borderRadius: tokens["--radius-full"],
+			backgroundColor: tokens["--fill-track"],
+			content: '""',
+			display: {
+				default: "block",
+				":last-of-type": "none",
+			},
+			insetBlockStart: "calc(var(--_stepper-marker-size) / 2)",
+			insetInlineStart:
+				"calc(var(--_stepper-marker-size) / 2 - var(--_stepper-connector-thickness) / 2)",
+			pointerEvents: "none",
+			position: "absolute",
+			zIndex: 0,
+			height: "100%",
+			width: "var(--_stepper-connector-thickness)",
+		},
+	},
+});
+
+const headingLayoutStyles = stylex.create({
+	horizontal: {
+		width:
+			"calc((100cqw - var(--_stepper-marker-size)) / max(1, var(--_stepper-step-count, 2) - 1))",
+	},
+	vertical: {
+		maxWidth: "100%",
+		width: "100%",
+	},
+});
+
+const indicatorLayoutStyles = stylex.create({
+	horizontal: {
+		height: "var(--_stepper-connector-thickness)",
+		left: "calc(var(--_stepper-marker-size) / 2)",
+		top: "calc(var(--active-tab-top) + var(--_stepper-marker-size) / 2 - var(--_stepper-connector-thickness) / 2)",
+		width: {
+			default:
+				"calc(var(--active-tab-left) + var(--active-tab-width) / 2 - var(--_stepper-marker-size) / 2)",
+			[stylex.when.ancestor(FIRST_TAB_ACTIVE, stepperRootMarker)]: "var(--active-tab-left)",
+			[stylex.when.ancestor(LAST_TAB_ACTIVE, stepperRootMarker)]:
+				"calc(var(--active-tab-left) + var(--active-tab-width) - var(--_stepper-marker-size))",
+		},
+	},
+	vertical: {
+		height: "var(--active-tab-top)",
+		left: "calc(var(--active-tab-left) + var(--_stepper-marker-size) / 2 - var(--_stepper-connector-thickness) / 2)",
+		top: "calc(var(--_stepper-marker-size) / 2)",
+		width: "var(--_stepper-connector-thickness)",
+	},
+});
+
 export type StepperOrientation = BaseTabs.Root.Orientation;
 export type StepperStatus = "incomplete" | "completed" | "invalid";
 export type StepperValue = string;
 
 const StepperStatusContext = createContext<StepperStatus>("incomplete");
+const StepperVisitContext = createContext<ReadonlySet<StepperValue>>(new Set());
+const StepperOrientationContext = createContext<StepperOrientation>("horizontal");
+
+function countStepperSteps(children: ReactNode): number {
+	let count = 0;
+	Children.forEach(children, (child) => {
+		if (!isValidElement(child)) return;
+		// SAFETY: ReactElement props are unknown here; a Fragment's only field we inspect is its standard optional children prop.
+		count +=
+			child.type === Fragment
+				? countStepperSteps((child.props as { children?: ReactNode }).children)
+				: 1;
+	});
+	return Math.max(count, 1);
+}
+
+function initialVisitedValues(
+	value: StepperValue | null | undefined,
+	defaultValue: StepperValue | null | undefined,
+): Set<StepperValue> {
+	const initial = value !== undefined ? value : defaultValue;
+	return new Set<StepperValue>(initial == null ? [] : [initial]);
+}
+
+function resolveStepperStatus(
+	status: StepperStatus,
+	completeOnVisit: boolean,
+	visited: boolean,
+): StepperStatus {
+	switch (status) {
+		case "invalid":
+			return "invalid";
+		case "completed":
+			return "completed";
+		case "incomplete":
+			return completeOnVisit && visited ? "completed" : "incomplete";
+		default: {
+			const exhaustive: never = status;
+			return exhaustive;
+		}
+	}
+}
+
+function statusAccessibleLabel(status: StepperStatus): string | null {
+	switch (status) {
+		case "completed":
+			return "Completed";
+		case "invalid":
+			return "Invalid";
+		case "incomplete":
+			return null;
+		default: {
+			const exhaustive: never = status;
+			return exhaustive;
+		}
+	}
+}
 
 type StepperPartStyleProps = BaseStyleProps & {
 	className?: string;
@@ -334,19 +429,35 @@ export function Root({
 		marginStyles,
 		xstyle,
 	);
+	const [visited, setVisited] = useState(() => initialVisitedValues(value, defaultValue));
+
+	if (value != null && !visited.has(value)) {
+		setVisited(new Set(visited).add(value));
+	}
 
 	return (
-		<BaseTabs.Root
-			{...rest}
-			ref={ref}
-			className={attrJoin(sx.className, className)}
-			data-orientation={effectiveOrientation}
-			defaultValue={defaultValue}
-			onValueChange={onValueChange}
-			orientation={effectiveOrientation}
-			style={mergeStyle(sx.style, style)}
-			value={value}
-		/>
+		<StepperOrientationContext value={effectiveOrientation}>
+			<StepperVisitContext value={visited}>
+				<BaseTabs.Root
+					{...rest}
+					ref={ref}
+					className={attrJoin(sx.className, className)}
+					data-orientation={effectiveOrientation}
+					defaultValue={defaultValue}
+					onValueChange={(nextValue, eventDetails) => {
+						onValueChange?.(nextValue, eventDetails);
+						if (value === undefined && nextValue != null && !eventDetails.isCanceled) {
+							setVisited((current) =>
+								current.has(nextValue) ? current : new Set(current).add(nextValue),
+							);
+						}
+					}}
+					orientation={effectiveOrientation}
+					style={mergeStyle(sx.style, style)}
+					value={value}
+				/>
+			</StepperVisitContext>
+		</StepperOrientationContext>
 	);
 }
 
@@ -357,8 +468,10 @@ export type StepperListProps = Omit<
 	StepperPartStyleProps;
 
 export function List({ ref, children, className, style, xstyle, ...props }: StepperListProps) {
-	const sx = stylex.props(stepperParts.list, xstyle);
-	const indicatorSx = stylex.props(stepperParts.indicator);
+	const orientation = useContext(StepperOrientationContext);
+	const stepCount = countStepperSteps(children);
+	const sx = stylex.props(stepperParts.list, listLayoutStyles[orientation], xstyle);
+	const indicatorSx = stylex.props(stepperParts.indicator, indicatorLayoutStyles[orientation]);
 
 	return (
 		<BaseTabs.List
@@ -366,7 +479,11 @@ export function List({ ref, children, className, style, xstyle, ...props }: Step
 			activateOnFocus={false}
 			className={attrJoin(sx.className, className)}
 			loopFocus={false}
-			style={mergeStyle(sx.style, style)}
+			style={mergeStyle(
+				// SAFETY: `--_stepper-step-count` is a unitless custom property for heading calc(); CSSProperties does not declare it.
+				{ ...sx.style, "--_stepper-step-count": String(stepCount) } as CSSProperties,
+				style,
+			)}
 			{...props}
 		>
 			{children}
@@ -380,6 +497,8 @@ export type StepperStepProps = Omit<
 	"className" | "render" | "style" | "value"
 > &
 	StepperPartStyleProps & {
+		/** When true, the step is completed once it has been selected. */
+		completeOnVisit?: boolean;
 		status?: StepperStatus;
 		value: StepperValue;
 	};
@@ -388,6 +507,7 @@ export function Step({
 	ref,
 	children,
 	className,
+	completeOnVisit = false,
 	status = "incomplete",
 	style,
 	type = "button",
@@ -395,21 +515,29 @@ export function Step({
 	xstyle,
 	...props
 }: StepperStepProps) {
-	const sx = stylex.props(stepperStepMarker, focusRing.offset, stepperParts.step, xstyle);
-	const statusLabel =
-		status === "completed" ? "Completed" : status === "invalid" ? "Invalid" : null;
+	const visited = useContext(StepperVisitContext).has(value);
+	const orientation = useContext(StepperOrientationContext);
+	const effectiveStatus = resolveStepperStatus(status, completeOnVisit, visited);
+	const sx = stylex.props(
+		stepperStepMarker,
+		focusRing.offset,
+		stepperParts.step,
+		stepLayoutStyles[orientation],
+		xstyle,
+	);
+	const statusLabel = statusAccessibleLabel(effectiveStatus);
 
 	return (
 		<BaseTabs.Tab
 			{...props}
 			ref={ref}
 			className={attrJoin(sx.className, className)}
-			data-status={status}
+			data-status={effectiveStatus}
 			style={mergeStyle(sx.style, style)}
 			type={type}
 			value={value}
 		>
-			<StepperStatusContext value={status}>{children}</StepperStatusContext>
+			<StepperStatusContext value={effectiveStatus}>{children}</StepperStatusContext>
 			{statusLabel ? <VisuallyHidden>{statusLabel}</VisuallyHidden> : null}
 		</BaseTabs.Tab>
 	);
@@ -450,7 +578,8 @@ export type StepperHeadingProps = Omit<ComponentPropsWithRef<"span">, "className
 	StepperPartStyleProps;
 
 export function Heading({ className, style, xstyle, ...props }: StepperHeadingProps) {
-	const sx = stylex.props(stepperParts.heading, xstyle);
+	const orientation = useContext(StepperOrientationContext);
+	const sx = stylex.props(stepperParts.heading, headingLayoutStyles[orientation], xstyle);
 	return (
 		<span
 			{...props}
@@ -484,12 +613,7 @@ export type StepperDescriptionProps = Omit<ComponentPropsWithRef<"span">, "class
 	StepperPartStyleProps;
 
 export function Description({ className, style, xstyle, ...props }: StepperDescriptionProps) {
-	const sx = stylex.props(
-		textStyles.supporting,
-		textTruncationStyles.truncate,
-		stepperParts.description,
-		xstyle,
-	);
+	const sx = stylex.props(textStyles.supporting, stepperParts.description, xstyle);
 	return (
 		<span
 			{...props}

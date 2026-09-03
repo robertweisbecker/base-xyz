@@ -3,6 +3,7 @@ import { expect, test } from "../playwright";
 const controlledPath = "/iframe.html?id=components-stepper--controlled&viewMode=story";
 const orientationsPath = "/iframe.html?id=components-stepper--orientations&viewMode=story";
 const statesPath = "/iframe.html?id=components-stepper--states&viewMode=story";
+const visitGuardsPath = "/iframe.html?id=components-stepper--visit-guards&viewMode=story";
 
 test("uses Base UI tab semantics without custom naming relationships", async ({ page }) => {
 	await page.goto(statesPath);
@@ -90,4 +91,44 @@ test("leaves locking and pagination under external control", async ({ page }) =>
 	const billingId = await billing.getAttribute("id");
 	const panel = page.locator(`[role='tabpanel'][aria-labelledby='${billingId}']`);
 	await expect(panel).toBeVisible();
+});
+
+test("marks completeOnVisit steps completed after they are selected", async ({ page }) => {
+	await page.goto(statesPath);
+
+	const root = page.getByTestId("complete-on-visit-stepper");
+	await expect(root.getByRole("tablist")).toHaveCSS("--_stepper-step-count", "3");
+	const tabs = root.getByRole("tab");
+	const overview = tabs.nth(0);
+	const permissions = tabs.nth(1);
+	const done = tabs.nth(2);
+
+	await expect(overview).toHaveAttribute("aria-selected", "true");
+	await expect(overview).toHaveAccessibleName(/Completed/);
+	await expect(page.getByTestId("visited-overview-marker")).toHaveText("");
+	await expect(permissions).not.toHaveAccessibleName(/Completed/);
+	await expect(page.getByTestId("unvisited-permissions-marker")).not.toHaveText("");
+
+	await permissions.click();
+	await expect(permissions).toHaveAttribute("aria-selected", "true");
+	await expect(permissions).toHaveAccessibleName(/Completed/);
+	await expect(page.getByTestId("unvisited-permissions-marker")).toHaveText("");
+	await expect(overview).toHaveAccessibleName(/Completed/);
+	await expect(done).not.toHaveAccessibleName(/Completed/);
+});
+
+test("records visits only after uncontrolled selection is accepted", async ({ page }) => {
+	await page.goto(visitGuardsPath);
+
+	for (const listName of ["Canceled visit guard", "Controlled visit guard"]) {
+		const tabs = page.getByRole("tablist", { name: listName }).getByRole("tab");
+		const profile = tabs.nth(0);
+		const security = tabs.nth(1);
+
+		await security.click();
+		await expect(profile).toHaveAttribute("aria-selected", "true");
+		await expect(profile).toHaveAccessibleName(/Completed/);
+		await expect(security).toHaveAttribute("aria-selected", "false");
+		await expect(security).not.toHaveAccessibleName(/Completed/);
+	}
 });
