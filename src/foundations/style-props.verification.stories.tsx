@@ -104,7 +104,7 @@ export const ConsumerContract: Story = {
 				</Box>
 			</Grid>
 
-			<Button data-testid="margin-precedence" m={1} mx={2} mt={3}>
+			<Button data-testid="margin-precedence" m={1} mx={2.5} mt={3}>
 				Margin precedence
 			</Button>
 			<Badge data-testid="logical-margin" dir="rtl" ms={2} me={4}>
@@ -115,7 +115,7 @@ export const ConsumerContract: Story = {
 					Pushed to inline end
 				</Button>
 			</Box>
-			<Card.Root data-testid="negative-margin" mt={-2}>
+			<Card.Root data-testid="negative-margin" mt={-2.5}>
 				<Card.Content>Negative margin</Card.Content>
 			</Card.Root>
 			<Button data-testid="css-margin" mt="13px">

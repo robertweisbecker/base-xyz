@@ -28,7 +28,7 @@ Margin props are logical and scalar:
 | `mt`, `mb` | block start, block end   |
 | `ms`, `me` | inline start, inline end |
 
-Edge precedence is `side ?? axis ?? all`. Every spacing prop uses the same `SpaceValue`: the explicit steps `0, 0.5, 1, 1.5, 2, 3, 3.5, 4, 5, 6, 7, 8, 9, 10, 12, 16`, their negative forms except negative zero, or a CSS string such as `"auto"`, `"1rem"`, `"var(--local-gap)"`, or `"calc(...)"`. The resolver is uniform; property-specific validity belongs to CSS, which ignores invalid declarations.
+Edge precedence is `side ?? axis ?? all`. Every spacing prop uses the same `SpaceValue`: the explicit steps `0, 0.5, 1, 1.5, 2, 2.5, 3, 3.5, 4, 5, 6, 7, 8, 9, 10, 12, 16`, their negative forms except negative zero, or a CSS string such as `"auto"`, `"1rem"`, `"var(--local-gap)"`, or `"calc(...)"`. The resolver is uniform; property-specific validity belongs to CSS, which ignores invalid declarations.
 
 ```tsx
 <Button mt={3} mx={2}>Save changes</Button>

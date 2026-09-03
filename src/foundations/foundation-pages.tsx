@@ -802,6 +802,7 @@ const spacingTokens = [
 	{ name: 'tokens["--space-1"]', value: "0.25rem", usage: "Fine alignment" },
 	{ name: 'tokens["--space-1-5"]', value: "0.375rem", usage: "Optical adjustment" },
 	{ name: 'tokens["--space-2"]', value: "0.5rem", usage: "Icon and label" },
+	{ name: 'tokens["--space-2-5"]', value: "0.625rem", usage: "Compact control rhythm" },
 	{ name: 'tokens["--space-3"]', value: "0.75rem", usage: "Related controls" },
 	{ name: 'tokens["--space-4"]', value: "1rem", usage: "Compact inset" },
 	{ name: 'tokens["--space-5"]', value: "1.25rem", usage: "Form rhythm" },
