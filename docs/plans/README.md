@@ -6,12 +6,12 @@ starting, honor its STOP conditions, and update its row when done.
 
 ## Execution order & status
 
-| Plan                                          | Title                                       | Priority | Effort | Depends on      | Status |
-| --------------------------------------------- | ------------------------------------------- | -------: | -----: | --------------- | ------ |
-| [003](./003-description-list-component.md)    | Add a semantic Description list component   |       P1 |      M | —               | TODO   |
-| [004](./004-form-field-primitives.md)         | Add composable form and field primitives    |       P1 |      L | —               | TODO   |
-| [005](./005-autocomplete-component.md)        | Add a free-form Autocomplete component      |       P2 |      M | 004             | TODO   |
-| [Stepper pagination](./stepper-pagination.md) | Evaluate shared Stepper pagination controls |       P3 |      S | Second consumer | TODO   |
+| Plan                                          | Title                                       | Priority | Effort | Depends on      | Status        |
+| --------------------------------------------- | ------------------------------------------- | -------: | -----: | --------------- | ------------- |
+| [003](./003-description-list-component.md)    | Add a semantic Description list component   |       P1 |      M | —               | TODO          |
+| [004](./004-form-field-primitives.md)         | Add composable form and field primitives    |       P1 |      L | Issue #22       | BLOCKED (#22) |
+| [005](./005-autocomplete-component.md)        | Add a free-form Autocomplete component      |       P2 |      M | 004             | TODO          |
+| [Stepper pagination](./stepper-pagination.md) | Evaluate shared Stepper pagination controls |       P3 |      S | Second consumer | TODO          |
 
 Status values: TODO | IN PROGRESS | DONE | BLOCKED (with one-line reason) |
 REJECTED (with one-line rationale — finding fixed independently or approach
@@ -37,9 +37,10 @@ The `.scratch/` archive is ignored and local to the checkout; never force-add it
   `src/components/index.ts`, `src/app/gallery-page.tsx`, and this index with
   other component plans, so parallel executors must reconcile those files
   without dropping public exports or plan rows.
-- `004-form-field-primitives.md` is independent and was planned from `main` at
-  `bf25e43`. It shares `src/components/index.ts` and this index with Plan 003,
-  so executors must preserve all public exports and plan rows.
+- `004-form-field-primitives.md` requires issue #22 to establish independent
+  Checkbox and Radio visual ownership before the structural field migration.
+  It shares `src/components/index.ts` and this index with Plan 003, so
+  executors must preserve all public exports and plan rows.
 - `005-autocomplete-component.md` requires Plan 004's public `Field` and `Label`
   wrappers. Execute them serially: they also share `src/components/index.ts`,
   ADR 0011, `src/styles/README.md`, and this index.

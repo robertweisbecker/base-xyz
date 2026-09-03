@@ -8,7 +8,7 @@
 > maintain the index.
 >
 > **Drift check (run first)**:
-> `git diff --stat bf25e43..HEAD -- docs/adr/0011-layout-primitives-common-margins-and-stylex-overrides.md src/styles/README.md src/components src/blocks/password-field src/blocks/prompt-composer src/experimental/math-expression-field src/app/experiments/inputs-composed-form.tsx src/foundations/style-props.verification.stories.tsx tests/components tests/style-props docs/plans/README.md`
+> `git diff --stat afb9dd8..HEAD -- docs/adr/0011-layout-primitives-common-margins-and-stylex-overrides.md src/styles/README.md src/components src/blocks/password-field src/blocks/prompt-composer src/experimental/math-expression-field src/app/experiments/inputs-composed-form.tsx src/foundations/style-props.verification.stories.tsx tests/components tests/style-props docs/plans/README.md`
 > If any in-scope file changed since this plan was written, compare the
 > "Current state" excerpts against the live code before proceeding; on a
 > mismatch, treat it as a STOP condition.
@@ -18,11 +18,12 @@
 - **Priority**: P1
 - **Effort**: L
 - **Risk**: HIGH
-- **Depends on**: none
+- **Depends on**: [#22](https://github.com/robertweisbecker/base-xyz/issues/22)
 - **Category**: migration
 - **Planned at**: commit `bf25e43`, 2026-08-27
+- **Reconciled at**: commit `afb9dd8`, 2026-09-02
 - **Issue**: [#19](https://github.com/robertweisbecker/base-xyz/issues/19)
-- **Status**: TODO
+- **Status**: BLOCKED — awaiting #22
 
 ## Why this matters
 
@@ -74,10 +75,11 @@ Field.Error                fieldStyles.error
 The root is already a column with `--space-1` gap and `minWidth: 0`. Keep that
 module as the owner of generic Field recipes; do not copy those recipes into
 each wrapper. Checkbox and Radio are an explicit boundary: their visual
-recipes belong to separate component-owned StyleX modules, not to Field. This
-plan establishes that boundary during migration; the deeper interaction-state
-cleanup follows in
-[#22](https://github.com/robertweisbecker/base-xyz/issues/22).
+recipes belong to separate component-owned StyleX modules, not to Field.
+[#22](https://github.com/robertweisbecker/base-xyz/issues/22) establishes that
+boundary and cleans up their interaction-state ownership before this migration
+begins. This plan then migrates their semantic Field/Fieldset/Label structure
+without reopening or relocating their visual styles.
 
 ### Duplicated Base UI assembly
 
@@ -438,13 +440,12 @@ styles as caller `xstyle` so they merge last.
 - Combobox: migrate Field/Label without changing input/trigger/chips/popup.
 - Checkbox/Radio: retain same-host Field → Fieldset → Group composition. Move
   only shared semantic/reset ownership to the public Fieldset and Label
-  wrappers. Move choice-specific label, description, group layout, control,
-  indicator, size, and state styles into separate Checkbox- and Radio-owned
-  StyleX modules; neither component may import private Field style maps for
-  visual treatment after migration. Preserve current behavior in this plan;
-  the deeper state-style cleanup is tracked by
-  [#22](https://github.com/robertweisbecker/base-xyz/issues/22) and begins only
-  after this plan lands.
+  wrappers. Preserve the choice-specific label, description, group layout,
+  control, indicator, size, and state styles already established in separate
+  Checkbox- and Radio-owned StyleX modules by
+  [#22](https://github.com/robertweisbecker/base-xyz/issues/22). Neither
+  component may regain a private Field style-map dependency for visual
+  treatment during migration.
 - Switch: use Field.Root, item Label, and Description while preserving one root,
   justify-between label layout, visually hidden label, required marker,
   description ID, nativeButton, and keyboard/pointer behavior.
@@ -600,6 +601,8 @@ imports.
 Stop and report; do not improvise if:
 
 - In-scope drift invalidates a current-state excerpt or ownership assumption.
+- Issue #22 is incomplete, or Checkbox/Radio still depend on private Field
+  style maps for their visual treatment.
 - Installed Base UI is no longer 1.7.x or the cited contracts materially differ.
 - Render typing requires `any`, cloning, `as`/`asChild`, or lost state/ref types.
 - Field/Fieldset/NumberField composition creates multiple hosts or
@@ -616,9 +619,11 @@ Stop and report; do not improvise if:
 ## Maintenance notes
 
 - Keep compounds closed; add `Field.Validity` only for a real consumer.
-- Do not absorb the Checkbox/Radio state refactor into this migration. It is
-  tracked separately by [#22](https://github.com/robertweisbecker/base-xyz/issues/22)
-  and depends on this plan's public primitive boundary.
+- Do not reopen the Checkbox/Radio state refactor in this migration. It is a
+  prerequisite tracked by
+  [#22](https://github.com/robertweisbecker/base-xyz/issues/22); this plan only
+  composes its completed visual ownership with the new public semantic
+  primitives.
 - Label is Field-context structure, not a generic typography label. Use Legend
   for groups and Base Select's label for select triggers.
 - Base UI-compatible controls register directly; use
