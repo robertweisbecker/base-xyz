@@ -33,6 +33,7 @@ export {
 	type DataTableProps,
 	type DataTableRow,
 	type DataTableRowAction,
+	type DataTableToolbarControls,
 } from "./data-table/data-table";
 export {
 	EmptyState,

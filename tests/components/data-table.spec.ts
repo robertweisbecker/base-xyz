@@ -3,6 +3,8 @@ import { expect, test } from "../playwright";
 const storyPath = "/iframe.html?id=components-data-table--playground&viewMode=story";
 const actionIdentityStoryPath =
 	"/iframe.html?id=components-data-table--action-identity&viewMode=story";
+const toolbarCompositionStoryPath =
+	"/iframe.html?id=components-data-table--toolbar-composition&viewMode=story";
 
 test("row expansion toggles keep contextual accessible names and pressed state", async ({
 	page,
@@ -140,4 +142,19 @@ test("selection and expansion compose on a stable row", async ({ page }) => {
 	await expect(table.getByText(/Deployment dep_/)).toBeVisible();
 
 	await expect(page.getByText("1 of 5 row(s) selected.")).toBeVisible();
+});
+
+test("custom toolbar content renders and reordered filters remain functional", async ({ page }) => {
+	await page.goto(toolbarCompositionStoryPath);
+
+	const fixture = page.getByTestId("data-table-toolbar-composition-fixture");
+	await fixture.getByTestId("data-table-toolbar-custom-action").click();
+	await expect(fixture.getByRole("status")).toHaveText("Refreshed deployments");
+
+	const environmentFilter = fixture.getByRole("button", { name: "Environment", exact: true });
+	await environmentFilter.click();
+	await page.getByRole("menuitemcheckbox", { name: "Preview" }).click();
+
+	await expect(fixture.getByRole("table").locator("tbody tr")).toHaveCount(2);
+	await expect(fixture.getByRole("cell", { name: "Preview", exact: true })).toHaveCount(2);
 });

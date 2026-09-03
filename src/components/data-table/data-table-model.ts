@@ -82,6 +82,17 @@ export type DataTableFilter = {
 	options: DataTableFilterOption[];
 };
 
+export type DataTableToolbarControls = {
+	/** The already-wired column visibility control. */
+	columnVisibility: ReactNode;
+	/** The already-wired global or column-specific search control. */
+	search: ReactNode;
+	/** Filter controls in their configured order, addressable by `columnId`. */
+	filters: ReadonlyArray<{ columnId: string; control: ReactNode }>;
+	/** The configured `toolbarEndSlot`, when one was provided. */
+	endSlot: ReactNode;
+};
+
 export type DataTableProps<TData extends RowData, TValue = unknown> = Omit<
 	ComponentProps<"div">,
 	"children" | "style" | "xstyle" | keyof MarginProps
@@ -100,6 +111,8 @@ export type DataTableProps<TData extends RowData, TValue = unknown> = Omit<
 		getRowId?: (originalRow: TData, index: number, parent?: DataTableRow<TData>) => string;
 		initialColumnVisibility?: ColumnVisibilityState;
 		renderExpandedRow?: (row: DataTableRow<TData>) => ReactNode;
+		/** Reorders or supplements the already-wired toolbar controls. */
+		renderToolbar?: (controls: DataTableToolbarControls) => ReactNode;
 		rowSelection?: boolean;
 		showExpandColumn?: boolean;
 		toolbarEndSlot?: ReactNode;

@@ -6,19 +6,28 @@ import { dataTableParts } from "./data-table.stylex";
 import type { DataTableColumn, DataTableFeatures, DataTableFilter } from "./data-table-model";
 import type { RowData, Table as TableInstance } from "@tanstack/react-table";
 
-export function DataTableFilters<TData extends RowData>({
+export function getDataTableFilterControls<TData extends RowData>({
 	filters,
 	table,
 }: {
 	filters?: DataTableFilter[];
 	table: TableInstance<DataTableFeatures, TData>;
 }) {
-	return filters?.map((filter) => {
-		const column = table.getColumn(filter.columnId);
-		return column ? (
-			<DataTableColumnFilterMenu key={filter.columnId} column={column} filter={filter} />
-		) : null;
-	});
+	return (
+		filters?.flatMap((filter) => {
+			const column = table.getColumn(filter.columnId);
+			return column
+				? [
+						{
+							columnId: filter.columnId,
+							control: (
+								<DataTableColumnFilterMenu key={filter.columnId} column={column} filter={filter} />
+							),
+						},
+					]
+				: [];
+		}) ?? []
+	);
 }
 
 function DataTableColumnFilterMenu<TData extends RowData>({

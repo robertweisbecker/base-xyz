@@ -11,7 +11,7 @@ import {
 import { Table } from "@/components/table/table";
 import { useDataTableColumns } from "./data-table-columns";
 import { DataTableContent } from "./data-table-content";
-import { DataTableFilters } from "./data-table-filters";
+import { getDataTableFilterControls } from "./data-table-filters";
 import { DataTableColumnVisibility } from "./data-table-column-visibility";
 import { DataTableSearch } from "./data-table-search";
 import { dataTableParts } from "./data-table.stylex";
@@ -20,6 +20,7 @@ import {
 	getDefaultColumnLabel,
 	type DataTableFeatures,
 	type DataTableProps,
+	type DataTableToolbarControls,
 } from "./data-table-model";
 
 export type {
@@ -30,6 +31,7 @@ export type {
 	DataTableProps,
 	DataTableRow,
 	DataTableRowAction,
+	DataTableToolbarControls,
 } from "./data-table-model";
 
 export function DataTable<TData extends RowData, TValue = unknown>({
@@ -46,6 +48,7 @@ export function DataTable<TData extends RowData, TValue = unknown>({
 	getRowId,
 	initialColumnVisibility,
 	renderExpandedRow,
+	renderToolbar,
 	rowSelection = true,
 	showExpandColumn = true,
 	style,
@@ -95,6 +98,19 @@ export function DataTable<TData extends RowData, TValue = unknown>({
 			sorting,
 		},
 	});
+	const toolbarControls: DataTableToolbarControls = {
+		columnVisibility: <DataTableColumnVisibility getColumnLabel={getColumnLabel} table={table} />,
+		search: (
+			<DataTableSearch
+				filterColumnId={filterColumnId}
+				filterPlaceholder={filterPlaceholder}
+				globalFilter={globalFilter}
+				table={table}
+			/>
+		),
+		filters: getDataTableFilterControls({ filters, table }),
+		endSlot: toolbarEndSlot,
+	};
 
 	return (
 		<Table.Root
@@ -105,17 +121,18 @@ export function DataTable<TData extends RowData, TValue = unknown>({
 			{...props}
 		>
 			<div {...stylex.props(dataTableParts.toolbar)}>
-				<DataTableColumnVisibility getColumnLabel={getColumnLabel} table={table} />
-				<DataTableSearch
-					filterColumnId={filterColumnId}
-					filterPlaceholder={filterPlaceholder}
-					globalFilter={globalFilter}
-					table={table}
-				/>
-				<div {...stylex.props(dataTableParts.toolbarActions)}>
-					<DataTableFilters filters={filters} table={table} />
-					{toolbarEndSlot}
-				</div>
+				{renderToolbar ? (
+					renderToolbar(toolbarControls)
+				) : (
+					<>
+						{toolbarControls.columnVisibility}
+						{toolbarControls.search}
+						<div {...stylex.props(dataTableParts.toolbarActions)}>
+							{toolbarControls.filters.map(({ control }) => control)}
+							{toolbarEndSlot}
+						</div>
+					</>
+				)}
 			</div>
 			<DataTableContent
 				emptyLabel={emptyLabel}
