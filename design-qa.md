@@ -105,7 +105,7 @@ line height is zero.
 
 Motion was verified from computed styles: the SVG rotates continuously while the
 foreground circle independently animates its normalized dash array and dash
-offset. Reduced-motion rules stop both animations. Button, Async job progress,
+offset. Reduced-motion rules stop both animations. Button, Task progress,
 Streaming response, and Workflow progress stories render without an error
 overlay, and the Collapsible module that previously failed now loads directly.
 

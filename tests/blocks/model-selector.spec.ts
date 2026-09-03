@@ -1,6 +1,6 @@
 import { expect, test, type Page } from "../playwright";
 
-const storyPath = "/iframe.html?id=blocks-model-selector--normalization-regression&viewMode=story";
+const storyPath = "/iframe.html?id=blocks-ai-model-selector--normalization-regression&viewMode=story";
 
 test.describe.configure({ timeout: 120_000 });
 

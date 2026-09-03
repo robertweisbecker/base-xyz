@@ -70,7 +70,7 @@ const agentBlockSections = [
 	},
 	{
 		id: "async-job-progress",
-		title: "Async Job Progress",
+		title: "Task Progress",
 		description: "A stable surface for queued, active, completed, and failed background work.",
 		Example: AsyncJobProgressExample,
 	},

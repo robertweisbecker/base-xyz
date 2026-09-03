@@ -10,7 +10,7 @@ import { Text } from "@/components/text/text";
 import { StreamingResponse, type StreamingResponseStatus } from "./streaming-response";
 
 const meta = {
-	title: "Blocks/Streaming response",
+	title: "Blocks/AI/Streaming response",
 	component: StreamingResponse.Root,
 	parameters: {
 		controls: { disable: true },

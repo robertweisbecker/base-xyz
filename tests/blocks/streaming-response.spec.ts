@@ -1,6 +1,6 @@
 import { expect, test, type Page } from "../playwright";
 
-const storyPath = "/iframe.html?id=blocks-streaming-response--replacement-reset&viewMode=story";
+const storyPath = "/iframe.html?id=blocks-ai-streaming-response--replacement-reset&viewMode=story";
 
 async function pauseClock(page: Page) {
 	await page.clock.pauseAt((await page.evaluate(() => Date.now())) + 100);

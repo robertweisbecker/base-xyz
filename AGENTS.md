@@ -3,7 +3,7 @@
 ## Architecture
 
 - Before changing component/block responsibility or compound ownership, read [ADR 0004](docs/adr/0004-component-block-and-compound-ownership.md).
-- Give each block a native Storybook Docs page with its standard metadata, previews, controls, a concise parts table, and an adjacent import `Source`. Place stories under `Blocks/`.
+- Give each block a native Storybook Docs page with its standard metadata, previews, controls, a concise parts table, and an adjacent import `Source`. Place stories under `Blocks/`. AI-related blocks go under `Blocks/AI/`; general blocks remain direct children of `Blocks/`.
 - Treat `src/components/index.ts` as the public component source of truth. Gallery specimens must use public exports; keep imports and specimen titles alphabetical.
 
 ## APIs and interface design
