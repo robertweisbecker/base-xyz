@@ -39,27 +39,32 @@ export function AppShell() {
 		setStoredThemeBrand(theme);
 	}, [mode, theme]);
 
-	function updateThemeSearch(nextTheme: ThemeName, nextMode: ThemeMode) {
+	function updateThemeSearch(nextPreference: { mode?: ThemeMode; theme?: ThemeName }) {
 		void navigate({
 			replace: true,
 			resetScroll: false,
 			to: ".",
-			search: (previous) => ({
-				...previous,
-				mode: nextMode === "system" ? undefined : nextMode,
-				theme: nextTheme === "default" ? undefined : nextTheme,
-			}),
+			search: (previous) => {
+				const nextMode = nextPreference.mode ?? previous.mode ?? getStoredThemeMode();
+				const nextTheme = nextPreference.theme ?? previous.theme ?? getStoredThemeBrand();
+
+				return {
+					...previous,
+					mode: nextMode === "system" ? undefined : nextMode,
+					theme: nextTheme === "default" ? undefined : nextTheme,
+				};
+			},
 		});
 	}
 
 	const handleModeChange = (nextMode: ThemeMode) => {
 		setStoredThemeMode(nextMode);
-		updateThemeSearch(theme, nextMode);
+		updateThemeSearch({ mode: nextMode });
 	};
 
 	const handleThemeChange = (nextTheme: ThemeName) => {
 		setStoredThemeBrand(nextTheme);
-		updateThemeSearch(nextTheme, mode);
+		updateThemeSearch({ theme: nextTheme });
 	};
 
 	return (
