@@ -20,11 +20,11 @@
 - **Priority**: P1
 - **Effort**: M
 - **Risk**: MED
-- **Depends on**: [Plan 006](./006-data-table-row-action-identities.md) / [#24](https://github.com/robertweisbecker/base-xyz/issues/24)
+- **Depends on**: completed Plan 006 / [#24](https://github.com/robertweisbecker/base-xyz/issues/24)
 - **Category**: tech-debt
 - **Planned at**: commit `e2910dd`, 2026-09-02
 - **Issue**: [#26](https://github.com/robertweisbecker/base-xyz/issues/26)
-- **Status**: BLOCKED — awaiting Plan 006 / #24
+- **Status**: TODO
 
 ## Why this matters
 
@@ -197,7 +197,8 @@ as documented in AGENTS.md.
 
 ## Git workflow
 
-- Do not begin until Plan 006 / #24 is implemented on the target base.
+- Start from an updated `main` that includes the completed Plan 006 / #24
+  identity contract.
 - Branch, when requested: `codex/decompose-data-table` from that updated `main`.
 - Prefer one focused implementation commit after all gates pass:
   `[codex] Decompose DataTable orchestration`.
@@ -360,8 +361,9 @@ diff for public surface, rendered markup, and StyleX value drift.
 
 Stop and report back instead of improvising if:
 
-- Plan 006 / #24 has not landed or the live row-action contract differs from
-  the expected required stable ID.
+- The target base does not include the completed Plan 006 / #24 identity
+  contract, or the live row-action contract differs from the expected required
+  stable ID.
 - Any characterization test fails on the pre-refactor implementation.
 - A private module requires its own competing TanStack state owner or a new
   context to avoid unreasonable prop flow; report the proposed ownership seam
