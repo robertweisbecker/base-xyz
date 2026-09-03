@@ -1,3 +1,4 @@
+import * as stylex from "@stylexjs/stylex";
 import { useState } from "react";
 import {
 	useTable,
@@ -10,7 +11,10 @@ import {
 import { Table } from "@/components/table/table";
 import { useDataTableColumns } from "./data-table-columns";
 import { DataTableContent } from "./data-table-content";
-import { DataTableToolbar } from "./data-table-toolbar";
+import { DataTableFilters } from "./data-table-filters";
+import { DataTableColumnVisibility } from "./data-table-column-visibility";
+import { DataTableSearch } from "./data-table-search";
+import { dataTableParts } from "./data-table.stylex";
 import {
 	dataTableFeatures,
 	getDefaultColumnLabel,
@@ -100,15 +104,19 @@ export function DataTable<TData extends RowData, TValue = unknown>({
 			// Delegated: Table.Root owns margin resolution; do not resolve locally.
 			{...props}
 		>
-			<DataTableToolbar
-				filterColumnId={filterColumnId}
-				filterPlaceholder={filterPlaceholder}
-				filters={filters}
-				getColumnLabel={getColumnLabel}
-				globalFilter={globalFilter}
-				table={table}
-				toolbarEndSlot={toolbarEndSlot}
-			/>
+			<div {...stylex.props(dataTableParts.toolbar)}>
+				<DataTableColumnVisibility getColumnLabel={getColumnLabel} table={table} />
+				<DataTableSearch
+					filterColumnId={filterColumnId}
+					filterPlaceholder={filterPlaceholder}
+					globalFilter={globalFilter}
+					table={table}
+				/>
+				<div {...stylex.props(dataTableParts.toolbarActions)}>
+					<DataTableFilters filters={filters} table={table} />
+					{toolbarEndSlot}
+				</div>
+			</div>
 			<DataTableContent
 				emptyLabel={emptyLabel}
 				renderExpandedRow={renderExpandedRow}

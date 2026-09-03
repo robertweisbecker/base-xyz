@@ -79,10 +79,21 @@ test("row actions retain focus, identity, and callbacks while mounted actions ch
 test("filtering, sorting, visibility, selection, and empty results remain observable", async ({
 	page,
 }) => {
+	await page.setViewportSize({ width: 640, height: 720 });
 	await page.goto(storyPath);
 
 	const table = page.getByRole("table");
 	const filter = page.getByRole("textbox", { name: "Search by URL…" });
+	const scrollViewport = page.getByLabel("Scrollable table");
+	await expect
+		.poll(() => scrollViewport.evaluate((element) => element.scrollWidth > element.clientWidth))
+		.toBe(true);
+	await scrollViewport.evaluate((element) => {
+		element.scrollLeft = 16;
+	});
+	await expect
+		.poll(() => scrollViewport.evaluate((element) => element.scrollLeft))
+		.toBeGreaterThan(0);
 
 	await filter.fill("feature-auth");
 	await expect(table.locator("tbody tr")).toHaveCount(1);
@@ -91,7 +102,6 @@ test("filtering, sorting, visibility, selection, and empty results remain observ
 
 	await filter.fill("");
 	const sortButton = page.getByRole("button", { name: "Sort URL ascending" });
-	const initialOrder = await table.locator("tbody tr").allTextContents();
 	await sortButton.click();
 	await expect(table.getByRole("columnheader", { name: /URL/ })).toHaveAttribute(
 		"aria-sort",
@@ -102,8 +112,8 @@ test("filtering, sorting, visibility, selection, and empty results remain observ
 		"aria-sort",
 		"descending",
 	);
-	const descendingOrder = await table.locator("tbody tr").allTextContents();
-	expect(descendingOrder).not.toEqual(initialOrder);
+	await expect(table.locator("tbody tr").first()).toContainText("staging.example.com");
+	await expect(table.locator("tbody tr").last()).toContainText("app.example.com");
 
 	await page.getByRole("button", { name: "Column settings" }).click();
 	const updatedColumn = page.getByRole("menuitemcheckbox", { name: "Updated" });

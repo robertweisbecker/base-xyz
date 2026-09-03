@@ -8,12 +8,7 @@ import {
 	type DataTableFeatures,
 	type DataTableRow,
 } from "./data-table-model";
-import {
-	flexRender,
-	type Row,
-	type RowData,
-	type Table as TableInstance,
-} from "@tanstack/react-table";
+import { flexRender, type RowData, type Table as TableInstance } from "@tanstack/react-table";
 
 export function DataTableBody<TData extends RowData>({
 	emptyLabel,
@@ -30,7 +25,7 @@ export function DataTableBody<TData extends RowData>({
 		<Table.Body>
 			{visibleRows.length > 0 ? (
 				visibleRows.map((row) => (
-					<DataTableRow key={row.id} renderExpandedRow={renderExpandedRow} row={row} />
+					<DataTableBodyRow key={row.id} renderExpandedRow={renderExpandedRow} row={row} />
 				))
 			) : (
 				<Table.Empty colSpan={Math.max(1, table.getVisibleLeafColumns().length)}>
@@ -41,12 +36,12 @@ export function DataTableBody<TData extends RowData>({
 	);
 }
 
-function DataTableRow<TData extends RowData>({
+function DataTableBodyRow<TData extends RowData>({
 	renderExpandedRow,
 	row,
 }: {
 	renderExpandedRow?: (row: DataTableRow<TData>) => ReactNode;
-	row: Row<DataTableFeatures, TData>;
+	row: DataTableRow<TData>;
 }) {
 	return (
 		<Fragment>
