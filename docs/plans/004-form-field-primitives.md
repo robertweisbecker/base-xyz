@@ -21,6 +21,7 @@
 - **Depends on**: none
 - **Category**: migration
 - **Planned at**: commit `bf25e43`, 2026-08-27
+- **Issue**: [#19](https://github.com/robertweisbecker/base-xyz/issues/19)
 - **Status**: TODO
 
 ## Why this matters
@@ -71,7 +72,12 @@ Field.Error                fieldStyles.error
 ```
 
 The root is already a column with `--space-1` gap and `minWidth: 0`. Keep that
-module as the style owner; do not copy these recipes into each wrapper.
+module as the owner of generic Field recipes; do not copy those recipes into
+each wrapper. Checkbox and Radio are an explicit boundary: their visual
+recipes belong to separate component-owned StyleX modules, not to Field. This
+plan establishes that boundary during migration; the deeper interaction-state
+cleanup follows in
+[#22](https://github.com/robertweisbecker/base-xyz/issues/22).
 
 ### Duplicated Base UI assembly
 
@@ -431,8 +437,14 @@ styles as caller `xstyle` so they merge last.
 - Select: migrate surrounding Field parts only; keep Base Select's label.
 - Combobox: migrate Field/Label without changing input/trigger/chips/popup.
 - Checkbox/Radio: retain same-host Field → Fieldset → Group composition. Move
-  shared native reset to Fieldset, retain component-specific gap/title/item
-  styles as `xstyle`, use Legend and `Label variant="item"`.
+  only shared semantic/reset ownership to the public Fieldset and Label
+  wrappers. Move choice-specific label, description, group layout, control,
+  indicator, size, and state styles into separate Checkbox- and Radio-owned
+  StyleX modules; neither component may import private Field style maps for
+  visual treatment after migration. Preserve current behavior in this plan;
+  the deeper state-style cleanup is tracked by
+  [#22](https://github.com/robertweisbecker/base-xyz/issues/22) and begins only
+  after this plan lands.
 - Switch: use Field.Root, item Label, and Description while preserving one root,
   justify-between label layout, visually hidden label, required marker,
   description ID, nativeButton, and keyboard/pointer behavior.
@@ -571,7 +583,8 @@ imports.
 - [ ] Form, Field.Root, and Fieldset.Root expose margins; parts do not; no prop
       leakage.
 - [ ] Base → margins → xstyle → native style precedence is tested.
-- [ ] Existing field recipes remain the style owner; controls retain chrome.
+- [ ] Generic Field recipes remain Field-owned; Checkbox and Radio own their
+      separate visual recipes; controls retain their chrome.
 - [ ] Fieldset owns reset without a competing generic gap.
 - [ ] Existing high-level component/block APIs and behavior are unchanged.
 - [ ] Select.Label remains Base Select-owned.
@@ -603,6 +616,9 @@ Stop and report; do not improvise if:
 ## Maintenance notes
 
 - Keep compounds closed; add `Field.Validity` only for a real consumer.
+- Do not absorb the Checkbox/Radio state refactor into this migration. It is
+  tracked separately by [#22](https://github.com/robertweisbecker/base-xyz/issues/22)
+  and depends on this plan's public primitive boundary.
 - Label is Field-context structure, not a generic typography label. Use Legend
   for groups and Base Select's label for select triggers.
 - Base UI-compatible controls register directly; use
