@@ -10,14 +10,13 @@ plans are not renumbered to fill gaps. The highest allocated identifier is
 
 ## Execution order & status
 
-| Plan                                               | Title                                       | Priority | Effort | Depends on      | Status        |
-| -------------------------------------------------- | ------------------------------------------- | -------: | -----: | --------------- | ------------- |
-| [007](./007-decompose-data-table-orchestration.md) | Decompose DataTable orchestration           |       P1 |      M | —               | IN PROGRESS   |
-| [003](./003-description-list-component.md)         | Add a semantic Description list component   |       P1 |      M | —               | TODO          |
-| [004](./004-form-field-primitives.md)              | Add composable form and field primitives    |       P1 |      L | Issue #22       | BLOCKED (#22) |
-| [005](./005-autocomplete-component.md)             | Add a free-form Autocomplete component      |       P2 |      M | 004             | TODO          |
-| [008](./008-migrate-from-npm-to-pnpm.md)           | Migrate repository workflows to pnpm 11     |       P2 |      M | #27; idle queue | TODO          |
-| [Stepper pagination](./stepper-pagination.md)      | Evaluate shared Stepper pagination controls |       P3 |      S | Second consumer | TODO          |
+| Plan                                          | Title                                       | Priority | Effort | Depends on                    | Status      |
+| --------------------------------------------- | ------------------------------------------- | -------: | -----: | ----------------------------- | ----------- |
+| [004](./004-form-field-primitives.md)         | Add composable form and field primitives    |       P1 |      L | Completed #22                 | IN PROGRESS |
+| [003](./003-description-list-component.md)    | Add a semantic Description list component   |       P1 |      M | —                             | TODO        |
+| [005](./005-autocomplete-component.md)        | Add a free-form Autocomplete component      |       P2 |      M | 004                           | TODO        |
+| [008](./008-migrate-from-npm-to-pnpm.md)      | Migrate repository workflows to pnpm 11     |       P2 |      M | Completed #34/#47; idle queue | TODO        |
+| [Stepper pagination](./stepper-pagination.md) | Evaluate shared Stepper pagination controls |       P3 |      S | Second consumer               | TODO        |
 
 Status values: TODO | IN PROGRESS | DONE | BLOCKED (with one-line reason) |
 REJECTED (with one-line rationale — finding fixed independently or approach
@@ -42,33 +41,29 @@ The `.scratch/` archive is ignored and local to the checkout; never force-add it
 This policy starts on 2026-09-03 and is not retroactive. Older retired plans
 are intentionally not reconstructed here.
 
-| Plan | Title | Final status | Durable evidence                       |
-| ---- | ----- | ------------ | -------------------------------------- |
-| —    | —     | —            | No plans retired under this policy yet |
+| Plan | Title                             | Final status | Durable evidence                                                                                                                                         |
+| ---- | --------------------------------- | ------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 007  | Decompose DataTable orchestration | DONE         | [Issue #26](https://github.com/robertweisbecker/base-xyz/issues/26); [PR #47](https://github.com/robertweisbecker/base-xyz/pull/47), merged as `e168ac3` |
 
 ## Dependency notes
 
-- Plan 006 / issue #24 established the stable public action identity and
-  regression fixture before DataTable internals move. Keeping these changes
-  serial avoided two agents changing the same DataTable owner and ensures the
-  private row-action module carries the corrected identity contract.
-- `007-decompose-data-table-orchestration.md` is IN PROGRESS and follows that
-  completed identity work; it remains a separate implementation effort for
-  issue #26.
+- Plan 007 completed after Plan 006's stable row-action identity work. Its
+  durable controller/module ownership and narrow `renderToolbar` seam are
+  recorded in ADR 0002; issue #26 and PR #47 retain the implementation record.
 - `003-description-list-component.md` is independent. It shares
   `src/components/index.ts`, `src/app/gallery-page.tsx`, and this index with
   other component plans, so parallel executors must reconcile those files
   without dropping public exports or plan rows.
-- `004-form-field-primitives.md` requires issue #22 to establish independent
-  Checkbox and Radio visual ownership before the structural field migration.
-  It shares `src/components/index.ts` and this index with Plan 003, so
-  executors must preserve all public exports and plan rows.
+- Issue #22 and PR #36 established independent Checkbox and Radio visual
+  ownership, satisfying Plan 004's prerequisite. Plan 004 is now IN PROGRESS
+  for issue #19 and shares `src/components/index.ts` and this index with Plan
+  003, so executors must preserve all public exports and plan rows.
 - `005-autocomplete-component.md` requires Plan 004's public `Field` and `Label`
   wrappers. Execute them serially: they also share `src/components/index.ts`,
   ADR 0011, `src/styles/README.md`, and this index.
-- `008-migrate-from-npm-to-pnpm.md` begins only after issue #27 / PR #34 lands
-  and no other plan is IN PROGRESS. It changes the installation and validation
-  vocabulary used by every executor, so it must run as a repository-wide serial
-  migration. The TRIAGE thread confirmed that #27 does not remove the six
-  transitive `@base-ui/utils/useMergedRefs` imports; Plan 008 owns that
-  prerequisite.
+- Issue #27 / PR #34 and Plan 007 / PR #47 are complete, satisfying Plan 008's
+  implementation prerequisites. Plan 008 remains TODO and may begin only when
+  no other plan is IN PROGRESS because it changes the installation and
+  validation vocabulary used by every executor. The TRIAGE thread confirmed
+  that #27 did not remove the six transitive `@base-ui/utils/useMergedRefs`
+  imports; Plan 008 owns that cleanup.

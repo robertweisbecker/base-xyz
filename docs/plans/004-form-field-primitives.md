@@ -8,22 +8,22 @@
 > maintain the index.
 >
 > **Drift check (run first)**:
-> `git diff --stat afb9dd8..HEAD -- docs/adr/0011-layout-primitives-common-margins-and-stylex-overrides.md src/styles/README.md src/components src/blocks/password-field src/blocks/prompt-composer src/experimental/math-expression-field src/app/experiments/inputs-composed-form.tsx src/foundations/style-props.verification.stories.tsx tests/components tests/style-props docs/plans/README.md`
-> If any in-scope file changed since this plan was written, compare the
-> "Current state" excerpts against the live code before proceeding; on a
-> mismatch, treat it as a STOP condition.
+> `git diff --stat 1569440..HEAD -- docs/adr/0011-layout-primitives-common-margins-and-stylex-overrides.md src/styles/README.md src/components/form src/components/fieldset src/components/field src/components/label src/components/index.ts src/components/text-field/text-field.tsx src/components/textarea/textarea.tsx src/components/number-field/number-field.tsx src/components/select/select.tsx src/components/combobox/combobox-field.tsx src/components/checkbox src/components/radio src/components/switch/switch.tsx src/components/input-group src/components/slider/slider.stories.tsx src/blocks/password-field/password-field.tsx src/blocks/prompt-composer/prompt-composer.tsx src/experimental/math-expression-field/math-expression-field.tsx src/experimental/inline-edit/inline-edit.stories.tsx src/app/experiments/inputs-composed-form.tsx src/foundations/style-props.verification.stories.tsx tests/components/form.spec.ts tests/components/checkbox.spec.ts tests/components/radio.spec.ts tests/style-props/browser.spec.ts docs/plans/004-form-field-primitives.md docs/plans/README.md`
+> Before implementation edits, expect only the post-merge plan/index
+> reconciliation after `1569440`. Compare any other change against the current
+> state below; on a mismatch, treat it as a STOP condition.
 
 ## Status
 
 - **Priority**: P1
 - **Effort**: L
 - **Risk**: HIGH
-- **Depends on**: [#22](https://github.com/robertweisbecker/base-xyz/issues/22)
+- **Completed prerequisite**: [#22](https://github.com/robertweisbecker/base-xyz/issues/22) / [PR #36](https://github.com/robertweisbecker/base-xyz/pull/36), merged as `26fece7`
 - **Category**: migration
 - **Planned at**: commit `bf25e43`, 2026-08-27
-- **Reconciled at**: commit `afb9dd8`, 2026-09-02
+- **Reconciled at**: commit `1569440`, 2026-09-03
 - **Issue**: [#19](https://github.com/robertweisbecker/base-xyz/issues/19)
-- **Status**: BLOCKED — awaiting #22
+- **Status**: IN PROGRESS
 
 ## Why this matters
 
@@ -60,8 +60,8 @@ those higher-level components' public contracts.
 
 ### Existing shared field styles
 
-`src/components/field/field.stylex.ts:16-32,34-73,141-152` already declares
-itself the canonical style owner and supplies:
+`src/components/field/field.stylex.ts` declares itself the canonical generic
+field-style owner and supplies:
 
 ```text
 Field.Root                 fieldStyles.root
@@ -76,10 +76,11 @@ The root is already a column with `--space-1` gap and `minWidth: 0`. Keep that
 module as the owner of generic Field recipes; do not copy those recipes into
 each wrapper. Checkbox and Radio are an explicit boundary: their visual
 recipes belong to separate component-owned StyleX modules, not to Field.
-[#22](https://github.com/robertweisbecker/base-xyz/issues/22) establishes that
-boundary and cleans up their interaction-state ownership before this migration
-begins. This plan then migrates their semantic Field/Fieldset/Label structure
-without reopening or relocating their visual styles.
+[#22](https://github.com/robertweisbecker/base-xyz/issues/22) and PR #36
+established that boundary in separate `checkbox.stylex.ts` and
+`radio.stylex.ts` modules. This plan migrates their semantic
+Field/Fieldset/Label structure without reopening or relocating those visual
+styles.
 
 ### Duplicated Base UI assembly
 
@@ -103,8 +104,8 @@ load-bearing no-extra-node composition:
 </Field.Root>
 ```
 
-`src/components/checkbox/checkbox.tsx:202-245` and Radio compose three Base UI
-roots onto one fieldset host:
+`CheckboxGroup` and `RadioGroup` compose three Base UI roots onto one fieldset
+host:
 
 ```tsx
 <Field.Root
@@ -123,8 +124,8 @@ roots onto one fieldset host:
 Preserve that same-host composition. Repository and caller styles must merge
 through Base UI's `render` contract, not through added wrapper elements.
 
-`src/blocks/prompt-composer/prompt-composer.tsx:98-117,374-382` imports Base UI
-`Form` directly. Its root deliberately overrides form spacing with
+`src/blocks/prompt-composer/prompt-composer.tsx` imports Base UI `Form`
+directly. Its root deliberately overrides form spacing with
 `gap: --space-0` and owns `maxWidth: 42rem`; the public Form must accept that
 style as caller `xstyle` merged after its default form structure.
 
@@ -143,12 +144,18 @@ src/components/select/select.tsx
 src/components/slider/slider.stories.tsx
 src/components/text-field/text-field.tsx
 src/components/textarea/textarea.tsx
+src/experimental/inline-edit/inline-edit.stories.tsx
 src/experimental/math-expression-field/math-expression-field.tsx
 ```
 
 After migration, direct imports from `@base-ui/react/field`,
 `@base-ui/react/fieldset`, and `@base-ui/react/form` should exist only inside
 the four new wrapper implementations.
+
+PR #49, merged as `9751025`, stabilized provider values and callbacks in
+PasswordField, PromptComposer, and Combobox. Their semantic migrations must
+preserve those `useMemo`/`useCallback` boundaries and dependency sets; replacing
+Base UI structure is not a reason to regress context identity.
 
 `src/components/switch/switch.tsx:64-105` is the remaining hand-built field
 shape: a `<div>`, native `<label>`, Base UI Switch, and description `<p>`.
@@ -199,15 +206,15 @@ render element and callback forms.
 
 ## Commands you will need
 
-| Purpose          | Command                                                                               | Expected on success                                     |
-| ---------------- | ------------------------------------------------------------------------------------- | ------------------------------------------------------- |
-| Inspect base     | `git status --short --branch && git rev-parse --short HEAD`                           | starts from `main`; no unrelated implementation changes |
-| Import inventory | `rg -n 'from "@base-ui/react/(field                                                   | fieldset                                                | form)"' src` | after migration: only four wrapper files |
-| Typecheck        | `npm run typecheck`                                                                   | exit 0, no errors                                       |
-| Standard gate    | `npm run verify:quick`                                                                | typecheck, lint, and formatting pass                    |
-| Build stories    | `npm run build-storybook`                                                             | exit 0                                                  |
-| Focused browser  | `npx playwright test tests/components/form.spec.ts tests/style-props/browser.spec.ts` | all pass; no console/page errors                        |
-| Full gate        | `npm run verify:full`                                                                 | app, Storybook, browser, and bundle gates pass          |
+| Purpose          | Command                                                                                                       | Expected on success                                     |
+| ---------------- | ------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------- |
+| Inspect base     | `git status --short --branch && git rev-parse --short HEAD`                                                   | starts from `main`; no unrelated implementation changes |
+| Import inventory | `rg -n -e 'from "@base-ui/react/field' -e 'from "@base-ui/react/fieldset' -e 'from "@base-ui/react/form' src` | after migration: only four wrapper files                |
+| Typecheck        | `npm run typecheck`                                                                                           | exit 0, no errors                                       |
+| Standard gate    | `npm run verify:quick`                                                                                        | typecheck, lint, and formatting pass                    |
+| Build stories    | `npm run build-storybook`                                                                                     | exit 0                                                  |
+| Focused browser  | `npx playwright test tests/components/form.spec.ts tests/style-props/browser.spec.ts`                         | all pass; no console/page errors                        |
+| Full gate        | `npm run verify:full`                                                                                         | app, Storybook, browser, and bundle gates pass          |
 
 If another checkout owns the default Storybook port, leave it running and use
 an unused port, for example:
@@ -262,6 +269,7 @@ PLAYWRIGHT_STORYBOOK_PORT=6116 npx playwright test tests/components/form.spec.ts
 - `src/blocks/password-field/password-field.tsx`
 - `src/blocks/prompt-composer/prompt-composer.tsx`
 - `src/experimental/math-expression-field/math-expression-field.tsx`
+- `src/experimental/inline-edit/inline-edit.stories.tsx`
 - `src/app/experiments/inputs-composed-form.tsx`
 - `src/foundations/style-props.verification.stories.tsx`
 - `tests/components/form.spec.ts` (create)
@@ -280,11 +288,14 @@ PLAYWRIGHT_STORYBOOK_PORT=6116 npx playwright test tests/components/form.spec.ts
 - `as`, `asChild`, slot cloning, a second render API, or added DOM wrappers.
 - Four isolated Gallery specimens or Gallery/routing redesign.
 - Token removal, control-chrome redesign, commits, pushes, or PR creation.
+- Changes to `src/components/checkbox/checkbox.stylex.ts` or
+  `src/components/radio/radio.stylex.ts`; these are completed visual owners and
+  prerequisite evidence, not migration targets.
 
 ## Git workflow
 
-- Base: `main` at `bf25e43`. This plan was derived from main, not the prior
-  feature branch.
+- Baseline evidence was refreshed against `main` at `1569440`. Start the
+  implementation branch from current `main`, including this reconciliation.
 - If the operator wants an implementation branch, create
   `codex/form-field-primitives` from current main; otherwise remain in the
   checkout they designate.
@@ -458,11 +469,17 @@ styles as caller `xstyle` so they merge last.
 - MathExpressionField: migrate structure only.
 - InputGroup and Slider stories: use public Field/Label, not Base UI/private
   field recipes.
+- InlineEdit's `FieldInlineEditDemo` story: replace its direct Base UI Field
+  and private field-style imports with public Field, Label, Description, and
+  Error parts while preserving the demo behavior and content.
+- PasswordField, PromptComposer, and Combobox: preserve the provider-value and
+  callback stabilization landed in PR #49; structure migration must not
+  recreate inline context objects or stale callback dependencies.
 
 Keep current explicit ID and described-by wiring. After migration:
 
 ```sh
-rg -n 'from "@base-ui/react/(field|fieldset|form)"' src
+rg -n -e 'from "@base-ui/react/field' -e 'from "@base-ui/react/fieldset' -e 'from "@base-ui/react/form' src
 ```
 
 Expected matches only:
@@ -511,6 +528,8 @@ Add Form, standalone Field.Root, and standalone Fieldset.Root margin fixtures to
 `style-props.verification.stories.tsx`. Extend
 `tests/style-props/browser.spec.ts` to prove margins land on roots, custom props
 do not leak, `xstyle` beats named margins, and native `style` remains last.
+Retain the fractional `2.5` and `-2.5` spacing expectations added by PR #51;
+do not narrow the shared margin domain while extending these fixtures.
 Avoid screenshots, generated classes, and incidental paint/geometry.
 
 **Verify**:
@@ -555,7 +574,7 @@ gates and manual checks pass.
 ```sh
 git diff --check
 git status --short
-rg -n 'from "@base-ui/react/(field|fieldset|form)"' src
+rg -n -e 'from "@base-ui/react/field' -e 'from "@base-ui/react/fieldset' -e 'from "@base-ui/react/form' src
 ```
 
 → no whitespace errors, only in-scope files changed, exactly four wrapper
@@ -601,8 +620,10 @@ imports.
 Stop and report; do not improvise if:
 
 - In-scope drift invalidates a current-state excerpt or ownership assumption.
-- Issue #22 is incomplete, or Checkbox/Radio still depend on private Field
-  style maps for their visual treatment.
+- The branch does not contain completed PR #36 (`26fece7`), or Checkbox/Radio
+  no longer own their visual treatment in separate component StyleX modules.
+- The migration regresses the provider-value/callback stabilization from PR #49
+  in PasswordField, PromptComposer, or Combobox.
 - Installed Base UI is no longer 1.7.x or the cited contracts materially differ.
 - Render typing requires `any`, cloning, `as`/`asChild`, or lost state/ref types.
 - Field/Fieldset/NumberField composition creates multiple hosts or
@@ -620,9 +641,9 @@ Stop and report; do not improvise if:
 
 - Keep compounds closed; add `Field.Validity` only for a real consumer.
 - Do not reopen the Checkbox/Radio state refactor in this migration. It is a
-  prerequisite tracked by
-  [#22](https://github.com/robertweisbecker/base-xyz/issues/22); this plan only
-  composes its completed visual ownership with the new public semantic
+  completed prerequisite tracked by
+  [#22](https://github.com/robertweisbecker/base-xyz/issues/22) and PR #36; this
+  plan only composes that visual ownership with the new public semantic
   primitives.
 - Label is Field-context structure, not a generic typography label. Use Legend
   for groups and Base Select's label for select triggers.

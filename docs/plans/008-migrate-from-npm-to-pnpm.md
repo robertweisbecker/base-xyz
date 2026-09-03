@@ -10,20 +10,21 @@
 > maintain the index.
 >
 > **Drift check (run first)**:
-> `git diff --stat 9b84d52..HEAD -- package.json package-lock.json pnpm-lock.yaml pnpm-workspace.yaml .prettierignore README.md AGENTS.md vercel.json playwright.config.ts playwright.app.config.ts src/hooks/use-merged-refs.ts src/blocks/prompt-composer/prompt-composer.tsx src/blocks/copy-button/copy-button.tsx src/components/tabs/tabs.tsx src/components/input-group/input-group.tsx src/components/textarea/textarea.tsx src/experimental/drag-and-drop/dnd-kit/dnd-kit-menu-demo.tsx src/experimental/inline-edit/inline-edit.tsx src/foundations/foundation-pages.tsx src/components/code/code.stories.tsx docs/plans docs/agents/planning.md`
-> Issue #27 / PR #34 and Plan 007 are expected to change their documented
-> owners before this plan begins. Confirm the dependency outcomes described
-> below, then compare every other changed in-scope file against "Current state."
-> Any unexplained mismatch is a STOP condition.
+> `git diff --stat 1569440..HEAD -- package.json package-lock.json pnpm-lock.yaml pnpm-workspace.yaml .prettierignore README.md AGENTS.md vercel.json playwright.config.ts playwright.app.config.ts src/hooks/use-merged-refs.ts src/blocks/prompt-composer/prompt-composer.tsx src/blocks/copy-button/copy-button.tsx src/components/tabs/tabs.tsx src/components/input-group/input-group.tsx src/components/textarea/textarea.tsx src/experimental/drag-and-drop/dnd-kit/dnd-kit-menu-demo.tsx src/experimental/inline-edit/inline-edit.tsx src/foundations/foundation-pages.tsx src/components/code/code.stories.tsx docs/plans docs/agents/planning.md`
+> Before implementation edits, expect only the post-merge lifecycle and plan
+> reconciliation after `1569440`, including Plan 007's retirement. Compare any
+> other change against "Current state." Any unexplained mismatch is a STOP
+> condition.
 
 ## Status
 
 - **Priority**: P2
 - **Effort**: M
 - **Risk**: HIGH
-- **Depends on**: issue [#27](https://github.com/robertweisbecker/base-xyz/issues/27) / PR [#34](https://github.com/robertweisbecker/base-xyz/pull/34) complete; no plan IN PROGRESS
+- **Completed prerequisites**: issue [#27](https://github.com/robertweisbecker/base-xyz/issues/27) / [PR #34](https://github.com/robertweisbecker/base-xyz/pull/34), merged as `a956b17`; Plan 007 / [PR #47](https://github.com/robertweisbecker/base-xyz/pull/47), merged as `e168ac3`
 - **Category**: migration
 - **Planned at**: commit `9b84d52`, 2026-09-03
+- **Reconciled at**: commit `1569440`, 2026-09-03
 - **Status**: TODO
 
 ## Why this matters
@@ -133,15 +134,13 @@ layout makes those undeclared imports resolve accidentally. pnpm must not be
 configured with public/shameful hoisting to preserve that accident, and the
 transitive utility must not be added as a direct dependency.
 
-Issue #27 / PR #34 changes commit-safety for latest-value refs in InlineEdit and
-two hooks; the TRIAGE owner confirmed it does **not** remove these six imports.
-Wait for that work to land because this plan should then extract InlineEdit's
-React 19 cleanup-aware local two-ref helper without overwriting its concurrent
-changes.
+Issue #27 / PR #34 landed as `a956b17`, changing commit-safety for latest-value
+refs in InlineEdit and two hooks without removing these six imports. This plan
+must preserve that completed work while extracting InlineEdit's React 19
+cleanup-aware local two-ref helper.
 
-At the planned commit,
-`src/experimental/inline-edit/inline-edit.tsx:489-516` already contains the
-right semantic seed:
+`src/experimental/inline-edit/inline-edit.tsx` now contains the right semantic
+seed in its private `useComposedRef` and `setRef` helpers:
 
 ```tsx
 function useComposedRef<T>(...refs: Array<Ref<T> | undefined>) {
@@ -200,11 +199,11 @@ build command to pnpm and keep `outputDirectory: "storybook-static"`.
 There is no GitHub Actions workflow. `.github/dependabot.yml` is the only
 tracked GitHub automation and should continue using `package-ecosystem: npm`.
 
-Plan 007 is IN PROGRESS at the planning commit. Do not execute this
-repository-wide package-manager migration concurrently with it or another
-active plan: every plan and validator currently assumes npm. When Plan 008
-begins, update only the active plan files that still exist; do not recreate a
-retired plan merely because it appears in this planned-at scope.
+Plan 007 completed in PR #47 and is retired from the active plan directory.
+Do not execute this repository-wide package-manager migration concurrently
+with another active plan: every plan and validator currently assumes npm. When
+Plan 008 begins, update only the active plan files that still exist; do not
+recreate Plan 007 merely because it appears in the original planned-at scope.
 
 ## Commands you will need
 
@@ -315,8 +314,9 @@ Do not use the current root `node_modules` as baseline evidence. The successful
 
 ## Git workflow
 
-- Start only after issue #27 / PR #34 is complete and the active-plan table has
-  no other IN PROGRESS row. Rebase or branch from the then-current `main`.
+- Start only from a base containing issue #27 / PR #34 (`a956b17`) and Plan 007
+  / PR #47 (`e168ac3`), with no other IN PROGRESS plan row. Rebase or branch
+  from the then-current `main`.
 - Suggested branch: `codex/migrate-to-pnpm`.
 - Preserve a clean pre-migration npm baseline in `/tmp`, not as tracked files.
 - Prefer two reviewable commits if authorized:
@@ -328,11 +328,11 @@ Do not use the current root `node_modules` as baseline evidence. The successful
 
 ### Step 1: Establish a clean npm baseline and execution lock
 
-Confirm issue #27 / PR #34 is merged and inspect its final InlineEdit/hook diff.
-Confirm no plan other than Plan 008 is IN PROGRESS, then mark Plan 008 IN
-PROGRESS without changing other statuses. The package-manager migration is a
-serial infrastructure change; do not run it beside another executor whose
-commands or lockfile may change.
+Confirm commits `a956b17` and `e168ac3` are ancestors of the implementation
+base and inspect the final InlineEdit/hook diff. Confirm no plan other than Plan
+008 is IN PROGRESS, then mark Plan 008 IN PROGRESS without changing other
+statuses. The package-manager migration is a serial infrastructure change; do
+not run it beside another executor whose commands or lockfile may change.
 
 In the isolated implementation branch/worktree:
 
@@ -391,7 +391,7 @@ Use exact React `Ref`/`RefCallback` types without `any`, a variable-length rest
 API, render-time ref mutation, or a hooks-lint suppression.
 
 Replace all six `@base-ui/utils/useMergedRefs` imports with the local hook.
-After PR #34's final changes are present, replace InlineEdit's private
+With PR #34's final changes present, replace InlineEdit's private
 `useComposedRef`/`setRef` with the same hook and remove the duplicate functions.
 Change no call-site order: the forwarded/caller ref remains first and the
 component-owned ref remains second.
@@ -658,8 +658,8 @@ implementation scope is changed.
 
 ## Done criteria
 
-- [ ] Issue #27 / PR #34 is complete and no other plan ran concurrently with
-      the package-manager migration.
+- [ ] Issue #27 / PR #34 and Plan 007 / PR #47 are present in the base, and no
+      other plan ran concurrently with the package-manager migration.
 - [ ] `package.json` declares Node `>=22.13` and exact
       `packageManager: "pnpm@11.19.0"`.
 - [ ] `pnpm-lock.yaml` is the only authoritative lockfile;
@@ -691,8 +691,9 @@ implementation scope is changed.
 
 Stop and report; do not improvise if:
 
-- issue #27 / PR #34 is not complete, its final InlineEdit changes conflict with
-  the planned shared ref hook, or another plan is still IN PROGRESS;
+- commits `a956b17` or `e168ac3` are absent, Plan 007 still appears IN PROGRESS
+  in the active-plan metadata, the final InlineEdit changes conflict with the
+  planned shared ref hook, or another plan is still IN PROGRESS;
 - the fresh npm baseline fails before any migration edit;
 - Node 20 support is intentional and may not be raised to the pnpm 11.19.0
   minimum of Node 22.13;
