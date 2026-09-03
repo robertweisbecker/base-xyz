@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from "@storybook/react-vite";
 import x from "@stylexjs/atoms";
 import { Icon } from "@/components/icons";
 import * as stylex from "@stylexjs/stylex";
-import type { ReactNode } from "react";
+import { useCallback, useState, useSyncExternalStore, type ReactNode } from "react";
 import { PageHeader } from "@/blocks/page-header/page-header";
 import { Badge } from "@/components/badge/badge";
 import { CommandPalette } from "@/components/command-palette/command-palette";
@@ -16,6 +16,7 @@ import {
 	type DataTableColumnDef,
 	type DataTableFilter,
 	type DataTableProps,
+	type DataTableRow,
 } from "./data-table";
 import { Loader } from "@/components/loader";
 import { Button } from "@/components/button";
@@ -272,6 +273,139 @@ export const Playground: Story = {
 	render: (args: Partial<DataTableProps<Deployment>>) => <DeploymentTable {...args} />,
 };
 
+type ActionIdentityRow = {
+	id: string;
+	name: string;
+};
+
+const actionIdentityRows: ActionIdentityRow[] = [{ id: "row-1", name: "First record" }];
+
+const actionIdentityColumns: Array<DataTableColumnDef<ActionIdentityRow>> = [
+	{
+		accessorKey: "name",
+		header: "Name",
+	},
+];
+
+const actionIdentityLabels = {
+	archive: "Archive record",
+	copy: "Copy record",
+	delete: "Delete record",
+	view: "View record",
+} as const;
+
+type ActionIdentityId = keyof typeof actionIdentityLabels;
+type ActionIdentityState = {
+	actionOrder: ActionIdentityId[];
+	disabledAction: ActionIdentityId | null;
+};
+
+function createActionIdentityStore() {
+	let state: ActionIdentityState = {
+		actionOrder: ["view", "archive", "delete"],
+		disabledAction: null,
+	};
+	const listeners = new Set<() => void>();
+
+	return {
+		getSnapshot: () => state,
+		setState(nextState: ActionIdentityState) {
+			state = nextState;
+			listeners.forEach((listener) => listener());
+		},
+		subscribe(listener: () => void) {
+			listeners.add(listener);
+			return () => listeners.delete(listener);
+		},
+	};
+}
+
+export const ActionIdentity: Story = {
+	parameters: {
+		controls: { disable: true },
+	},
+	render: () => <ActionIdentityFixture />,
+};
+
+function ActionIdentityFixture() {
+	const [actionStore] = useState(createActionIdentityStore);
+	const { actionOrder } = useSyncExternalStore(
+		actionStore.subscribe,
+		actionStore.getSnapshot,
+		actionStore.getSnapshot,
+	);
+	const [selectedAction, setSelectedAction] = useState<string | null>(null);
+	const getActionIdentityActions = useCallback(
+		(row: DataTableRow<ActionIdentityRow>) =>
+			actionStore.getSnapshot().actionOrder.map((id) => ({
+				id,
+				label: actionIdentityLabels[id],
+				disabled: actionStore.getSnapshot().disabledAction === id,
+				onSelect: () => setSelectedAction(`${id}:${row.original.id}`),
+			})),
+		[actionStore],
+	);
+
+	function updateActionOrder(nextActionOrder: ActionIdentityId[]) {
+		actionStore.setState({ ...actionStore.getSnapshot(), actionOrder: nextActionOrder });
+	}
+
+	function updateDisabledAction(nextDisabledAction: ActionIdentityId) {
+		actionStore.setState({
+			...actionStore.getSnapshot(),
+			disabledAction: nextDisabledAction,
+		});
+	}
+
+	return (
+		<Stack gap={3} data-testid="data-table-action-identity-fixture">
+			<Stack gap={2} orientation="horizontal" wrap="wrap">
+				<Button
+					onClick={(event) => {
+						event.stopPropagation();
+						updateActionOrder(["archive", "delete", "view"]);
+					}}
+				>
+					Reorder actions
+				</Button>
+				<Button
+					onClick={(event) => {
+						event.stopPropagation();
+						if (!actionOrder.includes("copy")) {
+							updateActionOrder(["view", "archive", "copy", "delete"]);
+						}
+					}}
+				>
+					Insert action
+				</Button>
+				<Button
+					onClick={(event) => {
+						event.stopPropagation();
+						updateActionOrder(actionOrder.filter((id) => id !== "copy"));
+					}}
+				>
+					Remove action
+				</Button>
+				<Button
+					onClick={(event) => {
+						event.stopPropagation();
+						updateDisabledAction("delete");
+					}}
+				>
+					Disable delete action
+				</Button>
+			</Stack>
+			<DataTable
+				columns={actionIdentityColumns}
+				data={actionIdentityRows}
+				getRowActions={getActionIdentityActions}
+				getRowId={(row) => row.id}
+			/>
+			<Text role="status">{selectedAction ?? "No action selected"}</Text>
+		</Stack>
+	);
+}
+
 export const Composition: Story = {
 	parameters: {
 		controls: { disable: true },
@@ -337,18 +471,25 @@ function DeploymentTable(args: Partial<DataTableProps<Deployment>>) {
 				</Stack>
 			)}
 			getRowActions={(row) => [
-				{ label: "View deployment", icon: <CubeFocusIcon weight="duotone" /> },
+				{ id: "view", label: "View deployment", icon: <CubeFocusIcon weight="duotone" /> },
 				{
+					id: "copy-id",
 					label: "Copy deployment ID",
 					icon: <CopyIcon weight="duotone" />,
 					onSelect: () => navigator.clipboard?.writeText(row.original.id),
 				},
 				{
+					id: "redeploy",
 					label: "Redeploy",
 					icon: <ArrowClockwiseIcon />,
 					disabled: row.original.status === "Building",
 				},
-				{ label: "Delete deployment", icon: <TrashIcon weight="duotone" />, variant: "danger" },
+				{
+					id: "delete",
+					label: "Delete deployment",
+					icon: <TrashIcon weight="duotone" />,
+					variant: "danger",
+				},
 			]}
 		/>
 	);

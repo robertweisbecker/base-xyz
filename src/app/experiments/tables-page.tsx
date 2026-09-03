@@ -129,9 +129,9 @@ export function TablesPage() {
 					filterPlaceholder="Search deployment URLs…"
 					filters={filters}
 					getRowActions={(row) => [
-						{ label: "View deployment" },
-						{ label: "Redeploy", disabled: row.original.status === "Building" },
-						{ label: "Delete deployment", variant: "danger" },
+						{ id: "view", label: "View deployment" },
+						{ id: "redeploy", label: "Redeploy", disabled: row.original.status === "Building" },
+						{ id: "delete", label: "Delete deployment", variant: "danger" },
 					]}
 					getRowId={(deployment) => deployment.id}
 					rowSelection
