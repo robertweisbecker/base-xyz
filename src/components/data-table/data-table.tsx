@@ -90,6 +90,8 @@ export type DataTableRow<TData extends RowData> = Row<DataTableFeatures, TData>;
 export type DataTableColumn<TData extends RowData> = Column<DataTableFeatures, TData, unknown>;
 
 export type DataTableRowAction<TData extends RowData> = {
+	/** Stable semantic identity, unique among the actions returned for one row. */
+	id: string;
 	label: ReactNode;
 	icon?: ReactNode;
 	disabled?: boolean;
@@ -597,9 +599,9 @@ function RowActions<TData extends RowData>({
 			/>
 			<Menu.Popup positionerProps={{ align: "end" }}>
 				<Menu.Group>
-					{actions.map((action, index) => (
+					{actions.map((action) => (
 						<Menu.Item
-							key={index}
+							key={action.id}
 							disabled={action.disabled}
 							variant={action.variant === "danger" ? "error" : "default"}
 							onClick={() => action.onSelect?.(row)}

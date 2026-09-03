@@ -1,6 +1,8 @@
 import { expect, test } from "../playwright";
 
 const storyPath = "/iframe.html?id=components-data-table--playground&viewMode=story";
+const actionIdentityStoryPath =
+	"/iframe.html?id=components-data-table--action-identity&viewMode=story";
 
 test("row expansion toggles keep contextual accessible names and pressed state", async ({
 	page,
@@ -20,4 +22,53 @@ test("row expansion toggles keep contextual accessible names and pressed state",
 	await firstRowToggle.click();
 	await expect(firstRowToggle).toHaveAttribute("aria-pressed", "true");
 	await expect(firstRowToggle).not.toHaveAccessibleName(collapsedName ?? "");
+});
+
+test("row actions retain focus, identity, and callbacks while mounted actions change", async ({
+	page,
+}) => {
+	await page.goto(actionIdentityStoryPath);
+
+	const fixture = page.getByTestId("data-table-action-identity-fixture");
+	const rowActions = fixture.getByRole("button", { name: "Open actions for row 1" });
+	await rowActions.click();
+
+	const viewAction = page.getByRole("menuitem", { name: "View record" });
+	await viewAction.focus();
+	await expect(viewAction).toBeFocused();
+
+	await fixture.getByRole("button", { name: "Reorder actions" }).evaluate((button) => {
+		if (!(button instanceof HTMLButtonElement)) throw new Error("Expected a story control button");
+		button.click();
+	});
+	await expect(page.getByRole("menuitem", { name: "View record" })).toBeFocused();
+
+	await page.getByRole("menuitem", { name: "View record" }).press("Enter");
+	await expect(fixture.getByRole("status")).toHaveText("view:row-1");
+
+	await rowActions.click();
+	await page.getByRole("menuitem", { name: "View record" }).focus();
+	await fixture.getByRole("button", { name: "Insert action" }).evaluate((button) => {
+		if (!(button instanceof HTMLButtonElement)) throw new Error("Expected a story control button");
+		button.click();
+	});
+	await expect(page.getByRole("menuitem", { name: "View record" })).toBeFocused();
+	await fixture.getByRole("button", { name: "Remove action" }).evaluate((button) => {
+		if (!(button instanceof HTMLButtonElement)) throw new Error("Expected a story control button");
+		button.click();
+	});
+	await expect(page.getByRole("menuitem", { name: "View record" })).toBeFocused();
+	await page.getByRole("menuitem", { name: "View record" }).press("Enter");
+	await expect(fixture.getByRole("status")).toHaveText("view:row-1");
+
+	await rowActions.click();
+	await fixture.getByRole("button", { name: "Disable view action" }).evaluate((button) => {
+		if (!(button instanceof HTMLButtonElement)) throw new Error("Expected a story control button");
+		button.click();
+	});
+	await fixture.getByRole("button", { name: "Reorder actions" }).evaluate((button) => {
+		if (!(button instanceof HTMLButtonElement)) throw new Error("Expected a story control button");
+		button.click();
+	});
+	await expect(page.getByRole("menuitem", { name: "View record" })).toBeDisabled();
 });
