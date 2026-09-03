@@ -260,6 +260,7 @@ const meta = {
 		getRowId: { table: { disable: true } },
 		initialColumnVisibility: { control: "object" },
 		renderExpandedRow: { table: { disable: true } },
+		renderToolbar: { table: { disable: true } },
 		showExpandColumn: { table: { disable: true } },
 		style: { table: { disable: true } },
 		toolbarEndSlot: { table: { disable: true } },
