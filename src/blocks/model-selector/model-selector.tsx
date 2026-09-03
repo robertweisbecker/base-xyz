@@ -97,8 +97,8 @@ export function Root({
 	const submenuOpen = useRef(false);
 	const clearSubmenuLatch = useRef(0);
 	const currentValue = value ?? uncontrolledValue;
-	const normalizedValue = normalizeModelValue(groups, currentValue);
-	const normalizedDefaultValue = normalizeModelValue(groups, defaultValue).value;
+	const normalizedValue = useNormalizedModelValue(groups, currentValue);
+	const normalizedDefaultValue = useNormalizedModelValue(groups, defaultValue).value;
 
 	const latchSubmenu = useCallback(() => {
 		submenuOpen.current = true;
@@ -400,16 +400,36 @@ function getFirstModel(groups: readonly ModelSelectorGroup[]) {
 	return groups.flatMap((group) => group.options)[0];
 }
 
+function useNormalizedModelValue(groups: readonly ModelSelectorGroup[], value: ModelSelectorValue) {
+	const { effort, model, speed } = value;
+	const selectedModel = useMemo(() => getNormalizedModel(groups, model), [groups, model]);
+	const fallbackValue = useMemo(
+		() => ({ model: selectedModel.value, effort, speed }),
+		[effort, selectedModel, speed],
+	);
+
+	return {
+		model: selectedModel,
+		value: selectedModel.value === model ? value : fallbackValue,
+	};
+}
+
 function normalizeModelValue(groups: readonly ModelSelectorGroup[], value: ModelSelectorValue) {
-	const model = findModel(groups, value.model) ?? getFirstModel(groups);
-	if (!model) {
-		throw new Error("ModelSelector.Root requires at least one model option.");
-	}
+	const model = getNormalizedModel(groups, value.model);
 
 	return {
 		model,
 		value: model.value === value.model ? value : { ...value, model: model.value },
 	};
+}
+
+function getNormalizedModel(groups: readonly ModelSelectorGroup[], value: string) {
+	const model = findModel(groups, value) ?? getFirstModel(groups);
+	if (!model) {
+		throw new Error("ModelSelector.Root requires at least one model option.");
+	}
+
+	return model;
 }
 
 function getTextLabel(label: ReactNode) {

@@ -148,7 +148,7 @@ function ConfirmationDialogRoot({
 	failureToast,
 	...rootProps
 }: ConfirmationDialogRootProps) {
-	const toastManager = Toast.useToastManager();
+	const { add: addToast } = Toast.useToastManager();
 	const internalActionsRef = useRef<ConfirmationDialogActions | null>(null);
 	const resolvedActionsRef = actionsRef ?? internalActionsRef;
 	const pendingRef = useRef(false);
@@ -171,11 +171,11 @@ function ConfirmationDialogRoot({
 		try {
 			await onConfirm?.();
 			if (!mountedRef.current) return;
-			if (successToast) toastManager.add(successToast);
+			if (successToast) addToast(successToast);
 			resolvedActionsRef.current?.close();
 		} catch (error) {
 			if (!mountedRef.current) return;
-			if (failureToast) toastManager.add(failureToast);
+			if (failureToast) addToast(failureToast);
 			onConfirmError?.(error);
 		} finally {
 			pendingRef.current = false;
@@ -183,7 +183,7 @@ function ConfirmationDialogRoot({
 				setPending(false);
 			}
 		}
-	}, [failureToast, onConfirm, onConfirmError, resolvedActionsRef, successToast, toastManager]);
+	}, [addToast, failureToast, onConfirm, onConfirmError, resolvedActionsRef, successToast]);
 	const contextValue = useMemo(() => ({ confirm, pending }), [confirm, pending]);
 
 	return (
