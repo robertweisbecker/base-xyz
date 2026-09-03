@@ -184,9 +184,15 @@ export const States: Story = {
 				<Text color="muted" size="1">
 					Read-only
 				</Text>
-				<RadioGroup label="Access level" name="states-access" defaultValue="editor" readOnly>
-					<Radio value="viewer" label="Viewer" />
-					<Radio value="editor" label="Editor" />
+				<RadioGroup
+					data-testid="readonly-radio-group"
+					label="Access level"
+					name="states-access"
+					defaultValue="editor"
+					readOnly
+				>
+					<Radio data-testid="readonly-radio-viewer" value="viewer" label="Viewer" />
+					<Radio data-testid="readonly-radio-editor" value="editor" label="Editor" />
 				</RadioGroup>
 			</Stack>
 			<Stack gap={4}>

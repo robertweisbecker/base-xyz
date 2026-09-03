@@ -3,24 +3,23 @@ import { CheckboxGroup as BaseCheckboxGroup } from "@base-ui/react/checkbox-grou
 import { Field } from "@base-ui/react/field";
 import { Fieldset } from "@base-ui/react/fieldset";
 import * as stylex from "@stylexjs/stylex";
-import type { StyleXStyles } from "@stylexjs/stylex";
-import { createContext, useContext, useId, type ReactNode } from "react";
-import { media } from "@/styles/constants.stylex";
+import { createContext, useContext, useId, useMemo, type ReactNode } from "react";
 import { mergeStyle, type BaseStyleProps } from "@/styles/props/base";
 import { extractMarginProps, type MarginProps } from "@/styles/props/spacing.stylex";
-import { fieldChoiceGroupStyles, fieldStyles, labelMarker } from "@/components/field/field.stylex";
-import { textStyles } from "@/components/text/text.stylex";
 import { focusRing } from "@/styles/recipes/focus";
 import { pressable } from "@/styles/recipes/transitions";
-import { tokens } from "@/theme/tokens.stylex";
 import { VisuallyHidden } from "@/components/visually-hidden/visually-hidden";
 import { attrJoin } from "@/utils/attr-join";
 import { Icon } from "@/components/icons";
+import {
+	checkboxControlSizeStyles,
+	checkboxDescriptionStyles,
+	checkboxLabelStyles,
+	checkboxStyles,
+	type CheckboxSize,
+} from "./checkbox.stylex";
 
-export type CheckboxSize = "sm" | "md";
-
-const ENABLED_HOVER = ":hover:not([data-disabled],[data-readonly])";
-const ENABLED_ACTIVE = ":active:not([data-disabled],[data-readonly])";
+export type { CheckboxSize } from "./checkbox.stylex";
 
 export type CheckboxProps = Omit<
 	BaseCheckbox.Root.Props,
@@ -86,7 +85,7 @@ export function Checkbox({
 		<>
 			{label}
 			{required ? (
-				<span aria-hidden {...stylex.props(fieldStyles.requiredIndicator)}>
+				<span aria-hidden {...stylex.props(checkboxStyles.requiredIndicator)}>
 					*
 				</span>
 			) : null}
@@ -97,7 +96,7 @@ export function Checkbox({
 			<Field.Label
 				data-disabled={isDisabled ? "" : undefined}
 				data-readonly={readOnly ? "" : undefined}
-				{...stylex.props(labelMarker, checkboxParts.labelRoot)}
+				{...stylex.props(checkboxStyles.labelRoot)}
 			>
 				<BaseCheckbox.Root
 					ref={ref}
@@ -109,7 +108,7 @@ export function Checkbox({
 					aria-invalid={invalid || undefined}
 					data-invalid={invalid ? "" : undefined}
 					{...stylex.props(
-						checkboxParts.control,
+						checkboxStyles.control,
 						checkboxControlSizeStyles[resolvedSize],
 						focusRing.offset,
 						pressable.transition,
@@ -117,7 +116,7 @@ export function Checkbox({
 					{...rest}
 				>
 					<BaseCheckbox.Indicator
-						{...stylex.props(checkboxParts.indicator, checkboxParts.indicatorTransition)}
+						{...stylex.props(checkboxStyles.indicator, checkboxStyles.indicatorTransition)}
 						render={(indicatorProps, state) => (
 							<span {...indicatorProps}>
 								{state.indeterminate ? (
@@ -138,18 +137,14 @@ export function Checkbox({
 			{description ? (
 				<Field.Description
 					id={descriptionId}
-					{...stylex.props(
-						fieldStyles.description,
-						checkboxParts.description,
-						checkboxDescriptionStyles[resolvedSize],
-					)}
+					{...stylex.props(checkboxStyles.description, checkboxDescriptionStyles[resolvedSize])}
 				>
 					{description}
 				</Field.Description>
 			) : null}
 		</>
 	);
-	const containerSx = stylex.props(checkboxParts.item, marginStyles, xstyle);
+	const containerSx = stylex.props(checkboxStyles.item, marginStyles, xstyle);
 	const containerClassName = attrJoin(containerSx.className, className);
 	const containerStyle = mergeStyle(containerSx.style, style);
 
@@ -197,7 +192,11 @@ export function CheckboxGroup({
 	const resolvedSize = size ?? parentGroupContext.size ?? "md";
 	const generatedId = useId();
 	const descriptionId = description ? `${generatedId}-description` : undefined;
-	const groupSx = stylex.props(checkboxParts.group, marginStyles, xstyle);
+	const groupSx = stylex.props(checkboxStyles.group, marginStyles, xstyle);
+	const groupValue = useMemo(
+		() => ({ disabled: isDisabled, inGroup: true, size: resolvedSize }),
+		[isDisabled, resolvedSize],
+	);
 
 	return (
 		<Field.Root
@@ -220,23 +219,21 @@ export function CheckboxGroup({
 			style={mergeStyle(groupSx.style, style)}
 		>
 			{label ? (
-				<Fieldset.Legend {...stylex.props(fieldStyles.groupLabel, checkboxParts.legend)}>
+				<Fieldset.Legend {...stylex.props(checkboxStyles.groupLabel, checkboxStyles.legend)}>
 					{label}
 				</Fieldset.Legend>
 			) : null}
 			{description ? (
-				<p
-					id={descriptionId}
-					{...stylex.props(fieldStyles.description, checkboxParts.groupDescription)}
-				>
+				<p id={descriptionId} {...stylex.props(checkboxStyles.groupDescription)}>
 					{description}
 				</p>
 			) : null}
-			<CheckboxGroupFieldContext.Provider
-				value={{ disabled: isDisabled, inGroup: true, size: resolvedSize }}
-			>
+			<CheckboxGroupFieldContext.Provider value={groupValue}>
 				<div
-					{...stylex.props(fieldChoiceGroupStyles.root, inline && fieldChoiceGroupStyles.inline)}
+					{...stylex.props(
+						checkboxStyles.groupOptions,
+						inline && checkboxStyles.groupOptionsInline,
+					)}
 				>
 					{children}
 				</div>
@@ -244,185 +241,3 @@ export function CheckboxGroup({
 		</Field.Root>
 	);
 }
-
-const checkboxControlSizeStyles = stylex.create({
-	sm: {
-		height: tokens["--size-indicator-sm"],
-		width: tokens["--size-indicator-sm"],
-	},
-	md: {
-		height: tokens["--size-indicator-md"],
-		width: tokens["--size-indicator-md"],
-	},
-});
-
-const checkboxLabelStyles = {
-	sm: textStyles.supporting,
-	md: textStyles.label,
-} as const satisfies Record<CheckboxSize, StyleXStyles>;
-
-const checkboxDescriptionStyles = stylex.create({
-	sm: {
-		paddingInlineStart: `calc(${tokens["--size-indicator-sm"]} + ${tokens["--space-2"]} + 2px)`,
-	},
-	md: {
-		paddingInlineStart: `calc(${tokens["--size-indicator-md"]} + ${tokens["--space-2"]} + 2px)`,
-	},
-});
-
-const checkboxParts = stylex.create({
-	group: {
-		margin: 0,
-		padding: 0,
-		borderWidth: 0,
-		gap: tokens["--space-2"],
-		display: "flex",
-		flexDirection: "column",
-		minInlineSize: 0,
-	},
-	legend: {
-		padding: 0,
-	},
-	groupDescription: {
-		marginBlockEnd: tokens["--space-2"],
-	},
-	item: {
-		gap: 0,
-		color: {
-			"[data-disabled]": tokens["--fg-subtle"],
-			default: tokens["--fg"],
-		},
-		cursor: {
-			"[data-disabled]": "not-allowed",
-			default: "default",
-		},
-		display: "flex",
-		flexDirection: "column",
-		width: "fit-content",
-	},
-	labelRoot: {
-		"--_checkbox-bg": {
-			[ENABLED_ACTIVE]: tokens["--surface-subtle-active"],
-			// eslint-disable-next-line @stylexjs/valid-styles -- the compiler supports chained pseudo-class conditions; the lint rule is stricter than the compiler.
-			[ENABLED_HOVER]: {
-				[media.canHover]: tokens["--surface-subtle"],
-			},
-			default: tokens["--surface"],
-		},
-		"--_checkbox-bg-checked": {
-			[ENABLED_ACTIVE]: tokens["--bg-primary"],
-			// eslint-disable-next-line @stylexjs/valid-styles -- the compiler supports chained pseudo-class conditions; the lint rule is stricter than the compiler.
-			[ENABLED_HOVER]: {
-				[media.canHover]: tokens["--bg-primary-highlight"],
-			},
-			default: tokens["--bg-primary"],
-		},
-		"--_checkbox-border": {
-			[ENABLED_ACTIVE]: tokens["--border-input-hover"],
-			// eslint-disable-next-line @stylexjs/valid-styles -- the compiler supports chained pseudo-class conditions; the lint rule is stricter than the compiler.
-			[ENABLED_HOVER]: {
-				[media.canHover]: tokens["--border-input-hover"],
-			},
-			default: tokens["--border-input"],
-		},
-		"--_checkbox-press-scale": {
-			[ENABLED_ACTIVE]: "0.94",
-			default: "1",
-		},
-		"--_checkbox-radius": {
-			default: tokens["--radius-xs"],
-		},
-		gap: tokens["--space-2"],
-		alignItems: "flex-start",
-		color: {
-			"[data-disabled]": tokens["--fg-subtle"],
-			"[data-readonly]": tokens["--fg-muted"],
-			default: tokens["--fg"],
-		},
-		cursor: "inherit",
-		display: "inline-flex",
-	},
-	control: {
-		padding: 2,
-		borderColor: {
-			"[data-checked]": tokens["--border"],
-			"[data-checked][data-disabled]": tokens["--border"],
-			"[data-disabled]": tokens["--border-disabled"],
-			"[data-indeterminate]": "var(--_checkbox-bg-checked)",
-			"[data-indeterminate][data-disabled]": tokens["--border"],
-			"[data-indeterminate][data-readonly]": tokens["--border-input"],
-			"[data-invalid]": tokens["--fg-error"],
-			"[data-readonly]": tokens["--border-input"],
-			default: "var(--_checkbox-border)",
-		},
-		borderRadius: "var(--_checkbox-radius)",
-		borderStyle: "solid",
-		borderWidth: "1px",
-		alignItems: "center",
-		backgroundColor: {
-			"[data-checked]": "var(--_checkbox-bg-checked)",
-			"[data-checked][data-disabled]": tokens["--surface-subtle"],
-			"[data-checked][data-invalid]": tokens["--bg-error-primary"],
-			"[data-checked][data-readonly]": tokens["--surface"],
-			"[data-readonly]": tokens["--surface"],
-			default: "var(--_checkbox-bg)",
-		},
-		display: "inline-flex",
-		flexShrink: 0,
-		justifyContent: "center",
-		marginBlockStart: 1,
-		position: "relative",
-		transform: {
-			"[data-disabled]": "scale(1)",
-			"[data-readonly]": "scale(1)",
-			default: "scale(var(--_checkbox-press-scale))",
-		},
-		willChange: "transform",
-		"::after": {
-			inset: 0,
-			borderRadius: "calc(var(--_checkbox-radius) - 1px)",
-			boxShadow: `0 -1px 0 ${tokens["--color-white-a3"]}, 0 1px ${tokens["--color-black-a2"]}`,
-			content: "''",
-			position: "absolute",
-			zIndex: 1,
-		},
-	},
-	indicator: {
-		alignItems: "center",
-		color: {
-			"[data-disabled]": tokens["--fg-subtle"],
-			"[data-indeterminate]": "var(--_checkbox-bg-checked)",
-			"[data-invalid]": tokens["--fg-accent-contrast"],
-			"[data-readonly]": tokens["--fg"],
-			default: tokens["--fg-accent-contrast"],
-		},
-		display: "flex",
-		filter: {
-			"[data-disabled]": null,
-			default: `drop-shadow(0 1px 1px ${tokens["--color-black-a3"]})`,
-		},
-		justifyContent: "center",
-		marginInlineStart: 0.5,
-		height: "100%",
-		width: "100%",
-	},
-	indicatorTransition: {
-		opacity: {
-			"[data-ending-style]": 0,
-			"[data-starting-style]": 1,
-			default: 1,
-		},
-		transform: {
-			"[data-ending-style]": "scale(0)",
-			"[data-starting-style]": "scale(0.5)",
-			default: "scale(1)",
-		},
-		transitionDuration: tokens["--motion-duration-medium"],
-		transitionProperty: "transform, opacity",
-		transitionTimingFunction: tokens["--motion-ease-out"],
-		willChange: "transform, opacity",
-	},
-	description: {
-		margin: 0,
-	},
-});

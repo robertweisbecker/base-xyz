@@ -114,7 +114,7 @@ element roles in a header comment.
 | Modal backdrop, viewport, surface, text | `components/dialog/dialog.stylex.ts`   | Dialog owns modal behavior; alert dialogs and drawers compose it                                                    |
 | Focus rings                             | `focus.ts`                             | `focusRing.inset` on bordered controls, `focusRing.offset` on buttons/links, `focusRing.within` on composite shells |
 | Press / icon-swap feedback              | `transitions.ts`                       | Buttons, toggles, close controls                                                                                    |
-| Checkbox, Radio, and Switch             | **component files**                    | Each control owns its marker, state styles, sizing, and indicator treatment                                         |
+| Checkbox, Radio, and Switch             | **component files**                    | Each family owns its group layout, supporting text, marker, state, sizing, and indicator treatment                  |
 | Text styles                             | `components/text/text.stylex.ts`       | Components, headings, body copy, and specimens                                                                      |
 
 ### Popup composition
@@ -243,19 +243,24 @@ stylex.props(modalChromeStyles.surface, drawerParts.popup);
   `ThemeProvider` and semantic tokens; do not infer it from system preference.
 - When parent interaction only changes child values, define local custom
   properties on the parent and consume them from the child's direct
-  `[data-*]` state selectors. Checkbox, Radio, and Switch use this pattern so
-  their state matrix remains declarative and component-local.
+  `[data-*]` state selectors. Switch uses this pattern so its state matrix
+  remains declarative and component-local.
 - For parent-child relationships that cannot be expressed through inherited
   values, define a component-scoped marker in a `.stylex.ts` file, include it
   in the ancestor's `stylex.props(...)`, and use `stylex.when.ancestor()` in
-  the child style. Never use `stylex.defaultMarker()` for form controls because
-  interaction from outer containers can leak into the control.
+  the child style. Checkbox and Radio use family-specific label markers for
+  label-driven control feedback. Never use `stylex.defaultMarker()` for form
+  controls because interaction from outer containers can leak into the control.
 - Use `defineVars()` only for a real shared cascading or theming contract.
   Interaction-only custom properties stay beside the component styles rather
   than in a variables sidecar.
 - Component-family files hold values shared only by sibling implementations,
   such as stacked and anchored toasts. Single-component values stay in that
   component instead of creating a one-consumer module.
+- Checkbox and Radio are separate control families. Similar group-layout or
+  supporting-text values are not a shared choice-family contract; keep them in
+  their respective component style modules so either family can evolve
+  independently.
 - Use CSS selector bridges only when StyleX cannot express a relationship that
   the component must own. Prefer component-owned slots when the relationship is
   part of the public composition API; Button and Badge size and align their
@@ -320,14 +325,16 @@ Named component markers expose intentional `stylex.when` boundaries. Import
 them directly from their owning `.stylex.ts` module; they are not default
 markers and are not re-exported through component barrels.
 
-| Marker              | Owner                                 | Applied to                                                                                               |
-| ------------------- | ------------------------------------- | -------------------------------------------------------------------------------------------------------- |
-| `buttonMarker`      | `components/button/button.stylex.ts`  | Button, IconButton, and shared Button-root controls                                                      |
-| `fieldMarker`       | `components/field/field.stylex.ts`    | Field roots observed by descendant form-control styles                                                   |
-| `itemMarker`        | `components/menu/menu-item.stylex.ts` | Menu rows and components composing the canonical row, including Select, Combobox, and Autocomplete items |
-| `labelMarker`       | `components/field/field.stylex.ts`    | Label elements associated with form controls                                                             |
-| `toggleMarker`      | `components/toggle/toggle.stylex.ts`  | Toggle controls observed by joined-group sibling and ancestor rules                                      |
-| `toggleGroupMarker` | `components/toggle/toggle.stylex.ts`  | ToggleGroup roots that opt into join radius and stacking                                                 |
+| Marker                | Owner                                    | Applied to                                                                                               |
+| --------------------- | ---------------------------------------- | -------------------------------------------------------------------------------------------------------- |
+| `buttonMarker`        | `components/button/button.stylex.ts`     | Button, IconButton, and shared Button-root controls                                                      |
+| `checkboxLabelMarker` | `components/checkbox/checkbox.stylex.ts` | Checkbox labels that drive component-owned control and indicator interaction styles                      |
+| `fieldMarker`         | `components/field/field.stylex.ts`       | Field roots observed by descendant form-control styles                                                   |
+| `itemMarker`          | `components/menu/menu-item.stylex.ts`    | Menu rows and components composing the canonical row, including Select, Combobox, and Autocomplete items |
+| `labelMarker`         | `components/field/field.stylex.ts`       | Label elements associated with form controls                                                             |
+| `radioLabelMarker`    | `components/radio/radio.stylex.ts`       | Radio labels that drive component-owned control interaction styles                                       |
+| `toggleMarker`        | `components/toggle/toggle.stylex.ts`     | Toggle controls observed by joined-group sibling and ancestor rules                                      |
+| `toggleGroupMarker`   | `components/toggle/toggle.stylex.ts`     | ToggleGroup roots that opt into join radius and stacking                                                 |
 
 ```tsx
 import * as stylex from "@stylexjs/stylex";

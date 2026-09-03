@@ -104,6 +104,7 @@ export const Playground: Story = {
 					Single checkbox
 				</Heading>
 				<Checkbox
+					data-testid="checkbox-playground-control"
 					key={`${defaultChecked}-${indeterminate}`}
 					label={label}
 					description={description}
