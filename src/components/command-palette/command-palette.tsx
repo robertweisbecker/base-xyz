@@ -18,7 +18,7 @@ import {
 	useCallback,
 	useContext,
 	useEffect,
-	useRef,
+	useEffectEvent,
 	useState,
 	type ComponentProps,
 	type KeyboardEvent,
@@ -59,7 +59,7 @@ type CommandPaletteContextValue = {
 const CommandPaletteContext = createContext<CommandPaletteContextValue | null>(null);
 
 type ShortcutRegistration = {
-	enabled: boolean;
+	isEnabled: () => boolean;
 	invoke: () => void;
 };
 
@@ -75,7 +75,7 @@ function handleShortcutKeyDown(event: globalThis.KeyboardEvent) {
 
 	let owner: ShortcutRegistration | undefined;
 	for (const registration of shortcutRegistrations) {
-		if (registration.enabled) {
+		if (registration.isEnabled()) {
 			owner = registration;
 		}
 	}
@@ -102,24 +102,17 @@ function unregisterShortcut(registration: ShortcutRegistration) {
 }
 
 function useCommandPaletteShortcut(shortcut: boolean, inline: boolean, toggle: () => void) {
-	const toggleRef = useRef(toggle);
-	const [registration] = useState<ShortcutRegistration>(() => ({
-		enabled: false,
-		invoke: () => toggleRef.current(),
-	}));
+	const isEnabled = useEffectEvent(() => shortcut && !inline);
+	const invoke = useEffectEvent(toggle);
 
 	useEffect(() => {
-		toggleRef.current = toggle;
-	}, [toggle]);
-
-	useEffect(() => {
-		registration.enabled = shortcut && !inline;
-	}, [inline, registration, shortcut]);
-
-	useEffect(() => {
+		const registration: ShortcutRegistration = {
+			isEnabled: () => isEnabled(),
+			invoke: () => invoke(),
+		};
 		registerShortcut(registration);
 		return () => unregisterShortcut(registration);
-	}, [registration]);
+	}, []);
 }
 
 export type CommandPaletteRootProps<ItemValue> = Omit<

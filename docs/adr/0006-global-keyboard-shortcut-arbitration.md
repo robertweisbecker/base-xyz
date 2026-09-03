@@ -12,7 +12,8 @@ The shortcut is global, but the state transition still belongs to an individual 
 ## Decision
 
 - A component family with a global shortcut owns one module-private document listener and an insertion-ordered registry of mounted roots.
-- Every root registers exactly once for its mounted lifetime. Changes to eligibility, current state, or callbacks update the existing registration and do not alter mount-order priority.
+- Every root registers exactly once for its mounted lifetime. Changes to eligibility, current state, or callbacks do not re-register the root or alter mount-order priority.
+- Registration callbacks use React Effect Events to read the latest committed eligibility and state. Do not mutate React state containers or write refs during render to keep a registration fresh.
 - The most recently mounted eligible root owns the shortcut. Unmounting it returns ownership to the preceding eligible root.
 - The dispatcher ignores repeated and already-prevented events. It calls `preventDefault` only when an eligible owner exists and invokes exactly that owner.
 - The selected root performs the transition through its existing controlled or uncontrolled state path. The dispatcher does not own open state or add public priority, registry, or keybinding props.
@@ -20,6 +21,6 @@ The shortcut is global, but the state transition still belongs to an individual 
 
 ## Consequences
 
-Multiple CommandPalette roots now have deterministic Command/Ctrl+K ownership while retaining the existing public API and callback behavior. Focused controls can reserve the shortcut, held keys do not toggle twice, and ownership hands back naturally after unmount.
+Multiple CommandPalette roots now have deterministic Command/Ctrl+K ownership while retaining the existing public API and callback behavior. Focused controls can reserve the shortcut, held keys do not toggle twice, ownership hands back naturally after unmount, and eligibility or callback changes remain fresh without mutable render-owned registrations.
 
 Any future component family that adds a document-level shortcut should establish one arbitration boundary for that family and prove multi-root ownership, callback freshness, repeat handling, prevented events, and cleanup in a real browser.
