@@ -69,12 +69,6 @@ const agentBlockSections = [
 		Example: AgentActionApprovalExample,
 	},
 	{
-		id: "async-job-progress",
-		title: "Async Job Progress",
-		description: "A stable surface for queued, active, completed, and failed background work.",
-		Example: AsyncJobProgressExample,
-	},
-	{
 		id: "context-popover",
 		title: "Context Popover",
 		description: "Composes Popover, MeterGauge, and Meter to show token usage on demand.",
@@ -104,6 +98,12 @@ const agentBlockSections = [
 		description:
 			"Generated content with explicit streaming, completion, interruption, and failure states.",
 		Example: StreamingResponseExample,
+	},
+	{
+		id: "async-job-progress",
+		title: "Task Progress",
+		description: "A stable surface for queued, active, completed, and failed background work.",
+		Example: AsyncJobProgressExample,
 	},
 ] as const;
 

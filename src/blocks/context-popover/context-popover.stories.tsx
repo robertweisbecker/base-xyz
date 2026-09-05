@@ -25,7 +25,7 @@ const tokenFormattingExamples = [
 ] as const;
 
 const meta = {
-	title: "Blocks/Context popover",
+	title: "Blocks/AI/Context popover",
 	component: ContextPopover,
 	args: {
 		total: 258_000,

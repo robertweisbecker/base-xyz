@@ -7,7 +7,7 @@ import { Text } from "@/components/text/text";
 import { AsyncJobProgress, type AsyncJobHeadingLevel } from "./async-job-progress";
 
 const meta = {
-	title: "Blocks/Async job progress",
+	title: "Blocks/AI/Task progress",
 	component: AsyncJobProgress.Root,
 	parameters: {
 		controls: { disable: true },

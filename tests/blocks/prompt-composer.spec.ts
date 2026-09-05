@@ -1,6 +1,6 @@
 import { expect, test } from "../playwright";
 
-const storyPath = "/iframe.html?id=blocks-prompt-composer--examples&viewMode=story";
+const storyPath = "/iframe.html?id=blocks-ai-prompt-composer--examples&viewMode=story";
 
 test("keeps the initial row floor while growing with content", async ({ page }) => {
 	await page.goto(storyPath);

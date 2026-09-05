@@ -15,6 +15,7 @@
 - **Action cell** — A compact table header or data cell reserved for a direct interactive control, such as a disclosure button or row-action menu trigger. Checkbox cells are specialized action cells that own the design-system Checkbox composition.
 - **Checked row** — A body row whose selection checkbox is checked and which receives the corresponding visual treatment. Use `checked`, not `selected`, in the presentation-only `Table` API.
 - **Math expression field** — Experimental unpublished text field that evaluates arithmetic on commit. Evaluator: `src/utils/evaluate-math-expression.ts`. Draft/commit hook: `src/hooks/use-math-expression-input.ts`. Field: `src/experimental/math-expression-field/`. Not a NumberField variant; Base UI NumberField filters expression characters. Not exported from `src/components/index.ts`.
+- **AI block** — A `src/blocks/` composition whose Storybook stories live under `Blocks/AI/` because the primary workflow is agent- or LLM-specific. Classification is in [ADR 0013](docs/adr/0013-storybook-ai-block-taxonomy.md). The subgroup is Storybook navigation only; files and public exports stay with the other blocks.
 
 ## Tokens and themes
 
