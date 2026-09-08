@@ -15,12 +15,12 @@ test("shares one tooltip across grouped icon buttons", async ({ page }) => {
 
 	await notifications.focus();
 	await expect(popup).toBeVisible();
-	await expect(popup.locator("[data-current]")).toContainText("Review notifications");
+	await expect(popup).toContainText("Review notifications");
 	await expect(notifications).toHaveAccessibleName("Notifications");
 
 	await information.focus();
 	await expect(page.locator('[data-slot="tooltip-popup"]')).toHaveCount(1);
-	await expect(popup.locator("[data-current]")).toContainText("Read product information");
+	await expect(popup).toHaveText("Read product information");
 	await expect(information).toHaveAccessibleName("Information");
 
 	await information.click();
@@ -28,13 +28,14 @@ test("shares one tooltip across grouped icon buttons", async ({ page }) => {
 });
 
 test("keeps collapsed child navigation on its popover interaction", async ({ page }) => {
+	await page.clock.install();
 	await page.goto(childPopoversPath);
 
 	const navigation = page.getByRole("navigation", { name: "Collapsed primary" });
 	const deploy = navigation.getByRole("button", { name: "Deploy" });
 
 	await deploy.focus();
-	await page.waitForTimeout(300);
+	await page.clock.fastForward(1_000);
 	await expect(page.locator('[data-slot="tooltip-popup"]')).toHaveCount(0);
 
 	await deploy.click();

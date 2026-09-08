@@ -14,4 +14,8 @@ test("exposes a selectable creatable option for new input", async ({ page }) => 
 	await expect(creatableItem).toBeVisible();
 	await creatableItem.click();
 	await expect(input).toHaveValue("");
+	const remove = page.getByRole("button", { name: "Remove Fixture value", exact: true });
+	await expect(remove).toBeVisible();
+	await remove.click();
+	await expect(remove).toBeHidden();
 });

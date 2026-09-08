@@ -19,7 +19,7 @@ The repository contains both reusable design-system primitives and recurring pro
 
 `Table` and `DataTable` are a concrete application of this boundary: presentation-only semantic table parts remain separate from stateful dataset behavior, as recorded in [ADR 0002](./0002-semantic-table-primitives.md).
 
-`NavList` drilldown is another concrete application. Its public compound surface remains `NavList.Drilldown`, `NavList.DrilldownPanel`, `NavList.DrilldownTrigger`, and `NavList.DrilldownBack`, while its private history, focus, scroll-restoration, collection, presentation-mode, and icon-rail coordination may move into an internal owner-focused module such as `nav-list-drilldown.tsx`. It should not become a generic public Drilldown component until a second non-navigation consumer establishes a smaller shared contract.
+`NavList` owns its drilldown history, focus, and presentation coordination. A generic public Drilldown component requires a second non-navigation consumer that establishes a smaller shared contract.
 
 ## Consequences
 

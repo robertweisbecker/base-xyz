@@ -30,6 +30,7 @@ npm run dev
 .storybook/                 Storybook config and global theme toolbar
 docs/
   adr/                      Durable architectural decisions
+  agents/                   Task-specific agent guides
   plans/                    Active implementation backlog
 src/
   components/               Base UI-backed components and colocated stories
@@ -44,60 +45,29 @@ src/
     constants.stylex.ts     Fixed breakpoints, z-index, keyframes, and style utilities (ie. selector aliases, truncation)
     recipes/                Shared cross-component styles and variables (ie. popups, input wrappers)
     reset.css               Modified Tailwind v4 reset with opinionated a11y and theme-specific tweaks
-    global.css              Legacy design token config
+    global.css              Global document and selection rules
     *.css                   Shared vendor or complex styles (ie. Base UI shared popup transitions)
-  App.tsx                   Demo component gallery
+  app/gallery-page.tsx      Demo component gallery
 ```
 
 ## Theming & tokens
 
-Tokens are currently<sup>*</sup> a single `defineVars` object using named CSS variables to allow page-level consumer overrides.
+[`src/theme/tokens.stylex.ts`](src/theme/tokens.stylex.ts) defines the stable,
+independently themeable token contract. Import `tokens` directly and reference
+its semantic values in StyleX. Named themes in
+[`src/theme/themes.stylex.ts`](src/theme/themes.stylex.ts) override only the
+values they change.
 
-Define colors with the mode-aware `light-dark()` syntax. Other tokens use standard CSS.
+`ThemeProvider` applies the selected theme and color mode to its host and mirrors
+the outermost provider onto the document root so body-level portals inherit it.
+Light/dark mode follows the system unless explicitly selected. Storybook exposes
+theme and mode controls; the gallery persists its theme choice locally.
 
-```ts
-// tokens.stylex.ts
-import * as stylex from '@stylexjs/stylex';
-
-export const tokens = stylex.defineVars({
-  "--canvas": "light-dark(#ffffff, #000000),
-  "--space-1": "0.25rem",
-});
-```
-
-Import tokens from `/src` with the alias `@/theme/tokens`, and use them in `styleX.create()`.
-
-```tsx
-// someComponent.tsx
-import * as stylex from "@stylexjs/stylex";
-import { tokens } from "@/theme/tokens";
-
-const styles = stylex.create({
-	button: {
-		backgroundColor: tokens["--bg-primary"],
-		color: tokens["--fg-primary-contrast"],
-		paddingInline: tokens["--space-4"],
-	},
-});
-```
-
-### Themes
-
-Named themes in `@/theme/themes` provide partial overrides to `tokens` and inherit everything else.
-
-> [!NOTE]
-> This is why `tokens` is a single object: it's easier (at this stage) to spin up a new theme in a single `defineVars` function containing everything.
-
-`ThemeProvider` applies the selected theme and mode to a real host and mirrors the outermost provider onto the
-document root so body-level portals inherit it. See:
-
-- [`docs/adr/ADR-0011`](docs/adr/0011-layout-primitives-common-margins-and-stylex-overrides.md) for layout primitives, eligible common margins, and the `style`/`xstyle` split,
-- [`docs/adr/ADR-0003`](docs/adr/0003-stylex-ownership-and-application.md) for StyleX ownership and application boundaries,
-- and [`src/styles/README.md`](src/styles/README.md) for the current implementation map.
-
-### Color modes
-
-Light/dark mode is automatic based on system prefs but can be forced to one mode or the other. Storybook includes a light/dark toolbar control, and the gallery persists its theme choice in local storage while defaulting to the operating-system preference.
+See the [style implementation map](src/styles/README.md) for imports, recipes,
+and examples; [ADR 0003](docs/adr/0003-stylex-ownership-and-application.md) for
+ownership and application; and
+[ADR 0011](docs/adr/0011-layout-primitives-common-margins-and-stylex-overrides.md)
+for layout primitives, common margins, and override precedence.
 
 ## Components vs. blocks
 
@@ -129,30 +99,27 @@ Repository terminology lives in [`CONTEXT.md`](CONTEXT.md). Agent-facing
 working rules live in [`AGENTS.md`](AGENTS.md); durable architectural rationale
 belongs in an ADR instead of either onboarding document.
 
+## Agent guides
+
+[AGENTS.md](AGENTS.md) contains the working rules and task-specific reference
+map. Detailed guidance is loaded when the task calls for it:
+
+- [Storybook conventions](docs/agents/storybook.md)
+- [Validation and browser checks](docs/agents/validation.md)
+- [Documentation ownership](docs/agents/domain.md)
+- [Issues](docs/agents/issue-tracker.md) and [triage labels](docs/agents/triage-labels.md)
+- [Implementation planning](docs/agents/planning.md) and the [active backlog](docs/plans/README.md)
+
 ## Validation
 
-```sh
-npm run verify:quick
-npm run verify:full
-npm run doctor
-```
+`npm run verify:quick` runs TypeScript, lint, and formatting. For changes spanning
+app/Storybook, build tooling, dependencies, or shared styling contracts,
+`npm run verify:full` includes that gate plus dev cold-start checks, app and
+Storybook builds/browser tests, and the style-prop bundle boundary.
 
-`verify:quick` runs TypeScript, Oxlint (including StyleX, anti-slop, complexity,
-and React Compiler diagnostics), and the Prettier check. Error-severity lint
-findings are blocking; complexity and the current React Compiler diagnostics
-remain advisory warnings so existing hotspots can be reduced incrementally.
-`verify:full` repeats that gate, then builds and exercises the app and Storybook
-independently, including the StyleX bundle-boundary test. Focused checks remain
-available as `typecheck`, `lint`, `format:check`, `build`, `build-storybook`,
-`test:app`, `test:storybook`, and `test:style-props`.
+`npm run doctor` is an advisory React audit for substantial React work. Its
+findings require source and behavior verification; it is not a blocking gate.
 
-`doctor` runs the advisory React Doctor scan with telemetry disabled. Treat its
-diagnostics as investigation leads and verify them against the source, ADRs,
-and browser behavior before changing code or publishing an issue. Repository
-exceptions and non-React scan exclusions live in `doctor.config.jsonc`; React
-Doctor is intentionally not part of the blocking verification gate while the
-existing baseline is being triaged.
-
-Playwright defaults to ports `6107` for the app and `6106` for Storybook. Set
-`PLAYWRIGHT_APP_PORT` or `PLAYWRIGHT_STORYBOOK_PORT` when another checkout owns
-one of those ports.
+Prose-only changes use formatting, link, and consistency checks. See the
+[validation guide](docs/agents/validation.md) for focused commands, browser
+assertions, and port isolation. Active plans retain their prescribed validation.

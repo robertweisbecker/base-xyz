@@ -26,11 +26,18 @@ const code = outputs
 	.filter((item) => item.type === "chunk")
 	.map((item) => item.code)
 	.join("\n");
-const unrelated = {
-	grid: code.includes("gridTemplateColumns"),
-	positioning: code.includes("insetInlineStart"),
-	shadow: code.includes("boxShadow"),
-};
+// A small public component must not retain the broad layout gateway's resolvers.
+// Inspect retained exports, not CSS property text or leftover unused constants.
+const unrelated = outputs
+	.filter((item) => item.type === "chunk")
+	.flatMap((item) => Object.entries(item.modules))
+	.filter(
+		([id, module]) =>
+			/\/src\/styles\/props\/(child-layout|flex|grid|position|sizing|surface|typography)\.stylex\.ts$/.test(
+				id,
+			) && module.renderedExports.length > 0,
+	)
+	.map(([id]) => id);
 
 console.log(JSON.stringify({ bytes: code.length, gzip: gzipSync(code).length, unrelated }));
-if (Object.values(unrelated).some(Boolean)) process.exitCode = 1;
+if (unrelated.length > 0) process.exitCode = 1;

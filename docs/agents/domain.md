@@ -1,31 +1,22 @@
 # Domain docs
 
-This is a single-context repository. Engineering skills should use the root domain glossary and architectural decisions when exploring the codebase.
+Use [CONTEXT.md](../../CONTEXT.md) terms when naming concepts in issues, proposals, hypotheses, and tests; avoid its rejected synonyms. Reconsider missing terms before noting a domain-modeling gap. Theming, components, and blocks share one context.
 
-## Before exploring, read these
+Consult accepted ADRs when changing their contracts; surface conflicts explicitly. [AGENTS.md](../../AGENTS.md#load-guidance-when-it-applies) routes tasks; the [README](../../README.md#agent--architecture-decisions) indexes decisions. Discovery is contextual, not a mandatory preflight. If documentation is missing, use current code and evidence; document resolved terminology or decision gaps.
 
-- **`CONTEXT.md`** at the repository root for the project’s domain vocabulary.
-- Relevant decisions under **`docs/adr/`** for the area being changed.
+## Documentation ownership
 
-If either source does not exist, proceed silently. Do not suggest creating it upfront. Domain-modeling skills create documentation lazily when terminology or architectural decisions are resolved.
+- `README.md`: orientation and authoritative links, not duplicate inventories or implementation guides.
+- `CONTEXT.md`: the shared, concise glossary.
+- `AGENTS.md`: executable rules and task-specific links. Detailed conventions belong in `docs/agents/`; implementation maps belong beside source.
+- `docs/adr/`: durable decisions and rationale. Clarify an existing decision in place; use the next number for a distinct decision or successor. Link new ADRs from the README and relevant agent guidance.
+- Superseded ADRs: link the successor in their status, move to `docs/adr/archive/`, and update inbound links. Retain decision, rationale, and supersession; remove obsolete instructions. Never reuse numbers.
+- `docs/plans/`: active backlog and prescriptive execution guidance. Follow [planning guidance](planning.md) for Improve-format handoffs, issue relationships, numbering, retirement, and ignored scratch archives.
 
-## File structure
+## Maintaining agent guidance
 
-```text
-/
-├── CONTEXT.md
-├── docs/adr/
-└── src/
-```
+Scope instructions to decisions; prefer task triggers and links over repetition or mandatory reading lists. Skill descriptions identify workflows; larger skills route to relevant references. Repository contracts override generic advice. Check historical scratch notes and archived decisions against current source and accepted ADRs before reuse.
 
-Topical areas such as theming, components, and blocks remain sections of the shared context rather than independent bounded contexts.
+Remove resolved papercuts, completed migration checklists, stale inventories, and expired scratch evidence. Link to source instead of copying details that drift. Plans retain their prescribed guidance and separate lifecycle.
 
-## Use the glossary’s vocabulary
-
-When output names a domain concept—in an issue title, refactoring proposal, hypothesis, or test name—use the term defined in `CONTEXT.md`. Do not drift to synonyms the glossary explicitly avoids.
-
-If a required concept is absent, reconsider whether the proposed language fits the project. If the gap is genuine, note it for domain modeling.
-
-## Flag ADR conflicts
-
-If proposed work contradicts an existing ADR, surface the conflict explicitly instead of silently overriding the decision.
+Basis: [Eric Provencher's guidance audit](https://x.com/pvncher/status/2095991462416490862) and [OpenAI's initiative and instruction-following guidance](https://developers.openai.com/api/docs/guides/latest-model#gpt-6-astra-initiative-and-follow-through), reviewed 2026-09-07.

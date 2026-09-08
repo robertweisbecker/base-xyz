@@ -35,7 +35,7 @@ try {
 		}
 	});
 
-	await page.goto(appUrl, { waitUntil: "networkidle" });
+	await page.goto(appUrl);
 	await page.locator("#root").waitFor({ state: "visible" });
 
 	assert(stylesheetResponses.length > 0, "The StyleX development stylesheet was not requested.");

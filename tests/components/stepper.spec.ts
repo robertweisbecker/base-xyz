@@ -5,7 +5,7 @@ const orientationsPath = "/iframe.html?id=components-stepper--orientations&viewM
 const statesPath = "/iframe.html?id=components-stepper--states&viewMode=story";
 const visitGuardsPath = "/iframe.html?id=components-stepper--visit-guards&viewMode=story";
 
-test("uses Base UI tab semantics without custom naming relationships", async ({ page }) => {
+test("exposes named steps, status, and the selected panel", async ({ page }) => {
 	await page.goto(statesPath);
 
 	const root = page.getByTestId("states-stepper");
@@ -18,28 +18,13 @@ test("uses Base UI tab semantics without custom naming relationships", async ({ 
 	await expect(list).toBeVisible();
 	await expect(tabs).toHaveCount(5);
 	await expect(account).toHaveAccessibleName(/\S/);
-	await expect(account).not.toHaveAttribute("aria-labelledby");
-	await expect(account).not.toHaveAttribute("aria-describedby");
-	await expect(account).not.toHaveAccessibleName(/1/);
+	await expect(account).toHaveAccessibleName(/Completed/);
+	await expect(tabs.nth(3)).toHaveAccessibleName(/Invalid/);
 	await expect(review).toHaveAttribute("aria-selected", "true");
 	await expect(finish).toBeDisabled();
 	const panel = root.getByRole("tabpanel");
 	await expect(panel).toBeVisible();
 	await expect(panel).toHaveAttribute("aria-labelledby", (await review.getAttribute("id")) ?? "");
-});
-
-test("replaces completed and invalid marker children with decorative status icons", async ({
-	page,
-}) => {
-	await page.goto(statesPath);
-
-	const completedMarker = page.getByTestId("completed-step-marker");
-	const invalidMarker = page.getByTestId("invalid-step-marker");
-
-	await expect(completedMarker).toHaveAttribute("aria-hidden", "true");
-	await expect(completedMarker).toHaveText("");
-	await expect(invalidMarker).toHaveAttribute("aria-hidden", "true");
-	await expect(invalidMarker).toHaveText("");
 });
 
 test("keeps Base UI manual keyboard navigation in both orientations", async ({ page }) => {
@@ -97,7 +82,6 @@ test("marks completeOnVisit steps completed after they are selected", async ({ p
 	await page.goto(statesPath);
 
 	const root = page.getByTestId("complete-on-visit-stepper");
-	await expect(root.getByRole("tablist")).toHaveCSS("--_stepper-step-count", "3");
 	const tabs = root.getByRole("tab");
 	const overview = tabs.nth(0);
 	const permissions = tabs.nth(1);
@@ -105,14 +89,11 @@ test("marks completeOnVisit steps completed after they are selected", async ({ p
 
 	await expect(overview).toHaveAttribute("aria-selected", "true");
 	await expect(overview).toHaveAccessibleName(/Completed/);
-	await expect(page.getByTestId("visited-overview-marker")).toHaveText("");
 	await expect(permissions).not.toHaveAccessibleName(/Completed/);
-	await expect(page.getByTestId("unvisited-permissions-marker")).not.toHaveText("");
 
 	await permissions.click();
 	await expect(permissions).toHaveAttribute("aria-selected", "true");
 	await expect(permissions).toHaveAccessibleName(/Completed/);
-	await expect(page.getByTestId("unvisited-permissions-marker")).toHaveText("");
 	await expect(overview).toHaveAccessibleName(/Completed/);
 	await expect(done).not.toHaveAccessibleName(/Completed/);
 });

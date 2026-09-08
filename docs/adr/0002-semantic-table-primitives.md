@@ -2,6 +2,7 @@
 
 - Status: Accepted
 - Date: 2026-08-12
+- Clarified: 2026-09-07 (public toolbar scope and state ownership)
 
 ## Context
 
@@ -11,9 +12,9 @@ DataTable owned reusable semantic table markup and appearance alongside TanStack
 
 Introduce a public, presentation-only `Table` compound component and make DataTable compose it. `Table.Root` is an outer assembly div so controls and metadata may be composed around the table; the optional `Table.Container` composes the shared `ScrollArea` in horizontal mode to add the scrollable frame and gives its focusable viewport the generic accessible name “Scrollable table,” while `Table.Content` is the semantic `<table>` and may be rendered directly inside Root or inside Container. Header, Body, and Footer map directly to `<thead>`, `<tbody>`, and `<tfoot>`. One contextual Row always renders `<tr>`. Header/data/action/checkbox cells remain explicit parts with fixed `<th>` or `<td>` output, while private context validates their section and row placement in development. Checkbox cells compose the existing design-system Checkbox, and `Table.Content` owns optional rich caption rendering so the caption is always the table's first child.
 
-DataTable remains the single controller for coordinated dataset behavior: it owns sorting, filtering, visibility, selection, expansion, the TanStack table instance, controlled callbacks, and cross-feature decisions. Pure responsibilities are split behind private module boundaries for the model and feature registry, internal column construction and row actions, wired toolbar controls, semantic header/body/content rendering, and shared styles. These are implementation boundaries, not public parts: they are not exported through either public barrel, no public controller or table-instance prop is introduced, and no React context exists solely to hide their communication.
+DataTable remains the single controller for coordinated dataset behavior: it owns sorting, filtering, visibility, selection, expansion, the TanStack table instance and its state callbacks, and cross-feature decisions. Those state callbacks are internal; this decision does not add consumer-controlled dataset state. Private modules separate the model and feature registry, column construction and row actions, wired toolbar controls, semantic rendering, and styles. These are implementation boundaries, not public parts: their helpers and views are not exported through public barrels, and no public controller, table-instance prop, or communication-only context is introduced.
 
-The only public DataTable composition seam is `renderToolbar`. It receives already-wired opaque `search`, `columnVisibility`, and `endSlot` nodes plus readonly filter entries keyed by stable `columnId`. Consumers may reorder or supplement those controls without receiving TanStack state or setters. Omitting the callback preserves the default toolbar DOM and layout. Pagination remains outside this capability until a real consumer requires it.
+`renderToolbar` is the composition seam for reordering DataTable's wired toolbar controls. It receives opaque `search`, `columnVisibility`, and `endSlot` nodes plus readonly filter entries keyed by stable `columnId`. Consumers may reorder or supplement those controls without receiving the table instance or setters through this callback. Existing `toolbarEndSlot`, `renderExpandedRow`, column definitions, and row-action callbacks retain their separate contracts. Omitting `renderToolbar` preserves the default toolbar DOM and layout. Pagination remains outside this capability until a real consumer requires it.
 
 ## Consequences
 

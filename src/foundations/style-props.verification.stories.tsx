@@ -7,15 +7,11 @@ import {
 	Box,
 	Button,
 	Card,
-	Checkbox,
-	CheckboxGroup,
 	CodeBlock,
 	Combobox,
 	Dialog,
 	Grid,
 	Heading,
-	Radio,
-	RadioGroup,
 	Stack,
 	Text,
 	TextField,
@@ -177,15 +173,6 @@ export const ConsumerContract: Story = {
 			</div>
 
 			<LoginForm />
-
-			<CheckboxGroup data-testid="inline-checkbox-group" inline label="Inline choices">
-				<Checkbox label="First choice" value="first" />
-				<Checkbox label="Second choice" value="second" />
-			</CheckboxGroup>
-			<RadioGroup data-testid="stacked-radio-group" label="Stacked choices" name="stacked-choices">
-				<Radio label="First choice" value="first" />
-				<Radio label="Second choice" value="second" />
-			</RadioGroup>
 		</Stack>
 	),
 };

@@ -349,6 +349,7 @@ function ActionIdentityFixture() {
 	);
 
 	function updateActionOrder(nextActionOrder: ActionIdentityId[]) {
+		setSelectedAction(null);
 		actionStore.setState({ ...actionStore.getSnapshot(), actionOrder: nextActionOrder });
 	}
 

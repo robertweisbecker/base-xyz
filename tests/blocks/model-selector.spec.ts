@@ -2,33 +2,30 @@ import { expect, test, type Page } from "../playwright";
 
 const storyPath = "/iframe.html?id=blocks-model-selector--normalization-regression&viewMode=story";
 
-test.describe.configure({ timeout: 120_000 });
-
 async function openStory(page: Page) {
 	await page.goto(storyPath);
-	await expect(page.getByTestId("controlled-status")).toHaveAttribute("data-event-count", "0", {
-		timeout: 30_000,
-	});
+	await expect(page.getByTestId("controlled-trigger")).toBeVisible();
 }
 
-async function openSubmenu(page: Page, settingIndex: number, optionIndex: number) {
-	const submenuTrigger = page.getByRole("menuitem").nth(settingIndex);
+async function openSubmenu(page: Page, setting: string, optionName: string) {
+	const submenuTrigger = page.getByRole("menuitem", { name: new RegExp(`^${setting}`) });
 	await expect(submenuTrigger).toBeVisible();
 	await submenuTrigger.focus();
 	await page.keyboard.press("ArrowRight");
-	const option = page.getByRole("menuitemradio").nth(optionIndex);
+	const option = page.getByRole("menuitemradio", { name: optionName, exact: true });
 	await expect(option).toBeVisible();
 	return option;
 }
 
-async function openModelMenu(page: Page, triggerTestId: string, optionIndex = 0) {
+async function openModelMenu(page: Page, triggerTestId: string, modelName = "Alpha") {
 	await page.getByTestId(triggerTestId).click();
-	return openSubmenu(page, 0, optionIndex);
+	return openSubmenu(page, "Model", modelName);
 }
 
-async function expectSelectedModel(page: Page, triggerTestId: string, optionIndex = 0) {
+async function expectSelectedModel(page: Page, triggerTestId: string, modelName = "Alpha") {
 	const trigger = page.getByTestId(triggerTestId);
-	const option = await openModelMenu(page, triggerTestId, optionIndex);
+	await expect(trigger).toContainText(modelName);
+	const option = await openModelMenu(page, triggerTestId, modelName);
 	await expect(option).toHaveAttribute("aria-checked", "true");
 	await page.keyboard.press("Escape");
 	await page.keyboard.press("Escape");
@@ -48,7 +45,7 @@ async function expectLatestEvent(
 	await expect(status).toHaveAttribute("data-reason", value.reason);
 }
 
-test("invalid controlled model normalizes display, selection, and the next callback", async ({
+test("invalid controlled model skips an empty group and normalizes the next callback", async ({
 	page,
 }) => {
 	await openStory(page);
@@ -56,7 +53,7 @@ test("invalid controlled model normalizes display, selection, and the next callb
 	await expectSelectedModel(page, "controlled-trigger");
 
 	await page.getByTestId("controlled-trigger").click();
-	const effort = await openSubmenu(page, 1, 2);
+	const effort = await openSubmenu(page, "Effort", "High");
 	await effort.focus();
 	await page.keyboard.press("Enter");
 	await expectLatestEvent(page, "controlled-status", {
@@ -75,7 +72,7 @@ test("invalid uncontrolled default normalizes display, selection, and stored cal
 	await expectSelectedModel(page, "uncontrolled-trigger");
 
 	await page.getByTestId("uncontrolled-trigger").click();
-	const speed = await openSubmenu(page, 2, 1);
+	const speed = await openSubmenu(page, "Speed", "Fast");
 	await speed.focus();
 	await page.keyboard.press("Enter");
 	await expectLatestEvent(page, "uncontrolled-status", {
@@ -90,13 +87,13 @@ test("dynamic model removal normalizes without a callback until the next user ac
 	page,
 }) => {
 	await openStory(page);
-	await expectSelectedModel(page, "dynamic-trigger", 1);
+	await expectSelectedModel(page, "dynamic-trigger", "Beta");
 	await page.getByTestId("dynamic-remove-model").click();
 	await expect(page.getByTestId("dynamic-status")).toHaveAttribute("data-event-count", "0");
 	await expectSelectedModel(page, "dynamic-trigger");
 
 	await page.getByTestId("dynamic-trigger").click();
-	const effort = await openSubmenu(page, 1, 2);
+	const effort = await openSubmenu(page, "Effort", "High");
 	await effort.focus();
 	await page.keyboard.press("Enter");
 	await expectLatestEvent(page, "dynamic-status", {
@@ -105,9 +102,4 @@ test("dynamic model removal normalizes without a callback until the next user ac
 		reason: "effort",
 		speed: "Default",
 	});
-});
-
-test("an empty first group falls through to the first later option", async ({ page }) => {
-	await openStory(page);
-	await expectSelectedModel(page, "controlled-trigger");
 });

@@ -42,13 +42,12 @@ test("parses exponent notation so formatted results round-trip", () => {
 	expect(evaluateMathExpression("2.5E3")).toEqual({ ok: true, value: 2500 });
 });
 
-test("rejects nesting beyond the parser depth limit without overflowing", () => {
-	const nested = `${"(".repeat(65)}1${")".repeat(65)}`;
+// Protect against stack overflow without freezing the private recursion limit.
+test("rejects pathological nesting without throwing", () => {
+	const nested = `${"(".repeat(10_000)}1${")".repeat(10_000)}`;
+	const unary = `${"-".repeat(10_000)}1`;
 	expect(evaluateMathExpression(nested)).toEqual({ ok: false, reason: "syntax" });
-	const deepUnary = `${"-".repeat(65)}1`;
-	expect(evaluateMathExpression(deepUnary)).toEqual({ ok: false, reason: "syntax" });
-	const allowed = `${"(".repeat(64)}1${")".repeat(64)}`;
-	expect(evaluateMathExpression(allowed)).toEqual({ ok: true, value: 1 });
+	expect(evaluateMathExpression(unary)).toEqual({ ok: false, reason: "syntax" });
 });
 
 test("rejects division by zero and non-finite results", () => {

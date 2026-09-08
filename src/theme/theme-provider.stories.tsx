@@ -309,7 +309,6 @@ function ContractFixture() {
 					>
 						{`${renderClicks}:${providerClicks}`}
 					</span>
-					<SemanticContent />
 					<PortalFixture />
 					<ThemeProvider
 						data-testid="nested-default-host"
@@ -341,35 +340,6 @@ function ContractFixture() {
 				<span data-testid="default-light-error-s1" {...stylex.props(statusRampStyles.errorS1)} />
 			</ThemeProvider>
 		</Stack>
-	);
-}
-
-function SemanticContent() {
-	return (
-		<section aria-labelledby="theme-semantics-heading" data-testid="theme-semantics">
-			<h2 id="theme-semantics-heading">Theme semantics</h2>
-			<ul>
-				<li>Surface</li>
-				<li>Accent</li>
-			</ul>
-			<table data-testid="theme-values-table">
-				<caption>Theme values</caption>
-				<thead>
-					<tr>
-						<th scope="col">Token</th>
-						<th scope="col">Purpose</th>
-					</tr>
-				</thead>
-				<tbody>
-					<tr>
-						<td>Accent</td>
-						<td>Interactive emphasis</td>
-					</tr>
-				</tbody>
-			</table>
-			<label htmlFor="theme-label">Theme label</label>
-			<input data-testid="theme-label-input" id="theme-label" defaultValue="MP" />
-		</section>
 	);
 }
 

@@ -3,6 +3,13 @@
 StyleX modules are organized by ownership and composition boundaries. The
 durable contract is [ADR 0011](../../docs/adr/0011-layout-primitives-common-margins-and-stylex-overrides.md).
 
+Use the relevant section when choosing a module or composition pattern.
+[ADR 0003](../../docs/adr/0003-stylex-ownership-and-application.md) governs
+ownership and JSX application; the
+[vendored authoring guide](../../.agents/resources/stylex-authoring.md) covers
+StyleX syntax. Its generic examples do not override repository token, cursor,
+marker, or `style`/`xstyle` contracts.
+
 - `src/theme/tokens.stylex.ts` is the stable interface for themeable color,
   spacing, size, radius, shadow, typography, and motion values. A private
   `SPACE_UNIT_REM` calculates the default spacing scale; every public
@@ -12,9 +19,10 @@ durable contract is [ADR 0011](../../docs/adr/0011-layout-primitives-common-marg
   child layout, surfaces, typography, flex, and grid are implementation details
   of that gateway.
 - `spacing.stylex.ts` also owns the small public scalar margin vocabulary and
-  `extractMarginProps`. An eligible normal-flow component root calls that
-  adapter once, places the returned margin styles immediately before `xstyle`,
-  and spreads only the returned remainder to its native or Base UI host.
+  `extractMarginProps`. An eligible root resolves margins once, locally or by
+  forwarding them to its owning component. The adapter's returned styles go
+  immediately before `xstyle`, and only its remainder reaches the native or
+  Base UI host.
 - Semantic components own their padding, dimensions, visual treatment, and
   internal alignment through base styles and variants. Compound parts do not
   inherit their root's common-margin contract.
@@ -89,6 +97,8 @@ export function Button({ className, style, xstyle, ...props }: ButtonProps) {
 
 `Box`, `Stack`, and `Grid` use their own explicit private splitter for the broad
 prop surface. Do not recreate a repository-wide key registry or DOM denylist.
+`Stack reverse` changes visual order only; preserve meaningful DOM, reading,
+focus, and keyboard order.
 
 ### Naming
 
@@ -130,25 +140,24 @@ import {
 	popupMotionStyles,
 	popupPositionerStyles,
 	popupViewportStyles,
-	popupArrowStyles,
 } from "@/components/popover/popover.stylex";
 import { tooltipStyles } from "@/components/tooltip/tooltip.stylex";
 
 // Normal Menu / Popover / LinkPreview / Tooltip Positioner
-stylex.props(popupPositionerStyles, style);
+stylex.props(popupPositionerStyles, xstyle);
 
 // Panel-style Popup (menu, select, combobox, popover, link-preview)
-stylex.props(menuParts.panelSurface, menuParts.popup, popupMotionStyles.anchoredPopup, style);
+stylex.props(menuParts.panelSurface, menuParts.popup, popupMotionStyles.anchoredPopup, xstyle);
 
 // Opt-in detached-trigger movement (positioner and popup respectively)
-stylex.props(popupPositionerStyles, popupMotionStyles.movingPositioner, style);
-stylex.props(panelSurface, popupMotionStyles.anchoredPopup, popupMotionStyles.movingPopup, style);
+stylex.props(popupPositionerStyles, popupMotionStyles.movingPositioner, xstyle);
+stylex.props(panelSurface, popupMotionStyles.anchoredPopup, popupMotionStyles.movingPopup, xstyle);
 
 // Tooltip Popup (chrome + motion bundled)
-stylex.props(tooltipStyles.popup, tooltipParts.popup, style);
+stylex.props(tooltipStyles.popup, tooltipParts.popup, xstyle);
 
 // Optional Viewport child for detached-trigger content swapping
-stylex.props(popupViewportStyles, style);
+stylex.props(popupViewportStyles, xstyle);
 ```
 
 Popup composites render their children directly. Opt into Base UI's content
@@ -175,7 +184,7 @@ other components that intentionally look like Menu items compose it directly:
 import { menuItemStyles, menuItemVariantStyles } from "@/components/menu/menu-item.stylex";
 import { menuItemVars } from "@/components/menu/menu-item-vars.stylex";
 
-stylex.props(menuItemStyles.item, menuItemVariantStyles.default, style); // item row
+stylex.props(menuItemStyles.item, menuItemVariantStyles.default, xstyle); // item row
 stylex.props(menuItemStyles.label); // primary label cell
 stylex.props(menuItemStyles.indicator); // check/radio slot
 ```
@@ -197,7 +206,6 @@ Field's style module exposes one export per element role and two size bundles:
 
 ```tsx
 import { fieldStyles, fieldInputStyles, fieldControlStyles } from "@/components/field/field.stylex";
-import type { FieldSize } from "@/components/field/field.types";
 
 stylex.props(fieldInputStyles.md, focusRing.inset); // text field
 stylex.props(fieldControlStyles.md, selectParts.trigger, focusRing.inset); // select trigger
@@ -214,14 +222,12 @@ import {
 	modalViewportStyles,
 	modalPopupStyles,
 	modalTextStyles,
-	alertBackdropStyles,
-	alertViewportStyles,
 	modalChromeStyles,
 } from "@/components/dialog/dialog.stylex";
 
 stylex.props(modalBackdropStyles); // dialog backdrop
 stylex.props(modalViewportStyles); // dialog viewport
-stylex.props(modalPopupStyles, dialogParts.popup, style); // dialog surface + motion
+stylex.props(modalPopupStyles, dialogParts.popup, xstyle); // dialog surface + motion
 stylex.props(modalTextStyles.title); // title role
 
 // Drawers: reuse chrome without dialog scale/fade motion
@@ -304,16 +310,17 @@ const styles = stylex.create({
 Styled component roots accept native `style?: CSSProperties` and StyleX
 `xstyle?: StyleXStyles`. `xstyle` is merged last inside `stylex.props`, so
 caller StyleX wins over component styles and named margins. Native `style` is
-merged after generated inline values. `className` remains only for third-party
-interop; it cannot carry StyleX overrides reliably.
+merged after generated inline values. `className` supports CSS and third-party
+interop without a promised StyleX precedence relationship.
 
 ```tsx
 import * as stylex from "@stylexjs/stylex";
 import x from "@stylexjs/atoms";
 import { Button } from "@/components";
+import { tokens } from "@/theme/tokens.stylex";
 
 const styles = stylex.create({
-	wide: { paddingInline: "2rem" },
+	wide: { paddingInline: tokens["--space-8"] },
 });
 
 <Button xstyle={[styles.wide, x.width["100%"], pending && x.opacity["0.5"]]}>Save</Button>;

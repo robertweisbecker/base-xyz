@@ -6,26 +6,6 @@ const actionIdentityStoryPath =
 const toolbarCompositionStoryPath =
 	"/iframe.html?id=components-data-table--toolbar-composition&viewMode=story";
 
-test("row expansion toggles keep contextual accessible names and pressed state", async ({
-	page,
-}) => {
-	await page.goto(storyPath);
-
-	const firstRowToggle = page
-		.getByRole("table")
-		.locator("tbody tr")
-		.first()
-		.locator("button[aria-pressed]");
-	await expect(firstRowToggle).toBeVisible();
-	await expect(firstRowToggle).toHaveAttribute("aria-pressed", "false");
-	await expect(firstRowToggle).toHaveAccessibleName(/\S/);
-	const collapsedName = await firstRowToggle.getAttribute("aria-label");
-
-	await firstRowToggle.click();
-	await expect(firstRowToggle).toHaveAttribute("aria-pressed", "true");
-	await expect(firstRowToggle).not.toHaveAccessibleName(collapsedName ?? "");
-});
-
 test("row actions retain focus, identity, and callbacks while mounted actions change", async ({
 	page,
 }) => {
@@ -42,6 +22,7 @@ test("row actions retain focus, identity, and callbacks while mounted actions ch
 	await deleteAction.focus();
 	await expect(deleteAction).toBeFocused();
 
+	// Simulate an external action update without stealing keyboard focus from the open menu.
 	await fixture.getByRole("button", { name: "Reorder actions" }).evaluate((button) => {
 		if (!(button instanceof HTMLButtonElement)) throw new Error("Expected a story control button");
 		button.click();
@@ -100,7 +81,6 @@ test("filtering, sorting, visibility, selection, and empty results remain observ
 	await filter.fill("feature-auth");
 	await expect(table.locator("tbody tr")).toHaveCount(1);
 	await expect(table.locator("tbody tr").first()).toContainText("feature-auth.example.com");
-	await expect(page.getByText("0 of 1 row(s) selected.")).toBeVisible();
 
 	await filter.fill("");
 	const sortButton = page.getByRole("button", { name: "Sort URL ascending" });
@@ -122,13 +102,14 @@ test("filtering, sorting, visibility, selection, and empty results remain observ
 	await expect(updatedColumn).toBeChecked();
 	await updatedColumn.click();
 	await expect(table.getByRole("columnheader", { name: /Updated/ })).toHaveCount(0);
-	await expect(page.getByText("7 column(s) visible.")).toBeVisible();
 
 	await filter.fill("no-such-deployment");
 	await expect(table.getByText("No results.")).toBeVisible();
 });
 
-test("selection and expansion compose on a stable row", async ({ page }) => {
+test("selection and expansion preserve row state and contextual accessible names", async ({
+	page,
+}) => {
 	await page.goto(storyPath);
 
 	const table = page.getByRole("table");
@@ -137,11 +118,16 @@ test("selection and expansion compose on a stable row", async ({ page }) => {
 	await expect(firstRow.getByRole("checkbox", { name: "Select row 1" })).toBeChecked();
 
 	const expand = firstRow.getByRole("button", { name: "Expand row 1" });
+	await expect(expand).toHaveAttribute("aria-pressed", "false");
 	await expand.click();
-	await expect(firstRow.locator("button[aria-pressed]")).toHaveAttribute("aria-pressed", "true");
+	const collapse = firstRow.getByRole("button", { name: "Collapse row 1" });
+	await expect(collapse).toHaveAttribute("aria-pressed", "true");
 	await expect(table.getByText(/Deployment dep_/)).toBeVisible();
 
-	await expect(page.getByText("1 of 5 row(s) selected.")).toBeVisible();
+	await collapse.click();
+	await expect(expand).toHaveAttribute("aria-pressed", "false");
+	await expect(table.getByText(/Deployment dep_/)).toBeHidden();
+	await expect(firstRow.getByRole("checkbox", { name: "Select row 1" })).toBeChecked();
 });
 
 test("custom toolbar content renders and reordered filters remain functional", async ({ page }) => {

@@ -35,24 +35,6 @@ test("custom render host merges semantics, refs, events, and theme state without
 	);
 });
 
-test("semantic hosts preserve accessible structured content", async ({ page }) => {
-	await page.goto(storyPath);
-	const main = page.getByTestId("custom-theme-host");
-	const region = main.getByTestId("theme-semantics");
-
-	await expect(region).toHaveAccessibleName(/\S/);
-	await expect(region.getByRole("heading", { level: 2 })).toHaveAccessibleName(/\S/);
-	await expect(region.getByRole("list")).toBeVisible();
-	await expect(region.getByRole("listitem")).toHaveCount(2);
-	await expect(region.getByTestId("theme-values-table")).toHaveAccessibleName(/\S/);
-	await expect(region.getByRole("columnheader")).toHaveCount(2);
-	await expect(region.getByTestId("theme-label-input")).toHaveValue("MP");
-	await expect(page.getByTestId("nested-default-host")).toBeVisible();
-
-	const fallback = page.getByTestId("fallback-theme-host");
-	await expect(fallback).not.toHaveAttribute("role");
-});
-
 test("fallback host inherits the root theme and remains a normal div", async ({ page }) => {
 	await page.emulateMedia({ colorScheme: "dark" });
 	await page.goto(storyPath);

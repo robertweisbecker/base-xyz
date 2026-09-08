@@ -1,44 +1,34 @@
-import { expect, test, type Page } from "../playwright";
+import { expect, test } from "../playwright";
 
 const storyPath = "/iframe.html?id=blocks-streaming-response--replacement-reset&viewMode=story";
+const initialResponse = "The initial response contains enough words to expose stale reveal state";
+const replacementResponse = "The replacement response is ready";
 
-async function pauseClock(page: Page) {
-	await page.clock.pauseAt((await page.evaluate(() => Date.now())) + 100);
-}
-
-test("resets replacement and retry streams before their first render", async ({ page }) => {
-	test.setTimeout(120_000);
+test("replacement and retry streams reveal fresh text and complete once", async ({ page }) => {
 	await page.clock.install();
 	await page.goto(storyPath);
-
 	const content = page.getByTestId("streaming-replacement-content");
 	const completionCount = page.getByTestId("streaming-completion-count");
-	const chunks = content.locator("[data-streaming-text-chunk]");
+	await expect(content).toBeVisible();
+	await page.clock.pauseAt((await page.evaluate(() => Date.now())) + 100);
 
-	await expect(content).toBeVisible({ timeout: 30_000 });
-	await expect(completionCount).toHaveAttribute("data-value", "1", { timeout: 30_000 });
-	await expect.poll(() => chunks.count()).toBeGreaterThan(1);
-	await expect(content.locator("[data-streaming-text-caret]")).toHaveCount(0);
-
-	await pauseClock(page);
-
-	await page.getByTestId("streaming-replace").click();
-	await expect(chunks).toHaveCount(1);
+	await page.clock.runFor(2_000);
+	await expect(content).toHaveText(initialResponse);
 	await expect(completionCount).toHaveAttribute("data-value", "1");
-	await expect(content.locator("[data-streaming-text-caret]")).toHaveCount(1);
 
-	await page.clock.runFor(92);
-	await expect(chunks).toHaveCount(2);
-	await expect(completionCount).toHaveAttribute("data-value", "2");
-	await expect(content.locator("[data-streaming-text-caret]")).toHaveCount(0);
+	for (const [action, completed] of [
+		["streaming-replace", 2],
+		["streaming-retry", 3],
+	] as const) {
+		await page.getByTestId(action).click();
+		const firstText = (await content.textContent())?.trim() ?? "";
+		expect(firstText.length).toBeGreaterThan(0);
+		expect(replacementResponse.startsWith(firstText)).toBe(true);
+		expect(firstText).not.toBe(replacementResponse);
+		await expect(completionCount).toHaveAttribute("data-value", String(completed - 1));
 
-	await page.getByTestId("streaming-retry").click();
-	await expect(chunks).toHaveCount(1);
-	await expect(completionCount).toHaveAttribute("data-value", "2");
-	await expect(content.locator("[data-streaming-text-caret]")).toHaveCount(1);
-
-	await page.clock.runFor(92);
-	await expect(chunks).toHaveCount(2);
-	await expect(completionCount).toHaveAttribute("data-value", "3");
-	await expect(content.locator("[data-streaming-text-caret]")).toHaveCount(0);
+		await page.clock.runFor(2_000);
+		await expect(content).toHaveText(replacementResponse);
+		await expect(completionCount).toHaveAttribute("data-value", String(completed));
+	}
 });

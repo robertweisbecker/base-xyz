@@ -2,6 +2,7 @@
 
 - Status: Accepted
 - Date: 2026-08-13
+- Clarified: 2026-09-07 (settlement timing and validation ownership)
 
 ## Context
 
@@ -17,10 +18,10 @@ Async settlement also coordinates every Confirm part under one dialog, imperativ
 - Root announces success only after resolution. Rejection keeps the dialog open, restores its controls, optionally announces configurable failure feedback, and reports the error through `onConfirmError` without rethrowing the rejected operation from the event path.
 - A synchronous ref guard prevents duplicate operations before React renders pending state. Every Confirm part beneath the Root reflects the same pending operation.
 - Promise settlement after unmount must not update state, add feedback, or close a stale dialog. Mounted-state effects must remain correct under React StrictMode effect replay.
-- Playwright discovers focused browser regressions throughout `tests/`. Async interaction fixtures use controlled clocks and capture browser console errors.
+- Async verification must observe pending and settled states separately and capture browser errors. Test commands belong in the [validation guide](../agents/validation.md).
 
 ## Consequences
 
-Consumers provide one operation at Root rather than coordinating closing and feedback inside click handlers. Existing dialogs without `onConfirm` retain immediate successful confirmation, while asynchronous consumers gain deterministic success and retryable failure behavior.
+Consumers provide one operation at Root rather than coordinating closing and feedback inside click handlers. Without `onConfirm`, the same settlement path completes without waiting for external work; closing still follows the asynchronous `await` boundary. Asynchronous consumers gain deterministic success and retryable failure behavior.
 
 The block owns a small amount of operation lifecycle state and an imperative Base UI ref. Browser regressions must cover the pending intermediate state, resolution, rejection, duplicate input, prevented input, and StrictMode behavior; build-only checks do not prove this contract.

@@ -2,6 +2,7 @@
 
 - Status: Accepted
 - Date: 2026-08-13
+- Clarified: 2026-09-07 (registration lifetime under StrictMode)
 
 ## Context
 
@@ -12,7 +13,7 @@ The shortcut is global, but the state transition still belongs to an individual 
 ## Decision
 
 - A component family with a global shortcut owns one module-private document listener and an insertion-ordered registry of mounted roots.
-- Every root registers exactly once for its mounted lifetime. Changes to eligibility, current state, or callbacks do not re-register the root or alter mount-order priority.
+- Each mounted root has one active registration. Changes to eligibility, current state, or callbacks do not re-register it or alter mount-order priority. StrictMode may replay setup and cleanup; this is an ownership guarantee, not an exact effect-call count.
 - Registration callbacks use React Effect Events to read the latest committed eligibility and state. Do not mutate React state containers or write refs during render to keep a registration fresh.
 - The most recently mounted eligible root owns the shortcut. Unmounting it returns ownership to the preceding eligible root.
 - The dispatcher ignores repeated and already-prevented events. It calls `preventDefault` only when an eligible owner exists and invokes exactly that owner.

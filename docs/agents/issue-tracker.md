@@ -1,42 +1,33 @@
 # Issue tracker: GitHub
 
-Issues and PRDs for this repository live as GitHub issues. Use the `gh` CLI for all operations.
+Issues and PRDs live in GitHub; use `gh`, which infers the repository from Git remotes. Local implementation and documentation requests need no issue. External PRs are not a request or triage surface; exclude them from issue queues.
 
-## Conventions
+## Commands
 
-- **Create an issue:** `gh issue create --title "..." --body "..."`
-- **Read an issue:** `gh issue view <number> --comments`, also fetching its labels.
-- **List issues:** `gh issue list --state open --json number,title,body,labels,comments` with appropriate `--label` and `--state` filters.
-- **Comment on an issue:** `gh issue comment <number> --body "..."`
-- **Apply or remove labels:** `gh issue edit <number> --add-label "..."` or `--remove-label "..."`
-- **Close an issue:** `gh issue close <number> --comment "..."`
+| Operation | Command                                                                                           |
+| --------- | ------------------------------------------------------------------------------------------------- |
+| Create    | `gh issue create --title "..." --body-file <body-file>`                                           |
+| Read      | `gh issue view <number> --comments`; also fetch labels                                            |
+| List      | `gh issue list --state open --json number,title,body,labels,comments`; adjust state/label filters |
+| Comment   | `gh issue comment <number> --body-file <body-file>`                                               |
+| Labels    | `gh issue edit <number> --add-label "..."` or `--remove-label "..."`                              |
+| Close     | `gh issue close <number> --comment "..."`                                                         |
 
-Infer the repository from `git remote -v`; `gh` does this automatically when run inside the clone.
+For multiline bodies, write exact text to a temporary file and use `--body-file`.
 
-## Pull requests as a triage surface
+## Issues and plans
 
-External pull requests are not a request or triage surface. Skills should not include pull requests when building the issue-triage queue.
+Issues own durable motivation, outcome, priority, discussion, ownership, and resolution. Plans own temporary evidence, scope, ordered steps, tests, commands, and STOP conditions. Labels track queue state; `docs/plans/README.md` tracks execution order, dependencies, and plan status.
 
-## Relationship to implementation plans
+- Small, well-specified fixes need no plan. Substantial active plans normally link one issue in their status metadata, with a reciprocal issue link. Draft, sensitive, or intentionally local plans may remain issue-less.
+- Prefer one issue per independently executable plan; larger initiatives use umbrella issues with independent child issues/plans.
+- On completion, close the issue with the implementing commit/PR and verification results. Preserve durable decisions in ADRs or `CONTEXT.md`; retire the plan under [planning guidance](planning.md).
+- On rejection, apply `wontfix`, record rationale, close the issue, and retire the plan.
 
-The GitHub issue is the durable shared work record. It owns the motivation, requested outcome, priority, discussion, ownership, and final resolution. An implementation plan under `docs/plans/` is a temporary execution specification that owns current-state evidence, exact scope, ordered steps, tests, verification commands, and STOP conditions.
+## Claiming ready work
 
-- Not every issue needs a plan. Small, well-specified fixes may be implemented directly from the issue.
-- Every substantial active plan should normally link to one issue in its status metadata, and the issue should link back to the active plan.
-- Prefer one issue per independently executable plan. Represent a larger initiative with an umbrella issue and independently executable child issues and plans.
-- GitHub labels own queue state. `docs/plans/README.md` owns active execution order, dependencies, and plan status.
-- When implementation starts, keep `ready-for-agent` or `ready-for-human`, assign the issue to the accountable GitHub user, and mark the linked plan IN PROGRESS. The ready label identifies the execution path; the assignee and plan status show that the work is claimed.
-- When listing work available for pickup, include only open, unassigned `ready-for-agent` or `ready-for-human` issues. Do not offer assigned work to another executor.
-- When work is blocked on the reporter, apply `needs-info` and mark the active plan BLOCKED with a concise reason.
-- On completion, close the issue with the implementing commit or pull request and verification results. Distill durable architectural outcomes into an ADR or `CONTEXT.md`, then retire the plan according to `docs/agents/planning.md`.
-- On rejection, apply `wontfix`, record the rationale on the issue, close it, and retire the plan.
+Offer only open, unassigned `ready-for-agent` or `ready-for-human` issues. To claim work, retain its ready label, assign the accountable GitHub user, and mark any linked plan IN PROGRESS. Assignment records ownership; the label records execution path. Reporter-blocked work takes `needs-info` and a BLOCKED plan status with a reason.
 
-Draft, sensitive, or intentionally local plans may remain issue-less. Creating or publishing a GitHub issue always requires explicit user authorization; a planning skill must not infer that authorization from the existence of a plan.
+## Publication authorization
 
-## When a skill says “publish to the issue tracker”
-
-Create a GitHub issue.
-
-## When a skill says “fetch the relevant ticket”
-
-Run `gh issue view <number> --comments`.
+Issue creation/publication requires explicit user authorization; plans and skill instructions alone do not grant it. Without authorization, prepare a concrete local draft. Do not ask again when already authorized.

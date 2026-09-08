@@ -2,6 +2,7 @@
 
 - Status: Accepted
 - Date: 2026-08-13
+- Clarified: 2026-09-07 (Effect Event callback delivery and mounted identity)
 
 ## Context
 
@@ -14,12 +15,12 @@ An effect is appropriate for synchronizing with an external system after a commi
 - When transient private state must be clean on the first render of a new logical identity, place that state in a keyed child owner and derive the key from every input that defines the identity.
 - Use a collision-safe scalar representation when multiple values form the identity. StreamingResponse serializes the tuple of `streamKey` and streamable text.
 - Consume identity inputs at the keyed ownership boundary. Do not also retain an effect that resets the same state after render.
-- Exclude callback identity and other non-semantic render churn from the key. Keep current callbacks in refs when their latest behavior is needed without restarting the state machine.
+- Exclude callback identity and other non-semantic render churn from the key. Deliver the latest callback without restarting the state machine. StreamingResponse uses `useEffectEvent` for completion invoked from its effect.
 - Preserve cleanup inside the keyed owner so unmounting an old identity cancels its timers or other pending work.
 - Do not force arbitrary non-streamable children into an identity model merely to share the implementation; preserve their direct-render path.
 
 ## Consequences
 
-StreamingResponse replacements and explicit retries now begin with their first chunk on the first committed render, and each identity reports completion exactly once after its final chunk. Callback changes alone do not restart streaming, while old timeouts are cleaned up when an identity is replaced.
+StreamingResponse replacements and explicit retries begin with their first chunk on the first committed render, and each mounted stream identity reports completion once after its final chunk. Leaving the streaming state unmounts that owner; entering it again starts a new reveal even for the same text and key. Callback changes alone do not restart streaming, while old timeouts are cleaned up when an identity is replaced.
 
 This remount pattern intentionally resets all private state owned by the keyed child. Components should use it only when that state is wholly scoped to the logical identity; state that must survive identity changes belongs above the keyed boundary.

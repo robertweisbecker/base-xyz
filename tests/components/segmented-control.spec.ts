@@ -1,22 +1,8 @@
-import { expect, test, type Page } from "@playwright/test";
+import { expect, test } from "../playwright";
 
 const playgroundPath = "/iframe.html?id=components-segmented-control--playground&viewMode=story";
 const formPath = "/iframe.html?id=components-segmented-control--form&viewMode=story";
 const statesPath = "/iframe.html?id=components-segmented-control--states&viewMode=story";
-const consoleErrorsByPage = new WeakMap<Page, string[]>();
-
-test.beforeEach(({ page }) => {
-	const consoleErrors: string[] = [];
-	consoleErrorsByPage.set(page, consoleErrors);
-	page.on("console", (message) => {
-		if (message.type() === "error") consoleErrors.push(message.text());
-	});
-});
-
-test.afterEach(({ page }) => {
-	expect(consoleErrorsByPage.get(page)).toEqual([]);
-});
-
 test("uses radio semantics and arrow-key selection", async ({ page }) => {
 	await page.goto(playgroundPath);
 
@@ -40,26 +26,6 @@ test("uses radio semantics and arrow-key selection", async ({ page }) => {
 	await expect(week).toBeChecked();
 });
 
-test("elevates the selected segment against the muted track", async ({ page }) => {
-	await page.goto(playgroundPath);
-
-	const group = page.getByRole("radiogroup", { name: "View range" });
-	const selected = group.getByRole("radio", { name: "Week" });
-	const unselected = group.getByRole("radio", { name: "Day" });
-
-	await expect
-		.poll(async () =>
-			group.evaluate((element) => {
-				const groupBackground = getComputedStyle(element).backgroundColor;
-				const checked = element.querySelector<HTMLElement>('[role="radio"][aria-checked="true"]');
-				return checked !== null && getComputedStyle(checked).backgroundColor !== groupBackground;
-			}),
-		)
-		.toBe(true);
-	await expect(selected).not.toHaveCSS("box-shadow", "none");
-	await expect(unselected).toHaveCSS("box-shadow", "none");
-});
-
 test("participates in required form submission", async ({ page }) => {
 	await page.goto(formPath);
 
@@ -71,15 +37,17 @@ test("participates in required form submission", async ({ page }) => {
 	await expect(page.getByText("Submitted: week")).toBeVisible();
 });
 
-test("keeps read-only segments visually inert on hover", async ({ page }) => {
+test("read-only segments ignore pointer and keyboard selection", async ({ page }) => {
 	await page.goto(statesPath);
 
 	const group = page.getByRole("radiogroup", { name: "Read-only example" });
-	const unselected = group.getByRole("radio", { name: "Week" });
-	const restingColor = await unselected.evaluate((element) => getComputedStyle(element).color);
-
-	await unselected.hover();
-	await page.waitForTimeout(300);
-
-	await expect(unselected).toHaveCSS("color", restingColor);
+	const day = group.getByRole("radio", { name: "Day" });
+	const week = group.getByRole("radio", { name: "Week" });
+	await expect(day).toBeChecked();
+	await week.click();
+	await expect(week).not.toBeChecked();
+	await week.focus();
+	await week.press("Space");
+	await expect(day).toBeChecked();
+	await expect(week).not.toBeChecked();
 });

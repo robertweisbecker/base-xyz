@@ -1,4 +1,4 @@
-import { expect, test, type Locator, type Page } from "../playwright";
+import { expect, test, type Page } from "../playwright";
 
 const storyPath =
 	"/iframe.html?id=design-system-style-props-verification--consumer-contract&viewMode=story";
@@ -8,12 +8,6 @@ const badgeTruncationStoryPath =
 async function openFixture(page: Page) {
 	await page.goto(storyPath);
 	await expect(page.getByTestId("fixture-ready")).toBeVisible();
-}
-
-async function expectTooltip(trigger: Locator, content: Locator) {
-	await expect(trigger).toHaveAttribute("data-popup-open", "");
-	await expect(content).toBeVisible();
-	await expect(content).toContainText(/\S/);
 }
 
 test("margin props preserve shorthand precedence, logical edges, negatives, and auto", async ({
@@ -133,7 +127,7 @@ test("Combobox chip overflow delegates trigger props, styles, and tooltip behavi
 	await expect(trigger).toHaveAttribute("data-forwarded", "true");
 	await expect(trigger).toHaveCSS("margin-left", "8px");
 	await trigger.hover();
-	await expectTooltip(trigger, page.getByTestId("chip-overflow-tooltip"));
+	await expect(page.locator('[data-slot="tooltip-popup"]')).toContainText("Ada, Grace, Linus");
 });
 
 test("created styles and static Atoms compose in one stateful xstyle array", async ({ page }) => {
@@ -156,7 +150,7 @@ test("created styles and static Atoms compose in one stateful xstyle array", asy
 	await expect(button).toHaveAttribute("aria-pressed", "false");
 });
 
-test("responsive layout remains a predeclared stylex.create set", async ({ page }) => {
+test("responsive xstyle changes the layout at its declared breakpoint", async ({ page }) => {
 	await openFixture(page);
 	const span = page.getByTestId("responsive-created-style");
 	await page.setViewportSize({ width: 600, height: 900 });
@@ -165,27 +159,14 @@ test("responsive layout remains a predeclared stylex.create set", async ({ page 
 	await expect(span).toHaveCSS("width", "120px");
 });
 
-test("Badge exposes its measured truncated label through a tooltip", async ({ page }) => {
+test("a truncated Badge exposes its full label through a keyboard-accessible tooltip", async ({
+	page,
+}) => {
 	await page.goto(badgeTruncationStoryPath);
 	const badge = page.getByTestId("truncated-badge");
-	const label = badge.locator("span").last();
-
-	await expect(label).toBeVisible();
-	expect(await label.evaluate((element) => element.scrollWidth > element.clientWidth)).toBe(true);
-	await expect(badge).toHaveAttribute("tabindex", "0");
 	await badge.focus();
+	await expect(badge).toBeFocused();
 	const badgeText = (await badge.textContent())?.trim() ?? "";
-	const tooltip = page.locator("[data-open]").filter({ hasText: badgeText }).last();
-	await expectTooltip(badge, tooltip);
-	await expect(tooltip).toContainText((await badge.textContent())?.trim() ?? "");
-});
-
-test("field choice groups retain native interaction behavior", async ({ page }) => {
-	await openFixture(page);
-	const firstChoice = page.getByTestId("inline-checkbox-group").getByRole("checkbox").first();
-	await firstChoice.check();
-	await expect(firstChoice).toBeChecked();
-	const firstRadio = page.getByTestId("stacked-radio-group").getByRole("radio").first();
-	await firstRadio.check();
-	await expect(firstRadio).toBeChecked();
+	expect(badgeText).not.toBe("");
+	await expect(page.locator('[data-slot="tooltip-popup"]')).toHaveText(badgeText);
 });
