@@ -56,7 +56,7 @@ const spacious = stylex.createTheme(tokens, {
 </div>;
 ```
 
-Field components apply margins to the wrapper containing the label, control, description, and error—not to the input or trigger itself.
+`Form`, `Field.Root`, and `Fieldset.Root` apply margins to their own hosts. Put margins for a complete label, control, description, and error composition on its explicit `Field.Root`. Bare controls apply margins to the actual control, while `NumberField.Root` owns margins on its widget host. Node-less `Select.Root` and `Combobox.Root` have no margin props; use an explicit Field or layout owner.
 
 ## Component-owned internals
 

@@ -4,6 +4,7 @@ import { tokens } from "@/theme/tokens.stylex";
 
 export const inputsPageStyles = stylex.create({
 	formRegion: { width: "fit-content" },
+	formResult: { overflowWrap: "anywhere", whiteSpace: "pre-wrap" },
 	horizontalOverflow: { paddingBlock: tokens["--space-1"], overflowX: "auto" },
 	fieldSizingCanvas: { minWidth: "82rem" },
 	fieldHeaderGrid: {
@@ -124,10 +125,10 @@ export const inputsPageStyles = stylex.create({
 		minHeight: tokens["--size-control-lg"],
 		width: "100%",
 	},
-	formFieldGrid: {
+	formFieldColumns: {
 		gridTemplateColumns: {
 			default: "minmax(0, 1fr)",
-			[breakpoints.sm]: "repeat(2, minmax(0, 1fr))",
+			[breakpoints.sm]: "minmax(10rem, 1fr) minmax(0, 2fr)",
 		},
 	},
 });

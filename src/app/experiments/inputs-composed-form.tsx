@@ -1,8 +1,10 @@
+import { useState } from "react";
 import {
 	Button,
 	Checkbox,
 	Field,
 	Fieldset,
+	Form,
 	Grid,
 	Label,
 	Radio,
@@ -10,6 +12,7 @@ import {
 	Select,
 	Stack,
 	Switch,
+	Text,
 	Textarea,
 	TextField,
 } from "@/components";
@@ -21,32 +24,48 @@ const regionItems = [
 	{ label: "Tokyo, Japan", value: "hnd1" },
 ];
 
+type EnvironmentValues = {
+	"environment-name": string;
+	region: string;
+	visibility: string;
+	description: string;
+	"automatic-rollback": boolean;
+	"workspace-defaults": boolean;
+};
+
 export function EnvironmentForm() {
+	const [submitted, setSubmitted] = useState<EnvironmentValues | null>(null);
 	return (
-		<form onSubmit={(event) => event.preventDefault()}>
+		<Form<EnvironmentValues> onFormSubmit={setSubmitted}>
 			<Stack gap={6}>
-				<Grid gap={4} xstyle={styles.formFieldGrid}>
-					<Field.Root name="environment-name">
-						<Label>Environment name</Label>
-						<TextField placeholder="Preview" required />
-						<Field.Description>Used in deployment URLs and CLI commands.</Field.Description>
-					</Field.Root>
-					<Field.Root name="region" xstyle={styles.formRegion}>
-						<Select.Root<string> defaultValue="iad1" items={regionItems}>
-							<Select.Label>Primary region</Select.Label>
-							<Select.Trigger />
-							<Select.Popup>
-								<Select.List>
-									{regionItems.map((item) => (
-										<Select.Item key={item.value} value={item.value}>
-											{item.label}
-										</Select.Item>
-									))}
-								</Select.List>
-							</Select.Popup>
-						</Select.Root>
-					</Field.Root>
-				</Grid>
+				<Field.Root name="environment-name">
+					<Grid gap={4} align="start" xstyle={styles.formFieldColumns}>
+						<Stack gap={1}>
+							<Label>Environment name</Label>
+							<Field.Description>Used in deployment URLs and CLI commands.</Field.Description>
+						</Stack>
+						<Stack gap={1}>
+							<TextField placeholder="Preview" required minLength={3} />
+							<Field.Error match="valueMissing">Enter an environment name.</Field.Error>
+							<Field.Error match="tooShort">Use at least three characters.</Field.Error>
+						</Stack>
+					</Grid>
+				</Field.Root>
+				<Field.Root name="region" xstyle={styles.formRegion}>
+					<Select.Root<string> defaultValue="iad1" items={regionItems}>
+						<Select.Label>Primary region</Select.Label>
+						<Select.Trigger />
+						<Select.Popup>
+							<Select.List>
+								{regionItems.map((item) => (
+									<Select.Item key={item.value} value={item.value}>
+										{item.label}
+									</Select.Item>
+								))}
+							</Select.List>
+						</Select.Popup>
+					</Select.Root>
+				</Field.Root>
 				<Fieldset.Root>
 					<Fieldset.Legend>Environment visibility</Fieldset.Legend>
 					<Field.Root name="visibility" mt={3}>
@@ -121,7 +140,16 @@ export function EnvironmentForm() {
 					</Button>
 					<Button type="submit">Create environment</Button>
 				</Stack>
+				{submitted && (
+					<Text
+						render={<output aria-label="Submitted environment" />}
+						size="1"
+						xstyle={styles.formResult}
+					>
+						{JSON.stringify(submitted, null, 2)}
+					</Text>
+				)}
 			</Stack>
-		</form>
+		</Form>
 	);
 }

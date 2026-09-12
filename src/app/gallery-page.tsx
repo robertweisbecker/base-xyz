@@ -1,5 +1,5 @@
 import x from "@stylexjs/atoms";
-import { useId, type ReactNode } from "react";
+import { useId, useState, type ReactNode } from "react";
 import * as stylex from "@stylexjs/stylex";
 import {
 	AgentActionApproval,
@@ -45,6 +45,7 @@ import {
 	EmptyState,
 	Field,
 	Fieldset,
+	Form,
 	Heading,
 	IconButton,
 	InfoTip,
@@ -381,6 +382,38 @@ function getComponentCells(): GalleryCell[] {
 			),
 		},
 		{
+			title: "Field",
+			content: (
+				<Field.Root name="project-slug">
+					<Label>Project slug</Label>
+					<TextField defaultValue="design-system" />
+					<Field.Description>Used in your project URL.</Field.Description>
+				</Field.Root>
+			),
+		},
+		{
+			title: "Fieldset",
+			content: (
+				<Fieldset.Root>
+					<Fieldset.Legend>Contact details</Fieldset.Legend>
+					<Stack gap={3} mt={2}>
+						<Field.Root name="given-name">
+							<Label>Given name</Label>
+							<TextField defaultValue="Ada" />
+						</Field.Root>
+						<Field.Root name="family-name">
+							<Label>Family name</Label>
+							<TextField defaultValue="Lovelace" />
+						</Field.Root>
+					</Stack>
+				</Fieldset.Root>
+			),
+		},
+		{
+			title: "Form",
+			content: <FormGalleryExample />,
+		},
+		{
 			title: "Heading",
 			content: (
 				<Heading textAlign="center" size="6">
@@ -435,6 +468,17 @@ function getComponentCells(): GalleryCell[] {
 					label="Projects"
 					startSlot={<FolderOpenIcon aria-hidden size="1.25em" weight="duotone" />}
 				/>
+			),
+		},
+		{
+			title: "Label",
+			content: (
+				<Field.Root>
+					<Stack render={<Label variant="item" />} orientation="horizontal" align="center" gap={2}>
+						<Checkbox defaultChecked />
+						Send me a copy
+					</Stack>
+				</Field.Root>
 			),
 		},
 		{
@@ -977,6 +1021,27 @@ function ComboboxGalleryPopup() {
 				)}
 			</Combobox.List>
 		</Combobox.Popup>
+	);
+}
+
+function FormGalleryExample() {
+	const [submitted, setSubmitted] = useState("");
+	return (
+		<Form<{ project: string }> onFormSubmit={({ project }) => setSubmitted(project)}>
+			<Stack gap={3}>
+				<Field.Root name="project">
+					<Label>Project name</Label>
+					<TextField defaultValue="Design system" required />
+					<Field.Error />
+				</Field.Root>
+				<Button type="submit" size="sm">
+					Save project
+				</Button>
+				<Text render={<output aria-label="Submitted project" />} size="1" color="muted">
+					{submitted ? `Submitted: ${submitted}` : "No project submitted."}
+				</Text>
+			</Stack>
+		</Form>
 	);
 }
 
