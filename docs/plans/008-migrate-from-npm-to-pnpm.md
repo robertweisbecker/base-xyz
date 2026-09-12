@@ -10,22 +10,23 @@
 > maintain the index.
 >
 > **Drift check (run first)**:
-> `git diff --stat c6d9b8f..HEAD -- package.json package-lock.json pnpm-lock.yaml pnpm-workspace.yaml .prettierignore README.md AGENTS.md vercel.json playwright.config.ts playwright.app.config.ts .github/workflows/verify.yml docs/agents/validation.md src/foundations/foundation-pages.tsx src/components/code/code.stories.tsx docs/plans docs/agents/planning.md`
-> Compare source/config changes since `c6d9b8f` with this plan. Ref cleanup
-> #65 must land first; reconcile dependency PR #57 before taking a fresh
-> baseline. Documentation reconciliation is expected. Stop on unexplained
-> contract or dependency drift rather than restoring older package versions.
+> `git diff --stat c42ce20..HEAD -- package.json package-lock.json pnpm-lock.yaml pnpm-workspace.yaml .prettierignore README.md AGENTS.md vercel.json playwright.config.ts playwright.app.config.ts .github/workflows/verify.yml docs/agents/validation.md src/foundations/foundation-pages.tsx src/components/code/code.stories.tsx docs/plans docs/agents/planning.md`
+> Compare source/config changes since dependency PR #57's merge `c42ce20` with
+> this plan. Ref cleanup #65 must land first; reconcile any later dependency
+> changes before taking a fresh baseline. Documentation reconciliation is expected.
+> Stop on unexplained contract or dependency drift rather than restoring older
+> package versions.
 
 ## Status
 
 - **Priority**: P2
 - **Effort**: M
 - **Risk**: HIGH
-- **Completed prerequisites**: issue [#27](https://github.com/robertweisbecker/base-xyz/issues/27) / [PR #34](https://github.com/robertweisbecker/base-xyz/pull/34), merged as `a956b17`; Plan 007 / [PR #47](https://github.com/robertweisbecker/base-xyz/pull/47), merged as `e168ac3`
+- **Completed prerequisites**: issue [#27](https://github.com/robertweisbecker/base-xyz/issues/27) / [PR #34](https://github.com/robertweisbecker/base-xyz/pull/34), merged as `a956b17`; Plan 007 / [PR #47](https://github.com/robertweisbecker/base-xyz/pull/47), merged as `e168ac3`; dependency [PR #57](https://github.com/robertweisbecker/base-xyz/pull/57), merged as `c42ce20`
 - **Category**: migration
 - **Planned at**: commit `9b84d52`, 2026-09-03
-- **Reconciled at**: commit `c6d9b8f`, 2026-09-11
-- **Depends on**: [#65 ref cleanup](https://github.com/robertweisbecker/base-xyz/issues/65) landed; resolved/serialized dependency PR #57; idle implementation queue
+- **Reconciled at**: commit `c42ce20`, 2026-09-11
+- **Depends on**: [#65 ref cleanup](https://github.com/robertweisbecker/base-xyz/issues/65) landed; idle implementation queue
 - **Issue**: intentionally local migration proposal; link a durable issue when claimed
 - **Status**: TODO — wait for the listed prerequisites
 
@@ -49,20 +50,19 @@ behavior.
   There is one root `package.json`, no package workspace, and no publish step.
 - `package-lock.json` is a lockfile v3 and is the only authoritative lockfile.
   There is no `pnpm-lock.yaml`, `pnpm-workspace.yaml`, `.npmrc`, or
-  `packageManager` field at the reconciled commit `c6d9b8f`.
+  `packageManager` field at the reconciled commit `c42ce20`.
 - `package.json:6-8` declares Node `>=20`. The planned pnpm executable is
   `11.19.0`; its own installed package metadata declares Node `>=22.13`.
   Record the execution host versions afresh. Selecting pnpm 11 raises the
   repository Node floor to `>=22.13`; do not leave contradictory engine and
   package-manager requirements.
-- The current `node_modules` is stale relative to `package.json` and
-  `package-lock.json`: `npm ls --depth=0` reports several invalid installed
-  versions, while the lockfile contains the requested current versions. Build
-  the comparison baseline from a fresh `npm ci` in the implementation
-  worktree, not from today's installed directory.
-- The root lockfile currently records install scripts for `esbuild` and a
-  nested optional `fsevents`. Previous pnpm diagnostics found that the required
-  toolchain permission is `esbuild`; do not approve every dependency script.
+- Earlier audits found installed versions that differed from `package.json`
+  and `package-lock.json`. Build the comparison baseline from a fresh `npm ci`
+  in the implementation worktree, not from a pre-existing installed directory.
+- At `c42ce20`, the root lockfile records an install script only for
+  `esbuild@0.28.1`; the earlier nested optional `fsevents` is absent. Previous
+  pnpm diagnostics identified `esbuild` as the required toolchain permission.
+  Recheck the execution baseline; do not approve every dependency script.
 
 Use these exact package-manager choices unless a STOP condition applies:
 
@@ -126,9 +126,11 @@ src/components/textarea/textarea.tsx
 src/experimental/drag-and-drop/dnd-kit/dnd-kit-menu-demo.tsx
 ```
 
-`@base-ui/react@1.7.0` depends on `@base-ui/utils@0.3.2`, so npm's flattened
-layout makes those undeclared imports resolve accidentally. pnpm must not be
-configured with public/shameful hoisting to preserve that accident, and the
+At the post-#57 baseline `c42ce20`, the manifest requests `@base-ui/react@^1.8.0`
+and the lockfile resolves `@base-ui/react@1.8.0`, which depends on
+`@base-ui/utils@0.4.0`. The utils package remains transitive, so npm's flattened
+layout still makes those undeclared imports resolve accidentally. pnpm must not
+be configured with public/shameful hoisting to preserve that accident, and the
 transitive utility must not be added as a direct dependency.
 
 [Ref cleanup #65](https://github.com/robertweisbecker/base-xyz/issues/65) owns
@@ -189,10 +191,11 @@ Inspect actual settings and authorized preview logs, or report deployment
 selection unverified. See [Vercel Corepack selection](https://vercel.com/docs/builds/configure-a-build#corepack).
 No environment-setting changes or deployment is authorized by this plan alone.
 
-Dependency PR #57 overlaps package.json/package-lock.json (including Base UI,
-Playwright, and Storybook upgrades). Resolve or serialize it before baseline;
-refresh installed-type and Chromium assumptions from the resulting lockfile.
-Passing quick/preview checks on that PR are not full interaction evidence.
+Dependency PR #57 merged as `c42ce20`, establishing the recorded dependency
+baseline, including Base UI, Playwright, and Storybook upgrades. Serialize any
+later dependency edits before taking the fresh npm snapshot; refresh
+installed-type and Chromium assumptions from that execution lockfile. Passing
+quick/preview checks on #57 are not full interaction evidence.
 
 Plan 007 completed in PR #47 and is retired from the active plan directory.
 Do not execute this repository-wide package-manager migration concurrently
@@ -318,10 +321,11 @@ Do not use the current root `node_modules` as baseline evidence. The successful
 
 ### Step 1: Establish a clean npm baseline and execution lock
 
-Confirm commits `a956b17` and `e168ac3` are ancestors of the implementation
-base. Confirm #65 is landed and its phantom-import check is empty. Resolve
-PR #57 overlap before recording this base. Confirm no plan other than Plan
-008 is IN PROGRESS, then mark Plan 008 IN PROGRESS without changing other
+Confirm commits `a956b17`, `e168ac3`, and dependency baseline `c42ce20` are
+ancestors of the implementation base. Confirm #65 is landed and its
+phantom-import check is empty. Serialize later dependency work before recording
+this base. Confirm no plan other than Plan 008 is IN PROGRESS, then mark Plan
+008 IN PROGRESS without changing other
 statuses. The package-manager migration is a serial infrastructure change; do
 not run it beside another executor whose commands or lockfile may change.
 
@@ -587,8 +591,9 @@ implementation scope is changed.
 
 ## Done criteria
 
-- [ ] Issue #27 / PR #34 and Plan 007 / PR #47 are present in the base, and no
-      other plan ran concurrently with the package-manager migration.
+- [ ] Issue #27 / PR #34, Plan 007 / PR #47, and dependency PR #57 (`c42ce20`)
+      are present in the base, and no other plan ran concurrently with the
+      package-manager migration.
 - [ ] `package.json` declares Node `>=22.13` and exact
       `packageManager: "pnpm@11.19.0"`.
 - [ ] `pnpm-lock.yaml` is the only authoritative lockfile;
@@ -622,8 +627,8 @@ implementation scope is changed.
 
 Stop and report; do not improvise if:
 
-- commits `a956b17` or `e168ac3` are absent, Plan 007 still appears IN PROGRESS
-  in active-plan metadata, #65 is not landed, dependency work overlaps the
+- commits `a956b17`, `e168ac3`, or `c42ce20` are absent, Plan 007 still appears
+  IN PROGRESS in active-plan metadata, #65 is not landed, dependency work overlaps the
   baseline, or another plan is still IN PROGRESS;
 - the fresh npm baseline fails before any migration edit;
 - Node 20 support is intentional and may not be raised to the pnpm 11.19.0

@@ -25,6 +25,8 @@
 - **Category**: direction
 - **Planned at**: commit `c575346`, 2026-09-02
 - **Reconciled at**: commit `c6d9b8f`, 2026-09-11
+- **Execution baseline**: merged PR #57 (`c42ce205`), `@base-ui/react@1.8.0`;
+  installed Autocomplete declarations and source re-audited for this plan
 - **Issue**: intentionally local proposal until the dependency and demand gates pass
 - **Status**: TODO — deferred; do not implement before #19 lands or without
   a named consumer needing free-form suggestions
@@ -72,11 +74,11 @@ do not implement this as a Combobox mode or add remembered selection state.
 Official reference:
 <https://base-ui.com/react/components/autocomplete>.
 
-The audit used `@base-ui/react@1.7.0`; PR #57 subsequently upgraded the lockfile
-to 1.8.0. This deferred plan must pass its compatibility check before execution.
-The audited declarations at
-`node_modules/@base-ui/react/autocomplete/root/AutocompleteRoot.d.ts:9-123`
-establish these contracts:
+The original audit used `@base-ui/react@1.7.0`. The execution contract below has
+been re-audited against installed `@base-ui/react@1.8.0` from merged PR #57;
+the earlier version is historical evidence, not an execution requirement.
+`node_modules/@base-ui/react/autocomplete/root/AutocompleteRoot.d.ts` and
+`AutocompleteRoot.js` establish these contracts:
 
 - `Root` renders no HTML; its flat/grouped overloads infer item types for Root
   callbacks such as `itemToStringValue` and `onItemHighlighted`, not arbitrary
@@ -85,10 +87,19 @@ establish these contracts:
   without adding a generic factory to manufacture cross-child inference.
 - `value` and `defaultValue` inherit React input values (including numbers);
   `onValueChange` supplies a string. Preserve the accepted upstream domain.
-- `mode` is `list | both | inline | none`; `list` is the default.
+- `items` and `filteredItems` accept readonly flat or grouped arrays. When both
+  are supplied, `filteredItems` must preserve the flat/grouped structure of
+  `items`; nullish entries are unsupported. Consumers prepare valid collections;
+  the wrapper does not add a filtering or data-normalization layer.
+- `mode` is `list | both | inline | none`; `list` is the default. In `both` and
+  `inline`, `readOnly` prevents temporary inline-completion writes as well as
+  ordinary input edits; keep this behavior delegated to Base UI.
 - `itemToStringValue` converts object items for display and form submission.
 - `form`, `submitOnItemClick`, controlled open state, highlight callbacks,
   `autoHighlight`, and `openOnInputClick` remain Base UI-owned behavior.
+- Derive change/highlight callback details from the public Autocomplete types.
+  In 1.8, its change details have a dedicated `BaseUIChangeEventDetails` type;
+  do not substitute the internal AriaCombobox change-details alias.
 - The primitive's selection mode is `none`; choosing a suggestion fills text
   but does not create Combobox-style selected state.
 
@@ -262,7 +273,7 @@ consumer may justify another part without expanding this initial API now.
 | ------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------ |
 | Inspect base       | `git status --short --branch && git rev-parse --short HEAD`                                                                                                          | intended checkout; no unrelated implementation changes             |
 | Confirm dependency | `test -f src/components/field/field.tsx && test -f src/components/label/label.tsx && rg -n 'Field' src/components/index.ts && rg -n 'Label' src/components/index.ts` | Plan 004 public wrappers exist                                     |
-| Confirm package    | `node -p "require('./node_modules/@base-ui/react/package.json').version"`                                                                                            | prints `1.7.0`, or executor performs the compatibility STOP check  |
+| Confirm package    | `node -p "require('./node_modules/@base-ui/react/package.json').version"`                                                                                            | prints `1.8.0`; reconcile any later version before execution       |
 | Typecheck          | `npm run typecheck`                                                                                                                                                  | exit 0, no errors                                                  |
 | Standard gate      | `npm run verify:quick`                                                                                                                                               | typecheck, blocking lint, advisory complexity, and formatting pass |
 | Build stories      | `npm run build-storybook`                                                                                                                                            | exit 0 and Autocomplete stories index                              |
@@ -285,10 +296,10 @@ PLAYWRIGHT_STORYBOOK_PORT=6116 npx playwright test tests/components/autocomplete
   ADR 0011, and #19's merge evidence before designing Root. Completed plan files
   are removed; do not require the retired Plan 004 file. Do not add implicit
   Field ownership to Autocomplete.
-- Use the installed Base UI declarations as the type authority and the official
-  Autocomplete docs for behavior examples. Check the Base UI 1.7 release notes
-  when interpreting filtering locale, scroll reset, event reasons, or Separator
-  semantics: <https://base-ui.com/react/overview/releases/v1-7-0>.
+- Use the installed Base UI 1.8 declarations and source as the execution
+  authority, with the official Autocomplete docs for behavior examples. Live
+  docs may describe a newer release; re-audit changed contracts before using a
+  later dependency version. Do not downgrade to the historical 1.7 audit.
 - If available, use `vercel:react-best-practices` after editing TSX as a review
   pass. It must not expand the API or override repository ADRs.
 
@@ -645,9 +656,11 @@ Stop and report; do not improvise if:
 - No real free-form consumer is identified, #19 has not landed, or its public
   Field/Label parts are absent or cannot compose with a node-less controller
   without a second Field owner.
-- The installed `@base-ui/react` version is not 1.7.x and its Autocomplete Root,
-  item inference, value semantics, mode, or part contracts materially differ
-  from this plan.
+- The installed `@base-ui/react` version differs from the reviewed 1.8.0
+  baseline without a recorded compatibility reconciliation, or its Autocomplete
+  Root, item inference, filtering collections, value semantics, mode, or part
+  contracts materially differ from this plan. Do not downgrade dependencies to
+  satisfy the original audit.
 - Preserving flat/grouped Root callback inference requires handwritten `any`, a public
   string-only restriction, or an inaccurate overload.
 - Free-form input/form behavior cannot be preserved without adding selection
