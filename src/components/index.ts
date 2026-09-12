@@ -184,7 +184,9 @@ export { Textarea, type TextareaProps } from "./textarea/textarea";
 export {
 	NumberField,
 	type NumberFieldInputWidth,
-	type NumberFieldProps,
+	type NumberFieldRootProps,
+	type NumberFieldControlProps,
+	type NumberFieldScrubAreaProps,
 } from "./number-field/number-field";
 export type { FieldSize } from "@/components/field/field.types";
 export {

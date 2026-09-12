@@ -1,20 +1,36 @@
+import { WarningOctagonIcon } from "@phosphor-icons/react/dist/csr/WarningOctagon";
+import x from "@stylexjs/atoms";
+import { Field } from "@/components/field/field";
+import { Label } from "@/components/label/label";
+import { tokens } from "@/theme/tokens.stylex";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import * as stylex from "@stylexjs/stylex";
 import type { ReactNode } from "react";
 import { Box, Grid, Stack } from "@/components/layout";
 import { Text } from "@/components/text/text";
 
-import { NumberField } from "./number-field";
+import {
+	NumberField,
+	type NumberFieldRootProps,
+	type NumberFieldControlProps,
+} from "./number-field";
+
+type PlaygroundArgs = NumberFieldRootProps &
+	Pick<NumberFieldControlProps, "inputWidth"> & {
+		_label: string;
+		_description: string;
+		_error: string;
+	};
 
 const meta = {
 	title: "Components/Number field",
-	component: NumberField,
+	component: NumberField.Root,
 	args: {
-		label: "Seats",
-		description: "Choose how many people can access this workspace.",
+		_label: "Seats",
+		_description: "Choose how many people can access this workspace.",
 		defaultValue: 8,
 		disabled: false,
-		error: "",
+		_error: "",
 		min: 1,
 		max: 100,
 		readOnly: false,
@@ -24,11 +40,11 @@ const meta = {
 		inputWidth: "12rem",
 	},
 	argTypes: {
-		label: { control: "text" },
-		description: { control: "text" },
+		_label: { control: "text" },
+		_description: { control: "text" },
 		defaultValue: { control: "number" },
 		disabled: { control: "boolean" },
-		error: { control: "text" },
+		_error: { control: "text" },
 		format: { control: false },
 		locale: { control: false },
 		max: { control: "number" },
@@ -47,11 +63,11 @@ const meta = {
 	parameters: {
 		controls: {
 			include: [
-				"label",
-				"description",
+				"_label",
+				"_description",
 				"defaultValue",
 				"disabled",
-				"error",
+				"_error",
 				"min",
 				"max",
 				"readOnly",
@@ -62,18 +78,40 @@ const meta = {
 			],
 		},
 	},
-} satisfies Meta<typeof NumberField>;
+} satisfies Meta<PlaygroundArgs>;
 
 export default meta;
-type Story = StoryObj<typeof meta>;
+type Story = StoryObj<PlaygroundArgs>;
 
 export const Playground: Story = {
-	render: (args) => (
+	render: ({ _label, _description, _error, inputWidth, ...props }) => (
 		<Box maxWidth="320px">
-			<NumberField
-				key={`${args.defaultValue}-${args.disabled}-${args.error}-${args.readOnly}-${args.size}-${args.inputWidth}`}
-				{...args}
-			/>
+			<Field.Root
+				key={`${props.defaultValue}-${props.disabled}-${_error}-${props.readOnly}-${props.size}-${inputWidth}`}
+				disabled={props.disabled}
+				invalid={Boolean(_error)}
+			>
+				<NumberField.Root {...props}>
+					<NumberField.ScrubArea>
+						<Label xstyle={x.cursor.inherit}>
+							{_label}
+							{props.required ? (
+								<span aria-hidden {...stylex.props(styles.requiredMarker)}>
+									*
+								</span>
+							) : null}
+						</Label>
+					</NumberField.ScrubArea>
+					<NumberField.Control inputWidth={inputWidth} />
+				</NumberField.Root>
+				{_description ? <Field.Description>{_description}</Field.Description> : null}
+				{_error ? (
+					<Field.Error match>
+						<WarningOctagonIcon aria-hidden size="1em" weight="duotone" />
+						{_error}
+					</Field.Error>
+				) : null}
+			</Field.Root>
 		</Box>
 	),
 };
@@ -84,23 +122,33 @@ export const Formatting: Story = {
 	},
 	render: () => (
 		<Stack gap={8} maxWidth="680px" orientation="horizontal" wrap="wrap">
-			<NumberField
-				label="Budget"
-				defaultValue={1250}
-				min={0}
-				step={50}
-				format={{ style: "currency", currency: "USD", maximumFractionDigits: 0 }}
-				inputWidth="11rem"
-			/>
-			<NumberField
-				label="Completion"
-				defaultValue={0.75}
-				min={0}
-				max={1}
-				step={0.05}
-				format={{ style: "percent" }}
-				inputWidth="10rem"
-			/>
+			<Field.Root>
+				<NumberField.Root
+					defaultValue={1250}
+					min={0}
+					step={50}
+					format={{ style: "currency", currency: "USD", maximumFractionDigits: 0 }}
+				>
+					<NumberField.ScrubArea>
+						<Label xstyle={x.cursor.inherit}>Budget</Label>
+					</NumberField.ScrubArea>
+					<NumberField.Control inputWidth="11rem" />
+				</NumberField.Root>
+			</Field.Root>
+			<Field.Root>
+				<NumberField.Root
+					defaultValue={0.75}
+					min={0}
+					max={1}
+					step={0.05}
+					format={{ style: "percent" }}
+				>
+					<NumberField.ScrubArea>
+						<Label xstyle={x.cursor.inherit}>Completion</Label>
+					</NumberField.ScrubArea>
+					<NumberField.Control inputWidth="10rem" />
+				</NumberField.Root>
+			</Field.Root>
 		</Stack>
 	),
 };
@@ -111,9 +159,30 @@ export const Sizes: Story = {
 	},
 	render: () => (
 		<Stack gap={8} maxWidth="680px" orientation="horizontal" wrap="wrap">
-			<NumberField label="Small" defaultValue={8} size="sm" inputWidth="8rem" />
-			<NumberField label="Medium" defaultValue={8} size="md" inputWidth="8rem" />
-			<NumberField label="Large" defaultValue={8} size="lg" inputWidth="8rem" />
+			<Field.Root>
+				<NumberField.Root defaultValue={8} size="sm">
+					<NumberField.ScrubArea>
+						<Label xstyle={x.cursor.inherit}>Small</Label>
+					</NumberField.ScrubArea>
+					<NumberField.Control inputWidth="8rem" />
+				</NumberField.Root>
+			</Field.Root>
+			<Field.Root>
+				<NumberField.Root defaultValue={8} size="md">
+					<NumberField.ScrubArea>
+						<Label xstyle={x.cursor.inherit}>Medium</Label>
+					</NumberField.ScrubArea>
+					<NumberField.Control inputWidth="8rem" />
+				</NumberField.Root>
+			</Field.Root>
+			<Field.Root>
+				<NumberField.Root defaultValue={8} size="lg">
+					<NumberField.ScrubArea>
+						<Label xstyle={x.cursor.inherit}>Large</Label>
+					</NumberField.ScrubArea>
+					<NumberField.Control inputWidth="8rem" />
+				</NumberField.Root>
+			</Field.Root>
 		</Stack>
 	),
 };
@@ -125,33 +194,94 @@ export const States: Story = {
 	render: () => (
 		<Grid columns={2} gap={8} maxWidth="700px" xstyle={styles.stateGrid}>
 			<StateSpecimen label="Empty">
-				<NumberField label="Seats" min={1} max={100} />
+				<Field.Root>
+					<NumberField.Root min={1} max={100}>
+						<NumberField.ScrubArea>
+							<Label xstyle={x.cursor.inherit}>Seats</Label>
+						</NumberField.ScrubArea>
+						<NumberField.Control />
+					</NumberField.Root>
+				</Field.Root>
 			</StateSpecimen>
 			<StateSpecimen label="Default">
-				<NumberField label="Seats" defaultValue={8} min={1} max={100} />
+				<Field.Root>
+					<NumberField.Root defaultValue={8} min={1} max={100}>
+						<NumberField.ScrubArea>
+							<Label xstyle={x.cursor.inherit}>Seats</Label>
+						</NumberField.ScrubArea>
+						<NumberField.Control />
+					</NumberField.Root>
+				</Field.Root>
 			</StateSpecimen>
 			<StateSpecimen label="Minimum">
-				<NumberField label="Seats" defaultValue={1} min={1} max={100} />
+				<Field.Root>
+					<NumberField.Root defaultValue={1} min={1} max={100}>
+						<NumberField.ScrubArea>
+							<Label xstyle={x.cursor.inherit}>Seats</Label>
+						</NumberField.ScrubArea>
+						<NumberField.Control />
+					</NumberField.Root>
+				</Field.Root>
 			</StateSpecimen>
 			<StateSpecimen label="Maximum">
-				<NumberField label="Seats" defaultValue={100} min={1} max={100} />
+				<Field.Root>
+					<NumberField.Root defaultValue={100} min={1} max={100}>
+						<NumberField.ScrubArea>
+							<Label xstyle={x.cursor.inherit}>Seats</Label>
+						</NumberField.ScrubArea>
+						<NumberField.Control />
+					</NumberField.Root>
+				</Field.Root>
 			</StateSpecimen>
 			<StateSpecimen label="Invalid">
-				<NumberField label="Seats" defaultValue={0} error="Choose at least one seat." />
+				<Field.Root invalid>
+					<NumberField.Root defaultValue={0}>
+						<NumberField.ScrubArea>
+							<Label xstyle={x.cursor.inherit}>Seats</Label>
+						</NumberField.ScrubArea>
+						<NumberField.Control />
+					</NumberField.Root>
+					<Field.Error match>
+						<WarningOctagonIcon aria-hidden size="1em" weight="duotone" />
+						Choose at least one seat.
+					</Field.Error>
+				</Field.Root>
 			</StateSpecimen>
 			<StateSpecimen label="Required">
-				<NumberField label="Seats" defaultValue={8} required />
+				<Field.Root>
+					<NumberField.Root defaultValue={8} required>
+						<NumberField.ScrubArea>
+							<Label xstyle={x.cursor.inherit}>
+								Seats
+								<span aria-hidden {...stylex.props(styles.requiredMarker)}>
+									*
+								</span>
+							</Label>
+						</NumberField.ScrubArea>
+						<NumberField.Control />
+					</NumberField.Root>
+				</Field.Root>
 			</StateSpecimen>
 			<StateSpecimen label="Read-only">
-				<NumberField
-					label="Seats"
-					defaultValue={8}
-					readOnly
-					description="Your plan fixes this limit."
-				/>
+				<Field.Root>
+					<NumberField.Root defaultValue={8} readOnly>
+						<NumberField.ScrubArea>
+							<Label xstyle={x.cursor.inherit}>Seats</Label>
+						</NumberField.ScrubArea>
+						<NumberField.Control />
+					</NumberField.Root>
+					<Field.Description>Your plan fixes this limit.</Field.Description>
+				</Field.Root>
 			</StateSpecimen>
 			<StateSpecimen label="Disabled">
-				<NumberField label="Seats" defaultValue={8} disabled />
+				<Field.Root disabled>
+					<NumberField.Root defaultValue={8}>
+						<NumberField.ScrubArea>
+							<Label xstyle={x.cursor.inherit}>Seats</Label>
+						</NumberField.ScrubArea>
+						<NumberField.Control />
+					</NumberField.Root>
+				</Field.Root>
 			</StateSpecimen>
 		</Grid>
 	),
@@ -169,6 +299,7 @@ function StateSpecimen({ children, label }: { children: ReactNode; label: string
 }
 
 const styles = stylex.create({
+	requiredMarker: { color: tokens["--fg-error"], marginInlineStart: tokens["--space-1"] },
 	stateGrid: {
 		gridTemplateColumns: {
 			default: "repeat(2, minmax(0, 1fr))",

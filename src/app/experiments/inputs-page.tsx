@@ -13,7 +13,6 @@ import {
 } from "./inputs-comparison-layout";
 import { CrossComponentRow, FieldSizingMatrix, FieldStateMatrix } from "./inputs-fields-examples";
 import { InputGroupVariations, InputPaddingComparison } from "./inputs-input-group-examples";
-import { comparisonLabelReset } from "./inputs-page.styles";
 
 export function InputsPage() {
 	return (
@@ -21,8 +20,6 @@ export function InputsPage() {
 			description="Visual parity checks for field sizing, state styling, input-group composition, and control alignment."
 			title="Inputs"
 		>
-			<style>{comparisonLabelReset}</style>
-
 			<ExperimentGroup
 				description="Compare the shared field contract across component families before composing complete forms."
 				title="Fields"

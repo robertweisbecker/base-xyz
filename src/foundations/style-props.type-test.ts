@@ -15,7 +15,11 @@ import type { DialogCloseProps, DialogPopupProps } from "@/components/dialog/dia
 import type { EmptyStateProps } from "@/components/empty-state/empty-state";
 import type { HeadingProps } from "@/components/heading/heading";
 import type { BoxProps } from "@/components/layout/layout";
-import type { NumberFieldProps } from "@/components/number-field/number-field";
+import type {
+	NumberFieldRootProps,
+	NumberFieldControlProps,
+	NumberFieldScrubAreaProps,
+} from "@/components/number-field/number-field";
 import type { PopoverPopupProps } from "@/components/popover/popover";
 import type { MenuItemProps } from "@/components/menu/menu";
 import type { SelectPopupProps, SelectRootProps } from "@/components/select/select";
@@ -107,7 +111,9 @@ export type TypographyContract = [
 export type FieldWrapperContract = [
 	Expect<HasKey<TextFieldProps, "m">>,
 	Expect<HasKey<TextareaProps, "m">>,
-	Expect<HasKey<NumberFieldProps, "m">>,
+	Expect<HasKey<NumberFieldRootProps, "m">>,
+	Expect<Not<HasKey<NumberFieldControlProps, "m">>>,
+	Expect<Not<HasKey<NumberFieldScrubAreaProps, "m">>>,
 ];
 
 export type WidgetControllerContract = [
