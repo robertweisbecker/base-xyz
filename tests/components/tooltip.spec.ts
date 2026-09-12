@@ -44,6 +44,28 @@ test("keeps independent tooltip content inside a shared group", async ({ page })
 	await expect(popup).toHaveText("Alex Morgan");
 });
 
+test("inherits group hover timing in an independent root", async ({ page }) => {
+	await page.clock.install();
+	await page.goto(`${sharedGroupPath}&args=_delay:1000;_closeDelay:1200`);
+
+	const avatar = page.getByRole("img", { name: "Alex Morgan" });
+	const popup = page.locator('[data-slot="tooltip-popup"][data-open]');
+	await expect(avatar).toBeVisible();
+	await page.clock.pauseAt(await page.evaluate(() => Date.now() + 1_000));
+
+	await avatar.hover();
+	await page.clock.runFor(500);
+	await expect(popup).toHaveCount(0);
+	await page.clock.runFor(500);
+	await expect(popup).toHaveText("Alex Morgan");
+
+	await page.mouse.move(0, 0);
+	await page.clock.runFor(600);
+	await expect(popup).toHaveText("Alex Morgan");
+	await page.clock.runFor(600);
+	await expect(popup).toHaveCount(0);
+});
+
 test("honors a disabled independent root inside a shared group", async ({ page }) => {
 	await page.clock.install();
 	await page.goto(sharedGroupPath);
