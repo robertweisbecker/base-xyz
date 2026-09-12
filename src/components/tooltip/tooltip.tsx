@@ -29,7 +29,7 @@ export type TooltipGroupProps = {
 };
 
 type TooltipGroupContextValue = {
-	handle: BaseTooltip.Handle<ReactNode>;
+	handle: BaseTooltip.Handle<ReactNode> | undefined;
 	delay: number;
 	closeDelay: number;
 };
@@ -41,7 +41,8 @@ const TooltipGroupContext = createContext<TooltipGroupContextValue | null>(null)
 
 /** Returns whether the current subtree participates in a shared tooltip root. */
 export function useTooltipGroup() {
-	return useContext(TooltipGroupContext);
+	const group = useContext(TooltipGroupContext);
+	return group?.handle ? group : null;
 }
 
 function Positioner({
@@ -129,7 +130,7 @@ export function Trigger({
 	xstyle,
 	...props
 }: StyledProps<BaseTooltip.Trigger.Props>) {
-	const group = useTooltipGroup();
+	const group = useContext(TooltipGroupContext);
 	const resolvedCloseDelay = closeDelay ?? group?.closeDelay ?? DEFAULT_CLOSE_DELAY;
 	const resolvedDelay = delay ?? group?.delay ?? DEFAULT_DELAY;
 	const { className: sxClassName, style: sxStyle } = stylex.props(xstyle);
@@ -150,7 +151,14 @@ export function Trigger({
 export const Provider = BaseTooltip.Provider;
 
 export function Root<Payload>(props: BaseTooltip.Root.Props<Payload>) {
-	return <BaseTooltip.Root {...props} />;
+	const group = useContext(TooltipGroupContext);
+	const independentGroup = useMemo(() => (group ? { ...group, handle: undefined } : null), [group]);
+
+	return (
+		<TooltipGroupContext value={independentGroup}>
+			<BaseTooltip.Root {...props} />
+		</TooltipGroupContext>
+	);
 }
 
 export function Group({
