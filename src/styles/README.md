@@ -273,8 +273,8 @@ stylex.props(modalChromeStyles.surface, drawerParts.popup);
   `ThemeProvider` and semantic tokens; do not infer it from system preference.
 - When parent interaction only changes child values, define local custom
   properties on the parent and consume them from the child's direct
-  `[data-*]` state selectors. Switch uses this pattern so its state matrix
-  remains declarative and component-local.
+  `[data-*]` state selectors. Switch establishes its interaction variables on
+  the control itself so its state matrix remains independent of label ancestry.
 - For parent-child relationships that cannot be expressed through inherited
   values, define a component-scoped marker in a `.stylex.ts` file, include it
   in the ancestor's `stylex.props(...)`, and use `stylex.when.ancestor()` in
@@ -361,7 +361,6 @@ markers and are not re-exported through component barrels.
 | `buttonMarker`      | `components/button/button.stylex.ts`  | Button, IconButton, and shared Button-root controls                                                      |
 | `fieldMarker`       | `components/field/field.stylex.ts`    | Field roots observed by descendant form-control styles                                                   |
 | `itemMarker`        | `components/menu/menu-item.stylex.ts` | Menu rows and components composing the canonical row, including Select, Combobox, and Autocomplete items |
-| `labelMarker`       | `components/field/field.stylex.ts`    | Label elements associated with form controls                                                             |
 | `toggleMarker`      | `components/toggle/toggle.stylex.ts`  | Toggle controls observed by joined-group sibling and ancestor rules                                      |
 | `toggleGroupMarker` | `components/toggle/toggle.stylex.ts`  | ToggleGroup roots that opt into join radius and stacking                                                 |
 

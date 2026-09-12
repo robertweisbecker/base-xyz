@@ -4,9 +4,6 @@ import { textStyles, fontWeightStyles } from "@/components/text/text.stylex";
 import { breakpoints, media } from "@/styles/constants.stylex";
 import { tokens } from "@/theme/tokens.stylex";
 
-/** Marker for label elements associated with form controls. */
-export const labelMarker = stylex.defineMarker();
-
 /** Marker for Field roots observed by descendant form-control styles. */
 export const fieldMarker = stylex.defineMarker();
 
@@ -21,7 +18,7 @@ const INTERACTIVE_CONTROL_HOVER =
  * | Element                                   | Export                     |
  * | ----------------------------------------- | -------------------------- |
  * | `Field.Root`                              | `fieldStyles.root`               |
- * | `Field.Label` / group / item labels       | `fieldStyles.label` etc.         |
+ * | `Label` / group / item labels       | `fieldStyles.label` etc.         |
  * | `Field.Description`                       | `fieldStyles.description`        |
  * | `Field.Error`                             | `fieldStyles.error`              |
  * | Text input (`input`, `textarea`)          | `fieldInputStyles[size]`         |
@@ -144,13 +141,7 @@ const parts = stylex.create({
 
 export const fieldStyles = {
 	root: [fieldMarker, parts.root],
-	label: [
-		labelMarker,
-		textStyles.supporting,
-		fontWeightStyles.medium,
-		parts.labelColor,
-		parts.label,
-	],
+	label: [textStyles.supporting, fontWeightStyles.medium, parts.labelColor, parts.label],
 	groupLabel: [textStyles.body, fontWeightStyles.semibold, parts.groupLabel],
 	itemLabel: [textStyles.label, parts.labelColor],
 	description: [textStyles.supporting, parts.description],

@@ -693,7 +693,14 @@ function getComponentCells(): GalleryCell[] {
 		},
 		{
 			title: "Switch",
-			content: <Switch label="Realtime sync" defaultChecked size="sm" />,
+			content: (
+				<Field.Root>
+					<Stack orientation="horizontal" align="center" justify="space-between" gap={2}>
+						<Label variant="item">Realtime sync</Label>
+						<Switch defaultChecked size="sm" />
+					</Stack>
+				</Field.Root>
+			),
 		},
 		{
 			title: "Table",

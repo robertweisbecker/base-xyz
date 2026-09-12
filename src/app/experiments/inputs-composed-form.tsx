@@ -72,12 +72,17 @@ export function EnvironmentForm() {
 					</Field.Description>
 				</Field.Root>
 				<Stack gap={3}>
-					<Switch
-						defaultChecked
-						description="Keep one successful deployment ready for immediate rollback."
-						label="Automatic rollback"
-						name="automatic-rollback"
-					/>
+					<Field.Root name="automatic-rollback">
+						<Stack orientation="horizontal" align="center" justify="space-between" gap={4}>
+							<Stack gap={1}>
+								<Label>Automatic rollback</Label>
+								<Field.Description>
+									Keep one successful deployment ready for immediate rollback.
+								</Field.Description>
+							</Stack>
+							<Switch defaultChecked />
+						</Stack>
+					</Field.Root>
 					<Field.Root name="workspace-defaults">
 						<Stack render={<Label variant="item" />} orientation="horizontal" align="start" gap={2}>
 							<Checkbox defaultChecked />

@@ -175,7 +175,7 @@ function ValueControlSizeRow({ size }: { size: FieldSize }) {
 				{size}
 			</Text>
 			<div {...stylex.props(styles.controlCell)}>
-				<Switch defaultChecked label={`${size} switch`} size={size} visuallyHideLabel />
+				<Switch defaultChecked aria-label={`${size} switch`} size={size} />
 			</div>
 			<div {...stylex.props(styles.sliderCell)}>
 				<ComparisonSlider label={`${size} slider`} size={size} value={60} />
@@ -240,8 +240,7 @@ function ComparisonSwitch({ state }: { state: ValueControlState }) {
 		<Switch
 			defaultChecked={state !== "resting"}
 			disabled={state === "disabled"}
-			label={`Switch ${valueControlStateLabels[state]}`}
-			visuallyHideLabel
+			aria-label={`Switch ${valueControlStateLabels[state]}`}
 		/>
 	);
 }
