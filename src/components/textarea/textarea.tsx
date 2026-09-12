@@ -37,6 +37,8 @@ export function Textarea({
 	autoFocus,
 	readOnly,
 	required,
+	"aria-describedby": ariaDescribedBy,
+	"aria-invalid": ariaInvalid,
 	rows = 4,
 	size = "md",
 	minRows,
@@ -64,6 +66,8 @@ export function Textarea({
 
 	return (
 		<Field.Control
+			aria-describedby={ariaDescribedBy}
+			aria-invalid={ariaInvalid}
 			autoFocus={autoFocus}
 			defaultValue={defaultValue}
 			disabled={disabled}
