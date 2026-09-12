@@ -46,7 +46,7 @@ function ChoiceControlSizeRow({ size }: { size: FieldSize }) {
 				{choiceSize ? (
 					<div data-radio-comparison>
 						<RadioGroup defaultValue={size} label={`${size} radio`} size={choiceSize}>
-							<Radio label={`${size} radio`} value={size} visuallyHideLabel />
+							<Radio aria-label={`${size} radio`} value={size} />
 						</RadioGroup>
 					</div>
 				) : (
@@ -129,10 +129,9 @@ function ComparisonRadio({ state }: { state: ChoiceControlState }) {
 				label={`Radio ${formatComparisonLabel(state)}`}
 			>
 				<Radio
-					label={`Radio ${formatComparisonLabel(state)}`}
+					aria-label={`Radio ${formatComparisonLabel(state)}`}
 					readOnly={state === "read-only" || state === "read-only-checked"}
 					value={state}
-					visuallyHideLabel
 				/>
 			</RadioGroup>
 		</div>

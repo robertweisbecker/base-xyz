@@ -45,16 +45,20 @@ export function EnvironmentForm() {
 					</Select.Root>
 				</Grid>
 				<RadioGroup defaultValue="preview" label="Environment visibility" name="visibility">
-					<Radio
-						value="private"
-						label="Private"
-						description="Only invited workspace members can access it."
-					/>
-					<Radio
-						value="preview"
-						label="Preview"
-						description="Anyone with a signed preview link can access it."
-					/>
+					<Field.Item>
+						<Stack render={<Label variant="item" />} orientation="horizontal" align="start" gap={2}>
+							<Radio value="private" />
+							Private
+						</Stack>
+						<Field.Description>Only invited workspace members can access it.</Field.Description>
+					</Field.Item>
+					<Field.Item>
+						<Stack render={<Label variant="item" />} orientation="horizontal" align="start" gap={2}>
+							<Radio value="preview" />
+							Preview
+						</Stack>
+						<Field.Description>Anyone with a signed preview link can access it.</Field.Description>
+					</Field.Item>
 				</RadioGroup>
 				<Field.Root name="description">
 					<Label>Description</Label>

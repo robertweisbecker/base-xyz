@@ -561,7 +561,12 @@ function getComponentCells(): GalleryCell[] {
 			title: "Radio",
 			content: (
 				<RadioGroup label="Selection" defaultValue="selected">
-					<Radio value="selected" label="Selected option" />
+					<Field.Item>
+						<Stack render={<Label variant="item" />} orientation="horizontal" align="start" gap={2}>
+							<Radio value="selected" />
+							Selected option
+						</Stack>
+					</Field.Item>
 				</RadioGroup>
 			),
 		},
@@ -569,8 +574,18 @@ function getComponentCells(): GalleryCell[] {
 			title: "RadioGroup",
 			content: (
 				<RadioGroup label="Fave ape" defaultValue="one">
-					<Radio value="one" label="Caesar" />
-					<Radio value="two" label="Koba" />
+					<Field.Item>
+						<Stack render={<Label variant="item" />} orientation="horizontal" align="start" gap={2}>
+							<Radio value="one" />
+							Caesar
+						</Stack>
+					</Field.Item>
+					<Field.Item>
+						<Stack render={<Label variant="item" />} orientation="horizontal" align="start" gap={2}>
+							<Radio value="two" />
+							Koba
+						</Stack>
+					</Field.Item>
 				</RadioGroup>
 			),
 		},

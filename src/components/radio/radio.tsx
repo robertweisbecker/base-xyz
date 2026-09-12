@@ -3,18 +3,15 @@ import { RadioGroup as BaseRadioGroup } from "@base-ui/react/radio-group";
 import { Field } from "@base-ui/react/field";
 import { Fieldset } from "@base-ui/react/fieldset";
 import * as stylex from "@stylexjs/stylex";
-import { createContext, useContext, useId, useMemo, type ReactNode } from "react";
+import { createContext, useContext, useId, type ComponentProps, type ReactNode } from "react";
 import { focusRing } from "@/styles/recipes/focus";
 import { pressable } from "@/styles/recipes/transitions";
 import { attrJoin } from "@/utils/attr-join";
-import { VisuallyHidden } from "@/components/visually-hidden/visually-hidden";
 import { mergeStyle, type BaseStyleProps } from "@/styles/props/base";
 import { extractMarginProps, type MarginProps } from "@/styles/props/spacing.stylex";
 import {
 	radioControlSizeStyles,
-	radioDescriptionStyles,
 	radioIndicatorSizeStyles,
-	radioLabelStyles,
 	radioStyles,
 	type RadioSize,
 } from "./radio.stylex";
@@ -22,15 +19,11 @@ import {
 export type { RadioSize } from "./radio.stylex";
 
 export type RadioProps = Omit<
-	BaseRadio.Root.Props,
+	ComponentProps<typeof BaseRadio.Root>,
 	"children" | "className" | "color" | "style" | keyof MarginProps
 > &
 	MarginProps &
 	BaseStyleProps & {
-		label: ReactNode;
-		description?: ReactNode;
-		/** Hides the label visually while keeping it available to assistive tech. */
-		visuallyHideLabel?: boolean;
 		size?: RadioSize;
 		className?: string;
 	};
@@ -49,99 +42,35 @@ export type RadioGroupProps = Omit<
 		className?: string;
 	};
 
-const RadioGroupStateContext = createContext<{
-	disabled: boolean;
-	readOnly: boolean;
-	size?: RadioSize;
-}>({ disabled: false, readOnly: false });
+const RadioGroupSizeContext = createContext<RadioSize>("md");
 
-export function Radio({
-	ref,
-	label,
-	description,
-	visuallyHideLabel = false,
-	className,
-	style,
-	xstyle,
-	disabled,
-	required,
-	size,
-	id: providedId,
-	"aria-describedby": ariaDescribedBy,
-	...props
-}: RadioProps) {
+export function Radio({ className, style, xstyle, size, ...props }: RadioProps) {
 	const { marginStyles, rest } = extractMarginProps(props);
-	const groupState = useContext(RadioGroupStateContext);
-	const selfOrGroupDisabled = Boolean(disabled || groupState.disabled);
-	const selfOrGroupReadOnly = Boolean(rest.readOnly || groupState.readOnly);
-	const resolvedSize = size ?? groupState.size ?? "md";
-	const generatedId = useId();
-	const id = providedId ?? `${generatedId}-control`;
-	const descriptionId = description ? `${generatedId}-description` : undefined;
-	const itemSx = stylex.props(radioStyles.item, marginStyles, xstyle);
-	const itemClassName = attrJoin(itemSx.className, className);
-	const itemStyle = mergeStyle(itemSx.style, style);
-	const labelContent = (
-		<>
-			{label}
-			{required ? (
-				<span aria-hidden {...stylex.props(radioStyles.requiredIndicator)}>
-					*
-				</span>
-			) : null}
-		</>
+	const groupSize = useContext(RadioGroupSizeContext);
+	const resolvedSize = size ?? groupSize;
+	const sx = stylex.props(
+		radioStyles.control,
+		radioControlSizeStyles[resolvedSize],
+		focusRing.offset,
+		pressable.transition,
+		marginStyles,
+		xstyle,
 	);
 
 	return (
-		<Field.Item
-			data-readonly={selfOrGroupReadOnly ? "" : undefined}
-			disabled={selfOrGroupDisabled}
-			className={itemClassName}
-			style={itemStyle}
+		<BaseRadio.Root
+			className={attrJoin(sx.className, className)}
+			style={mergeStyle(sx.style, style)}
+			{...rest}
 		>
-			<Field.Label
-				htmlFor={id}
-				data-disabled={selfOrGroupDisabled ? "" : undefined}
-				data-readonly={selfOrGroupReadOnly ? "" : undefined}
-				{...stylex.props(radioStyles.labelRoot)}
-			>
-				<BaseRadio.Root
-					ref={ref}
-					id={id}
-					required={required}
-					aria-describedby={attrJoin(ariaDescribedBy, descriptionId) || undefined}
-					{...stylex.props(
-						radioStyles.control,
-						radioControlSizeStyles[resolvedSize],
-						focusRing.offset,
-						pressable.transition,
-					)}
-					{...rest}
-				>
-					<BaseRadio.Indicator
-						{...stylex.props(
-							radioStyles.indicator,
-							radioIndicatorSizeStyles[resolvedSize],
-							radioStyles.indicatorTransition,
-						)}
-					/>
-				</BaseRadio.Root>
-				{visuallyHideLabel ? (
-					<VisuallyHidden>{labelContent}</VisuallyHidden>
-				) : (
-					<span {...stylex.props(radioLabelStyles[resolvedSize])}>{labelContent}</span>
+			<BaseRadio.Indicator
+				{...stylex.props(
+					radioStyles.indicator,
+					radioIndicatorSizeStyles[resolvedSize],
+					radioStyles.indicatorTransition,
 				)}
-			</Field.Label>
-			{/* Place description outside of the label so ariaDescribedBy doesn't read twice */}
-			{description ? (
-				<Field.Description
-					id={descriptionId}
-					{...stylex.props(radioStyles.description, radioDescriptionStyles[resolvedSize])}
-				>
-					{description}
-				</Field.Description>
-			) : null}
-		</Field.Item>
+			/>
+		</BaseRadio.Root>
 	);
 }
 
@@ -166,13 +95,10 @@ export function RadioGroup({
 	const generatedId = useId();
 	const descriptionId = description ? `${generatedId}-description` : undefined;
 	const groupSx = stylex.props(radioStyles.fieldset, marginStyles, xstyle);
-	const groupValue = useMemo(
-		() => ({ disabled: Boolean(disabled), readOnly: Boolean(readOnly), size }),
-		[disabled, readOnly, size],
-	);
 
 	return (
 		<Field.Root
+			disabled={disabled}
 			name={name}
 			render={
 				<Fieldset.Root
@@ -207,11 +133,11 @@ export function RadioGroup({
 					</p>
 				) : null}
 			</div>
-			<RadioGroupStateContext.Provider value={groupValue}>
+			<RadioGroupSizeContext.Provider value={size}>
 				<div {...stylex.props(radioStyles.groupOptions, inline && radioStyles.groupOptionsInline)}>
 					{children}
 				</div>
-			</RadioGroupStateContext.Provider>
+			</RadioGroupSizeContext.Provider>
 		</Field.Root>
 	);
 }

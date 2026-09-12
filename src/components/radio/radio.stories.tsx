@@ -1,9 +1,11 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
+import { useRef, useState } from "react";
+import { Button, Field, Form, Label } from "@/components";
 import { Stack } from "@/components/layout/layout";
 import { Text } from "@/components/text/text";
-import { Radio, RadioGroup, type RadioSize } from "./radio";
+import { Radio, RadioGroup, type RadioProps, type RadioSize } from "./radio";
 
-type RadioStoryArgs = {
+type RadioStoryArgs = Pick<RadioProps, "aria-invalid"> & {
 	_label: string;
 	_description: string;
 	defaultValue: string;
@@ -11,7 +13,6 @@ type RadioStoryArgs = {
 	readOnly: boolean;
 	required: boolean;
 	size: RadioSize;
-	visuallyHideLabel: boolean;
 };
 
 const meta = {
@@ -24,9 +25,9 @@ const meta = {
 		readOnly: false,
 		required: false,
 		size: "md",
-		visuallyHideLabel: false,
 	},
 	argTypes: {
+		"aria-invalid": { control: "boolean" },
 		_label: { control: "text" },
 		_description: { control: "text" },
 		defaultValue: {
@@ -40,19 +41,18 @@ const meta = {
 			control: "inline-radio",
 			options: ["sm", "md"],
 		},
-		visuallyHideLabel: { control: "boolean" },
 	},
 	parameters: {
 		controls: {
 			include: [
 				"_label",
 				"_description",
+				"aria-invalid",
 				"defaultValue",
 				"disabled",
 				"readOnly",
 				"required",
 				"size",
-				"visuallyHideLabel",
 			],
 		},
 	},
@@ -70,7 +70,7 @@ export const Playground: Story = {
 		readOnly,
 		required,
 		size,
-		visuallyHideLabel,
+		"aria-invalid": ariaInvalid,
 	}) => (
 		<RadioGroup
 			key={defaultValue}
@@ -82,24 +82,27 @@ export const Playground: Story = {
 			required={required}
 			size={size}
 		>
-			<Radio
-				value="email"
-				label={_label}
-				description={_description}
-				visuallyHideLabel={visuallyHideLabel}
-			/>
-			<Radio
-				value="push"
-				label="Push"
-				description="Show updates on this device."
-				visuallyHideLabel={visuallyHideLabel}
-			/>
-			<Radio
-				value="none"
-				label="None"
-				description="Do not send updates."
-				visuallyHideLabel={visuallyHideLabel}
-			/>
+			<Field.Item>
+				<Stack render={<Label variant="item" />} orientation="horizontal" align="start" gap={2}>
+					<Radio value="email" aria-invalid={ariaInvalid} />
+					{_label}
+				</Stack>
+				{_description && <Field.Description>{_description}</Field.Description>}
+			</Field.Item>
+			<Field.Item>
+				<Stack render={<Label variant="item" />} orientation="horizontal" align="start" gap={2}>
+					<Radio value="push" />
+					Push
+				</Stack>
+				<Field.Description>Show updates on this device.</Field.Description>
+			</Field.Item>
+			<Field.Item>
+				<Stack render={<Label variant="item" />} orientation="horizontal" align="start" gap={2}>
+					<Radio value="none" />
+					None
+				</Stack>
+				<Field.Description>Do not send updates.</Field.Description>
+			</Field.Item>
 		</RadioGroup>
 	),
 };
@@ -110,8 +113,18 @@ export const Sizes: Story = {
 	},
 	render: () => (
 		<RadioGroup label="Density" name="density" defaultValue="sm">
-			<Radio size="sm" value="sm" label="Small" />
-			<Radio size="md" value="md" label="Medium" />
+			<Field.Item>
+				<Stack render={<Label variant="item" />} orientation="horizontal" align="start" gap={2}>
+					<Radio size="sm" value="sm" />
+					Small
+				</Stack>
+			</Field.Item>
+			<Field.Item>
+				<Stack render={<Label variant="item" />} orientation="horizontal" align="start" gap={2}>
+					<Radio size="md" value="md" />
+					Medium
+				</Stack>
+			</Field.Item>
 		</RadioGroup>
 	),
 };
@@ -132,12 +145,20 @@ export const Groups: Story = {
 					name="visibility"
 					defaultValue="team"
 				>
-					<Radio value="private" label="Private" description="Only you can access this project." />
-					<Radio
-						value="team"
-						label="Team"
-						description="Everyone in your workspace can access it."
-					/>
+					<Field.Item>
+						<Stack render={<Label variant="item" />} orientation="horizontal" align="start" gap={2}>
+							<Radio value="private" />
+							Private
+						</Stack>
+						<Field.Description>Only you can access this project.</Field.Description>
+					</Field.Item>
+					<Field.Item>
+						<Stack render={<Label variant="item" />} orientation="horizontal" align="start" gap={2}>
+							<Radio value="team" />
+							Team
+						</Stack>
+						<Field.Description>Everyone in your workspace can access it.</Field.Description>
+					</Field.Item>
 				</RadioGroup>
 			</Stack>
 			<Stack gap={4}>
@@ -145,9 +166,24 @@ export const Groups: Story = {
 					Inline group
 				</Text>
 				<RadioGroup label="Billing cycle" name="billing-cycle" defaultValue="monthly" inline>
-					<Radio value="monthly" label="Monthly" />
-					<Radio value="quarterly" label="Quarterly" />
-					<Radio value="yearly" label="Yearly" />
+					<Field.Item>
+						<Stack render={<Label variant="item" />} orientation="horizontal" align="start" gap={2}>
+							<Radio value="monthly" />
+							Monthly
+						</Stack>
+					</Field.Item>
+					<Field.Item>
+						<Stack render={<Label variant="item" />} orientation="horizontal" align="start" gap={2}>
+							<Radio value="quarterly" />
+							Quarterly
+						</Stack>
+					</Field.Item>
+					<Field.Item>
+						<Stack render={<Label variant="item" />} orientation="horizontal" align="start" gap={2}>
+							<Radio value="yearly" />
+							Yearly
+						</Stack>
+					</Field.Item>
 				</RadioGroup>
 			</Stack>
 		</Stack>
@@ -165,10 +201,32 @@ export const States: Story = {
 					Selected and unselected
 				</Text>
 				<RadioGroup label="Plan" name="states-plan" defaultValue="free">
-					<Radio value="free" label="Free" />
-					<Radio value="pro" label="Pro" />
-					<Radio value="pro-plus" label="Pro+" description="Read-only" readOnly />
-					<Radio value="ultra" label="Ultra" description="Disabled" disabled />
+					<Field.Item>
+						<Stack render={<Label variant="item" />} orientation="horizontal" align="start" gap={2}>
+							<Radio value="free" />
+							Free
+						</Stack>
+					</Field.Item>
+					<Field.Item>
+						<Stack render={<Label variant="item" />} orientation="horizontal" align="start" gap={2}>
+							<Radio value="pro" />
+							Pro
+						</Stack>
+					</Field.Item>
+					<Field.Item>
+						<Stack render={<Label variant="item" />} orientation="horizontal" align="start" gap={2}>
+							<Radio value="pro-plus" readOnly />
+							Pro+
+						</Stack>
+						<Field.Description>Read-only</Field.Description>
+					</Field.Item>
+					<Field.Item disabled>
+						<Stack render={<Label variant="item" />} orientation="horizontal" align="start" gap={2}>
+							<Radio value="ultra" />
+							Ultra
+						</Stack>
+						<Field.Description>Disabled</Field.Description>
+					</Field.Item>
 				</RadioGroup>
 			</Stack>
 			<Stack gap={4}>
@@ -176,8 +234,18 @@ export const States: Story = {
 					Disabled group
 				</Text>
 				<RadioGroup label="Region" name="states-region" disabled defaultValue="americas">
-					<Radio value="americas" label="Americas" />
-					<Radio value="europe" label="Europe" />
+					<Field.Item>
+						<Stack render={<Label variant="item" />} orientation="horizontal" align="start" gap={2}>
+							<Radio value="americas" />
+							Americas
+						</Stack>
+					</Field.Item>
+					<Field.Item>
+						<Stack render={<Label variant="item" />} orientation="horizontal" align="start" gap={2}>
+							<Radio value="europe" />
+							Europe
+						</Stack>
+					</Field.Item>
 				</RadioGroup>
 			</Stack>
 			<Stack gap={4}>
@@ -191,8 +259,18 @@ export const States: Story = {
 					defaultValue="editor"
 					readOnly
 				>
-					<Radio data-testid="readonly-radio-viewer" value="viewer" label="Viewer" />
-					<Radio data-testid="readonly-radio-editor" value="editor" label="Editor" />
+					<Field.Item>
+						<Stack render={<Label variant="item" />} orientation="horizontal" align="start" gap={2}>
+							<Radio data-testid="readonly-radio-viewer" value="viewer" />
+							Viewer
+						</Stack>
+					</Field.Item>
+					<Field.Item>
+						<Stack render={<Label variant="item" />} orientation="horizontal" align="start" gap={2}>
+							<Radio data-testid="readonly-radio-editor" value="editor" />
+							Editor
+						</Stack>
+					</Field.Item>
 				</RadioGroup>
 			</Stack>
 			<Stack gap={4}>
@@ -200,10 +278,70 @@ export const States: Story = {
 					Required
 				</Text>
 				<RadioGroup label="Deployment region" name="states-required" required>
-					<Radio value="us" label="United States" />
-					<Radio value="eu" label="Europe" />
+					<Field.Item>
+						<Stack render={<Label variant="item" />} orientation="horizontal" align="start" gap={2}>
+							<Radio value="us" />
+							United States
+						</Stack>
+					</Field.Item>
+					<Field.Item>
+						<Stack render={<Label variant="item" />} orientation="horizontal" align="start" gap={2}>
+							<Radio value="eu" />
+							Europe
+						</Stack>
+					</Field.Item>
 				</RadioGroup>
 			</Stack>
 		</Stack>
 	),
 };
+
+export const Controlled: Story = {
+	parameters: { controls: { disable: true } },
+	render: () => <ControlledVisibility />,
+};
+
+function ControlledVisibility() {
+	const [visibility, setVisibility] = useState("");
+	const [submitted, setSubmitted] = useState("");
+	const privateRef = useRef<HTMLElement>(null);
+	return (
+		<Form<{ visibility: string }> onFormSubmit={(values) => setSubmitted(values.visibility)}>
+			<Stack gap={3}>
+				<RadioGroup
+					label="Project visibility"
+					name="visibility"
+					value={visibility}
+					onValueChange={setVisibility}
+					required
+				>
+					<Field.Item>
+						<Stack render={<Label variant="item" />} orientation="horizontal" align="start" gap={2}>
+							<Radio ref={privateRef} value="private" />
+							Private
+						</Stack>
+						<Field.Description>Only invited collaborators can access it.</Field.Description>
+					</Field.Item>
+					<Field.Item>
+						<Stack render={<Label variant="item" />} orientation="horizontal" align="start" gap={2}>
+							<Radio value="team" />
+							Team
+						</Stack>
+						<Field.Description>Everyone in the workspace can access it.</Field.Description>
+					</Field.Item>
+					<Field.Error />
+				</RadioGroup>
+				<Stack orientation="horizontal" gap={2}>
+					<Button type="submit">Save visibility</Button>
+					<Button type="button" variant="secondary" onClick={() => setVisibility("private")}>
+						Select private
+					</Button>
+					<Button type="button" variant="secondary" onClick={() => privateRef.current?.focus()}>
+						Focus private
+					</Button>
+				</Stack>
+				<output aria-label="Submitted visibility">{submitted}</output>
+			</Stack>
+		</Form>
+	);
+}

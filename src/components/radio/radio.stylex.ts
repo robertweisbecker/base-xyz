@@ -1,5 +1,4 @@
 import * as stylex from "@stylexjs/stylex";
-import type { StyleXStyles } from "@stylexjs/stylex";
 import { textStyles, fontWeightStyles } from "@/components/text/text.stylex";
 import { media } from "@/styles/constants.stylex";
 import { tokens } from "@/theme/tokens.stylex";
@@ -7,13 +6,10 @@ import { tokens } from "@/theme/tokens.stylex";
 export type RadioSize = "sm" | "md";
 
 const ENABLED_ACTIVE = ":active:not([data-disabled],[data-readonly])";
-const UNSELECTED_HOVER = ":hover:not([data-disabled],[data-readonly]):not(:has([data-checked]))";
-const UNSELECTED_ACTIVE = ":active:not([data-disabled],[data-readonly]):not(:has([data-checked]))";
-const ENABLED_SELECTED_HOVER = ":hover:not([data-disabled],[data-readonly]):has([data-checked])";
-const ENABLED_SELECTED_ACTIVE = ":active:not([data-disabled],[data-readonly]):has([data-checked])";
-
-/** Marker for Radio labels so their interaction styles remain component-owned. */
-export const radioLabelMarker = stylex.defineMarker();
+const UNSELECTED_HOVER = ":hover:not([data-disabled],[data-readonly]):not([data-checked])";
+const UNSELECTED_ACTIVE = ":active:not([data-disabled],[data-readonly]):not([data-checked])";
+const ENABLED_SELECTED_HOVER = ":hover:not([data-disabled],[data-readonly])[data-checked]";
+const ENABLED_SELECTED_ACTIVE = ":active:not([data-disabled],[data-readonly])[data-checked]";
 
 export const radioControlSizeStyles = stylex.create({
 	sm: {
@@ -23,20 +19,6 @@ export const radioControlSizeStyles = stylex.create({
 	md: {
 		height: tokens["--size-indicator-md"],
 		width: tokens["--size-indicator-md"],
-	},
-});
-
-export const radioLabelStyles = {
-	sm: textStyles.supporting,
-	md: textStyles.label,
-} as const satisfies Record<RadioSize, StyleXStyles>;
-
-export const radioDescriptionStyles = stylex.create({
-	sm: {
-		paddingInlineStart: `calc(${tokens["--size-indicator-sm"]} + ${tokens["--space-2"]} + 2px)`,
-	},
-	md: {
-		paddingInlineStart: `calc(${tokens["--size-indicator-md"]} + ${tokens["--space-2"]} + 2px)`,
 	},
 });
 
@@ -90,83 +72,63 @@ const radioParts = stylex.create({
 		flexDirection: "row",
 		flexWrap: "wrap",
 	},
-	item: {
-		gap: tokens["--space-1"],
-		cursor: {
-			"[data-disabled]": "not-allowed",
-			"[data-readonly]": "default",
-			default: "default",
-		},
-		display: "flex",
-		flexDirection: "column",
-		opacity: {
-			"[data-disabled]": 0.48,
-			default: 1,
-		},
-		width: "fit-content",
-	},
-	labelRoot: {
-		gap: tokens["--space-2"],
-		alignItems: "flex-start",
-		color: {
-			"[data-readonly]": tokens["--fg-muted"],
-			default: tokens["--fg"],
-		},
-		cursor: "inherit",
-		display: "inline-flex",
-	},
 	control: {
 		borderColor: {
+			[ENABLED_SELECTED_ACTIVE]: tokens["--bg-primary-hover"],
+			// eslint-disable-next-line @stylexjs/valid-styles -- the compiler supports chained pseudo-class conditions; the lint rule is stricter than the compiler.
+			[ENABLED_SELECTED_HOVER]: {
+				[media.canHover]: tokens["--bg-primary-hover"],
+			},
+			[UNSELECTED_ACTIVE]: tokens["--bg-primary-highlight"],
+			// eslint-disable-next-line @stylexjs/valid-styles -- the compiler supports chained pseudo-class conditions; the lint rule is stricter than the compiler.
+			[UNSELECTED_HOVER]: {
+				[media.canHover]: tokens["--border-input-hover"],
+			},
 			"[data-checked]": tokens["--bg-primary"],
 			"[data-checked][data-disabled]": tokens["--bg-neutral"],
 			"[data-checked][data-readonly]": tokens["--fg-muted"],
 			"[data-disabled]": tokens["--border-disabled"],
 			"[data-readonly]": tokens["--border"],
 			default: tokens["--border-input"],
-			// eslint-disable-next-line @stylexjs/valid-styles -- the compiler supports ancestor conditions; the lint rule is stricter than the compiler.
-			[stylex.when.ancestor(UNSELECTED_HOVER, radioLabelMarker)]: {
-				[media.canHover]: tokens["--border-input-hover"],
-			},
-			[stylex.when.ancestor(UNSELECTED_ACTIVE, radioLabelMarker)]: tokens["--bg-primary-highlight"],
-			// eslint-disable-next-line @stylexjs/valid-styles -- the compiler supports ancestor conditions; the lint rule is stricter than the compiler.
-			[stylex.when.ancestor(ENABLED_SELECTED_HOVER, radioLabelMarker)]: {
-				[media.canHover]: tokens["--bg-primary-hover"],
-			},
-			[stylex.when.ancestor(ENABLED_SELECTED_ACTIVE, radioLabelMarker)]:
-				tokens["--bg-primary-hover"],
 		},
 		borderRadius: tokens["--radius-full"],
 		borderStyle: "solid",
 		borderWidth: "1px",
 		alignItems: "center",
 		backgroundColor: {
+			[ENABLED_SELECTED_ACTIVE]: tokens["--bg-primary-hover"],
+			// eslint-disable-next-line @stylexjs/valid-styles -- the compiler supports chained pseudo-class conditions; the lint rule is stricter than the compiler.
+			[ENABLED_SELECTED_HOVER]: {
+				[media.canHover]: tokens["--bg-primary-hover"],
+			},
+			[UNSELECTED_ACTIVE]: tokens["--surface-subtle-active"],
+			// eslint-disable-next-line @stylexjs/valid-styles -- the compiler supports chained pseudo-class conditions; the lint rule is stricter than the compiler.
+			[UNSELECTED_HOVER]: {
+				[media.canHover]: tokens["--surface-subtle"],
+			},
 			"[data-checked]": tokens["--bg-primary"],
 			"[data-checked][data-disabled]": tokens["--bg-neutral"],
 			"[data-checked][data-readonly]": tokens["--bg-neutral"],
 			default: tokens["--surface"],
-			// eslint-disable-next-line @stylexjs/valid-styles -- the compiler supports ancestor conditions; the lint rule is stricter than the compiler.
-			[stylex.when.ancestor(UNSELECTED_HOVER, radioLabelMarker)]: {
-				[media.canHover]: tokens["--surface-subtle"],
-			},
-			[stylex.when.ancestor(UNSELECTED_ACTIVE, radioLabelMarker)]:
-				tokens["--surface-subtle-active"],
-			// eslint-disable-next-line @stylexjs/valid-styles -- the compiler supports ancestor conditions; the lint rule is stricter than the compiler.
-			[stylex.when.ancestor(ENABLED_SELECTED_HOVER, radioLabelMarker)]: {
-				[media.canHover]: tokens["--bg-primary-hover"],
-			},
-			[stylex.when.ancestor(ENABLED_SELECTED_ACTIVE, radioLabelMarker)]:
-				tokens["--bg-primary-hover"],
+		},
+		cursor: {
+			"[data-disabled]": "not-allowed",
+			default: "default",
 		},
 		display: "inline-flex",
 		flexShrink: 0,
 		justifyContent: "center",
 		marginBlockStart: "1px",
+		opacity: {
+			"[data-disabled]": 0.48,
+			default: 1,
+		},
 		position: "relative",
 		transform: {
+			[ENABLED_ACTIVE]: "scale(0.94)",
 			"[data-disabled]": "scale(1)",
 			"[data-readonly]": "scale(1)",
 			default: "scale(1)",
-			[stylex.when.ancestor(ENABLED_ACTIVE, radioLabelMarker)]: "scale(0.94)",
 		},
 		willChange: "transform",
 		"::after": {
@@ -199,10 +161,6 @@ const radioParts = stylex.create({
 		transitionTimingFunction: tokens["--motion-ease-out"],
 		willChange: "transform, opacity",
 	},
-	description: {
-		margin: 0,
-		color: tokens["--fg-muted"],
-	},
 	requiredIndicator: {
 		color: tokens["--fg-error"],
 		marginInlineStart: tokens["--space-1"],
@@ -216,11 +174,8 @@ export const radioStyles = {
 	groupDescription: [textStyles.supporting, radioParts.groupDescription],
 	groupOptions: radioParts.groupOptions,
 	groupOptionsInline: radioParts.groupOptionsInline,
-	item: radioParts.item,
-	labelRoot: [radioLabelMarker, radioParts.labelRoot],
 	control: radioParts.control,
 	indicator: radioParts.indicator,
 	indicatorTransition: radioParts.indicatorTransition,
-	description: [textStyles.supporting, radioParts.description],
 	requiredIndicator: radioParts.requiredIndicator,
 } as const;

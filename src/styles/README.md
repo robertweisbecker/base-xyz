@@ -278,10 +278,9 @@ stylex.props(modalChromeStyles.surface, drawerParts.popup);
 - For parent-child relationships that cannot be expressed through inherited
   values, define a component-scoped marker in a `.stylex.ts` file, include it
   in the ancestor's `stylex.props(...)`, and use `stylex.when.ancestor()` in
-  the child style. Radio currently uses a family-specific label marker for
-  label-driven control feedback. Checkbox feedback belongs to its control, and
-  its indicator inherits the control color. Never use `stylex.defaultMarker()` for form
-  controls because interaction from outer containers can leak into the control.
+  the child style. Checkbox and Radio feedback belongs to each control; the
+  Checkbox indicator inherits its control color. Never use `stylex.defaultMarker()`
+  for form controls because interaction from outer containers can leak into the control.
 - Use `defineVars()` only for a real shared cascading or theming contract.
   Interaction-only custom properties stay beside the component styles rather
   than in a variables sidecar.
@@ -363,7 +362,6 @@ markers and are not re-exported through component barrels.
 | `fieldMarker`       | `components/field/field.stylex.ts`    | Field roots observed by descendant form-control styles                                                   |
 | `itemMarker`        | `components/menu/menu-item.stylex.ts` | Menu rows and components composing the canonical row, including Select, Combobox, and Autocomplete items |
 | `labelMarker`       | `components/field/field.stylex.ts`    | Label elements associated with form controls                                                             |
-| `radioLabelMarker`  | `components/radio/radio.stylex.ts`    | Radio labels that drive component-owned control interaction styles                                       |
 | `toggleMarker`      | `components/toggle/toggle.stylex.ts`  | Toggle controls observed by joined-group sibling and ancestor rules                                      |
 | `toggleGroupMarker` | `components/toggle/toggle.stylex.ts`  | ToggleGroup roots that opt into join radius and stacking                                                 |
 
