@@ -18,6 +18,7 @@ import { Tooltip } from "@/components/tooltip/tooltip";
 const GROUP_HAS_DISABLED = ":has(:is(input, textarea):is([data-disabled], :disabled))";
 
 const GROUP_HOVER = `:hover:not(:focus-within):not(:has([aria-invalid="true"])):not(${GROUP_HAS_DISABLED}):not(:has([data-invalid])):not(:has([readonly]))`;
+const GROUP_READONLY = `:has([readonly]):not(${GROUP_HAS_DISABLED}):not(:has([aria-invalid="true"],[data-invalid]))`;
 
 type InputGroupStyledProps<T> = Omit<T, "className" | "style"> &
 	BaseStyleProps & {
@@ -255,10 +256,10 @@ const inputGroupParts = stylex.create({
 			[GROUP_HOVER]: {
 				[media.canHover]: tokens["--border-input-hover"],
 			},
+			[GROUP_READONLY]: tokens["--border"],
 			default: tokens["--border-input"],
 			':has([aria-invalid="true"])': tokens["--bg-error-primary"],
 			":has([data-invalid])": tokens["--bg-error-primary"],
-			":has([readonly])": tokens["--border"],
 		},
 		overflow: "hidden",
 		alignItems: "center",

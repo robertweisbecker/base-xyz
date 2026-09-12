@@ -143,7 +143,7 @@ const checkboxParts = stylex.create({
 		backgroundColor: {
 			"[data-checked]": tokens["--bg-primary"],
 			"[data-checked][data-disabled]": tokens["--surface-subtle"],
-			"[data-checked][data-invalid]": tokens["--bg-error-primary"],
+			"[data-checked][data-invalid]:not([data-disabled])": tokens["--bg-error-primary"],
 			"[data-checked][data-readonly]": tokens["--surface"],
 			"[data-indeterminate]": tokens["--surface"],
 			"[data-readonly]": tokens["--surface"],
@@ -190,6 +190,7 @@ const checkboxParts = stylex.create({
 	indicator: {
 		alignItems: "center",
 		color: {
+			"[data-checked][data-invalid]:not([data-disabled])": tokens["--fg-accent-contrast"],
 			"[data-disabled]": tokens["--fg-subtle"],
 			"[data-indeterminate]": tokens["--bg-primary"],
 			"[data-invalid]": tokens["--fg-accent-contrast"],
