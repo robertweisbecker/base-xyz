@@ -23,7 +23,9 @@
 - **Strategy reassessed at**: commit `c6d9b8f`, 2026-09-11
 - **Issue**: [#19](https://github.com/robertweisbecker/base-xyz/issues/19)
 - **Completed prerequisite**: #22 / PR #36 (`26fece7`), independent Checkbox/Radio visual ownership
-- **Status**: BLOCKED — authorized; awaiting #54/#60/#65 and overlapping work
+- **Status**: IN PROGRESS — prerequisites reviewed and verified; combined baseline and API migration
+- **Execution baseline**: reviewed input PR #74 plus #70 → #66 → #73 → CopyButton #75;
+  combined in `codex/composable-form-fields` before the baseline gate.
 - **Execution gate**: the maintainer conditionally resumed work on 2026-09-11.
   Include reviewed and verified #54/#60/#65 fixes in the execution baseline;
   use completed #59 type coverage and serialize overlapping #58/public barrel

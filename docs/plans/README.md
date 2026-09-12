@@ -10,16 +10,16 @@ plans are not renumbered to fill gaps. The highest allocated identifier is
 
 ## Execution order & status
 
-| Plan                                             | Title                                                                                                          | Priority | Effort | Depends on                                                    | Status                                   |
-| ------------------------------------------------ | -------------------------------------------------------------------------------------------------------------- | -------: | -----: | ------------------------------------------------------------- | ---------------------------------------- |
-| [011](./011-nav-list-ownership-and-contracts.md) | [Preserve NavList contracts across private owners](https://github.com/robertweisbecker/base-xyz/issues/18)     |       P1 |      M | —                                                             | IN PROGRESS                              |
-| [010](./010-copy-button-component-ownership.md)  | [Give CopyButton a canonical component owner](https://github.com/robertweisbecker/base-xyz/issues/58)          |       P2 |      M | Serialize with #65                                            | IN PROGRESS                              |
-| [003](./003-description-list-component.md)       | Add a semantic Description list component                                                                      |       P2 |      M | —                                                             | TODO; intentionally local                |
-| [008](./008-migrate-from-npm-to-pnpm.md)         | Migrate repository workflows to pnpm 11                                                                        |       P2 |      M | #65 landed; dependency PR #57 resolved/serialized; idle queue | TODO; intentionally local                |
-| [004](./004-form-field-primitives.md)            | [Make inputs standalone and compose fields explicitly](https://github.com/robertweisbecker/base-xyz/issues/19) |       P1 |      L | #54/#60/#65; coordinate #59/#58                               | BLOCKED — authorized; prerequisite fixes |
-| [005](./005-autocomplete-component.md)           | Add a free-form Autocomplete component                                                                         |       P2 |      M | Landed #19 plus a real consumer                               | TODO — deferred; intentionally local     |
-| [009](./009-relative-time-helper.md)             | [Investigate a relative-time helper](https://github.com/robertweisbecker/base-xyz/pull/53)                     |       P3 |      S | Real timestamp consumer; static/live requirement              | TODO — deferred                          |
-| [Stepper pagination](./stepper-pagination.md)    | Evaluate shared Stepper pagination controls                                                                    |       P3 |      S | Second real consumer                                          | TODO — deferred                          |
+| Plan                                             | Title                                                                                                          | Priority | Effort | Depends on                                       | Status                               |
+| ------------------------------------------------ | -------------------------------------------------------------------------------------------------------------- | -------: | -----: | ------------------------------------------------ | ------------------------------------ |
+| [011](./011-nav-list-ownership-and-contracts.md) | [Preserve NavList contracts across private owners](https://github.com/robertweisbecker/base-xyz/issues/18)     |       P1 |      M | —                                                | IN PROGRESS                          |
+| [010](./010-copy-button-component-ownership.md)  | [Give CopyButton a canonical component owner](https://github.com/robertweisbecker/base-xyz/issues/58)          |       P2 |      M | Serialize with #65                               | IN PROGRESS                          |
+| [004](./004-form-field-primitives.md)            | [Make inputs standalone and compose fields explicitly](https://github.com/robertweisbecker/base-xyz/issues/19) |       P1 |      L | #54/#60/#65; coordinate #59/#58                  | IN PROGRESS                          |
+| [003](./003-description-list-component.md)       | Add a semantic Description list component                                                                      |       P2 |      M | —                                                | TODO; intentionally local            |
+| [008](./008-migrate-from-npm-to-pnpm.md)         | Migrate repository workflows to pnpm 11                                                                        |       P2 |      M | #65 landed; idle queue                           | TODO; intentionally local            |
+| [005](./005-autocomplete-component.md)           | Add a free-form Autocomplete component                                                                         |       P2 |      M | Landed #19 plus a real consumer                  | TODO — deferred; intentionally local |
+| [009](./009-relative-time-helper.md)             | [Investigate a relative-time helper](https://github.com/robertweisbecker/base-xyz/pull/53)                     |       P3 |      S | Real timestamp consumer; static/live requirement | TODO — deferred                      |
+| [Stepper pagination](./stepper-pagination.md)    | Evaluate shared Stepper pagination controls                                                                    |       P3 |      S | Second real consumer                             | TODO — deferred                      |
 
 Status values: TODO | IN PROGRESS | DONE | BLOCKED (with one-line reason) |
 REJECTED (with one-line rationale — finding fixed independently or approach
@@ -53,8 +53,10 @@ are intentionally not reconstructed here.
 - Dependency PR #57 merged as `c42ce205`. Refresh active branches and locked
   dependencies before final validation; Form/Field starts from this baseline.
 - PR #70 repairs the flaky streaming-clock test. The current dependency stack
-  is #70 → tooling PR #66 → ref cleanup #65 → CopyButton #58. Preserve this
-  merge order; each implementation remains independently reviewable.
+  is #70 → tooling PR #66 → ref PR #73 → CopyButton PR #75. Preserve this
+  merge order; each implementation remains independently reviewable. Input PR
+  #74 also follows #70. Form/Field combines #74, #75, and these published plans
+  before its baseline gate; source migration follows only after that gate passes.
 
 - Prefer #59 typecheck coverage before substantial refactors. Prioritize #60
   focus and #61 Tooltip isolation alongside it; #62/#64 are independent prose
@@ -73,18 +75,18 @@ are intentionally not reconstructed here.
   block will stack metadata below DescriptionList's 34rem threshold. Remove its
   duplicated layout styles; preserve public parts/props and review the new layout.
 - #22/PR #36 satisfied Plan 004's earlier prerequisite. The maintainer authorized
-  #19 after input styling #54 and related focus/ref fixes #60/#65. Keep it
-  unassigned until those fixes are reviewed and verified in its execution
-  baseline; incorporate #59 and serialize overlapping #58 work. No further
-  resumption request is needed. Plan 004 migrates inputs/usages to explicit Field composition;
+  #19 after input styling #54 and related focus/ref fixes #60/#65. Those fixes
+  and overlapping #58 work are now reviewed and verified; #19 is claimed for
+  combined-baseline verification and implementation. No further resumption
+  request is needed. Plan 004 migrates inputs/usages to explicit Field composition;
   bare inputs do not create a Field wrapper. It preserves real widget roots and
   broad Base UI form/validation support. No wrapped-shorthand compatibility mode
   or callable .Control aliases are planned. Plan 005 follows the same node-less
   controller boundary and waits for landed code plus a real free-form consumer;
   it must not depend on reading a retired Plan 004 file after completion.
 - #65 independently removes the seven consumers' transitive/private ref helpers.
-  Plan 008 starts only after that change lands, overlapping dependency PR #57 is
-  resolved/serialized, and no other plan is IN PROGRESS. Preserve completed
+  Plan 008 starts only after that change lands and no other plan is IN PROGRESS;
+  dependency PR #57 is already merged. Preserve completed
   #27/PR #34 and Plan 007/PR #47. Run config/foundation/docs issues #59/#63/#64
   separately from the package-manager migration.
 - Relative time is an investigation only. Frozen showcase copy does not justify
