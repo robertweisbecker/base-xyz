@@ -215,17 +215,17 @@ function GoalProgressContent({
 	}) => ReactNode;
 	id: string;
 }) {
-	const manager = Toast.useAnchoredToastManager();
+	const { add, close } = Toast.useAnchoredToastManager();
 	const anchorRef = useRef<HTMLDivElement | null>(null);
 	const [goalActive, setGoalActive] = useState(true);
 
 	useEffect(() => {
 		if (!goalActive) {
-			manager.close(id);
+			close(id);
 			return;
 		}
 
-		manager.add({
+		add({
 			id,
 			title: `Step ${goalProgressStep} / ${goalProgressSteps} · 4 files changed`,
 			description: <ChangeCount additions={12} deletions={3} />,
@@ -254,7 +254,7 @@ function GoalProgressContent({
 				dismissible: false,
 			},
 		});
-	}, [goalActive, id, manager]);
+	}, [add, close, goalActive, id]);
 
 	return children({ anchorRef, setGoalActive });
 }
