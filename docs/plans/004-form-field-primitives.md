@@ -32,6 +32,13 @@
   changes. A reviewed dependency stack is allowed; another resumption request
   is unnecessary once these conditions hold.
 
+**Authorized API exception (2026-09-11):** The maintainer explicitly allowed
+updating existing field usages and required inputs to render without a Field
+wrapper. This plan's specified API migration is a scoped exception to the general
+public-contract preservation rule in AGENTS.md. Migrate callers to the bare
+controls and explicit composition below; do not retain compatibility facades
+that restore the old implicit wrappers. Unrelated public contracts remain intact.
+
 ## Intended outcome and strategy
 
 Consumers need to arrange labels, descriptions, controls, actions, and validation
