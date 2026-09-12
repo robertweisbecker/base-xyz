@@ -1,3 +1,4 @@
+import x from "@stylexjs/atoms";
 import { CircleIcon } from "@phosphor-icons/react/dist/csr/Circle";
 import { GlobeIcon } from "@phosphor-icons/react/dist/csr/Globe";
 import * as stylex from "@stylexjs/stylex";
@@ -209,48 +210,48 @@ function ComparisonField({
 			);
 		case "select":
 			return (
-				<Select.Root<string>
-					defaultValue={hasValue ? "react" : null}
-					disabled={disabled}
-					invalid={invalid}
-					items={frameworkItems}
-					readOnly={readOnly}
-					size={size}
-				>
-					<Select.Label>{label}</Select.Label>
-					<Select.Trigger placeholder="Choose framework" />
-					<Select.Popup>
-						<Select.List>
-							{frameworkItems.map((item) => (
-								<Select.Item key={item.value} value={item.value}>
-									{item.label}
-								</Select.Item>
-							))}
-						</Select.List>
-					</Select.Popup>
-				</Select.Root>
+				<Field.Root disabled={disabled} invalid={invalid} xstyle={x.width["fit-content"]}>
+					<Select.Root<string>
+						defaultValue={hasValue ? "react" : null}
+						items={frameworkItems}
+						readOnly={readOnly}
+						size={size}
+					>
+						<Select.Label>{label}</Select.Label>
+						<Select.Trigger placeholder="Choose framework" />
+						<Select.Popup>
+							<Select.List>
+								{frameworkItems.map((item) => (
+									<Select.Item key={item.value} value={item.value}>
+										{item.label}
+									</Select.Item>
+								))}
+							</Select.List>
+						</Select.Popup>
+					</Select.Root>
+				</Field.Root>
 			);
 		case "combobox":
 			return (
-				<Combobox.Root
-					defaultValue={hasValue ? "React" : undefined}
-					disabled={disabled}
-					invalid={invalid}
-					items={["React", "Vue"]}
-					readOnly={readOnly}
-					size={size}
-				>
-					<Combobox.Label>{label}</Combobox.Label>
-					<Combobox.InputGroup>
-						<Combobox.Input placeholder="Choose framework" />
-					</Combobox.InputGroup>
-					<Combobox.Popup>
-						<Combobox.List>
-							<Combobox.Item value="React">React</Combobox.Item>
-							<Combobox.Item value="Vue">Vue</Combobox.Item>
-						</Combobox.List>
-					</Combobox.Popup>
-				</Combobox.Root>
+				<Field.Root disabled={disabled} invalid={invalid}>
+					<Combobox.Root
+						defaultValue={hasValue ? "React" : undefined}
+						items={["React", "Vue"]}
+						readOnly={readOnly}
+						size={size}
+					>
+						<Combobox.Label>{label}</Combobox.Label>
+						<Combobox.InputGroup>
+							<Combobox.Input placeholder="Choose framework" />
+						</Combobox.InputGroup>
+						<Combobox.Popup>
+							<Combobox.List>
+								<Combobox.Item value="React">React</Combobox.Item>
+								<Combobox.Item value="Vue">Vue</Combobox.Item>
+							</Combobox.List>
+						</Combobox.Popup>
+					</Combobox.Root>
+				</Field.Root>
 			);
 		case "input-group":
 			return (

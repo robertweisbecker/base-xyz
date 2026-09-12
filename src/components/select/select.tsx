@@ -1,4 +1,3 @@
-import { Field } from "@base-ui/react/field";
 import { Select as BaseSelect } from "@base-ui/react/select";
 import { CaretDownIcon } from "@phosphor-icons/react/dist/csr/CaretDown";
 import { CaretUpIcon } from "@phosphor-icons/react/dist/csr/CaretUp";
@@ -7,7 +6,6 @@ import * as stylex from "@stylexjs/stylex";
 import { createContext, useContext, type ReactNode } from "react";
 import { media } from "@/styles/constants.stylex";
 import { mergeStyle, type BaseStyleProps } from "@/styles/props/base";
-import { extractMarginProps, type MarginProps } from "@/styles/props/spacing.stylex";
 import type { FieldSize } from "@/components/field/field.types";
 import { fieldStyles, fieldControlStyles } from "@/components/field/field.stylex";
 import { focusRing } from "@/styles/recipes/focus";
@@ -32,43 +30,21 @@ const SelectSizeContext = createContext<FieldSize>("md");
 type SelectMultiple = boolean | undefined;
 type SelectPartStyleProps = BaseStyleProps & { className?: string };
 
-export type SelectRootProps<Value, Multiple extends SelectMultiple = false> = Omit<
-	BaseSelect.Root.Props<Value, Multiple>,
-	"className" | "color" | "size" | "style" | keyof MarginProps
-> &
-	MarginProps &
-	BaseStyleProps & {
-		className?: string;
-		invalid?: boolean;
-		size?: FieldSize;
-	};
+export type SelectRootProps<Value, Multiple extends SelectMultiple = false> = BaseSelect.Root.Props<
+	Value,
+	Multiple
+> & {
+	size?: FieldSize;
+};
 
 export function Root<Value, Multiple extends SelectMultiple = false>({
-	children,
-	className,
-	disabled,
-	invalid,
 	size = "md",
-	style,
-	xstyle,
 	...props
 }: SelectRootProps<Value, Multiple>) {
-	const { marginStyles, rest } = extractMarginProps(props);
-	const sx = stylex.props(selectParts.root, marginStyles, xstyle);
-
 	return (
-		<Field.Root
-			disabled={disabled}
-			invalid={invalid}
-			className={attrJoin(sx.className, className)}
-			style={mergeStyle(sx.style, style)}
-		>
-			<SelectSizeContext.Provider value={size}>
-				<BaseSelect.Root disabled={disabled} {...rest}>
-					{children}
-				</BaseSelect.Root>
-			</SelectSizeContext.Provider>
-		</Field.Root>
+		<SelectSizeContext.Provider value={size}>
+			<BaseSelect.Root {...props} />
+		</SelectSizeContext.Provider>
 	);
 }
 
@@ -370,13 +346,6 @@ const selectParts = stylex.create({
 		boxShadow: tokens["--shadow-md"],
 		color: popupVars.foreground,
 		minWidth: "calc(var(--anchor-width) + 1.75rem)",
-	},
-	root: {
-		gap: tokens["--space-1"],
-		display: "flex",
-		flexDirection: "column",
-		minWidth: 0,
-		width: "fit-content",
 	},
 	trigger: {
 		alignItems: "center",

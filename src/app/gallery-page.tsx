@@ -638,7 +638,7 @@ function getComponentCells(): GalleryCell[] {
 			title: "Select",
 			content: (
 				<Select.Root defaultValue="v1">
-					<Select.Trigger placeholder="Select version" />
+					<Select.Trigger aria-label="Version" placeholder="Select version" />
 					<Select.Popup>
 						<Select.List>
 							<Select.Item value="v1">Version 1</Select.Item>
@@ -910,44 +910,48 @@ function CheckboxGroupGalleryExample() {
 function ComboboxGalleryExample({ multiple = false }: { multiple?: boolean }) {
 	if (multiple) {
 		return (
-			<Combobox.Root<string, true>
-				items={componentNames}
-				multiple
-				defaultValue={["React", "Solid"]}
-			>
-				<Combobox.Label>Libraries</Combobox.Label>
-				<Combobox.InputGroup variant="chips">
-					<Combobox.Chips>
-						<Combobox.Value>
-							{(value: string[]) => (
-								<>
-									{value.map((item) => (
-										<Combobox.Chip
-											key={item}
-											endSlot={<Combobox.ChipRemove aria-label={`Remove ${item}`} />}
-										>
-											{item}
-										</Combobox.Chip>
-									))}
-									<Combobox.Input placeholder={value.length > 0 ? "" : "Choose libraries"} />
-								</>
-							)}
-						</Combobox.Value>
-					</Combobox.Chips>
-				</Combobox.InputGroup>
-				<ComboboxGalleryPopup />
-			</Combobox.Root>
+			<Field.Root>
+				<Combobox.Root<string, true>
+					items={componentNames}
+					multiple
+					defaultValue={["React", "Solid"]}
+				>
+					<Combobox.Label>Libraries</Combobox.Label>
+					<Combobox.InputGroup variant="chips">
+						<Combobox.Chips>
+							<Combobox.Value>
+								{(value: string[]) => (
+									<>
+										{value.map((item) => (
+											<Combobox.Chip
+												key={item}
+												endSlot={<Combobox.ChipRemove aria-label={`Remove ${item}`} />}
+											>
+												{item}
+											</Combobox.Chip>
+										))}
+										<Combobox.Input placeholder={value.length > 0 ? "" : "Choose libraries"} />
+									</>
+								)}
+							</Combobox.Value>
+						</Combobox.Chips>
+					</Combobox.InputGroup>
+					<ComboboxGalleryPopup />
+				</Combobox.Root>
+			</Field.Root>
 		);
 	}
 
 	return (
-		<Combobox.Root items={componentNames}>
-			<Combobox.Label>Framework</Combobox.Label>
-			<Combobox.InputGroup>
-				<Combobox.Input placeholder="Select an issue..." />
-			</Combobox.InputGroup>
-			<ComboboxGalleryPopup />
-		</Combobox.Root>
+		<Field.Root>
+			<Combobox.Root items={componentNames}>
+				<Combobox.Label>Framework</Combobox.Label>
+				<Combobox.InputGroup>
+					<Combobox.Input placeholder="Select an issue..." />
+				</Combobox.InputGroup>
+				<ComboboxGalleryPopup />
+			</Combobox.Root>
+		</Field.Root>
 	);
 }
 

@@ -108,8 +108,19 @@ export type FieldWrapperContract = [
 	Expect<HasKey<TextFieldProps, "m">>,
 	Expect<HasKey<TextareaProps, "m">>,
 	Expect<HasKey<NumberFieldProps, "m">>,
-	Expect<HasKey<SelectRootProps<string>, "m">>,
-	Expect<HasKey<ComboboxRootProps<string>, "m">>,
+];
+
+export type WidgetControllerContract = [
+	Expect<Not<HasKey<SelectRootProps<string>, "m">>>,
+	Expect<Not<HasKey<SelectRootProps<string>, "className">>>,
+	Expect<Not<HasKey<SelectRootProps<string>, "style">>>,
+	Expect<Not<HasKey<SelectRootProps<string>, "xstyle">>>,
+	Expect<Not<HasKey<SelectRootProps<string>, "invalid">>>,
+	Expect<Not<HasKey<ComboboxRootProps<string>, "m">>>,
+	Expect<Not<HasKey<ComboboxRootProps<string>, "className">>>,
+	Expect<Not<HasKey<ComboboxRootProps<string>, "style">>>,
+	Expect<Not<HasKey<ComboboxRootProps<string>, "xstyle">>>,
+	Expect<Not<HasKey<ComboboxRootProps<string>, "invalid">>>,
 ];
 
 export type DelegatedMarginContract = [

@@ -1,5 +1,4 @@
 import { Combobox as BaseCombobox } from "@base-ui/react/combobox";
-import { Field } from "@base-ui/react/field";
 import { CaretDownIcon } from "@phosphor-icons/react/dist/csr/CaretDown";
 import { PlusIcon } from "@phosphor-icons/react/dist/csr/Plus";
 import { XCircleIcon } from "@phosphor-icons/react/dist/csr/XCircle";
@@ -16,6 +15,7 @@ import {
 import { fieldControlSizes, fieldStyles, fieldTextStyles } from "@/components/field/field.stylex";
 import type { FieldSize } from "@/components/field/field.types";
 import { Icon } from "@/components/icons";
+import { Label as FieldLabel, type LabelProps } from "@/components/label/label";
 import {
 	menuItemSizeStyles,
 	menuItemStyles,
@@ -27,7 +27,6 @@ import { Tooltip } from "@/components/tooltip/tooltip";
 import { focusRing } from "@/styles/recipes/focus";
 import { pressable } from "@/styles/recipes/transitions";
 import { mergeStyle, type BaseStyleProps } from "@/styles/props/base";
-import { extractMarginProps, type MarginProps } from "@/styles/props/spacing.stylex";
 import { attrJoin } from "@/utils/attr-join";
 import {
 	comboboxActionSizeVariants,
@@ -59,65 +58,36 @@ const ComboboxContext = createContext<ComboboxContextValue>({
 });
 const ComboboxChipsContext = createContext(false);
 
-export type ComboboxRootProps<Value, Multiple extends ComboboxMultipleMode = false> = Omit<
-	BaseCombobox.Root.Props<Value, Multiple>,
-	"className" | "color" | "size" | "style" | keyof MarginProps
-> &
-	MarginProps &
-	BaseStyleProps & {
-		className?: string;
-		invalid?: boolean;
-		size?: FieldSize;
-	};
+export type ComboboxRootProps<
+	Value,
+	Multiple extends ComboboxMultipleMode = false,
+> = BaseCombobox.Root.Props<Value, Multiple> & {
+	size?: FieldSize;
+};
 
 export function Root<Value, Multiple extends ComboboxMultipleMode = false>({
-	children,
-	className,
-	disabled,
-	invalid,
 	multiple,
 	readOnly = false,
 	size = "md",
-	style,
-	xstyle,
 	...props
 }: ComboboxRootProps<Value, Multiple>) {
-	const { marginStyles, rest } = extractMarginProps(props);
-	const sx = stylex.props(fieldStyles.root, marginStyles, xstyle);
 	const contextValue = useMemo(
 		() => ({ multiple: multiple === true, readOnly, size }),
 		[multiple, readOnly, size],
 	);
 
 	return (
-		<Field.Root
-			disabled={disabled}
-			invalid={invalid}
-			className={attrJoin(sx.className, className)}
-			style={mergeStyle(sx.style, style)}
-		>
-			<ComboboxContext.Provider value={contextValue}>
-				<BaseCombobox.Root disabled={disabled} multiple={multiple} readOnly={readOnly} {...rest}>
-					{children}
-				</BaseCombobox.Root>
-			</ComboboxContext.Provider>
-		</Field.Root>
+		<ComboboxContext.Provider value={contextValue}>
+			<BaseCombobox.Root multiple={multiple} readOnly={readOnly} {...props} />
+		</ComboboxContext.Provider>
 	);
 }
 
-export type ComboboxLabelProps = StyledProps<Field.Label.Props>;
+export type ComboboxLabelProps = Omit<LabelProps, "variant">;
 
-export function Label({ ref, className, style, xstyle, ...props }: ComboboxLabelProps) {
-	const sx = stylex.props(fieldStyles.label, xstyle);
-
-	return (
-		<Field.Label
-			ref={ref}
-			className={attrJoin(sx.className, className)}
-			style={mergeStyle(sx.style, style)}
-			{...props}
-		/>
-	);
+/** Labels an external Combobox input inside an explicit Field.Root. */
+export function Label(props: ComboboxLabelProps) {
+	return <FieldLabel {...props} />;
 }
 
 export type ComboboxInputGroupVariant = "input" | "chips";

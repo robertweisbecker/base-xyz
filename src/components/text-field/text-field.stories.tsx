@@ -222,34 +222,38 @@ export const FieldFamilyParity: Story = {
 				</FamilyRow>
 				<FamilyRow label="Select">
 					{(size) => (
-						<Select.Root<string>
-							defaultValue="React"
-							items={[{ label: "React", value: "React" }]}
-							size={size}
-						>
-							<Select.Label>Select</Select.Label>
-							<Select.Trigger />
-							<Select.Popup>
-								<Select.List>
-									<Select.Item value="React">React</Select.Item>
-								</Select.List>
-							</Select.Popup>
-						</Select.Root>
+						<Field.Root xstyle={x.width["fit-content"]}>
+							<Select.Root<string>
+								defaultValue="React"
+								items={[{ label: "React", value: "React" }]}
+								size={size}
+							>
+								<Select.Label>Select</Select.Label>
+								<Select.Trigger />
+								<Select.Popup>
+									<Select.List>
+										<Select.Item value="React">React</Select.Item>
+									</Select.List>
+								</Select.Popup>
+							</Select.Root>
+						</Field.Root>
 					)}
 				</FamilyRow>
 				<FamilyRow label="Combobox">
 					{(size) => (
-						<Combobox.Root items={["React"]} size={size}>
-							<Combobox.Label>Combobox</Combobox.Label>
-							<Combobox.InputGroup>
-								<Combobox.Input placeholder="Shared control surface" />
-							</Combobox.InputGroup>
-							<Combobox.Popup>
-								<Combobox.List>
-									<Combobox.Item value="React">React</Combobox.Item>
-								</Combobox.List>
-							</Combobox.Popup>
-						</Combobox.Root>
+						<Field.Root>
+							<Combobox.Root items={["React"]} size={size}>
+								<Combobox.Label>Combobox</Combobox.Label>
+								<Combobox.InputGroup>
+									<Combobox.Input placeholder="Shared control surface" />
+								</Combobox.InputGroup>
+								<Combobox.Popup>
+									<Combobox.List>
+										<Combobox.Item value="React">React</Combobox.Item>
+									</Combobox.List>
+								</Combobox.Popup>
+							</Combobox.Root>
+						</Field.Root>
 					)}
 				</FamilyRow>
 			</Grid>
