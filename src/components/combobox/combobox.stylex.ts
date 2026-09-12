@@ -21,10 +21,12 @@ export const comboboxParts = stylex.create({
 	inputGroup: {
 		borderColor: {
 			"[data-disabled]": tokens["--border"],
+			"[data-invalid]": tokens["--bg-error-primary"],
 			"[data-readonly]": tokens["--border"],
 			default: tokens["--border-input"],
-			":focus-within:not([data-disabled]):not([data-readonly])": tokens["--focus"],
-			":hover:not(:focus-within):not([data-disabled]):not([data-readonly])":
+			":focus-within:not([data-disabled]):not([data-invalid]):not([data-readonly])":
+				tokens["--focus"],
+			":hover:not(:focus-within):not([data-disabled]):not([data-invalid]):not([data-readonly])":
 				tokens["--border-input-hover"],
 		},
 		alignItems: "center",

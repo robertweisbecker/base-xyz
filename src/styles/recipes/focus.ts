@@ -11,7 +11,7 @@ import { tokens } from "@/theme/tokens.stylex";
  *   (buttons, links, toolbar items).
  * - `outsetInteractive` — the same outset ring, limited to elements that
  *   ultimately render as a native button or link.
- * - `within` — ring on a wrapper when a descendant input holds focus (input
+ * - `within` — ring on a wrapper when a descendant input or textarea holds focus (input
  *   groups, composite fields).
  */
 export const focusRing = stylex.create({
@@ -60,7 +60,7 @@ export const focusRing = stylex.create({
 			':focus-within:has([aria-invalid="true"])': tokens["--bg-error-primary"],
 			":focus-within:has([data-invalid])": tokens["--bg-error-primary"],
 			":focus-within[data-invalid]": tokens["--bg-error-primary"],
-			":has(input:focus-visible)": tokens["--focus"],
+			":has(:is(input, textarea):focus-visible)": tokens["--focus"],
 		},
 		outlineOffset: "-1px",
 		outlineStyle: "solid",

@@ -115,12 +115,13 @@ const checkboxParts = stylex.create({
 		borderColor: {
 			"[data-checked]": tokens["--border"],
 			"[data-checked][data-disabled]": tokens["--border"],
+			"[data-checked][data-readonly]:not([data-disabled],[data-invalid])": tokens["--fg-muted"],
 			"[data-disabled]": tokens["--border-disabled"],
 			"[data-indeterminate]": tokens["--bg-primary"],
 			"[data-indeterminate][data-disabled]": tokens["--border"],
-			"[data-indeterminate][data-readonly]": tokens["--border-input"],
+			"[data-indeterminate][data-readonly]:not([data-disabled],[data-invalid])": tokens["--border"],
 			"[data-invalid]": tokens["--fg-error"],
-			"[data-readonly]": tokens["--border-input"],
+			"[data-readonly]:not([data-disabled],[data-invalid])": tokens["--border"],
 			default: tokens["--border-input"],
 			// eslint-disable-next-line @stylexjs/valid-styles -- the compiler supports ancestor conditions; the lint rule is stricter than the compiler.
 			[stylex.when.ancestor(UNSELECTED_HOVER, checkboxLabelMarker)]: {

@@ -256,6 +256,7 @@ const inputGroupParts = stylex.create({
 				[media.canHover]: tokens["--border-input-hover"],
 			},
 			default: tokens["--border-input"],
+			':has([aria-invalid="true"])': tokens["--bg-error-primary"],
 			":has([data-invalid])": tokens["--bg-error-primary"],
 			":has([readonly])": tokens["--border"],
 		},
