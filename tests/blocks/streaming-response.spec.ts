@@ -5,15 +5,24 @@ const initialResponse = "The initial response contains enough words to expose st
 const replacementResponse = "The replacement response is ready";
 
 test("replacement and retry streams reveal fresh text and complete once", async ({ page }) => {
-	await page.clock.install();
+	// Freeze before navigation, with a target that cannot become stale within this test.
+	await page.clock.install({ time: 0 });
+	await page.clock.pauseAt(test.info().timeout);
 	await page.goto(storyPath);
 	const content = page.getByTestId("streaming-replacement-content");
 	const completionCount = page.getByTestId("streaming-completion-count");
-	await expect(content).toBeVisible();
-	await page.clock.pauseAt((await page.evaluate(() => Date.now())) + 100);
 
-	await page.clock.runFor(2_000);
-	await expect(content).toHaveText(initialResponse);
+	async function expectCompletedText(response: string) {
+		await expect
+			.poll(async () => {
+				await page.clock.runFor(100);
+				return (await content.textContent())?.trim();
+			})
+			.toBe(response);
+	}
+
+	await expect(content).toBeVisible();
+	await expectCompletedText(initialResponse);
 	await expect(completionCount).toHaveAttribute("data-value", "1");
 
 	for (const [action, completed] of [
@@ -27,8 +36,7 @@ test("replacement and retry streams reveal fresh text and complete once", async 
 		expect(firstText).not.toBe(replacementResponse);
 		await expect(completionCount).toHaveAttribute("data-value", String(completed - 1));
 
-		await page.clock.runFor(2_000);
-		await expect(content).toHaveText(replacementResponse);
+		await expectCompletedText(replacementResponse);
 		await expect(completionCount).toHaveAttribute("data-value", String(completed));
 	}
 });
