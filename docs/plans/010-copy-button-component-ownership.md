@@ -194,10 +194,12 @@ Storybook and rerun the focused clipboard spec → all baseline cases still pass
 
 Move the CopyButton stories and MDX beside the canonical component, use the
 `Components/Copy button` title, and update the documented import to `@/components`.
-Preserve example content and coverage; remove the old story/MDX files so the
-inventory has one authoritative entry. Update only the affected Storybook IDs in
-the new clipboard spec. Mention the legacy block imports as compatibility paths
-without duplicating the API table.
+Add a first-exported `Playground` with representative public controls for `value`,
+`children`, `tooltip`, `size`, `variant`, `shape`, and `disabled`, following
+`docs/agents/storybook.md`. Preserve `Examples` content and coverage with controls
+disabled; remove the old story/MDX files so the inventory has one authoritative
+entry. Update only the affected Storybook IDs in the new clipboard spec. Mention
+the legacy block imports as compatibility paths without duplicating the API table.
 
 In the gallery, move CopyButton into the component import and alphabetized
 component specimen collection; remove its block specimen. Preserve content and
@@ -207,9 +209,18 @@ The compatibility alias has no automatic removal date.
 
 **Verify:** `npm run verify:quick`, `npm run build-storybook`, and the focused
 clipboard spec → exit 0. Inspect `storybook-static/index.json`: there is exactly
-one CopyButton Examples entry under Components and no duplicate Blocks entry.
-`rg -n 'CopyButton' src/app/gallery-page.tsx` confirms its canonical import and
-single top-level specimen (nested uses may remain).
+one CopyButton Playground and one Examples entry under Components, with no
+duplicate Blocks entry. `rg -n '^export const ' src/components/copy-button/copy-button.stories.tsx`
+lists Playground first. Verify the containing gallery import declaration:
+
+```sh
+rg -l -U '^import \{[^}]*\bCopyButton\b[^}]*\} from "@/components";' src/app/gallery-page.tsx
+rg -l -U '^import \{[^}]*\bCopyButton\b[^}]*\} from "@/blocks";' src/app/gallery-page.tsx
+```
+
+The first command prints `src/app/gallery-page.tsx` (exit 0); the second has no
+matches (exit 1). Inspect its specimen collections to confirm one top-level
+CopyButton component specimen and no block specimen (nested uses may remain).
 
 ### 5. Verify the boundary and integration
 
@@ -247,7 +258,10 @@ manager tests, or independent tests of the compatibility module itself.
 - [ ] The old block module is only a re-export; neither Breadcrumbs nor the new
       owner imports blocks or the root component barrel.
 - [ ] Focused clipboard tests and `npm run verify:full` pass.
-- [ ] One authoritative Components story/Docs entry and one gallery specimen exist.
+- [ ] One authoritative Components story/Docs entry has Playground first with
+      representative controls, followed by Examples with controls disabled.
+- [ ] The gallery imports CopyButton from `@/components` and has one component
+      specimen with no duplicate block specimen.
 - [ ] `git diff --check` passes; status/diff contains only scoped files.
 - [ ] Live Storybook evidence and issue/index status are recorded.
 
