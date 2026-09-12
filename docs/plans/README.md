@@ -35,7 +35,11 @@ GitHub labels own queue state. This index owns active execution order, dependenc
 
 ## Lifecycle
 
-This directory contains only active plan files. This index also retains a compact public ledger for numbered plans retired on or after 2026-09-03. When a plan becomes DONE or REJECTED, update and close its linked issue with the implementation and verification evidence or rejection rationale, then distill any durable outcome into the appropriate ADR, glossary entry, or implementation guide. Copy the final plan to `.scratch/plans/completed/<original-filename>` for optional local reference, remove its tracked file, and move its row from the active table to the retired ledger below. Keep the allocated number reserved and advance the next-number marker.
+This directory contains only active plan files. This index also retains a compact public ledger for numbered plans retired on or after 2026-09-03. Follow the [planning lifecycle](../agents/planning.md#repository-lifecycle-override) when a plan becomes DONE or REJECTED.
+
+Update and close its linked issue with the implementation and verification evidence or rejection rationale when those GitHub actions are authorized. Existing user authorization persists across turns; do not request it again. Without authorization, complete the local retirement steps and record pending GitHub synchronization in the retired ledger.
+
+Distill any durable outcome into the appropriate ADR, glossary entry, or implementation guide. Copy the final plan to `.scratch/plans/completed/<original-filename>` for optional local reference, remove its tracked file, and move its row from the active table to the retired ledger below. Keep the allocated number reserved and advance the next-number marker.
 
 The `.scratch/` archive is ignored and local to the checkout; never force-add it. Git history remains the durable shared archive.
 
