@@ -64,8 +64,8 @@ are intentionally not reconstructed here.
   and input/focus [PR #74](https://github.com/robertweisbecker/base-xyz/pull/74)
   (`8665fc1`) are merged too. Form/Field retains its own baseline and verification gates.
 - NavList is 011 because PR #53 reserved relative-time 009 earlier. CopyButton
-  remains 010. Reconcile PR #53's older index before merge; its branch must not
-  reset the next number to 010. Never reuse 009 if the investigation is rejected.
+  remains 010. PR #53 is closed; its reconciled investigation remains deferred
+  in Plan 009. Never reuse 009 if the investigation is rejected.
 - CopyButton's canonical owner is now under components; preserve the legacy block
   imports and the merged local ref helper. Plans 003/004 share public barrel/gallery
   or index files; reconcile additions without drops.
@@ -93,8 +93,7 @@ are intentionally not reconstructed here.
   by #20. Stepper pagination likewise waits for a second consumer; retain optional
   `completeOnVisit` presentation while consumers own workflow validation.
 - Keep issue motivation, acceptance, queue state, and decisions when retiring
-  temporary full-plan mirrors. PR #53's description carries the reconciled
-  investigation while its older branch awaits synchronization.
+  temporary full-plan mirrors.
 
 ## Short backlog issues
 
@@ -103,7 +102,6 @@ separate full plans would duplicate the handoff. GitHub owns live queue state.
 
 | Issue                                                         | Scope                                                       | Priority | Effort |
 | ------------------------------------------------------------- | ----------------------------------------------------------- | -------- | ------ |
-| [#61](https://github.com/robertweisbecker/base-xyz/issues/61) | Isolate independent Tooltip roots inside groups             | P1       | S      |
 | [#42](https://github.com/robertweisbecker/base-xyz/issues/42) | Triage Popover arrow removal and retained Tooltip ownership | P2       | S      |
 
 ## Findings considered and rejected
