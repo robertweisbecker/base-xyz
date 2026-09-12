@@ -8,19 +8,21 @@
 > maintain the index.
 >
 > **Drift check (run first)**:
-> `git diff --stat bf25e43..HEAD -- src/components/description-list src/components/index.ts src/app/gallery-page.tsx src/blocks/agent-action-approval/agent-action-approval.tsx src/styles/constants.stylex.ts src/styles/README.md tests/components/description-list.spec.ts CONTEXT.md docs/adr/0011-layout-primitives-common-margins-and-stylex-overrides.md docs/plans/003-description-list-component.md docs/plans/README.md`
+> `git diff --stat c6d9b8f..HEAD -- src/components/description-list src/components/index.ts src/app/gallery-page.tsx src/blocks/agent-action-approval/agent-action-approval.tsx src/styles/constants.stylex.ts src/styles/README.md tests/components/description-list.spec.ts CONTEXT.md docs/adr/0011-layout-primitives-common-margins-and-stylex-overrides.md docs/plans/003-description-list-component.md docs/plans/README.md`
 > If any in-scope file changed since this plan was written, compare the
 > "Current state" excerpts against the live code before proceeding. On a
 > mismatch, treat it as a STOP condition.
 
 ## Status
 
-- **Priority**: P1
+- **Priority**: P2
 - **Effort**: M
 - **Risk**: LOW
 - **Depends on**: none
 - **Category**: direction
 - **Planned at**: commit `bf25e43`, 2026-08-27
+- **Reconciled at**: commit `c6d9b8f`, 2026-09-11
+- **Issue**: intentionally local proposal; create a durable issue when activated
 - **Status**: TODO
 
 ## Why this matters
@@ -291,9 +293,13 @@ detail: {
 `src/blocks/agent-action-approval/agent-action-approval.stories.tsx:45-58`
 and `:115-136` exercise plain text, `Code`, and `Badge` values. The plan must
 preserve those compositions and the current `AgentActionApproval.Details`,
-`Detail`, `DetailLabel`, and `DetailValue` namespace keys. Repoint them to the
-new component exports and remove only their duplicated implementation/styles;
-do not remove or rename the compatibility surface in this plan.
+`Detail`, `DetailLabel`, and `DetailValue` namespace keys. The approval root
+caps itself at 32rem while its details currently remain two
+columns. DescriptionList stacks below 34rem, so this migration deliberately
+adopts stacked metadata at the block's default width. The maintainer approved
+that presentation change: blocks compose component layouts. Remove duplicated
+block layout styles rather than retaining an override just to freeze the old
+presentation. Preserve existing public parts and accepted props.
 
 ### Repository architecture and conventions
 
@@ -301,10 +307,10 @@ do not remove or rename the compatibility surface in this plan.
   product-agnostic primitives to `src/components/`, keeps public contracts
   compact, requires native semantics, makes `src/components/index.ts` the
   public source of truth, and uses Storybook as the functional inventory.
-- `docs/adr/0011-layout-primitives-common-margins-and-stylex-overrides.md:31-66`
-  grants margins only to a stable normal-flow root; parts do not inherit the
-  contract. Add `DescriptionList.Root` to the eligible compound-root row in the
-  ADR rather than creating a new ADR.
+- ADR 0011 grants margins to eligible stable normal-flow roots; internal
+  parts do not inherit that contract. Extend its ownership prose with
+  DescriptionList.Root only where clarification is needed; there is no
+  component eligibility table to update.
 - `docs/adr/0003-stylex-ownership-and-application.md:14-30` requires
   component-owned styles, defaults before caller `xstyle`, and native `style`
   last.
@@ -342,7 +348,8 @@ do not remove or rename the compatibility surface in this plan.
   is the rich semantic compound exemplar.
 - `tests/components/list.spec.ts` and `tests/components/stepper.spec.ts` use
   stable Storybook fixtures, role/semantic queries, focused geometry checks,
-  and a per-page console-error collector. Copy that console guard.
+  and shared browser diagnostics. Import `{ test, expect }` from
+  `../playwright`; do not copy diagnostic hooks into the new spec.
 - Browser tests should gate native elements, accessible action names,
   documented container-responsive orientations, root margin/override
   precedence, and no leaked custom props. Do not gate exact colors, token
@@ -409,7 +416,8 @@ unavailable, stop and ask the operator before installing anything.
 - `List`, `Table`, `DataTable`, `Item`, `Card`, `Text`, or layout-primitives
   public APIs.
 - Removing or renaming `AgentActionApproval.Details`, `Detail`, `DetailLabel`,
-  or `DetailValue`; they are compatibility aliases in this plan.
+  or `DetailValue`; their parts and accepted props remain compatible. Layout
+  adopts DescriptionList as described in step 4.
 - Moving agent blocks into an `AI/` Storybook or filesystem subtree.
 - Inline editing, validation, save/cancel state, row selection, sorting,
   filtering, pagination, or data loading.
@@ -421,12 +429,12 @@ unavailable, stop and ask the operator before installing anything.
 
 - Start from the operator's intended checkout after running the drift check.
 - Suggested branch: `codex/003-description-list`.
-- Use one logical commit after all gates pass. Match recent history with a
-  message such as `[codex] Add DescriptionList component`.
+- Commit only with user authorization after all gates pass; if authorized,
+  use a message such as `[codex] Add DescriptionList component`.
 - Do not push, open a PR, or merge unless the operator explicitly requests it.
-- Plans 002 and 004 are logically independent but also touch
+- Plan 004 and other component work are logically independent but also touch
   `src/components/index.ts`, `src/app/gallery-page.tsx`, and
-  `docs/plans/README.md`. If either lands or is executing concurrently,
+  `docs/plans/README.md`. If another task lands or is executing concurrently,
   rebase/reconcile those files and preserve every component; do not overwrite
   another plan's work.
 
@@ -474,8 +482,9 @@ public types (`RootProps`, `ItemProps`, `LabelProps`, `ValueProps`,
 export in alphabetical component order and choose one consistent explicit
 export list; do not add a second folder barrel.
 
-Update the eligible compound-root row in ADR 0011 to include
-`DescriptionList.Root`. Add one `CONTEXT.md` glossary bullet stating that a
+Clarify ADR 0011's existing normal-flow ownership prose for
+`DescriptionList.Root`; do not recreate a component eligibility table. Add one
+`CONTEXT.md` glossary bullet stating that a
 Description list is a native name/value association, while `List` is ordered or
 unordered content and `Table` is for tabular relationships across columns. In
 `src/styles/README.md`, document `containerBreakpoints` beside `breakpoints`:
@@ -513,11 +522,10 @@ the gallery verifies the public export.
 **Verify**: `npm run build-storybook` -> the production Storybook build exits
 0 and includes `components-description-list` stories.
 
-### Step 4: Replace the product-block duplication without breaking its API
+### Step 4: Compose the approval block from DescriptionList
 
-In `agent-action-approval.tsx`, import the new implementation directly from
-its component module. Replace the four native type aliases and component
-functions with compatibility aliases:
+Import DescriptionList directly from its component module and replace the four
+metadata implementations with aliases:
 
 ```tsx
 export const Details = DescriptionList.Root;
@@ -526,20 +534,29 @@ export const DetailLabel = DescriptionList.Label;
 export const DetailValue = DescriptionList.Value;
 ```
 
-Derive the corresponding exported prop types from those component parts.
-Remove the now-unused `details`, `detail`, `detailLabel`, and `detailValue`
-StyleX entries and imports made obsolete by that removal. Preserve the four
-keys in the final `AgentActionApproval` namespace, and do not change its stories
-or MDX parts table in this plan.
+Derive exported prop types from the corresponding parts while preserving all
+previously accepted native/style props. Keep the four keys in the final
+AgentActionApproval namespace. Remove duplicated `details`, `detail`,
+`detailLabel`, and `detailValue` styles and newly unused imports. Keep the
+existing stories and MDX parts table unless the documented anatomy is incorrect.
 
-**Verify**:
-`rg -n "function (Details|Detail|DetailLabel|DetailValue)|details:|detailLabel:|detailValue:" src/blocks/agent-action-approval/agent-action-approval.tsx`
--> no matches, then `npm run typecheck` -> exit 0.
+This intentionally changes the block's metadata presentation: its 32rem maximum
+is below DescriptionList's 34rem breakpoint, so its default metadata now stacks.
+The maintainer accepts this consequence of composing the new component. Do not
+add compatibility layout overrides or a new layout prop to preserve the former
+two-column block recipe. Capture the existing approval story before the move,
+then review the new layout at its normal and narrow widths, including rich
+Code/Badge values, wrapping, native anatomy, and caller overrides.
+
+**Verify**: `npm run typecheck` → exit 0. The search
+`rg -n 'function (Details|Detail|DetailLabel|DetailValue)|details:|detailLabel:|detailValue:' src/blocks/agent-action-approval/agent-action-approval.tsx`
+returns no obsolete implementation/style entries. Rebuild Storybook and record
+the accepted presentation change with all four public parts still usable.
 
 ### Step 5: Add focused semantic and responsive browser coverage
 
-Create `tests/components/description-list.spec.ts`, copying the console-error
-guard from `tests/components/list.spec.ts`.
+Create `tests/components/description-list.spec.ts`, importing `{ test, expect }`
+from `../playwright` for automatic console/page-error capture.
 
 Cover these durable contracts:
 
@@ -571,7 +588,8 @@ Build Storybook before the focused run.
 
 ### Step 6: Run the repository gates and perform live review
 
-Run `npm run verify:quick`, then `npm run verify:full`. If another checkout owns
+Run `npm run verify:full` once after the final source change; it includes quick.
+If another checkout owns
 the default preview port, rerun the affected Playwright command with an unused
 `PLAYWRIGHT_STORYBOOK_PORT` or `PLAYWRIGHT_APP_PORT`; do not terminate or reuse
 another checkout's server.
@@ -594,8 +612,15 @@ literal or modify `vite.config.ts` as a workaround. If port 6006 belongs to
 another checkout, launch Storybook on an unused port instead of stopping the
 other server.
 
-Finally, inspect `git diff --check` and `git status --short`. Update this plan's
-status row only after all required gates pass.
+Finally, inspect `git diff --check` and `git status --short`.
+
+After the required checks pass, close the linked issue with implementation and
+verification evidence (or record that this intentionally local proposal has no
+issue), and distill durable decisions into the owning ADR or guide. Optionally
+copy the final plan to `.scratch/plans/completed/`, remove its tracked file, and
+move 003's row to the retired ledger in `docs/plans/README.md` with DONE status
+and commit/PR evidence. Keep its number reserved and preserve the next-number
+marker; do not leave a completed plan in the active table.
 
 **Verify**: `npm run verify:full && git diff --check` -> both exit 0; `git
 status --short` lists only the files permitted by this plan plus any
@@ -605,7 +630,8 @@ pre-existing operator-owned changes.
 
 - New file: `tests/components/description-list.spec.ts`.
 - Structural pattern: `tests/components/list.spec.ts` for native semantics and
-  console capture; `tests/components/stepper.spec.ts` for the smallest useful
+  shared `tests/playwright.ts` diagnostics; `tests/components/stepper.spec.ts`
+  for the smallest useful
   documented geometry checks across container sizes.
 - Required cases: native anatomy, contextual accessible action name,
   horizontal, grid, and vertical layout; narrow container-relative stacking;
@@ -637,9 +663,9 @@ pre-existing operator-owned changes.
       responsive-query string.
 - [ ] Row-action examples have complete accessible names supplied by caller
       content.
-- [ ] `AgentActionApproval` delegates its metadata anatomy to
-      `DescriptionList` while retaining its existing four public namespace
-      keys.
+- [ ] AgentActionApproval aliases the four DescriptionList parts, preserves
+      accepted props, and removes duplicated metadata styles. Its deliberate
+      move to responsive stacked metadata is reviewed in the existing story.
 - [ ] ADR 0011 and `CONTEXT.md` record the ownership and semantic boundary;
       README gains no duplicate component inventory.
 - [ ] Storybook and the gallery consume the public `@/components` export and
@@ -649,17 +675,18 @@ pre-existing operator-owned changes.
 - [ ] The focused browser spec passes with no console errors.
 - [ ] `npm run verify:quick`, `npm run verify:full`, and `git diff --check` all
       exit 0.
-- [ ] `docs/plans/README.md` status row is updated when implementation is
-      complete.
+- [ ] Completion evidence is recorded and the plan is retired under the
+      repository lifecycle; its identifier remains reserved.
 
 ## STOP conditions
 
 Stop and report back; do not improvise if:
 
-- Any current-state excerpt or in-scope file has materially drifted from commit
-  `bf25e43`, including concurrent implementation of a description/data list.
-- Preserving the four existing `AgentActionApproval` metadata keys requires a
-  public behavior or prop-shape change rather than direct aliases.
+- Any current-state excerpt or in-scope file has materially drifted from
+  the reconciled `c6d9b8f` baseline, including another description/data list.
+- The approval migration would remove an existing public part or accepted
+  prop, or change interaction/semantics beyond the approved adoption of
+  DescriptionList presentation. Responsive stacking alone is not a STOP.
 - The current StyleX compiler cannot express the private label-width property,
   inline-size container, descendant container conditions, or auto-fit grid
   through the repository's explicit `stylex.props(...)` boundary. Do not fall
@@ -673,7 +700,7 @@ Stop and report back; do not improvise if:
   roles, or child introspection that rejects valid multiple-name/value groups.
 - The design appears to require a new theme token, global selector, shared
   recipe, package, or dependency.
-- Plan 002, Plan 004, or another concurrent task changed a shared in-scope
+- Plan 004 or another concurrent task changed a shared in-scope
   export/gallery file and cannot be cleanly reconciled without discarding any
   task.
 - A required verification command fails twice after one focused correction.
@@ -693,7 +720,7 @@ Stop and report back; do not improvise if:
   or a different container threshold, treat that as a focused follow-up with
   multiple product examples; do not silently widen the v1 orientation API.
 - When the AI block subtree is reorganized, keep `DescriptionList` in
-  `src/components/`; only the compatibility aliases move with
+  `src/components/`; only the composition aliases move with
   `AgentActionApproval`.
 - Reviewers should scrutinize native structure, margin stripping and override
   order, wide/narrow container behavior, grid reading/focus order, long-value
