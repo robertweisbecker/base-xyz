@@ -1,9 +1,9 @@
 import { CopyIcon } from "@phosphor-icons/react/dist/csr/Copy";
-import { useMergedRefs } from "@base-ui/utils/useMergedRefs";
 import * as stylex from "@stylexjs/stylex";
 import { type ReactNode, useId, useRef, useState } from "react";
 import { Button, IconButton, Icon, Toast } from "@/components";
 import type { ButtonProps } from "@/components";
+import { useMergedRefs } from "@/hooks/use-merged-refs";
 import { iconSwapTransition } from "@/styles/recipes/transitions";
 
 export type CopyButtonProps = Omit<ButtonProps, "children"> & {

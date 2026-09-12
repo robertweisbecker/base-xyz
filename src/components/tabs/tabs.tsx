@@ -1,5 +1,4 @@
 import { Tabs as BaseTabs } from "@base-ui/react/tabs";
-import { useMergedRefs } from "@base-ui/utils/useMergedRefs";
 import * as stylex from "@stylexjs/stylex";
 import {
 	createContext,
@@ -12,6 +11,7 @@ import {
 } from "react";
 import type { ButtonSize } from "@/components/button/button";
 import { typescaleStyles, fontWeightStyles } from "@/components/text/text.stylex";
+import { useMergedRefs } from "@/hooks/use-merged-refs";
 import { media } from "@/styles/constants.stylex";
 import { focusRing } from "@/styles/recipes/focus";
 import { mergeStyle, type BaseStyleProps } from "@/styles/props/base";

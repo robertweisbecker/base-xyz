@@ -1,6 +1,5 @@
 import { Field } from "@base-ui/react/field";
 import { Input as BaseInput } from "@base-ui/react/input";
-import { useMergedRefs } from "@base-ui/utils/useMergedRefs";
 import * as stylex from "@stylexjs/stylex";
 import { type ComponentProps } from "react";
 import { media } from "@/styles/constants.stylex";
@@ -13,6 +12,7 @@ import { attrJoin } from "@/utils/attr-join";
 import { mergeStyle, type BaseStyleProps } from "@/styles/props/base";
 import { extractMarginProps, type MarginProps } from "@/styles/props/spacing.stylex";
 import { Tooltip } from "@/components/tooltip/tooltip";
+import { useMergedRefs } from "@/hooks/use-merged-refs";
 
 /** Disabled chrome follows a nested input/textarea, not addon action buttons. */
 const GROUP_HAS_DISABLED = ":has(:is(input, textarea):is([data-disabled], :disabled))";
