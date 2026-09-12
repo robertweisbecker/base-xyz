@@ -151,6 +151,10 @@ errors or increase timeouts to hide failures.
   acyclic. These are allowed ownership boundaries, not a quota of files.
 - `tests/components/nav-list.spec.ts` (new focused public-behavior coverage).
 - This plan and its row/dependency notes in `docs/plans/README.md`.
+- Verification only: temporarily enable `framework.options.strictMode` in
+  `.storybook/main.ts` and add the disposable effect sentinel described in step 5
+  to the lifecycle story. Restore both before the final gate; neither belongs in
+  the implementation diff.
 
 **Out of scope:** Sidebar implementation, routing/app-shell code, public barrels,
 Tooltip/Popover/Collapsible implementations, tokens, shared recipes, dependency or
@@ -186,10 +190,11 @@ with a small labeled configuration control or callback output when a supported
 combination is otherwise inaccessible. Keep current story IDs. If a combined
 scenario cannot fit an existing story intelligibly, one focused navigation story
 in the same file is allowed; it must exercise public behavior rather than expose
-private state. Wrap the lifecycle scenario in React.StrictMode so the live
-development check can also exercise effect replay; keep that scenario useful
-without development-only behavior. Production-built Playwright runs do not
-exercise StrictMode replay.
+private state. Keep the lifecycle scenario useful without development-only
+instrumentation. A StrictMode wrapper inside the story sits below Storybook's
+preview decorators and does not establish initial effect replay. Step 5 verifies
+that separately with a temporary strict render root. Production-built Playwright
+runs do not exercise StrictMode replay.
 
 Cover the currently working cases from the test matrix below: expanded links,
 collapsible opening, controlled/uncontrolled drilldown, focus/scroll restoration,
@@ -203,10 +208,20 @@ dropped callbacks, false navigation, or stale content as expected behavior.
 ### 3. Repair the presentation contracts in place
 
 1. Preserve accepted trigger `onClick` and `aria-label` in both collapsed paths.
-   Pass one focused trigger-prop contract to the private popup adapters; preserve
-   the existing differences in disclosure and navigation. Base UI must retain
-   its own handlers/ref/ARIA wiring. Consumer cancellation must prevent the
-   corresponding activation, not merely a callback notification.
+   Pass one focused trigger-prop contract to the private popup adapters. Have Row
+   render `<Popover.Trigger disabled={disabled} />` through its existing
+   `useRender` boundary so Base UI owns the final button and its refs, handlers,
+   `id`, `aria-haspopup`, `aria-expanded`, `aria-controls`, and popup state
+   attributes. Do not use `<Popover.Trigger render={<Row />} />`: Row's closed
+   prop contract would discard Base UI's injected render props. Keep the public
+   trigger contract compact instead of adding unrestricted native props.
+   For enabled activation in `createRowClickHandler`, call the consumer's
+   `onClick` before disclosure/navigation. If it called ordinary
+   `event.preventDefault()`, also call `event.preventBaseUIHandler?.()` before
+   returning. Disabled activation uses the same cancellation bridge without
+   invoking the consumer callback. Base UI 1.8's merged handler checks that cancellation
+   method, so returning from Row alone does not prevent popup activation.
+   Preserve the existing distinction between disclosure and navigation.
 2. Give panel registration a lifetime tied to the mounted panel, using a stable
    registration dependency and matching cleanup. Replacing/removing a panel must
    remove its old content. An old cleanup must not erase a newer registration.
@@ -248,15 +263,31 @@ NavList spec → exit 0 with the same behavior matrix. `git diff --check` → ex
 
 ### 5. Verify integration and close the handoff
 
-Run the full gate once after the final source change. Inspect Collapsible,
-Drilldown, InDrawer, and CollapsedChildPopovers in live Storybook after optimization.
-Exercise keyboard activation, Escape/closing, explicit accessible names, focus
-restoration, and expanded/icon presentations. In development Storybook, exercise
-the StrictMode-wrapped lifecycle scenario: mount, replace, and remove its panel,
-then switch presentations and confirm only current links remain reachable.
-Capture console errors. Check the
-app navigation at `/` and `/experiments` using the existing app tests included in
-the full gate. Record visual observations as evidence rather than pixel gates.
+Inspect Collapsible, Drilldown, InDrawer, and CollapsedChildPopovers in live
+Storybook after optimization. Exercise keyboard activation, Escape/closing,
+explicit accessible names, focus restoration, and expanded/icon presentations.
+Capture console/page errors and record visual observations as review evidence.
+
+For initial effect replay, temporarily set
+`framework.options.strictMode: true` in `.storybook/main.ts`. Storybook's React
+renderer must place that StrictMode wrapper outside its ErrorBoundary, Story,
+and preview decorators; confirm this in the installed renderer before claiming
+replay. In the lifecycle scenario, temporarily add a mount-only `useEffect` that
+records `setup`, returns a cleanup recording `cleanup`, and changes no UI/state.
+Start or restart development Storybook with the temporary configuration. On a
+fresh lifecycle-story mount, require the sentinel sequence
+`setup → cleanup → setup`, then exercise mount, replace, remove, and presentation
+switching and confirm only current links remain reachable. Run the focused
+NavList cases against this live server with the existing shared diagnostics:
+`PLAYWRIGHT_SKIP_WEBSERVER=1 PLAYWRIGHT_STORYBOOK_PORT=6206 npx playwright test tests/components/nav-list.spec.ts`.
+Use the selected live port if 6206 is occupied. Keep the sentinel transcript and
+browser outcomes as disposable review evidence, not a permanent mechanism test.
+
+Stop the development server and restore only the temporary configuration and
+sentinel edits. Compare their diff with the pre-check state; `.storybook/main.ts`
+must be unchanged and the story must contain no sentinel. Run the full gate once
+against that final source. Check app navigation at `/` and `/experiments` through
+the existing app tests included in the full gate.
 
 **Verify:** `npm run verify:full` → exit 0; `git diff --check` → exit 0. Review
 `git diff --name-only` and `git status --short` against Scope, including new files.
@@ -274,11 +305,14 @@ implementation calls or exact frame timing:
   and caller cancellation before `onNavigate`.
 - Both collapsible and drilldown triggers, in expanded and icon modes, retain the
   caller's accessible name and click callback. Prevented/disabled activation does
-  not open or navigate; ordinary activation still uses Base UI behavior.
+  not open or navigate; ordinary activation still uses Base UI behavior. For both
+  icon-mode paths, assert `aria-haspopup="dialog"`, the open/closed
+  `aria-expanded` state, and `aria-controls` matching the open popup's
+  `id`. Escape closes the popup and restores trigger focus.
 - Replacing panel content updates the popup; removing the panel removes its links.
   Presentation changes do not leave stale content. Check development-only
-  StrictMode effect replay in live Storybook as described in step 5; do not claim
-  that the production-built permanent suite exercises replay.
+  initial effect replay at the strict Storybook render root as described in step
+  5; a nested story wrapper or the production-built suite is not replay evidence.
 - Controlled drilldown emits the requested value/direction once and waits for the
   supplied value; uncontrolled drilldown updates itself. Forward/back restores the
   intended focus target and previously observed scroll position. Use a bounded
@@ -304,8 +338,10 @@ assertions that lock private module structure into the permanent suite.
 - [ ] Private modules import each other acyclically and never import the public
       entry/barrel; review their imports with `rg -n '^import|^export' src/components/nav-list`.
 - [ ] `git diff --name-only` plus `git status --short` contains only scoped files.
-- [ ] Live development Storybook/StrictMode evidence, advisory Doctor comparison,
-      and issue/index status are recorded.
+- [ ] Live strict-root Storybook evidence includes the disposable sentinel's
+      setup/cleanup/setup transcript and passing public lifecycle cases;
+      temporary config/sentinel edits are absent from the final diff.
+- [ ] Advisory Doctor comparison and issue/index status are recorded.
 
 ## STOP conditions
 
