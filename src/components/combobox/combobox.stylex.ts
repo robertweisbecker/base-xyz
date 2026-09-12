@@ -21,7 +21,7 @@ export const comboboxParts = stylex.create({
 	inputGroup: {
 		borderColor: {
 			"[data-disabled]": tokens["--border"],
-			"[data-invalid]": tokens["--bg-error-primary"],
+			"[data-invalid]:not([data-disabled])": tokens["--bg-error-primary"],
 			"[data-readonly]": tokens["--border"],
 			default: tokens["--border-input"],
 			":focus-within:not([data-disabled]):not([data-invalid]):not([data-readonly])":
