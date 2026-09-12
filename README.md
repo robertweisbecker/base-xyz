@@ -17,6 +17,14 @@ npm install
 npm run storybook
 ```
 
+After `npm install`, if Playwright's matching Chromium browser is absent, run
+`npx playwright install chromium` before browser checks or `npm run verify:full`.
+On Linux systems missing browser dependencies, use
+`npx playwright install --with-deps chromium` instead. This is standard
+[Playwright browser setup](https://playwright.dev/docs/browsers), separate from
+each verification run; a Playwright upgrade may require installing its matching
+Chromium revision again.
+
 Storybook is the browsable inventory and behavior reference.
 The demo app (a gallery grid) is available with:
 
