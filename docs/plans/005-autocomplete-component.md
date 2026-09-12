@@ -8,11 +8,11 @@
 > maintain the index.
 >
 > **Drift check (run first)**:
-> `git diff --stat c575346..HEAD -- docs/adr/0011-layout-primitives-common-margins-and-stylex-overrides.md src/styles/README.md src/components/autocomplete src/components/field src/components/label src/components/index.ts src/app/gallery-page.tsx tests/components/autocomplete.spec.ts docs/plans/004-form-field-primitives.md docs/plans/005-autocomplete-component.md docs/plans/README.md`
+> `git diff --stat c6d9b8f..HEAD -- docs/adr/0011-layout-primitives-common-margins-and-stylex-overrides.md src/styles/README.md src/components/autocomplete src/components/field src/components/label src/components/index.ts src/app/gallery-page.tsx tests/components/autocomplete.spec.ts docs/plans/005-autocomplete-component.md docs/plans/README.md`
 > Plan 004 is an explicit dependency, so its documented additions to
 > `src/components/field`, `src/components/label`, `src/components/index.ts`,
-> ADR 0011, and the plan index are expected drift. Confirm that those changes
-> match Plan 004's public contracts. Any other in-scope drift, or a materially
+> ADR 0011, `src/styles/README.md`, and the plan index are expected drift. Confirm that those changes
+> match the landed Field/Label contracts and #19's merge evidence. Any other in-scope drift, or a materially
 > different Field API, is a STOP condition.
 
 ## Status
@@ -20,10 +20,14 @@
 - **Priority**: P2
 - **Effort**: M
 - **Risk**: MED
-- **Depends on**: `docs/plans/004-form-field-primitives.md`
+- **Depends on**: landed public Field/Label wrappers from #19 (Plan 004),
+  plus a real free-form consumer outside CommandPalette
 - **Category**: direction
 - **Planned at**: commit `c575346`, 2026-09-02
-- **Status**: TODO
+- **Reconciled at**: commit `c6d9b8f`, 2026-09-11
+- **Issue**: intentionally local proposal until the dependency and demand gates pass
+- **Status**: TODO — deferred; do not implement before #19 lands or without
+  a named consumer needing free-form suggestions
 
 ## Why this matters
 
@@ -44,17 +48,19 @@ repository's field, popup, item, StyleX, and accessibility conventions.
   semantic owner, and favors compact compound APIs over exhaustive mirrors.
 - `docs/adr/0011-layout-primitives-common-margins-and-stylex-overrides.md:36-55`
   permits common margins only on a stable normal-flow public root and says a
-  field component applies them to its field wrapper, not its input or popup.
-  Its component table currently names `Combobox.Root` but not Autocomplete.
+  node-less controller has no margin host. Consumers apply field layout and
+  margins to explicit Field.Root; actual control parts keep their own styles.
+  Extend its existing ownership prose; there is no component table to update.
 - `src/styles/README.md:14-34,66-88` requires an eligible root to call
   `extractMarginProps` once, compose defaults then margins then `xstyle`, merge
   native `style` after StyleX output, and keep compound parts outside the common
   margin surface.
 - `src/components/index.ts` is the public component source of truth. Gallery
   specimens import from that barrel and stay alphabetically ordered.
-- Plan 004 adds the public `Field` and `Label` wrappers and migrates direct Base
-  UI Field imports. Autocomplete must consume those wrappers rather than add a
-  fifth direct `@base-ui/react/field` import or duplicate their styles.
+- Plan 004 makes existing inputs standalone and adds public Field/Label
+  composition. Autocomplete follows that boundary: its controller creates no
+  Field; examples use public Field/Label parts for optional field structure.
+  Keep field styles with their canonical owners.
 
 ### The behavioral distinction is real
 
@@ -66,13 +72,19 @@ do not implement this as a Combobox mode or add remembered selection state.
 Official reference:
 <https://base-ui.com/react/components/autocomplete>.
 
-The installed dependency is `@base-ui/react@1.7.0`. Its declarations at
+The audit used `@base-ui/react@1.7.0`; PR #57 subsequently upgraded the lockfile
+to 1.8.0. This deferred plan must pass its compatibility check before execution.
+The audited declarations at
 `node_modules/@base-ui/react/autocomplete/root/AutocompleteRoot.d.ts:9-123`
 establish these contracts:
 
-- `Root` renders no HTML and overloads flat and grouped `items` so object-item
-  inference reaches child values and callbacks.
-- `value`, `defaultValue`, and `onValueChange` own the input string.
+- `Root` renders no HTML; its flat/grouped overloads infer item types for Root
+  callbacks such as `itemToStringValue` and `onItemHighlighted`, not arbitrary
+  JSX descendants. Item.value and Collection children are upstream `any`
+  boundaries; Value supplies a string. Preserve those upstream signatures
+  without adding a generic factory to manufacture cross-child inference.
+- `value` and `defaultValue` inherit React input values (including numbers);
+  `onValueChange` supplies a string. Preserve the accepted upstream domain.
 - `mode` is `list | both | inline | none`; `list` is the default.
 - `itemToStringValue` converts object items for display and form submission.
 - `form`, `submitOnItemClick`, controlled open state, highlight callbacks,
@@ -84,7 +96,7 @@ establish these contracts:
 Value, Trigger, Input, InputGroup, Clear, List, Status, Portal, Positioner,
 Popup, Group, GroupLabel, Item, Collection, Empty, and several advanced parts.
 The public repository component should expose only the parts selected below.
-Installed declarations win if live documentation has advanced beyond 1.7.
+The execution baseline's installed declarations take precedence over this audit.
 
 ### Existing local patterns to compose, not clone
 
@@ -93,23 +105,28 @@ field-wrapper boundary: root props combine Base UI behavior, `MarginProps`,
 `BaseStyleProps`, `invalid`, and `FieldSize`; margins and `xstyle` land on the
 outer Field while Base UI owns the inner controller.
 
-At the planned commit Combobox still imports Base UI Field directly. After
-Plan 004, use this expected shape instead:
+At the planned commit Combobox still owns an implicit Base UI Field. Plan 004
+removes that implicit ownership. Autocomplete follows the same controller-only
+Root; consumers explicitly compose a Field when needed:
 
 ```tsx
-<Field.Root disabled={disabled} invalid={invalid} {...fieldRootProps}>
-	<AutocompleteContext.Provider value={{ readOnly, size }}>
-		<BaseAutocomplete.Root disabled={disabled} readOnly={readOnly} {...autocompleteProps}>
-			{children}
-		</BaseAutocomplete.Root>
-	</AutocompleteContext.Provider>
+<Field.Root name="query">
+	<Label>Search</Label>
+	<Autocomplete.Root items={items}>
+		<Autocomplete.InputGroup>
+			<Autocomplete.Input />
+		</Autocomplete.InputGroup>
+		{/* popup/results */}
+	</Autocomplete.Root>
+	<Field.Description>Choose a suggestion or enter your own text.</Field.Description>
+	<Field.Error />
 </Field.Root>
 ```
 
-This is a structural example, not permission to pass Base Autocomplete props to
-the Field host. Split margins and field-only props from controller props before
-rendering. Preserve Root's flat and grouped item overloads; do not erase them
-with `any`.
+Autocomplete.Root provides only the necessary private size/readOnly context and
+Base UI controller; it renders no Field or layout host. It also works without
+Field when its actual input has an explicit accessible name. Preserve Root's
+flat/grouped overloads; do not erase them with handwritten `any`.
 
 `src/components/combobox/combobox-field.tsx:120-267,390-460` is the closest
 control and popup precedent:
@@ -149,13 +166,13 @@ per-spec duplicate diagnostic hooks.
 
 ## Selected public contract
 
-Export this initial namespace and its public prop types:
+This is the candidate namespace, not authorization to ship every part. Once
+a real consumer exists, confirm the smallest necessary surface and revise this
+plan before execution if that differs. Do not activate it for gallery coverage
+alone. The selected parts and their public prop types are:
 
 ```text
 Autocomplete.Root
-Autocomplete.Label
-Autocomplete.Description
-Autocomplete.Error
 Autocomplete.InputGroup
 Autocomplete.Input
 Autocomplete.Trigger
@@ -173,14 +190,14 @@ Autocomplete.Empty
 
 Responsibilities:
 
-- `Root<ItemValue>` wraps the node-less Base Autocomplete Root in the public
-  `Field.Root`, provides `size` through private context, and is the only part
-  with common `MarginProps`. Add `invalid?: boolean` and
-  `size?: FieldSize` (`"sm" | "md" | "lg"`, default `"md"`). Preserve Base
-  UI's `disabled`, `readOnly`, `required`, `name`, `form`, controlled/uncontrolled
-  input, filtering, open state, mode, and callback props.
-- `Label`, `Description`, and `Error` wrap Plan 004's public Label and Field
-  parts. They apply no margins and do not create a second association model.
+- `Root<ItemValue>` preserves the node-less Base Autocomplete Root with private
+  presentation context and `size?: FieldSize` (`sm | md | lg`, default `md`).
+  Preserve disabled/readOnly/required/name/form, values, filtering, mode, open
+  state, and callbacks. Do not add Field.Root, invalid, margins, className,
+  native style, or xstyle to this controller.
+- Consumers use public Label, Field.Description, and Field.Error in an explicit
+  Field.Root when needed. Do not duplicate these as Autocomplete aliases or
+  require a field wrapper for an independently named input.
 - `InputGroup`, `Input`, `Trigger`, and `Clear` are styled wrappers around the
   corresponding Base UI parts. Composition is explicit: do not silently append
   Trigger/Clear or add a private Actions element.
@@ -198,8 +215,9 @@ Responsibilities:
   Base UI parts. `Items` names Base UI `Collection` in the public namespace so
   consumers can render filtered flat or grouped item arrays without a second
   data schema.
-- `Item` accepts the full Base UI item contract, arbitrary children,
-  `variant?: MenuItemVariant` (default `"default"`), and repository style props.
+- `Item` accepts the full Base UI item contract, arbitrary children, and
+  repository style props. Use the canonical default Menu variant internally;
+  expose no Item.variant without demonstrated consumer demand.
   It must not add a checkmark, selected state, creatable mode, or forced content
   slots.
 
@@ -217,7 +235,8 @@ consumer may justify another part without expanding this initial API now.
 
 ## Visual contract
 
-- The Field wrapper uses the shared field root recipe from Plan 004.
+- An optional caller-owned Field.Root supplies field structure; the controller
+  creates no wrapper. InputGroup is the visible control chrome.
 - InputGroup uses existing field surface, text-size, control-size, and
   focus-within recipes. Its layout reserves space only for explicitly rendered
   Trigger/Clear children; it does not inject controls.
@@ -262,9 +281,10 @@ PLAYWRIGHT_STORYBOOK_PORT=6116 npx playwright test tests/components/autocomplete
 - Before any component or StyleX edit, read
   `.agents/resources/stylex-authoring.md`, ADRs 0003, 0004, and 0011, and
   `src/styles/README.md` in full.
-- Read `docs/plans/004-form-field-primitives.md` and inspect its landed public
-  Field/Label types before designing Root. Do not use the pre-Plan-004 direct
-  Base UI Field import shown in the current Combobox excerpt.
+- Inspect landed `src/components/field/field.tsx`, `src/components/label/label.tsx`,
+  ADR 0011, and #19's merge evidence before designing Root. Completed plan files
+  are removed; do not require the retired Plan 004 file. Do not add implicit
+  Field ownership to Autocomplete.
 - Use the installed Base UI declarations as the type authority and the official
   Autocomplete docs for behavior examples. Check the Base UI 1.7 release notes
   when interpreting filtering locale, scroll reset, event reasons, or Separator
@@ -285,6 +305,7 @@ PLAYWRIGHT_STORYBOOK_PORT=6116 npx playwright test tests/components/autocomplete
 - `src/components/index.ts`
 - `src/app/gallery-page.tsx`
 - `tests/components/autocomplete.spec.ts` (create)
+- `docs/plans/005-autocomplete-component.md`
 - `docs/plans/README.md`
 
 **Out of scope**:
@@ -318,23 +339,25 @@ PLAYWRIGHT_STORYBOOK_PORT=6116 npx playwright test tests/components/autocomplete
 
 ## Steps
 
-### Step 1: Confirm Plan 004 and record the ownership decision
+### Step 1: Confirm demand, landed Field/Label, and ownership
 
-Read Plan 004's landed Field and Label source. Confirm:
+Name the real free-form consumer, its required parts, and why Combobox is not
+its semantic owner. STOP/defer if none exists or #19 has not landed. Record
+#19's landed commit/PR and read the resulting Field/Label source, independent
+of whether its temporary plan still exists. Confirm:
 
-1. `Field.Root` is the one normal-flow field wrapper and accepts margins,
+1. `Field.Root` is the optional explicit field wrapper and accepts margins,
    `invalid`, `disabled`, and the repository style channels.
 2. top-level `Label` preserves Base UI Field association;
 3. `Field.Description` and `Field.Error` preserve Base UI accessibility state;
-4. these wrappers can contain the node-less Base Autocomplete Root without an
-   added host or direct Base UI Field import.
+4. these wrappers can surround a node-less controller without a second Field
+   owner, while a named input also works standalone.
 
 Amend the existing ADR 0011 decision, because this is another application of
 the same margin rule rather than a distinct architecture decision:
 
-- add `Autocomplete.Root` to the field-wrapper margin row;
-- state that Base Autocomplete Root is node-less and its public Field wrapper is
-  the sole margin/layout owner;
+- state that Autocomplete.Root remains node-less and has no margins or styles;
+- callers own any Field.Root and its field layout/margins;
 - keep InputGroup, Input, controls, popup, positioner, list, and items outside
   common margins.
 
@@ -351,46 +374,34 @@ npx prettier --check docs/adr/0011-layout-primitives-common-margins-and-stylex-o
 Expected: exit 0, and `rg -n 'Autocomplete'` finds the new ownership statement
 in both documents.
 
-### Step 2: Add the generic Root and field parts
+### Step 2: Add the node-less generic controller
 
-Create `src/components/autocomplete/autocomplete.tsx` and its private size
-context. Type Root directly from `BaseAutocomplete.Root.Props<ItemValue>`, plus
-`MarginProps`, `BaseStyleProps`, `className?: string`, `invalid?: boolean`, and
-`size?: FieldSize`. Model overloads after the installed Base Root so both flat
-and grouped item arrays retain their item type.
+Create autocomplete.tsx with a private size/readOnly context around
+BaseAutocomplete.Root. Derive RootProps from BaseAutocomplete.Root.Props with
+only the existing FieldSize addition. Forward behavioral props directly; do not
+add FieldRootProps or a wrapper-prop split. Preserve flat and grouped item
+inference through the installed overloads.
 
-Split props deliberately:
+If rest forwarding cannot preserve the installed overloads, use explicit public
+overloads and one narrow unknown-based boundary with an accurate SAFETY comment,
+following CommandPalette. Do not add handwritten any, string-only item limits,
+or a generic factory. There are no Autocomplete Label/Description/Error wrappers;
+examples consume those public field primitives directly.
 
-- margins, `className`, native `style`, and `xstyle` go to public Field.Root;
-- `invalid` goes to Field.Root only; `disabled` and `name` go to both Field.Root
-  and BaseAutocomplete.Root because Field owns validation identity while Base
-  Autocomplete owns the actual input;
-- `size` and `readOnly` feed private presentation context;
-- Base UI behavior props, including `children`, `readOnly`, `required`, `form`,
-  and the duplicated `disabled`/`name`, go to BaseAutocomplete.Root; field-only
-  props must not leak to the node-less controller.
-
-If TypeScript cannot express the two installed Base UI overloads through a
-rest spread, write explicit public overloads and keep one narrow
-`unknown`-based forwarding boundary with a `SAFETY` comment explaining why it
-is sound, following CommandPalette's precedent. Never use `any`, narrow object
-items to strings, or publish an inaccurate type.
-
-Add `Autocomplete.Label`, `.Description`, and `.Error` around Plan 004's public
-parts. Preserve their render/ref/native props and style channels; add no
-Margins. Do not import `@base-ui/react/field`.
-
-Add the local barrel and public barrel exports, including public prop/size/item
-variant types. Put Autocomplete before Avatar in `src/components/index.ts` so
+Add the local barrel and public barrel exports, including public prop/size types. Put Autocomplete before Avatar in `src/components/index.ts` so
 the new export is alphabetical without reordering unrelated existing exports.
 
 Use a temporary type-only probe, then remove it, to prove:
 
-- `{ id: string; label: string }[]` infers the object in `itemToStringValue`,
-  item value, and highlight callback;
-- grouped `{ value: string; items: User[] }[]` infers `User`;
+- flat `{ id: string; label: string }[]` and grouped
+  `{ value: string; items: User[] }[]` preserve Root callback inference in
+  `itemToStringValue` and `onItemHighlighted`;
 - `onValueChange` receives a string and Base UI event details;
-- invalid props such as a numeric controlled `value` fail.
+- numeric/string values remain accepted as upstream allows; boolean/object
+  controlled values fail;
+- Collection render callbacks in examples use explicit item annotations where
+  upstream supplies `any`; Item.value is not a negative inference probe. Do not
+  add handwritten `any` or a generic propagation framework to compensate.
 
 **Verify**:
 
@@ -428,7 +439,9 @@ contract" and "Visual contract". Important boundaries:
    ring, and a local one-column override. Its child content occupies column 1.
 5. Status and Empty remain live Base UI parts; do not invent loading/filtering
    state or inspect children.
-6. Value and Items preserve render-function/item inference without added DOM.
+6. Value and Items preserve their actual upstream render-function signatures
+   without added DOM. Value exposes a string; explicitly annotate Collection
+   item callbacks in examples when contextual typing does not infer the item.
 
 Do not import `comboboxParts`, wrap repository `Combobox`, or copy its selection
 indicator. Keep arbitrary Item children rather than adding start/end slots.
@@ -450,9 +463,10 @@ use object items so generic inference is exercised in ordinary repository code.
 
 Playground controls:
 
-- actual public props: `disabled`, `readOnly`, `required`, `invalid`, `size`,
+- actual public props: `disabled`, `readOnly`, `required`, `size`,
   `mode`, and `openOnInputClick`;
-- story-only controls: `_label` and `_placeholder`;
+- story-only controls: `_label`, `_placeholder`, and `_invalid`; map `_invalid`
+  to the caller's Field.Root, never Autocomplete.Root;
 - omit filtering functions, item arrays, render props, portal/positioner props,
   `xstyle`, and callback objects from controls.
 
@@ -463,10 +477,10 @@ Add consolidated fixed stories with controls disabled:
   suggestions with controlled `value` and Status, and `mode="both"` inline
   completion. Keep these as clearly labeled sections with realistic neutral
   content, not cards or decorative wells.
-- `Behavior fixture`: one stable, minimal field for browser tests. Use stable
-  `data-testid` markers only for fixture-owned callback/form output that cannot
-  be selected semantically; all component interaction must use roles, labels,
-  and Base UI state.
+- Add a small submission/callback scenario only if observable form output
+  cannot fit an existing realistic example. Use story-owned markers only for
+  that output; interaction uses roles and labels. Do not require a separate
+  all-purpose behavior fixture.
 
 Every input has an accessible Label or explicit name. Show Description/Error
 only where they demonstrate the field relationship. Do not describe
@@ -485,9 +499,8 @@ all examples load without console errors.
 
 Update `src/app/gallery-page.tsx` through `Autocomplete` from `@/components`.
 Add the import and cell in alphabetical order before Avatar. Use a compact,
-free-form search example with a small stable item array; include Label,
-InputGroup, Input, explicit Trigger/Clear, Popup, List, Item, and Empty as
-appropriate.
+free-form search example with a small stable item array; compose public Field.Root/Label as needed plus Autocomplete InputGroup, Input,
+explicit Trigger/Clear, Popup, List, Item, and Empty as appropriate.
 
 The specimen proves the public barrel only. Do not import private styles or the
 component's source path, add product behavior, duplicate Storybook examples, or
@@ -505,8 +518,11 @@ returns no matches.
 ### Step 6: Add durable browser contracts
 
 Create `tests/components/autocomplete.spec.ts`, importing the shared Playwright
-fixture. Target the stable behavior story and cover these contracts in a small
-number of focused tests:
+fixture. Map the cases to real scenarios: Playground covers typing, keyboard,
+Trigger/Clear, and object stringification; States covers editing constraints
+and Field relationships; Examples covers grouped/disabled items, inline
+completion, and free-form submission. Include a disabled option in the grouped
+example. Add one submission-output scenario only if necessary. Cover:
 
 1. The input is named by Label, exposes combobox semantics, opens a listbox,
    filters suggestions after typing, moves highlight with ArrowDown, and Enter
@@ -539,11 +555,10 @@ page errors.
 Run:
 
 ```sh
-npm run verify:quick
 npm run verify:full
 ```
 
-Both must exit 0. Then start Storybook and manually inspect Playground, States,
+The full gate includes quick and must exit 0. Then start Storybook and manually inspect Playground, States,
 and Examples after optimization finishes:
 
 - pointer open, filtering, item press, Clear, and Trigger behavior;
@@ -557,14 +572,19 @@ This manual review is a required design feedback loop, not a screenshot gate.
 If Storybook transiently reports a missing story or `Invalid empty selector`,
 reload/restart and reacquire the story before changing valid code.
 
-**Verify**: record the two passing gate commands and the manually reviewed story
+**Verify**: record the passing full gate and focused browser command and the manually reviewed story
 IDs in the implementation handoff.
 
 ### Step 8: Reconcile the plan index and final diff
 
-Set Plan 005 to `DONE` in `docs/plans/README.md` only after every prior step and
-gate passes. Preserve all other active plan rows. Report any unrelated failure
-without changing concurrent work.
+After the required checks pass, close the linked issue with implementation and
+verification evidence (or record that this intentionally local proposal has no
+issue), and distill durable decisions into the owning ADR or guide. Optionally
+copy the final plan to `.scratch/plans/completed/`, remove its tracked file, and
+move 005's row to the retired ledger in `docs/plans/README.md` with DONE status
+and commit/PR evidence. Keep its number reserved and preserve the next-number
+marker; do not leave a completed plan in the active table.
+Report unrelated failures without changing concurrent work.
 
 Run:
 
@@ -583,12 +603,12 @@ Storybook output, Playwright artifacts, or execution transcripts.
 - New file: `tests/components/autocomplete.spec.ts`.
 - Structural pattern: `tests/components/combobox.spec.ts` for focused component
   navigation and `tests/playwright.ts` for automatic browser diagnostics.
-- Behavioral cases: accessible field association, filtered listbox, keyboard
+- Behavioral cases: accessible explicit field association and standalone named input, filtered listbox, keyboard
   highlighting/fill, free-form persistence and form value, Trigger/Clear,
   object/group inference at compile time, grouped/disabled item behavior,
   inline completion semantics, and field states.
 - Type coverage: temporary compile-only probes during Step 2, removed after
-  proving flat and grouped object inference and string controlled values.
+  proving Root callback inference and upstream accepted value types.
 - Verification:
   `npm run build-storybook && npx playwright test tests/components/autocomplete.spec.ts`
   → all new tests pass with no console/page errors.
@@ -596,19 +616,19 @@ Storybook output, Playwright artifacts, or execution transcripts.
 
 ## Done criteria
 
-- [ ] Plan 004 is DONE and Autocomplete uses its public Field/Label wrappers.
+- [ ] A real consumer justifies the selected API; #19's implementation is
+      landed and examples use its public Field/Label composition.
 - [ ] `Autocomplete` and all selected public prop types export from
       `src/components/index.ts`; Gallery consumes only that public export.
-- [ ] Root preserves flat/grouped object-item inference, string value semantics,
+- [ ] Root preserves flat/grouped Root callback inference, upstream value types,
       Base UI filtering/open/form callbacks, and free-form input behavior.
-- [ ] Only Root accepts common margins, resolved once on the Field wrapper;
-      ADR 0011 and `src/styles/README.md` document that ownership.
+- [ ] Root renders no HTML/Field and has no margin/style props. Consumers own
+      optional Field composition; a standalone named input works without one.
+      ADR 0011 and the style guide document the boundary.
 - [ ] The public namespace contains exactly the selected v1 parts; no advanced
       Base UI mirror, remembered selection, or command behavior was added.
 - [ ] Input, explicit controls, popup, results, grouped items, status, and empty
       state use repository recipes/tokens and preserve Base UI render/ref props.
-- [ ] `rg -n 'from "@base-ui/react/field"' src/components/autocomplete` returns
-      no matches.
 - [ ] `npm run verify:quick` exits 0.
 - [ ] Focused Playwright tests pass with shared console/page-error diagnostics.
 - [ ] `npm run verify:full` exits 0.
@@ -616,19 +636,19 @@ Storybook output, Playwright artifacts, or execution transcripts.
       console checks are recorded.
 - [ ] No files outside the in-scope list are modified and no generated output or
       temporary probe remains.
-- [ ] `docs/plans/README.md` marks Plan 005 DONE only after all gates pass.
+- [ ] Completion evidence is recorded and Plan 005 is retired after all gates pass.
 
 ## STOP conditions
 
 Stop and report; do not improvise if:
 
-- Plan 004 is not DONE, its public Field/Label wrappers are absent, or their
-  landed contract cannot host Base Autocomplete without an extra wrapper or a
-  direct Base UI Field import.
+- No real free-form consumer is identified, #19 has not landed, or its public
+  Field/Label parts are absent or cannot compose with a node-less controller
+  without a second Field owner.
 - The installed `@base-ui/react` version is not 1.7.x and its Autocomplete Root,
   item inference, value semantics, mode, or part contracts materially differ
   from this plan.
-- Preserving flat and grouped object-item inference requires `any`, a public
+- Preserving flat/grouped Root callback inference requires handwritten `any`, a public
   string-only restriction, or an inaccurate overload.
 - Free-form input/form behavior cannot be preserved without adding selection
   state or changing the repository Combobox.
@@ -652,7 +672,7 @@ Stop and report; do not improvise if:
 - If a real consumer needs virtualization, a grid, Separator/Row, fuzzy search,
   or filter hooks, extend the closed namespace from that concrete use case. Do
   not preemptively mirror Base UI.
-- Reviewers should scrutinize the Root prop split, absence of duplicate Field
+- Reviewers should scrutinize the node-less Root and absence of duplicate Field
   ownership, Item's canonical marker/single-column override, and free-form form
   submission more closely than visual similarity to Combobox.
 - If repeated Autocomplete/Combobox maintenance later proves a stable common
