@@ -107,7 +107,7 @@ export const inputsPageStyles = stylex.create({
 		gap: tokens["--space-5"],
 		alignItems: "center",
 		display: "grid",
-		gridTemplateColumns: "max-content repeat(4, minmax(8rem, 1fr))",
+		gridTemplateColumns: "max-content repeat(5, minmax(8rem, 1fr))",
 		minWidth: "42rem",
 	},
 	valueControlSizeMatrix: {
