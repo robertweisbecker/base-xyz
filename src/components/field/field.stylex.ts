@@ -4,9 +4,6 @@ import { textStyles, fontWeightStyles } from "@/components/text/text.stylex";
 import { breakpoints, media } from "@/styles/constants.stylex";
 import { tokens } from "@/theme/tokens.stylex";
 
-/** Marker for label elements associated with form controls. */
-export const labelMarker = stylex.defineMarker();
-
 /** Marker for Field roots observed by descendant form-control styles. */
 export const fieldMarker = stylex.defineMarker();
 
@@ -21,7 +18,7 @@ const INTERACTIVE_CONTROL_HOVER =
  * | Element                                   | Export                     |
  * | ----------------------------------------- | -------------------------- |
  * | `Field.Root`                              | `fieldStyles.root`               |
- * | `Field.Label` / group / item labels       | `fieldStyles.label` etc.         |
+ * | `Label` / group / item labels       | `fieldStyles.label` etc.         |
  * | `Field.Description`                       | `fieldStyles.description`        |
  * | `Field.Error`                             | `fieldStyles.error`              |
  * | Text input (`input`, `textarea`)          | `fieldInputStyles[size]`         |
@@ -38,11 +35,13 @@ const parts = stylex.create({
 		flexDirection: "column",
 		minWidth: 0,
 	},
-	label: {
+	labelColor: {
 		color: {
 			"[data-disabled]": tokens["--fg-subtle"],
 			default: tokens["--fg"],
 		},
+	},
+	label: {
 		lineHeight: tokens["--line-height-2"],
 	},
 	groupLabel: {
@@ -81,11 +80,12 @@ const parts = stylex.create({
 			[INTERACTIVE_CONTROL_HOVER]: {
 				[media.canHover]: tokens["--border-input-hover"],
 			},
+			'[aria-invalid="true"]': tokens["--bg-error-primary"],
 			"[data-disabled]": tokens["--border-disabled"],
 			"[data-invalid]": tokens["--bg-error-primary"],
 			"[data-popup-open]": tokens["--border-input-hover"],
 			"[data-readonly]": tokens["--border"],
-			"[readonly]:not([data-disabled],[data-invalid])": tokens["--border"],
+			'[readonly]:not([data-disabled],[data-invalid],[aria-invalid="true"])': tokens["--border"],
 			default: tokens["--border-input"],
 		},
 		borderStyle: "solid",
@@ -141,9 +141,9 @@ const parts = stylex.create({
 
 export const fieldStyles = {
 	root: [fieldMarker, parts.root],
-	label: [labelMarker, textStyles.supporting, fontWeightStyles.medium, parts.label],
+	label: [textStyles.supporting, fontWeightStyles.medium, parts.labelColor, parts.label],
 	groupLabel: [textStyles.body, fontWeightStyles.semibold, parts.groupLabel],
-	itemLabel: textStyles.label,
+	itemLabel: [textStyles.label, parts.labelColor],
 	description: [textStyles.supporting, parts.description],
 	error: [textStyles.supporting, parts.error],
 	requiredIndicator: parts.requiredIndicator,

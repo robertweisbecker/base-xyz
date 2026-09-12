@@ -82,13 +82,16 @@ test("theme overrides, xstyle, and native style follow the declared precedence",
 	await expect(compound).toHaveCSS("width", "123px");
 });
 
-test("field margins land on the wrapper and custom props do not leak to DOM", async ({ page }) => {
+test("explicit field margins land on their owner and custom props do not leak to DOM", async ({
+	page,
+}) => {
 	await openFixture(page);
 
 	const control = page.getByTestId("field-control");
-	const wrapper = control.locator("xpath=..");
+	const wrapper = page.getByTestId("field-owner");
 	await expect(wrapper).toHaveCSS("margin-top", "16px");
 	await expect(control).toHaveCSS("margin-top", "0px");
+	await expect(wrapper).toHaveCSS("color", "rgb(0, 0, 255)");
 
 	for (const testId of [
 		"margin-precedence",
@@ -102,6 +105,31 @@ test("field margins land on the wrapper and custom props do not leak to DOM", as
 		}
 	}
 	await expect(control).not.toHaveAttribute("mt");
+});
+
+test("Form and Fieldset owners preserve xstyle and native style precedence", async ({ page }) => {
+	await openFixture(page);
+	for (const testId of ["form-owner", "fieldset-owner"]) {
+		const owner = page.getByTestId(testId);
+		await expect(owner).toHaveCSS("margin-top", "0px");
+		await expect(owner).toHaveCSS("margin-left", "16px");
+		await expect(owner).toHaveCSS("color", "rgb(0, 0, 255)");
+		await expect(owner).not.toHaveAttribute("m");
+	}
+});
+
+test("bare text control margins and overrides target the native control", async ({ page }) => {
+	await openFixture(page);
+	for (const [testId, tagName] of [
+		["bare-input", "INPUT"],
+		["bare-textarea", "TEXTAREA"],
+	]) {
+		const control = page.getByTestId(testId);
+		await expect(control).toHaveJSProperty("tagName", tagName);
+		await expect(control).toHaveCSS("margin-top", "10px");
+		await expect(control).toHaveCSS("color", "rgb(0, 0, 255)");
+		await expect(control).not.toHaveAttribute("mt");
+	}
 });
 
 test("delegated CodeBlock margins stay on ScrollArea while native props stay on pre", async ({

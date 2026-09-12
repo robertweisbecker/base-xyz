@@ -1,9 +1,12 @@
+import x from "@stylexjs/atoms";
+import { WarningOctagonIcon } from "@phosphor-icons/react/dist/csr/WarningOctagon";
 import { CircleIcon } from "@phosphor-icons/react/dist/csr/Circle";
 import { GlobeIcon } from "@phosphor-icons/react/dist/csr/Globe";
 import * as stylex from "@stylexjs/stylex";
 import {
 	Button,
 	Combobox,
+	Field,
 	type FieldSize,
 	InputGroup,
 	NumberField,
@@ -66,11 +69,7 @@ function FieldSizeComparison({ size }: { size: FieldSize }) {
 			</Text>
 			<div {...stylex.props(styles.fieldControlGrid, fieldComparisonHeights[size])}>
 				{fieldKinds.map((kind) => (
-					<div
-						data-field-label-hidden={kind === "input-group" ? undefined : ""}
-						key={kind}
-						{...stylex.props(styles.comparisonControl)}
-					>
+					<div key={kind} {...stylex.props(styles.comparisonControl)}>
 						<ComparisonField kind={kind} size={size} state="filled" />
 					</div>
 				))}
@@ -95,8 +94,8 @@ export function CrossComponentRow() {
 				</Text>
 			</div>
 			<div {...stylex.props(styles.crossComponentRow, fieldComparisonHeights.md)}>
-				<div data-field-label-hidden {...stylex.props(styles.comparisonControl)}>
-					<TextField defaultValue="Production" label="Environment" />
+				<div {...stylex.props(styles.comparisonControl)}>
+					<TextField aria-label="Environment" defaultValue="Production" />
 				</div>
 				<InputGroup.Root>
 					<InputGroup.Addon>
@@ -136,11 +135,7 @@ function FieldStateRow({ kind }: { kind: FieldKind }) {
 				{fieldKindLabels[kind]}
 			</Text>
 			{fieldStates.map((state) => (
-				<div
-					data-field-label-hidden={kind === "input-group" ? undefined : ""}
-					key={state}
-					{...stylex.props(styles.stateCell)}
-				>
+				<div key={state} {...stylex.props(styles.stateCell)}>
 					<ComparisonField kind={kind} size="md" state={state} />
 				</div>
 			))}
@@ -166,87 +161,89 @@ function ComparisonField({
 	switch (kind) {
 		case "text":
 			return (
-				<TextField
-					defaultValue={hasValue ? (invalid ? "Design Review" : "Design system") : undefined}
-					disabled={disabled}
-					error={invalid ? "Use lowercase letters only." : undefined}
-					label={label}
-					placeholder="Enter a value…"
-					readOnly={readOnly}
-					size={size}
-				/>
+				<Field.Root disabled={disabled} invalid={invalid}>
+					<TextField
+						aria-label={label}
+						defaultValue={hasValue ? (invalid ? "Design Review" : "Design system") : undefined}
+						placeholder="Enter a value…"
+						readOnly={readOnly}
+						size={size}
+					/>
+					{invalid ? <Field.Error match>Use lowercase letters only.</Field.Error> : null}
+				</Field.Root>
 			);
 		case "textarea":
 			return (
-				<Textarea
-					defaultValue={
-						hasValue ? (invalid ? "Missing project context" : "Design system notes") : undefined
-					}
-					disabled={disabled}
-					error={invalid ? "Add a complete sentence." : undefined}
-					label={label}
-					placeholder="Enter a value…"
-					readOnly={readOnly}
-					rows={1}
-					size={size}
-				/>
+				<Field.Root disabled={disabled} invalid={invalid}>
+					<Textarea
+						aria-label={label}
+						defaultValue={
+							hasValue ? (invalid ? "Missing project context" : "Design system notes") : undefined
+						}
+						placeholder="Enter a value…"
+						readOnly={readOnly}
+						rows={1}
+						size={size}
+					/>
+					{invalid ? <Field.Error match>Add a complete sentence.</Field.Error> : null}
+				</Field.Root>
 			);
 		case "number":
 			return (
-				<NumberField
-					defaultValue={hasValue ? 8 : undefined}
-					disabled={disabled}
-					error={invalid ? "Enter a value below 5." : undefined}
-					inputWidth="fill"
-					label={label}
-					readOnly={readOnly}
-					size={size}
-				/>
+				<Field.Root disabled={disabled} invalid={invalid}>
+					<NumberField.Root defaultValue={hasValue ? 8 : undefined} readOnly={readOnly} size={size}>
+						<NumberField.Control aria-label={label} inputWidth="fill" />
+					</NumberField.Root>
+					{invalid ? (
+						<Field.Error match>
+							<WarningOctagonIcon aria-hidden size="1em" weight="duotone" />
+							Enter a value below 5.
+						</Field.Error>
+					) : null}
+				</Field.Root>
 			);
 		case "select":
 			return (
-				<Select.Root<string>
-					defaultValue={hasValue ? "react" : null}
-					disabled={disabled}
-					invalid={invalid}
-					items={frameworkItems}
-					readOnly={readOnly}
-					size={size}
-				>
-					<Select.Label>{label}</Select.Label>
-					<Select.Trigger placeholder="Choose framework" />
-					<Select.Popup>
-						<Select.List>
-							{frameworkItems.map((item) => (
-								<Select.Item key={item.value} value={item.value}>
-									{item.label}
-								</Select.Item>
-							))}
-						</Select.List>
-					</Select.Popup>
-				</Select.Root>
+				<Field.Root disabled={disabled} invalid={invalid} xstyle={x.width["fit-content"]}>
+					<Select.Root<string>
+						defaultValue={hasValue ? "react" : null}
+						items={frameworkItems}
+						readOnly={readOnly}
+						size={size}
+					>
+						<Select.Trigger aria-label={label} placeholder="Choose framework" />
+						<Select.Popup>
+							<Select.List>
+								{frameworkItems.map((item) => (
+									<Select.Item key={item.value} value={item.value}>
+										{item.label}
+									</Select.Item>
+								))}
+							</Select.List>
+						</Select.Popup>
+					</Select.Root>
+				</Field.Root>
 			);
 		case "combobox":
 			return (
-				<Combobox.Root
-					defaultValue={hasValue ? "React" : undefined}
-					disabled={disabled}
-					invalid={invalid}
-					items={["React", "Vue"]}
-					readOnly={readOnly}
-					size={size}
-				>
-					<Combobox.Label>{label}</Combobox.Label>
-					<Combobox.InputGroup>
-						<Combobox.Input placeholder="Choose framework" />
-					</Combobox.InputGroup>
-					<Combobox.Popup>
-						<Combobox.List>
-							<Combobox.Item value="React">React</Combobox.Item>
-							<Combobox.Item value="Vue">Vue</Combobox.Item>
-						</Combobox.List>
-					</Combobox.Popup>
-				</Combobox.Root>
+				<Field.Root disabled={disabled} invalid={invalid}>
+					<Combobox.Root
+						defaultValue={hasValue ? "React" : undefined}
+						items={["React", "Vue"]}
+						readOnly={readOnly}
+						size={size}
+					>
+						<Combobox.InputGroup>
+							<Combobox.Input aria-label={label} placeholder="Choose framework" />
+						</Combobox.InputGroup>
+						<Combobox.Popup>
+							<Combobox.List>
+								<Combobox.Item value="React">React</Combobox.Item>
+								<Combobox.Item value="Vue">Vue</Combobox.Item>
+							</Combobox.List>
+						</Combobox.Popup>
+					</Combobox.Root>
+				</Field.Root>
 			);
 		case "input-group":
 			return (

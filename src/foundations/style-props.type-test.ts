@@ -13,9 +13,19 @@ import type { CodeBlockProps } from "@/components/code-block/code-block";
 import type { ComboboxRootProps } from "@/components/combobox/combobox-field";
 import type { DialogCloseProps, DialogPopupProps } from "@/components/dialog/dialog";
 import type { EmptyStateProps } from "@/components/empty-state/empty-state";
+import type { FieldRootProps, FieldControlProps } from "@/components/field/field";
+import type { FieldsetRootProps } from "@/components/fieldset/fieldset";
+import type { FormProps } from "@/components/form/form";
+import type { CheckboxProps } from "@/components/checkbox/checkbox";
+import type { RadioProps } from "@/components/radio/radio";
+import type { SwitchProps } from "@/components/switch/switch";
 import type { HeadingProps } from "@/components/heading/heading";
 import type { BoxProps } from "@/components/layout/layout";
-import type { NumberFieldProps } from "@/components/number-field/number-field";
+import type {
+	NumberFieldRootProps,
+	NumberFieldControlProps,
+	NumberFieldScrubAreaProps,
+} from "@/components/number-field/number-field";
 import type { PopoverPopupProps } from "@/components/popover/popover";
 import type { MenuItemProps } from "@/components/menu/menu";
 import type { SelectPopupProps, SelectRootProps } from "@/components/select/select";
@@ -104,12 +114,35 @@ export type TypographyContract = [
 	Expect<Not<HasKey<HeadingProps, "alignSelf">>>,
 ];
 
-export type FieldWrapperContract = [
+export type FormAndControlHostContract = [
+	Expect<HasKey<FormProps, "m">>,
+	Expect<HasKey<FormProps, "xstyle">>,
+	Expect<HasKey<FieldRootProps, "m">>,
+	Expect<HasKey<FieldRootProps, "xstyle">>,
+	Expect<HasKey<FieldsetRootProps, "m">>,
+	Expect<HasKey<FieldsetRootProps, "xstyle">>,
+	Expect<Not<HasKey<FieldControlProps, "m">>>,
+	Expect<HasKey<CheckboxProps, "m">>,
+	Expect<HasKey<RadioProps, "m">>,
+	Expect<HasKey<SwitchProps, "m">>,
 	Expect<HasKey<TextFieldProps, "m">>,
 	Expect<HasKey<TextareaProps, "m">>,
-	Expect<HasKey<NumberFieldProps, "m">>,
-	Expect<HasKey<SelectRootProps<string>, "m">>,
-	Expect<HasKey<ComboboxRootProps<string>, "m">>,
+	Expect<HasKey<NumberFieldRootProps, "m">>,
+	Expect<Not<HasKey<NumberFieldControlProps, "m">>>,
+	Expect<Not<HasKey<NumberFieldScrubAreaProps, "m">>>,
+];
+
+export type WidgetControllerContract = [
+	Expect<Not<HasKey<SelectRootProps<string>, "m">>>,
+	Expect<Not<HasKey<SelectRootProps<string>, "className">>>,
+	Expect<Not<HasKey<SelectRootProps<string>, "style">>>,
+	Expect<Not<HasKey<SelectRootProps<string>, "xstyle">>>,
+	Expect<Not<HasKey<SelectRootProps<string>, "invalid">>>,
+	Expect<Not<HasKey<ComboboxRootProps<string>, "m">>>,
+	Expect<Not<HasKey<ComboboxRootProps<string>, "className">>>,
+	Expect<Not<HasKey<ComboboxRootProps<string>, "style">>>,
+	Expect<Not<HasKey<ComboboxRootProps<string>, "xstyle">>>,
+	Expect<Not<HasKey<ComboboxRootProps<string>, "invalid">>>,
 ];
 
 export type DelegatedMarginContract = [

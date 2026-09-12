@@ -4,7 +4,7 @@
 - **Normal-flow component root** — One stable public HTML node that normally participates in caller-owned document flow. Eligible roots may expose the common scalar margin props `m`, `mx`, `my`, `mt`, `mb`, `ms`, and `me`.
 - **Positioned surface** — A modal, portal, positioner, popup, toast region, or anchored/collision-managed surface whose geometry belongs to its component or Base UI offset/alignment props. It does not receive common margins by default.
 - **Internal layout** — Arrangement of a component's own contents: padding, gap, dimensions, and flow. Semantic components own this through base styles, size props, and variants rather than generic style props.
-- **Field wrapper** — The public root around a label, control, description, and error. Common margins style this wrapper only; they never alter the inner control chrome.
+- **Field owner** — `Field.Root` associates one logical control value with its labels, descriptions, and validation. Layout can be nested inside it. Form owns submission, Fieldset groups related fields, and bare controls retain their actual widget roots and independently owned margins.
 - **Build-time spacing unit** — The private `SPACE_UNIT_REM` constant used to calculate unchanged default spacing values. Public `--space-*` variables remain stable and independently themeable.
 - **Scalar spacing contract** — `SpaceValue` is shared by margin, padding, gap, and inset props. Numeric values resolve through the explicit spacing scale, while CSS strings pass through; named props do not accept responsive objects.
 - **xstyle** — The StyleX override hatch. It accepts both StyleX Atoms and `stylex.create` styles, including arrays and conditional entries, and is merged after component styles and named margins.

@@ -1,14 +1,15 @@
-import { Field } from "@base-ui/react/field";
+import { Field } from "@/components/field/field";
+import { Form } from "@/components/form/form";
+import { Label } from "@/components/label/label";
 import { MagnifyingGlassIcon } from "@phosphor-icons/react/dist/csr/MagnifyingGlass";
 import { PaperclipIcon } from "@phosphor-icons/react/dist/csr/Paperclip";
 import { PaperPlaneTiltIcon } from "@phosphor-icons/react/dist/csr/PaperPlaneTilt";
 import { ArrowUpIcon } from "@phosphor-icons/react/dist/csr/ArrowUp";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import * as stylex from "@stylexjs/stylex";
-import type { ReactNode } from "react";
+import { useState, type ReactNode } from "react";
 import { Button, IconButton } from "@/components/button/button";
 import { breakpoints } from "@/styles/constants.stylex";
-import { fieldStyles } from "@/components/field/field.stylex";
 import { Box, Grid, Stack } from "@/components/layout/layout";
 import { Separator } from "@/components/separator/separator";
 import { Text } from "@/components/text/text";
@@ -38,8 +39,8 @@ type Story = StoryObj<typeof meta>;
 export const Playground: Story = {
 	render: (args) => (
 		<Box xstyle={styles.frame}>
-			<Field.Root {...stylex.props(fieldStyles.root)}>
-				<Field.Label {...stylex.props(fieldStyles.label)}>Search projects</Field.Label>
+			<Field.Root>
+				<Label>Search projects</Label>
 				<InputGroup.Root {...args}>
 					<InputGroup.Input placeholder="Search by name…" />
 					<InputGroup.Addon>
@@ -47,9 +48,7 @@ export const Playground: Story = {
 					</InputGroup.Addon>
 					<InputGroup.Addon position="end">⌘ K</InputGroup.Addon>
 				</InputGroup.Root>
-				<Field.Description {...stylex.props(fieldStyles.description)}>
-					Search across projects in the current workspace.
-				</Field.Description>
+				<Field.Description>Search across projects in the current workspace.</Field.Description>
 			</Field.Root>
 		</Box>
 	),
@@ -288,6 +287,47 @@ function State({ children, label }: { children: ReactNode; label: string }) {
 			</Text>
 			{children}
 		</Stack>
+	);
+}
+
+export const Controlled: Story = {
+	parameters: { controls: { disable: true } },
+	render: () => <ControlledReply />,
+};
+
+function ControlledReply() {
+	const [value, setValue] = useState("The change is ready for review.");
+	const [submitted, setSubmitted] = useState("");
+	return (
+		<Form<{ reply: string }> onFormSubmit={(values) => setSubmitted(values.reply)}>
+			<Stack gap={3} maxWidth="32rem">
+				<Field.Root name="reply" validationMode="onChange">
+					<Label>Review reply</Label>
+					<InputGroup.Root>
+						<InputGroup.Textarea
+							value={value}
+							onChange={(event) => setValue(event.currentTarget.value)}
+							minRows={2}
+							maxRows={4}
+							required
+						/>
+						<InputGroup.Footer>
+							<Button type="button" variant="secondary" size="sm" onClick={() => setValue("")}>
+								Clear reply
+							</Button>
+							<Button type="submit" size="sm">
+								Send reply
+							</Button>
+						</InputGroup.Footer>
+					</InputGroup.Root>
+					<Field.Error />
+					<Field.Validity>
+						{(state) => <output aria-label="Validated reply">{String(state.value ?? "")}</output>}
+					</Field.Validity>
+				</Field.Root>
+				<output aria-label="Submitted reply">{submitted}</output>
+			</Stack>
+		</Form>
 	);
 }
 

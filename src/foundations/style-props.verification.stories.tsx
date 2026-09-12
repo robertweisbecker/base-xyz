@@ -10,11 +10,16 @@ import {
 	CodeBlock,
 	Combobox,
 	Dialog,
+	Field,
+	Fieldset,
+	Form,
 	Grid,
 	Heading,
+	Label,
 	Stack,
 	Text,
 	TextField,
+	Textarea,
 } from "@/components";
 import { breakpoints } from "@/styles/constants.stylex";
 import { tokens } from "@/theme/tokens.stylex";
@@ -45,8 +50,14 @@ function LoginForm() {
 			</Card.Header>
 			<Card.Content>
 				<Stack gap={3}>
-					<TextField label="Email" type="email" />
-					<TextField label="Password" type="password" />
+					<Field.Root>
+						<Label>Email</Label>
+						<TextField type="email" />
+					</Field.Root>
+					<Field.Root>
+						<Label>Password</Label>
+						<TextField type="password" />
+					</Field.Root>
 					<Button
 						aria-pressed={submitting}
 						data-testid="atom-submit"
@@ -164,7 +175,46 @@ export const ConsumerContract: Story = {
 			</CodeBlock>
 			<ChipOverflowFixture />
 
-			<TextField data-testid="field-control" label="Project name" mt={4} />
+			<Form
+				data-testid="form-owner"
+				m={4}
+				xstyle={[styles.zeroTopMargin, styles.redText]}
+				style={{ color: "rgb(0, 0, 255)" }}
+			>
+				Form margin and style precedence
+			</Form>
+			<Fieldset.Root
+				data-testid="fieldset-owner"
+				m={4}
+				xstyle={[styles.zeroTopMargin, styles.redText]}
+				style={{ color: "rgb(0, 0, 255)" }}
+			>
+				<Fieldset.Legend>Fieldset margin and style precedence</Fieldset.Legend>
+			</Fieldset.Root>
+			<Field.Root
+				data-testid="field-owner"
+				mt={4}
+				xstyle={styles.redText}
+				style={{ color: "rgb(0, 0, 255)" }}
+			>
+				<Label>Project name</Label>
+				<TextField data-testid="field-control" />
+			</Field.Root>
+
+			<TextField
+				aria-label="Standalone text input"
+				data-testid="bare-input"
+				mt={2.5}
+				xstyle={styles.redText}
+				style={{ color: "rgb(0, 0, 255)" }}
+			/>
+			<Textarea
+				aria-label="Standalone textarea"
+				data-testid="bare-textarea"
+				mt={2.5}
+				xstyle={styles.redText}
+				style={{ color: "rgb(0, 0, 255)" }}
+			/>
 
 			<div data-testid="spacing-theme" {...stylex.props(spacingOverride)}>
 				<Button data-testid="themed-margin" m={4}>
@@ -194,6 +244,7 @@ const styles = stylex.create({
 	submitButton: {
 		marginBlockStart: tokens["--space-1"],
 	},
+	zeroTopMargin: { marginBlockStart: 0 },
 	zeroMargins: {
 		marginBlockEnd: 0,
 		marginBlockStart: 0,

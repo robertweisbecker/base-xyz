@@ -1,8 +1,8 @@
-import { Field } from "@base-ui/react/field";
 import * as stylex from "@stylexjs/stylex";
-import { useId, type ComponentProps } from "react";
+import type { ComponentProps } from "react";
+import { Field } from "@/components/field/field";
 import type { FieldSize } from "@/components/field/field.types";
-import { fieldStyles, fieldInputStyles } from "@/components/field/field.stylex";
+import { fieldInputStyles } from "@/components/field/field.stylex";
 import { useMergedRefs } from "@/hooks/use-merged-refs";
 import { mergeStyle, type BaseStyleProps } from "@/styles/props/base";
 import { extractMarginProps, type MarginProps } from "@/styles/props/spacing.stylex";
@@ -16,9 +16,6 @@ export type TextareaProps = Omit<
 > &
 	MarginProps &
 	BaseStyleProps & {
-		label: string;
-		description?: string;
-		error?: string;
 		className?: string;
 		size?: FieldSize;
 		/** Enables content-based resizing with this minimum row count; defaults to `rows`. */
@@ -29,21 +26,23 @@ export type TextareaProps = Omit<
 
 export function Textarea({
 	ref,
-	label,
-	description,
-	error,
 	className,
 	style,
 	xstyle,
 	disabled,
-	id: providedId,
+	id,
+	name,
+	value,
+	defaultValue,
+	autoFocus,
 	readOnly,
+	required,
+	"aria-describedby": ariaDescribedBy,
+	"aria-invalid": ariaInvalid,
 	rows = 4,
 	size = "md",
 	minRows,
 	maxRows,
-	"aria-describedby": ariaDescribedBy,
-	"aria-invalid": ariaInvalid,
 	onChange,
 	...props
 }: TextareaProps) {
@@ -56,56 +55,42 @@ export function Textarea({
 		maxRows,
 	});
 	const mergedRef = useMergedRefs(ref, autoResizeState.ref);
-	const generatedId = useId();
-	const id = providedId ?? generatedId;
-	const descriptionId = description ? `${id}-description` : undefined;
-	const errorId = error ? `${id}-error` : undefined;
-	const rootSx = stylex.props(fieldStyles.root, marginStyles, xstyle);
+	const sx = stylex.props(
+		fieldInputStyles[size],
+		textareaParts.control,
+		autoResizeEnabled && textareaParts.autoResize,
+		focusRing.inset,
+		marginStyles,
+		xstyle,
+	);
 
 	return (
-		<Field.Root
-			className={attrJoin(rootSx.className, className)}
-			style={mergeStyle(rootSx.style, style)}
+		<Field.Control
+			aria-describedby={ariaDescribedBy}
+			aria-invalid={ariaInvalid}
+			autoFocus={autoFocus}
+			defaultValue={defaultValue}
 			disabled={disabled}
-			invalid={Boolean(error)}
-		>
-			<Field.Label htmlFor={id} {...stylex.props(fieldStyles.label)}>
-				{label}
-			</Field.Label>
-			<textarea
-				ref={mergedRef}
-				id={id}
-				aria-describedby={attrJoin(ariaDescribedBy, descriptionId, errorId) || undefined}
-				aria-invalid={error ? true : ariaInvalid}
-				data-disabled={disabled ? "" : undefined}
-				data-invalid={error ? "" : undefined}
-				data-readonly={readOnly ? "" : undefined}
-				disabled={disabled}
-				readOnly={readOnly}
-				rows={autoResizeEnabled ? autoResizeState.minRows : rows}
-				onChange={(event) => {
-					onChange?.(event);
-					autoResizeState.resize();
-				}}
-				{...stylex.props(
-					fieldInputStyles[size],
-					textareaParts.control,
-					autoResizeEnabled && textareaParts.autoResize,
-					focusRing.inset,
-				)}
-				{...rest}
-			/>
-			{description ? (
-				<Field.Description id={descriptionId} {...stylex.props(fieldStyles.description)}>
-					{description}
-				</Field.Description>
-			) : null}
-			{error ? (
-				<Field.Error id={errorId} match {...stylex.props(fieldStyles.error)}>
-					{error}
-				</Field.Error>
-			) : null}
-		</Field.Root>
+			id={id}
+			name={name}
+			readOnly={readOnly}
+			required={required}
+			value={value}
+			render={
+				<textarea
+					ref={mergedRef}
+					rows={autoResizeEnabled ? autoResizeState.minRows : rows}
+					onChange={(event) => {
+						onChange?.(event);
+						// React restores the accepted controlled value after this event.
+						queueMicrotask(autoResizeState.resize);
+					}}
+					className={attrJoin(sx.className, className)}
+					style={mergeStyle(sx.style, style)}
+					{...rest}
+				/>
+			}
+		/>
 	);
 }
 

@@ -5,6 +5,8 @@ import {
 	Checkbox,
 	CommandPalette,
 	Dialog,
+	Field,
+	Label,
 	LinkPreview,
 	Menu,
 	Popover,
@@ -90,8 +92,16 @@ export function PopoverExample() {
 					Mixed content combines supporting copy, form controls, and actions.
 				</Popover.Description>
 				<Stack gap={3} mt={4}>
-					<TextField label="Branch" defaultValue="feature/popup-lab" />
-					<Checkbox defaultChecked label="Include environment variables" />
+					<Field.Root>
+						<Label>Branch</Label>
+						<TextField defaultValue="feature/popup-lab" />
+					</Field.Root>
+					<Field.Root>
+						<Stack render={<Label variant="item" />} orientation="horizontal" align="start" gap={2}>
+							<Checkbox defaultChecked />
+							Include environment variables
+						</Stack>
+					</Field.Root>
 				</Stack>
 				<Popover.Footer>
 					<Button size="sm">Create preview</Button>

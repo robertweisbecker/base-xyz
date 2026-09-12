@@ -42,11 +42,34 @@ export {
 	type EmptyStateProps,
 	type EmptyStateSize,
 } from "./empty-state/empty-state";
+export {
+	Field,
+	type FieldControlChangeEventDetails,
+	type FieldControlChangeEventReason,
+	type FieldControlProps,
+	type FieldDescriptionProps,
+	type FieldErrorProps,
+	type FieldItemProps,
+	type FieldRootActions,
+	type FieldRootProps,
+	type FieldValidityProps,
+	type FieldValidityState,
+} from "./field/field";
+export { Fieldset, type FieldsetLegendProps, type FieldsetRootProps } from "./fieldset/fieldset";
+export {
+	Form,
+	type FormActions,
+	type FormProps,
+	type FormSubmitEventDetails,
+	type FormSubmitEventReason,
+	type FormValidationMode,
+} from "./form/form";
 export { Heading, type HeadingProps } from "./heading/heading";
 export { Icon, type IconProps } from "./icons";
 export { InfoTip, type InfoTipProps } from "./info-tip/info-tip";
 export { Item, type ItemDescriptionLayout, type ItemProps, type ItemVariant } from "./item/item";
 export { Kbd, KbdGroup, type KbdProps } from "./kbd/kbd";
+export { Label, type LabelProps, type LabelVariant } from "./label/label";
 export {
 	Box,
 	type BoxProps,
@@ -161,7 +184,9 @@ export { Textarea, type TextareaProps } from "./textarea/textarea";
 export {
 	NumberField,
 	type NumberFieldInputWidth,
-	type NumberFieldProps,
+	type NumberFieldRootProps,
+	type NumberFieldControlProps,
+	type NumberFieldScrubAreaProps,
 } from "./number-field/number-field";
 export type { FieldSize } from "@/components/field/field.types";
 export {

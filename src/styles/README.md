@@ -73,8 +73,8 @@ is `side ?? axis ?? all`.
 
 ### Eligible component pattern
 
-Reference implementations: `src/components/button/button.tsx` and the field
-wrapper in `src/components/text-field/text-field.tsx`.
+Reference implementations: `src/components/button/button.tsx` and
+`src/components/field/field.tsx`.
 
 ```tsx
 export type ButtonProps = Omit<BaseButton.Props, "className" | "style" | keyof MarginProps> &
@@ -124,7 +124,7 @@ element roles in a header comment.
 | Modal backdrop, viewport, surface, text | `components/dialog/dialog.stylex.ts`   | Dialog owns modal behavior; alert dialogs and drawers compose it                                                    |
 | Focus rings                             | `focus.ts`                             | `focusRing.inset` on bordered controls, `focusRing.offset` on buttons/links, `focusRing.within` on composite shells |
 | Press / icon-swap feedback              | `transitions.ts`                       | Buttons, toggles, close controls                                                                                    |
-| Checkbox, Radio, and Switch             | **component files**                    | Each family owns its group layout, supporting text, marker, state, sizing, and indicator treatment                  |
+| Checkbox, Radio, and Switch             | **component files**                    | Each family owns its control state, sizing, and indicator treatment; Field and Label own composed metadata          |
 | Text styles                             | `components/text/text.stylex.ts`       | Components, headings, body copy, and specimens                                                                      |
 
 ### Popup composition
@@ -195,11 +195,50 @@ borrowers may import its styles, but Menu must not import a borrower.
 
 ### Field composition
 
-Field's style module exposes one export per element role and two size bundles:
+Form owns native submission and Base UI validation without imposing layout.
+Field.Root owns one logical field's associations and validation, with a small
+vertical default. Nest Grid/Stack inside it for custom layouts, or use its
+`xstyle` override. Fieldset groups related fields; it does not replace a Field.
+Label, Field.Item, Field.Description, and Field.Error require an explicit
+Field.Root. Standalone controls use native labels or accessible-name attributes.
+
+Form, Field.Root, and Fieldset.Root resolve common margins on their own hosts.
+Bare controls resolve margins on the actual control, independent of Field
+context. Put a whole field composition's margins/styles on its explicit Field.
+Node-less Select/Combobox roots have no host-style surface; NumberField.Root
+owns its real widget host. Field.Control is an unstyled registration bridge for
+controls that do not already integrate with Base UI; never double-register an
+existing Base UI control. Field.Validity directly exposes Base UI's render-only
+validity state and has no styling surface.
+
+Select.Label keeps the Select trigger's own label association. Combobox.Label
+labels an external input through the public Label, so it belongs inside an
+explicit Field.Root. Standalone Combobox inputs use an accessible-name attribute.
+Put field invalid state on Field.Root and control styling on Trigger/InputGroup,
+not the node-less widget roots.
+
+NumberField.Root owns numeric state and the widget host. Control forwards native
+input props, styles, and its ref to the visible input; steppers remain private.
+Root.ref targets the widget div, Root.inputRef targets the hidden input, and
+Root.id identifies the visible input. ScrubArea wraps caller content; use
+`xstyle={x.cursor.inherit}` on a Label inside it to preserve the scrub cursor.
+
+Form preserves native `onSubmit`/`action` and typed `onFormSubmit`. Callers supply
+the generic value shape; arbitrary JSX names do not infer a runtime schema.
+Registered Field values feed `onFormSubmit`, while native FormData follows native
+control semantics. Select and Combobox submit serialized values configured by
+`itemToStringValue`, even when selection and callback values are objects. The
+Form generic must match that submission representation; it does not transform
+runtime values. Base UI 1.8 async validators do not block submission while
+pending; request orchestration and pending submission stay with the consumer.
+
+Field's style module exposes one export per element role and two size bundles.
+Public composition uses the styled components; these exports are for component
+implementations that borrow Field's canonical appearance:
 
 | Element                                      | Export                                                              |
 | -------------------------------------------- | ------------------------------------------------------------------- |
-| `Field.Root` wrapper                         | `fieldStyles.root`                                                  |
+| `Field.Root`                                 | `fieldStyles.root`                                                  |
 | Labels, description, error                   | `fieldStyles.label`, `fieldStyles.description`, `fieldStyles.error` |
 | Text input (`input`, `textarea`)             | `fieldInputStyles[size]`                                            |
 | Button-like trigger (select, combobox shell) | `fieldControlStyles[size]`                                          |
@@ -249,14 +288,14 @@ stylex.props(modalChromeStyles.surface, drawerParts.popup);
   `ThemeProvider` and semantic tokens; do not infer it from system preference.
 - When parent interaction only changes child values, define local custom
   properties on the parent and consume them from the child's direct
-  `[data-*]` state selectors. Switch uses this pattern so its state matrix
-  remains declarative and component-local.
+  `[data-*]` state selectors. Switch establishes its interaction variables on
+  the control itself so its state matrix remains independent of label ancestry.
 - For parent-child relationships that cannot be expressed through inherited
   values, define a component-scoped marker in a `.stylex.ts` file, include it
   in the ancestor's `stylex.props(...)`, and use `stylex.when.ancestor()` in
-  the child style. Checkbox and Radio use family-specific label markers for
-  label-driven control feedback. Never use `stylex.defaultMarker()` for form
-  controls because interaction from outer containers can leak into the control.
+  the child style. Checkbox and Radio feedback belongs to each control; the
+  Checkbox indicator inherits its control color. Never use `stylex.defaultMarker()`
+  for form controls because interaction from outer containers can leak into the control.
 - Use `defineVars()` only for a real shared cascading or theming contract.
   Interaction-only custom properties stay beside the component styles rather
   than in a variables sidecar.
@@ -332,16 +371,13 @@ Named component markers expose intentional `stylex.when` boundaries. Import
 them directly from their owning `.stylex.ts` module; they are not default
 markers and are not re-exported through component barrels.
 
-| Marker                | Owner                                    | Applied to                                                                                               |
-| --------------------- | ---------------------------------------- | -------------------------------------------------------------------------------------------------------- |
-| `buttonMarker`        | `components/button/button.stylex.ts`     | Button, IconButton, and shared Button-root controls                                                      |
-| `checkboxLabelMarker` | `components/checkbox/checkbox.stylex.ts` | Checkbox labels that drive component-owned control and indicator interaction styles                      |
-| `fieldMarker`         | `components/field/field.stylex.ts`       | Field roots observed by descendant form-control styles                                                   |
-| `itemMarker`          | `components/menu/menu-item.stylex.ts`    | Menu rows and components composing the canonical row, including Select, Combobox, and Autocomplete items |
-| `labelMarker`         | `components/field/field.stylex.ts`       | Label elements associated with form controls                                                             |
-| `radioLabelMarker`    | `components/radio/radio.stylex.ts`       | Radio labels that drive component-owned control interaction styles                                       |
-| `toggleMarker`        | `components/toggle/toggle.stylex.ts`     | Toggle controls observed by joined-group sibling and ancestor rules                                      |
-| `toggleGroupMarker`   | `components/toggle/toggle.stylex.ts`     | ToggleGroup roots that opt into join radius and stacking                                                 |
+| Marker              | Owner                                 | Applied to                                                                                               |
+| ------------------- | ------------------------------------- | -------------------------------------------------------------------------------------------------------- |
+| `buttonMarker`      | `components/button/button.stylex.ts`  | Button, IconButton, and shared Button-root controls                                                      |
+| `fieldMarker`       | `components/field/field.stylex.ts`    | Field roots observed by descendant form-control styles                                                   |
+| `itemMarker`        | `components/menu/menu-item.stylex.ts` | Menu rows and components composing the canonical row, including Select, Combobox, and Autocomplete items |
+| `toggleMarker`      | `components/toggle/toggle.stylex.ts`  | Toggle controls observed by joined-group sibling and ancestor rules                                      |
+| `toggleGroupMarker` | `components/toggle/toggle.stylex.ts`  | ToggleGroup roots that opt into join radius and stacking                                                 |
 
 ```tsx
 import * as stylex from "@stylexjs/stylex";

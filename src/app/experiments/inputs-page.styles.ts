@@ -2,20 +2,9 @@ import * as stylex from "@stylexjs/stylex";
 import { breakpoints } from "@/styles/constants.stylex";
 import { tokens } from "@/theme/tokens.stylex";
 
-export const comparisonLabelReset = `
-	[data-field-label-hidden] > * > :first-child,
-	[data-radio-comparison] > * > :first-child {
-		clip: rect(0 0 0 0);
-		clip-path: inset(50%);
-		height: 1px;
-		overflow: hidden;
-		position: absolute;
-		white-space: nowrap;
-		width: 1px;
-	}
-`;
-
 export const inputsPageStyles = stylex.create({
+	formRegion: { width: "fit-content" },
+	formResult: { overflowWrap: "anywhere", whiteSpace: "pre-wrap" },
 	horizontalOverflow: { paddingBlock: tokens["--space-1"], overflowX: "auto" },
 	fieldSizingCanvas: { minWidth: "82rem" },
 	fieldHeaderGrid: {
@@ -136,10 +125,10 @@ export const inputsPageStyles = stylex.create({
 		minHeight: tokens["--size-control-lg"],
 		width: "100%",
 	},
-	formFieldGrid: {
+	formFieldColumns: {
 		gridTemplateColumns: {
 			default: "minmax(0, 1fr)",
-			[breakpoints.sm]: "repeat(2, minmax(0, 1fr))",
+			[breakpoints.sm]: "minmax(10rem, 1fr) minmax(0, 2fr)",
 		},
 	},
 });

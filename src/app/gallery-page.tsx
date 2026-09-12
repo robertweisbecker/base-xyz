@@ -1,4 +1,5 @@
-import { type ReactNode } from "react";
+import x from "@stylexjs/atoms";
+import { useId, useState, type ReactNode } from "react";
 import * as stylex from "@stylexjs/stylex";
 import {
 	AgentActionApproval,
@@ -42,11 +43,15 @@ import {
 	Dialog,
 	Drawer,
 	EmptyState,
+	Field,
+	Fieldset,
+	Form,
 	Heading,
 	IconButton,
 	InfoTip,
 	InputGroup,
 	Item,
+	Label,
 	Link,
 	LinkPreview,
 	Loader,
@@ -219,16 +224,18 @@ function getComponentCells(): GalleryCell[] {
 		},
 		{
 			title: "Checkbox",
-			content: <Checkbox label="Max bandwidth" defaultChecked />,
+			content: (
+				<Field.Root>
+					<Stack render={<Label variant="item" />} orientation="horizontal" align="start" gap={2}>
+						<Checkbox defaultChecked />
+						Max bandwidth
+					</Stack>
+				</Field.Root>
+			),
 		},
 		{
 			title: "CheckboxGroup",
-			content: (
-				<CheckboxGroup label="Files" defaultValue={["readme"]}>
-					<Checkbox value="readme" label="Readme" />
-					<Checkbox value="changelog" label="Changelog" />
-				</CheckboxGroup>
-			),
+			content: <CheckboxGroupGalleryExample />,
 		},
 		{
 			title: "Code",
@@ -320,7 +327,10 @@ function getComponentCells(): GalleryCell[] {
 							<Dialog.Description>Adjust shared project settings.</Dialog.Description>
 						</Dialog.Header>
 						<Dialog.Body>
-							<TextField label="Name" defaultValue="StyleX Lab" />
+							<Field.Root>
+								<Label>Name</Label>
+								<TextField defaultValue="StyleX Lab" />
+							</Field.Root>
 						</Dialog.Body>
 						<Dialog.Footer>
 							<Dialog.Close render={<Button variant="ghost" />}>Cancel</Dialog.Close>
@@ -370,6 +380,38 @@ function getComponentCells(): GalleryCell[] {
 					<Button size="sm">Create project</Button>
 				</EmptyState>
 			),
+		},
+		{
+			title: "Field",
+			content: (
+				<Field.Root name="project-slug">
+					<Label>Project slug</Label>
+					<TextField defaultValue="design-system" />
+					<Field.Description>Used in your project URL.</Field.Description>
+				</Field.Root>
+			),
+		},
+		{
+			title: "Fieldset",
+			content: (
+				<Fieldset.Root>
+					<Fieldset.Legend>Contact details</Fieldset.Legend>
+					<Stack gap={3} mt={2}>
+						<Field.Root name="given-name">
+							<Label>Given name</Label>
+							<TextField defaultValue="Ada" />
+						</Field.Root>
+						<Field.Root name="family-name">
+							<Label>Family name</Label>
+							<TextField defaultValue="Lovelace" />
+						</Field.Root>
+					</Stack>
+				</Fieldset.Root>
+			),
+		},
+		{
+			title: "Form",
+			content: <FormGalleryExample />,
 		},
 		{
 			title: "Heading",
@@ -426,6 +468,17 @@ function getComponentCells(): GalleryCell[] {
 					label="Projects"
 					startSlot={<FolderOpenIcon aria-hidden size="1.25em" weight="duotone" />}
 				/>
+			),
+		},
+		{
+			title: "Label",
+			content: (
+				<Field.Root>
+					<Stack render={<Label variant="item" />} orientation="horizontal" align="center" gap={2}>
+						<Checkbox defaultChecked />
+						Send me a copy
+					</Stack>
+				</Field.Root>
 			),
 		},
 		{
@@ -509,7 +562,16 @@ function getComponentCells(): GalleryCell[] {
 		},
 		{
 			title: "NumberField",
-			content: <NumberField label="Seats" defaultValue={12} inputWidth="7ch" />,
+			content: (
+				<Field.Root>
+					<NumberField.Root defaultValue={12}>
+						<NumberField.ScrubArea>
+							<Label xstyle={x.cursor.inherit}>Seats</Label>
+						</NumberField.ScrubArea>
+						<NumberField.Control inputWidth="7ch" />
+					</NumberField.Root>
+				</Field.Root>
+			),
 		},
 		{
 			title: "Popover",
@@ -538,18 +600,62 @@ function getComponentCells(): GalleryCell[] {
 		{
 			title: "Radio",
 			content: (
-				<RadioGroup label="Selection" defaultValue="selected">
-					<Radio value="selected" label="Selected option" />
-				</RadioGroup>
+				<Fieldset.Root>
+					<Fieldset.Legend>Selection</Fieldset.Legend>
+					<Field.Root name="selection" mt={3}>
+						<RadioGroup defaultValue="selected">
+							<Stack gap={3}>
+								<Field.Item>
+									<Stack
+										render={<Label variant="item" />}
+										orientation="horizontal"
+										align="start"
+										gap={2}
+									>
+										<Radio value="selected" />
+										Selected option
+									</Stack>
+								</Field.Item>
+							</Stack>
+						</RadioGroup>
+					</Field.Root>
+				</Fieldset.Root>
 			),
 		},
 		{
 			title: "RadioGroup",
 			content: (
-				<RadioGroup label="Fave ape" defaultValue="one">
-					<Radio value="one" label="Caesar" />
-					<Radio value="two" label="Koba" />
-				</RadioGroup>
+				<Fieldset.Root>
+					<Fieldset.Legend>Fave ape</Fieldset.Legend>
+					<Field.Root name="ape" mt={3}>
+						<RadioGroup defaultValue="one">
+							<Stack gap={3}>
+								<Field.Item>
+									<Stack
+										render={<Label variant="item" />}
+										orientation="horizontal"
+										align="start"
+										gap={2}
+									>
+										<Radio value="one" />
+										Caesar
+									</Stack>
+								</Field.Item>
+								<Field.Item>
+									<Stack
+										render={<Label variant="item" />}
+										orientation="horizontal"
+										align="start"
+										gap={2}
+									>
+										<Radio value="two" />
+										Koba
+									</Stack>
+								</Field.Item>
+							</Stack>
+						</RadioGroup>
+					</Field.Root>
+				</Fieldset.Root>
 			),
 		},
 		{
@@ -586,7 +692,7 @@ function getComponentCells(): GalleryCell[] {
 			title: "Select",
 			content: (
 				<Select.Root defaultValue="v1">
-					<Select.Trigger placeholder="Select version" />
+					<Select.Trigger aria-label="Version" placeholder="Select version" />
 					<Select.Popup>
 						<Select.List>
 							<Select.Item value="v1">Version 1</Select.Item>
@@ -656,7 +762,14 @@ function getComponentCells(): GalleryCell[] {
 		},
 		{
 			title: "Switch",
-			content: <Switch label="Realtime sync" defaultChecked size="sm" />,
+			content: (
+				<Field.Root>
+					<Stack orientation="horizontal" align="center" justify="space-between" gap={2}>
+						<Label variant="item">Realtime sync</Label>
+						<Switch defaultChecked size="sm" />
+					</Stack>
+				</Field.Root>
+			),
 		},
 		{
 			title: "Table",
@@ -715,25 +828,25 @@ function getComponentCells(): GalleryCell[] {
 		{
 			title: "Textarea",
 			content: (
-				<Textarea
-					label="Message"
-					placeholder="Enter your name"
-					rows={2}
-					xstyle={styles.compactField}
-				/>
+				<Field.Root xstyle={styles.compactField}>
+					<Label>Message</Label>
+					<Textarea placeholder="Enter your name" rows={2} />
+				</Field.Root>
 			),
 		},
 		{
 			title: "TextField",
 			content: (
 				<div {...stylex.props(styles.controlStack)}>
-					<TextField label="Name" placeholder="Type something..." xstyle={styles.compactField} />
-					<TextField
-						label="Project"
-						defaultValue="Invalid"
-						error="Use at least 8 characters."
-						xstyle={styles.compactField}
-					/>
+					<Field.Root xstyle={styles.compactField}>
+						<Label>Name</Label>
+						<TextField placeholder="Type something..." />
+					</Field.Root>
+					<Field.Root invalid xstyle={styles.compactField}>
+						<Label>Project</Label>
+						<TextField defaultValue="Invalid" />
+						<Field.Error match>Use at least 8 characters.</Field.Error>
+					</Field.Root>
 				</div>
 			),
 		},
@@ -811,47 +924,88 @@ function getComponentCells(): GalleryCell[] {
 	];
 }
 
+function CheckboxGroupGalleryExample() {
+	const filesLegendId = useId();
+	return (
+		<Fieldset.Root>
+			<Fieldset.Legend id={filesLegendId}>Files</Fieldset.Legend>
+			<Field.Root name="files" mt={2}>
+				<CheckboxGroup defaultValue={["readme"]} aria-labelledby={filesLegendId}>
+					<Stack gap={3}>
+						<Field.Item>
+							<Stack
+								render={<Label variant="item" />}
+								orientation="horizontal"
+								align="start"
+								gap={2}
+							>
+								<Checkbox value="readme" />
+								Readme
+							</Stack>
+						</Field.Item>
+						<Field.Item>
+							<Stack
+								render={<Label variant="item" />}
+								orientation="horizontal"
+								align="start"
+								gap={2}
+							>
+								<Checkbox value="changelog" />
+								Changelog
+							</Stack>
+						</Field.Item>
+					</Stack>
+				</CheckboxGroup>
+			</Field.Root>
+		</Fieldset.Root>
+	);
+}
+
 function ComboboxGalleryExample({ multiple = false }: { multiple?: boolean }) {
 	if (multiple) {
 		return (
-			<Combobox.Root<string, true>
-				items={componentNames}
-				multiple
-				defaultValue={["React", "Solid"]}
-			>
-				<Combobox.Label>Libraries</Combobox.Label>
-				<Combobox.InputGroup variant="chips">
-					<Combobox.Chips>
-						<Combobox.Value>
-							{(value: string[]) => (
-								<>
-									{value.map((item) => (
-										<Combobox.Chip
-											key={item}
-											endSlot={<Combobox.ChipRemove aria-label={`Remove ${item}`} />}
-										>
-											{item}
-										</Combobox.Chip>
-									))}
-									<Combobox.Input placeholder={value.length > 0 ? "" : "Choose libraries"} />
-								</>
-							)}
-						</Combobox.Value>
-					</Combobox.Chips>
-				</Combobox.InputGroup>
-				<ComboboxGalleryPopup />
-			</Combobox.Root>
+			<Field.Root>
+				<Combobox.Root<string, true>
+					items={componentNames}
+					multiple
+					defaultValue={["React", "Solid"]}
+				>
+					<Combobox.Label>Libraries</Combobox.Label>
+					<Combobox.InputGroup variant="chips">
+						<Combobox.Chips>
+							<Combobox.Value>
+								{(value: string[]) => (
+									<>
+										{value.map((item) => (
+											<Combobox.Chip
+												key={item}
+												endSlot={<Combobox.ChipRemove aria-label={`Remove ${item}`} />}
+											>
+												{item}
+											</Combobox.Chip>
+										))}
+										<Combobox.Input placeholder={value.length > 0 ? "" : "Choose libraries"} />
+									</>
+								)}
+							</Combobox.Value>
+						</Combobox.Chips>
+					</Combobox.InputGroup>
+					<ComboboxGalleryPopup />
+				</Combobox.Root>
+			</Field.Root>
 		);
 	}
 
 	return (
-		<Combobox.Root items={componentNames}>
-			<Combobox.Label>Framework</Combobox.Label>
-			<Combobox.InputGroup>
-				<Combobox.Input placeholder="Select an issue..." />
-			</Combobox.InputGroup>
-			<ComboboxGalleryPopup />
-		</Combobox.Root>
+		<Field.Root>
+			<Combobox.Root items={componentNames}>
+				<Combobox.Label>Framework</Combobox.Label>
+				<Combobox.InputGroup>
+					<Combobox.Input placeholder="Select an issue..." />
+				</Combobox.InputGroup>
+				<ComboboxGalleryPopup />
+			</Combobox.Root>
+		</Field.Root>
 	);
 }
 
@@ -867,6 +1021,27 @@ function ComboboxGalleryPopup() {
 				)}
 			</Combobox.List>
 		</Combobox.Popup>
+	);
+}
+
+function FormGalleryExample() {
+	const [submitted, setSubmitted] = useState("");
+	return (
+		<Form<{ project: string }> onFormSubmit={({ project }) => setSubmitted(project)}>
+			<Stack gap={3}>
+				<Field.Root name="project">
+					<Label>Project name</Label>
+					<TextField defaultValue="Design system" required />
+					<Field.Error />
+				</Field.Root>
+				<Button type="submit" size="sm">
+					Save project
+				</Button>
+				<Text render={<output aria-label="Submitted project" />} size="1" color="muted">
+					{submitted ? `Submitted: ${submitted}` : "No project submitted."}
+				</Text>
+			</Stack>
+		</Form>
 	);
 }
 

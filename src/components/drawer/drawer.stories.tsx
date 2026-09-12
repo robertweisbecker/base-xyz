@@ -5,6 +5,8 @@ import { tokens } from "@/theme/tokens.stylex";
 
 import { AlertDialog } from "@/components/alert-dialog/alert-dialog";
 import { Button } from "@/components/button/button";
+import { Field } from "@/components/field/field";
+import { Label } from "@/components/label/label";
 import { Stack } from "@/components/layout/layout";
 import { createDrawerHandle } from "@/components/popup-handles";
 import { Text } from "@/components/text/text";
@@ -364,13 +366,15 @@ function CloseConfirmationDrawer() {
 								}}
 							>
 								<Drawer.Body>
-									<Textarea
-										label="Update"
-										value={draft}
-										onChange={(event) => setDraft(event.target.value)}
-										placeholder="What changed?"
-										rows={5}
-									/>
+									<Field.Root>
+										<Label>Update</Label>
+										<Textarea
+											value={draft}
+											onChange={(event) => setDraft(event.target.value)}
+											placeholder="What changed?"
+											rows={5}
+										/>
+									</Field.Root>
 								</Drawer.Body>
 								<Drawer.Footer>
 									<Drawer.Close render={<Button variant="secondary" />}>Cancel</Drawer.Close>

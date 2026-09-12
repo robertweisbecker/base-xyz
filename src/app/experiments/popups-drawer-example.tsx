@@ -1,5 +1,15 @@
 import { useState } from "react";
-import { Button, Checkbox, Drawer, Stack, Text, Textarea, TextField } from "@/components";
+import {
+	Button,
+	Checkbox,
+	Drawer,
+	Field,
+	Label,
+	Stack,
+	Text,
+	Textarea,
+	TextField,
+} from "@/components";
 import { popupsPageStyles as styles } from "./popups-page.styles";
 
 const drawerSnapPoints: Array<string | number> = ["22rem", "36rem", 1];
@@ -82,9 +92,20 @@ export function DrawerExample() {
 function DrawerDetails() {
 	return (
 		<Stack gap={4}>
-			<TextField label="Project name" defaultValue="BaseX lab" />
-			<Checkbox defaultChecked label="Require preview authentication" />
-			<Textarea label="Description" rows={4} />
+			<Field.Root>
+				<Label>Project name</Label>
+				<TextField defaultValue="BaseX lab" />
+			</Field.Root>
+			<Field.Root>
+				<Stack render={<Label variant="item" />} orientation="horizontal" align="start" gap={2}>
+					<Checkbox defaultChecked />
+					Require preview authentication
+				</Stack>
+			</Field.Root>
+			<Field.Root>
+				<Label>Description</Label>
+				<Textarea rows={4} />
+			</Field.Root>
 		</Stack>
 	);
 }

@@ -44,18 +44,16 @@ function ChoiceControlSizeRow({ size }: { size: FieldSize }) {
 			</Text>
 			<div {...stylex.props(styles.controlCell)}>
 				{choiceSize ? (
-					<div data-radio-comparison>
-						<RadioGroup defaultValue={size} label={`${size} radio`} size={choiceSize}>
-							<Radio label={`${size} radio`} value={size} visuallyHideLabel />
-						</RadioGroup>
-					</div>
+					<RadioGroup defaultValue={size} aria-label={`${size} radio`} size={choiceSize}>
+						<Radio aria-label={`${size} radio`} value={size} />
+					</RadioGroup>
 				) : (
 					<UnsupportedSize />
 				)}
 			</div>
 			<div {...stylex.props(styles.controlCell)}>
 				{choiceSize ? (
-					<Checkbox defaultChecked label={`${size} checkbox`} size={choiceSize} visuallyHideLabel />
+					<Checkbox defaultChecked aria-label={`${size} checkbox`} size={choiceSize} />
 				) : (
 					<UnsupportedSize />
 				)}
@@ -122,20 +120,17 @@ function ChoiceControlStateRow({
 
 function ComparisonRadio({ state }: { state: ChoiceControlState }) {
 	return (
-		<div data-radio-comparison>
-			<RadioGroup
-				defaultValue={state === "on" || state === "read-only-checked" ? state : undefined}
-				disabled={state === "disabled"}
-				label={`Radio ${formatComparisonLabel(state)}`}
-			>
-				<Radio
-					label={`Radio ${formatComparisonLabel(state)}`}
-					readOnly={state === "read-only" || state === "read-only-checked"}
-					value={state}
-					visuallyHideLabel
-				/>
-			</RadioGroup>
-		</div>
+		<RadioGroup
+			defaultValue={state === "on" || state === "read-only-checked" ? state : undefined}
+			disabled={state === "disabled"}
+			aria-label={`Radio ${formatComparisonLabel(state)}`}
+		>
+			<Radio
+				aria-label={`Radio ${formatComparisonLabel(state)}`}
+				readOnly={state === "read-only" || state === "read-only-checked"}
+				value={state}
+			/>
+		</RadioGroup>
 	);
 }
 
@@ -144,9 +139,8 @@ function ComparisonCheckbox({ state }: { state: ChoiceControlState }) {
 		<Checkbox
 			defaultChecked={state === "on" || state === "read-only-checked"}
 			disabled={state === "disabled"}
-			label={`Checkbox ${formatComparisonLabel(state)}`}
+			aria-label={`Checkbox ${formatComparisonLabel(state)}`}
 			readOnly={state === "read-only" || state === "read-only-checked"}
-			visuallyHideLabel
 		/>
 	);
 }
@@ -177,7 +171,7 @@ function ValueControlSizeRow({ size }: { size: FieldSize }) {
 				{size}
 			</Text>
 			<div {...stylex.props(styles.controlCell)}>
-				<Switch defaultChecked label={`${size} switch`} size={size} visuallyHideLabel />
+				<Switch defaultChecked aria-label={`${size} switch`} size={size} />
 			</div>
 			<div {...stylex.props(styles.sliderCell)}>
 				<ComparisonSlider label={`${size} slider`} size={size} value={60} />
@@ -242,8 +236,7 @@ function ComparisonSwitch({ state }: { state: ValueControlState }) {
 		<Switch
 			defaultChecked={state !== "resting"}
 			disabled={state === "disabled"}
-			label={`Switch ${valueControlStateLabels[state]}`}
-			visuallyHideLabel
+			aria-label={`Switch ${valueControlStateLabels[state]}`}
 		/>
 	);
 }

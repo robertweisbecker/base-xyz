@@ -47,9 +47,13 @@ The design system needs a smaller ownership boundary:
    root may receive margins; its internal parts do not inherit that surface.
    A part can be reconsidered only when it gains an independently useful
    normal-flow composition contract.
-5. **Field margins belong to the wrapper.** `TextField`, `Textarea`,
-   `NumberField`, `Select.Root`, and `Combobox.Root` apply common margins to the
-   field wrapper, not to an inner input, button, or control.
+5. **Field association and control placement have separate owners.** `Form`,
+   `Field.Root`, and `Fieldset.Root` resolve margins on their own hosts. Bare
+   controls such as `TextField`, `Textarea`, and `Checkbox` resolve margins on
+   the actual control regardless of surrounding Field context. Move margins
+   for a label/control/description composition to its explicit `Field.Root`.
+   `NumberField.Root` owns its real widget host; node-less `Select.Root` and
+   `Combobox.Root` have no margin or host-style surface.
 6. **Internal spacing stays semantic.** Padding, gaps, control dimensions, and
    optical alignment inside composed components remain owned by base styles and
    variants. For example, `Card` padding remains controlled by its `size`
@@ -108,6 +112,21 @@ adapter and resolvers are internal module exports, not public barrel API. There
 is no global style-prop denylist, HOC, component registry, or generic prop
 engine. `Box`, `Stack`, and `Grid` retain a private broad-layout resolver and
 private DOM stripping because that complexity belongs to their module.
+
+Form has no implicit layout. Field.Root keeps a small vertical default while
+allowing arbitrary nested layout or an explicit `xstyle` override. One Field
+owns one logical value; multiple independent values use separate Fields.
+Fieldset supplies group semantics, not a replacement field context. Label,
+Field.Item, Field.Description, and Field.Error use an explicit Field.Root.
+Standalone controls use native labels or accessible-name attributes.
+
+Field.Control is an unstyled registration bridge for native/custom controls;
+Base UI controls already register and must not be wrapped a second time.
+Field.Validity is a render-only alias without margins or styling props. Label,
+control, and other internal parts do not acquire margins from the Field owner.
+Consumers nest Grid/Stack inside a Field or override its `xstyle`; arbitrary
+same-host render composition does not promise to resolve competing atomic
+classes.
 
 ### Override channels and precedence
 

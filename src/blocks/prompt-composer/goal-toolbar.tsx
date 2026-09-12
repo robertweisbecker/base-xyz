@@ -10,6 +10,8 @@ import {
 	IconButton,
 	Collapsible,
 	Dialog,
+	Field,
+	Label,
 	ScrollArea,
 	Textarea,
 	Tooltip,
@@ -172,13 +174,15 @@ export function GoalToolbar({
 					</Dialog.Header>
 					<form onSubmit={handleSave}>
 						<Dialog.Body>
-							<Textarea
-								autoFocus
-								label="Goal description"
-								rows={5}
-								value={draftDescription}
-								onChange={(event) => setDraftDescription(event.currentTarget.value)}
-							/>
+							<Field.Root>
+								<Label>Goal description</Label>
+								<Textarea
+									autoFocus
+									rows={5}
+									value={draftDescription}
+									onChange={(event) => setDraftDescription(event.currentTarget.value)}
+								/>
+							</Field.Root>
 						</Dialog.Body>
 						<Dialog.Footer>
 							<Dialog.Close render={<Button variant="neutral" />}>Cancel</Dialog.Close>

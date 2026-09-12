@@ -1,3 +1,6 @@
+import x from "@stylexjs/atoms";
+import { Field } from "@/components/field/field";
+import { Label } from "@/components/label/label";
 import { Field as BaseField } from "@base-ui/react/field";
 import { MinusIcon } from "@phosphor-icons/react/dist/csr/Minus";
 import { PlusIcon } from "@phosphor-icons/react/dist/csr/Plus";
@@ -396,16 +399,21 @@ function ControlledExamples() {
 						<Slider.Control markers={{ every: 2 }}>
 							<Slider.Thumb />
 						</Slider.Control>
-						<NumberField
-							inputWidth="6ch"
-							label="Value"
-							max={max}
-							min={min}
-							onValueChange={(value) => setNumberValue(value ?? min)}
-							size="sm"
-							step={step}
-							value={numberValue}
-						/>
+						<Field.Root>
+							<NumberField.Root
+								max={max}
+								min={min}
+								onValueChange={(value) => setNumberValue(value ?? min)}
+								size="sm"
+								step={step}
+								value={numberValue}
+							>
+								<NumberField.ScrubArea>
+									<Label xstyle={x.cursor.inherit}>Value</Label>
+								</NumberField.ScrubArea>
+								<NumberField.Control inputWidth="6ch" />
+							</NumberField.Root>
+						</Field.Root>
 					</Slider.Row>
 				</Slider.Root>
 			</Stack>

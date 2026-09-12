@@ -6,6 +6,8 @@ import { tokens } from "@/theme/tokens.stylex";
 
 import { AlertDialog } from "@/components/alert-dialog/alert-dialog";
 import { Button } from "@/components/button/button";
+import { Field } from "@/components/field/field";
+import { Label } from "@/components/label/label";
 import { Heading } from "@/components/heading/heading";
 import { Stack } from "@/components/layout/layout";
 import { ScrollArea } from "@/components/scroll-area/scroll-area";
@@ -354,13 +356,15 @@ function CloseConfirmationDialog() {
 					}}
 				>
 					<Dialog.Body>
-						<Textarea
-							label="Note"
-							value={draft}
-							onChange={(event) => setDraft(event.target.value)}
-							placeholder="Capture a thought…"
-							rows={5}
-						/>
+						<Field.Root>
+							<Label>Note</Label>
+							<Textarea
+								value={draft}
+								onChange={(event) => setDraft(event.target.value)}
+								placeholder="Capture a thought…"
+								rows={5}
+							/>
+						</Field.Root>
 					</Dialog.Body>
 					<Dialog.Footer>
 						<Dialog.Close render={<Button variant="neutral" />}>Cancel</Dialog.Close>

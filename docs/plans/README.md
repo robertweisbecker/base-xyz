@@ -10,14 +10,13 @@ plans are not renumbered to fill gaps. The highest allocated identifier is
 
 ## Execution order & status
 
-| Plan                                          | Title                                                                                                          | Priority | Effort | Depends on                                       | Status                               |
-| --------------------------------------------- | -------------------------------------------------------------------------------------------------------------- | -------: | -----: | ------------------------------------------------ | ------------------------------------ |
-| [004](./004-form-field-primitives.md)         | [Make inputs standalone and compose fields explicitly](https://github.com/robertweisbecker/base-xyz/issues/19) |       P1 |      L | Prerequisites merged                             | IN PROGRESS                          |
-| [003](./003-description-list-component.md)    | Add a semantic Description list component                                                                      |       P2 |      M | —                                                | TODO; intentionally local            |
-| [008](./008-migrate-from-npm-to-pnpm.md)      | Migrate repository workflows to pnpm 11                                                                        |       P2 |      M | #65 landed; idle queue                           | TODO; intentionally local            |
-| [005](./005-autocomplete-component.md)        | Add a free-form Autocomplete component                                                                         |       P2 |      M | Landed #19 plus a real consumer                  | TODO — deferred; intentionally local |
-| [009](./009-relative-time-helper.md)          | [Investigate a relative-time helper](https://github.com/robertweisbecker/base-xyz/pull/53)                     |       P3 |      S | Real timestamp consumer; static/live requirement | TODO — deferred                      |
-| [Stepper pagination](./stepper-pagination.md) | Evaluate shared Stepper pagination controls                                                                    |       P3 |      S | Second real consumer                             | TODO — deferred                      |
+| Plan                                          | Title                                                                                      | Priority | Effort | Depends on                                       | Status                               |
+| --------------------------------------------- | ------------------------------------------------------------------------------------------ | -------: | -----: | ------------------------------------------------ | ------------------------------------ |
+| [003](./003-description-list-component.md)    | Add a semantic Description list component                                                  |       P2 |      M | —                                                | TODO; intentionally local            |
+| [008](./008-migrate-from-npm-to-pnpm.md)      | Migrate repository workflows to pnpm 11                                                    |       P2 |      M | #65 landed; idle queue                           | TODO; intentionally local            |
+| [005](./005-autocomplete-component.md)        | Add a free-form Autocomplete component                                                     |       P2 |      M | Landed #19 plus a real consumer                  | TODO — deferred; intentionally local |
+| [009](./009-relative-time-helper.md)          | [Investigate a relative-time helper](https://github.com/robertweisbecker/base-xyz/pull/53) |       P3 |      S | Real timestamp consumer; static/live requirement | TODO — deferred                      |
+| [Stepper pagination](./stepper-pagination.md) | Evaluate shared Stepper pagination controls                                                |       P3 |      S | Second real consumer                             | TODO — deferred                      |
 
 Status values: TODO | IN PROGRESS | DONE | BLOCKED (with one-line reason) |
 REJECTED (with one-line rationale — finding fixed independently or approach
@@ -46,11 +45,12 @@ The `.scratch/` archive is ignored and local to the checkout; never force-add it
 This policy starts on 2026-09-03 and is not retroactive. Older retired plans
 are intentionally not reconstructed here.
 
-| Plan | Title                                            | Final status | Durable evidence                                                                                                                                         |
-| ---- | ------------------------------------------------ | ------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| 007  | Decompose DataTable orchestration                | DONE         | [Issue #26](https://github.com/robertweisbecker/base-xyz/issues/26); [PR #47](https://github.com/robertweisbecker/base-xyz/pull/47), merged as `e168ac3` |
-| 010  | Give CopyButton a canonical component owner      | DONE         | [Issue #58](https://github.com/robertweisbecker/base-xyz/issues/58); [PR #75](https://github.com/robertweisbecker/base-xyz/pull/75), merged as `551c7ad` |
-| 011  | Preserve NavList contracts across private owners | DONE         | [Issue #18](https://github.com/robertweisbecker/base-xyz/issues/18); [PR #76](https://github.com/robertweisbecker/base-xyz/pull/76), merged as `a44f5b3` |
+| Plan | Title                                                | Final status | Durable evidence                                                                                                                                         |
+| ---- | ---------------------------------------------------- | ------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 004  | Make inputs standalone and compose fields explicitly | DONE         | [Issue #19](https://github.com/robertweisbecker/base-xyz/issues/19), implementation and verification record                                              |
+| 007  | Decompose DataTable orchestration                    | DONE         | [Issue #26](https://github.com/robertweisbecker/base-xyz/issues/26); [PR #47](https://github.com/robertweisbecker/base-xyz/pull/47), merged as `e168ac3` |
+| 010  | Give CopyButton a canonical component owner          | DONE         | [Issue #58](https://github.com/robertweisbecker/base-xyz/issues/58); [PR #75](https://github.com/robertweisbecker/base-xyz/pull/75), merged as `551c7ad` |
+| 011  | Preserve NavList contracts across private owners     | DONE         | [Issue #18](https://github.com/robertweisbecker/base-xyz/issues/18); [PR #76](https://github.com/robertweisbecker/base-xyz/pull/76), merged as `a44f5b3` |
 
 ## Dependency notes
 
@@ -64,8 +64,8 @@ are intentionally not reconstructed here.
   and input/focus [PR #74](https://github.com/robertweisbecker/base-xyz/pull/74)
   (`8665fc1`) are merged too. Form/Field retains its own baseline and verification gates.
 - NavList is 011 because PR #53 reserved relative-time 009 earlier. CopyButton
-  remains 010. Reconcile PR #53's older index before merge; its branch must not
-  reset the next number to 010. Never reuse 009 if the investigation is rejected.
+  remains 010. PR #53 is closed; its reconciled investigation remains deferred
+  in Plan 009. Never reuse 009 if the investigation is rejected.
 - CopyButton's canonical owner is now under components; preserve the legacy block
   imports and the merged local ref helper. Plans 003/004 share public barrel/gallery
   or index files; reconcile additions without drops.
@@ -93,8 +93,7 @@ are intentionally not reconstructed here.
   by #20. Stepper pagination likewise waits for a second consumer; retain optional
   `completeOnVisit` presentation while consumers own workflow validation.
 - Keep issue motivation, acceptance, queue state, and decisions when retiring
-  temporary full-plan mirrors. PR #53's description carries the reconciled
-  investigation while its older branch awaits synchronization.
+  temporary full-plan mirrors.
 
 ## Short backlog issues
 
@@ -103,7 +102,6 @@ separate full plans would duplicate the handoff. GitHub owns live queue state.
 
 | Issue                                                         | Scope                                                       | Priority | Effort |
 | ------------------------------------------------------------- | ----------------------------------------------------------- | -------- | ------ |
-| [#61](https://github.com/robertweisbecker/base-xyz/issues/61) | Isolate independent Tooltip roots inside groups             | P1       | S      |
 | [#42](https://github.com/robertweisbecker/base-xyz/issues/42) | Triage Popover arrow removal and retained Tooltip ownership | P2       | S      |
 
 ## Findings considered and rejected

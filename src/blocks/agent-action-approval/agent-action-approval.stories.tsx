@@ -1,7 +1,17 @@
 import { ChatCircleDotsIcon } from "@phosphor-icons/react/dist/csr/ChatCircleDots";
 import { GitPullRequestIcon } from "@phosphor-icons/react/dist/csr/GitPullRequest";
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { Badge, Code, Button, Checkbox, CodeBlock, Collapsible, Separator } from "@/components";
+import {
+	Badge,
+	Code,
+	Button,
+	Checkbox,
+	CodeBlock,
+	Collapsible,
+	Field,
+	Label,
+	Separator,
+} from "@/components";
 import { Stack } from "@/components/layout/layout";
 import { Text } from "@/components/text/text";
 
@@ -72,15 +82,19 @@ export const Examples: Story = {
 						</Collapsible.Root>
 					</AgentActionApproval.Content>
 					<AgentActionApproval.Footer>
-						<Checkbox
-							label={
-								<>
+						<Field.Root>
+							<Stack
+								render={<Label variant="item" />}
+								orientation="horizontal"
+								align="start"
+								gap={2}
+							>
+								<Checkbox name="remember-message-approval" size="sm" />
+								<span>
 									Auto-approve <strong>Send message</strong> actions
-								</>
-							}
-							name="remember-message-approval"
-							size="sm"
-						/>
+								</span>
+							</Stack>
+						</Field.Root>
 						<AgentActionApproval.Actions>
 							<Button variant="secondary">Cancel</Button>
 							<Button>Allow</Button>
