@@ -34,7 +34,8 @@ Use stable fixture hooks, then assert public roles, ARIA state, relationships, a
 ## Tooling and concurrent work
 
 - Vet Doctor findings against source, ADRs, and browser evidence before fixes or issue publication; scores/severity are investigation leads. Preserve `doctor.config.jsonc`'s `only-export-components` waiver for StyleX/compound namespace colocation.
-- During parallel work, only the primary or designated validator runs `verify:full`; others run focused checks and report evidence.
+- Parallelize independent source work; serialize dependency/browser installs, builds, Playwright, live browser QA, and `verify:full` across agents. The primary agent schedules these heavyweight jobs; others run focused checks when released.
+- Reuse an installation when its lockfile is unchanged. Stop task-owned servers, browsers, and watchers after validation; preserve others' sessions. If contention causes a load timeout, drain heavyweight work and rerun unchanged rather than adding retries or raising timeouts.
 - Storybook Playwright discovers `tests/` except `tests/app/`; app Playwright owns that subtree. Ports default to `6106`/`6107`, respectively. If occupied by another checkout, set `PLAYWRIGHT_STORYBOOK_PORT`/`PLAYWRIGHT_APP_PORT`; leave its server running and test this checkout's build.
 - For transient missing stories or `Invalid empty selector`, reload/restart the affected dev server and reacquire browser references before changing valid code.
 - Fix in-scope failures; preserve concurrent work. Report unrelated failures and blockers with the failing command, evidence, and missing dependency or decision.
