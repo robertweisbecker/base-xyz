@@ -38,11 +38,13 @@ const parts = stylex.create({
 		flexDirection: "column",
 		minWidth: 0,
 	},
-	label: {
+	labelColor: {
 		color: {
 			"[data-disabled]": tokens["--fg-subtle"],
 			default: tokens["--fg"],
 		},
+	},
+	label: {
 		lineHeight: tokens["--line-height-2"],
 	},
 	groupLabel: {
@@ -142,9 +144,15 @@ const parts = stylex.create({
 
 export const fieldStyles = {
 	root: [fieldMarker, parts.root],
-	label: [labelMarker, textStyles.supporting, fontWeightStyles.medium, parts.label],
+	label: [
+		labelMarker,
+		textStyles.supporting,
+		fontWeightStyles.medium,
+		parts.labelColor,
+		parts.label,
+	],
 	groupLabel: [textStyles.body, fontWeightStyles.semibold, parts.groupLabel],
-	itemLabel: textStyles.label,
+	itemLabel: [textStyles.label, parts.labelColor],
 	description: [textStyles.supporting, parts.description],
 	error: [textStyles.supporting, parts.error],
 	requiredIndicator: parts.requiredIndicator,

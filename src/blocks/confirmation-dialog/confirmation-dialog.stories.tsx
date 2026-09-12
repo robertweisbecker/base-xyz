@@ -1,7 +1,7 @@
 import { PaperPlaneTiltIcon } from "@phosphor-icons/react/dist/csr/PaperPlaneTilt";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { StrictMode, useState, type ComponentProps, type ReactElement } from "react";
-import { Button, Checkbox, Separator } from "@/components";
+import { Button, Checkbox, Field, Label, Separator } from "@/components";
 import { Stack } from "@/components/layout/layout";
 import { Text } from "@/components/text/text";
 
@@ -105,7 +105,17 @@ export const Examples: Story = {
 						The project will remain available to workspace administrators from the archive.
 					</ConfirmationDialog.Body>
 					<ConfirmationDialog.Footer>
-						<Checkbox label="Do not ask again" name="skip-archive-confirmation" />
+						<Field.Root>
+							<Stack
+								render={<Label variant="item" />}
+								orientation="horizontal"
+								align="start"
+								gap={2}
+							>
+								<Checkbox name="skip-archive-confirmation" />
+								Do not ask again
+							</Stack>
+						</Field.Root>
 						<ConfirmationDialog.Actions>
 							<ConfirmationDialog.Cancel>Cancel</ConfirmationDialog.Cancel>
 							<ConfirmationDialog.Confirm>Archive</ConfirmationDialog.Confirm>

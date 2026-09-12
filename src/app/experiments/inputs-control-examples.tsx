@@ -55,7 +55,7 @@ function ChoiceControlSizeRow({ size }: { size: FieldSize }) {
 			</div>
 			<div {...stylex.props(styles.controlCell)}>
 				{choiceSize ? (
-					<Checkbox defaultChecked label={`${size} checkbox`} size={choiceSize} visuallyHideLabel />
+					<Checkbox defaultChecked aria-label={`${size} checkbox`} size={choiceSize} />
 				) : (
 					<UnsupportedSize />
 				)}
@@ -144,9 +144,8 @@ function ComparisonCheckbox({ state }: { state: ChoiceControlState }) {
 		<Checkbox
 			defaultChecked={state === "on" || state === "read-only-checked"}
 			disabled={state === "disabled"}
-			label={`Checkbox ${formatComparisonLabel(state)}`}
+			aria-label={`Checkbox ${formatComparisonLabel(state)}`}
 			readOnly={state === "read-only" || state === "read-only-checked"}
-			visuallyHideLabel
 		/>
 	);
 }

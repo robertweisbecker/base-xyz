@@ -1,80 +1,59 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import * as stylex from "@stylexjs/stylex";
-import { useState } from "react";
+import { useRef, useState } from "react";
+import { Button, Field, Form, Label } from "@/components";
 import { Heading } from "@/components/heading/heading";
 import { Stack } from "@/components/layout/layout";
 import { Separator } from "@/components/separator/separator";
 import { tokens } from "@/theme/tokens.stylex";
 
-import { Checkbox, CheckboxGroup, type CheckboxSize } from "./checkbox";
+import { Checkbox, CheckboxGroup, type CheckboxProps } from "./checkbox";
 
-type CheckboxStoryArgs = {
-	label: string;
-	description: string;
-	defaultChecked: boolean;
-	disabled: boolean;
-	invalid: boolean;
-	readOnly: boolean;
-	required: boolean;
-	indeterminate: boolean;
-	size: CheckboxSize;
-	visuallyHideLabel: boolean;
-	_groupDefaultValue: string[];
-	_groupDisabled: boolean;
+type CheckboxStoryArgs = CheckboxProps & {
+	_label: string;
+	_description: string;
+	_invalid: boolean;
 };
 
 const meta = {
 	title: "Components/Checkbox",
 	component: Checkbox,
 	args: {
-		label: "Product updates",
-		description: "Receive news about features and improvements.",
+		_label: "Product updates",
+		_description: "Receive news about features and improvements.",
 		defaultChecked: true,
 		disabled: false,
-		invalid: false,
+		_invalid: false,
 		readOnly: false,
 		required: false,
 		indeterminate: false,
 		size: "md",
-		visuallyHideLabel: false,
-		_groupDefaultValue: ["email"],
-		_groupDisabled: false,
 	},
 	argTypes: {
-		label: { control: "text" },
-		description: { control: "text" },
+		"aria-invalid": { control: "boolean" },
+		_label: { control: "text" },
+		_description: { control: "text" },
 		defaultChecked: { control: "boolean" },
 		disabled: { control: "boolean" },
-		invalid: { control: "boolean" },
+		_invalid: { control: "boolean" },
 		readOnly: { control: "boolean" },
 		required: { control: "boolean" },
 		indeterminate: { control: "boolean" },
-		size: {
-			control: "inline-radio",
-			options: ["sm", "md"],
-		},
-		visuallyHideLabel: { control: "boolean" },
-		_groupDefaultValue: {
-			control: "check",
-			options: ["email", "push", "sms"],
-		},
-		_groupDisabled: { control: "boolean" },
+		size: { control: "inline-radio", options: ["sm", "md"] },
 	},
 	parameters: {
 		controls: {
 			include: [
-				"label",
-				"description",
+				"_label",
+				"_description",
+				"aria-invalid",
 				"defaultChecked",
 				"disabled",
-				"invalid",
+				"_invalid",
 				"readOnly",
 				"required",
 				"indeterminate",
 				"size",
-				"visuallyHideLabel",
-				"_groupDefaultValue",
-				"_groupDisabled",
 			],
 		},
 	},
@@ -84,57 +63,18 @@ export default meta;
 type Story = StoryObj<CheckboxStoryArgs>;
 
 export const Playground: Story = {
-	render: ({
-		label,
-		description,
-		defaultChecked,
-		disabled,
-		invalid,
-		readOnly,
-		required,
-		indeterminate,
-		size,
-		visuallyHideLabel,
-		_groupDefaultValue,
-		_groupDisabled,
-	}) => (
-		<Stack gap={8} p={4}>
-			<Stack align="start" gap={4}>
-				<Heading size="1" color="muted" fontWeight="regular">
-					Single checkbox
-				</Heading>
+	render: ({ _label, _description, _invalid, disabled, ...args }) => (
+		<Field.Root disabled={disabled} invalid={_invalid}>
+			<Stack render={<Label variant="item" />} orientation="horizontal" align="start" gap={2}>
 				<Checkbox
 					data-testid="checkbox-playground-control"
-					key={`${defaultChecked}-${indeterminate}`}
-					label={label}
-					description={description}
-					defaultChecked={defaultChecked}
-					disabled={disabled}
-					invalid={invalid}
-					readOnly={readOnly}
-					required={required}
-					indeterminate={indeterminate}
-					size={size}
-					visuallyHideLabel={visuallyHideLabel}
+					key={`${args.defaultChecked}-${args.indeterminate}`}
+					{...args}
 				/>
+				{_label}
 			</Stack>
-			<Stack align="start" gap={4}>
-				<Heading size="1" color="muted" fontWeight="regular">
-					Checkbox group
-				</Heading>
-				<CheckboxGroup
-					key={_groupDefaultValue.join("-")}
-					label="Notification methods"
-					defaultValue={_groupDefaultValue}
-					disabled={_groupDisabled}
-					size={size}
-				>
-					<Checkbox value="email" label="Email" visuallyHideLabel={visuallyHideLabel} />
-					<Checkbox value="push" label="Push" visuallyHideLabel={visuallyHideLabel} />
-					<Checkbox value="sms" label="SMS" visuallyHideLabel={visuallyHideLabel} />
-				</CheckboxGroup>
-			</Stack>
-		</Stack>
+			{_description && <Field.Description>{_description}</Field.Description>}
+		</Field.Root>
 	),
 };
 
@@ -144,8 +84,18 @@ export const Sizes: Story = {
 	},
 	render: () => (
 		<Stack gap={3}>
-			<Checkbox size="sm" label="Small" defaultChecked />
-			<Checkbox size="md" label="Medium" defaultChecked />
+			<Field.Root>
+				<Stack render={<Label variant="item" />} orientation="horizontal" align="start" gap={2}>
+					<Checkbox size="sm" defaultChecked />
+					Small
+				</Stack>
+			</Field.Root>
+			<Field.Root>
+				<Stack render={<Label variant="item" />} orientation="horizontal" align="start" gap={2}>
+					<Checkbox size="md" defaultChecked />
+					Medium
+				</Stack>
+			</Field.Root>
 		</Stack>
 	),
 };
@@ -165,9 +115,27 @@ export const Groups: Story = {
 					description="Choose all the ways we may contact you."
 					defaultValue={["email", "push"]}
 				>
-					<Checkbox value="email" label="Email" description="Receive account updates by email." />
-					<Checkbox value="push" label="Push" description="Receive notifications on this device." />
-					<Checkbox value="sms" label="SMS" description="Receive urgent alerts by text message." />
+					<Field.Item>
+						<Stack render={<Label variant="item" />} orientation="horizontal" align="start" gap={2}>
+							<Checkbox value="email" />
+							Email
+						</Stack>
+						<Field.Description>Receive account updates by email.</Field.Description>
+					</Field.Item>
+					<Field.Item>
+						<Stack render={<Label variant="item" />} orientation="horizontal" align="start" gap={2}>
+							<Checkbox value="push" />
+							Push
+						</Stack>
+						<Field.Description>Receive notifications on this device.</Field.Description>
+					</Field.Item>
+					<Field.Item>
+						<Stack render={<Label variant="item" />} orientation="horizontal" align="start" gap={2}>
+							<Checkbox value="sms" />
+							SMS
+						</Stack>
+						<Field.Description>Receive urgent alerts by text message.</Field.Description>
+					</Field.Item>
 				</CheckboxGroup>
 			</Stack>
 			<Separator />
@@ -176,9 +144,24 @@ export const Groups: Story = {
 					Inline group
 				</Heading>
 				<CheckboxGroup label="Allowed network protocols" inline>
-					<Checkbox value="http" label="HTTP" />
-					<Checkbox value="https" label="HTTPS" />
-					<Checkbox value="ssh" label="SSH" />
+					<Field.Item>
+						<Stack render={<Label variant="item" />} orientation="horizontal" align="start" gap={2}>
+							<Checkbox value="http" />
+							HTTP
+						</Stack>
+					</Field.Item>
+					<Field.Item>
+						<Stack render={<Label variant="item" />} orientation="horizontal" align="start" gap={2}>
+							<Checkbox value="https" />
+							HTTPS
+						</Stack>
+					</Field.Item>
+					<Field.Item>
+						<Stack render={<Label variant="item" />} orientation="horizontal" align="start" gap={2}>
+							<Checkbox value="ssh" />
+							SSH
+						</Stack>
+					</Field.Item>
 				</CheckboxGroup>
 			</Stack>
 		</Stack>
@@ -196,9 +179,24 @@ export const States: Story = {
 					Selection
 				</Heading>
 				<Stack gap={3}>
-					<Checkbox label="Unchecked" />
-					<Checkbox label="Checked" defaultChecked />
-					<Checkbox label="Indeterminate" indeterminate />
+					<Field.Root>
+						<Stack render={<Label variant="item" />} orientation="horizontal" align="start" gap={2}>
+							<Checkbox />
+							Unchecked
+						</Stack>
+					</Field.Root>
+					<Field.Root>
+						<Stack render={<Label variant="item" />} orientation="horizontal" align="start" gap={2}>
+							<Checkbox defaultChecked />
+							Checked
+						</Stack>
+					</Field.Root>
+					<Field.Root>
+						<Stack render={<Label variant="item" />} orientation="horizontal" align="start" gap={2}>
+							<Checkbox indeterminate />
+							Indeterminate
+						</Stack>
+					</Field.Root>
 				</Stack>
 			</Stack>
 			<Separator />
@@ -207,21 +205,143 @@ export const States: Story = {
 					Interaction
 				</Heading>
 				<Stack gap={3}>
-					<Checkbox label="Disabled" disabled />
-					<Checkbox label="Disabled, checked" defaultChecked disabled />
-					<Checkbox label="Invalid" invalid />
-					<Checkbox label="Invalid, checked" invalid defaultChecked />
-					<Checkbox label="Read-only" readOnly />
-					<Checkbox label="Read-only, disabled" disabled readOnly />
-					<Checkbox label="Read-only, checked" defaultChecked readOnly />
-					<Checkbox label="Read-only, invalid" invalid readOnly />
-					<Checkbox label="Read-only, invalid, checked" invalid defaultChecked readOnly />
-					<Checkbox label="Required" required />
+					<Field.Root disabled>
+						<Stack render={<Label variant="item" />} orientation="horizontal" align="start" gap={2}>
+							<Checkbox />
+							Disabled
+						</Stack>
+					</Field.Root>
+					<Field.Root disabled>
+						<Stack render={<Label variant="item" />} orientation="horizontal" align="start" gap={2}>
+							<Checkbox defaultChecked />
+							Disabled, checked
+						</Stack>
+					</Field.Root>
+					<Field.Root invalid>
+						<Stack render={<Label variant="item" />} orientation="horizontal" align="start" gap={2}>
+							<Checkbox />
+							Invalid
+						</Stack>
+					</Field.Root>
+					<Field.Root invalid>
+						<Stack render={<Label variant="item" />} orientation="horizontal" align="start" gap={2}>
+							<Checkbox defaultChecked />
+							Invalid, checked
+						</Stack>
+					</Field.Root>
+					<Field.Root>
+						<Stack render={<Label variant="item" />} orientation="horizontal" align="start" gap={2}>
+							<Checkbox readOnly />
+							Read-only
+						</Stack>
+					</Field.Root>
+					<Field.Root disabled>
+						<Stack render={<Label variant="item" />} orientation="horizontal" align="start" gap={2}>
+							<Checkbox readOnly />
+							Read-only, disabled
+						</Stack>
+					</Field.Root>
+					<Field.Root>
+						<Stack render={<Label variant="item" />} orientation="horizontal" align="start" gap={2}>
+							<Checkbox defaultChecked readOnly />
+							Read-only, checked
+						</Stack>
+					</Field.Root>
+					<Field.Root invalid>
+						<Stack render={<Label variant="item" />} orientation="horizontal" align="start" gap={2}>
+							<Checkbox readOnly />
+							Read-only, invalid
+						</Stack>
+					</Field.Root>
+					<Field.Root invalid>
+						<Stack render={<Label variant="item" />} orientation="horizontal" align="start" gap={2}>
+							<Checkbox defaultChecked readOnly />
+							Read-only, invalid, checked
+						</Stack>
+					</Field.Root>
+					<Field.Root>
+						<Stack render={<Label variant="item" />} orientation="horizontal" align="start" gap={2}>
+							<Checkbox required />
+							Required
+						</Stack>
+					</Field.Root>
 				</Stack>
 			</Stack>
 		</Stack>
 	),
 };
+
+export const Standalone: Story = {
+	parameters: { controls: { disable: true } },
+	render: () => <StandaloneSelection />,
+};
+
+function StandaloneSelection() {
+	const [selection, setSelection] = useState("");
+	return (
+		<form
+			onSubmit={(event) => {
+				event.preventDefault();
+				setSelection(String(new FormData(event.currentTarget).get("document") ?? "None"));
+			}}
+		>
+			<Stack gap={3}>
+				<Stack orientation="horizontal" gap={4}>
+					<Checkbox aria-label="Select document" name="document" value="readme" />
+					<Checkbox aria-label="Invalid selection" aria-invalid="true" defaultChecked />
+					<Checkbox
+						aria-label="Read-only invalid selection"
+						aria-invalid="true"
+						defaultChecked
+						readOnly
+					/>
+				</Stack>
+				<Button type="submit">Submit selection</Button>
+				<output aria-label="Selected document">{selection}</output>
+			</Stack>
+		</form>
+	);
+}
+
+export const Controlled: Story = {
+	parameters: { controls: { disable: true } },
+	render: () => <ControlledAgreement />,
+};
+
+function ControlledAgreement() {
+	const [checked, setChecked] = useState(false);
+	const [submitted, setSubmitted] = useState(false);
+	const checkboxRef = useRef<HTMLElement>(null);
+	return (
+		<Form<{ agreement: boolean }> onFormSubmit={(values) => setSubmitted(values.agreement)}>
+			<Stack gap={3}>
+				<Field.Root name="agreement">
+					<Stack render={<Label variant="item" />} orientation="horizontal" align="start" gap={2}>
+						<Checkbox
+							ref={checkboxRef}
+							checked={checked}
+							onCheckedChange={setChecked}
+							value="accepted"
+							required
+						/>
+						Accept the workspace terms
+					</Stack>
+					<Field.Error />
+				</Field.Root>
+				<Stack orientation="horizontal" gap={2}>
+					<Button type="submit">Continue</Button>
+					<Button type="button" variant="secondary" onClick={() => setChecked(false)}>
+						Clear selection
+					</Button>
+					<Button type="button" variant="secondary" onClick={() => checkboxRef.current?.focus()}>
+						Focus agreement
+					</Button>
+				</Stack>
+				<output aria-label="Agreement submitted">{String(submitted)}</output>
+			</Stack>
+		</Form>
+	);
+}
 
 const mainPermissions = ["view-dashboard", "manage-users", "access-reports"];
 const userManagementPermissions = ["create-user", "edit-user", "delete-user", "assign-roles"];
@@ -247,10 +367,25 @@ function NestedParentCheckboxes() {
 			}}
 			allValues={mainPermissions}
 		>
-			<Checkbox parent indeterminate={managementIsPartial} label="User permissions" />
+			<Field.Item>
+				<Stack render={<Label variant="item" />} orientation="horizontal" align="start" gap={2}>
+					<Checkbox parent indeterminate={managementIsPartial} />
+					User permissions
+				</Stack>
+			</Field.Item>
 			<Stack gap={3} xstyle={storyParts.permissionChildren}>
-				<Checkbox value="view-dashboard" label="View dashboard" />
-				<Checkbox value="access-reports" label="Access reports" />
+				<Field.Item>
+					<Stack render={<Label variant="item" />} orientation="horizontal" align="start" gap={2}>
+						<Checkbox value="view-dashboard" />
+						View dashboard
+					</Stack>
+				</Field.Item>
+				<Field.Item>
+					<Stack render={<Label variant="item" />} orientation="horizontal" align="start" gap={2}>
+						<Checkbox value="access-reports" />
+						Access reports
+					</Stack>
+				</Field.Item>
 				<CheckboxGroup
 					aria-label="Manage users"
 					value={managementValue}
@@ -267,12 +402,57 @@ function NestedParentCheckboxes() {
 					}}
 					allValues={userManagementPermissions}
 				>
-					<Checkbox parent label="Manage users" />
+					<Field.Item>
+						<Stack render={<Label variant="item" />} orientation="horizontal" align="start" gap={2}>
+							<Checkbox parent />
+							Manage users
+						</Stack>
+					</Field.Item>
 					<Stack gap={3} xstyle={storyParts.permissionChildren}>
-						<Checkbox value="create-user" label="Create user" />
-						<Checkbox value="edit-user" label="Edit user" />
-						<Checkbox value="delete-user" label="Delete user" />
-						<Checkbox value="assign-roles" label="Assign roles" />
+						<Field.Item>
+							<Stack
+								render={<Label variant="item" />}
+								orientation="horizontal"
+								align="start"
+								gap={2}
+							>
+								<Checkbox value="create-user" />
+								Create user
+							</Stack>
+						</Field.Item>
+						<Field.Item>
+							<Stack
+								render={<Label variant="item" />}
+								orientation="horizontal"
+								align="start"
+								gap={2}
+							>
+								<Checkbox value="edit-user" />
+								Edit user
+							</Stack>
+						</Field.Item>
+						<Field.Item>
+							<Stack
+								render={<Label variant="item" />}
+								orientation="horizontal"
+								align="start"
+								gap={2}
+							>
+								<Checkbox value="delete-user" />
+								Delete user
+							</Stack>
+						</Field.Item>
+						<Field.Item>
+							<Stack
+								render={<Label variant="item" />}
+								orientation="horizontal"
+								align="start"
+								gap={2}
+							>
+								<Checkbox value="assign-roles" />
+								Assign roles
+							</Stack>
+						</Field.Item>
 					</Stack>
 				</CheckboxGroup>
 			</Stack>

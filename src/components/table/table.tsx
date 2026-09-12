@@ -1,6 +1,7 @@
 import * as stylex from "@stylexjs/stylex";
-import { createContext, useContext, type ComponentProps, type ReactNode } from "react";
+import { createContext, useContext, useId, type ComponentProps, type ReactNode } from "react";
 import { Checkbox, type CheckboxProps } from "@/components/checkbox/checkbox";
+import { VisuallyHidden } from "@/components/visually-hidden/visually-hidden";
 import { ScrollArea } from "@/components/scroll-area/scroll-area";
 import {
 	fontWeightStyles,
@@ -53,13 +54,12 @@ type TableCheckboxControlProps = Pick<
 	| "defaultChecked"
 	| "disabled"
 	| "indeterminate"
-	| "label"
 	| "name"
 	| "onCheckedChange"
 	| "readOnly"
 	| "required"
 	| "value"
->;
+> & { label: ReactNode };
 
 export type TableHeaderCheckboxProps = Omit<
 	TableHeaderActionProps,
@@ -431,6 +431,7 @@ function CheckboxContent({
 	required,
 	value,
 }: TableCheckboxControlProps) {
+	const labelId = useId();
 	return (
 		<span {...stylex.props(tableParts.checkboxFrame)}>
 			<Checkbox
@@ -439,16 +440,15 @@ function CheckboxContent({
 				defaultChecked={defaultChecked}
 				disabled={disabled}
 				indeterminate={indeterminate}
-				label={label}
+				aria-labelledby={labelId}
 				name={name}
 				onCheckedChange={onCheckedChange}
 				readOnly={readOnly}
 				required={required}
 				value={value}
 				size="md"
-				visuallyHideLabel
-				{...stylex.props(tableParts.checkbox)}
 			/>
+			<VisuallyHidden id={labelId}>{label}</VisuallyHidden>
 		</span>
 	);
 }
@@ -674,15 +674,6 @@ const tableParts = stylex.create({
 		paddingInlineStart: tokens["--space-3"],
 		whiteSpace: "nowrap",
 		width: "1%",
-	},
-	checkbox: {
-		gap: 0,
-		alignItems: "center",
-		display: "flex",
-		flexDirection: "row",
-		justifyContent: "center",
-		lineHeight: 0,
-		width: "auto",
 	},
 	checkboxFrame: {
 		alignItems: "center",

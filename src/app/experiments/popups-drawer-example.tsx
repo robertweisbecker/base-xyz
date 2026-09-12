@@ -96,7 +96,12 @@ function DrawerDetails() {
 				<Label>Project name</Label>
 				<TextField defaultValue="BaseX lab" />
 			</Field.Root>
-			<Checkbox defaultChecked label="Require preview authentication" />
+			<Field.Root>
+				<Stack render={<Label variant="item" />} orientation="horizontal" align="start" gap={2}>
+					<Checkbox defaultChecked />
+					Require preview authentication
+				</Stack>
+			</Field.Root>
 			<Field.Root>
 				<Label>Description</Label>
 				<Textarea rows={4} />

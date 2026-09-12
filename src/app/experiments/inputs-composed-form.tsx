@@ -74,12 +74,13 @@ export function EnvironmentForm() {
 						label="Automatic rollback"
 						name="automatic-rollback"
 					/>
-					<Checkbox
-						defaultChecked
-						description="Use the workspace retention and access policies."
-						label="Apply workspace defaults"
-						name="workspace-defaults"
-					/>
+					<Field.Root name="workspace-defaults">
+						<Stack render={<Label variant="item" />} orientation="horizontal" align="start" gap={2}>
+							<Checkbox defaultChecked />
+							Apply workspace defaults
+						</Stack>
+						<Field.Description>Use the workspace retention and access policies.</Field.Description>
+					</Field.Root>
 				</Stack>
 				<Stack align="center" gap={3} justify="end" orientation="horizontal">
 					<Button type="button" variant="secondary">

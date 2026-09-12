@@ -96,7 +96,12 @@ export function PopoverExample() {
 						<Label>Branch</Label>
 						<TextField defaultValue="feature/popup-lab" />
 					</Field.Root>
-					<Checkbox defaultChecked label="Include environment variables" />
+					<Field.Root>
+						<Stack render={<Label variant="item" />} orientation="horizontal" align="start" gap={2}>
+							<Checkbox defaultChecked />
+							Include environment variables
+						</Stack>
+					</Field.Root>
 				</Stack>
 				<Popover.Footer>
 					<Button size="sm">Create preview</Button>

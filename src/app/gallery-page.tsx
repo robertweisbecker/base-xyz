@@ -221,14 +221,31 @@ function getComponentCells(): GalleryCell[] {
 		},
 		{
 			title: "Checkbox",
-			content: <Checkbox label="Max bandwidth" defaultChecked />,
+			content: (
+				<Field.Root>
+					<Stack render={<Label variant="item" />} orientation="horizontal" align="start" gap={2}>
+						<Checkbox defaultChecked />
+						Max bandwidth
+					</Stack>
+				</Field.Root>
+			),
 		},
 		{
 			title: "CheckboxGroup",
 			content: (
 				<CheckboxGroup label="Files" defaultValue={["readme"]}>
-					<Checkbox value="readme" label="Readme" />
-					<Checkbox value="changelog" label="Changelog" />
+					<Field.Item>
+						<Stack render={<Label variant="item" />} orientation="horizontal" align="start" gap={2}>
+							<Checkbox value="readme" />
+							Readme
+						</Stack>
+					</Field.Item>
+					<Field.Item>
+						<Stack render={<Label variant="item" />} orientation="horizontal" align="start" gap={2}>
+							<Checkbox value="changelog" />
+							Changelog
+						</Stack>
+					</Field.Item>
 				</CheckboxGroup>
 			),
 		},
