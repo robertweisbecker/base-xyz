@@ -5,11 +5,11 @@ import { HouseIcon } from "@phosphor-icons/react/dist/csr/House";
 import { ShieldChevronIcon } from "@phosphor-icons/react/dist/csr/ShieldChevron";
 import { UsersIcon } from "@phosphor-icons/react/dist/csr/Users";
 import * as stylex from "@stylexjs/stylex";
-import { useState } from "react";
+import { useRef, useState, type MouseEvent } from "react";
 import { Badge } from "@/components/badge/badge";
 import { Button } from "@/components/button/button";
 import { Drawer } from "@/components/drawer/drawer";
-import { Box } from "@/components/layout";
+import { Box, Stack } from "@/components/layout";
 import { Separator } from "@/components/separator/separator";
 import { tokens } from "@/theme/tokens.stylex";
 import { NavList, type NavListIndentLevel, type NavListSize } from "./nav-list";
@@ -201,50 +201,212 @@ export const CollapsedChildPopovers: Story = {
 	),
 };
 
+export const States: Story = {
+	parameters: { controls: { disable: true } },
+	render: () => <NavigationStates />,
+};
+
+function NavigationStates() {
+	const [icon, setIcon] = useState(false);
+	const [cancel, setCancel] = useState(false);
+	const [disabled, setDisabled] = useState(false);
+	const [panel, setPanel] = useState("deployments");
+	const [clicks, setClicks] = useState(0);
+	const [navigations, setNavigations] = useState(0);
+	const onClick = (event: MouseEvent<HTMLElement>) => {
+		setClicks((count) => count + 1);
+		if (cancel) event.preventDefault();
+	};
+	return (
+		<Stack gap={3}>
+			<label>
+				<input type="checkbox" checked={icon} onChange={(event) => setIcon(event.target.checked)} />
+				Icon presentation
+			</label>
+			<label>
+				<input
+					type="checkbox"
+					checked={cancel}
+					onChange={(event) => setCancel(event.target.checked)}
+				/>
+				Cancel activation
+			</label>
+			<label>
+				<input
+					type="checkbox"
+					checked={disabled}
+					onChange={(event) => setDisabled(event.target.checked)}
+				/>
+				Disable triggers
+			</label>
+			<label>
+				Available navigation{" "}
+				<select value={panel} onChange={(event) => setPanel(event.target.value)}>
+					<option value="deployments">Deployments</option>
+					<option value="workers">Workers</option>
+					<option value="none">None</option>
+				</select>
+			</label>
+			<output aria-label="Click callbacks">{clicks}</output>
+			<output aria-label="Navigation callbacks">{navigations}</output>
+			<Box width={icon ? "4rem" : "18rem"} height="20rem">
+				<NavList.NavListPresentationProvider presentation={icon ? "icon" : "expanded"}>
+					<NavList.Root
+						aria-label="Configurable navigation"
+						onNavigate={() => setNavigations((count) => count + 1)}
+					>
+						<NavList.Section label="Project" visuallyHideLabel={icon}>
+							<NavList.Item label="Overview" href="#overview" current="page" onClick={onClick} />
+							<NavList.Item label="Unavailable" href="#unavailable" disabled />
+							<NavList.CollapsibleGroup>
+								<NavList.CollapsibleGroupTrigger
+									label="Deploy"
+									aria-label="Open deployment navigation"
+									icon={<CubeIcon />}
+									disabled={disabled}
+									onClick={onClick}
+								/>
+								{panel !== "none" && (
+									<NavList.CollapsibleGroupPanel key={panel}>
+										<NavList.Item
+											label={panel === "deployments" ? "Deployments" : "Workers"}
+											href={"#" + panel}
+										/>
+									</NavList.CollapsibleGroupPanel>
+								)}
+							</NavList.CollapsibleGroup>
+							<NavList.Drilldown defaultValue="account">
+								<NavList.DrilldownPanel value="account" label="Account">
+									<NavList.DrilldownTrigger
+										to="settings"
+										label="Settings"
+										aria-label="Open account settings"
+										icon={<GearIcon />}
+										disabled={disabled}
+										onClick={onClick}
+									/>
+								</NavList.DrilldownPanel>
+								<NavList.DrilldownPanel value="settings" label="Settings">
+									<NavList.DrilldownBack to="account" />
+									<NavList.Item label="Members" href="#members" />
+								</NavList.DrilldownPanel>
+							</NavList.Drilldown>
+						</NavList.Section>
+					</NavList.Root>
+				</NavList.NavListPresentationProvider>
+			</Box>
+		</Stack>
+	);
+}
+
 function DrilldownExample() {
 	const [value, setValue] = useState("account");
+	const [controlled, setControlled] = useState(true);
+	const [defer, setDefer] = useState(false);
+	const [icon, setIcon] = useState(false);
+	const [request, setRequest] = useState({ value: "account", direction: "forward", count: 0 });
+	const scrollRef = useRef<HTMLDivElement>(null);
 
 	return (
-		<Box height="28rem" p={3} radius="lg" xstyle={storyParts.frame} width="18rem">
-			<NavList.Root aria-label="Account navigation">
-				<NavList.Drilldown value={value} defaultValue="account" onValueChange={setValue}>
-					<NavList.DrilldownPanel value="account" label="Account navigation">
-						<NavList.Section label="Account">
-							<NavList.Item
-								label="Overview"
-								icon={<HouseIcon weight="duotone" />}
-								href="#account"
-							/>
-							<NavList.DrilldownTrigger
-								to="project"
-								label="Project settings"
-								icon={<GearIcon weight="duotone" />}
-							/>
-							<NavList.DrilldownTrigger
-								to="security"
-								label="Security"
-								icon={<ShieldChevronIcon weight="duotone" />}
-							/>
-						</NavList.Section>
-					</NavList.DrilldownPanel>
-					<NavList.DrilldownPanel value="project" label="Project">
-						<NavList.DrilldownBack to="account" />
-						<NavList.Section label="Project" visuallyHideLabel>
-							<NavList.Item label="Members" href="#members" />
-							<NavList.Item label="Billing" href="#billing" />
-							<NavList.Item label="Environments" href="#environments" />
-						</NavList.Section>
-					</NavList.DrilldownPanel>
-					<NavList.DrilldownPanel value="security" label="Security">
-						<NavList.DrilldownBack to="account" />
-						<NavList.Section label="Security">
-							<NavList.Item label="Single sign-on" href="#sso" />
-							<NavList.Item label="Audit log" href="#audit-log" />
-						</NavList.Section>
-					</NavList.DrilldownPanel>
-				</NavList.Drilldown>
-			</NavList.Root>
-		</Box>
+		<Stack gap={3}>
+			<label>
+				<input
+					type="checkbox"
+					checked={controlled}
+					onChange={(event) => setControlled(event.target.checked)}
+				/>
+				Controlled navigation
+			</label>
+			<label>
+				<input
+					type="checkbox"
+					checked={defer}
+					onChange={(event) => setDefer(event.target.checked)}
+				/>
+				Defer navigation update
+			</label>
+			<label>
+				<input type="checkbox" checked={icon} onChange={(event) => setIcon(event.target.checked)} />
+				Icon presentation
+			</label>
+			<Button onClick={() => setValue(request.value)}>Apply requested navigation</Button>
+			<output aria-label="Requested navigation">
+				{request.value} {request.direction} {request.count}
+			</output>
+			<output aria-label="Supplied navigation">{value}</output>
+			<Box
+				ref={scrollRef}
+				data-testid="account-scroll"
+				height="18rem"
+				width={icon ? "4rem" : "18rem"}
+				xstyle={storyParts.scroller}
+			>
+				<NavList.NavListPresentationProvider
+					presentation={icon ? "icon" : "expanded"}
+					scrollMode="external"
+					scrollRef={scrollRef}
+				>
+					<NavList.Root aria-label="Account navigation">
+						<NavList.Drilldown
+							key={String(controlled)}
+							value={controlled ? value : undefined}
+							defaultValue="account"
+							onValueChange={(nextValue, details) => {
+								setRequest((previous) => ({
+									value: nextValue,
+									direction: details.direction,
+									count: previous.count + 1,
+								}));
+								if (!defer) setValue(nextValue);
+							}}
+						>
+							<NavList.DrilldownPanel value="account" label="Account navigation">
+								<NavList.Section label="Account">
+									<NavList.Item
+										label="Overview"
+										icon={<HouseIcon weight="duotone" />}
+										href="#account"
+									/>
+									{Array.from({ length: 10 }, (_, index) => (
+										<NavList.Item
+											key={index}
+											label={`Account ${index + 1}`}
+											href={`#account-${index + 1}`}
+										/>
+									))}
+									<NavList.DrilldownTrigger
+										to="project"
+										label="Project settings"
+										icon={<GearIcon weight="duotone" />}
+									/>
+									<NavList.DrilldownTrigger
+										to="security"
+										label="Security"
+										icon={<ShieldChevronIcon weight="duotone" />}
+									/>
+								</NavList.Section>
+							</NavList.DrilldownPanel>
+							<NavList.DrilldownPanel value="project" label="Project">
+								<NavList.DrilldownBack to="account" />
+								<NavList.Section label="Project" visuallyHideLabel>
+									<NavList.Item label="Members" href="#members" />
+									<NavList.Item label="Billing" href="#billing" />
+									<NavList.Item label="Environments" href="#environments" />
+									<NavList.DrilldownTrigger to="security" label="Security settings" />
+								</NavList.Section>
+							</NavList.DrilldownPanel>
+							<NavList.DrilldownPanel value="security" label="Security">
+								<NavList.DrilldownBack to="account" />
+								<NavList.Section label="Security">
+									<NavList.Item label="Single sign-on" href="#sso" />
+									<NavList.Item label="Audit log" href="#audit-log" />
+								</NavList.Section>
+							</NavList.DrilldownPanel>
+						</NavList.Drilldown>
+					</NavList.Root>
+				</NavList.NavListPresentationProvider>
+			</Box>
+		</Stack>
 	);
 }
 
@@ -267,38 +429,56 @@ function DrilldownNavigation() {
 
 function DrawerExample() {
 	const [open, setOpen] = useState(false);
+	const [icon, setIcon] = useState(false);
 
 	return (
-		<Drawer.Root open={open} onOpenChange={setOpen}>
-			<Drawer.Trigger render={<Button />}>Open navigation</Drawer.Trigger>
-			<Drawer.Portal>
-				<Drawer.Backdrop />
-				<Drawer.Viewport>
-					<Drawer.Popup>
-						<Drawer.Content>
-							<Drawer.Body>
-								<NavList.Root aria-label="Drawer navigation" onNavigate={() => setOpen(false)}>
-									<NavList.Section label="Project">
-										<NavList.Item label="Overview" href="#overview" icon={<HouseIcon />} />
-										<NavList.CollapsibleGroup>
-											<NavList.CollapsibleGroupTrigger label="Deploy" icon={<CubeIcon />} />
-											<NavList.CollapsibleGroupPanel>
-												<NavList.Item label="Deployments" href="#deployments" />
-												<NavList.Item label="Workers" href="#workers" />
-											</NavList.CollapsibleGroupPanel>
-										</NavList.CollapsibleGroup>
-									</NavList.Section>
-								</NavList.Root>
-							</Drawer.Body>
-						</Drawer.Content>
-					</Drawer.Popup>
-				</Drawer.Viewport>
-			</Drawer.Portal>
-		</Drawer.Root>
+		<Box>
+			<label>
+				<input type="checkbox" checked={icon} onChange={(event) => setIcon(event.target.checked)} />
+				Icon presentation
+			</label>
+			<Drawer.Root open={open} onOpenChange={setOpen}>
+				<Drawer.Trigger render={<Button />}>Open navigation</Drawer.Trigger>
+				<Drawer.Portal>
+					<Drawer.Backdrop />
+					<Drawer.Viewport>
+						<Drawer.Popup>
+							<Drawer.Content>
+								<Drawer.Body>
+									<NavList.NavListPresentationProvider presentation={icon ? "icon" : "expanded"}>
+										<NavList.Root aria-label="Drawer navigation" onNavigate={() => setOpen(false)}>
+											<NavList.Section label="Project">
+												<NavList.Item label="Overview" href="#overview" icon={<HouseIcon />} />
+												<NavList.Item
+													label="Cancelled link"
+													href="#cancelled"
+													onClick={(event) => event.preventDefault()}
+												/>
+												<NavList.CollapsibleGroup>
+													<NavList.CollapsibleGroupTrigger label="Deploy" icon={<CubeIcon />} />
+													<NavList.CollapsibleGroupPanel>
+														<NavList.Item label="Deployments" href="#deployments" />
+														<NavList.Item label="Workers" href="#workers" />
+													</NavList.CollapsibleGroupPanel>
+												</NavList.CollapsibleGroup>
+												<DrilldownNavigation />
+											</NavList.Section>
+										</NavList.Root>
+									</NavList.NavListPresentationProvider>
+								</Drawer.Body>
+							</Drawer.Content>
+						</Drawer.Popup>
+					</Drawer.Viewport>
+				</Drawer.Portal>
+			</Drawer.Root>
+		</Box>
 	);
 }
 
 const storyParts = stylex.create({
+	scroller: {
+		overflowY: "auto",
+	},
 	frame: {
 		borderColor: tokens["--border"],
 		borderStyle: "solid",
