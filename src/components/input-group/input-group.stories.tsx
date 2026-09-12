@@ -223,6 +223,16 @@ export const States: Story = {
 					</InputGroup.Root>
 				</Field.Root>
 			</State>
+			<State label="Invalid textarea">
+				<InputGroup.Root>
+					<InputGroup.Textarea
+						aria-invalid="true"
+						aria-label="Invalid textarea"
+						defaultValue="Add more detail."
+						rows={3}
+					/>
+				</InputGroup.Root>
+			</State>
 			<State label="Required">
 				<InputGroup.Root>
 					<InputGroup.Input aria-label="Required input" placeholder="Enter a value…" required />

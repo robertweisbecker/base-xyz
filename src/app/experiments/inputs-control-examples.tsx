@@ -4,7 +4,7 @@ import { Checkbox, type FieldSize, Radio, RadioGroup, Slider, Switch, Text } fro
 import { fieldSizes, formatComparisonLabel } from "./inputs-comparison-model";
 import { inputsPageStyles as styles } from "./inputs-page.styles";
 
-const choiceControlStates = ["off", "on", "read-only", "disabled"] as const;
+const choiceControlStates = ["off", "on", "read-only", "read-only-checked", "disabled"] as const;
 const valueControlStates = ["resting", "set", "disabled"] as const;
 
 type ChoiceControlState = (typeof choiceControlStates)[number];
@@ -124,13 +124,13 @@ function ComparisonRadio({ state }: { state: ChoiceControlState }) {
 	return (
 		<div data-radio-comparison>
 			<RadioGroup
-				defaultValue={state === "on" ? state : undefined}
+				defaultValue={state === "on" || state === "read-only-checked" ? state : undefined}
 				disabled={state === "disabled"}
 				label={`Radio ${formatComparisonLabel(state)}`}
 			>
 				<Radio
 					label={`Radio ${formatComparisonLabel(state)}`}
-					readOnly={state === "read-only"}
+					readOnly={state === "read-only" || state === "read-only-checked"}
 					value={state}
 					visuallyHideLabel
 				/>
@@ -142,10 +142,10 @@ function ComparisonRadio({ state }: { state: ChoiceControlState }) {
 function ComparisonCheckbox({ state }: { state: ChoiceControlState }) {
 	return (
 		<Checkbox
-			defaultChecked={state === "on"}
+			defaultChecked={state === "on" || state === "read-only-checked"}
 			disabled={state === "disabled"}
 			label={`Checkbox ${formatComparisonLabel(state)}`}
-			readOnly={state === "read-only"}
+			readOnly={state === "read-only" || state === "read-only-checked"}
 			visuallyHideLabel
 		/>
 	);
