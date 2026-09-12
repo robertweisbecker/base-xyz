@@ -1,6 +1,8 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
+import x from "@stylexjs/atoms";
 import * as stylex from "@stylexjs/stylex";
 import type { ReactNode } from "react";
+import { Field } from "@/components/field/field";
 import { Avatar } from "@/components/avatar/avatar";
 import { Item } from "@/components/item/item";
 import { Box, Grid, Stack } from "@/components/layout/layout";
@@ -19,7 +21,7 @@ type Positioning = "item-aligned" | "bottom-start" | "bottom-end" | "top-start";
 
 type PlaygroundArgs = {
 	disabled: boolean;
-	invalid: boolean;
+	_invalid: boolean;
 	_itemVariant: SelectItemVariant;
 	_label: string;
 	multiple: boolean;
@@ -35,7 +37,7 @@ const meta: Meta<PlaygroundArgs> = {
 	title: "Components/Select",
 	args: {
 		disabled: false,
-		invalid: false,
+		_invalid: false,
 		_itemVariant: "primary",
 		_label: "Framework",
 		multiple: false,
@@ -48,7 +50,7 @@ const meta: Meta<PlaygroundArgs> = {
 	},
 	argTypes: {
 		disabled: { control: "boolean" },
-		invalid: { control: "boolean" },
+		_invalid: { control: "boolean" },
 		_itemVariant: { control: "select", options: ["default", "primary", "error"] },
 		_label: { control: "text" },
 		multiple: { control: "boolean" },
@@ -71,7 +73,7 @@ const meta: Meta<PlaygroundArgs> = {
 				"disabled",
 				"readOnly",
 				"required",
-				"invalid",
+				"_invalid",
 				"_size",
 				"_variant",
 				"_itemVariant",
@@ -100,7 +102,7 @@ export const Playground: Story = {
 
 function PlaygroundExample({
 	disabled,
-	invalid,
+	_invalid,
 	_itemVariant,
 	_label,
 	multiple,
@@ -113,8 +115,6 @@ function PlaygroundExample({
 }: PlaygroundArgs) {
 	const selectLabel = _label.trim();
 	const sharedProps = {
-		disabled,
-		invalid,
 		readOnly,
 		required,
 		size: _size,
@@ -122,36 +122,44 @@ function PlaygroundExample({
 
 	if (multiple) {
 		return (
-			<Select.Root<string, true>
+			<Field.Root
 				key="multiple"
-				{...sharedProps}
-				defaultValue={["React", "Svelte"]}
-				items={frameworkItems}
-				multiple
+				disabled={disabled}
+				invalid={_invalid}
+				xstyle={x.width["fit-content"]}
 			>
+				<Select.Root<string, true>
+					{...sharedProps}
+					defaultValue={["React", "Svelte"]}
+					items={frameworkItems}
+					multiple
+				>
+					{selectLabel ? <Select.Label>{selectLabel}</Select.Label> : null}
+					<Select.Trigger
+						aria-label={selectLabel || "Framework"}
+						placeholder={_placeholder}
+						variant={_variant}
+					>
+						{formatMultipleFrameworks}
+					</Select.Trigger>
+					<FrameworkPopup itemVariant={_itemVariant} positioning={_positioning} />
+				</Select.Root>
+			</Field.Root>
+		);
+	}
+
+	return (
+		<Field.Root key="single" disabled={disabled} invalid={_invalid} xstyle={x.width["fit-content"]}>
+			<Select.Root<string> {...sharedProps} items={frameworkItems}>
 				{selectLabel ? <Select.Label>{selectLabel}</Select.Label> : null}
 				<Select.Trigger
 					aria-label={selectLabel || "Framework"}
 					placeholder={_placeholder}
 					variant={_variant}
-				>
-					{formatMultipleFrameworks}
-				</Select.Trigger>
+				/>
 				<FrameworkPopup itemVariant={_itemVariant} positioning={_positioning} />
 			</Select.Root>
-		);
-	}
-
-	return (
-		<Select.Root<string> key="single" {...sharedProps} items={frameworkItems}>
-			{selectLabel ? <Select.Label>{selectLabel}</Select.Label> : null}
-			<Select.Trigger
-				aria-label={selectLabel || "Framework"}
-				placeholder={_placeholder}
-				variant={_variant}
-			/>
-			<FrameworkPopup itemVariant={_itemVariant} positioning={_positioning} />
-		</Select.Root>
+		</Field.Root>
 	);
 }
 
@@ -162,33 +170,39 @@ export const SelectionModes: Story = {
 	},
 	render: () => (
 		<Grid gap={6} xstyle={storyParts.fieldGrid}>
-			<Select.Root<string> defaultValue="React" items={frameworkItems}>
-				<Select.Label>Single selection</Select.Label>
-				<Select.Trigger />
-				<FrameworkPopup />
-			</Select.Root>
-			<Select.Root<string> items={frameworkItems}>
-				<Select.Label>Placeholder</Select.Label>
-				<Select.Trigger placeholder="Choose a framework" />
-				<FrameworkPopup />
-			</Select.Root>
-			<Select.Root<string, true>
-				defaultValue={["TypeScript", "CSS"]}
-				items={languageItems}
-				multiple
-			>
-				<Select.Label>Multiple selection</Select.Label>
-				<Select.Trigger placeholder="Select languages">{formatMultipleLanguages}</Select.Trigger>
-				<Select.Popup positionerProps={{ alignItemWithTrigger: false }}>
-					<Select.List>
-						{languageItems.map((item) => (
-							<Select.Item key={item.value} value={item.value}>
-								{item.label}
-							</Select.Item>
-						))}
-					</Select.List>
-				</Select.Popup>
-			</Select.Root>
+			<Field.Root xstyle={x.width["fit-content"]}>
+				<Select.Root<string> defaultValue="React" items={frameworkItems}>
+					<Select.Label>Single selection</Select.Label>
+					<Select.Trigger />
+					<FrameworkPopup />
+				</Select.Root>
+			</Field.Root>
+			<Field.Root xstyle={x.width["fit-content"]}>
+				<Select.Root<string> items={frameworkItems}>
+					<Select.Label>Placeholder</Select.Label>
+					<Select.Trigger placeholder="Choose a framework" />
+					<FrameworkPopup />
+				</Select.Root>
+			</Field.Root>
+			<Field.Root xstyle={x.width["fit-content"]}>
+				<Select.Root<string, true>
+					defaultValue={["TypeScript", "CSS"]}
+					items={languageItems}
+					multiple
+				>
+					<Select.Label>Multiple selection</Select.Label>
+					<Select.Trigger placeholder="Select languages">{formatMultipleLanguages}</Select.Trigger>
+					<Select.Popup positionerProps={{ alignItemWithTrigger: false }}>
+						<Select.List>
+							{languageItems.map((item) => (
+								<Select.Item key={item.value} value={item.value}>
+									{item.label}
+								</Select.Item>
+							))}
+						</Select.List>
+					</Select.Popup>
+				</Select.Root>
+			</Field.Root>
 		</Grid>
 	),
 };
@@ -200,13 +214,15 @@ export const Sizes: Story = {
 	render: () => (
 		<Stack gap={6}>
 			{(["sm", "md", "lg"] as const).map((size) => (
-				<Select.Root<string> key={size} defaultValue="React" items={frameworkItems} size={size}>
-					<Select.Label>
-						{size === "sm" ? "Small" : size === "md" ? "Medium" : "Large"}
-					</Select.Label>
-					<Select.Trigger />
-					<FrameworkPopup />
-				</Select.Root>
+				<Field.Root key={size} xstyle={x.width["fit-content"]}>
+					<Select.Root<string> defaultValue="React" items={frameworkItems} size={size}>
+						<Select.Label>
+							{size === "sm" ? "Small" : size === "md" ? "Medium" : "Large"}
+						</Select.Label>
+						<Select.Trigger />
+						<FrameworkPopup />
+					</Select.Root>
+				</Field.Root>
 			))}
 		</Stack>
 	),
@@ -219,46 +235,58 @@ export const States: Story = {
 	render: () => (
 		<Grid gap={8} xstyle={storyParts.stateGrid}>
 			<SelectState label="Empty">
-				<Select.Root<string> items={frameworkItems}>
-					<Select.Label>Framework</Select.Label>
-					<Select.Trigger placeholder="Choose a framework" />
-					<FrameworkPopup />
-				</Select.Root>
+				<Field.Root xstyle={x.width["fit-content"]}>
+					<Select.Root<string> items={frameworkItems}>
+						<Select.Label>Framework</Select.Label>
+						<Select.Trigger placeholder="Choose a framework" />
+						<FrameworkPopup />
+					</Select.Root>
+				</Field.Root>
 			</SelectState>
 			<SelectState label="Selected">
-				<Select.Root<string> defaultValue="React" items={frameworkItems}>
-					<Select.Label>Framework</Select.Label>
-					<Select.Trigger />
-					<FrameworkPopup />
-				</Select.Root>
+				<Field.Root xstyle={x.width["fit-content"]}>
+					<Select.Root<string> defaultValue="React" items={frameworkItems}>
+						<Select.Label>Framework</Select.Label>
+						<Select.Trigger />
+						<FrameworkPopup />
+					</Select.Root>
+				</Field.Root>
 			</SelectState>
 			<SelectState label="Invalid">
-				<Select.Root<string> invalid items={frameworkItems}>
-					<Select.Label>Framework</Select.Label>
-					<Select.Trigger placeholder="Choose a framework" />
-					<FrameworkPopup />
-				</Select.Root>
+				<Field.Root invalid xstyle={x.width["fit-content"]}>
+					<Select.Root<string> items={frameworkItems}>
+						<Select.Label>Framework</Select.Label>
+						<Select.Trigger placeholder="Choose a framework" />
+						<FrameworkPopup />
+					</Select.Root>
+				</Field.Root>
 			</SelectState>
 			<SelectState label="Required">
-				<Select.Root<string> required items={frameworkItems}>
-					<Select.Label>Framework</Select.Label>
-					<Select.Trigger placeholder="Choose a framework" />
-					<FrameworkPopup />
-				</Select.Root>
+				<Field.Root xstyle={x.width["fit-content"]}>
+					<Select.Root<string> required items={frameworkItems}>
+						<Select.Label>Framework</Select.Label>
+						<Select.Trigger placeholder="Choose a framework" />
+						<FrameworkPopup />
+					</Select.Root>
+				</Field.Root>
 			</SelectState>
 			<SelectState label="Read-only">
-				<Select.Root<string> defaultValue="React" readOnly items={frameworkItems}>
-					<Select.Label>Framework</Select.Label>
-					<Select.Trigger />
-					<FrameworkPopup />
-				</Select.Root>
+				<Field.Root xstyle={x.width["fit-content"]}>
+					<Select.Root<string> defaultValue="React" readOnly items={frameworkItems}>
+						<Select.Label>Framework</Select.Label>
+						<Select.Trigger />
+						<FrameworkPopup />
+					</Select.Root>
+				</Field.Root>
 			</SelectState>
 			<SelectState label="Disabled">
-				<Select.Root<string> defaultValue="React" disabled items={frameworkItems}>
-					<Select.Label>Framework</Select.Label>
-					<Select.Trigger />
-					<FrameworkPopup />
-				</Select.Root>
+				<Field.Root disabled xstyle={x.width["fit-content"]}>
+					<Select.Root<string> defaultValue="React" items={frameworkItems}>
+						<Select.Label>Framework</Select.Label>
+						<Select.Trigger />
+						<FrameworkPopup />
+					</Select.Root>
+				</Field.Root>
 			</SelectState>
 		</Grid>
 	),
@@ -296,26 +324,28 @@ const produceGroups = [
 
 function GroupedOptionsSelect() {
 	return (
-		<Select.Root<string> items={produceGroups}>
-			<Select.Label>Produce</Select.Label>
-			<Select.Trigger placeholder="Select produce" />
-			<Select.Popup>
-				<Select.List>
-					{produceGroups.map((group, index) => (
-						<div key={group.label}>
-							<Select.Group label={group.label}>
-								{group.items.map((item) => (
-									<Select.Item key={item.value} value={item.value}>
-										{item.label}
-									</Select.Item>
-								))}
-							</Select.Group>
-							{index < produceGroups.length - 1 ? <Select.Separator /> : null}
-						</div>
-					))}
-				</Select.List>
-			</Select.Popup>
-		</Select.Root>
+		<Field.Root xstyle={x.width["fit-content"]}>
+			<Select.Root<string> items={produceGroups}>
+				<Select.Label>Produce</Select.Label>
+				<Select.Trigger placeholder="Select produce" />
+				<Select.Popup>
+					<Select.List>
+						{produceGroups.map((group, index) => (
+							<div key={group.label}>
+								<Select.Group label={group.label}>
+									{group.items.map((item) => (
+										<Select.Item key={item.value} value={item.value}>
+											{item.label}
+										</Select.Item>
+									))}
+								</Select.Group>
+								{index < produceGroups.length - 1 ? <Select.Separator /> : null}
+							</div>
+						))}
+					</Select.List>
+				</Select.Popup>
+			</Select.Root>
+		</Field.Root>
 	);
 }
 
@@ -341,46 +371,48 @@ const countryItems = countries.map((country) => ({ label: country.name, value: c
 
 function ComplexValueSelect() {
 	return (
-		<Select.Root<Country>
-			defaultValue={countries[0]}
-			isItemEqualToValue={(item, value) => item.code === value.code}
-			itemToStringLabel={(country) => country.name}
-			itemToStringValue={(country) => country.code}
-			items={countryItems}
-		>
-			<Select.Label>Country or region</Select.Label>
-			<Select.Trigger placeholder="Select a country">
-				{(country: Country | null) =>
-					country ? (
-						<span {...stylex.props(storyParts.countryValue)}>
-							<span aria-hidden {...stylex.props(storyParts.flag)}>
-								{country.flag}
-							</span>
-							<span>{country.name}</span>
-						</span>
-					) : (
-						"Select a country"
-					)
-				}
-			</Select.Trigger>
-			<Select.Popup>
-				<Select.List>
-					{countries.map((country) => (
-						<Select.Item key={country.code} label={country.name} value={country}>
-							<span {...stylex.props(storyParts.countryItem)}>
+		<Field.Root xstyle={x.width["fit-content"]}>
+			<Select.Root<Country>
+				defaultValue={countries[0]}
+				isItemEqualToValue={(item, value) => item.code === value.code}
+				itemToStringLabel={(country) => country.name}
+				itemToStringValue={(country) => country.code}
+				items={countryItems}
+			>
+				<Select.Label>Country or region</Select.Label>
+				<Select.Trigger placeholder="Select a country">
+					{(country: Country | null) =>
+						country ? (
+							<span {...stylex.props(storyParts.countryValue)}>
 								<span aria-hidden {...stylex.props(storyParts.flag)}>
 									{country.flag}
 								</span>
-								<span {...stylex.props(storyParts.countryName)}>{country.name}</span>
-								<span {...stylex.props(storyParts.countryMeta)}>
-									{country.code} · {country.locale}
-								</span>
+								<span>{country.name}</span>
 							</span>
-						</Select.Item>
-					))}
-				</Select.List>
-			</Select.Popup>
-		</Select.Root>
+						) : (
+							"Select a country"
+						)
+					}
+				</Select.Trigger>
+				<Select.Popup>
+					<Select.List>
+						{countries.map((country) => (
+							<Select.Item key={country.code} label={country.name} value={country}>
+								<span {...stylex.props(storyParts.countryItem)}>
+									<span aria-hidden {...stylex.props(storyParts.flag)}>
+										{country.flag}
+									</span>
+									<span {...stylex.props(storyParts.countryName)}>{country.name}</span>
+									<span {...stylex.props(storyParts.countryMeta)}>
+										{country.code} · {country.locale}
+									</span>
+								</span>
+							</Select.Item>
+						))}
+					</Select.List>
+				</Select.Popup>
+			</Select.Root>
+		</Field.Root>
 	);
 }
 
@@ -421,19 +453,21 @@ const timeZoneItems = timeZones.map((value) => ({ label: value.replaceAll("_", "
 
 function LongListSelect() {
 	return (
-		<Select.Root<string> defaultValue="America/Los_Angeles" items={timeZoneItems}>
-			<Select.Label>Time zone</Select.Label>
-			<Select.Trigger />
-			<Select.Popup positionerProps={{ alignItemWithTrigger: false }}>
-				<Select.List>
-					{timeZoneItems.map((item) => (
-						<Select.Item key={item.value} value={item.value}>
-							{item.label}
-						</Select.Item>
-					))}
-				</Select.List>
-			</Select.Popup>
-		</Select.Root>
+		<Field.Root xstyle={x.width["fit-content"]}>
+			<Select.Root<string> defaultValue="America/Los_Angeles" items={timeZoneItems}>
+				<Select.Label>Time zone</Select.Label>
+				<Select.Trigger />
+				<Select.Popup positionerProps={{ alignItemWithTrigger: false }}>
+					<Select.List>
+						{timeZoneItems.map((item) => (
+							<Select.Item key={item.value} value={item.value}>
+								{item.label}
+							</Select.Item>
+						))}
+					</Select.List>
+				</Select.Popup>
+			</Select.Root>
+		</Field.Root>
 	);
 }
 
@@ -471,48 +505,50 @@ export const UserSelection: Story = {
 		controls: { disable: true },
 	},
 	render: () => (
-		<Select.Root<UserOption>
-			defaultValue={userOptions[0]}
-			isItemEqualToValue={(item, value) => item.id === value.id}
-			itemToStringLabel={(user) => user.name}
-			itemToStringValue={(user) => user.id}
-			items={userSelectItems}
-		>
-			<Select.Label>Assignee</Select.Label>
-			<Select.Trigger placeholder="Select a person" xstyle={storyParts.userSelect}>
-				{(user: UserOption | null) =>
-					user ? (
-						<Item
-							align="center"
-							label={user.name}
-							description={user.email}
-							render={<span />}
-							startSlot={<Avatar initials={user.initials} shape="rounded" size={8} />}
-							xstyle={storyParts.userValueItem}
-							variant="embedded"
-						/>
-					) : (
-						"Select a person"
-					)
-				}
-			</Select.Trigger>
-			<Select.Popup>
-				<Select.List>
-					{userOptions.map((user) => (
-						<Select.Item key={user.id} label={user.name} value={user}>
+		<Field.Root xstyle={x.width["fit-content"]}>
+			<Select.Root<UserOption>
+				defaultValue={userOptions[0]}
+				isItemEqualToValue={(item, value) => item.id === value.id}
+				itemToStringLabel={(user) => user.name}
+				itemToStringValue={(user) => user.id}
+				items={userSelectItems}
+			>
+				<Select.Label>Assignee</Select.Label>
+				<Select.Trigger placeholder="Select a person" xstyle={storyParts.userSelect}>
+					{(user: UserOption | null) =>
+						user ? (
 							<Item
 								align="center"
-								description={user.email}
 								label={user.name}
+								description={user.email}
+								render={<span />}
 								startSlot={<Avatar initials={user.initials} shape="rounded" size={8} />}
-								xstyle={storyParts.userOptionItem}
+								xstyle={storyParts.userValueItem}
 								variant="embedded"
 							/>
-						</Select.Item>
-					))}
-				</Select.List>
-			</Select.Popup>
-		</Select.Root>
+						) : (
+							"Select a person"
+						)
+					}
+				</Select.Trigger>
+				<Select.Popup>
+					<Select.List>
+						{userOptions.map((user) => (
+							<Select.Item key={user.id} label={user.name} value={user}>
+								<Item
+									align="center"
+									description={user.email}
+									label={user.name}
+									startSlot={<Avatar initials={user.initials} shape="rounded" size={8} />}
+									xstyle={storyParts.userOptionItem}
+									variant="embedded"
+								/>
+							</Select.Item>
+						))}
+					</Select.List>
+				</Select.Popup>
+			</Select.Root>
+		</Field.Root>
 	),
 };
 
@@ -553,8 +589,13 @@ function AdLibSelect({
 	placeholder?: string;
 }) {
 	return (
-		<Select.Root<string> xstyle={storyParts.adLibSelect} defaultValue={defaultValue} items={items}>
-			<Select.Trigger aria-label={label} placeholder={placeholder} variant="inline" />
+		<Select.Root<string> defaultValue={defaultValue} items={items}>
+			<Select.Trigger
+				xstyle={storyParts.adLibSelect}
+				aria-label={label}
+				placeholder={placeholder}
+				variant="inline"
+			/>
 			<Select.Popup backdrop>
 				<Select.List>
 					{items.map((item) => (

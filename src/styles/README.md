@@ -211,10 +211,19 @@ controls that do not already integrate with Base UI; never double-register an
 existing Base UI control. Field.Validity directly exposes Base UI's render-only
 validity state and has no styling surface.
 
+Select.Label keeps the Select trigger's own label association. Combobox.Label
+labels an external input through the public Label, so it belongs inside an
+explicit Field.Root. Standalone Combobox inputs use an accessible-name attribute.
+Put field invalid state on Field.Root and control styling on Trigger/InputGroup,
+not the node-less widget roots.
+
 Form preserves native `onSubmit`/`action` and typed `onFormSubmit`. Callers supply
 the generic value shape; arbitrary JSX names do not infer a runtime schema.
 Registered Field values feed `onFormSubmit`, while native FormData follows native
-control semantics. Base UI 1.8 async validators do not block submission while
+control semantics. Select and Combobox submit serialized values configured by
+`itemToStringValue`, even when selection and callback values are objects. The
+Form generic must match that submission representation; it does not transform
+runtime values. Base UI 1.8 async validators do not block submission while
 pending; request orchestration and pending submission stay with the consumer.
 
 Field's style module exposes one export per element role and two size bundles.

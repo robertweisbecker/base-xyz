@@ -1,3 +1,4 @@
+import x from "@stylexjs/atoms";
 import {
 	Button,
 	Checkbox,
@@ -30,19 +31,21 @@ export function EnvironmentForm() {
 						<TextField placeholder="Preview" required />
 						<Field.Description>Used in deployment URLs and CLI commands.</Field.Description>
 					</Field.Root>
-					<Select.Root<string> defaultValue="iad1" items={regionItems} name="region">
-						<Select.Label>Primary region</Select.Label>
-						<Select.Trigger />
-						<Select.Popup>
-							<Select.List>
-								{regionItems.map((item) => (
-									<Select.Item key={item.value} value={item.value}>
-										{item.label}
-									</Select.Item>
-								))}
-							</Select.List>
-						</Select.Popup>
-					</Select.Root>
+					<Field.Root name="region" xstyle={x.width["fit-content"]}>
+						<Select.Root<string> defaultValue="iad1" items={regionItems}>
+							<Select.Label>Primary region</Select.Label>
+							<Select.Trigger />
+							<Select.Popup>
+								<Select.List>
+									{regionItems.map((item) => (
+										<Select.Item key={item.value} value={item.value}>
+											{item.label}
+										</Select.Item>
+									))}
+								</Select.List>
+							</Select.Popup>
+						</Select.Root>
+					</Field.Root>
 				</Grid>
 				<RadioGroup defaultValue="preview" label="Environment visibility" name="visibility">
 					<Field.Item>

@@ -17,6 +17,7 @@ import {
 	type ComboboxItemVariant,
 	type ComboboxRootProps,
 } from "@/components/combobox/combobox-field";
+import { Field } from "@/components/field/field";
 import { Heading } from "@/components/heading/heading";
 import { Box, Stack } from "@/components/layout/layout";
 import { Item } from "@/components/item/item";
@@ -30,7 +31,7 @@ const apps = ["Codex", "Claude", "Cursor", "Zed"];
 
 type PlaygroundArgs = {
 	disabled: boolean;
-	invalid: boolean;
+	_invalid: boolean;
 	_itemVariant: ComboboxItemVariant;
 	_label: string;
 	_placeholder: string;
@@ -43,7 +44,7 @@ const meta = {
 	title: "Components/Combobox",
 	args: {
 		disabled: false,
-		invalid: false,
+		_invalid: false,
 		_itemVariant: "default",
 		_label: "Framework",
 		_placeholder: "Filter frameworks…",
@@ -53,7 +54,7 @@ const meta = {
 	},
 	argTypes: {
 		disabled: { control: "boolean" },
-		invalid: { control: "boolean" },
+		_invalid: { control: "boolean" },
 		_itemVariant: { control: "select", options: ["default", "primary", "error"] },
 		_label: { control: "text" },
 		_placeholder: { control: "text" },
@@ -69,7 +70,7 @@ const meta = {
 				"disabled",
 				"readOnly",
 				"required",
-				"invalid",
+				"_invalid",
 				"size",
 				"_itemVariant",
 			],
@@ -88,9 +89,10 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const Playground: Story = {
-	render: ({ _itemVariant, _label, _placeholder, ...props }) => (
+	render: ({ _invalid, _itemVariant, _label, _placeholder, ...props }) => (
 		<SingleCombobox
 			{...props}
+			invalid={_invalid}
 			itemVariant={_itemVariant}
 			items={frameworks}
 			label={_label}
@@ -403,6 +405,7 @@ export const ControlledMultiple: Story = {
 };
 
 type SingleComboboxProps<Value> = Omit<ComboboxRootProps<Value>, "children" | "items"> & {
+	invalid?: boolean;
 	itemVariant?: ComboboxItemVariant;
 	items: readonly Value[];
 	label: ReactNode;
@@ -411,6 +414,8 @@ type SingleComboboxProps<Value> = Omit<ComboboxRootProps<Value>, "children" | "i
 };
 
 function SingleCombobox<Value>({
+	disabled,
+	invalid,
 	itemVariant = "default",
 	items,
 	label,
@@ -419,22 +424,24 @@ function SingleCombobox<Value>({
 	...props
 }: SingleComboboxProps<Value>) {
 	return (
-		<Combobox.Root<Value> items={items} {...props}>
-			<Combobox.Label>{label}</Combobox.Label>
-			<Combobox.InputGroup>
-				<Combobox.Input placeholder={placeholder} />
-			</Combobox.InputGroup>
-			<Combobox.Popup>
-				<Combobox.Empty>No matching options.</Combobox.Empty>
-				<Combobox.List>
-					{(item: Value) => (
-						<Combobox.Item key={getItemKey(item, props)} value={item} variant={itemVariant}>
-							{renderItem?.(item) ?? getItemLabel(item, props)}
-						</Combobox.Item>
-					)}
-				</Combobox.List>
-			</Combobox.Popup>
-		</Combobox.Root>
+		<Field.Root disabled={disabled} invalid={invalid}>
+			<Combobox.Root<Value> items={items} {...props}>
+				<Combobox.Label>{label}</Combobox.Label>
+				<Combobox.InputGroup>
+					<Combobox.Input placeholder={placeholder} />
+				</Combobox.InputGroup>
+				<Combobox.Popup>
+					<Combobox.Empty>No matching options.</Combobox.Empty>
+					<Combobox.List>
+						{(item: Value) => (
+							<Combobox.Item key={getItemKey(item, props)} value={item} variant={itemVariant}>
+								{renderItem?.(item) ?? getItemLabel(item, props)}
+							</Combobox.Item>
+						)}
+					</Combobox.List>
+				</Combobox.Popup>
+			</Combobox.Root>
+		</Field.Root>
 	);
 }
 
@@ -456,6 +463,7 @@ type MultipleComboboxProps<Value> = Omit<
 };
 
 function MultipleCombobox<Value>({
+	disabled,
 	chipPlacement = "inside",
 	creatableItem,
 	expandChips,
@@ -489,65 +497,67 @@ function MultipleCombobox<Value>({
 		renderSelectedValues(value, visibleChipLimit, inputGroupRef, props, renderChip);
 
 	return (
-		<Combobox.Root<Value, true> items={items} multiple {...props}>
-			<Combobox.Label>{label}</Combobox.Label>
-			{chipPlacement === "inside" ? (
-				<Combobox.InputGroup ref={inputGroupRef} variant="chips" {...focusProps}>
-					<Combobox.Chips>
+		<Field.Root disabled={disabled}>
+			<Combobox.Root<Value, true> items={items} multiple {...props}>
+				<Combobox.Label>{label}</Combobox.Label>
+				{chipPlacement === "inside" ? (
+					<Combobox.InputGroup ref={inputGroupRef} variant="chips" {...focusProps}>
+						<Combobox.Chips>
+							<Combobox.Value>
+								{(value: Value[]) => (
+									<>
+										{renderValues(value)}
+										<Combobox.Input
+											{...inputProps}
+											placeholder={value.length > 0 ? "" : placeholder}
+										/>
+									</>
+								)}
+							</Combobox.Value>
+						</Combobox.Chips>
+					</Combobox.InputGroup>
+				) : (
+					<Combobox.Chips
+						xstyle={[x.alignItems.stretch, x.flexDirection.column, x.gap(tokens["--space-2"])]}
+						{...focusProps}
+					>
 						<Combobox.Value>
 							{(value: Value[]) => (
 								<>
-									{renderValues(value)}
-									<Combobox.Input
-										{...inputProps}
-										placeholder={value.length > 0 ? "" : placeholder}
-									/>
+									<div {...stylex.props(styles.outsideChipList)}>
+										{value.length > 0 ? (
+											renderValues(value)
+										) : (
+											<Text size="1" color="muted">
+												No selections
+											</Text>
+										)}
+									</div>
+									<Combobox.InputGroup ref={inputGroupRef}>
+										<Combobox.Input {...inputProps} placeholder={placeholder} />
+									</Combobox.InputGroup>
 								</>
 							)}
 						</Combobox.Value>
 					</Combobox.Chips>
-				</Combobox.InputGroup>
-			) : (
-				<Combobox.Chips
-					xstyle={[x.alignItems.stretch, x.flexDirection.column, x.gap(tokens["--space-2"])]}
-					{...focusProps}
-				>
-					<Combobox.Value>
-						{(value: Value[]) => (
-							<>
-								<div {...stylex.props(styles.outsideChipList)}>
-									{value.length > 0 ? (
-										renderValues(value)
-									) : (
-										<Text size="1" color="muted">
-											No selections
-										</Text>
-									)}
-								</div>
-								<Combobox.InputGroup ref={inputGroupRef}>
-									<Combobox.Input {...inputProps} placeholder={placeholder} />
-								</Combobox.InputGroup>
-							</>
+				)}
+				<Combobox.Popup>
+					<Combobox.Empty>No matching options.</Combobox.Empty>
+					<Combobox.List>
+						{(item: Value) => (
+							<Combobox.Item
+								creatable={creatableItem !== undefined && item === creatableItem}
+								key={getItemKey(item, props)}
+								value={item}
+								variant={itemVariant}
+							>
+								{renderItem?.(item) ?? getItemLabel(item, props)}
+							</Combobox.Item>
 						)}
-					</Combobox.Value>
-				</Combobox.Chips>
-			)}
-			<Combobox.Popup>
-				<Combobox.Empty>No matching options.</Combobox.Empty>
-				<Combobox.List>
-					{(item: Value) => (
-						<Combobox.Item
-							creatable={creatableItem !== undefined && item === creatableItem}
-							key={getItemKey(item, props)}
-							value={item}
-							variant={itemVariant}
-						>
-							{renderItem?.(item) ?? getItemLabel(item, props)}
-						</Combobox.Item>
-					)}
-				</Combobox.List>
-			</Combobox.Popup>
-		</Combobox.Root>
+					</Combobox.List>
+				</Combobox.Popup>
+			</Combobox.Root>
+		</Field.Root>
 	);
 }
 
