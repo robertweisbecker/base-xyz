@@ -24,6 +24,7 @@ export {
 export { Code, type CodeProps } from "./code/code";
 export { CodeBlock, type CodeBlockProps } from "./code-block/code-block";
 export { CommandPalette } from "./command-palette/command-palette";
+export { CopyButton, type CopyButtonProps } from "./copy-button/copy-button";
 export {
 	DataTable,
 	type DataTableColumn,

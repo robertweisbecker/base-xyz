@@ -79,6 +79,7 @@ export const Examples: Story = {
 					</Breadcrumbs.Link>
 					<Breadcrumbs.Separator />
 					<Breadcrumbs.Current>Getting started</Breadcrumbs.Current>
+					<Breadcrumbs.Clipboard text="/docs/getting-started" />
 				</Breadcrumbs.Root>
 			</Example>
 			<Separator />

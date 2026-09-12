@@ -5,7 +5,6 @@ import {
 	AsyncJobProgress,
 	ConfirmationDialog,
 	ContextPopover,
-	CopyButton,
 	GoalToolbar,
 	ModelSelector,
 	PageHeader,
@@ -37,6 +36,7 @@ import {
 	Collapsible,
 	Combobox,
 	CommandPalette,
+	CopyButton,
 	DataTable,
 	type DataTableColumnDef,
 	Dialog,
@@ -286,6 +286,14 @@ function getComponentCells(): GalleryCell[] {
 					</CommandPalette.List>
 					<CommandPalette.Empty />
 				</CommandPalette.Root>
+			),
+		},
+		{
+			title: "CopyButton",
+			content: (
+				<CopyButton value="yo@bob.fyi" variant="ghost">
+					yo@bob.fyi
+				</CopyButton>
 			),
 		},
 		{
@@ -959,14 +967,6 @@ function getBlockCells(): GalleryCell[] {
 		{
 			title: "ContextPopover",
 			content: <ContextPopover total={258_000} usage={207_000} />,
-		},
-		{
-			title: "CopyButton",
-			content: (
-				<CopyButton value="yo@bob.fyi" variant="ghost">
-					yo@bob.fyi
-				</CopyButton>
-			),
 		},
 		{
 			title: "GoalToolbar",
