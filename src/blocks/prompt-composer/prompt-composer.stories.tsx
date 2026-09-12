@@ -24,7 +24,7 @@ type ComposerDemoProps = Pick<
 >;
 
 const meta = {
-	title: "Blocks/Prompt composer",
+	title: "Blocks/AI/Prompt composer",
 	component: PromptComposer.Root,
 	args: {
 		onSubmit: () => undefined,

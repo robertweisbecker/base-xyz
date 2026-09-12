@@ -8,7 +8,7 @@ import { Text } from "@/components/text/text";
 import { AgentActionApproval } from "./agent-action-approval";
 
 const meta = {
-	title: "Blocks/Agent action approval",
+	title: "Blocks/AI/Agent action approval",
 	component: AgentActionApproval.Root,
 	parameters: {
 		controls: { disable: true },

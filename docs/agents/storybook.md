@@ -11,6 +11,7 @@
 ## Blocks
 
 - Use `Blocks/` navigation and native Storybook Docs: standard metadata, previews, controls, a concise parts table, and adjacent import `Source`.
+- Put agent- or LLM-specific blocks under `Blocks/AI/` per [ADR 0013](../adr/0013-storybook-ai-block-taxonomy.md); keep general blocks as direct `Blocks/` children.
 - Default to one neutral, labeled `Examples` story with meaningful options, states, and use cases. Add `Playground` only when dynamic controls communicate more than static examples.
 
 ## Story organization and presentation

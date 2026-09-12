@@ -14,7 +14,7 @@ import {
 } from "./model-selector.examples";
 
 const meta = {
-	title: "Blocks/Model selector",
+	title: "Blocks/AI/Model selector",
 	parameters: {
 		controls: { disable: true },
 	},
