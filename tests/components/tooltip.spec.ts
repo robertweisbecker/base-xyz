@@ -31,7 +31,7 @@ test("keeps independent tooltip content inside a shared group", async ({ page })
 	await page.goto(sharedGroupPath);
 
 	const avatar = page.getByRole("img", { name: "Alex Morgan" });
-	const popup = page.locator('[data-slot="tooltip-popup"]');
+	const popup = page.locator('[data-slot="tooltip-popup"][data-open]');
 
 	await avatar.focus();
 	await expect(popup).toHaveText("Alex Morgan");
