@@ -135,8 +135,8 @@ The [forms handbook](https://base-ui.com/react/handbook/forms),
 [Field](https://base-ui.com/react/components/field),
 [Form](https://base-ui.com/react/components/form), and
 [Fieldset](https://base-ui.com/react/components/fieldset) are behavior references.
-Live docs may describe a newer release. If dependency PR #57 lands first, verify
-its exact declarations and amend changed assumptions; do not downgrade packages.
+Live docs may describe a newer release. Verify the installed declarations if
+dependencies change after the reviewed 1.8 baseline; do not downgrade packages.
 
 ## Public composition contract
 
@@ -391,14 +391,13 @@ final change list explainable by this API migration.
   scrubbing, changing control size domains, or moving Checkbox/Radio styles to
   generic Field ownership.
 - Permanent experimental/private-mechanism fixtures or exact paint assertions.
-  Source implementation is not part of this planning task.
 
 ## Commands and baseline
 
 Use the package manager recorded in current package.json. Commands below match
-`c6d9b8f`; if Plan 008 lands first, refresh them before execution. The current
-shared installation has stale TypeScript/Storybook versions; it is not a locked
-verification baseline. Use `npm ci` in an isolated execution checkout if needed.
+`c6d9b8f`; if Plan 008 lands first, refresh them before execution. Verify the
+execution checkout has the current locked dependencies; the original audit
+installation was stale. Use `npm ci` in an isolated checkout if needed.
 Install matching Chromium with `npx playwright install chromium` if absent or
 changed after a Playwright upgrade; Linux may require `--with-deps chromium`.
 
