@@ -27,6 +27,35 @@ test("shares one tooltip across grouped icon buttons", async ({ page }) => {
 	await expect(popup).toBeHidden();
 });
 
+test("keeps independent tooltip content inside a shared group", async ({ page }) => {
+	await page.goto(sharedGroupPath);
+
+	const avatar = page.getByRole("img", { name: "Alex Morgan" });
+	const popup = page.locator('[data-slot="tooltip-popup"]');
+
+	await avatar.focus();
+	await expect(popup).toHaveText("Alex Morgan");
+	await expect(avatar).toHaveAccessibleName("Alex Morgan");
+
+	await page.getByRole("button", { name: "Notifications" }).focus();
+	await expect(popup).toHaveText("Review notifications");
+
+	await avatar.hover();
+	await expect(popup).toHaveText("Alex Morgan");
+});
+
+test("honors a disabled independent root inside a shared group", async ({ page }) => {
+	await page.clock.install();
+	await page.goto(sharedGroupPath);
+
+	const trigger = page.getByRole("button", { name: "Disabled tooltip" });
+	await trigger.focus();
+	await trigger.hover();
+	await page.clock.fastForward(1_000);
+
+	await expect(page.locator('[data-slot="tooltip-popup"]')).toHaveCount(0);
+});
+
 test("keeps collapsed child navigation on its popover interaction", async ({ page }) => {
 	await page.clock.install();
 	await page.goto(childPopoversPath);

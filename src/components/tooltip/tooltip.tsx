@@ -150,7 +150,11 @@ export function Trigger({
 export const Provider = BaseTooltip.Provider;
 
 export function Root<Payload>(props: BaseTooltip.Root.Props<Payload>) {
-	return <BaseTooltip.Root {...props} />;
+	return (
+		<TooltipGroupContext value={null}>
+			<BaseTooltip.Root {...props} />
+		</TooltipGroupContext>
+	);
 }
 
 export function Group({

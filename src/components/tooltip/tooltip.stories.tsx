@@ -2,6 +2,7 @@ import { BellIcon } from "@phosphor-icons/react/dist/csr/Bell";
 import { GearIcon } from "@phosphor-icons/react/dist/csr/Gear";
 import { InfoIcon } from "@phosphor-icons/react/dist/csr/Info";
 import type { Meta, StoryObj } from "@storybook/react-vite";
+import { Avatar } from "@/components/avatar/avatar";
 import { Stack } from "@/components/layout/layout";
 import { Button, IconButton } from "@/components/button/button";
 import { Text } from "@/components/text/text";
@@ -135,6 +136,15 @@ export const SharedGroup: Story = {
 							variant="ghost"
 						/>
 					))}
+				</Stack>
+				<Stack align="center" gap={2} orientation="horizontal">
+					<Avatar name="Alex Morgan" />
+					<Tooltip.Root disabled>
+						<Tooltip.Trigger render={<Button variant="secondary" />}>
+							Disabled tooltip
+						</Tooltip.Trigger>
+						<Tooltip.Popup>This tooltip is disabled</Tooltip.Popup>
+					</Tooltip.Root>
 				</Stack>
 			</Stack>
 		</Tooltip.Group>
