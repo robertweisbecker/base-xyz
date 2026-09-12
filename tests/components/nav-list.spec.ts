@@ -136,7 +136,13 @@ for (const presentation of ["expanded", "icon"] as const) {
 			await expect(page.getByLabel("Click callbacks")).toHaveText("2");
 			await expect(page.getByLabel("Navigation callbacks")).toHaveText("0");
 			if (presentation === "icon") {
+				await expect(trigger).toHaveAttribute("aria-haspopup", "dialog");
 				await expect(trigger).toHaveAttribute("aria-expanded", "true");
+				await expect(trigger).toHaveAttribute("aria-controls", /\S/);
+				await expect(page.getByRole("dialog")).toHaveAttribute(
+					"id",
+					(await trigger.getAttribute("aria-controls")) ?? "",
+				);
 				await page.keyboard.press("Escape");
 				await expect(trigger).toBeFocused();
 				await expect(trigger).toHaveAttribute("aria-expanded", "false");

@@ -5,7 +5,7 @@ import { HouseIcon } from "@phosphor-icons/react/dist/csr/House";
 import { ShieldChevronIcon } from "@phosphor-icons/react/dist/csr/ShieldChevron";
 import { UsersIcon } from "@phosphor-icons/react/dist/csr/Users";
 import * as stylex from "@stylexjs/stylex";
-import { StrictMode, useRef, useState, type MouseEvent } from "react";
+import { useRef, useState, type MouseEvent } from "react";
 import { Badge } from "@/components/badge/badge";
 import { Button } from "@/components/button/button";
 import { Drawer } from "@/components/drawer/drawer";
@@ -203,11 +203,7 @@ export const CollapsedChildPopovers: Story = {
 
 export const States: Story = {
 	parameters: { controls: { disable: true } },
-	render: () => (
-		<StrictMode>
-			<NavigationStates />
-		</StrictMode>
-	),
+	render: () => <NavigationStates />,
 };
 
 function NavigationStates() {
