@@ -10,16 +10,14 @@ plans are not renumbered to fill gaps. The highest allocated identifier is
 
 ## Execution order & status
 
-| Plan                                             | Title                                                                                                          | Priority | Effort | Depends on                                       | Status                               |
-| ------------------------------------------------ | -------------------------------------------------------------------------------------------------------------- | -------: | -----: | ------------------------------------------------ | ------------------------------------ |
-| [011](./011-nav-list-ownership-and-contracts.md) | [Preserve NavList contracts across private owners](https://github.com/robertweisbecker/base-xyz/issues/18)     |       P1 |      M | —                                                | IN PROGRESS                          |
-| [010](./010-copy-button-component-ownership.md)  | [Give CopyButton a canonical component owner](https://github.com/robertweisbecker/base-xyz/issues/58)          |       P2 |      M | Serialize with #65                               | IN PROGRESS                          |
-| [004](./004-form-field-primitives.md)            | [Make inputs standalone and compose fields explicitly](https://github.com/robertweisbecker/base-xyz/issues/19) |       P1 |      L | #54/#60/#65; coordinate #59/#58                  | IN PROGRESS                          |
-| [003](./003-description-list-component.md)       | Add a semantic Description list component                                                                      |       P2 |      M | —                                                | TODO; intentionally local            |
-| [008](./008-migrate-from-npm-to-pnpm.md)         | Migrate repository workflows to pnpm 11                                                                        |       P2 |      M | #65 landed; idle queue                           | TODO; intentionally local            |
-| [005](./005-autocomplete-component.md)           | Add a free-form Autocomplete component                                                                         |       P2 |      M | Landed #19 plus a real consumer                  | TODO — deferred; intentionally local |
-| [009](./009-relative-time-helper.md)             | [Investigate a relative-time helper](https://github.com/robertweisbecker/base-xyz/pull/53)                     |       P3 |      S | Real timestamp consumer; static/live requirement | TODO — deferred                      |
-| [Stepper pagination](./stepper-pagination.md)    | Evaluate shared Stepper pagination controls                                                                    |       P3 |      S | Second real consumer                             | TODO — deferred                      |
+| Plan                                          | Title                                                                                                          | Priority | Effort | Depends on                                       | Status                               |
+| --------------------------------------------- | -------------------------------------------------------------------------------------------------------------- | -------: | -----: | ------------------------------------------------ | ------------------------------------ |
+| [004](./004-form-field-primitives.md)         | [Make inputs standalone and compose fields explicitly](https://github.com/robertweisbecker/base-xyz/issues/19) |       P1 |      L | Prerequisites merged                             | IN PROGRESS                          |
+| [003](./003-description-list-component.md)    | Add a semantic Description list component                                                                      |       P2 |      M | —                                                | TODO; intentionally local            |
+| [008](./008-migrate-from-npm-to-pnpm.md)      | Migrate repository workflows to pnpm 11                                                                        |       P2 |      M | #65 landed; idle queue                           | TODO; intentionally local            |
+| [005](./005-autocomplete-component.md)        | Add a free-form Autocomplete component                                                                         |       P2 |      M | Landed #19 plus a real consumer                  | TODO — deferred; intentionally local |
+| [009](./009-relative-time-helper.md)          | [Investigate a relative-time helper](https://github.com/robertweisbecker/base-xyz/pull/53)                     |       P3 |      S | Real timestamp consumer; static/live requirement | TODO — deferred                      |
+| [Stepper pagination](./stepper-pagination.md) | Evaluate shared Stepper pagination controls                                                                    |       P3 |      S | Second real consumer                             | TODO — deferred                      |
 
 Status values: TODO | IN PROGRESS | DONE | BLOCKED (with one-line reason) |
 REJECTED (with one-line rationale — finding fixed independently or approach
@@ -48,51 +46,46 @@ The `.scratch/` archive is ignored and local to the checkout; never force-add it
 This policy starts on 2026-09-03 and is not retroactive. Older retired plans
 are intentionally not reconstructed here.
 
-| Plan | Title                             | Final status | Durable evidence                                                                                                                                         |
-| ---- | --------------------------------- | ------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| 007  | Decompose DataTable orchestration | DONE         | [Issue #26](https://github.com/robertweisbecker/base-xyz/issues/26); [PR #47](https://github.com/robertweisbecker/base-xyz/pull/47), merged as `e168ac3` |
+| Plan | Title                                            | Final status | Durable evidence                                                                                                                                         |
+| ---- | ------------------------------------------------ | ------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 007  | Decompose DataTable orchestration                | DONE         | [Issue #26](https://github.com/robertweisbecker/base-xyz/issues/26); [PR #47](https://github.com/robertweisbecker/base-xyz/pull/47), merged as `e168ac3` |
+| 010  | Give CopyButton a canonical component owner      | DONE         | [Issue #58](https://github.com/robertweisbecker/base-xyz/issues/58); [PR #75](https://github.com/robertweisbecker/base-xyz/pull/75), merged as `551c7ad` |
+| 011  | Preserve NavList contracts across private owners | DONE         | [Issue #18](https://github.com/robertweisbecker/base-xyz/issues/18); [PR #76](https://github.com/robertweisbecker/base-xyz/pull/76), merged as `a44f5b3` |
 
 ## Dependency notes
 
-- Dependency PR #57 merged as `c42ce205`. Refresh active branches and locked
-  dependencies before final validation; Form/Field starts from this baseline.
-- PR #70 repairs the flaky streaming-clock test. The current dependency stack
-  is #70 → tooling PR #66 → ref PR #73 → CopyButton PR #75. Preserve this
-  merge order; each implementation remains independently reviewable. Input PR
-  #74 also follows #70. Form/Field combines #74, #75, and these published plans
-  before its baseline gate; source migration follows only after that gate passes.
-
-- Prefer #59 typecheck coverage before substantial refactors. Prioritize #60
-  focus and #61 Tooltip isolation alongside it; #62/#64 are independent prose
-  fixes. Each plan still establishes its own baseline.
+- Dependency [PR #57](https://github.com/robertweisbecker/base-xyz/pull/57) merged as
+  `c42ce205`. Refresh active branches and locked dependencies before final validation.
+- Form/Field's streaming, typecheck, and ref prerequisites are merged:
+  [PR #70](https://github.com/robertweisbecker/base-xyz/pull/70) (`aa5b11a`),
+  [PR #66](https://github.com/robertweisbecker/base-xyz/pull/66) (`53bef9e`), and
+  [PR #73](https://github.com/robertweisbecker/base-xyz/pull/73) (`24740a4`).
+  CopyButton [PR #75](https://github.com/robertweisbecker/base-xyz/pull/75) (`551c7ad`)
+  and input/focus [PR #74](https://github.com/robertweisbecker/base-xyz/pull/74)
+  (`8665fc1`) are merged too. Form/Field retains its own baseline and verification gates.
 - NavList is 011 because PR #53 reserved relative-time 009 earlier. CopyButton
   remains 010. Reconcile PR #53's older index before merge; its branch must not
   reset the next number to 010. Never reuse 009 if the investigation is rejected.
-- Plan 011 extends #18. It preserves NavList's public contract, repairs collapsed
-  trigger/disclosure and panel lifetime, then extracts private owners. Serialize
-  with Sidebar work and Plan 008; no Sidebar implementation is required first.
-- Plan 010 and #65 both touch CopyButton. Execute serially and refresh the later
-  item's canonical source path. Preserve legacy block imports. Plans 003/004/010
-  share public barrel/gallery or index files; reconcile additions without drops.
+- CopyButton's canonical owner is now under components; preserve the legacy block
+  imports and the merged local ref helper. Plans 003/004 share public barrel/gallery
+  or index files; reconcile additions without drops.
 - Plan 003 retains the selected native/container-responsive design. The maintainer
   approved AgentActionApproval adopting the component's layout: its default 32rem
   block will stack metadata below DescriptionList's 34rem threshold. Remove its
   duplicated layout styles; preserve public parts/props and review the new layout.
 - #22/PR #36 satisfied Plan 004's earlier prerequisite. The maintainer authorized
   #19 after input styling #54 and related focus/ref fixes #60/#65. Those fixes
-  and overlapping #58 work are now reviewed and verified; #19 is claimed for
-  combined-baseline verification and implementation. No further resumption
+  and overlapping #58 work are merged; #19 remains IN PROGRESS for
+  baseline verification and implementation. No further resumption
   request is needed. Plan 004 migrates inputs/usages to explicit Field composition;
   bare inputs do not create a Field wrapper. It preserves real widget roots and
   broad Base UI form/validation support. No wrapped-shorthand compatibility mode
   or callable .Control aliases are planned. Plan 005 follows the same node-less
   controller boundary and waits for landed code plus a real free-form consumer;
   it must not depend on reading a retired Plan 004 file after completion.
-- #65 independently removes the seven consumers' transitive/private ref helpers.
-  Plan 008 starts only after that change lands and no other plan is IN PROGRESS;
-  dependency PR #57 is already merged. Preserve completed
-  #27/PR #34 and Plan 007/PR #47. Run config/foundation/docs issues #59/#63/#64
-  separately from the package-manager migration.
+- #65's ref cleanup and dependency PR #57 are merged. Plan 008 still waits until
+  no other plan is IN PROGRESS. Preserve completed #27/PR #34 and Plan 007/PR #47;
+  keep foundation issue #63 separate from the package-manager migration.
 - Relative time is an investigation only. Frozen showcase copy does not justify
   shipping an API. Require a real consumer before spikes; test only unresolved
   risks in disposable work. Plan 009 remains reserved and deferred.
@@ -100,41 +93,27 @@ are intentionally not reconstructed here.
   #21 waits for a second real layout with duplicated policy. #21 is not blocked
   by #20. Stepper pagination likewise waits for a second consumer; retain optional
   `completeOnVisit` presentation while consumers own workflow validation.
-- #18/#19/#58 link their published plan revision; keep issue motivation,
-  acceptance, queue state, and decisions when retiring temporary full-plan mirrors.
-  PR #53's description
-  carries the reconciled investigation while its older branch awaits synchronization.
+- Keep issue motivation, acceptance, queue state, and decisions when retiring
+  temporary full-plan mirrors. PR #53's description carries the reconciled
+  investigation while its older branch awaits synchronization.
 
 ## Short backlog issues
 
 These bounded changes have their own scope, acceptance criteria, and verification;
 separate full plans would duplicate the handoff. GitHub owns live queue state.
 
-| Issue                                                         | Scope                                                         | Priority | Effort |
-| ------------------------------------------------------------- | ------------------------------------------------------------- | -------- | ------ |
-| [#59](https://github.com/robertweisbecker/base-xyz/issues/59) | Typecheck tests and Storybook configuration                   | P1       | S      |
-| [#60](https://github.com/robertweisbecker/base-xyz/issues/60) | Restore InputGroup textarea focus                             | P1       | S      |
-| [#61](https://github.com/robertweisbecker/base-xyz/issues/61) | Isolate independent Tooltip roots inside groups               | P1       | S      |
-| [#62](https://github.com/robertweisbecker/base-xyz/issues/62) | Remove obsolete block API documentation parts                 | P2       | S      |
-| [#63](https://github.com/robertweisbecker/base-xyz/issues/63) | Render foundation specimens from canonical styles/tokens      | P2       | S–M    |
-| [#64](https://github.com/robertweisbecker/base-xyz/issues/64) | Document Chromium verification setup                          | P2       | S      |
-| [#65](https://github.com/robertweisbecker/base-xyz/issues/65) | Replace transitive Base UI ref utilities; prerequisite to 008 | P2       | S–M    |
-| [#42](https://github.com/robertweisbecker/base-xyz/issues/42) | Triage Popover arrow removal and retained Tooltip ownership   | P2       | S      |
-| [#39](https://github.com/robertweisbecker/base-xyz/issues/39) | Document optional visit-based Stepper presentation            | P2       | S      |
+| Issue                                                         | Scope                                                       | Priority | Effort |
+| ------------------------------------------------------------- | ----------------------------------------------------------- | -------- | ------ |
+| [#61](https://github.com/robertweisbecker/base-xyz/issues/61) | Isolate independent Tooltip roots inside groups             | P1       | S      |
+| [#63](https://github.com/robertweisbecker/base-xyz/issues/63) | Render foundation specimens from canonical styles/tokens    | P2       | S–M    |
+| [#42](https://github.com/robertweisbecker/base-xyz/issues/42) | Triage Popover arrow removal and retained Tooltip ownership | P2       | S      |
 
 ## Findings considered and rejected
 
-- #39's private step-count assertion was removed in `c6d9b8f`. Its two status
-  switches own different decisions; the two-step orientation story is useful.
-  Retain `completeOnVisit`; clarify its distinction from workflow validation.
 - Tooltip retains its own 20×10 SVG. The maintainer subsequently requested
   removing Popover's arrow in #42; that issue is back in `needs-triage`.
   Reconcile its public usage and LinkPreview's shared arrow styles before
   execution. Tooltip's arrow marker remains a real selector dependency.
-- #55 duplicates #54 and is closed into it. #54 retains original screenshots
-  but distinguishes state defects, unequal fixtures, and pending design choices.
-  Its claim that Base UI fails to propagate Combobox `data-invalid` is disproved;
-  inspect later local border overrides before choosing a fix.
 - Private render/effect mechanics, exact visual values, and experimental UI alone
   do not justify permanent tests under ADR 0012. Use durable contracts and
   focused live review; do not turn every historical observation into a code task.
