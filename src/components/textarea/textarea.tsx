@@ -1,9 +1,9 @@
 import { Field } from "@base-ui/react/field";
-import { useMergedRefs } from "@base-ui/utils/useMergedRefs";
 import * as stylex from "@stylexjs/stylex";
 import { useId, type ComponentProps } from "react";
 import type { FieldSize } from "@/components/field/field.types";
 import { fieldStyles, fieldInputStyles } from "@/components/field/field.stylex";
+import { useMergedRefs } from "@/hooks/use-merged-refs";
 import { mergeStyle, type BaseStyleProps } from "@/styles/props/base";
 import { extractMarginProps, type MarginProps } from "@/styles/props/spacing.stylex";
 import { focusRing } from "@/styles/recipes/focus";

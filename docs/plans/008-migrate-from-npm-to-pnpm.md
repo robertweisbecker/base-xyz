@@ -10,27 +10,29 @@
 > maintain the index.
 >
 > **Drift check (run first)**:
-> `git diff --stat 1569440..HEAD -- package.json package-lock.json pnpm-lock.yaml pnpm-workspace.yaml .prettierignore README.md AGENTS.md vercel.json playwright.config.ts playwright.app.config.ts src/hooks/use-merged-refs.ts src/blocks/prompt-composer/prompt-composer.tsx src/blocks/copy-button/copy-button.tsx src/components/tabs/tabs.tsx src/components/input-group/input-group.tsx src/components/textarea/textarea.tsx src/experimental/drag-and-drop/dnd-kit/dnd-kit-menu-demo.tsx src/experimental/inline-edit/inline-edit.tsx src/foundations/foundation-pages.tsx src/components/code/code.stories.tsx docs/plans docs/agents/planning.md`
-> Before implementation edits, expect only the post-merge lifecycle and plan
-> reconciliation after `1569440`, including Plan 007's retirement. Compare any
-> other change against "Current state." Any unexplained mismatch is a STOP
-> condition.
+> `git diff --stat c42ce20..HEAD -- package.json package-lock.json pnpm-lock.yaml pnpm-workspace.yaml .prettierignore README.md AGENTS.md vercel.json playwright.config.ts playwright.app.config.ts .github/workflows/verify.yml docs/agents/validation.md src/foundations/foundation-pages.tsx src/components/code/code.stories.tsx docs/plans docs/agents/planning.md`
+> Compare source/config changes since dependency PR #57's merge `c42ce20` with
+> this plan. Ref cleanup #65 must land first; reconcile any later dependency
+> changes before taking a fresh baseline. Documentation reconciliation is expected.
+> Stop on unexplained contract or dependency drift rather than restoring older
+> package versions.
 
 ## Status
 
 - **Priority**: P2
 - **Effort**: M
 - **Risk**: HIGH
-- **Completed prerequisites**: issue [#27](https://github.com/robertweisbecker/base-xyz/issues/27) / [PR #34](https://github.com/robertweisbecker/base-xyz/pull/34), merged as `a956b17`; Plan 007 / [PR #47](https://github.com/robertweisbecker/base-xyz/pull/47), merged as `e168ac3`
+- **Completed prerequisites**: issue [#27](https://github.com/robertweisbecker/base-xyz/issues/27) / [PR #34](https://github.com/robertweisbecker/base-xyz/pull/34), merged as `a956b17`; Plan 007 / [PR #47](https://github.com/robertweisbecker/base-xyz/pull/47), merged as `e168ac3`; dependency [PR #57](https://github.com/robertweisbecker/base-xyz/pull/57), merged as `c42ce20`
 - **Category**: migration
 - **Planned at**: commit `9b84d52`, 2026-09-03
-- **Reconciled at**: commit `1569440`, 2026-09-03
-- **Status**: TODO
+- **Reconciled at**: commit `c42ce20`, 2026-09-11
+- **Depends on**: [#65 ref cleanup](https://github.com/robertweisbecker/base-xyz/issues/65) landed; idle implementation queue
+- **Issue**: intentionally local migration proposal; link a durable issue when claimed
+- **Status**: TODO — wait for the listed prerequisites
 
 ## Why this matters
 
-The repository currently uses npm everywhere but already carries an older
-root-level pnpm migration draft. pnpm's strict dependency layout would expose
+The repository currently uses npm. pnpm's strict dependency layout would expose
 six source imports from the transitive `@base-ui/utils` package that npm
 hoisting currently masks, so replacing the lockfile without first correcting
 that boundary would produce an incomplete migration. Move to one exactly
@@ -39,33 +41,28 @@ permissions, and pnpm-based local, browser, documentation, Dependabot, and
 Vercel workflows while preserving the locked dependency graph and all current
 behavior.
 
-This plan supersedes the former root-level `pnpm-migration-plan.md`, which was
-authored before the current validation, deployment, issue, and plan-lifecycle
-infrastructure existed.
-
 ## Current state
 
 ### Repository and package-manager boundary
 
-- This is a private, single-package React 19/Vite 8/Storybook 10 repository.
+- This is a non-published single-package React 19/Vite 8/Storybook 10 project
+  in a public GitHub repository.
   There is one root `package.json`, no package workspace, and no publish step.
 - `package-lock.json` is a lockfile v3 and is the only authoritative lockfile.
   There is no `pnpm-lock.yaml`, `pnpm-workspace.yaml`, `.npmrc`, or
-  `packageManager` field at commit `9b84d52`.
+  `packageManager` field at the reconciled commit `c42ce20`.
 - `package.json:6-8` declares Node `>=20`. The planned pnpm executable is
   `11.19.0`; its own installed package metadata declares Node `>=22.13`.
-  The planning host runs Node `v24.9.0`, npm `11.6.0`, Corepack `0.34.0`, and
-  pnpm `11.19.0`. Selecting pnpm 11 therefore intentionally raises the
+  Record the execution host versions afresh. Selecting pnpm 11 raises the
   repository Node floor to `>=22.13`; do not leave contradictory engine and
   package-manager requirements.
-- The current `node_modules` is stale relative to `package.json` and
-  `package-lock.json`: `npm ls --depth=0` reports several invalid installed
-  versions, while the lockfile contains the requested current versions. Build
-  the comparison baseline from a fresh `npm ci` in the implementation
-  worktree, not from today's installed directory.
-- The root lockfile currently records install scripts for `esbuild` and a
-  nested optional `fsevents`. Previous pnpm diagnostics found that the required
-  toolchain permission is `esbuild`; do not approve every dependency script.
+- Earlier audits found installed versions that differed from `package.json`
+  and `package-lock.json`. Build the comparison baseline from a fresh `npm ci`
+  in the implementation worktree, not from a pre-existing installed directory.
+- At `c42ce20`, the root lockfile records an install script only for
+  `esbuild@0.28.1`; the earlier nested optional `fsevents` is absent. Previous
+  pnpm diagnostics identified `esbuild` as the required toolchain permission.
+  Recheck the execution baseline; do not approve every dependency script.
 
 Use these exact package-manager choices unless a STOP condition applies:
 
@@ -129,44 +126,29 @@ src/components/textarea/textarea.tsx
 src/experimental/drag-and-drop/dnd-kit/dnd-kit-menu-demo.tsx
 ```
 
-`@base-ui/react@1.7.0` depends on `@base-ui/utils@0.3.2`, so npm's flattened
-layout makes those undeclared imports resolve accidentally. pnpm must not be
-configured with public/shameful hoisting to preserve that accident, and the
+At the post-#57 baseline `c42ce20`, the manifest requests `@base-ui/react@^1.8.0`
+and the lockfile resolves `@base-ui/react@1.8.0`, which depends on
+`@base-ui/utils@0.4.0`. The utils package remains transitive, so npm's flattened
+layout still makes those undeclared imports resolve accidentally. pnpm must not
+be configured with public/shameful hoisting to preserve that accident, and the
 transitive utility must not be added as a direct dependency.
 
-Issue #27 / PR #34 landed as `a956b17`, changing commit-safety for latest-value
-refs in InlineEdit and two hooks without removing these six imports. This plan
-must preserve that completed work while extracting InlineEdit's React 19
-cleanup-aware local two-ref helper.
-
-`src/experimental/inline-edit/inline-edit.tsx` now contains the right semantic
-seed in its private `useComposedRef` and `setRef` helpers:
-
-```tsx
-function useComposedRef<T>(...refs: Array<Ref<T> | undefined>) {
-	return useCallback((value: T | null) => {
-		const cleanups = refs.map((ref) => setRef(ref, value));
-		return () => {
-			for (const cleanup of cleanups) cleanup?.();
-		};
-	}, refs);
-}
-```
-
-The actual implementation currently includes a hooks-lint suppression because
-the rest array is newly allocated. Extract a repository-owned hook accepting
-exactly two refs—the only supported use case in all seven consumers—with
-literal `[firstRef, secondRef]` dependencies. Preserve callback-ref cleanup
-functions, the `ref(null)` fallback for callback refs without cleanup, and
-object-ref clearing. Do not use `mergeProps`: Base UI 1.7 explicitly documents
-that its public `mergeProps` keeps only the rightmost ref.
+[Ref cleanup #65](https://github.com/robertweisbecker/base-xyz/issues/65) owns
+replacement of those imports and InlineEdit's local helper with one closed,
+React 19 cleanup-aware two-ref hook. That independent change must land before
+this migration. Preserve its implementation; do not edit refs during a lockfile
+conversion. If Plan 010 moved CopyButton, inspect its new canonical component
+path. The relevant invariant is `rg -n 'from "@base-ui/utils' src` returning no
+matches, not a fixed list of filenames or absence of a private `setRef`.
 
 ### Repository-facing npm references
 
 The current migration surface is broader than the old draft:
 
 - `README.md:16-24,135-137` — install, app, Storybook, verification, and Doctor;
-- `AGENTS.md:64-65` — canonical executor verification commands;
+- `AGENTS.md` and `docs/agents/validation.md` — canonical verification commands
+  and browser setup;
+- `.github/workflows/verify.yml` — Node 24, npm cache, `npm ci`, and quick gate;
 - `package.json:18-24` — nested package scripts;
 - `playwright.config.ts:25` — Storybook preview through `npx vite`;
 - `playwright.app.config.ts:18` — app preview through `npm run`;
@@ -196,8 +178,24 @@ authoritative lockfile changes.
 incorrectly said there was no deployment configuration. Change the explicit
 build command to pnpm and keep `outputDirectory: "storybook-static"`.
 
-There is no GitHub Actions workflow. `.github/dependabot.yml` is the only
-tracked GitHub automation and should continue using `package-ecosystem: npm`.
+`.github/workflows/verify.yml` runs the quick gate on pull requests, with
+read-only contents permission, cancellation by workflow/ref, and a 10-minute
+timeout. Migrate its install/cache commands without broadening CI to full
+browser verification. Keep Dependabot's `package-ecosystem: npm`.
+
+Vercel's actual project settings were not inspected. Verify its Node version and
+package-manager selection before claiming deployment readiness. The documented
+Corepack route requires `packageManager` plus the project opt-in
+`ENABLE_EXPERIMENTAL_COREPACK=1`; do not assume that setting exists or is absent.
+Inspect actual settings and authorized preview logs, or report deployment
+selection unverified. See [Vercel Corepack selection](https://vercel.com/docs/builds/configure-a-build#corepack).
+No environment-setting changes or deployment is authorized by this plan alone.
+
+Dependency PR #57 merged as `c42ce20`, establishing the recorded dependency
+baseline, including Base UI, Playwright, and Storybook upgrades. Serialize any
+later dependency edits before taking the fresh npm snapshot; refresh
+installed-type and Chromium assumptions from that execution lockfile. Passing
+quick/preview checks on #57 are not full interaction evidence.
 
 Plan 007 completed in PR #47 and is retired from the active plan directory.
 Do not execute this repository-wide package-manager migration concurrently
@@ -211,14 +209,18 @@ recreate Plan 007 merely because it appears in the original planned-at scope.
   Expect the intended isolated branch or worktree, clean before migration.
 - Confirm queue: `rg -n 'IN PROGRESS' docs/plans/README.md`. Expect no active
   plan row other than Plan 008 after it is claimed.
+- Browser prerequisite: after locked dependency installation, run
+  `npx playwright install chromium` if its matching browser is absent (or
+  after a Playwright upgrade); on Linux use `--with-deps chromium` when
+  system libraries are missing. Do this before the full baseline gate.
 - Record environment:
-  `node --version && npm --version && corepack --version && pnpm --version`.
-  Expect Node to satisfy `>=22.13` and pnpm to print `11.19.0`.
+  `node --version && npm --version && corepack --version`.
+  Expect Node to satisfy `>=22.13`; check `pnpm --version` only after bootstrap.
 - Establish the npm baseline:
   `npm ci && npm ls --depth=0 --json > /tmp/base-xyz-plan-008-npm-baseline.json`.
   Expect a clean npm install and dependency snapshot.
 - Find phantom imports: `rg -n 'from "@base-ui/utils' src`. Expect no matches
-  after the ref migration.
+  before starting this migration; #65 owns the correction.
 - Inspect blocked install scripts: `pnpm ignored-builds`. Expect no required
   build to remain unapproved and `esbuild` to be allowed explicitly.
 - Prove the pnpm install: `pnpm install --frozen-lockfile`. Expect a clean
@@ -233,8 +235,9 @@ recreate Plan 007 merely because it appears in the original planned-at scope.
 - Run the full gate: `pnpm run verify:full`. Expect app, Storybook, browser,
   StyleX development, and bundle gates to pass.
 - Inventory repository-facing commands:
-  `rg -n -e 'npm run' -e 'npm install' -e 'npm exec' -e 'npm ci' -e '\bnpx\b' README.md AGENTS.md package.json vercel.json playwright.config.ts playwright.app.config.ts src/foundations/foundation-pages.tsx src/components/code/code.stories.tsx docs/plans`.
-  Expect only intentional migration or rollback references to remain.
+  `rg -n -e 'npm run' -e 'npm install' -e 'npm exec' -e 'npm ci' -e '\bnpx\b' README.md AGENTS.md docs/agents/validation.md .github/workflows/verify.yml package.json vercel.json playwright.config.ts playwright.app.config.ts src/foundations/foundation-pages.tsx src/components/code/code.stories.tsx docs/plans`.
+  Expect only intentional migration/rollback references and the exact pinned
+  npm-to-pnpm CI bootstrap to remain.
 - Check final lockfiles:
   `git ls-files package-lock.json pnpm-lock.yaml && test ! -e package-lock.json && test -f pnpm-lock.yaml`.
   Expect only `pnpm-lock.yaml` after staging or commit preparation.
@@ -244,18 +247,15 @@ Do not use the current root `node_modules` as baseline evidence. The successful
 
 ## Suggested executor toolkit
 
-- Read `AGENTS.md`, `README.md`, `docs/agents/planning.md`, and ADR 0012 before
+- Read `AGENTS.md`, `README.md`, `docs/agents/validation.md`,
+  `docs/agents/planning.md`, and ADR 0012 before
   starting. This migration changes repository workflow, not component design.
 - Use pnpm 11.19.0's local help and official references when a command is
   unclear:
   [installation/Corepack](https://pnpm.io/installation#using-corepack),
   [`pnpm import`](https://pnpm.io/cli/import), and
   [`pnpm approve-builds`](https://pnpm.io/cli/approve-builds).
-- Use the installed Base UI 1.7 documentation at
-  `node_modules/@base-ui/react/docs/react/utils/merge-props.md` to confirm that
-  `mergeProps` does not merge refs.
-- Use the repository's code-review skill after the ref-hook extraction and
-  package-manager migration. Treat generated lockfile volume as data to inspect,
+- Use the repository's code-review skill after the package-manager migration. Treat generated lockfile volume as data to inspect,
   not a reason to skip the semantic diff.
 
 ## Scope
@@ -272,14 +272,8 @@ Do not use the current root `node_modules` as baseline evidence. The successful
 - `vercel.json`
 - `playwright.config.ts`
 - `playwright.app.config.ts`
-- `src/hooks/use-merged-refs.ts` (create)
-- `src/blocks/copy-button/copy-button.tsx`
-- `src/blocks/prompt-composer/prompt-composer.tsx`
-- `src/components/input-group/input-group.tsx`
-- `src/components/tabs/tabs.tsx`
-- `src/components/textarea/textarea.tsx`
-- `src/experimental/drag-and-drop/dnd-kit/dnd-kit-menu-demo.tsx`
-- `src/experimental/inline-edit/inline-edit.tsx`
+- `.github/workflows/verify.yml`
+- `docs/agents/validation.md`
 - `src/foundations/foundation-pages.tsx`
 - `src/components/code/code.stories.tsx`
 - every active tracked plan file still present under `docs/plans/` when this
@@ -294,8 +288,8 @@ Do not use the current root `node_modules` as baseline evidence. The successful
   internal, or enabling `shamefully-hoist`/public hoisting to mask undeclared
   imports.
 - Replacing ref composition with `mergeProps`; it does not preserve both refs.
-- Changing ref ownership, component output, styling, icons, Storybook content,
-  or public APIs while migrating the helper.
+- Ref implementation, component output, styling, icons, public APIs, or
+  Storybook content beyond the two command examples listed in Scope.
 - Upgrading application dependencies, changing package ranges, resolving
   unrelated npm audit findings, or accepting top-level version drift.
 - Converting the repository into a multi-package workspace. A
@@ -303,7 +297,7 @@ Do not use the current root `node_modules` as baseline evidence. The successful
   dependency-build policy there.
 - Approving every dependency lifecycle script, disabling script safety, or
   adding a broad trusted-dependency pattern.
-- Changing Dependabot's `package-ecosystem: npm`, GitHub labels/issues, ADRs,
+- Changing Dependabot's `package-ecosystem: npm`, unrelated GitHub labels/issues, ADRs,
   Doctor rule waivers, test behavior, test concurrency, ports, or gate order.
 - Rewriting historical npm references in `.agents/PAPERCUTS.md`, Git history,
   ignored scratch plans, or retired-plan ledger evidence.
@@ -319,18 +313,19 @@ Do not use the current root `node_modules` as baseline evidence. The successful
   from the then-current `main`.
 - Suggested branch: `codex/migrate-to-pnpm`.
 - Preserve a clean pre-migration npm baseline in `/tmp`, not as tracked files.
-- Prefer two reviewable commits if authorized:
-  1. `[codex] Remove transitive Base UI utility imports`
-  2. `[codex] Migrate repository workflows to pnpm`
+- #65 lands as an independent prerequisite. If a migration commit is
+  separately authorized, use `[codex] Migrate repository workflows to pnpm`.
 - Do not push or open a pull request unless instructed.
 
 ## Steps
 
 ### Step 1: Establish a clean npm baseline and execution lock
 
-Confirm commits `a956b17` and `e168ac3` are ancestors of the implementation
-base and inspect the final InlineEdit/hook diff. Confirm no plan other than Plan
-008 is IN PROGRESS, then mark Plan 008 IN PROGRESS without changing other
+Confirm commits `a956b17`, `e168ac3`, and dependency baseline `c42ce20` are
+ancestors of the implementation base. Confirm #65 is landed and its
+phantom-import check is empty. Serialize later dependency work before recording
+this base. Confirm no plan other than Plan 008 is IN PROGRESS, then mark Plan
+008 IN PROGRESS without changing other
 statuses. The package-manager migration is a serial infrastructure change; do
 not run it beside another executor whose commands or lockfile may change.
 
@@ -343,7 +338,8 @@ npm --version
 corepack --version
 npm ci
 npm ls --depth=0 --json > /tmp/base-xyz-plan-008-npm-baseline.json
-npm run verify:quick
+# If the lockfile-matching browser is absent:
+npx playwright install chromium
 npm run verify:full
 npm run doctor
 ```
@@ -356,75 +352,7 @@ later failures impossible to attribute to pnpm.
 **Verify**: all baseline commands exit 0 except any already-documented advisory
 Doctor status; `git status --short` still contains no generated tracked change.
 
-### Step 2: Replace the transitive ref utility with a repository-owned hook
-
-Create `src/hooks/use-merged-refs.ts` with a closed two-ref API:
-
-```tsx
-export function useMergedRefs<T>(
-	firstRef: Ref<T> | undefined,
-	secondRef: Ref<T> | undefined,
-): RefCallback<T> {
-	return useCallback(
-		(value) => {
-			const firstCleanup = setRef(firstRef, value);
-			const secondCleanup = setRef(secondRef, value);
-			return () => {
-				firstCleanup?.();
-				secondCleanup?.();
-			};
-		},
-		[firstRef, secondRef],
-	);
-}
-```
-
-Add a private `setRef` that preserves React 19 callback-ref cleanup semantics:
-
-- callback refs receive the instance; retain and return their cleanup when they
-  provide one;
-- callback refs without cleanup receive `null` during cleanup;
-- object refs receive the instance and reset to `null` during cleanup;
-- missing refs do nothing.
-
-Use exact React `Ref`/`RefCallback` types without `any`, a variable-length rest
-API, render-time ref mutation, or a hooks-lint suppression.
-
-Replace all six `@base-ui/utils/useMergedRefs` imports with the local hook.
-With PR #34's final changes present, replace InlineEdit's private
-`useComposedRef`/`setRef` with the same hook and remove the duplicate functions.
-Change no call-site order: the forwarded/caller ref remains first and the
-component-owned ref remains second.
-
-Do not add a direct `@base-ui/utils` dependency. Do not substitute
-`@base-ui/react/merge-props` because only the rightmost ref survives.
-
-**Verify**:
-
-```sh
-rg -n 'from "@base-ui/utils|function useComposedRef|function setRef' src
-pnpm exec tsc -b --pretty false
-pnpm exec oxlint src/hooks/use-merged-refs.ts src/blocks/copy-button/copy-button.tsx src/blocks/prompt-composer/prompt-composer.tsx src/components/input-group/input-group.tsx src/components/tabs/tabs.tsx src/components/textarea/textarea.tsx src/experimental/drag-and-drop/dnd-kit/dnd-kit-menu-demo.tsx src/experimental/inline-edit/inline-edit.tsx
-```
-
-Expected: the inventory returns no matches; typecheck and focused lint exit 0.
-Use the already available pnpm executable for these commands, but do not alter
-the lockfile yet.
-
-Run existing behavior coverage before changing package managers:
-
-```sh
-npm run build-storybook
-npx playwright test tests/blocks/prompt-composer.spec.ts tests/components/tabs.spec.ts
-```
-
-Expected: existing public behavior passes with shared console/page-error
-capture. Per ADR 0012, do not add a permanent private-ref fixture. Manually
-exercise Textarea auto-resize, InputGroup Textarea auto-resize, CopyButton toast
-anchoring, Tabs indicator motion, PromptComposer scrolling, and drag handles in
-their existing stories; record results in the implementation handoff.
-
-### Step 3: Pin pnpm and import the npm lockfile
+### Step 2: Pin pnpm and import the npm lockfile
 
 Make pnpm 11.19.0 available through Corepack without `sudo`:
 
@@ -471,7 +399,7 @@ rg -n 'package-lock.yaml|package-lock.json' .prettierignore package.json
 Expected: pnpm is `11.19.0`; package metadata matches; only the new lockfile is
 present; `.prettierignore` contains no obsolete package-lock entry.
 
-### Step 4: Record the dependency-build policy and prove strict installation
+### Step 3: Record the dependency-build policy and prove strict installation
 
 Remove the npm-created `node_modules`, then install from pnpm without hoisting
 overrides. Review `pnpm ignored-builds` and approve only packages required by
@@ -501,13 +429,13 @@ pnpm list --depth=0 --json > /tmp/base-xyz-plan-008-pnpm-baseline.json
 
 Compare every top-level version against the clean npm baseline. Also run
 `pnpm why @base-ui/utils`: it may appear transitively through Base UI, but the
-source inventory from Step 2 must remain empty.
+prerequisite phantom-import inventory must remain empty.
 
 **Verify**: frozen install exits 0, no required build remains blocked, top-level
 versions match, and neither `shamefully-hoist` nor a public-hoist workaround is
 present in repository configuration.
 
-### Step 5: Convert repository commands and deployment configuration
+### Step 4: Convert repository commands and deployment configuration
 
 Update package-manager invocations while preserving script behavior:
 
@@ -518,8 +446,18 @@ Update package-manager invocations while preserving script behavior:
   `pnpm run preview`.
 - In `vercel.json`, change the build command to
   `pnpm run build-storybook`; preserve the output directory.
-- In `README.md`, convert setup, dev, Storybook, quick/full verification, and
-  Doctor examples to pnpm.
+- In `README.md` and `docs/agents/validation.md`, convert setup, dev,
+  Storybook, quick/full verification, Doctor, and Playwright installation
+  examples to pnpm. Preserve browser setup as a prerequisite, not a per-run
+  download; Playwright upgrades can require a matching browser reinstall.
+- In `.github/workflows/verify.yml`, retain checkout and establish Node 24
+  without a package-manager cache first. Install the exact pnpm 11.19.0
+  executable explicitly (for example `npm install --global pnpm@11.19.0`),
+  verify `pnpm --version`, then configure `actions/setup-node` with Node 24,
+  `cache: pnpm`, and `cache-dependency-path: pnpm-lock.yaml`. Run
+  `pnpm install --frozen-lockfile`, then `pnpm run verify:quick`. This ordering
+  gives the cache step a working pnpm executable. Keep the current action
+  versions, PR trigger, permissions, concurrency, timeout, and quick-only scope.
 - In `AGENTS.md`, convert executable validation commands to pnpm without
   changing their policy or meaning.
 - Update the visible code examples in `foundation-pages.tsx` and
@@ -534,31 +472,24 @@ README and historical PAPERCUT entries unchanged.
 
 **Verify**: run the command inventory from "Commands you will need." Inspect
 each remaining match and confirm it is an intentional migration baseline,
-rollback command, package link, historical record, or `pnpm import` source
-description—not an executable repository instruction.
+rollback command, package link, historical record, `pnpm import` source
+description, or the exact pinned `npm install --global pnpm@11.19.0` CI
+bootstrap. All ordinary repository install/run instructions must use pnpm.
 
-### Step 6: Run the complete pnpm verification matrix
+### Step 5: Run the complete pnpm verification matrix
 
 Run the repository only through pnpm:
 
 ```sh
-pnpm run typecheck
-pnpm run lint
-pnpm run format:check
-pnpm run verify:quick
-pnpm run doctor
-pnpm run test:stylex-dev
-pnpm run test:app
-pnpm run test:storybook
-pnpm run test:style-props:bundle
 pnpm run verify:full
+pnpm run doctor
 ```
 
-`verify:full` repeats most focused commands intentionally; the individual runs
-localize failures and the final run proves the public aggregate workflow.
-Doctor remains advisory: inspect new diagnostics attributable to the ref
-extraction or strict dependency layout, but do not chase unrelated warnings or
-change its configured export waiver.
+The full gate includes quick and all build/browser/bundle leaf checks. Run a
+leaf independently only to diagnose a failure or verify a later relevant edit;
+do not prescribe duplicate passing leaf/quick/full runs. Compare advisory
+Doctor diagnostics with the fresh npm baseline without score chasing or waiver
+changes.
 
 Then run live development checks after dependency optimization finishes:
 
@@ -570,18 +501,24 @@ pnpm run storybook
 Use separate terminals and the repository's alternate-port guidance when
 another checkout already owns a port. Confirm the Vite app and representative
 component, block, experimental, and foundation stories render; exercise the
-six ref-hook consumers; verify the StyleX development stylesheet and browser
+affected resize, anchor, scrolling, and indicator behavior already established
+by #65; verify the StyleX development stylesheet and browser
 console remain clean.
 
-If the operator authorizes a branch push/PR, require a Vercel preview to use the
-new lockfile and `pnpm run build-storybook`. Without deployment authorization,
-verify `vercel.json` by source inspection and the identical local Storybook
-build; do not create a deployment solely for this plan.
+Inspect Vercel's selected Node/package-manager mechanism when access permits.
+For an authorized preview, require logs showing pnpm **11.19.0**, a frozen
+pnpm-lock install, the intended Node version, and a successful Storybook build.
+A changed `buildCommand` alone does not prove package-manager selection.
+Without deployment authorization or settings access, record local verification
+as complete and deployment selection as unverified; do not deploy or alter
+project environment settings solely to satisfy this plan.
 
-**Verify**: every pnpm command exits 0, live app/Storybook evidence is recorded,
-and any Vercel preview that was authorized succeeds.
+**Verify**: full gate passes, Doctor has no unexplained migration regression,
+live evidence is recorded, and CI source preserves quick-only policy. Any
+claim of CI or deployment success requires an actual authorized run; otherwise
+report that limitation explicitly.
 
-### Step 7: Prove frozen reproducibility and prepare rollback evidence
+### Step 6: Prove frozen reproducibility and prepare rollback evidence
 
 Capture the checksum of `pnpm-lock.yaml`, remove `node_modules`, run another
 clean frozen install, and confirm the lockfile does not change:
@@ -602,17 +539,17 @@ tracked install/build artifacts.
 Rollback, if a STOP condition prevents completion:
 
 1. use Git in the isolated branch to restore `package.json`,
-   `package-lock.json`, `.prettierignore`, configs, docs, and source imports;
+   `package-lock.json`, `.prettierignore`, configs, and docs changed by this migration; preserve landed #65;
 2. remove migration-created `pnpm-lock.yaml` and `pnpm-workspace.yaml` only
    after resolving their exact paths;
-3. run `npm ci`, then the original npm `verify:quick` and `verify:full` gates;
+3. run `npm ci`, then the original npm `verify:full` gate;
 4. leave Plan 008 BLOCKED with the exact incompatibility and do not leave a
    mixed-lockfile or partially converted command state.
 
 **Verify**: either the pnpm end state passes every criterion, or the npm rollback
 returns to the clean baseline with no mixed migration files.
 
-### Step 8: Complete the plan lifecycle without reusing its number
+### Step 7: Complete the plan lifecycle without reusing its number
 
 After all gates pass, update any linked issue only if the operator authorized
 GitHub changes. No issue was published while this plan was written.
@@ -620,8 +557,8 @@ GitHub changes. No issue was published while this plan was written.
 Copy the final Plan 008 to the ignored scratch archive, remove the tracked plan
 file, and move its row from the active table to the public retired-plan ledger
 with DONE status and the durable commit/PR evidence. Keep `008` reserved and
-leave the index's next available identifier at `009` unless another plan was
-allocated concurrently.
+preserve the index's current highest/next markers (011/012 at reconciliation),
+advancing only for newly allocated plans. Never reset the marker to 009.
 
 **Verify**:
 
@@ -642,15 +579,11 @@ implementation scope is changed.
 
 - Add no permanent test or Storybook fixture solely for package-manager or
   private-ref implementation details, per ADR 0012.
-- Before lockfile migration, run existing PromptComposer and Tabs browser specs
-  after the ref-hook extraction; rely on `tests/playwright.ts` for console and
-  page-error capture.
-- Manually exercise current stories for all seven ref-hook consumers, including
-  callback behavior, auto-resize, scroll fading, indicator/anchor behavior, and
-  drag handles. Record the story IDs and results as review evidence.
-- Establish a fresh npm baseline with `npm ci` and both aggregate verification
-  gates before switching. After switching, run every equivalent command with
-  pnpm and the full `verify:full` gate.
+- #65 owns focused ref characterization and cleanup evidence. Confirm it landed
+  and reuse its coverage; do not repeat ref implementation in this migration.
+- Establish one fresh npm baseline with `npm ci` and `npm run verify:full`.
+  After switching, run `pnpm run verify:full` once plus advisory Doctor and
+  targeted live review. Repeat affected checks only for changes or failures.
 - Perform two clean `pnpm install --frozen-lockfile` passes using the committed
   build policy; compare the lockfile checksum and top-level resolved versions.
 - If authorized, use the Vercel preview as deployment evidence. Do not make
@@ -658,31 +591,34 @@ implementation scope is changed.
 
 ## Done criteria
 
-- [ ] Issue #27 / PR #34 and Plan 007 / PR #47 are present in the base, and no
-      other plan ran concurrently with the package-manager migration.
+- [ ] Issue #27 / PR #34, Plan 007 / PR #47, and dependency PR #57 (`c42ce20`)
+      are present in the base, and no other plan ran concurrently with the
+      package-manager migration.
 - [ ] `package.json` declares Node `>=22.13` and exact
       `packageManager: "pnpm@11.19.0"`.
 - [ ] `pnpm-lock.yaml` is the only authoritative lockfile;
       `package-lock.json` is removed and `.prettierignore` follows the new file.
 - [ ] `pnpm-workspace.yaml` contains only the necessary pnpm 11 dependency-build
       policy, with `esbuild` explicitly allowed and no broad approval.
-- [ ] All source imports of `@base-ui/utils` are gone; the repository-owned
-      two-ref hook preserves callback cleanup and object-ref clearing without
-      `any`, render-time ref mutation, or lint suppression.
+- [ ] #65 is landed; `rg -n 'from "@base-ui/utils' src` remains empty and
+      ref implementation is unchanged by this migration.
 - [ ] No direct `@base-ui/utils` dependency, shameful/public hoisting, or
       `mergeProps` ref workaround was added.
 - [ ] A clean frozen pnpm install succeeds twice without changing the lockfile;
       top-level versions match the clean npm baseline.
-- [ ] README, AGENTS, composite scripts, Playwright servers, Vercel, visible
-      examples, and all still-active plans use pnpm commands consistently.
+- [ ] README, AGENTS, validation guide, CI, composite scripts, Playwright
+      servers, Vercel, visible examples, and active plans use pnpm consistently.
+- [ ] CI bootstraps exact pnpm before cache/frozen install and preserves its
+      existing quick-only trigger/permission/concurrency policy.
 - [ ] Dependabot remains `package-ecosystem: npm`; historical npm records are
       unchanged.
-- [ ] Existing focused PromptComposer/Tabs tests pass; manual ref-consumer
-      evidence is recorded; no migration-only permanent fixture was added.
+- [ ] Existing full-suite behavior and focused live integration remain valid;
+      no migration-only permanent fixture was added.
 - [ ] `pnpm run verify:quick`, `pnpm run doctor`, and
       `pnpm run verify:full` complete with no migration regression.
 - [ ] Live Vite and Storybook checks pass after optimization; any authorized
-      Vercel preview uses pnpm successfully.
+      Vercel preview proves Node, exact pnpm 11.19.0, frozen install, and build.
+      If no preview is authorized, deployment readiness is explicitly unverified.
 - [ ] No generated build/test/install artifacts or files outside Scope remain.
 - [ ] Plan 008 is archived to ignored scratch, its tracked file is removed, its
       compact public row is DONE, and identifier 008 is never reused.
@@ -691,9 +627,9 @@ implementation scope is changed.
 
 Stop and report; do not improvise if:
 
-- commits `a956b17` or `e168ac3` are absent, Plan 007 still appears IN PROGRESS
-  in the active-plan metadata, the final InlineEdit changes conflict with the
-  planned shared ref hook, or another plan is still IN PROGRESS;
+- commits `a956b17`, `e168ac3`, or `c42ce20` are absent, Plan 007 still appears
+  IN PROGRESS in active-plan metadata, #65 is not landed, dependency work overlaps the
+  baseline, or another plan is still IN PROGRESS;
 - the fresh npm baseline fails before any migration edit;
 - Node 20 support is intentional and may not be raised to the pnpm 11.19.0
   minimum of Node 22.13;
@@ -703,8 +639,8 @@ Stop and report; do not improvise if:
   without a separately approved dependency update;
 - strict installation succeeds only by adding `@base-ui/utils`, enabling broad
   hoisting, approving all lifecycle scripts, or changing application behavior;
-- any ref consumer requires more than two refs, loses callback cleanup, changes
-  ref order/ownership, or needs a new public API/test-only fixture;
+- completing migration would require changing ref behavior or adding a
+  public API/test-only fixture; route ref problems back to #65;
 - a required dependency script other than `esbuild` is blocked and its need
   cannot be proven from the current toolchain;
 - Vite, Storybook, StyleX cold-start, Playwright, bundle, or Doctor behavior
@@ -724,11 +660,8 @@ Stop and report; do not improvise if:
   for pnpm manifests; review its first post-migration lockfile PR carefully.
 - `pnpm-workspace.yaml` initially owns dependency-build trust only. Do not infer
   that the repository has become a multi-package workspace.
-- The local `useMergedRefs` hook is deliberately a closed two-ref utility. Add a
-  broader API only when a real caller exists and React cleanup semantics remain
-  explicit.
 - Reviewers should focus on direct/resolved dependency equivalence, absence of
-  hoisting workarounds, lifecycle-script policy, ref cleanup semantics, and the
+  hoisting workarounds, lifecycle-script policy, CI selection, and the
   Vercel/browser gates—not install speed anecdotes.
 - Any active plan created after this migration must use pnpm commands. Retired
   plan numbers remain in the public ledger and are never recycled.

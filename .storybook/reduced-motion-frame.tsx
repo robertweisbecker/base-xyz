@@ -14,7 +14,9 @@ export function ReducedMotionFrame({
 			delete document.documentElement.dataset.reducedMotion;
 		}
 
-		return () => delete document.documentElement.dataset.reducedMotion;
+		return () => {
+			delete document.documentElement.dataset.reducedMotion;
+		};
 	}, [reducedMotion]);
 
 	return <>{children}</>;

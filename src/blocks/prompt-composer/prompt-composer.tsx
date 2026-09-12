@@ -1,5 +1,4 @@
 import { Form } from "@base-ui/react/form";
-import { useMergedRefs } from "@base-ui/utils/useMergedRefs";
 import { ArrowUpIcon } from "@phosphor-icons/react/dist/csr/ArrowUp";
 import { PlusIcon } from "@phosphor-icons/react/dist/csr/Plus";
 import { SquareIcon } from "@phosphor-icons/react/dist/csr/Square";
@@ -17,6 +16,7 @@ import {
 } from "react";
 import { Button, IconButton, InputGroup, Kbd, Menu } from "@/components";
 import type { ButtonProps } from "@/components";
+import { useMergedRefs } from "@/hooks/use-merged-refs";
 import { useScrollFade } from "@/hooks/use-scroll-fade";
 import { mergeStyle, type BaseStyleProps } from "@/styles/props/base";
 import { tokens } from "@/theme/tokens.stylex";

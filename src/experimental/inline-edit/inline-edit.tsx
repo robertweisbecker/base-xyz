@@ -13,7 +13,6 @@ import {
 	useRef,
 	useState,
 	type ReactNode,
-	type Ref,
 } from "react";
 import { IconButton, type IconButtonProps } from "@/components/button/button";
 import { fieldStyles } from "@/components/field/field.stylex";
@@ -32,6 +31,7 @@ import type {
 	TypographySize,
 	TypographyWrap,
 } from "@/components/text/text.types";
+import { useMergedRefs } from "@/hooks/use-merged-refs";
 import { mergeStyle, type BaseStyleProps } from "@/styles/props/base";
 import { extractMarginProps, type MarginProps } from "@/styles/props/spacing.stylex";
 import { resolveTypography, type TypographyProps } from "@/styles/props/typography.stylex";
@@ -284,7 +284,7 @@ function InlineEditRoot({
 	return (
 		<InlineEditContext.Provider value={contextValue}>
 			<span
-				ref={useComposedRef(ref, rootRef)}
+				ref={useMergedRefs(ref, rootRef)}
 				{...rest}
 				aria-busy={pending || undefined}
 				data-disabled={disabled ? "" : undefined}
@@ -358,7 +358,7 @@ function InlineEditValue({
 	...props
 }: InlineEditValueProps) {
 	const context = useInlineEditContext("Value");
-	const composedRef = useComposedRef(ref, context.valueRef);
+	const composedRef = useMergedRefs(ref, context.valueRef);
 	if (context.editing) return null;
 	const isDisabled = context.disabled || disabled;
 	const sx = stylex.props(
@@ -399,7 +399,7 @@ function InlineEditInput({
 	...props
 }: InlineEditInputProps) {
 	const context = useInlineEditContext("Input");
-	const composedRef = useComposedRef(ref, context.inputRef);
+	const composedRef = useMergedRefs(ref, context.inputRef);
 	const sx = stylex.props(
 		fieldStyles.inputUnstyled,
 		inlineEditStyles.input,
@@ -501,35 +501,6 @@ export const InlineEdit = {
 	Root: InlineEditRoot,
 	Value: InlineEditValue,
 } as const;
-
-function useComposedRef<T>(...refs: Array<Ref<T> | undefined>) {
-	return useCallback(
-		(value: T | null) => {
-			const cleanups = refs.map((ref) => setRef(ref, value));
-			return () => {
-				for (const cleanup of cleanups) cleanup?.();
-			};
-		},
-		// The refs passed by these compound parts are stable in practice, while the
-		// array wrapper is newly allocated on every render.
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-		refs,
-	);
-}
-
-function setRef<T>(ref: Ref<T> | undefined, value: T | null) {
-	if (typeof ref === "function") {
-		const cleanup = ref(value);
-		return typeof cleanup === "function" ? cleanup : () => ref(null);
-	}
-	if (ref !== null && ref !== undefined) {
-		ref.current = value;
-		return () => {
-			ref.current = null;
-		};
-	}
-	return undefined;
-}
 
 const inlineEditStyles = stylex.create({
 	root: {

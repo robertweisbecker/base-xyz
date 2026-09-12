@@ -1,6 +1,5 @@
 import { Field } from "@base-ui/react/field";
 import { Input as BaseInput } from "@base-ui/react/input";
-import { useMergedRefs } from "@base-ui/utils/useMergedRefs";
 import * as stylex from "@stylexjs/stylex";
 import { type ComponentProps } from "react";
 import { media } from "@/styles/constants.stylex";
@@ -13,11 +12,13 @@ import { attrJoin } from "@/utils/attr-join";
 import { mergeStyle, type BaseStyleProps } from "@/styles/props/base";
 import { extractMarginProps, type MarginProps } from "@/styles/props/spacing.stylex";
 import { Tooltip } from "@/components/tooltip/tooltip";
+import { useMergedRefs } from "@/hooks/use-merged-refs";
 
 /** Disabled chrome follows a nested input/textarea, not addon action buttons. */
 const GROUP_HAS_DISABLED = ":has(:is(input, textarea):is([data-disabled], :disabled))";
 
 const GROUP_HOVER = `:hover:not(:focus-within):not(:has([aria-invalid="true"])):not(${GROUP_HAS_DISABLED}):not(:has([data-invalid])):not(:has([readonly]))`;
+const GROUP_READONLY = `:has([readonly]):not(${GROUP_HAS_DISABLED}):not(:has([aria-invalid="true"],[data-invalid]))`;
 
 type InputGroupStyledProps<T> = Omit<T, "className" | "style"> &
 	BaseStyleProps & {
@@ -255,9 +256,10 @@ const inputGroupParts = stylex.create({
 			[GROUP_HOVER]: {
 				[media.canHover]: tokens["--border-input-hover"],
 			},
+			[GROUP_READONLY]: tokens["--border"],
 			default: tokens["--border-input"],
+			':has([aria-invalid="true"])': tokens["--bg-error-primary"],
 			":has([data-invalid])": tokens["--bg-error-primary"],
-			":has([readonly])": tokens["--border"],
 		},
 		overflow: "hidden",
 		alignItems: "center",

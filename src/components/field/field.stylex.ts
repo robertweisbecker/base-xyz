@@ -85,6 +85,7 @@ const parts = stylex.create({
 			"[data-invalid]": tokens["--bg-error-primary"],
 			"[data-popup-open]": tokens["--border-input-hover"],
 			"[data-readonly]": tokens["--border"],
+			"[readonly]:not([data-disabled],[data-invalid])": tokens["--border"],
 			default: tokens["--border-input"],
 		},
 		borderStyle: "solid",

@@ -43,7 +43,7 @@ export function InputsPage() {
 				</ComparisonContainer>
 
 				<ComparisonContainer
-					description="One medium-size matrix keeps the common resting, filled, invalid, read-only, and disabled treatments visible together."
+					description="Compare medium-size states. Text field, Textarea, and Number field include error messages; Select, Combobox, and Input group demonstrate invalid styling only."
 					id="field-states"
 					title="States"
 				>

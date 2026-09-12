@@ -16,8 +16,14 @@ import * as stylex from "@stylexjs/stylex";
 import { useState, type ReactNode } from "react";
 import { breakpoints, zIndex } from "@/styles/constants.stylex";
 import { tokens } from "@/theme/tokens.stylex";
+import { attrJoin } from "@/utils/attr-join";
 
-import { fontFamilyStyles, typescaleStyles } from "@/components/text/text.stylex";
+import {
+	fontFamilyStyles,
+	headingStyles,
+	textStyles,
+	typescaleStyles,
+} from "@/components/text/text.stylex";
 
 import { ThemeProvider } from "@/theme";
 
@@ -195,46 +201,46 @@ function TypographySection() {
 
 			<FoundationSection
 				title="Semantic roles"
-				description="Choose a role by intent. Keep each semantic size paired with its matching line-height and letter-spacing step."
+				description="Choose a role by intent. These specimens reuse the canonical text and heading styles, including their semantic size, weight, line-height, and letter-spacing tokens."
 			>
 				<div {...stylex.props(styles.typeRoles)}>
 					<TypeRole
 						name="Display"
-						token='tokens["--font-size-5"] · tokens["--line-height-5"] · tokens["--letter-spacing-5"] · tokens["--font-weight-semibold"]'
+						token="textStyles.display"
 						description="Short, high-emphasis page or empty-state titles."
-						style={styles.typeDisplay}
+						style={textStyles.display}
 					>
 						Design systems, clearly expressed.
 					</TypeRole>
 					<TypeRole
-						name="Title"
-						token='tokens["--font-size-4"] · tokens["--line-height-4"] · tokens["--letter-spacing-4"] · tokens["--font-weight-semibold"]'
+						name="Heading 6"
+						token='headingStyles["6"]'
 						description="Section headings, dialog titles, and card titles."
-						style={styles.typeTitle}
+						style={headingStyles["6"]}
 					>
 						Workspace activity
 					</TypeRole>
 					<TypeRole
-						name="Control"
-						token='tokens["--font-size-3"] · tokens["--line-height-3"] · tokens["--letter-spacing-3"] · tokens["--font-weight-medium"]'
-						description="Prominent labels in buttons, inputs, and menu items."
-						style={styles.typeControl}
+						name="Label"
+						token="textStyles.label"
+						description="Labels in buttons, inputs, and menu items."
+						style={textStyles.label}
 					>
 						Create workspace
 					</TypeRole>
 					<TypeRole
 						name="Body"
-						token='tokens["--font-size-2"] · tokens["--line-height-2"] · tokens["--letter-spacing-2"] · tokens["--font-weight-regular"]'
+						token="textStyles.body"
 						description="Default reading size for descriptions and content."
-						style={styles.typeBody}
+						style={textStyles.body}
 					>
 						Invite collaborators and keep project decisions in one place.
 					</TypeRole>
 					<TypeRole
-						name="Small"
-						token='tokens["--font-size-1"] · tokens["--line-height-1"] · tokens["--letter-spacing-1"] · tokens["--font-weight-medium"]'
+						name="Supporting"
+						token="textStyles.supporting"
 						description="Metadata, helper text, compact labels, and status."
-						style={styles.typeSmall}
+						style={textStyles.supporting}
 					>
 						Updated two minutes ago
 					</TypeRole>
@@ -291,9 +297,14 @@ function SpacingAndShapeSection() {
 				<div {...stylex.props(styles.tokenRows)}>
 					{spacingTokens.map((token) => (
 						<div key={token.name} {...stylex.props(styles.tokenRow)}>
-							<TokenName name={token.name} value={token.value} />
+							<TokenName
+								name={`tokens["${token.name}"]`}
+								value={`Default: ${token.defaultValue}`}
+							/>
 							<div {...stylex.props(styles.measureTrack)}>
-								<span {...stylex.props(styles.measureBar, styles.measureBarWidth(token.value))} />
+								<span
+									{...stylex.props(styles.measureBar, styles.measureBarWidth(tokens[token.name]))}
+								/>
 							</div>
 							<span {...stylex.props(styles.usage)}>{token.usage}</span>
 						</div>
@@ -338,9 +349,15 @@ function SpacingAndShapeSection() {
 					{radiusTokens.map((token) => (
 						<div key={token.name} {...stylex.props(styles.radiusToken)}>
 							<div
-								{...stylex.props(styles.radiusSpecimen, styles.radiusSpecimenValue(token.value))}
+								{...stylex.props(
+									styles.radiusSpecimen,
+									styles.radiusSpecimenValue(tokens[token.name]),
+								)}
 							/>
-							<TokenName name={token.name} value={token.value} />
+							<TokenName
+								name={`tokens["${token.name}"]`}
+								value={`Default: ${token.defaultValue}`}
+							/>
 							<span {...stylex.props(styles.usage)}>{token.usage}</span>
 						</div>
 					))}
@@ -519,8 +536,10 @@ function FoundationPage({
 	description: string;
 	title: string;
 }) {
+	const sx = stylex.props(styles.page);
+
 	return (
-		<article {...stylex.props(styles.page)}>
+		<article {...sx} className={attrJoin(sx.className, "sb-unstyled")}>
 			<header {...stylex.props(styles.pageHeader)}>
 				<h1 {...stylex.props(styles.pageTitle)}>{title}</h1>
 				<p {...stylex.props(styles.pageDescription)}>{description}</p>
@@ -798,22 +817,22 @@ function TokenSource({ code }: { code: string }) {
 }
 
 const spacingTokens = [
-	{ name: 'tokens["--space-0"]', value: "0", usage: "Remove token spacing" },
-	{ name: 'tokens["--space-1"]', value: "0.25rem", usage: "Fine alignment" },
-	{ name: 'tokens["--space-1-5"]', value: "0.375rem", usage: "Optical adjustment" },
-	{ name: 'tokens["--space-2"]', value: "0.5rem", usage: "Icon and label" },
-	{ name: 'tokens["--space-2-5"]', value: "0.625rem", usage: "Compact control rhythm" },
-	{ name: 'tokens["--space-3"]', value: "0.75rem", usage: "Related controls" },
-	{ name: 'tokens["--space-4"]', value: "1rem", usage: "Compact inset" },
-	{ name: 'tokens["--space-5"]', value: "1.25rem", usage: "Form rhythm" },
-	{ name: 'tokens["--space-6"]', value: "1.5rem", usage: "Card inset" },
-	{ name: 'tokens["--space-7"]', value: "1.75rem", usage: "Roomy control rhythm" },
-	{ name: 'tokens["--space-8"]', value: "2rem", usage: "Section grouping" },
-	{ name: 'tokens["--space-9"]', value: "2.25rem", usage: "Large control rhythm" },
-	{ name: 'tokens["--space-10"]', value: "2.5rem", usage: "Panel spacing" },
-	{ name: 'tokens["--space-12"]', value: "3rem", usage: "Major separation" },
-	{ name: 'tokens["--space-16"]', value: "4rem", usage: "Page sections" },
-];
+	{ name: "--space-0", defaultValue: "0", usage: "Remove token spacing" },
+	{ name: "--space-1", defaultValue: "0.25rem", usage: "Fine alignment" },
+	{ name: "--space-1-5", defaultValue: "0.375rem", usage: "Optical adjustment" },
+	{ name: "--space-2", defaultValue: "0.5rem", usage: "Icon and label" },
+	{ name: "--space-2-5", defaultValue: "0.625rem", usage: "Compact control rhythm" },
+	{ name: "--space-3", defaultValue: "0.75rem", usage: "Related controls" },
+	{ name: "--space-4", defaultValue: "1rem", usage: "Compact inset" },
+	{ name: "--space-5", defaultValue: "1.25rem", usage: "Form rhythm" },
+	{ name: "--space-6", defaultValue: "1.5rem", usage: "Card inset" },
+	{ name: "--space-7", defaultValue: "1.75rem", usage: "Roomy control rhythm" },
+	{ name: "--space-8", defaultValue: "2rem", usage: "Section grouping" },
+	{ name: "--space-9", defaultValue: "2.25rem", usage: "Large control rhythm" },
+	{ name: "--space-10", defaultValue: "2.5rem", usage: "Panel spacing" },
+	{ name: "--space-12", defaultValue: "3rem", usage: "Major separation" },
+	{ name: "--space-16", defaultValue: "4rem", usage: "Page sections" },
+] as const;
 
 const containerSizeTokens = [
 	{ name: 'tokens["--size-container-xs"]', value: "20rem", usage: "Compact panels" },
@@ -826,14 +845,14 @@ const containerSizeTokens = [
 ];
 
 const radiusTokens = [
-	{ name: 'tokens["--radius-xxs"]', value: "0.1875rem", usage: "Tiny indicators" },
-	{ name: 'tokens["--radius-xs"]', value: "0.3125rem", usage: "Compact controls" },
-	{ name: 'tokens["--radius-sm"]', value: "0.4375rem", usage: "Buttons and inputs" },
-	{ name: 'tokens["--radius-md"]', value: "0.6875rem", usage: "Cards and popups" },
-	{ name: 'tokens["--radius-lg"]', value: "0.9375rem", usage: "Large panels" },
-	{ name: 'tokens["--radius-xl"]', value: "1.6875rem", usage: "Hero surfaces" },
-	{ name: 'tokens["--radius-full"]', value: "9999rem", usage: "Pills and circles" },
-];
+	{ name: "--radius-xxs", defaultValue: "0.1875rem", usage: "Tiny indicators" },
+	{ name: "--radius-xs", defaultValue: "0.3125rem", usage: "Compact controls" },
+	{ name: "--radius-sm", defaultValue: "0.4375rem", usage: "Buttons and inputs" },
+	{ name: "--radius-md", defaultValue: "0.6875rem", usage: "Cards and popups" },
+	{ name: "--radius-lg", defaultValue: "0.9375rem", usage: "Large panels" },
+	{ name: "--radius-xl", defaultValue: "1.6875rem", usage: "Hero surfaces" },
+	{ name: "--radius-full", defaultValue: "9999rem", usage: "Pills and circles" },
+] as const;
 
 const layerTokens = [
 	{ name: "zIndex.base", value: "0", usage: "Normal content" },
@@ -850,6 +869,7 @@ const layerTokens = [
 const styles = stylex.create({
 	page: {
 		marginInline: "auto",
+		backgroundColor: tokens["--canvas"],
 		maxWidth: "1120px",
 	},
 	pageHeader: {
@@ -991,36 +1011,6 @@ const styles = stylex.create({
 	typeSampleFontFamily: (fontFamily: string) => ({
 		fontFamily,
 	}),
-	typeDisplay: {
-		fontSize: tokens["--font-size-5"],
-		fontWeight: tokens["--font-weight-semibold"],
-		letterSpacing: tokens["--letter-spacing-5"],
-		lineHeight: tokens["--line-height-5"],
-	},
-	typeTitle: {
-		fontSize: tokens["--font-size-4"],
-		fontWeight: tokens["--font-weight-semibold"],
-		letterSpacing: tokens["--letter-spacing-4"],
-		lineHeight: tokens["--line-height-4"],
-	},
-	typeControl: {
-		fontSize: tokens["--font-size-3"],
-		fontWeight: tokens["--font-weight-medium"],
-		letterSpacing: tokens["--letter-spacing-3"],
-		lineHeight: tokens["--line-height-3"],
-	},
-	typeBody: {
-		fontSize: tokens["--font-size-2"],
-		fontWeight: tokens["--font-weight-regular"],
-		letterSpacing: tokens["--letter-spacing-2"],
-		lineHeight: tokens["--line-height-2"],
-	},
-	typeSmall: {
-		fontSize: tokens["--font-size-1"],
-		fontWeight: tokens["--font-weight-medium"],
-		letterSpacing: tokens["--letter-spacing-1"],
-		lineHeight: tokens["--line-height-1"],
-	},
 	weightGrid: {
 		gap: tokens["--space-4"],
 		display: "grid",

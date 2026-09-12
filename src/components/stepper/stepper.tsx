@@ -497,7 +497,7 @@ export type StepperStepProps = Omit<
 	"className" | "render" | "style" | "value"
 > &
 	StepperPartStyleProps & {
-		/** When true, the step is completed once it has been selected. */
+		/** Displays the step as completed once selected; does not validate data or authorize progression. */
 		completeOnVisit?: boolean;
 		status?: StepperStatus;
 		value: StepperValue;

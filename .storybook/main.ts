@@ -1,8 +1,5 @@
 import type { StorybookConfig } from "@storybook/react-vite";
 
-const getStorybookViteCacheDir = (configType: "DEVELOPMENT" | "PRODUCTION") =>
-	`node_modules/.cache/storybook-vite-${configType.toLowerCase()}`;
-
 const config: StorybookConfig = {
 	stories: ["../src/**/*.mdx", "../src/**/*.stories.@(js|jsx|mjs|ts|tsx)"],
 	addons: ["@storybook/addon-docs", "@storybook/addon-a11y"],
@@ -10,11 +7,8 @@ const config: StorybookConfig = {
 		name: "@storybook/react-vite",
 		options: {},
 	},
-	docs: {
-		autodocs: "tag",
-	},
-	async viteFinal(viteConfig, { configType }) {
-		const cacheDir = getStorybookViteCacheDir(configType);
+	async viteFinal(viteConfig, { configType = "PRODUCTION" }) {
+		const cacheDir = `node_modules/.cache/storybook-vite-${configType.toLowerCase()}`;
 
 		if (configType !== "DEVELOPMENT") {
 			return {
