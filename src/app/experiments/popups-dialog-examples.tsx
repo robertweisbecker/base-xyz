@@ -1,5 +1,15 @@
 import { useRef } from "react";
-import { Button, Dialog, ScrollArea, Stack, Text, Textarea, TextField } from "@/components";
+import {
+	Button,
+	Dialog,
+	Field,
+	Label,
+	ScrollArea,
+	Stack,
+	Text,
+	Textarea,
+	TextField,
+} from "@/components";
 import { popupsPageStyles as styles } from "./popups-page.styles";
 
 const longFormSections = [
@@ -72,7 +82,10 @@ function LargeDialog() {
 				</Dialog.Header>
 				<Dialog.Body>
 					<Stack gap={4}>
-						<TextField label="Project name" defaultValue="Design system" />
+						<Field.Root>
+							<Label>Project name</Label>
+							<TextField defaultValue="Design system" />
+						</Field.Root>
 						<Textarea label="Release notes" rows={5} />
 					</Stack>
 				</Dialog.Body>

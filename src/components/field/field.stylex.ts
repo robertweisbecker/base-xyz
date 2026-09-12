@@ -81,11 +81,12 @@ const parts = stylex.create({
 			[INTERACTIVE_CONTROL_HOVER]: {
 				[media.canHover]: tokens["--border-input-hover"],
 			},
+			'[aria-invalid="true"]': tokens["--bg-error-primary"],
 			"[data-disabled]": tokens["--border-disabled"],
 			"[data-invalid]": tokens["--bg-error-primary"],
 			"[data-popup-open]": tokens["--border-input-hover"],
 			"[data-readonly]": tokens["--border"],
-			"[readonly]:not([data-disabled],[data-invalid])": tokens["--border"],
+			'[readonly]:not([data-disabled],[data-invalid],[aria-invalid="true"])': tokens["--border"],
 			default: tokens["--border-input"],
 		},
 		borderStyle: "solid",

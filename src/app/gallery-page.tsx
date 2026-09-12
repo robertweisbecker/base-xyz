@@ -42,11 +42,13 @@ import {
 	Dialog,
 	Drawer,
 	EmptyState,
+	Field,
 	Heading,
 	IconButton,
 	InfoTip,
 	InputGroup,
 	Item,
+	Label,
 	Link,
 	LinkPreview,
 	Loader,
@@ -320,7 +322,10 @@ function getComponentCells(): GalleryCell[] {
 							<Dialog.Description>Adjust shared project settings.</Dialog.Description>
 						</Dialog.Header>
 						<Dialog.Body>
-							<TextField label="Name" defaultValue="StyleX Lab" />
+							<Field.Root>
+								<Label>Name</Label>
+								<TextField defaultValue="StyleX Lab" />
+							</Field.Root>
 						</Dialog.Body>
 						<Dialog.Footer>
 							<Dialog.Close render={<Button variant="ghost" />}>Cancel</Dialog.Close>
@@ -727,13 +732,15 @@ function getComponentCells(): GalleryCell[] {
 			title: "TextField",
 			content: (
 				<div {...stylex.props(styles.controlStack)}>
-					<TextField label="Name" placeholder="Type something..." xstyle={styles.compactField} />
-					<TextField
-						label="Project"
-						defaultValue="Invalid"
-						error="Use at least 8 characters."
-						xstyle={styles.compactField}
-					/>
+					<Field.Root xstyle={styles.compactField}>
+						<Label>Name</Label>
+						<TextField placeholder="Type something..." />
+					</Field.Root>
+					<Field.Root invalid xstyle={styles.compactField}>
+						<Label>Project</Label>
+						<TextField defaultValue="Invalid" />
+						<Field.Error match>Use at least 8 characters.</Field.Error>
+					</Field.Root>
 				</div>
 			),
 		},

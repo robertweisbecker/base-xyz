@@ -4,8 +4,10 @@ import * as stylex from "@stylexjs/stylex";
 import {
 	Button,
 	Combobox,
+	Field,
 	type FieldSize,
 	InputGroup,
+	Label,
 	NumberField,
 	Select,
 	Stack,
@@ -96,7 +98,7 @@ export function CrossComponentRow() {
 			</div>
 			<div {...stylex.props(styles.crossComponentRow, fieldComparisonHeights.md)}>
 				<div data-field-label-hidden {...stylex.props(styles.comparisonControl)}>
-					<TextField defaultValue="Production" label="Environment" />
+					<TextField aria-label="Environment" defaultValue="Production" />
 				</div>
 				<InputGroup.Root>
 					<InputGroup.Addon>
@@ -166,15 +168,16 @@ function ComparisonField({
 	switch (kind) {
 		case "text":
 			return (
-				<TextField
-					defaultValue={hasValue ? (invalid ? "Design Review" : "Design system") : undefined}
-					disabled={disabled}
-					error={invalid ? "Use lowercase letters only." : undefined}
-					label={label}
-					placeholder="Enter a value…"
-					readOnly={readOnly}
-					size={size}
-				/>
+				<Field.Root disabled={disabled} invalid={invalid}>
+					<Label>{label}</Label>
+					<TextField
+						defaultValue={hasValue ? (invalid ? "Design Review" : "Design system") : undefined}
+						placeholder="Enter a value…"
+						readOnly={readOnly}
+						size={size}
+					/>
+					{invalid ? <Field.Error match>Use lowercase letters only.</Field.Error> : null}
+				</Field.Root>
 			);
 		case "textarea":
 			return (

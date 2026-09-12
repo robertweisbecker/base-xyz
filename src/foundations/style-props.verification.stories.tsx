@@ -10,8 +10,10 @@ import {
 	CodeBlock,
 	Combobox,
 	Dialog,
+	Field,
 	Grid,
 	Heading,
+	Label,
 	Stack,
 	Text,
 	TextField,
@@ -45,8 +47,14 @@ function LoginForm() {
 			</Card.Header>
 			<Card.Content>
 				<Stack gap={3}>
-					<TextField label="Email" type="email" />
-					<TextField label="Password" type="password" />
+					<Field.Root>
+						<Label>Email</Label>
+						<TextField type="email" />
+					</Field.Root>
+					<Field.Root>
+						<Label>Password</Label>
+						<TextField type="password" />
+					</Field.Root>
 					<Button
 						aria-pressed={submitting}
 						data-testid="atom-submit"
@@ -164,7 +172,10 @@ export const ConsumerContract: Story = {
 			</CodeBlock>
 			<ChipOverflowFixture />
 
-			<TextField data-testid="field-control" label="Project name" mt={4} />
+			<Field.Root data-testid="field-owner" mt={4}>
+				<Label>Project name</Label>
+				<TextField data-testid="field-control" />
+			</Field.Root>
 
 			<div data-testid="spacing-theme" {...stylex.props(spacingOverride)}>
 				<Button data-testid="themed-margin" m={4}>

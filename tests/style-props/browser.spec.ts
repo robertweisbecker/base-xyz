@@ -82,11 +82,13 @@ test("theme overrides, xstyle, and native style follow the declared precedence",
 	await expect(compound).toHaveCSS("width", "123px");
 });
 
-test("field margins land on the wrapper and custom props do not leak to DOM", async ({ page }) => {
+test("explicit field margins land on their owner and custom props do not leak to DOM", async ({
+	page,
+}) => {
 	await openFixture(page);
 
 	const control = page.getByTestId("field-control");
-	const wrapper = control.locator("xpath=..");
+	const wrapper = page.getByTestId("field-owner");
 	await expect(wrapper).toHaveCSS("margin-top", "16px");
 	await expect(control).toHaveCSS("margin-top", "0px");
 

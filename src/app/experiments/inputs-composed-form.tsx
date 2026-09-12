@@ -1,7 +1,9 @@
 import {
 	Button,
 	Checkbox,
+	Field,
 	Grid,
+	Label,
 	Radio,
 	RadioGroup,
 	Select,
@@ -23,13 +25,11 @@ export function EnvironmentForm() {
 		<form onSubmit={(event) => event.preventDefault()}>
 			<Stack gap={6}>
 				<Grid gap={4} xstyle={styles.formFieldGrid}>
-					<TextField
-						description="Used in deployment URLs and CLI commands."
-						label="Environment name"
-						name="environment-name"
-						placeholder="Preview"
-						required
-					/>
+					<Field.Root name="environment-name">
+						<Label>Environment name</Label>
+						<TextField placeholder="Preview" required />
+						<Field.Description>Used in deployment URLs and CLI commands.</Field.Description>
+					</Field.Root>
 					<Select.Root<string> defaultValue="iad1" items={regionItems} name="region">
 						<Select.Label>Primary region</Select.Label>
 						<Select.Trigger />

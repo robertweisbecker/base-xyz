@@ -1,7 +1,10 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import x from "@stylexjs/atoms";
 import * as stylex from "@stylexjs/stylex";
-import type { ReactNode } from "react";
+import { useState, type ReactNode } from "react";
+import { Button } from "@/components/button/button";
+import { Field } from "@/components/field/field";
+import { Label } from "@/components/label/label";
 import { Code } from "@/components/code/code";
 import { Combobox } from "@/components/combobox/combobox-field";
 import { Box, Grid, Stack } from "@/components/layout/layout";
@@ -16,24 +19,22 @@ const meta = {
 	title: "Components/Text field",
 	component: TextField,
 	args: {
-		label: "Workspace name",
+		"aria-label": "Workspace name",
 		placeholder: "e.g. Acme Studio",
-		description: "This appears in shared project links.",
 		defaultValue: "",
 		disabled: false,
-		error: "",
+		"aria-invalid": false,
 		readOnly: false,
 		required: false,
 		size: "md",
 		type: "text",
 	},
 	argTypes: {
-		label: { control: "text" },
+		"aria-label": { control: "text" },
 		placeholder: { control: "text" },
-		description: { control: "text" },
 		defaultValue: { control: "text" },
 		disabled: { control: "boolean" },
-		error: { control: "text" },
+		"aria-invalid": { control: "boolean" },
 		readOnly: { control: "boolean" },
 		required: { control: "boolean" },
 		size: { control: "inline-radio", options: ["sm", "md", "lg"] },
@@ -42,12 +43,11 @@ const meta = {
 	parameters: {
 		controls: {
 			include: [
-				"label",
+				"aria-label",
 				"placeholder",
-				"description",
 				"defaultValue",
 				"disabled",
-				"error",
+				"aria-invalid",
 				"readOnly",
 				"required",
 				"size",
@@ -64,20 +64,20 @@ export const Playground: Story = {
 	render: (args) => (
 		<Box maxWidth="360px">
 			<TextField
-				key={`${args.defaultValue}-${args.disabled}-${args.error}-${args.readOnly}-${args.size}-${args.type}`}
+				key={`${args.defaultValue}-${args.disabled}-${args.readOnly}-${args.size}-${args.type}`}
 				{...args}
 			/>
 		</Box>
 	),
 };
 
-export const WrapperLayout: Story = {
+export const Composition: Story = {
 	parameters: { controls: { disable: true } },
-	render: (args) => (
-		<TextField
-			{...args}
-			xstyle={[x.display.flex, x.flexDirection.row, x.gap(tokens["--space-3"])]}
-		/>
+	render: () => (
+		<Field.Root xstyle={[x.flexDirection.row, x.alignItems.center, x.gap(tokens["--space-3"])]}>
+			<Label>Workspace name</Label>
+			<TextField placeholder="e.g. Acme Studio" />
+		</Field.Root>
 	),
 };
 
@@ -88,46 +88,97 @@ export const States: Story = {
 	render: () => (
 		<Grid gap={8} maxWidth="800px" xstyle={styles.stateGrid}>
 			<StateSpecimen label="Default">
-				<TextField label="Workspace name" placeholder="e.g. Acme Studio" />
+				<Field.Root>
+					<Label>Workspace name</Label>
+					<TextField placeholder="e.g. Acme Studio" />
+				</Field.Root>
 			</StateSpecimen>
 			<StateSpecimen label="Filled" attribute="data-filled">
-				<TextField label="Workspace name" defaultValue="Design Ops" />
+				<Field.Root>
+					<Label>Workspace name</Label>
+					<TextField defaultValue="Design Ops" />
+				</Field.Root>
 			</StateSpecimen>
 			<StateSpecimen label="Focused" attribute="autoFocus">
-				<TextField label="Workspace name" defaultValue="Design Ops" autoFocus />
+				<Field.Root>
+					<Label>Workspace name</Label>
+					<TextField defaultValue="Design Ops" autoFocus />
+				</Field.Root>
 			</StateSpecimen>
 			<StateSpecimen label="Invalid" attribute="data-invalid">
-				<TextField
-					label="Workspace name"
-					defaultValue="ab"
-					error="Use at least three characters."
-				/>
+				<Field.Root invalid>
+					<Label>Workspace name</Label>
+					<TextField defaultValue="ab" />
+					<Field.Error match>Use at least three characters.</Field.Error>
+				</Field.Root>
 			</StateSpecimen>
 			<StateSpecimen label="Required" attribute="required">
-				<TextField label="Workspace name" placeholder="e.g. Acme Studio" required />
+				<Field.Root>
+					<Label>Workspace name</Label>
+					<TextField placeholder="e.g. Acme Studio" required />
+				</Field.Root>
 			</StateSpecimen>
 			<StateSpecimen label="Readonly, filled" attribute="readonly">
-				<TextField
-					label="Workspace name"
-					defaultValue="Design Ops"
-					readOnly
-					description="Workspace names cannot be edited in this view."
-				/>
+				<Field.Root>
+					<Label>Workspace name</Label>
+					<TextField defaultValue="Design Ops" readOnly />
+					<Field.Description>Workspace names cannot be edited in this view.</Field.Description>
+				</Field.Root>
 			</StateSpecimen>
 			<StateSpecimen label="Readonly, empty" attribute="readonly">
-				<TextField label="Workspace name" placeholder="e.g. Acme Studio" readOnly />
+				<Field.Root>
+					<Label>Workspace name</Label>
+					<TextField placeholder="e.g. Acme Studio" readOnly />
+				</Field.Root>
 			</StateSpecimen>
 			<StateSpecimen label="Disabled" attribute="data-disabled">
-				<TextField
-					label="Workspace name"
-					defaultValue="Design Ops"
-					disabled
-					description="Workspace names are managed by an administrator."
-				/>
+				<Field.Root disabled>
+					<Label>Workspace name</Label>
+					<TextField defaultValue="Design Ops" />
+					<Field.Description>Workspace names are managed by an administrator.</Field.Description>
+				</Field.Root>
 			</StateSpecimen>
 		</Grid>
 	),
 };
+
+export const Controlled: Story = {
+	parameters: { controls: { disable: true } },
+	render: () => <ControlledTextField />,
+};
+
+function ControlledTextField() {
+	const [value, setValue] = useState("design-system");
+	const [submitted, setSubmitted] = useState("");
+	return (
+		<form
+			onSubmit={(event) => {
+				event.preventDefault();
+				setSubmitted(String(new FormData(event.currentTarget).get("project") ?? ""));
+			}}
+		>
+			<Stack gap={3} maxWidth="360px">
+				<TextField
+					aria-label="Project slug"
+					name="project"
+					required
+					value={value}
+					onValueChange={setValue}
+				/>
+				<Text size="1" color="muted">
+					Current value: {value}
+				</Text>
+				<Stack orientation="horizontal" gap={2}>
+					<Button type="submit">Save project</Button>
+					<Button type="button" variant="secondary" onClick={() => setValue("design-system")}>
+						Reset value
+					</Button>
+				</Stack>
+				<output aria-label="Submitted project">{submitted}</output>
+			</Stack>
+		</form>
+	);
+}
 
 export const FieldFamilyParity: Story = {
 	name: "Field family sizing",
@@ -156,7 +207,7 @@ export const FieldFamilyParity: Story = {
 				))}
 				<FamilyRow label="Text field">
 					{(size) => (
-						<TextField label="Text field" defaultValue="Shared control surface" size={size} />
+						<TextField aria-label="Text field" defaultValue="Shared control surface" size={size} />
 					)}
 				</FamilyRow>
 				<FamilyRow label="Textarea">

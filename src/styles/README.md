@@ -73,8 +73,8 @@ is `side ?? axis ?? all`.
 
 ### Eligible component pattern
 
-Reference implementations: `src/components/button/button.tsx` and the field
-wrapper in `src/components/text-field/text-field.tsx`.
+Reference implementations: `src/components/button/button.tsx` and
+`src/components/field/field.tsx`.
 
 ```tsx
 export type ButtonProps = Omit<BaseButton.Props, "className" | "style" | keyof MarginProps> &
@@ -195,11 +195,35 @@ borrowers may import its styles, but Menu must not import a borrower.
 
 ### Field composition
 
-Field's style module exposes one export per element role and two size bundles:
+Form owns native submission and Base UI validation without imposing layout.
+Field.Root owns one logical field's associations and validation, with a small
+vertical default. Nest Grid/Stack inside it for custom layouts, or use its
+`xstyle` override. Fieldset groups related fields; it does not replace a Field.
+Label, Field.Item, Field.Description, and Field.Error require an explicit
+Field.Root. Standalone controls use native labels or accessible-name attributes.
+
+Form, Field.Root, and Fieldset.Root resolve common margins on their own hosts.
+Bare controls resolve margins on the actual control, independent of Field
+context. Put a whole field composition's margins/styles on its explicit Field.
+Node-less Select/Combobox roots have no host-style surface; NumberField.Root
+owns its real widget host. Field.Control is an unstyled registration bridge for
+controls that do not already integrate with Base UI; never double-register an
+existing Base UI control. Field.Validity directly exposes Base UI's render-only
+validity state and has no styling surface.
+
+Form preserves native `onSubmit`/`action` and typed `onFormSubmit`. Callers supply
+the generic value shape; arbitrary JSX names do not infer a runtime schema.
+Registered Field values feed `onFormSubmit`, while native FormData follows native
+control semantics. Base UI 1.8 async validators do not block submission while
+pending; request orchestration and pending submission stay with the consumer.
+
+Field's style module exposes one export per element role and two size bundles.
+Public composition uses the styled components; these exports are for component
+implementations that borrow Field's canonical appearance:
 
 | Element                                      | Export                                                              |
 | -------------------------------------------- | ------------------------------------------------------------------- |
-| `Field.Root` wrapper                         | `fieldStyles.root`                                                  |
+| `Field.Root`                                 | `fieldStyles.root`                                                  |
 | Labels, description, error                   | `fieldStyles.label`, `fieldStyles.description`, `fieldStyles.error` |
 | Text input (`input`, `textarea`)             | `fieldInputStyles[size]`                                            |
 | Button-like trigger (select, combobox shell) | `fieldControlStyles[size]`                                          |
