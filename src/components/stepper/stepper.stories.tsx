@@ -35,7 +35,12 @@ const meta = {
 		orientation: "horizontal",
 	},
 	argTypes: {
-		_completeOnVisit: { control: "boolean", name: "_completeOnVisit" },
+		_completeOnVisit: {
+			control: "boolean",
+			description:
+				"Stepper.Step.completeOnVisit optionally displays a visited step as completed. It does not validate data or authorize progression.",
+			name: "_completeOnVisit",
+		},
 		_locked: { control: "boolean", name: "_locked" },
 		_marker: {
 			control: "select",
@@ -58,6 +63,12 @@ const meta = {
 		},
 	},
 	parameters: {
+		docs: {
+			description: {
+				component:
+					"Stepper owns step navigation and status presentation. Consumers own validation, authoritative task completion, locking, persistence, and async policy. Use Stepper.Step.completeOnVisit for optional visit-based completion presentation, such as an informational guide.",
+			},
+		},
 		controls: {
 			include: ["defaultValue", "orientation", "_status", "_locked", "_completeOnVisit", "_marker"],
 		},
@@ -221,7 +232,7 @@ export const States: Story = {
 			<Separator />
 			<Stack data-testid="complete-on-visit-stepper" gap={2} minWidth={0}>
 				<Text color="muted" size="1">
-					Informational steps complete on visit
+					Informational steps display as completed on visit
 				</Text>
 				<Stepper.Root defaultValue="overview">
 					<Stepper.List aria-label="Guide progress">
@@ -250,9 +261,11 @@ export const States: Story = {
 						</Fragment>
 					</Stepper.List>
 					<Stepper.Content>
-						<Stepper.Panel value="overview">This guide step completes when opened.</Stepper.Panel>
+						<Stepper.Panel value="overview">
+							This guide step displays as completed when opened.
+						</Stepper.Panel>
 						<Stepper.Panel value="permissions">
-							Permission details complete after this visit.
+							Visiting this step does not confirm that permissions have been granted.
 						</Stepper.Panel>
 						<Stepper.Panel value="done">The last informational step.</Stepper.Panel>
 					</Stepper.Content>

@@ -21,6 +21,8 @@ The repository contains both reusable design-system primitives and recurring pro
 
 `NavList` owns its drilldown history, focus, and presentation coordination. A generic public Drilldown component requires a second non-navigation consumer that establishes a smaller shared contract.
 
+`Stepper` owns step navigation and status presentation. `Stepper.Step.completeOnVisit` is optional visit-based completion presentation; it does not validate data or authorize progression. Consumers own validation, authoritative task completion, locking, persistence, and async policy.
+
 ## Consequences
 
 Blocks can be opinionated without leaking product policy into primitives, while shared behavior has one reusable owner. Compound namespaces may contain more named parts than a prop-driven component, but call sites expose structure and state ownership directly.
