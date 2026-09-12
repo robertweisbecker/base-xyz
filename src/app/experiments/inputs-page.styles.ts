@@ -3,8 +3,7 @@ import { breakpoints } from "@/styles/constants.stylex";
 import { tokens } from "@/theme/tokens.stylex";
 
 export const comparisonLabelReset = `
-	[data-field-label-hidden] > * > :first-child,
-	[data-radio-comparison] > * > :first-child {
+	[data-field-label-hidden] > * > :first-child {
 		clip: rect(0 0 0 0);
 		clip-path: inset(50%);
 		height: 1px;

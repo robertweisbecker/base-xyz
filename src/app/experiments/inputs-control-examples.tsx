@@ -44,11 +44,9 @@ function ChoiceControlSizeRow({ size }: { size: FieldSize }) {
 			</Text>
 			<div {...stylex.props(styles.controlCell)}>
 				{choiceSize ? (
-					<div data-radio-comparison>
-						<RadioGroup defaultValue={size} label={`${size} radio`} size={choiceSize}>
-							<Radio aria-label={`${size} radio`} value={size} />
-						</RadioGroup>
-					</div>
+					<RadioGroup defaultValue={size} aria-label={`${size} radio`} size={choiceSize}>
+						<Radio aria-label={`${size} radio`} value={size} />
+					</RadioGroup>
 				) : (
 					<UnsupportedSize />
 				)}
@@ -122,19 +120,17 @@ function ChoiceControlStateRow({
 
 function ComparisonRadio({ state }: { state: ChoiceControlState }) {
 	return (
-		<div data-radio-comparison>
-			<RadioGroup
-				defaultValue={state === "on" || state === "read-only-checked" ? state : undefined}
-				disabled={state === "disabled"}
-				label={`Radio ${formatComparisonLabel(state)}`}
-			>
-				<Radio
-					aria-label={`Radio ${formatComparisonLabel(state)}`}
-					readOnly={state === "read-only" || state === "read-only-checked"}
-					value={state}
-				/>
-			</RadioGroup>
-		</div>
+		<RadioGroup
+			defaultValue={state === "on" || state === "read-only-checked" ? state : undefined}
+			disabled={state === "disabled"}
+			aria-label={`Radio ${formatComparisonLabel(state)}`}
+		>
+			<Radio
+				aria-label={`Radio ${formatComparisonLabel(state)}`}
+				readOnly={state === "read-only" || state === "read-only-checked"}
+				value={state}
+			/>
+		</RadioGroup>
 	);
 }
 

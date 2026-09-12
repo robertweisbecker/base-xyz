@@ -1,5 +1,4 @@
 import * as stylex from "@stylexjs/stylex";
-import { textStyles, fontWeightStyles } from "@/components/text/text.stylex";
 import { media } from "@/styles/constants.stylex";
 import { tokens } from "@/theme/tokens.stylex";
 
@@ -34,44 +33,6 @@ export const radioIndicatorSizeStyles = stylex.create({
 });
 
 const radioParts = stylex.create({
-	fieldset: {
-		margin: 0,
-		padding: 0,
-		borderWidth: 0,
-		gap: tokens["--space-3"],
-		display: "flex",
-		flexDirection: "column",
-		minInlineSize: 0,
-	},
-	title: {
-		gap: tokens["--space-1"],
-		display: "flex",
-		flexDirection: "column",
-	},
-	groupLabel: {
-		color: {
-			"[data-disabled]": tokens["--fg-subtle"],
-			default: tokens["--fg"],
-		},
-	},
-	groupDescription: {
-		margin: 0,
-		color: tokens["--fg-muted"],
-	},
-	groupOptions: {
-		alignItems: "stretch",
-		columnGap: tokens["--space-3"],
-		display: "flex",
-		flexDirection: "column",
-		flexWrap: "nowrap",
-		rowGap: tokens["--space-3"],
-	},
-	groupOptionsInline: {
-		alignItems: "start",
-		columnGap: tokens["--space-6"],
-		flexDirection: "row",
-		flexWrap: "wrap",
-	},
 	control: {
 		borderColor: {
 			[ENABLED_SELECTED_ACTIVE]: tokens["--bg-primary-hover"],
@@ -161,21 +122,10 @@ const radioParts = stylex.create({
 		transitionTimingFunction: tokens["--motion-ease-out"],
 		willChange: "transform, opacity",
 	},
-	requiredIndicator: {
-		color: tokens["--fg-error"],
-		marginInlineStart: tokens["--space-1"],
-	},
 });
 
 export const radioStyles = {
-	fieldset: radioParts.fieldset,
-	title: radioParts.title,
-	groupLabel: [textStyles.body, fontWeightStyles.semibold, radioParts.groupLabel],
-	groupDescription: [textStyles.supporting, radioParts.groupDescription],
-	groupOptions: radioParts.groupOptions,
-	groupOptionsInline: radioParts.groupOptionsInline,
 	control: radioParts.control,
 	indicator: radioParts.indicator,
 	indicatorTransition: radioParts.indicatorTransition,
-	requiredIndicator: radioParts.requiredIndicator,
 } as const;

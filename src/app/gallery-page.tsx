@@ -1,4 +1,4 @@
-import { type ReactNode } from "react";
+import { useId, type ReactNode } from "react";
 import * as stylex from "@stylexjs/stylex";
 import {
 	AgentActionApproval,
@@ -43,6 +43,7 @@ import {
 	Drawer,
 	EmptyState,
 	Field,
+	Fieldset,
 	Heading,
 	IconButton,
 	InfoTip,
@@ -232,22 +233,7 @@ function getComponentCells(): GalleryCell[] {
 		},
 		{
 			title: "CheckboxGroup",
-			content: (
-				<CheckboxGroup label="Files" defaultValue={["readme"]}>
-					<Field.Item>
-						<Stack render={<Label variant="item" />} orientation="horizontal" align="start" gap={2}>
-							<Checkbox value="readme" />
-							Readme
-						</Stack>
-					</Field.Item>
-					<Field.Item>
-						<Stack render={<Label variant="item" />} orientation="horizontal" align="start" gap={2}>
-							<Checkbox value="changelog" />
-							Changelog
-						</Stack>
-					</Field.Item>
-				</CheckboxGroup>
-			),
+			content: <CheckboxGroupGalleryExample />,
 		},
 		{
 			title: "Code",
@@ -560,33 +546,62 @@ function getComponentCells(): GalleryCell[] {
 		{
 			title: "Radio",
 			content: (
-				<RadioGroup label="Selection" defaultValue="selected">
-					<Field.Item>
-						<Stack render={<Label variant="item" />} orientation="horizontal" align="start" gap={2}>
-							<Radio value="selected" />
-							Selected option
-						</Stack>
-					</Field.Item>
-				</RadioGroup>
+				<Fieldset.Root>
+					<Fieldset.Legend>Selection</Fieldset.Legend>
+					<Field.Root name="selection" mt={3}>
+						<RadioGroup defaultValue="selected">
+							<Stack gap={3}>
+								<Field.Item>
+									<Stack
+										render={<Label variant="item" />}
+										orientation="horizontal"
+										align="start"
+										gap={2}
+									>
+										<Radio value="selected" />
+										Selected option
+									</Stack>
+								</Field.Item>
+							</Stack>
+						</RadioGroup>
+					</Field.Root>
+				</Fieldset.Root>
 			),
 		},
 		{
 			title: "RadioGroup",
 			content: (
-				<RadioGroup label="Fave ape" defaultValue="one">
-					<Field.Item>
-						<Stack render={<Label variant="item" />} orientation="horizontal" align="start" gap={2}>
-							<Radio value="one" />
-							Caesar
-						</Stack>
-					</Field.Item>
-					<Field.Item>
-						<Stack render={<Label variant="item" />} orientation="horizontal" align="start" gap={2}>
-							<Radio value="two" />
-							Koba
-						</Stack>
-					</Field.Item>
-				</RadioGroup>
+				<Fieldset.Root>
+					<Fieldset.Legend>Fave ape</Fieldset.Legend>
+					<Field.Root name="ape" mt={3}>
+						<RadioGroup defaultValue="one">
+							<Stack gap={3}>
+								<Field.Item>
+									<Stack
+										render={<Label variant="item" />}
+										orientation="horizontal"
+										align="start"
+										gap={2}
+									>
+										<Radio value="one" />
+										Caesar
+									</Stack>
+								</Field.Item>
+								<Field.Item>
+									<Stack
+										render={<Label variant="item" />}
+										orientation="horizontal"
+										align="start"
+										gap={2}
+									>
+										<Radio value="two" />
+										Koba
+									</Stack>
+								</Field.Item>
+							</Stack>
+						</RadioGroup>
+					</Field.Root>
+				</Fieldset.Root>
 			),
 		},
 		{
@@ -853,6 +868,43 @@ function getComponentCells(): GalleryCell[] {
 			),
 		},
 	];
+}
+
+function CheckboxGroupGalleryExample() {
+	const filesLegendId = useId();
+	return (
+		<Fieldset.Root>
+			<Fieldset.Legend id={filesLegendId}>Files</Fieldset.Legend>
+			<Field.Root name="files" mt={2}>
+				<CheckboxGroup defaultValue={["readme"]} aria-labelledby={filesLegendId}>
+					<Stack gap={3}>
+						<Field.Item>
+							<Stack
+								render={<Label variant="item" />}
+								orientation="horizontal"
+								align="start"
+								gap={2}
+							>
+								<Checkbox value="readme" />
+								Readme
+							</Stack>
+						</Field.Item>
+						<Field.Item>
+							<Stack
+								render={<Label variant="item" />}
+								orientation="horizontal"
+								align="start"
+								gap={2}
+							>
+								<Checkbox value="changelog" />
+								Changelog
+							</Stack>
+						</Field.Item>
+					</Stack>
+				</CheckboxGroup>
+			</Field.Root>
+		</Fieldset.Root>
+	);
 }
 
 function ComboboxGalleryExample({ multiple = false }: { multiple?: boolean }) {

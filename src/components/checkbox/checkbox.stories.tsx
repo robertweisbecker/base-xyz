@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import * as stylex from "@stylexjs/stylex";
-import { useRef, useState } from "react";
-import { Button, Field, Form, Label } from "@/components";
+import { useId, useRef, useState } from "react";
+import { Button, Field, Fieldset, Form, Label } from "@/components";
 import { Heading } from "@/components/heading/heading";
 import { Stack } from "@/components/layout/layout";
 import { Separator } from "@/components/separator/separator";
@@ -104,68 +104,116 @@ export const Groups: Story = {
 	parameters: {
 		controls: { disable: true },
 	},
-	render: () => (
-		<Stack gap={8}>
-			<Stack align="start" gap={4}>
-				<Heading size="1" color="muted" fontWeight="regular">
-					With descriptions
-				</Heading>
-				<CheckboxGroup
-					label="Notification methods"
-					description="Choose all the ways we may contact you."
-					defaultValue={["email", "push"]}
-				>
-					<Field.Item>
-						<Stack render={<Label variant="item" />} orientation="horizontal" align="start" gap={2}>
-							<Checkbox value="email" />
-							Email
-						</Stack>
-						<Field.Description>Receive account updates by email.</Field.Description>
-					</Field.Item>
-					<Field.Item>
-						<Stack render={<Label variant="item" />} orientation="horizontal" align="start" gap={2}>
-							<Checkbox value="push" />
-							Push
-						</Stack>
-						<Field.Description>Receive notifications on this device.</Field.Description>
-					</Field.Item>
-					<Field.Item>
-						<Stack render={<Label variant="item" />} orientation="horizontal" align="start" gap={2}>
-							<Checkbox value="sms" />
-							SMS
-						</Stack>
-						<Field.Description>Receive urgent alerts by text message.</Field.Description>
-					</Field.Item>
-				</CheckboxGroup>
+	render: function RenderGroups() {
+		const notificationsLegendId = useId();
+		const protocolsLegendId = useId();
+		return (
+			<Stack gap={8}>
+				<Stack align="start" gap={4}>
+					<Heading size="1" color="muted" fontWeight="regular">
+						With descriptions
+					</Heading>
+					<Fieldset.Root>
+						<Fieldset.Legend id={notificationsLegendId}>Notification methods</Fieldset.Legend>
+						<Field.Root name="channels" mt={2}>
+							<Field.Description>Choose all the ways we may contact you.</Field.Description>
+							<CheckboxGroup
+								defaultValue={["email", "push"]}
+								aria-labelledby={notificationsLegendId}
+							>
+								<Stack gap={3}>
+									<Field.Item>
+										<Stack
+											render={<Label variant="item" />}
+											orientation="horizontal"
+											align="start"
+											gap={2}
+										>
+											<Checkbox value="email" />
+											Email
+										</Stack>
+										<Field.Description>Receive account updates by email.</Field.Description>
+									</Field.Item>
+									<Field.Item>
+										<Stack
+											render={<Label variant="item" />}
+											orientation="horizontal"
+											align="start"
+											gap={2}
+										>
+											<Checkbox value="push" />
+											Push
+										</Stack>
+										<Field.Description>Receive notifications on this device.</Field.Description>
+									</Field.Item>
+									<Field.Item>
+										<Stack
+											render={<Label variant="item" />}
+											orientation="horizontal"
+											align="start"
+											gap={2}
+										>
+											<Checkbox value="sms" />
+											SMS
+										</Stack>
+										<Field.Description>Receive urgent alerts by text message.</Field.Description>
+									</Field.Item>
+								</Stack>
+							</CheckboxGroup>
+						</Field.Root>
+					</Fieldset.Root>
+				</Stack>
+				<Separator />
+				<Stack align="start" gap={4}>
+					<Heading size="1" color="muted" fontWeight="regular">
+						Inline group
+					</Heading>
+					<Fieldset.Root>
+						<Fieldset.Legend id={protocolsLegendId}>Allowed network protocols</Fieldset.Legend>
+						<Field.Root name="protocols" mt={2}>
+							<CheckboxGroup aria-labelledby={protocolsLegendId}>
+								<Stack orientation="horizontal" align="start" wrap="wrap" gap={6}>
+									<Field.Item>
+										<Stack
+											render={<Label variant="item" />}
+											orientation="horizontal"
+											align="start"
+											gap={2}
+										>
+											<Checkbox value="http" />
+											HTTP
+										</Stack>
+									</Field.Item>
+									<Field.Item>
+										<Stack
+											render={<Label variant="item" />}
+											orientation="horizontal"
+											align="start"
+											gap={2}
+										>
+											<Checkbox value="https" />
+											HTTPS
+										</Stack>
+									</Field.Item>
+									<Field.Item>
+										<Stack
+											render={<Label variant="item" />}
+											orientation="horizontal"
+											align="start"
+											gap={2}
+										>
+											<Checkbox value="ssh" />
+											SSH
+										</Stack>
+									</Field.Item>
+								</Stack>
+							</CheckboxGroup>
+						</Field.Root>
+					</Fieldset.Root>
+				</Stack>
 			</Stack>
-			<Separator />
-			<Stack align="start" gap={4}>
-				<Heading size="1" color="muted" fontWeight="regular">
-					Inline group
-				</Heading>
-				<CheckboxGroup label="Allowed network protocols" inline>
-					<Field.Item>
-						<Stack render={<Label variant="item" />} orientation="horizontal" align="start" gap={2}>
-							<Checkbox value="http" />
-							HTTP
-						</Stack>
-					</Field.Item>
-					<Field.Item>
-						<Stack render={<Label variant="item" />} orientation="horizontal" align="start" gap={2}>
-							<Checkbox value="https" />
-							HTTPS
-						</Stack>
-					</Field.Item>
-					<Field.Item>
-						<Stack render={<Label variant="item" />} orientation="horizontal" align="start" gap={2}>
-							<Checkbox value="ssh" />
-							SSH
-						</Stack>
-					</Field.Item>
-				</CheckboxGroup>
-			</Stack>
-		</Stack>
-	),
+		);
+	},
 };
 
 export const States: Story = {
@@ -353,59 +401,26 @@ function NestedParentCheckboxes() {
 		managementValue.length > 0 && managementValue.length !== userManagementPermissions.length;
 
 	return (
-		<CheckboxGroup
-			aria-label="User permissions"
-			value={mainValue}
-			onValueChange={(value) => {
-				if (value.includes("manage-users")) {
-					setManagementValue(userManagementPermissions);
-				} else if (managementValue.length === userManagementPermissions.length) {
-					setManagementValue([]);
-				}
+		<Field.Root name="permissions">
+			<CheckboxGroup
+				aria-label="User permissions"
+				value={mainValue}
+				onValueChange={(value) => {
+					if (value.includes("manage-users")) {
+						setManagementValue(userManagementPermissions);
+					} else if (managementValue.length === userManagementPermissions.length) {
+						setManagementValue([]);
+					}
 
-				setMainValue(value);
-			}}
-			allValues={mainPermissions}
-		>
-			<Field.Item>
-				<Stack render={<Label variant="item" />} orientation="horizontal" align="start" gap={2}>
-					<Checkbox parent indeterminate={managementIsPartial} />
-					User permissions
-				</Stack>
-			</Field.Item>
-			<Stack gap={3} xstyle={storyParts.permissionChildren}>
-				<Field.Item>
-					<Stack render={<Label variant="item" />} orientation="horizontal" align="start" gap={2}>
-						<Checkbox value="view-dashboard" />
-						View dashboard
-					</Stack>
-				</Field.Item>
-				<Field.Item>
-					<Stack render={<Label variant="item" />} orientation="horizontal" align="start" gap={2}>
-						<Checkbox value="access-reports" />
-						Access reports
-					</Stack>
-				</Field.Item>
-				<CheckboxGroup
-					aria-label="Manage users"
-					value={managementValue}
-					onValueChange={(value) => {
-						if (value.length === userManagementPermissions.length) {
-							setMainValue((current) => Array.from(new Set([...current, "manage-users"])));
-						} else {
-							setMainValue((current) =>
-								current.filter((permission) => permission !== "manage-users"),
-							);
-						}
-
-						setManagementValue(value);
-					}}
-					allValues={userManagementPermissions}
-				>
+					setMainValue(value);
+				}}
+				allValues={mainPermissions}
+			>
+				<Stack gap={3}>
 					<Field.Item>
 						<Stack render={<Label variant="item" />} orientation="horizontal" align="start" gap={2}>
-							<Checkbox parent />
-							Manage users
+							<Checkbox parent indeterminate={managementIsPartial} />
+							User permissions
 						</Stack>
 					</Field.Item>
 					<Stack gap={3} xstyle={storyParts.permissionChildren}>
@@ -416,8 +431,8 @@ function NestedParentCheckboxes() {
 								align="start"
 								gap={2}
 							>
-								<Checkbox value="create-user" />
-								Create user
+								<Checkbox value="view-dashboard" />
+								View dashboard
 							</Stack>
 						</Field.Item>
 						<Field.Item>
@@ -427,36 +442,92 @@ function NestedParentCheckboxes() {
 								align="start"
 								gap={2}
 							>
-								<Checkbox value="edit-user" />
-								Edit user
+								<Checkbox value="access-reports" />
+								Access reports
 							</Stack>
 						</Field.Item>
-						<Field.Item>
-							<Stack
-								render={<Label variant="item" />}
-								orientation="horizontal"
-								align="start"
-								gap={2}
+						<Field.Root name="management">
+							<CheckboxGroup
+								aria-label="Manage users"
+								value={managementValue}
+								onValueChange={(value) => {
+									if (value.length === userManagementPermissions.length) {
+										setMainValue((current) => Array.from(new Set([...current, "manage-users"])));
+									} else {
+										setMainValue((current) =>
+											current.filter((permission) => permission !== "manage-users"),
+										);
+									}
+
+									setManagementValue(value);
+								}}
+								allValues={userManagementPermissions}
 							>
-								<Checkbox value="delete-user" />
-								Delete user
-							</Stack>
-						</Field.Item>
-						<Field.Item>
-							<Stack
-								render={<Label variant="item" />}
-								orientation="horizontal"
-								align="start"
-								gap={2}
-							>
-								<Checkbox value="assign-roles" />
-								Assign roles
-							</Stack>
-						</Field.Item>
+								<Stack gap={3}>
+									<Field.Item>
+										<Stack
+											render={<Label variant="item" />}
+											orientation="horizontal"
+											align="start"
+											gap={2}
+										>
+											<Checkbox parent />
+											Manage users
+										</Stack>
+									</Field.Item>
+									<Stack gap={3} xstyle={storyParts.permissionChildren}>
+										<Field.Item>
+											<Stack
+												render={<Label variant="item" />}
+												orientation="horizontal"
+												align="start"
+												gap={2}
+											>
+												<Checkbox value="create-user" />
+												Create user
+											</Stack>
+										</Field.Item>
+										<Field.Item>
+											<Stack
+												render={<Label variant="item" />}
+												orientation="horizontal"
+												align="start"
+												gap={2}
+											>
+												<Checkbox value="edit-user" />
+												Edit user
+											</Stack>
+										</Field.Item>
+										<Field.Item>
+											<Stack
+												render={<Label variant="item" />}
+												orientation="horizontal"
+												align="start"
+												gap={2}
+											>
+												<Checkbox value="delete-user" />
+												Delete user
+											</Stack>
+										</Field.Item>
+										<Field.Item>
+											<Stack
+												render={<Label variant="item" />}
+												orientation="horizontal"
+												align="start"
+												gap={2}
+											>
+												<Checkbox value="assign-roles" />
+												Assign roles
+											</Stack>
+										</Field.Item>
+									</Stack>
+								</Stack>
+							</CheckboxGroup>
+						</Field.Root>
 					</Stack>
-				</CheckboxGroup>
-			</Stack>
-		</CheckboxGroup>
+				</Stack>
+			</CheckboxGroup>
+		</Field.Root>
 	);
 }
 

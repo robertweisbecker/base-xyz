@@ -1,16 +1,7 @@
 import { Checkbox as BaseCheckbox } from "@base-ui/react/checkbox";
 import { CheckboxGroup as BaseCheckboxGroup } from "@base-ui/react/checkbox-group";
-import { Field } from "@base-ui/react/field";
-import { Fieldset } from "@base-ui/react/fieldset";
 import * as stylex from "@stylexjs/stylex";
-import {
-	createContext,
-	useContext,
-	useId,
-	useMemo,
-	type ComponentProps,
-	type ReactNode,
-} from "react";
+import { createContext, useContext, useMemo, type ComponentProps } from "react";
 import { mergeStyle, type BaseStyleProps } from "@/styles/props/base";
 import { extractMarginProps, type MarginProps } from "@/styles/props/spacing.stylex";
 import { focusRing } from "@/styles/recipes/focus";
@@ -32,28 +23,23 @@ export type CheckboxProps = Omit<
 	};
 
 export type CheckboxGroupProps = Omit<
-	BaseCheckboxGroup.Props,
+	ComponentProps<typeof BaseCheckboxGroup>,
 	"className" | "color" | "style" | keyof MarginProps
 > &
 	MarginProps &
 	BaseStyleProps & {
-		label?: ReactNode;
-		description?: ReactNode;
-		name?: string;
-		/** Displays the group items in a horizontal row that wraps when needed. */
-		inline?: boolean;
 		size?: CheckboxSize;
 		className?: string;
 	};
 
-const CheckboxGroupFieldContext = createContext<{
+const CheckboxGroupContext = createContext<{
 	disabled: boolean;
 	size?: CheckboxSize;
 }>({ disabled: false });
 
 export function Checkbox({ className, style, xstyle, size, ...props }: CheckboxProps) {
 	const { marginStyles, rest } = extractMarginProps(props);
-	const groupContext = useContext(CheckboxGroupFieldContext);
+	const groupContext = useContext(CheckboxGroupContext);
 	const resolvedSize = size ?? groupContext.size ?? "md";
 	const sx = stylex.props(
 		checkboxStyles.control,
@@ -87,72 +73,34 @@ export function Checkbox({ className, style, xstyle, size, ...props }: CheckboxP
 }
 
 export function CheckboxGroup({
-	ref,
-	label,
-	description,
 	children,
 	className,
 	style,
 	xstyle,
 	disabled,
-	inline = false,
 	size,
-	"aria-describedby": ariaDescribedBy,
-	name,
 	...props
 }: CheckboxGroupProps) {
 	const { marginStyles, rest } = extractMarginProps(props);
-	const parentGroupContext = useContext(CheckboxGroupFieldContext);
-	const isDisabled = Boolean(disabled || parentGroupContext.disabled);
-	const resolvedSize = size ?? parentGroupContext.size ?? "md";
-	const generatedId = useId();
-	const descriptionId = description ? `${generatedId}-description` : undefined;
-	const groupSx = stylex.props(checkboxStyles.group, marginStyles, xstyle);
+	const parentGroup = useContext(CheckboxGroupContext);
+	const isDisabled = Boolean(disabled || parentGroup.disabled);
+	const resolvedSize = size ?? parentGroup.size ?? "md";
 	const groupValue = useMemo(
 		() => ({ disabled: isDisabled, size: resolvedSize }),
 		[isDisabled, resolvedSize],
 	);
+	const sx = stylex.props(marginStyles, xstyle);
 
 	return (
-		<Field.Root
-			name={name}
-			disabled={isDisabled}
-			render={
-				<Fieldset.Root
-					disabled={isDisabled}
-					render={
-						<BaseCheckboxGroup
-							ref={ref}
-							disabled={isDisabled}
-							aria-describedby={attrJoin(ariaDescribedBy, descriptionId) || undefined}
-							{...rest}
-						/>
-					}
-				/>
-			}
-			className={attrJoin(groupSx.className, className)}
-			style={mergeStyle(groupSx.style, style)}
-		>
-			{label ? (
-				<Fieldset.Legend {...stylex.props(checkboxStyles.groupLabel, checkboxStyles.legend)}>
-					{label}
-				</Fieldset.Legend>
-			) : null}
-			{description ? (
-				<p id={descriptionId} {...stylex.props(checkboxStyles.groupDescription)}>
-					{description}
-				</p>
-			) : null}
-			<CheckboxGroupFieldContext.Provider value={groupValue}>
-				<div
-					{...stylex.props(
-						checkboxStyles.groupOptions,
-						inline && checkboxStyles.groupOptionsInline,
-					)}
-				>
-					{children}
-				</div>
-			</CheckboxGroupFieldContext.Provider>
-		</Field.Root>
+		<CheckboxGroupContext.Provider value={groupValue}>
+			<BaseCheckboxGroup
+				disabled={isDisabled}
+				className={attrJoin(sx.className, className)}
+				style={mergeStyle(sx.style, style)}
+				{...rest}
+			>
+				{children}
+			</BaseCheckboxGroup>
+		</CheckboxGroupContext.Provider>
 	);
 }

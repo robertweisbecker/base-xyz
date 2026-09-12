@@ -2,6 +2,7 @@ import {
 	Button,
 	Checkbox,
 	Field,
+	Fieldset,
 	Grid,
 	Label,
 	Radio,
@@ -44,22 +45,43 @@ export function EnvironmentForm() {
 						</Select.Popup>
 					</Select.Root>
 				</Grid>
-				<RadioGroup defaultValue="preview" label="Environment visibility" name="visibility">
-					<Field.Item>
-						<Stack render={<Label variant="item" />} orientation="horizontal" align="start" gap={2}>
-							<Radio value="private" />
-							Private
-						</Stack>
-						<Field.Description>Only invited workspace members can access it.</Field.Description>
-					</Field.Item>
-					<Field.Item>
-						<Stack render={<Label variant="item" />} orientation="horizontal" align="start" gap={2}>
-							<Radio value="preview" />
-							Preview
-						</Stack>
-						<Field.Description>Anyone with a signed preview link can access it.</Field.Description>
-					</Field.Item>
-				</RadioGroup>
+				<Fieldset.Root>
+					<Fieldset.Legend>Environment visibility</Fieldset.Legend>
+					<Field.Root name="visibility" mt={3}>
+						<RadioGroup defaultValue="preview">
+							<Stack gap={3}>
+								<Field.Item>
+									<Stack
+										render={<Label variant="item" />}
+										orientation="horizontal"
+										align="start"
+										gap={2}
+									>
+										<Radio value="private" />
+										Private
+									</Stack>
+									<Field.Description>
+										Only invited workspace members can access it.
+									</Field.Description>
+								</Field.Item>
+								<Field.Item>
+									<Stack
+										render={<Label variant="item" />}
+										orientation="horizontal"
+										align="start"
+										gap={2}
+									>
+										<Radio value="preview" />
+										Preview
+									</Stack>
+									<Field.Description>
+										Anyone with a signed preview link can access it.
+									</Field.Description>
+								</Field.Item>
+							</Stack>
+						</RadioGroup>
+					</Field.Root>
+				</Fieldset.Root>
 				<Field.Root name="description">
 					<Label>Description</Label>
 					<Textarea

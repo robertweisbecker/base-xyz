@@ -1,5 +1,4 @@
 import * as stylex from "@stylexjs/stylex";
-import { textStyles, fontWeightStyles } from "@/components/text/text.stylex";
 import { media } from "@/styles/constants.stylex";
 import { tokens } from "@/theme/tokens.stylex";
 
@@ -31,42 +30,6 @@ export const checkboxControlSizeStyles = stylex.create({
 });
 
 const checkboxParts = stylex.create({
-	group: {
-		margin: 0,
-		padding: 0,
-		borderWidth: 0,
-		gap: tokens["--space-2"],
-		display: "flex",
-		flexDirection: "column",
-		minInlineSize: 0,
-	},
-	groupLabel: {
-		color: {
-			"[data-disabled]": tokens["--fg-subtle"],
-			default: tokens["--fg"],
-		},
-	},
-	legend: {
-		padding: 0,
-	},
-	groupDescription: {
-		color: tokens["--fg-muted"],
-		marginBlockEnd: tokens["--space-2"],
-	},
-	groupOptions: {
-		alignItems: "stretch",
-		columnGap: tokens["--space-3"],
-		display: "flex",
-		flexDirection: "column",
-		flexWrap: "nowrap",
-		rowGap: tokens["--space-3"],
-	},
-	groupOptionsInline: {
-		alignItems: "start",
-		columnGap: tokens["--space-6"],
-		flexDirection: "row",
-		flexWrap: "wrap",
-	},
 	control: {
 		padding: 2,
 		borderColor: {
@@ -195,12 +158,6 @@ const checkboxParts = stylex.create({
 });
 
 export const checkboxStyles = {
-	group: checkboxParts.group,
-	groupLabel: [textStyles.body, fontWeightStyles.semibold, checkboxParts.groupLabel],
-	legend: checkboxParts.legend,
-	groupDescription: [textStyles.supporting, checkboxParts.groupDescription],
-	groupOptions: checkboxParts.groupOptions,
-	groupOptionsInline: checkboxParts.groupOptionsInline,
 	control: checkboxParts.control,
 	indicator: checkboxParts.indicator,
 	indicatorTransition: checkboxParts.indicatorTransition,

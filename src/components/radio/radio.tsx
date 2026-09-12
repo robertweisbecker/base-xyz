@@ -1,9 +1,7 @@
 import { Radio as BaseRadio } from "@base-ui/react/radio";
 import { RadioGroup as BaseRadioGroup } from "@base-ui/react/radio-group";
-import { Field } from "@base-ui/react/field";
-import { Fieldset } from "@base-ui/react/fieldset";
 import * as stylex from "@stylexjs/stylex";
-import { createContext, useContext, useId, type ComponentProps, type ReactNode } from "react";
+import { createContext, useContext, type ComponentProps } from "react";
 import { focusRing } from "@/styles/recipes/focus";
 import { pressable } from "@/styles/recipes/transitions";
 import { attrJoin } from "@/utils/attr-join";
@@ -28,16 +26,12 @@ export type RadioProps = Omit<
 		className?: string;
 	};
 
-export type RadioGroupProps = Omit<
-	BaseRadioGroup.Props,
+export type RadioGroupProps<Value = unknown> = Omit<
+	ComponentProps<typeof BaseRadioGroup<Value>>,
 	"className" | "color" | "style" | keyof MarginProps
 > &
 	MarginProps &
 	BaseStyleProps & {
-		label: ReactNode;
-		description?: ReactNode;
-		/** Displays the group items in a horizontal row that wraps when needed. */
-		inline?: boolean;
 		size?: RadioSize;
 		className?: string;
 	};
@@ -74,70 +68,26 @@ export function Radio({ className, style, xstyle, size, ...props }: RadioProps) 
 	);
 }
 
-export function RadioGroup({
-	ref,
-	label,
-	description,
+export function RadioGroup<Value = unknown>({
 	children,
 	className,
 	style,
 	xstyle,
-	disabled,
-	inline = false,
-	readOnly,
-	required,
 	size = "md",
-	"aria-describedby": ariaDescribedBy,
-	name,
 	...props
-}: RadioGroupProps) {
+}: RadioGroupProps<Value>) {
 	const { marginStyles, rest } = extractMarginProps(props);
-	const generatedId = useId();
-	const descriptionId = description ? `${generatedId}-description` : undefined;
-	const groupSx = stylex.props(radioStyles.fieldset, marginStyles, xstyle);
+	const sx = stylex.props(marginStyles, xstyle);
 
 	return (
-		<Field.Root
-			disabled={disabled}
-			name={name}
-			render={
-				<Fieldset.Root
-					render={
-						<BaseRadioGroup
-							ref={ref}
-							name={name}
-							disabled={disabled}
-							readOnly={readOnly}
-							required={required}
-							aria-describedby={attrJoin(ariaDescribedBy, descriptionId) || undefined}
-							{...rest}
-						/>
-					}
-				/>
-			}
-			className={attrJoin(groupSx.className, className)}
-			style={mergeStyle(groupSx.style, style)}
-		>
-			<div {...stylex.props(radioStyles.title)}>
-				<Fieldset.Legend {...stylex.props(radioStyles.groupLabel)}>
-					{label}
-					{required ? (
-						<span aria-hidden {...stylex.props(radioStyles.requiredIndicator)}>
-							*
-						</span>
-					) : null}
-				</Fieldset.Legend>
-				{description ? (
-					<p id={descriptionId} {...stylex.props(radioStyles.groupDescription)}>
-						{description}
-					</p>
-				) : null}
-			</div>
-			<RadioGroupSizeContext.Provider value={size}>
-				<div {...stylex.props(radioStyles.groupOptions, inline && radioStyles.groupOptionsInline)}>
-					{children}
-				</div>
-			</RadioGroupSizeContext.Provider>
-		</Field.Root>
+		<RadioGroupSizeContext.Provider value={size}>
+			<BaseRadioGroup<Value>
+				className={attrJoin(sx.className, className)}
+				style={mergeStyle(sx.style, style)}
+				{...rest}
+			>
+				{children}
+			</BaseRadioGroup>
+		</RadioGroupSizeContext.Provider>
 	);
 }
