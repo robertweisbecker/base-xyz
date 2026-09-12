@@ -84,8 +84,7 @@ are intentionally not reconstructed here.
   controller boundary and waits for landed code plus a real free-form consumer;
   it must not depend on reading a retired Plan 004 file after completion.
 - #65's ref cleanup and dependency PR #57 are merged. Plan 008 still waits until
-  no other plan is IN PROGRESS. Preserve completed #27/PR #34 and Plan 007/PR #47;
-  keep foundation issue #63 separate from the package-manager migration.
+  no other plan is IN PROGRESS. Preserve completed #27/PR #34 and Plan 007/PR #47.
 - Relative time is an investigation only. Frozen showcase copy does not justify
   shipping an API. Require a real consumer before spikes; test only unresolved
   risks in disposable work. Plan 009 remains reserved and deferred.
@@ -105,7 +104,6 @@ separate full plans would duplicate the handoff. GitHub owns live queue state.
 | Issue                                                         | Scope                                                       | Priority | Effort |
 | ------------------------------------------------------------- | ----------------------------------------------------------- | -------- | ------ |
 | [#61](https://github.com/robertweisbecker/base-xyz/issues/61) | Isolate independent Tooltip roots inside groups             | P1       | S      |
-| [#63](https://github.com/robertweisbecker/base-xyz/issues/63) | Render foundation specimens from canonical styles/tokens    | P2       | S–M    |
 | [#42](https://github.com/robertweisbecker/base-xyz/issues/42) | Triage Popover arrow removal and retained Tooltip ownership | P2       | S      |
 
 ## Findings considered and rejected
