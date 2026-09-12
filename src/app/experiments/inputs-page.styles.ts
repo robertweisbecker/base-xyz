@@ -2,19 +2,8 @@ import * as stylex from "@stylexjs/stylex";
 import { breakpoints } from "@/styles/constants.stylex";
 import { tokens } from "@/theme/tokens.stylex";
 
-export const comparisonLabelReset = `
-	[data-field-label-hidden] > * > :first-child {
-		clip: rect(0 0 0 0);
-		clip-path: inset(50%);
-		height: 1px;
-		overflow: hidden;
-		position: absolute;
-		white-space: nowrap;
-		width: 1px;
-	}
-`;
-
 export const inputsPageStyles = stylex.create({
+	formRegion: { width: "fit-content" },
 	horizontalOverflow: { paddingBlock: tokens["--space-1"], overflowX: "auto" },
 	fieldSizingCanvas: { minWidth: "82rem" },
 	fieldHeaderGrid: {

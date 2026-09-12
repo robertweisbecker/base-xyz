@@ -1,10 +1,9 @@
-import { Field } from "@base-ui/react/field";
 import { NumberField as BaseNumberField } from "@base-ui/react/number-field";
 import { ArrowsHorizontalIcon } from "@phosphor-icons/react/dist/csr/ArrowsHorizontal";
 import { MinusIcon } from "@phosphor-icons/react/dist/csr/Minus";
 import { PlusIcon } from "@phosphor-icons/react/dist/csr/Plus";
 import * as stylex from "@stylexjs/stylex";
-import { useId, type CSSProperties } from "react";
+import { createContext, useContext, type ComponentProps, type CSSProperties } from "react";
 import { media } from "@/styles/constants.stylex";
 import type { FieldSize } from "@/components/field/field.types";
 import { fieldStyles, fieldTextStyles } from "@/components/field/field.stylex";
@@ -13,7 +12,6 @@ import { extractMarginProps, type MarginProps } from "@/styles/props/spacing.sty
 import { focusRing } from "@/styles/recipes/focus";
 import { pressable } from "@/styles/recipes/transitions";
 import { tokens } from "@/theme/tokens.stylex";
-import { WarningOctagonIcon } from "@phosphor-icons/react";
 import { attrJoin } from "@/utils/attr-join";
 
 const STEPPER_HOVER = ":hover:not([data-disabled]):not([data-readonly]):not(:active)";
@@ -21,150 +19,140 @@ const STEPPER_ACTIVE = ":active:not([data-disabled]):not([data-readonly])";
 const INPUT_HOVER =
 	':hover:not(:focus-visible):not([aria-invalid="true"]):not([data-disabled]):not([data-invalid]):not([data-readonly]):not([readonly])';
 
-export type NumberFieldProps = Omit<
-	BaseNumberField.Root.Props,
-	"children" | "className" | "color" | "id" | "style" | keyof MarginProps
+const NumberFieldSizeContext = createContext<FieldSize>("md");
+
+export type NumberFieldRootProps = Omit<
+	ComponentProps<typeof BaseNumberField.Root>,
+	"className" | "style" | keyof MarginProps
 > &
 	MarginProps &
+	BaseStyleProps & { className?: string; size?: FieldSize };
+
+export type NumberFieldControlProps = Omit<
+	ComponentProps<typeof BaseNumberField.Input>,
+	"className" | "style"
+> &
 	BaseStyleProps & {
-		label: string;
-		description?: string;
-		error?: string;
 		className?: string;
-		id?: string;
-		/**
-		 * Width of the nested input. Use `"fill"` to occupy the available inline
-		 * space, or provide any CSS width such as `"10ch"`, `"80px"`, or `240`.
-		 * @default "5ch"
-		 */
+		/** Width of the visible input. Use "fill" or any CSS width. @default "5ch" */
 		inputWidth?: NumberFieldInputWidth;
 		decrementLabel?: string;
 		incrementLabel?: string;
-		size?: FieldSize;
 	};
+
+export type NumberFieldScrubAreaProps = Omit<
+	ComponentProps<typeof BaseNumberField.ScrubArea>,
+	"className" | "style"
+> &
+	BaseStyleProps & { className?: string };
 
 export type NumberFieldInputWidth = CSSProperties["width"] | "fill";
 
-export function NumberField({
-	label,
-	description,
-	error,
+/** Owns numeric state and the widget host. Field composition stays with the caller. */
+export function Root({ className, style, xstyle, size = "md", ...props }: NumberFieldRootProps) {
+	const { marginStyles, rest } = extractMarginProps(props);
+	const sx = stylex.props(numberFieldParts.root, marginStyles, xstyle);
+	return (
+		<NumberFieldSizeContext.Provider value={size}>
+			<BaseNumberField.Root
+				className={attrJoin(sx.className, className)}
+				style={mergeStyle(sx.style, style)}
+				{...rest}
+			/>
+		</NumberFieldSizeContext.Provider>
+	);
+}
+
+/** Input props and ref target the visible input; group and steppers remain private. */
+export function Control({
 	className,
 	style,
 	xstyle,
-	id: providedId,
+	inputWidth = "5ch",
 	decrementLabel = "Decrease value",
 	incrementLabel = "Increase value",
-	disabled,
-	name,
-	readOnly,
-	required,
-	size: fieldSize = "md",
-	inputWidth = "5ch",
 	...props
-}: NumberFieldProps) {
-	const { marginStyles, rest } = extractMarginProps(props);
-	const generatedId = useId();
-	const id = providedId ?? generatedId;
-	const descriptionId = description ? `${id}-description` : undefined;
-	const errorId = error ? `${id}-error` : undefined;
-	const rootSx = stylex.props(fieldStyles.root, numberFieldParts.root, marginStyles, xstyle);
-
+}: NumberFieldControlProps) {
+	const size = useContext(NumberFieldSizeContext);
+	const sx = stylex.props(
+		fieldStyles.inputUnstyled,
+		fieldStyles.inputDefault,
+		fieldTextStyles[size],
+		numberFieldParts.input,
+		numberFieldInputPaddingSizes.default,
+		size === "lg" && numberFieldInputPaddingSizes.lg,
+		focusRing.inset,
+		numberFieldParts.inputWidth(inputWidth),
+		xstyle,
+	);
 	return (
-		<Field.Root
-			className={attrJoin(rootSx.className, className)}
-			style={mergeStyle(rootSx.style, style)}
-			disabled={disabled}
-			invalid={Boolean(error)}
-			name={name}
-			render={
-				<BaseNumberField.Root
-					id={id}
-					disabled={disabled}
-					readOnly={readOnly}
-					required={required}
-					{...rest}
-				/>
-			}
-		>
-			<BaseNumberField.ScrubArea {...stylex.props(numberFieldParts.scrubArea)}>
-				<Field.Label htmlFor={id} {...stylex.props(fieldStyles.label, numberFieldParts.label)}>
-					{label}
-					{required ? (
-						<span aria-hidden {...stylex.props(fieldStyles.requiredIndicator)}>
-							*
-						</span>
-					) : null}
-				</Field.Label>
-				<BaseNumberField.ScrubAreaCursor {...stylex.props(numberFieldParts.scrubCursor)}>
-					<ArrowsHorizontalIcon
-						aria-hidden
-						size={24}
-						weight="fill"
-						strokeWidth={8}
-						fill="black"
-						stroke={"white"}
-					/>
-				</BaseNumberField.ScrubAreaCursor>
-			</BaseNumberField.ScrubArea>
-			<BaseNumberField.Group
-				{...stylex.props(numberFieldParts.group, numberFieldGroupSizes[fieldSize])}
+		<BaseNumberField.Group {...stylex.props(numberFieldParts.group, numberFieldGroupSizes[size])}>
+			<BaseNumberField.Decrement
+				aria-label={decrementLabel}
+				{...stylex.props(
+					numberFieldParts.stepper,
+					numberFieldStepperSizes[size],
+					numberFieldDecrementRadii.default,
+					size === "sm" && numberFieldDecrementRadii.sm,
+					numberFieldParts.decrement,
+					pressable.transition,
+				)}
 			>
-				<BaseNumberField.Decrement
-					aria-label={decrementLabel}
-					{...stylex.props(
-						numberFieldParts.stepper,
-						numberFieldStepperSizes[fieldSize],
-						numberFieldDecrementRadii.default,
-						fieldSize === "sm" && numberFieldDecrementRadii.sm,
-						numberFieldParts.decrement,
-						pressable.transition,
-					)}
-				>
-					<MinusIcon aria-hidden size={12} weight="bold" />
-				</BaseNumberField.Decrement>
-				<BaseNumberField.Input
-					aria-describedby={attrJoin(descriptionId, errorId) || undefined}
-					aria-invalid={Boolean(error)}
-					{...stylex.props(
-						fieldStyles.inputUnstyled,
-						fieldStyles.inputDefault,
-						fieldTextStyles[fieldSize],
-						numberFieldParts.input,
-						numberFieldInputPaddingSizes.default,
-						fieldSize === "lg" && numberFieldInputPaddingSizes.lg,
-						focusRing.inset,
-						numberFieldParts.inputWidth(inputWidth),
-					)}
-				/>
-				<BaseNumberField.Increment
-					aria-label={incrementLabel}
-					{...stylex.props(
-						numberFieldParts.stepper,
-						numberFieldStepperSizes[fieldSize],
-						numberFieldIncrementRadii.default,
-						fieldSize === "sm" && numberFieldIncrementRadii.sm,
-						numberFieldParts.increment,
-						pressable.transition,
-					)}
-				>
-					<PlusIcon aria-hidden size={12} weight="bold" />
-				</BaseNumberField.Increment>
-			</BaseNumberField.Group>
-			{description ? (
-				<Field.Description id={descriptionId} {...stylex.props(fieldStyles.description)}>
-					{description}
-				</Field.Description>
-			) : null}
-			{error ? (
-				<Field.Error id={errorId} match {...stylex.props(fieldStyles.error)}>
-					<WarningOctagonIcon aria-hidden size={"1em"} weight="duotone" />
-					{error}
-				</Field.Error>
-			) : null}
-		</Field.Root>
+				<MinusIcon aria-hidden size={12} weight="bold" />
+			</BaseNumberField.Decrement>
+			<BaseNumberField.Input
+				className={attrJoin(sx.className, className)}
+				style={mergeStyle(sx.style, style)}
+				{...props}
+			/>
+			<BaseNumberField.Increment
+				aria-label={incrementLabel}
+				{...stylex.props(
+					numberFieldParts.stepper,
+					numberFieldStepperSizes[size],
+					numberFieldIncrementRadii.default,
+					size === "sm" && numberFieldIncrementRadii.sm,
+					numberFieldParts.increment,
+					pressable.transition,
+				)}
+			>
+				<PlusIcon aria-hidden size={12} weight="bold" />
+			</BaseNumberField.Increment>
+		</BaseNumberField.Group>
 	);
 }
+
+/** Optional scrub target around caller content, with the cursor kept private. */
+export function ScrubArea({
+	children,
+	className,
+	style,
+	xstyle,
+	...props
+}: NumberFieldScrubAreaProps) {
+	const sx = stylex.props(numberFieldParts.scrubArea, xstyle);
+	return (
+		<BaseNumberField.ScrubArea
+			className={attrJoin(sx.className, className)}
+			style={mergeStyle(sx.style, style)}
+			{...props}
+		>
+			{children}
+			<BaseNumberField.ScrubAreaCursor {...stylex.props(numberFieldParts.scrubCursor)}>
+				<ArrowsHorizontalIcon
+					aria-hidden
+					size={24}
+					weight="fill"
+					strokeWidth={8}
+					fill="black"
+					stroke="white"
+				/>
+			</BaseNumberField.ScrubAreaCursor>
+		</BaseNumberField.ScrubArea>
+	);
+}
+
+export const NumberField = { Root, Control, ScrubArea } as const;
 
 const numberFieldParts = stylex.create({
 	root: {
@@ -181,9 +169,6 @@ const numberFieldParts = stylex.create({
 			default: "ew-resize",
 		},
 		userSelect: "none",
-	},
-	label: {
-		cursor: "inherit",
 	},
 	scrubCursor: {
 		alignItems: "center",

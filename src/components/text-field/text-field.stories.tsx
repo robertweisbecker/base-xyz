@@ -187,17 +187,6 @@ export const FieldFamilyParity: Story = {
 	},
 	render: () => (
 		<Box pb={2} xstyle={styles.familyOverflow}>
-			<style>{`
-				[data-field-family-control] > * > :first-child {
-					clip: rect(0 0 0 0);
-					clip-path: inset(50%);
-					height: 1px;
-					overflow: hidden;
-					position: absolute;
-					white-space: nowrap;
-					width: 1px;
-				}
-			`}</style>
 			<Grid align="start" gap={6} xstyle={styles.familyGrid}>
 				<span aria-hidden />
 				{FIELD_SIZES.map((size) => (
@@ -217,43 +206,39 @@ export const FieldFamilyParity: Story = {
 				</FamilyRow>
 				<FamilyRow label="Number field">
 					{(size) => (
-						<NumberField label="Number field" defaultValue={8} size={size} inputWidth="fill" />
+						<NumberField.Root defaultValue={8} size={size}>
+							<NumberField.Control aria-label="Number field" inputWidth="fill" />
+						</NumberField.Root>
 					)}
 				</FamilyRow>
 				<FamilyRow label="Select">
 					{(size) => (
-						<Field.Root xstyle={x.width["fit-content"]}>
-							<Select.Root<string>
-								defaultValue="React"
-								items={[{ label: "React", value: "React" }]}
-								size={size}
-							>
-								<Select.Label>Select</Select.Label>
-								<Select.Trigger />
-								<Select.Popup>
-									<Select.List>
-										<Select.Item value="React">React</Select.Item>
-									</Select.List>
-								</Select.Popup>
-							</Select.Root>
-						</Field.Root>
+						<Select.Root<string>
+							defaultValue="React"
+							items={[{ label: "React", value: "React" }]}
+							size={size}
+						>
+							<Select.Trigger aria-label="Select" />
+							<Select.Popup>
+								<Select.List>
+									<Select.Item value="React">React</Select.Item>
+								</Select.List>
+							</Select.Popup>
+						</Select.Root>
 					)}
 				</FamilyRow>
 				<FamilyRow label="Combobox">
 					{(size) => (
-						<Field.Root>
-							<Combobox.Root items={["React"]} size={size}>
-								<Combobox.Label>Combobox</Combobox.Label>
-								<Combobox.InputGroup>
-									<Combobox.Input placeholder="Shared control surface" />
-								</Combobox.InputGroup>
-								<Combobox.Popup>
-									<Combobox.List>
-										<Combobox.Item value="React">React</Combobox.Item>
-									</Combobox.List>
-								</Combobox.Popup>
-							</Combobox.Root>
-						</Field.Root>
+						<Combobox.Root items={["React"]} size={size}>
+							<Combobox.InputGroup>
+								<Combobox.Input aria-label="Combobox" placeholder="Shared control surface" />
+							</Combobox.InputGroup>
+							<Combobox.Popup>
+								<Combobox.List>
+									<Combobox.Item value="React">React</Combobox.Item>
+								</Combobox.List>
+							</Combobox.Popup>
+						</Combobox.Root>
 					)}
 				</FamilyRow>
 			</Grid>
@@ -276,7 +261,7 @@ function FamilyRow({
 				{label}
 			</Text>
 			{FIELD_SIZES.map((size) => (
-				<Box key={size} data-field-family-control minWidth={0}>
+				<Box key={size} minWidth={0}>
 					{children(size)}
 				</Box>
 			))}

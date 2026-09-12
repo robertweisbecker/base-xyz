@@ -1,4 +1,5 @@
 import x from "@stylexjs/atoms";
+import { WarningOctagonIcon } from "@phosphor-icons/react/dist/csr/WarningOctagon";
 import { CircleIcon } from "@phosphor-icons/react/dist/csr/Circle";
 import { GlobeIcon } from "@phosphor-icons/react/dist/csr/Globe";
 import * as stylex from "@stylexjs/stylex";
@@ -8,7 +9,6 @@ import {
 	Field,
 	type FieldSize,
 	InputGroup,
-	Label,
 	NumberField,
 	Select,
 	Stack,
@@ -69,11 +69,7 @@ function FieldSizeComparison({ size }: { size: FieldSize }) {
 			</Text>
 			<div {...stylex.props(styles.fieldControlGrid, fieldComparisonHeights[size])}>
 				{fieldKinds.map((kind) => (
-					<div
-						data-field-label-hidden={kind === "input-group" ? undefined : ""}
-						key={kind}
-						{...stylex.props(styles.comparisonControl)}
-					>
+					<div key={kind} {...stylex.props(styles.comparisonControl)}>
 						<ComparisonField kind={kind} size={size} state="filled" />
 					</div>
 				))}
@@ -98,7 +94,7 @@ export function CrossComponentRow() {
 				</Text>
 			</div>
 			<div {...stylex.props(styles.crossComponentRow, fieldComparisonHeights.md)}>
-				<div data-field-label-hidden {...stylex.props(styles.comparisonControl)}>
+				<div {...stylex.props(styles.comparisonControl)}>
 					<TextField aria-label="Environment" defaultValue="Production" />
 				</div>
 				<InputGroup.Root>
@@ -139,11 +135,7 @@ function FieldStateRow({ kind }: { kind: FieldKind }) {
 				{fieldKindLabels[kind]}
 			</Text>
 			{fieldStates.map((state) => (
-				<div
-					data-field-label-hidden={kind === "input-group" ? undefined : ""}
-					key={state}
-					{...stylex.props(styles.stateCell)}
-				>
+				<div key={state} {...stylex.props(styles.stateCell)}>
 					<ComparisonField kind={kind} size="md" state={state} />
 				</div>
 			))}
@@ -170,8 +162,8 @@ function ComparisonField({
 		case "text":
 			return (
 				<Field.Root disabled={disabled} invalid={invalid}>
-					<Label>{label}</Label>
 					<TextField
+						aria-label={label}
 						defaultValue={hasValue ? (invalid ? "Design Review" : "Design system") : undefined}
 						placeholder="Enter a value…"
 						readOnly={readOnly}
@@ -183,8 +175,8 @@ function ComparisonField({
 		case "textarea":
 			return (
 				<Field.Root disabled={disabled} invalid={invalid}>
-					<Label>{label}</Label>
 					<Textarea
+						aria-label={label}
 						defaultValue={
 							hasValue ? (invalid ? "Missing project context" : "Design system notes") : undefined
 						}
@@ -198,15 +190,17 @@ function ComparisonField({
 			);
 		case "number":
 			return (
-				<NumberField
-					defaultValue={hasValue ? 8 : undefined}
-					disabled={disabled}
-					error={invalid ? "Enter a value below 5." : undefined}
-					inputWidth="fill"
-					label={label}
-					readOnly={readOnly}
-					size={size}
-				/>
+				<Field.Root disabled={disabled} invalid={invalid}>
+					<NumberField.Root defaultValue={hasValue ? 8 : undefined} readOnly={readOnly} size={size}>
+						<NumberField.Control aria-label={label} inputWidth="fill" />
+					</NumberField.Root>
+					{invalid ? (
+						<Field.Error match>
+							<WarningOctagonIcon aria-hidden size="1em" weight="duotone" />
+							Enter a value below 5.
+						</Field.Error>
+					) : null}
+				</Field.Root>
 			);
 		case "select":
 			return (
@@ -217,8 +211,7 @@ function ComparisonField({
 						readOnly={readOnly}
 						size={size}
 					>
-						<Select.Label>{label}</Select.Label>
-						<Select.Trigger placeholder="Choose framework" />
+						<Select.Trigger aria-label={label} placeholder="Choose framework" />
 						<Select.Popup>
 							<Select.List>
 								{frameworkItems.map((item) => (
@@ -240,9 +233,8 @@ function ComparisonField({
 						readOnly={readOnly}
 						size={size}
 					>
-						<Combobox.Label>{label}</Combobox.Label>
 						<Combobox.InputGroup>
-							<Combobox.Input placeholder="Choose framework" />
+							<Combobox.Input aria-label={label} placeholder="Choose framework" />
 						</Combobox.InputGroup>
 						<Combobox.Popup>
 							<Combobox.List>

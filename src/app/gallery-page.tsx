@@ -1,3 +1,4 @@
+import x from "@stylexjs/atoms";
 import { useId, type ReactNode } from "react";
 import * as stylex from "@stylexjs/stylex";
 import {
@@ -517,7 +518,16 @@ function getComponentCells(): GalleryCell[] {
 		},
 		{
 			title: "NumberField",
-			content: <NumberField label="Seats" defaultValue={12} inputWidth="7ch" />,
+			content: (
+				<Field.Root>
+					<NumberField.Root defaultValue={12}>
+						<NumberField.ScrubArea>
+							<Label xstyle={x.cursor.inherit}>Seats</Label>
+						</NumberField.ScrubArea>
+						<NumberField.Control inputWidth="7ch" />
+					</NumberField.Root>
+				</Field.Root>
+			),
 		},
 		{
 			title: "Popover",

@@ -1,4 +1,3 @@
-import x from "@stylexjs/atoms";
 import {
 	Button,
 	Checkbox,
@@ -32,7 +31,7 @@ export function EnvironmentForm() {
 						<TextField placeholder="Preview" required />
 						<Field.Description>Used in deployment URLs and CLI commands.</Field.Description>
 					</Field.Root>
-					<Field.Root name="region" xstyle={x.width["fit-content"]}>
+					<Field.Root name="region" xstyle={styles.formRegion}>
 						<Select.Root<string> defaultValue="iad1" items={regionItems}>
 							<Select.Label>Primary region</Select.Label>
 							<Select.Trigger />

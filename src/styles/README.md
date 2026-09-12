@@ -217,6 +217,12 @@ explicit Field.Root. Standalone Combobox inputs use an accessible-name attribute
 Put field invalid state on Field.Root and control styling on Trigger/InputGroup,
 not the node-less widget roots.
 
+NumberField.Root owns numeric state and the widget host. Control forwards native
+input props, styles, and its ref to the visible input; steppers remain private.
+Root.ref targets the widget div, Root.inputRef targets the hidden input, and
+Root.id identifies the visible input. ScrubArea wraps caller content; use
+`xstyle={x.cursor.inherit}` on a Label inside it to preserve the scrub cursor.
+
 Form preserves native `onSubmit`/`action` and typed `onFormSubmit`. Callers supply
 the generic value shape; arbitrary JSX names do not infer a runtime schema.
 Registered Field values feed `onFormSubmit`, while native FormData follows native

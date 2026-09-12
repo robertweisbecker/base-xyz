@@ -135,9 +135,7 @@ export function InputPaddingComparison() {
 				Standalone input
 			</Text>
 			<div {...stylex.props(styles.paddingComparison)}>
-				<div data-field-label-hidden>
-					<TextField aria-label="Project slug" defaultValue="design-system" />
-				</div>
+				<TextField aria-label="Project slug" defaultValue="design-system" />
 				<Text color="muted" size="1">
 					Input group
 				</Text>
