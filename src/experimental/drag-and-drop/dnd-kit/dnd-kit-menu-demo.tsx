@@ -1,4 +1,3 @@
-import { useMergedRefs } from "@base-ui/utils/useMergedRefs";
 import { move } from "@dnd-kit/helpers";
 import {
 	DragDropProvider,
@@ -20,6 +19,7 @@ import * as stylex from "@stylexjs/stylex";
 import type { ReactNode } from "react";
 import { useRef, useState } from "react";
 import { Button, Menu } from "@/components";
+import { useMergedRefs } from "@/hooks/use-merged-refs";
 import { demoStyles } from "../drag-and-drop-demo.stylex";
 import { DemoInstructions, DemoPanel } from "../demo-parts";
 
