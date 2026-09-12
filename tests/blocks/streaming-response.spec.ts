@@ -1,6 +1,6 @@
 import { expect, test } from "../playwright";
 
-const storyPath = "/iframe.html?id=blocks-streaming-response--replacement-reset&viewMode=story";
+const storyPath = "/iframe.html?id=blocks-ai-streaming-response--replacement-reset&viewMode=story";
 const initialResponse = "The initial response contains enough words to expose stale reveal state";
 const replacementResponse = "The replacement response is ready";
 
