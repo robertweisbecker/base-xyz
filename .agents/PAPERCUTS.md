@@ -6,8 +6,9 @@ workarounds. Routine checks and port isolation belong in [validation](../docs/ag
 
 ## Retained workarounds
 
-Source/configuration checked 2026-09-07; original failures were not all reproduced.
+Older failures were not all reproduced.
 
+- 2026-09-11 — **Atoms-only modules.** `@stylexjs/unplugin` 0.19.0 defaults to scanning `stylex` / `@stylexjs/stylex` imports, so a module importing only `@stylexjs/atoms` can leave expressions uncompiled. `EnvironmentForm` failed at runtime on `x.width["fit-content"]` despite a passing app build. Use a named style from the existing style owner in such consumers; do not add unused imports to trigger compilation. Recheck if transform configuration changes.
 - 2026-08-20 — **Grid longhands.** `src/styles/props/grid.stylex.ts` retains `gridColumnStart`/`gridColumnEnd` and row equivalents under `@stylexjs/valid-shorthands`. The trigger was shorthand/longhand override precedence. Inspect both edges when changing spans; the caller-shorthand failure has not been reverified.
 - 2026-08-20 — **Relational-selector lint exceptions.** With StyleX/plugin 0.19.0, components retain narrow `@stylexjs/valid-styles` suppressions for nested conditions. Computed `stylex.when.ancestor(...)` keys previously widened literal types. Reproduce the lint/type/compiler mismatch before adding casts or suppressions.
 - 2026-08-26 — **Worktree lint traversal.** Bare Oxlint traversed `.worktrees`, loading anti-slop twice: `Plugin name 'anti-slop' is already registered`. Config ignores were too late. Use lint scripts or preserve `--ignore-pattern '.worktrees/**'` in focused runs.
