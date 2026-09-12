@@ -28,7 +28,7 @@ import { PromptComposer } from "./prompt-composer";
 type StoryArgs = ComponentProps<typeof GoalToolbar>;
 
 const meta = {
-	title: "Blocks/Goal toolbar",
+	title: "Blocks/AI/Goal toolbar",
 	component: GoalToolbar,
 	parameters: {
 		controls: { disable: true },
