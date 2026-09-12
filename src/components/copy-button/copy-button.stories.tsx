@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
+import { CopyButton as BlockCopyButton } from "@/blocks";
 import { Separator } from "@/components";
 import { Stack } from "@/components/layout/layout";
 import { Text } from "@/components/text/text";
@@ -6,17 +7,43 @@ import { Text } from "@/components/text/text";
 import { CopyButton } from "./copy-button";
 
 const meta = {
-	title: "Blocks/Copy button",
+	title: "Components/Copy button",
 	component: CopyButton,
+	args: {
+		value: "pnpm add @base-ui/react",
+		children: "Copy install command",
+		tooltip: "Copy to clipboard",
+		size: "md",
+		variant: "primary",
+		shape: "default",
+		disabled: false,
+	},
+	argTypes: {
+		value: { control: "text" },
+		children: { control: "text" },
+		tooltip: { control: "text" },
+		size: { control: "inline-radio", options: ["xs", "sm", "md", "lg"] },
+		variant: {
+			control: "select",
+			options: ["primary", "subtle", "secondary", "neutral", "ghost", "error"],
+		},
+		shape: { control: "inline-radio", options: ["default", "pill", "square", "circle"] },
+		disabled: { control: "boolean" },
+	},
 	parameters: {
-		controls: { disable: true },
+		controls: { include: ["value", "children", "tooltip", "size", "variant", "shape", "disabled"] },
 	},
 } satisfies Meta<typeof CopyButton>;
 
 export default meta;
-type Story = StoryObj;
+type Story = StoryObj<typeof meta>;
+
+export const Playground: Story = {};
 
 export const Examples: Story = {
+	parameters: {
+		controls: { disable: true },
+	},
 	render: () => (
 		<Stack gap={8}>
 			<Example title="Common uses">
@@ -85,6 +112,22 @@ export const Examples: Story = {
 					<CopyButton shape="square" tooltip="Copy square token" value="square-token" />
 					<CopyButton shape="circle" tooltip="Copy circular token" value="circle-token" />
 				</Stack>
+			</Example>
+
+			<Separator />
+
+			<Example title="Canceled by the caller">
+				<CopyButton value="restricted-token" onClick={(event) => event.preventDefault()}>
+					Copy restricted token
+				</CopyButton>
+			</Example>
+
+			<Separator />
+
+			<Example title="Compatible block import">
+				<BlockCopyButton value="project_4f28ac" variant="secondary">
+					Copy project reference
+				</BlockCopyButton>
 			</Example>
 		</Stack>
 	),

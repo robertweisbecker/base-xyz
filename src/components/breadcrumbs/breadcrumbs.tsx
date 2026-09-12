@@ -1,6 +1,6 @@
 import * as stylex from "@stylexjs/stylex";
 import { type ComponentProps, type ReactNode } from "react";
-import { CopyButton } from "@/blocks/copy-button/copy-button";
+import { CopyButton } from "@/components/copy-button/copy-button";
 import type { LinkColor } from "@/components/link/link";
 import { Loader } from "@/components/loader/loader";
 import { shimmerTextStyles } from "@/styles/recipes/shimmer-text.stylex";
