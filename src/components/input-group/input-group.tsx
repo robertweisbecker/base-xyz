@@ -1,4 +1,4 @@
-import { Field } from "@base-ui/react/field";
+import { Field } from "@/components/field/field";
 import { Input as BaseInput } from "@base-ui/react/input";
 import * as stylex from "@stylexjs/stylex";
 import { type ComponentProps } from "react";
@@ -116,6 +116,12 @@ export function Textarea({
 	xstyle,
 	rows = 1,
 	disabled,
+	id,
+	name,
+	defaultValue,
+	autoFocus,
+	readOnly,
+	required,
 	minRows,
 	maxRows,
 	onChange,
@@ -140,20 +146,30 @@ export function Textarea({
 		<textarea
 			ref={mergedRef}
 			rows={autoResizeEnabled ? autoResizeState.minRows : rows}
-			disabled={disabled}
 			onChange={(event) => {
 				onChange?.(event);
-				autoResizeState.resize();
+				// React restores the accepted controlled value after this event.
+				queueMicrotask(autoResizeState.resize);
 			}}
-			value={value}
-			{...(disabled && { "data-disabled": true })}
 			className={attrJoin(sx.className, className)}
 			style={mergeStyle(sx.style, style)}
 			{...props}
 		/>
 	);
 
-	return <Field.Control render={control} disabled={disabled} />;
+	return (
+		<Field.Control
+			autoFocus={autoFocus}
+			defaultValue={defaultValue}
+			disabled={disabled}
+			id={id}
+			name={name}
+			readOnly={readOnly}
+			required={required}
+			value={value}
+			render={control}
+		/>
+	);
 }
 
 export function Addon({

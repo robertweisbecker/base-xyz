@@ -720,12 +720,10 @@ function getComponentCells(): GalleryCell[] {
 		{
 			title: "Textarea",
 			content: (
-				<Textarea
-					label="Message"
-					placeholder="Enter your name"
-					rows={2}
-					xstyle={styles.compactField}
-				/>
+				<Field.Root xstyle={styles.compactField}>
+					<Label>Message</Label>
+					<Textarea placeholder="Enter your name" rows={2} />
+				</Field.Root>
 			),
 		},
 		{

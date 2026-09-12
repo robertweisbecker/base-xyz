@@ -181,18 +181,19 @@ function ComparisonField({
 			);
 		case "textarea":
 			return (
-				<Textarea
-					defaultValue={
-						hasValue ? (invalid ? "Missing project context" : "Design system notes") : undefined
-					}
-					disabled={disabled}
-					error={invalid ? "Add a complete sentence." : undefined}
-					label={label}
-					placeholder="Enter a value…"
-					readOnly={readOnly}
-					rows={1}
-					size={size}
-				/>
+				<Field.Root disabled={disabled} invalid={invalid}>
+					<Label>{label}</Label>
+					<Textarea
+						defaultValue={
+							hasValue ? (invalid ? "Missing project context" : "Design system notes") : undefined
+						}
+						placeholder="Enter a value…"
+						readOnly={readOnly}
+						rows={1}
+						size={size}
+					/>
+					{invalid ? <Field.Error match>Add a complete sentence.</Field.Error> : null}
+				</Field.Root>
 			);
 		case "number":
 			return (

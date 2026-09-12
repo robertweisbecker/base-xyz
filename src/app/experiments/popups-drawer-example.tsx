@@ -97,7 +97,10 @@ function DrawerDetails() {
 				<TextField defaultValue="BaseX lab" />
 			</Field.Root>
 			<Checkbox defaultChecked label="Require preview authentication" />
-			<Textarea label="Description" rows={4} />
+			<Field.Root>
+				<Label>Description</Label>
+				<Textarea rows={4} />
+			</Field.Root>
 		</Stack>
 	);
 }

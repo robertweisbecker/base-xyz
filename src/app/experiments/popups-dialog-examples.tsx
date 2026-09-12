@@ -86,7 +86,10 @@ function LargeDialog() {
 							<Label>Project name</Label>
 							<TextField defaultValue="Design system" />
 						</Field.Root>
-						<Textarea label="Release notes" rows={5} />
+						<Field.Root>
+							<Label>Release notes</Label>
+							<Textarea rows={5} />
+						</Field.Root>
 					</Stack>
 				</Dialog.Body>
 				<Dialog.Footer>

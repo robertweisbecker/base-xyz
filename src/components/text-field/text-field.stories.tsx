@@ -212,7 +212,7 @@ export const FieldFamilyParity: Story = {
 				</FamilyRow>
 				<FamilyRow label="Textarea">
 					{(size) => (
-						<Textarea label="Textarea" defaultValue="Shared control surface" size={size} />
+						<Textarea aria-label="Textarea" defaultValue="Shared control surface" size={size} />
 					)}
 				</FamilyRow>
 				<FamilyRow label="Number field">

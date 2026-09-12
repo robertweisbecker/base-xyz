@@ -56,14 +56,17 @@ export function EnvironmentForm() {
 						description="Anyone with a signed preview link can access it."
 					/>
 				</RadioGroup>
-				<Textarea
-					description="Shown to teammates when they select this environment."
-					label="Description"
-					maxRows={6}
-					minRows={3}
-					name="description"
-					placeholder="Used for pull request previews and design reviews."
-				/>
+				<Field.Root name="description">
+					<Label>Description</Label>
+					<Textarea
+						maxRows={6}
+						minRows={3}
+						placeholder="Used for pull request previews and design reviews."
+					/>
+					<Field.Description>
+						Shown to teammates when they select this environment.
+					</Field.Description>
+				</Field.Root>
 				<Stack gap={3}>
 					<Switch
 						defaultChecked
