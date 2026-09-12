@@ -4,7 +4,7 @@ test("keeps the Gallery route at the landing page", async ({ page }) => {
 	await page.goto("/");
 
 	await expect(page).toHaveURL(/\/$/);
-	const appNavigation = page.getByTestId("app-navigation");
+	const appNavigation = page.getByRole("banner").getByTestId("app-navigation");
 	await expect(appNavigation).toHaveRole("navigation");
 	await expect(appNavigation).toHaveAccessibleName(/\S/);
 	await expect(appNavigation.locator('a[href="/"]')).toHaveAttribute("aria-current", "page");
