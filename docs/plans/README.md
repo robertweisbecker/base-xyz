@@ -44,13 +44,13 @@ The `.scratch/` archive is ignored and local to the checkout; never force-add it
 This policy starts on 2026-09-03 and is not retroactive. Older retired plans
 are intentionally not reconstructed here.
 
-| Plan | Title                                                | Final status | Durable evidence                                                                                                                                                                                                          |
-| ---- | ---------------------------------------------------- | ------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| 003  | Add a semantic Description list component            | DONE         | [Implementation `7651f1f`](https://github.com/robertweisbecker/base-xyz/commit/7651f1f63f5d99a590090a55b0a258707236cc07); verified in `codex/003-description-list`, pending merge; intentionally local proposal, no issue |
-| 004  | Make inputs standalone and compose fields explicitly | DONE         | [Issue #19](https://github.com/robertweisbecker/base-xyz/issues/19); [PR #79](https://github.com/robertweisbecker/base-xyz/pull/79), merged as `a741aaa`                                                                  |
-| 007  | Decompose DataTable orchestration                    | DONE         | [Issue #26](https://github.com/robertweisbecker/base-xyz/issues/26); [PR #47](https://github.com/robertweisbecker/base-xyz/pull/47), merged as `e168ac3`                                                                  |
-| 010  | Give CopyButton a canonical component owner          | DONE         | [Issue #58](https://github.com/robertweisbecker/base-xyz/issues/58); [PR #75](https://github.com/robertweisbecker/base-xyz/pull/75), merged as `551c7ad`                                                                  |
-| 011  | Preserve NavList contracts across private owners     | DONE         | [Issue #18](https://github.com/robertweisbecker/base-xyz/issues/18); [PR #76](https://github.com/robertweisbecker/base-xyz/pull/76), merged as `a44f5b3`                                                                  |
+| Plan | Title                                                | Final status | Durable evidence                                                                                                                                         |
+| ---- | ---------------------------------------------------- | ------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 003  | Add a semantic Description list component            | DONE         | [PR #80](https://github.com/robertweisbecker/base-xyz/pull/80); reviewed, pending merge; intentionally local proposal, no issue                          |
+| 004  | Make inputs standalone and compose fields explicitly | DONE         | [Issue #19](https://github.com/robertweisbecker/base-xyz/issues/19); [PR #79](https://github.com/robertweisbecker/base-xyz/pull/79), merged as `a741aaa` |
+| 007  | Decompose DataTable orchestration                    | DONE         | [Issue #26](https://github.com/robertweisbecker/base-xyz/issues/26); [PR #47](https://github.com/robertweisbecker/base-xyz/pull/47), merged as `e168ac3` |
+| 010  | Give CopyButton a canonical component owner          | DONE         | [Issue #58](https://github.com/robertweisbecker/base-xyz/issues/58); [PR #75](https://github.com/robertweisbecker/base-xyz/pull/75), merged as `551c7ad` |
+| 011  | Preserve NavList contracts across private owners     | DONE         | [Issue #18](https://github.com/robertweisbecker/base-xyz/issues/18); [PR #76](https://github.com/robertweisbecker/base-xyz/pull/76), merged as `a44f5b3` |
 
 The four previously merged entries (004, 007, 010, 011) were spot-checked at `a741aaa`: public Form/Field/Label
 exports and standalone controls, DataTable's extracted owners, canonical
@@ -67,8 +67,9 @@ checked source/history and plan consistency; it did not rerun runtime suites.
 - Plan 003 is complete in `codex/003-description-list` after full verification,
   anti-slop, React Doctor baseline comparison, Thermonuclear review, and live
   Storybook inspection; merge remains pending. Its plan is retired. The approval
-  block now adopts stacked metadata below 34rem while preserving public parts,
-  accepted props, and the existing `Blocks/AI/` story grouping.
+  block fills its container without a width cap: metadata is horizontal from
+  the shared `xs` breakpoint (20rem) and stacks below that list width. Public
+  parts, accepted props, and the existing `Blocks/AI/` story grouping are preserved.
 - Plan 008's dependency and ref prerequisites are merged, including
   [PR #57](https://github.com/robertweisbecker/base-xyz/pull/57) (`c42ce20`) and
   [PR #73](https://github.com/robertweisbecker/base-xyz/pull/73) (`24740a4`).

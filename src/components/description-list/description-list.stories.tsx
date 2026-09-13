@@ -30,7 +30,7 @@ const meta = {
 		docs: {
 			description: {
 				component:
-					"Description lists associate native terms and values. Root margins are the external layout boundary; parts accept native attributes and style overrides. Horizontal layout stacks below the 34rem container width, while grid uses auto-fit columns above that width. labelWidth affects only wide horizontal layout. Row actions are caller-owned and should include contextual visible or visually hidden text. Items default to baseline alignment and accept start, center, or baseline; labelWidth defaults to 6.5rem. Each item supports multiple Label and Value parts with at most one optional Actions group.",
+					"Description lists associate native terms and values. Root margins are the external layout boundary; parts accept native attributes and style overrides. Horizontal layout stacks below the 20rem container width, while grid uses auto-fit columns above that width. labelWidth affects only wide horizontal layout. Row actions are caller-owned and should include contextual visible or visually hidden text. Items default to baseline alignment and accept start, center, or baseline; labelWidth defaults to 6.5rem. Each item supports multiple Label and Value parts with at most one optional Actions group.",
 			},
 		},
 	},
@@ -39,7 +39,7 @@ const meta = {
 			control: "select",
 			options: ["horizontal", "vertical", "grid"],
 			description:
-				"Horizontal stacks below the 34rem container width; vertical stays stacked; grid uses auto-fit columns above 34rem.",
+				"Horizontal stacks below the 20rem container width; vertical stays stacked; grid uses auto-fit columns above 20rem.",
 		},
 		size: { control: "select", options: ["sm", "md", "lg"] },
 		variant: { control: "select", options: ["plain", "divided"] },

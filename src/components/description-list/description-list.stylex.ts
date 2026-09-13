@@ -30,12 +30,12 @@ export const itemStyles = stylex.create({
 	horizontal: {
 		gridTemplateColumns: {
 			default: "minmax(0, 1fr) auto",
-			[containerBreakpoints.sm]: "var(--_description-list-label-width) minmax(0, 1fr) auto",
+			[containerBreakpoints.xs]: "var(--_description-list-label-width) minmax(0, 1fr) auto",
 		},
 	},
 	grid: {
-		gridColumnEnd: { default: "-1", [containerBreakpoints.sm]: "auto" },
-		gridColumnStart: { default: "1", [containerBreakpoints.sm]: "auto" },
+		gridColumnEnd: { default: "-1", [containerBreakpoints.xs]: "auto" },
+		gridColumnStart: { default: "1", [containerBreakpoints.xs]: "auto" },
 		gridTemplateColumns: "minmax(0, 1fr) auto",
 	},
 	divided: {
@@ -78,10 +78,10 @@ export const valueStyles = stylex.create({
 		overflowWrap: "anywhere",
 		minWidth: 0,
 	},
-	wide: { gridColumn: { default: "1 / -1", [containerBreakpoints.sm]: "2" } },
+	wide: { gridColumn: { default: "1 / -1", [containerBreakpoints.xs]: "2" } },
 });
 
 export const actionsStyles = stylex.create({
 	base: { margin: 0, gridColumn: "2", gridRow: "1", minWidth: 0 },
-	wide: { gridColumn: { default: "2", [containerBreakpoints.sm]: "3" } },
+	wide: { gridColumn: { default: "2", [containerBreakpoints.xs]: "3" } },
 });

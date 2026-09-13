@@ -76,7 +76,7 @@ test("horizontal layout follows wrapper width and keeps actions with the label r
 	const value = item.locator(":scope > dd").first();
 	const action = item.locator(":scope > dd").nth(1);
 
-	await setWrapperWidth(wrapper, "40rem");
+	await setWrapperWidth(wrapper, "25rem");
 	const wideLabel = await getBox(label);
 	const wideValue = await getBox(value);
 	const wideAction = await getBox(action);
@@ -85,7 +85,7 @@ test("horizontal layout follows wrapper width and keeps actions with the label r
 	expect(sharesRow(wideLabel, wideValue)).toBe(true);
 	expect(sharesRow(wideLabel, wideAction)).toBe(true);
 
-	await setWrapperWidth(wrapper, "20rem");
+	await setWrapperWidth(wrapper, "18rem");
 	const narrowLabel = await getBox(label);
 	const narrowValue = await getBox(value);
 	const narrowAction = await getBox(action);
@@ -107,7 +107,7 @@ test("grid changes from distinct columns to equal full rows at the wrapper thres
 	const wideSecond = await getBox(items.nth(1));
 	expect(wideSecond.x).toBeGreaterThan(wideFirst.x);
 
-	await setWrapperWidth(wrapper, "20rem");
+	await setWrapperWidth(wrapper, "18rem");
 	const narrow = await Promise.all([0, 1, 2].map((index) => getBox(items.nth(index))));
 	for (const item of narrow.slice(1)) {
 		expect(Math.abs(item.x - narrow[0].x)).toBeLessThan(1);
@@ -130,7 +130,7 @@ test("vertical layout stays stacked while labels and actions share their first r
 	const value = item.locator(":scope > dd").first();
 	const action = item.locator(":scope > dd").nth(1);
 
-	for (const width of ["40rem", "20rem"]) {
+	for (const width of ["40rem", "18rem"]) {
 		await setWrapperWidth(wrapper, width);
 		const labelBox = await getBox(label);
 		const valueBox = await getBox(value);

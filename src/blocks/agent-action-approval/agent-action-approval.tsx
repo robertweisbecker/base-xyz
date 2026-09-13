@@ -164,7 +164,6 @@ export function Actions({ className, style, xstyle, ...props }: AgentActionAppro
 
 const parts = stylex.create({
 	root: {
-		maxWidth: "32rem",
 		width: "100%",
 	},
 	header: {
