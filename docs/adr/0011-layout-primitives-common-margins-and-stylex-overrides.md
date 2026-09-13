@@ -128,6 +128,10 @@ Consumers nest Grid/Stack inside a Field or override its `xstyle`; arbitrary
 same-host render composition does not promise to resolve competing atomic
 classes.
 
+`DescriptionList.Root` is an eligible stable normal-flow root and may resolve
+common margins; its `Item`, `Label`, `Value`, and `Actions` parts remain internal
+layout owners without that external spacing contract.
+
 ### Override channels and precedence
 
 Eligible components use this order:
