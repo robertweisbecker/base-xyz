@@ -1,6 +1,7 @@
 import * as stylex from "@stylexjs/stylex";
 import { createContext, type ComponentProps, useContext, useId, useMemo } from "react";
 import { Card } from "@/components";
+import { DescriptionList } from "@/components/description-list/description-list";
 import { tokens } from "@/theme/tokens.stylex";
 import { mergeStyle, type BaseStyleProps } from "@/styles/props/base";
 import { attrJoin } from "@/utils/attr-join";
@@ -25,10 +26,10 @@ export type AgentActionApprovalIconProps = DivProps;
 export type AgentActionApprovalSummaryContentProps = DivProps;
 export type AgentActionApprovalActionProps = DivProps;
 export type AgentActionApprovalActionDescriptionProps = DivProps;
-export type AgentActionApprovalDetailsProps = StyledProps<ComponentProps<"dl">>;
-export type AgentActionApprovalDetailProps = DivProps;
-export type AgentActionApprovalDetailLabelProps = StyledProps<ComponentProps<"dt">>;
-export type AgentActionApprovalDetailValueProps = StyledProps<ComponentProps<"dd">>;
+export type AgentActionApprovalDetailsProps = ComponentProps<typeof DescriptionList.Root>;
+export type AgentActionApprovalDetailProps = ComponentProps<typeof DescriptionList.Item>;
+export type AgentActionApprovalDetailLabelProps = ComponentProps<typeof DescriptionList.Label>;
+export type AgentActionApprovalDetailValueProps = ComponentProps<typeof DescriptionList.Value>;
 export type AgentActionApprovalFooterProps = ComponentProps<typeof Card.Footer>;
 export type AgentActionApprovalActionsProps = DivProps;
 
@@ -138,59 +139,13 @@ export function ActionDescription({
 	);
 }
 
-export function Details({ className, style, xstyle, ...props }: AgentActionApprovalDetailsProps) {
-	const sx = stylex.props(parts.details, xstyle);
-	return (
-		<dl
-			className={attrJoin(sx.className, className)}
-			style={mergeStyle(sx.style, style)}
-			{...props}
-		/>
-	);
-}
+export const Details = DescriptionList.Root;
 
-export function Detail({ className, style, xstyle, ...props }: AgentActionApprovalDetailProps) {
-	const sx = stylex.props(parts.detail, xstyle);
-	return (
-		<div
-			className={attrJoin(sx.className, className)}
-			style={mergeStyle(sx.style, style)}
-			{...props}
-		/>
-	);
-}
+export const Detail = DescriptionList.Item;
 
-export function DetailLabel({
-	className,
-	style,
-	xstyle,
-	...props
-}: AgentActionApprovalDetailLabelProps) {
-	const sx = stylex.props(parts.detailLabel, xstyle);
-	return (
-		<dt
-			className={attrJoin(sx.className, className)}
-			style={mergeStyle(sx.style, style)}
-			{...props}
-		/>
-	);
-}
+export const DetailLabel = DescriptionList.Label;
 
-export function DetailValue({
-	className,
-	style,
-	xstyle,
-	...props
-}: AgentActionApprovalDetailValueProps) {
-	const sx = stylex.props(parts.detailValue, xstyle);
-	return (
-		<dd
-			className={attrJoin(sx.className, className)}
-			style={mergeStyle(sx.style, style)}
-			{...props}
-		/>
-	);
-}
+export const DetailValue = DescriptionList.Value;
 
 export function Footer({ xstyle, ...props }: AgentActionApprovalFooterProps) {
 	return <Card.Footer xstyle={[parts.footer, xstyle]} {...props} />;
@@ -209,7 +164,6 @@ export function Actions({ className, style, xstyle, ...props }: AgentActionAppro
 
 const parts = stylex.create({
 	root: {
-		maxWidth: "32rem",
 		width: "100%",
 	},
 	header: {
@@ -273,32 +227,6 @@ const parts = stylex.create({
 		fontSize: tokens["--font-size-2"],
 		letterSpacing: tokens["--letter-spacing-2"],
 		lineHeight: tokens["--line-height-2"],
-	},
-	details: {
-		margin: 0,
-		gap: tokens["--space-2"],
-		display: "flex",
-		flexDirection: "column",
-	},
-	detail: {
-		gap: tokens["--space-3"],
-		alignItems: "baseline",
-		display: "grid",
-		gridTemplateColumns: "6.5rem minmax(0, 1fr)",
-	},
-	detailLabel: {
-		color: tokens["--fg-muted"],
-		fontSize: tokens["--font-size-1"],
-		letterSpacing: tokens["--letter-spacing-1"],
-		lineHeight: tokens["--line-height-1"],
-	},
-	detailValue: {
-		margin: 0,
-		color: tokens["--fg"],
-		fontSize: tokens["--font-size-2"],
-		letterSpacing: tokens["--letter-spacing-2"],
-		lineHeight: tokens["--line-height-2"],
-		overflowWrap: "anywhere",
 	},
 	footer: {
 		margin: 0,

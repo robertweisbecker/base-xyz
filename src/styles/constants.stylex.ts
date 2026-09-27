@@ -26,6 +26,16 @@ export const breakpoints = stylex.defineConsts({
 	xxl: "@media (min-width: 87.5rem)",
 });
 
+/** Mobile-first selectors relative to an inline-size query container. */
+export const containerBreakpoints = stylex.defineConsts({
+	xs: "@container (min-width: 20rem)",
+	sm: "@container (min-width: 34rem)",
+	md: "@container (min-width: 48rem)",
+	lg: "@container (min-width: 63.25rem)",
+	xl: "@container (min-width: 80rem)",
+	xxl: "@container (min-width: 87.5rem)",
+});
+
 /**
  * Non-overlapping ranges for component-owned responsive style sets.
  *
