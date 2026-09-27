@@ -40,6 +40,7 @@ import {
 	CopyButton,
 	DataTable,
 	type DataTableColumnDef,
+	DescriptionList,
 	Dialog,
 	Drawer,
 	EmptyState,
@@ -314,6 +315,17 @@ function getComponentCells(): GalleryCell[] {
 					rowSelection={false}
 					xstyle={styles.galleryWide}
 				/>
+			),
+		},
+		{
+			title: "DescriptionList",
+			content: (
+				<DescriptionList.Root>
+					<DescriptionList.Item>
+						<DescriptionList.Label>Workspace</DescriptionList.Label>
+						<DescriptionList.Value>StyleX Lab</DescriptionList.Value>
+					</DescriptionList.Item>
+				</DescriptionList.Root>
 			),
 		},
 		{

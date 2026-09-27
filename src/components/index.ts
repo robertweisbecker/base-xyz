@@ -37,6 +37,18 @@ export {
 	type DataTableToolbarControls,
 } from "./data-table/data-table";
 export {
+	DescriptionList,
+	type DescriptionListActionsProps,
+	type DescriptionListItemAlign,
+	type DescriptionListItemProps,
+	type DescriptionListLabelProps,
+	type DescriptionListOrientation,
+	type DescriptionListRootProps,
+	type DescriptionListSize,
+	type DescriptionListValueProps,
+	type DescriptionListVariant,
+} from "./description-list/description-list";
+export {
 	EmptyState,
 	type EmptyStateHeadingLevel,
 	type EmptyStateProps,

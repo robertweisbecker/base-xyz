@@ -327,8 +327,11 @@ Spacing, radius, font-size, line-height, and breakpoint dimensions use `rem` so
 they follow the user's root type-size preference. Optical hairlines and shadow
 offsets remain pixel-based.
 
-Breakpoints are ready-to-use mobile-first media-query selectors, not CSS
-values. Use them as computed condition keys:
+`breakpoints` and `containerBreakpoints` are ready-to-use mobile-first selectors,
+not CSS values. They share the `xs` through `xxl` names and thresholds;
+`breakpoints` is viewport-relative while `containerBreakpoints` is for an
+inline-size query container. Use the family matching the component's owner as
+computed condition keys:
 
 ```ts
 import * as stylex from "@stylexjs/stylex";
