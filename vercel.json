@@ -1,6 +1,6 @@
 {
 	"$schema": "https://openapi.vercel.sh/vercel.json",
 	"buildCommand": "npm run build-storybook",
-	"ignoreCommand": "git diff --quiet \"${VERCEL_GIT_PREVIOUS_SHA:-HEAD^}\" HEAD -- . ':(exclude).agents/**' ':(exclude).github/**' ':(exclude).vscode/**' ':(exclude)docs/**' ':(exclude)plans/**' ':(exclude)tests/**' ':(exclude)tools/**' ':(exclude)AGENTS.md' ':(exclude)CONTEXT.md' ':(exclude)README.md' ':(exclude)design-qa.md' ':(exclude)pnpm-migration-plan.md' ':(exclude)doctor.config.jsonc' ':(exclude)playwright.app.config.ts' ':(exclude)playwright.config.ts' ':(exclude).oxlintrc.json' ':(exclude).prettierignore' ':(exclude).prettierrc'",
+	"ignoreCommand": "sh scripts/vercel-ignore-build.sh",
 	"outputDirectory": "storybook-static"
 }
