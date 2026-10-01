@@ -35,7 +35,7 @@
     "@phosphor-icons/react": "^2.1.10",
     "@stylexjs/atoms": "^0.19.1",
     "@stylexjs/stylex": "^0.19.1",
-    "@tanstack/react-router": "^1.170.38",
+    "@tanstack/react-router": "^1.170.40",
     "@tanstack/react-table": "^9.2.4",
     "react": "^19.3.0",
     "react-aria": "^3.52.1",
@@ -43,23 +43,23 @@
     "react-dom": "^19.3.0"
   },
   "devDependencies": {
-    "@oxlint/plugins": "^1.84.0",
+    "@oxlint/plugins": "^1.86.0",
     "@playwright/test": "^1.63.0",
     "@storybook/addon-a11y": "^10.6.0",
     "@storybook/addon-docs": "^10.6.0",
     "@storybook/react-vite": "^10.6.0",
     "@stylexjs/eslint-plugin": "^0.19.1",
     "@stylexjs/unplugin": "^0.19.1",
-    "@tanstack/router-plugin": "^1.168.40",
-    "@types/node": "^26.6.2",
+    "@tanstack/router-plugin": "^1.168.41",
+    "@types/node": "^26.6.3",
     "@types/react": "^19.3.0",
     "@types/react-dom": "^19.3.0",
     "@vitejs/plugin-react": "^6.1.1",
-    "oxlint": "^1.84.0",
-    "prettier": "^3.9.8",
+    "oxlint": "^1.86.0",
+    "prettier": "^3.9.9",
     "react-doctor": "^0.9.14",
     "storybook": "^10.5.6",
     "typescript": "~7.0.2",
-    "vite": "^8.3.0"
+    "vite": "^8.3.1"
   }
 }
