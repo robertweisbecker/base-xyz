@@ -247,6 +247,7 @@ export function AgentWorkflow() {
 				</Stack>
 			)}
 			<PromptComposer.Root
+				clearOnSubmit={false}
 				value={prompt}
 				onValueChange={setPrompt}
 				onSubmit={start}
