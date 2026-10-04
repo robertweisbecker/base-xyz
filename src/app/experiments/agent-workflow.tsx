@@ -268,7 +268,15 @@ export function AgentWorkflow() {
 						</PromptComposer.Options>
 						<PromptComposer.Actions>
 							{working || run.phase === "approval" ? (
-								<PromptComposer.Stop ref={stopRef} aria-label="Cancel run" onClick={cancel} />
+								<PromptComposer.Stop
+									ref={stopRef}
+									shape="default"
+									size="sm"
+									aria-label="Cancel run"
+									onClick={cancel}
+								>
+									Cancel run
+								</PromptComposer.Stop>
 							) : (
 								<PromptComposer.Submit disabled={terminal || !prompt.trim()} />
 							)}
