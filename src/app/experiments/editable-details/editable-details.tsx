@@ -24,7 +24,7 @@ export function EditableDetails() {
 					Manage the details used on invoices and internal reports.
 				</Text>
 			</Stack>
-			<DescriptionList.Root variant="divided" labelWidth="10rem" aria-label="Workspace details">
+			<DescriptionList.Root variant="divided" labelWidth="8rem" aria-label="Workspace details">
 				<EditableDetail
 					label="Workspace name"
 					initialValue="Acme Design"
@@ -58,7 +58,9 @@ export function EditableDetails() {
 				<DescriptionList.Item>
 					<DescriptionList.Label>Plan</DescriptionList.Label>
 					<DescriptionList.Value>
-						<Badge hue="neutral">Team</Badge>
+						<Badge hue="neutral" variant="elevated">
+							Team
+						</Badge>
 					</DescriptionList.Value>
 				</DescriptionList.Item>
 			</DescriptionList.Root>
@@ -170,7 +172,7 @@ function EditableDetail({
 								setDraft(next);
 								setError(null);
 							}}
-							xstyle={styles.input}
+							xstyle={[styles.input, editing && styles.inputEditing]}
 						/>
 						<InlineEdit.Actions>
 							<InlineEdit.Confirm />
@@ -196,6 +198,7 @@ function EditableDetail({
 
 const styles = stylex.create({
 	editor: { boxSizing: "border-box", maxWidth: "100%" },
-	input: { fontSize: tokens["--type-large-size"], minWidth: 0, width: "100%" },
+	input: { fontSize: tokens["--type-large-size"], minWidth: 0 },
+	inputEditing: { width: "100%" },
 	status: { minHeight: tokens["--type-supporting-line-height"] },
 });
