@@ -23,6 +23,33 @@ After `npm install`, if Playwright's matching Chromium browser is absent, run `n
 
 This is standard [Playwright browser setup](https://playwright.dev/docs/browsers), separate from each verification run. A Playwright upgrade may require installing its matching Chromium revision again.
 
+## Pull request CI
+
+Every pull request runs `verify:full` once after a clean install and Chromium/Linux
+browser setup. The existing `Quick verification` check name is retained so required
+checks keep resolving. Running the same suite for all PRs avoids path filters
+missing shared-component, dependency, tooling, or integration changes.
+
+Failed browser checks upload traces and screenshots from `test-results/` for seven
+days. App and Storybook output directories are separate so a later suite does not
+clear evidence from an earlier suite.
+
+## Dependency audit limitation
+
+As of 2026-10-03, `npm audit` reports three high-severity nodes for one unresolved
+advisory: `@stylexjs/eslint-plugin@0.19.1` → `micromatch@4.0.8` → `braces@3.0.3`
+([GHSA-vfj7-8cjw-p6xm](https://github.com/advisories/GHSA-vfj7-8cjw-p6xm)).
+Upstream lists no patched braces release; these are the latest published versions.
+The plugin is required by `.oxlintrc.json` for blocking StyleX rules. Its glob
+matching runs during development linting, including configured style-property
+patterns; the affected packages are absent from production dependencies.
+Malicious deeply nested brace patterns can exhaust the lint process stack.
+
+Keep the blocking StyleX rules and revisit a supported upstream patch when
+available. The audit suggestion to downgrade the plugin to `0.3.0` is not a
+compatible remediation. Compatible lockfile patches already resolve the separate
+`brace-expansion` and `fast-uri` advisories; no overrides or audit exclusions are used.
+
 ## Test contracts
 
 Follow [ADR 0012](../adr/0012-test-durable-behavior-not-incidental-fixes.md): protect native semantics, accessible names/relationships, keyboard/focus, state, callbacks, forms, routing, and documented mechanics. A bug fix or tool finding alone does not justify a new test.

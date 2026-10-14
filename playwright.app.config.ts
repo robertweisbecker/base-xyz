@@ -4,6 +4,7 @@ const appPort = process.env.PLAYWRIGHT_APP_PORT ?? "6107";
 const appURL = `http://127.0.0.1:${appPort}`;
 
 export default defineConfig({
+	outputDir: "./test-results/app",
 	testDir: "./tests/app",
 	fullyParallel: false,
 	forbidOnly: Boolean(process.env.CI),
