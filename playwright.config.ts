@@ -4,6 +4,7 @@ const storybookPort = process.env.PLAYWRIGHT_STORYBOOK_PORT ?? "6106";
 const storybookURL = `http://127.0.0.1:${storybookPort}`;
 
 export default defineConfig({
+	outputDir: "./test-results/storybook",
 	testDir: "./tests",
 	testIgnore: "**/app/**",
 	fullyParallel: false,
