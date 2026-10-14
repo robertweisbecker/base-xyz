@@ -36,7 +36,7 @@ clear evidence from an earlier suite.
 
 ## Dependency audit limitation
 
-As of 2026-10-03, `npm audit` reports three high-severity nodes for one unresolved
+As of 2026-10-14, `npm audit` reports three high-severity nodes for one unresolved
 advisory: `@stylexjs/eslint-plugin@0.19.1` → `micromatch@4.0.8` → `braces@3.0.3`
 ([GHSA-vfj7-8cjw-p6xm](https://github.com/advisories/GHSA-vfj7-8cjw-p6xm)).
 Upstream lists no patched braces release; these are the latest published versions.
@@ -48,7 +48,7 @@ Malicious deeply nested brace patterns can exhaust the lint process stack.
 Keep the blocking StyleX rules and revisit a supported upstream patch when
 available. The audit suggestion to downgrade the plugin to `0.3.0` is not a
 compatible remediation. Compatible lockfile patches already resolve the separate
-`brace-expansion` and `fast-uri` advisories; no overrides or audit exclusions are used.
+`brace-expansion`, `fast-uri`, and `source-map-js` advisories; no overrides or audit exclusions are used.
 
 ## Test contracts
 
