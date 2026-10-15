@@ -9,6 +9,7 @@ import {
 	WorkflowProgress,
 } from "@/blocks";
 import { Badge, Box, Button, Icon, Stack, Tabs, Text } from "@/components";
+import { EditableDetails } from "./editable-details/editable-details";
 import { ExperimentPage, ExperimentSection } from "./experiment-page";
 
 const passwordRequirements = [/.{12,}/, /[0-9]/, /[a-z]/, /[A-Z]/] as const;
@@ -16,6 +17,13 @@ const passwordRequirements = [/.{12,}/, /[0-9]/, /[a-z]/, /[A-Z]/] as const;
 export function UtilitiesPage() {
 	return (
 		<ExperimentPage description="Reusable component compositions" title="Utilities">
+			<ExperimentSection
+				title="Editable details"
+				description="DescriptionList and experimental InlineEdit compose a record with validation, async saving, and retryable errors."
+			>
+				<EditableDetails />
+			</ExperimentSection>
+
 			<ExperimentSection title="Copy Button">
 				<Stack gap={4}>
 					<Stack gap={1}>
