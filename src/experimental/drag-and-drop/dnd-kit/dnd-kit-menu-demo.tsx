@@ -8,13 +8,7 @@ import {
 	type DragStartEvent,
 } from "@dnd-kit/react";
 import { useSortable } from "@dnd-kit/react/sortable";
-import {
-	ArchiveIcon,
-	BellIcon,
-	DotsSixVerticalIcon,
-	EnvelopeSimpleIcon,
-	FolderIcon,
-} from "@phosphor-icons/react";
+import { IconArchive, IconBell, IconEnvelopeSimple, IconFolder, IconGripV } from "fyicons";
 import * as stylex from "@stylexjs/stylex";
 import type { ReactNode } from "react";
 import { useRef, useState } from "react";
@@ -53,13 +47,13 @@ const INITIAL_MENU_GROUPS: MenuGroupState = {
 			id: "assign-folder",
 			label: "Assign folder",
 			shortcut: "A",
-			icon: <FolderIcon size={16} weight="regular" />,
+			icon: <IconFolder size={16} />,
 		},
 		{
 			id: "notify-team",
 			label: "Notify team",
 			shortcut: "N",
-			icon: <BellIcon size={16} weight="regular" />,
+			icon: <IconBell size={16} />,
 		},
 	],
 	followUp: [
@@ -67,13 +61,13 @@ const INITIAL_MENU_GROUPS: MenuGroupState = {
 			id: "email-owner",
 			label: "Email owner",
 			shortcut: "E",
-			icon: <EnvelopeSimpleIcon size={16} weight="regular" />,
+			icon: <IconEnvelopeSimple size={16} />,
 		},
 		{
 			id: "archive-record",
 			label: "Archive record",
 			shortcut: "⌘⌫",
-			icon: <ArchiveIcon size={16} weight="regular" />,
+			icon: <IconArchive size={16} />,
 		},
 	],
 };
@@ -273,7 +267,7 @@ function SortableMenuItem({
 			xstyle={demoStyles.sortableMenuItem}
 		>
 			<Menu.ItemIcon>
-				<DotsSixVerticalIcon weight="bold" />
+				<IconGripV size="1em" />
 			</Menu.ItemIcon>
 			<Menu.ItemLabel>{item.label}</Menu.ItemLabel>
 			<Menu.ItemShortcut>{item.shortcut}</Menu.ItemShortcut>
@@ -284,7 +278,7 @@ function SortableMenuItem({
 function MenuOverlay({ label }: { label: string }) {
 	return (
 		<div {...stylex.props(demoStyles.menuOverlay)}>
-			<DotsSixVerticalIcon aria-hidden weight="bold" />
+			<IconGripV size="1em" aria-hidden />
 			<span>{label}</span>
 		</div>
 	);

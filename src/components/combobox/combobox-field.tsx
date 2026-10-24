@@ -1,8 +1,5 @@
 import { Combobox as BaseCombobox } from "@base-ui/react/combobox";
-import { CaretDownIcon } from "@phosphor-icons/react/dist/csr/CaretDown";
-import { PlusIcon } from "@phosphor-icons/react/dist/csr/Plus";
-import { XCircleIcon } from "@phosphor-icons/react/dist/csr/XCircle";
-import { XIcon } from "@phosphor-icons/react/dist/csr/X";
+import { IconChevronDown, IconCircleXFill, IconPlusThick, IconXmark } from "fyicons";
 import * as stylex from "@stylexjs/stylex";
 import {
 	createContext,
@@ -203,7 +200,7 @@ function Clear({
 			style={mergeStyle(sx.style, style)}
 			{...props}
 		>
-			{children ?? <XCircleIcon aria-hidden size="1.25em" weight="fill" />}
+			{children ?? <IconCircleXFill aria-hidden size="1.25em" />}
 		</BaseCombobox.Clear>
 	);
 }
@@ -236,7 +233,7 @@ function Trigger({
 			style={mergeStyle(sx.style, style)}
 			{...props}
 		>
-			{children ?? <CaretDownIcon aria-hidden size="1em" weight="bold" />}
+			{children ?? <IconChevronDown aria-hidden size="1em" />}
 		</BaseCombobox.Trigger>
 	);
 }
@@ -330,7 +327,7 @@ export function ChipRemove({
 			style={mergeStyle(sx.style, style)}
 			{...props}
 		>
-			{children ?? <XIcon aria-hidden size={12} weight="bold" />}
+			{children ?? <IconXmark aria-hidden size={12} />}
 		</BaseCombobox.ChipRemove>
 	);
 }
@@ -474,7 +471,7 @@ export function Item({
 					aria-hidden
 					{...stylex.props(menuItemStyles.indicator, comboboxParts.creatableIndicator)}
 				>
-					<PlusIcon aria-hidden size={16} weight="bold" />
+					<IconPlusThick aria-hidden size={16} />
 				</span>
 			) : (
 				<BaseCombobox.ItemIndicator keepMounted {...stylex.props(menuItemStyles.indicator)}>

@@ -1,4 +1,4 @@
-import { SlidersHorizontalIcon } from "@phosphor-icons/react/dist/csr/SlidersHorizontal";
+import { IconSliders } from "fyicons";
 import { IconButton } from "@/components/button/button";
 import { Menu } from "@/components/menu/menu";
 import type { DataTableColumn, DataTableFeatures } from "./data-table-model";
@@ -24,7 +24,7 @@ export function DataTableColumnVisibility<TData extends RowData>({
 				render={
 					<IconButton
 						variant="neutral"
-						icon={<SlidersHorizontalIcon aria-hidden />}
+						icon={<IconSliders size="1em" aria-hidden />}
 						label="Column settings"
 					/>
 				}

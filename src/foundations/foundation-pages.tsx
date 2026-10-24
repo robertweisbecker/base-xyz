@@ -1,9 +1,11 @@
-import { ArrowRightIcon } from "@phosphor-icons/react/dist/csr/ArrowRight";
-import { CheckCircleIcon } from "@phosphor-icons/react/dist/csr/CheckCircle";
-import { InfoIcon } from "@phosphor-icons/react/dist/csr/Info";
-import { MagnifyingGlassIcon } from "@phosphor-icons/react/dist/csr/MagnifyingGlass";
-import { PlusIcon } from "@phosphor-icons/react/dist/csr/Plus";
-import { WarningIcon } from "@phosphor-icons/react/dist/csr/Warning";
+import {
+	IconArrowRight,
+	IconCircleCheckFill,
+	IconInfoFill,
+	IconPlusThick,
+	IconSearch,
+	IconWarningFill,
+} from "fyicons";
 import {
 	ColorItem,
 	ColorPalette,
@@ -467,7 +469,7 @@ function IconographySection() {
 	return (
 		<FoundationCategory
 			title="Iconography"
-			description="Phosphor icons use a consistent optical language. Keep icons aligned to a clear action or state, and pair unfamiliar symbols with text."
+			description="FYIcons provides the core interface symbols. Keep icons aligned to a clear action or state, and pair unfamiliar symbols with text."
 		>
 			<FoundationSection
 				title="Core interface symbols"
@@ -475,51 +477,51 @@ function IconographySection() {
 			>
 				<IconGallery>
 					<IconItem name="Search">
-						<MagnifyingGlassIcon aria-label="Search" size={28} weight="regular" />
+						<IconSearch aria-label="Search" size={28} />
 					</IconItem>
 					<IconItem name="Add">
-						<PlusIcon aria-label="Add" size={28} weight="bold" />
+						<IconPlusThick aria-label="Add" size={28} />
 					</IconItem>
 					<IconItem name="Continue">
-						<ArrowRightIcon aria-label="Continue" size={28} weight="bold" />
+						<IconArrowRight aria-label="Continue" size={28} />
 					</IconItem>
 					<IconItem name="Success">
-						<CheckCircleIcon aria-label="Success" size={28} weight="fill" />
+						<IconCircleCheckFill aria-label="Success" size={28} />
 					</IconItem>
 					<IconItem name="Information">
-						<InfoIcon aria-label="Information" size={28} weight="fill" />
+						<IconInfoFill aria-label="Information" size={28} />
 					</IconItem>
 					<IconItem name="Warning">
-						<WarningIcon aria-label="Warning" size={28} weight="fill" />
+						<IconWarningFill aria-label="Warning" size={28} />
 					</IconItem>
 				</IconGallery>
 			</FoundationSection>
 
 			<FoundationSection
 				title="Sizing and weight"
-				description="Use 16–20px icons inside controls, regular weight for utility, bold for directional actions, and fill for status."
+				description="Use 16–20px icons inside controls. Choose thick variants for emphasis and fill variants for status."
 			>
 				<div {...stylex.props(styles.iconExamples)}>
 					<div {...stylex.props(styles.iconExample)}>
-						<MagnifyingGlassIcon aria-hidden size={16} />
-						<TokenName name="16px · regular" value="Dense controls" />
+						<IconSearch aria-hidden size={16} />
+						<TokenName name="16px · outline" value="Dense controls" />
 					</div>
 					<div {...stylex.props(styles.iconExample)}>
-						<ArrowRightIcon aria-hidden size={20} weight="bold" />
-						<TokenName name="20px · bold" value="Primary actions" />
+						<IconArrowRight aria-hidden size={20} />
+						<TokenName name="20px · outline" value="Primary actions" />
 					</div>
 					<div {...stylex.props(styles.iconExample)}>
-						<CheckCircleIcon aria-hidden size={24} weight="fill" />
+						<IconCircleCheckFill aria-hidden size={24} />
 						<TokenName name="24px · fill" value="Status emphasis" />
 					</div>
 				</div>
 			</FoundationSection>
 
 			<TokenSource
-				code={`import { ArrowRightIcon } from "@phosphor-icons/react/dist/csr/ArrowRight";
+				code={`import { IconArrowRight } from "fyicons";
 import { Button } from "./components/button/button";
 
-<Button endSlot={<ArrowRightIcon aria-hidden weight="bold" />}>
+<Button endSlot={<IconArrowRight aria-hidden size="1em" />}>
   Continue
 </Button>`}
 			/>
@@ -734,7 +736,7 @@ function MotionSpecimens() {
 					onClick={() => setIsPlaying((value) => !value)}
 				>
 					{isPlaying ? "Reset" : "Play motion"}
-					<ArrowRightIcon aria-hidden size={16} weight="bold" />
+					<IconArrowRight aria-hidden size={16} />
 				</button>
 			</div>
 			<div {...stylex.props(styles.motionRows)}>

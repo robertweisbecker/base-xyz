@@ -1,4 +1,4 @@
-import { XIcon } from "@phosphor-icons/react/dist/csr/X";
+import { IconXmark } from "fyicons";
 import { IconButton, type IconButtonProps } from "./button";
 
 export type CloseButtonProps = Omit<IconButtonProps, "icon" | "label" | "shape"> & {
@@ -14,7 +14,7 @@ export function CloseButton({
 }: CloseButtonProps) {
 	return (
 		<IconButton
-			icon={<XIcon aria-hidden weight="bold" size={12} stroke="currentColor" strokeWidth={4} />}
+			icon={<IconXmark aria-hidden size={12} stroke="currentColor" strokeWidth={0.25} />}
 			label={label}
 			shape="circle"
 			size={size}

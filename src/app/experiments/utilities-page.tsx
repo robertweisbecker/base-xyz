@@ -1,6 +1,4 @@
-import { GitForkIcon } from "@phosphor-icons/react/dist/csr/GitFork";
-import { LockIcon } from "@phosphor-icons/react/dist/csr/Lock";
-import { RocketLaunchIcon } from "@phosphor-icons/react/dist/csr/RocketLaunch";
+import { IconGitFork, IconLockFill, IconRocket } from "fyicons";
 import {
 	ConfirmationDialog,
 	CopyButton,
@@ -62,7 +60,7 @@ export function UtilitiesPage() {
 			>
 				<PageHeader
 					actions={
-						<Button startSlot={<GitForkIcon aria-hidden />} variant="secondary">
+						<Button startSlot={<IconGitFork size="1em" aria-hidden />} variant="secondary">
 							Action
 						</Button>
 					}
@@ -92,7 +90,7 @@ export function UtilitiesPage() {
 					}
 					endSlot={<Button variant="neutral">End slot</Button>}
 					titleAddon={
-						<Badge hue="neutral" startSlot={<LockIcon aria-hidden weight="fill" />}>
+						<Badge hue="neutral" startSlot={<IconLockFill size="1em" aria-hidden />}>
 							Private
 						</Badge>
 					}
@@ -113,7 +111,7 @@ export function UtilitiesPage() {
 					>
 						<ConfirmationDialog.Header>
 							<ConfirmationDialog.Visual color="accent" bg="accent" size={12} radius="full">
-								<RocketLaunchIcon aria-hidden size={24} weight="duotone" />
+								<IconRocket aria-hidden size={24} />
 							</ConfirmationDialog.Visual>
 							<ConfirmationDialog.Title>Deploy branch</ConfirmationDialog.Title>
 							<ConfirmationDialog.Description>

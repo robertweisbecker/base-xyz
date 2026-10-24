@@ -1,9 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { CubeIcon } from "@phosphor-icons/react/dist/csr/Cube";
-import { GearIcon } from "@phosphor-icons/react/dist/csr/Gear";
-import { HouseIcon } from "@phosphor-icons/react/dist/csr/House";
+import { IconCube, IconHome, IconSettings, IconUsers } from "fyicons";
 import { ShieldChevronIcon } from "@phosphor-icons/react/dist/csr/ShieldChevron";
-import { UsersIcon } from "@phosphor-icons/react/dist/csr/Users";
+
 import * as stylex from "@stylexjs/stylex";
 import { useRef, useState, type MouseEvent } from "react";
 import { Badge } from "@/components/badge/badge";
@@ -44,8 +42,8 @@ export default meta;
 type Story = StoryObj<StoryArgs>;
 
 const icons = {
-	House: <HouseIcon />,
-	Cube: <CubeIcon />,
+	House: <IconHome size="1em" />,
+	Cube: <IconCube size="1em" />,
 	None: undefined,
 } as const;
 
@@ -63,14 +61,14 @@ export const Playground: Story = {
 					<NavList.Item
 						label="Deployments"
 						href="#deployments"
-						icon={<CubeIcon weight="duotone" />}
+						icon={<IconCube size="1em" />}
 						indentLevel={indentLevel}
 						current={current === "deployments" ? "page" : false}
 						badge={<Badge size="sm">12</Badge>}
 					/>
 					<NavList.Item
 						label="Members"
-						icon={<UsersIcon weight="duotone" />}
+						icon={<IconUsers size="1em" />}
 						disabled={disabled}
 						current={current === "members" ? "page" : false}
 					/>
@@ -89,10 +87,10 @@ export const Examples: Story = {
 					<NavList.Item
 						label="Overview"
 						href="#overview"
-						icon={<HouseIcon weight="duotone" />}
+						icon={<IconHome size="1em" />}
 						current="page"
 					/>
-					<NavList.Item label="Deploy" href="#deploy" icon={<CubeIcon weight="duotone" />} />
+					<NavList.Item label="Deploy" href="#deploy" icon={<IconCube size="1em" />} />
 					<NavList.Item
 						label="Deployments"
 						href="#deployments"
@@ -122,7 +120,7 @@ export const Collapsible: Story = {
 			<NavList.Root aria-label="Build navigation">
 				<NavList.Section label="Build">
 					<NavList.CollapsibleGroup defaultOpen>
-						<NavList.CollapsibleGroupTrigger label="Deploy" icon={<CubeIcon weight="duotone" />} />
+						<NavList.CollapsibleGroupTrigger label="Deploy" icon={<IconCube size="1em" />} />
 						<NavList.CollapsibleGroupPanel>
 							<NavList.Item label="Deployments" href="#deployments" current="page" />
 							<NavList.Item label="Workers" href="#workers" />
@@ -145,7 +143,7 @@ export const Collapsible: Story = {
 					<NavList.CollapsibleGroup>
 						<NavList.CollapsibleGroupTrigger
 							label="Bottom group"
-							icon={<GearIcon weight="duotone" />}
+							icon={<IconSettings size="1em" />}
 						/>
 						<NavList.CollapsibleGroupPanel>
 							<NavList.Item label="Audit logs" href="#audit" />
@@ -180,14 +178,11 @@ export const CollapsedChildPopovers: Story = {
 						<NavList.Item
 							label="Overview"
 							href="#overview"
-							icon={<HouseIcon weight="duotone" />}
+							icon={<IconHome size="1em" />}
 							current="page"
 						/>
 						<NavList.CollapsibleGroup>
-							<NavList.CollapsibleGroupTrigger
-								label="Deploy"
-								icon={<CubeIcon weight="duotone" />}
-							/>
+							<NavList.CollapsibleGroupTrigger label="Deploy" icon={<IconCube size="1em" />} />
 							<NavList.CollapsibleGroupPanel>
 								<NavList.Item label="Deployments" href="#deployments" />
 								<NavList.Item label="Workers" href="#workers" />
@@ -262,7 +257,7 @@ function NavigationStates() {
 								<NavList.CollapsibleGroupTrigger
 									label="Deploy"
 									aria-label="Open deployment navigation"
-									icon={<CubeIcon />}
+									icon={<IconCube size="1em" />}
 									disabled={disabled}
 									onClick={onClick}
 								/>
@@ -281,7 +276,7 @@ function NavigationStates() {
 										to="settings"
 										label="Settings"
 										aria-label="Open account settings"
-										icon={<GearIcon />}
+										icon={<IconSettings size="1em" />}
 										disabled={disabled}
 										onClick={onClick}
 									/>
@@ -362,11 +357,7 @@ function DrilldownExample() {
 						>
 							<NavList.DrilldownPanel value="account" label="Account navigation">
 								<NavList.Section label="Account">
-									<NavList.Item
-										label="Overview"
-										icon={<HouseIcon weight="duotone" />}
-										href="#account"
-									/>
+									<NavList.Item label="Overview" icon={<IconHome size="1em" />} href="#account" />
 									{Array.from({ length: 10 }, (_, index) => (
 										<NavList.Item
 											key={index}
@@ -377,7 +368,7 @@ function DrilldownExample() {
 									<NavList.DrilldownTrigger
 										to="project"
 										label="Project settings"
-										icon={<GearIcon weight="duotone" />}
+										icon={<IconSettings size="1em" />}
 									/>
 									<NavList.DrilldownTrigger
 										to="security"
@@ -414,7 +405,11 @@ function DrilldownNavigation() {
 	return (
 		<NavList.Drilldown defaultValue="account">
 			<NavList.DrilldownPanel value="account" label="Account navigation">
-				<NavList.DrilldownTrigger to="project" label="Project settings" icon={<GearIcon />} />
+				<NavList.DrilldownTrigger
+					to="project"
+					label="Project settings"
+					icon={<IconSettings size="1em" />}
+				/>
 			</NavList.DrilldownPanel>
 			<NavList.DrilldownPanel value="project" label="Project">
 				<NavList.DrilldownBack to="account" />
@@ -448,14 +443,21 @@ function DrawerExample() {
 									<NavList.NavListPresentationProvider presentation={icon ? "icon" : "expanded"}>
 										<NavList.Root aria-label="Drawer navigation" onNavigate={() => setOpen(false)}>
 											<NavList.Section label="Project">
-												<NavList.Item label="Overview" href="#overview" icon={<HouseIcon />} />
+												<NavList.Item
+													label="Overview"
+													href="#overview"
+													icon={<IconHome size="1em" />}
+												/>
 												<NavList.Item
 													label="Cancelled link"
 													href="#cancelled"
 													onClick={(event) => event.preventDefault()}
 												/>
 												<NavList.CollapsibleGroup>
-													<NavList.CollapsibleGroupTrigger label="Deploy" icon={<CubeIcon />} />
+													<NavList.CollapsibleGroupTrigger
+														label="Deploy"
+														icon={<IconCube size="1em" />}
+													/>
 													<NavList.CollapsibleGroupPanel>
 														<NavList.Item label="Deployments" href="#deployments" />
 														<NavList.Item label="Workers" href="#workers" />

@@ -1,23 +1,23 @@
 import { Select as BaseSelect } from "@base-ui/react/select";
-import { ArrowClockwiseIcon } from "@phosphor-icons/react/dist/csr/ArrowClockwise";
-import { ArrowCounterClockwiseIcon } from "@phosphor-icons/react/dist/csr/ArrowCounterClockwise";
-import { CaretUpDownIcon } from "@phosphor-icons/react/dist/csr/CaretUpDown";
-import { CopyIcon } from "@phosphor-icons/react/dist/csr/Copy";
 import {
-	LinkIcon,
-	ListNumbersIcon,
-	PaperclipIcon,
-	CodeIcon,
-	CodeBlockIcon,
-} from "@phosphor-icons/react";
-import { ListBulletsIcon } from "@phosphor-icons/react/dist/csr/ListBullets";
-import { TextAlignCenterIcon } from "@phosphor-icons/react/dist/csr/TextAlignCenter";
-import { TextAlignLeftIcon } from "@phosphor-icons/react/dist/csr/TextAlignLeft";
-import { TextAlignRightIcon } from "@phosphor-icons/react/dist/csr/TextAlignRight";
-import { TextBIcon } from "@phosphor-icons/react/dist/csr/TextB";
-import { TextItalicIcon } from "@phosphor-icons/react/dist/csr/TextItalic";
-import { TextStrikethroughIcon } from "@phosphor-icons/react/dist/ssr/TextStrikethrough";
-import { TextUnderlineIcon } from "@phosphor-icons/react/dist/csr/TextUnderline";
+	IconArrowClockwise,
+	IconArrowCounterClockwise,
+	IconChevronsUpDown,
+	IconCode,
+	IconCodeBlock,
+	IconCopy,
+	IconItalic,
+	IconLink,
+	IconListBullet,
+	IconListOrdered,
+	IconPaperclip,
+	IconTextAlignCenter,
+	IconTextAlignEnd,
+	IconTextAlignStart,
+	IconTextBold,
+	IconTextStrikethrough,
+	IconTextUnderline,
+} from "fyicons";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import * as stylex from "@stylexjs/stylex";
 import { CopyButton } from "@/blocks/copy-button/copy-button";
@@ -69,26 +69,22 @@ export const Playground: Story = {
 				<Toolbar.Button
 					render={
 						<Toggle
-							icon={<TextBIcon aria-hidden weight="regular" />}
+							icon={<IconTextBold size="1em" aria-hidden />}
 							label="Bold"
-							pressedIcon={<TextBIcon aria-hidden weight="bold" />}
+							pressedIcon={<IconTextBold size="1em" aria-hidden />}
 							value="bold"
 						/>
 					}
 				/>
 				<Toolbar.Button
 					render={
-						<Toggle
-							icon={<TextItalicIcon aria-hidden weight="regular" />}
-							label="Italic"
-							value="italic"
-						/>
+						<Toggle icon={<IconItalic size="1em" aria-hidden />} label="Italic" value="italic" />
 					}
 				/>
 				<Toolbar.Button
 					render={
 						<Toggle
-							icon={<TextUnderlineIcon aria-hidden weight="regular" />}
+							icon={<IconTextUnderline size="1em" aria-hidden />}
 							label="Underline"
 							value="underline"
 						/>
@@ -97,7 +93,7 @@ export const Playground: Story = {
 				<Toolbar.Button
 					render={
 						<Toggle
-							icon={<TextStrikethroughIcon aria-hidden weight="regular" />}
+							icon={<IconTextStrikethrough size="1em" aria-hidden />}
 							label="Strikethrough"
 							value="strikethrough"
 						/>
@@ -110,7 +106,7 @@ export const Playground: Story = {
 					render={
 						<IconButton
 							variant="ghost"
-							icon={<LinkIcon aria-hidden weight="regular" />}
+							icon={<IconLink size="1em" aria-hidden />}
 							label="Insert link"
 						/>
 					}
@@ -119,7 +115,7 @@ export const Playground: Story = {
 					render={
 						<IconButton
 							variant="ghost"
-							icon={<PaperclipIcon aria-hidden weight="regular" />}
+							icon={<IconPaperclip size="1em" aria-hidden />}
 							label="Attach file"
 						/>
 					}
@@ -130,7 +126,7 @@ export const Playground: Story = {
 				<Toolbar.Button
 					render={
 						<Toggle
-							icon={<ListBulletsIcon aria-hidden weight="regular" />}
+							icon={<IconListBullet size="1em" aria-hidden />}
 							label="Bulleted list"
 							value="unordered"
 						/>
@@ -139,7 +135,7 @@ export const Playground: Story = {
 				<Toolbar.Button
 					render={
 						<Toggle
-							icon={<ListNumbersIcon aria-hidden weight="regular" />}
+							icon={<IconListOrdered size="1em" aria-hidden />}
 							label="Numbered list"
 							value="ordered"
 						/>
@@ -152,7 +148,7 @@ export const Playground: Story = {
 					render={
 						<IconButton
 							variant="ghost"
-							icon={<CodeIcon aria-hidden weight="regular" />}
+							icon={<IconCode size="1em" aria-hidden />}
 							label="Inline code"
 						/>
 					}
@@ -161,7 +157,7 @@ export const Playground: Story = {
 					render={
 						<IconButton
 							variant="ghost"
-							icon={<CodeBlockIcon aria-hidden weight="regular" />}
+							icon={<IconCodeBlock size="1em" aria-hidden />}
 							label="Code block"
 						/>
 					}
@@ -215,10 +211,10 @@ export const States: Story = {
 				<Toolbar.Root aria-label="List actions">
 					<Toolbar.Group disabled aria-label="List formatting">
 						<Toolbar.Button aria-label="Bulleted list">
-							<ListBulletsIcon aria-hidden size={16} weight="regular" />
+							<IconListBullet aria-hidden size={16} />
 						</Toolbar.Button>
 						<Toolbar.Button aria-label="Copy">
-							<CopyIcon aria-hidden size={16} weight="regular" />
+							<IconCopy aria-hidden size={16} />
 						</Toolbar.Button>
 					</Toolbar.Group>
 					<Toolbar.Separator />
@@ -236,10 +232,10 @@ function EditingToolbar() {
 		<Toolbar.Root aria-label="Document actions">
 			<Toolbar.Group aria-label="History">
 				<Toolbar.Button aria-label="Undo">
-					<ArrowCounterClockwiseIcon aria-hidden size={16} weight="regular" />
+					<IconArrowCounterClockwise aria-hidden size={16} />
 				</Toolbar.Button>
 				<Toolbar.Button aria-label="Redo">
-					<ArrowClockwiseIcon aria-hidden size={16} weight="regular" />
+					<IconArrowClockwise aria-hidden size={16} />
 				</Toolbar.Button>
 			</Toolbar.Group>
 			<Toolbar.Separator />
@@ -247,7 +243,7 @@ function EditingToolbar() {
 				<Toolbar.Button
 					render={
 						<Toggle
-							icon={<TextAlignLeftIcon aria-hidden weight="regular" />}
+							icon={<IconTextAlignStart size="1em" aria-hidden />}
 							label="Align left"
 							value="left"
 						/>
@@ -256,7 +252,7 @@ function EditingToolbar() {
 				<Toolbar.Button
 					render={
 						<Toggle
-							icon={<TextAlignCenterIcon aria-hidden weight="regular" />}
+							icon={<IconTextAlignCenter size="1em" aria-hidden />}
 							label="Align center"
 							value="center"
 						/>
@@ -265,7 +261,7 @@ function EditingToolbar() {
 				<Toolbar.Button
 					render={
 						<Toggle
-							icon={<TextAlignRightIcon aria-hidden weight="regular" />}
+							icon={<IconTextAlignEnd size="1em" aria-hidden />}
 							label="Align right"
 							value="right"
 						/>
@@ -289,7 +285,7 @@ function PopupToolbar() {
 				>
 					<BaseSelect.Value />
 					<BaseSelect.Icon>
-						<CaretUpDownIcon aria-hidden size={14} weight="regular" />
+						<IconChevronsUpDown aria-hidden size={14} />
 					</BaseSelect.Icon>
 				</Toolbar.Button>
 				<Select.Popup>
@@ -326,10 +322,10 @@ function CompactToolbar({ disabled }: { disabled?: boolean }) {
 	return (
 		<Toolbar.Root aria-label="List actions" disabled={disabled}>
 			<Toolbar.Button aria-label="Bulleted list">
-				<ListBulletsIcon aria-hidden size={16} weight="regular" />
+				<IconListBullet aria-hidden size={16} />
 			</Toolbar.Button>
 			<Toolbar.Button aria-label="Copy">
-				<CopyIcon aria-hidden size={16} weight="regular" />
+				<IconCopy aria-hidden size={16} />
 			</Toolbar.Button>
 			<Toolbar.Separator />
 			<Toolbar.Button aria-label="More actions">

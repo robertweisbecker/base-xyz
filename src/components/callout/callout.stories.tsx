@@ -1,7 +1,4 @@
-import { CheckCircleIcon } from "@phosphor-icons/react/dist/csr/CheckCircle";
-import { InfoIcon } from "@phosphor-icons/react/dist/csr/Info";
-import { WarningCircleIcon } from "@phosphor-icons/react/dist/csr/WarningCircle";
-import { WarningIcon } from "@phosphor-icons/react/dist/csr/Warning";
+import { IconCircleAlert, IconCircleCheck, IconInfo, IconWarning } from "fyicons";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import x from "@stylexjs/atoms";
 import * as stylex from "@stylexjs/stylex";
@@ -17,9 +14,9 @@ import { Callout, type CalloutHue, type CalloutVariant } from "./callout";
 
 const iconOptions = {
 	None: undefined,
-	Information: <InfoIcon aria-hidden weight="duotone" />,
-	Success: <CheckCircleIcon aria-hidden weight="duotone" />,
-	Warning: <WarningIcon aria-hidden weight="duotone" />,
+	Information: <IconInfo size="1em" aria-hidden />,
+	Success: <IconCircleCheck size="1em" aria-hidden />,
+	Warning: <IconWarning size="1em" aria-hidden />,
 };
 
 const actionOptions = {
@@ -45,7 +42,7 @@ const meta = {
 		alert: false,
 		description: "A new version is ready to install.",
 		hue: "accent",
-		icon: <InfoIcon aria-hidden weight="duotone" />,
+		icon: <IconInfo size="1em" aria-hidden />,
 		title: "Update available",
 		variant: "default",
 	},
@@ -97,27 +94,27 @@ const variants: readonly CalloutVariant[] = ["default", "banner"];
 const examplesByHue = {
 	accent: {
 		description: "A new version is ready to install.",
-		icon: <InfoIcon aria-hidden weight="duotone" />,
+		icon: <IconInfo size="1em" aria-hidden />,
 		title: "Update available",
 	},
 	error: {
 		description: "We couldn't save your changes. Please try again.",
-		icon: <WarningCircleIcon aria-hidden weight="duotone" />,
+		icon: <IconCircleAlert size="1em" aria-hidden />,
 		title: "Save failed",
 	},
 	warning: {
 		description: "Your session will expire in five minutes.",
-		icon: <WarningIcon aria-hidden weight="duotone" />,
+		icon: <IconWarning size="1em" aria-hidden />,
 		title: "Session expiring",
 	},
 	success: {
 		description: "The production release completed successfully.",
-		icon: <CheckCircleIcon aria-hidden weight="duotone" />,
+		icon: <IconCircleCheck size="1em" aria-hidden />,
 		title: "Deployment complete",
 	},
 	neutral: {
 		description: "This service will be unavailable for ten minutes.",
-		icon: <InfoIcon aria-hidden weight="duotone" />,
+		icon: <IconInfo size="1em" aria-hidden />,
 		title: "Maintenance scheduled",
 	},
 } satisfies Record<CalloutHue, { description: string; icon: ReactNode; title: string }>;
@@ -174,20 +171,20 @@ export const Options: Story = {
 				}
 				description="A new version is ready to install."
 				hue="accent"
-				icon={<InfoIcon aria-hidden weight="duotone" />}
+				icon={<IconInfo size="1em" aria-hidden />}
 				title="Update available"
 			/>
 			<Callout
 				description="Background synchronization has completed."
 				hue="success"
-				icon={<CheckCircleIcon aria-hidden weight="duotone" />}
+				icon={<IconCircleCheck size="1em" aria-hidden />}
 			/>
 			<Callout
 				action={<CloseButton label="Dismiss save error" />}
 				alert
 				description="We couldn't save your changes."
 				hue="error"
-				icon={<WarningCircleIcon aria-hidden weight="duotone" />}
+				icon={<IconCircleAlert size="1em" aria-hidden />}
 				variant="banner"
 			/>
 		</Stack>

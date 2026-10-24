@@ -11,7 +11,7 @@ import type {
 	AutocompleteStatusProps,
 } from "@base-ui/react/autocomplete";
 import { Dialog as BaseDialog } from "@base-ui/react/dialog";
-import { MagnifyingGlassIcon } from "@phosphor-icons/react/dist/csr/MagnifyingGlass";
+import { IconEmojiMelt, IconSearch } from "fyicons";
 import * as stylex from "@stylexjs/stylex";
 import {
 	createContext,
@@ -44,7 +44,7 @@ import {
 import { ScrollArea } from "@/components/scroll-area/scroll-area";
 import { VisuallyHidden } from "@/components/visually-hidden/visually-hidden";
 import { tokens } from "@/theme/tokens.stylex";
-import { SmileyMeltingIcon } from "@phosphor-icons/react";
+
 import { attrJoin } from "@/utils/attr-join";
 import { mergeStyle, type BaseStyleProps } from "@/styles/props/base";
 
@@ -274,7 +274,7 @@ export function Input({
 	label = "Search commands",
 	onKeyDown,
 	placeholder = "Search commands…",
-	startSlot = <MagnifyingGlassIcon aria-hidden />,
+	startSlot = <IconSearch size="1em" aria-hidden />,
 	style,
 	xstyle,
 	...props
@@ -438,7 +438,7 @@ export function Empty({
 		<EmptyState
 			size="sm"
 			headingLevel="h3"
-			icon={<SmileyMeltingIcon aria-hidden weight="duotone" />}
+			icon={<IconEmojiMelt size="1em" aria-hidden />}
 			title="No commands found"
 			description="Try a different search term."
 		/>

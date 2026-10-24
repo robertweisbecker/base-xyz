@@ -1,5 +1,11 @@
-import { ClockIcon } from "@phosphor-icons/react/dist/csr/Clock";
-import { WarningIcon } from "@phosphor-icons/react/dist/csr/Warning";
+import {
+	IconArrowClockwise,
+	IconChevronRight,
+	IconCircleXFill,
+	IconClock,
+	IconTrash,
+	IconWarningFill,
+} from "fyicons";
 import * as stylex from "@stylexjs/stylex";
 import {
 	createContext,
@@ -21,7 +27,6 @@ import { tokens } from "@/theme/tokens.stylex";
 import { mergeStyle, type BaseStyleProps } from "@/styles/props/base";
 import type { MarginProps } from "@/styles/props/spacing.stylex";
 import { attrJoin } from "@/utils/attr-join";
-import { ArrowClockwiseIcon, CaretRightIcon, TrashIcon, XCircleIcon } from "@phosphor-icons/react";
 
 export type AsyncJobStatus = "queued" | "running" | "complete" | "error";
 export type AsyncJobHeadingLevel = 2 | 3 | 4 | 5 | 6;
@@ -61,28 +66,28 @@ const statusPresentation = {
 		hue: "neutral",
 		statusLabel: "Waiting…",
 		buttonLabel: "Remove",
-		buttonIcon: <TrashIcon aria-hidden />,
+		buttonIcon: <IconTrash size="1em" aria-hidden />,
 	},
 	running: {
 		badgeLabel: "Running",
 		hue: "accent",
 		statusLabel: "In progress",
 		buttonLabel: "Stop",
-		buttonIcon: <XCircleIcon aria-hidden weight="fill" />,
+		buttonIcon: <IconCircleXFill size="1em" aria-hidden />,
 	},
 	complete: {
 		badgeLabel: "Complete",
 		hue: "success",
 		statusLabel: "Complete",
 		buttonLabel: "View output",
-		buttonIcon: <CaretRightIcon aria-hidden />,
+		buttonIcon: <IconChevronRight size="1em" aria-hidden />,
 	},
 	error: {
 		badgeLabel: "Failed",
 		hue: "error",
 		statusLabel: "Failed",
 		buttonLabel: "Retry",
-		buttonIcon: <ArrowClockwiseIcon aria-hidden />,
+		buttonIcon: <IconArrowClockwise size="1em" aria-hidden />,
 	},
 } satisfies Record<
 	AsyncJobStatus,
@@ -303,13 +308,13 @@ function getAriaValueText(status: AsyncJobStatus, value: number | null) {
 function renderStatusIcon(status: AsyncJobStatus) {
 	switch (status) {
 		case "queued":
-			return <ClockIcon aria-hidden weight="bold" size={12} />;
+			return <IconClock aria-hidden size={12} />;
 		case "running":
 			return <Loader aria-hidden size="10px" />;
 		case "complete":
 			return <Icon.Checkmark aria-hidden size={12} />;
 		case "error":
-			return <WarningIcon aria-hidden weight="fill" size={12} />;
+			return <IconWarningFill aria-hidden size={12} />;
 	}
 }
 

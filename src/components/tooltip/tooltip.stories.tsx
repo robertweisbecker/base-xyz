@@ -1,6 +1,4 @@
-import { BellIcon } from "@phosphor-icons/react/dist/csr/Bell";
-import { GearIcon } from "@phosphor-icons/react/dist/csr/Gear";
-import { InfoIcon } from "@phosphor-icons/react/dist/csr/Info";
+import { IconBell, IconInfo, IconSettings } from "fyicons";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { Avatar } from "@/components/avatar/avatar";
 import { Stack } from "@/components/layout/layout";
@@ -59,7 +57,7 @@ export const Playground: Story = {
 						delay={_delay}
 						render={
 							<IconButton
-								icon={<InfoIcon aria-hidden />}
+								icon={<IconInfo size="1em" aria-hidden />}
 								label="More information"
 								shape="circle"
 								tooltip={false}
@@ -108,9 +106,9 @@ export const Positioning: Story = {
 };
 
 const tooltipActions = [
-	{ label: "Notifications", copy: "Review notifications", Icon: BellIcon },
-	{ label: "Information", copy: "Read product information", Icon: InfoIcon },
-	{ label: "Settings", copy: "Open workspace settings", Icon: GearIcon },
+	{ label: "Notifications", copy: "Review notifications", Icon: IconBell },
+	{ label: "Information", copy: "Read product information", Icon: IconInfo },
+	{ label: "Settings", copy: "Open workspace settings", Icon: IconSettings },
 ];
 
 export const SharedGroup: Story = {
@@ -129,7 +127,7 @@ export const SharedGroup: Story = {
 					{tooltipActions.map(({ label, copy, Icon }) => (
 						<IconButton
 							key={label}
-							icon={<Icon aria-hidden />}
+							icon={<Icon size="1em" aria-hidden />}
 							label={label}
 							shape="circle"
 							tooltip={copy}

@@ -1,8 +1,4 @@
-import { CaretRightIcon } from "@phosphor-icons/react/dist/csr/CaretRight";
-import { GaugeIcon } from "@phosphor-icons/react/dist/csr/Gauge";
-import { LightningIcon } from "@phosphor-icons/react/dist/csr/Lightning";
-import { SlidersHorizontalIcon } from "@phosphor-icons/react/dist/csr/SlidersHorizontal";
-import { StackSimpleIcon } from "@phosphor-icons/react/dist/csr/StackSimple";
+import { IconBolt, IconChevronRight, IconGauge, IconSliders, IconStack } from "fyicons";
 import * as stylex from "@stylexjs/stylex";
 import { useState, type ReactNode } from "react";
 import type {
@@ -83,7 +79,7 @@ export function MorphingModelSelector({ defaultOpen = true }: MorphingModelSelec
 			</MorphingMenu.RadioGroup>
 
 			<SelectorSubmenu
-				icon={<StackSimpleIcon />}
+				icon={<IconStack size="1em" />}
 				label="More models"
 				value={claudeModels.some((model) => model.value === value.model) ? "Selected" : undefined}
 			>
@@ -103,28 +99,38 @@ export function MorphingModelSelector({ defaultOpen = true }: MorphingModelSelec
 			</SelectorSubmenu>
 
 			<SelectorSubmenu
-				icon={<SlidersHorizontalIcon />}
+				icon={<IconSliders size="1em" />}
 				label="Tune response"
 				value={`${value.effort} · ${value.speed}`}
 			>
-				<SelectorSubmenu icon={<GaugeIcon />} label="Effort" value={value.effort}>
+				<SelectorSubmenu icon={<IconGauge size="1em" />} label="Effort" value={value.effort}>
 					<MorphingMenu.RadioGroup
 						value={value.effort}
 						onValueChange={(effort) => setValue((current) => ({ ...current, effort }))}
 					>
 						{exampleEffortOptions.map((effort) => (
-							<SelectorOption key={effort} icon={<GaugeIcon />} label={effort} value={effort} />
+							<SelectorOption
+								key={effort}
+								icon={<IconGauge size="1em" />}
+								label={effort}
+								value={effort}
+							/>
 						))}
 					</MorphingMenu.RadioGroup>
 				</SelectorSubmenu>
 
-				<SelectorSubmenu icon={<LightningIcon />} label="Speed" value={value.speed}>
+				<SelectorSubmenu icon={<IconBolt size="1em" />} label="Speed" value={value.speed}>
 					<MorphingMenu.RadioGroup
 						value={value.speed}
 						onValueChange={(speed) => setValue((current) => ({ ...current, speed }))}
 					>
 						{exampleSpeedOptions.map((speed) => (
-							<SelectorOption key={speed} icon={<LightningIcon />} label={speed} value={speed} />
+							<SelectorOption
+								key={speed}
+								icon={<IconBolt size="1em" />}
+								label={speed}
+								value={speed}
+							/>
 						))}
 					</MorphingMenu.RadioGroup>
 				</SelectorSubmenu>
@@ -180,10 +186,9 @@ function SelectorRow({ back, icon, label, submenu, value }: SelectorRowProps) {
 						<span {...stylex.props(morphingModelSelectorStyles.rowValue)}>{value}</span>
 					) : null}
 					{submenu ? (
-						<CaretRightIcon
+						<IconChevronRight
 							aria-hidden
 							size={16}
-							weight="bold"
 							{...stylex.props(morphingMenuStyles.chevron, back && morphingMenuStyles.chevronBack)}
 						/>
 					) : null}

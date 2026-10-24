@@ -1,6 +1,4 @@
-import { GlobeIcon } from "@phosphor-icons/react/dist/csr/Globe";
-import { LinkSimpleIcon } from "@phosphor-icons/react/dist/csr/LinkSimple";
-import { PaperclipIcon } from "@phosphor-icons/react/dist/csr/Paperclip";
+import { IconGlobe, IconLink, IconPaperclip } from "fyicons";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import * as stylex from "@stylexjs/stylex";
 import { useState, type ReactNode } from "react";
@@ -102,13 +100,13 @@ function AddMenu({ setFeedback }: { setFeedback: (message: string) => void }) {
 					<Menu.GroupLabel>Add</Menu.GroupLabel>
 					<Menu.Item onClick={() => setFeedback("Attachment action requested.")}>
 						<Menu.ItemIcon>
-							<PaperclipIcon aria-hidden size={16} weight="bold" />
+							<IconPaperclip aria-hidden size={16} />
 						</Menu.ItemIcon>
 						<PromptComposer.AddItemContent>Files and folders</PromptComposer.AddItemContent>
 					</Menu.Item>
 					<Menu.Item onClick={() => setFeedback("Link action requested.")}>
 						<Menu.ItemIcon>
-							<LinkSimpleIcon aria-hidden size={16} weight="bold" />
+							<IconLink aria-hidden size={16} />
 						</Menu.ItemIcon>
 						<PromptComposer.AddItemContent>
 							<span>Add a link</span>
@@ -144,7 +142,7 @@ function GeneratingDemo() {
 						variant="neutral"
 						size="sm"
 						shape="pill"
-						startSlot={<GlobeIcon aria-hidden />}
+						startSlot={<IconGlobe size="1em" aria-hidden />}
 						aria-label="Search the web"
 						aria-pressed={webSearch}
 						onClick={() => {

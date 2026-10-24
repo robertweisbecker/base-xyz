@@ -1,9 +1,12 @@
-import { CopyIcon } from "@phosphor-icons/react/dist/csr/Copy";
-import { GitPullRequestIcon } from "@phosphor-icons/react/dist/csr/GitPullRequest";
-import { LinkSimpleIcon } from "@phosphor-icons/react/dist/csr/LinkSimple";
-import { MicrophoneIcon } from "@phosphor-icons/react/dist/csr/Microphone";
-import { ThumbsUpIcon } from "@phosphor-icons/react/dist/csr/ThumbsUp";
-import { ThumbsDownIcon } from "@phosphor-icons/react/dist/csr/ThumbsDown";
+import {
+	IconCopy,
+	IconGitPullRequest,
+	IconImages,
+	IconLink,
+	IconMicrophone,
+	IconThumbsDown,
+	IconThumbsUp,
+} from "fyicons";
 import * as stylex from "@stylexjs/stylex";
 import { useState, type ReactNode } from "react";
 import {
@@ -33,7 +36,6 @@ import { breakpoints } from "@/styles/constants.stylex";
 import { tokens } from "@/theme/tokens.stylex";
 import { experimentLayoutVars } from "./experiment-layout.stylex";
 import { ExperimentPage, ExperimentSection } from "./experiment-page";
-import { ImagesSquareIcon } from "@phosphor-icons/react/dist/ssr";
 
 const agentModelGroups = [
 	{
@@ -167,7 +169,7 @@ function AgentActionApprovalExample({ description, id, title }: AgentBlockExampl
 				<AgentActionApproval.Content>
 					<AgentActionApproval.Summary>
 						<AgentActionApproval.Icon>
-							<GitPullRequestIcon aria-hidden weight="duotone" />
+							<IconGitPullRequest size="1em" aria-hidden />
 						</AgentActionApproval.Icon>
 						<AgentActionApproval.SummaryContent>
 							<AgentActionApproval.Action>Open a draft pull request</AgentActionApproval.Action>
@@ -341,13 +343,13 @@ function PromptComposerExample({ description, id, title }: AgentBlockExampleProp
 											<Menu.GroupLabel>Attach</Menu.GroupLabel>
 											<Menu.Item onClick={() => setFeedback("File picker requested")}>
 												<Menu.ItemIcon>
-													<ImagesSquareIcon aria-hidden />
+													<IconImages size="1em" aria-hidden />
 												</Menu.ItemIcon>
 												<PromptComposer.AddItemContent>Upload files</PromptComposer.AddItemContent>
 											</Menu.Item>
 											<Menu.Item onClick={() => setFeedback("Link attachment requested")}>
 												<Menu.ItemIcon>
-													<LinkSimpleIcon aria-hidden />
+													<IconLink size="1em" aria-hidden />
 												</Menu.ItemIcon>
 												<PromptComposer.AddItemContent>Add from URL</PromptComposer.AddItemContent>
 											</Menu.Item>
@@ -369,7 +371,7 @@ function PromptComposerExample({ description, id, title }: AgentBlockExampleProp
 							</PromptComposer.Options>
 							<PromptComposer.Actions>
 								<Toggle
-									icon={<MicrophoneIcon aria-hidden />}
+									icon={<IconMicrophone size="1em" aria-hidden />}
 									label="Use microphone"
 									onPressedChange={(pressed) =>
 										setFeedback(pressed ? "Microphone enabled" : "Microphone disabled")
@@ -431,13 +433,13 @@ function StreamingResponseExample({ description, id, title }: AgentBlockExampleP
 				</StreamingResponse.Content>
 				<StreamingResponse.Actions>
 					<Toolbar.Button aria-label="Approve response">
-						<ThumbsUpIcon aria-hidden />
+						<IconThumbsUp size="1em" aria-hidden />
 					</Toolbar.Button>
 					<Toolbar.Button aria-label="Reject response">
-						<ThumbsDownIcon aria-hidden />
+						<IconThumbsDown size="1em" aria-hidden />
 					</Toolbar.Button>
 					<Toolbar.Button aria-label="Copy response">
-						<CopyIcon aria-hidden />
+						<IconCopy size="1em" aria-hidden />
 					</Toolbar.Button>
 				</StreamingResponse.Actions>
 			</StreamingResponse.Root>

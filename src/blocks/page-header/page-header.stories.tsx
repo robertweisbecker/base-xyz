@@ -1,12 +1,9 @@
 import { GithubLogoIcon } from "@phosphor-icons/react/dist/csr/GithubLogo";
-import { GitForkIcon } from "@phosphor-icons/react/dist/csr/GitFork";
-import { LockIcon } from "@phosphor-icons/react/dist/csr/Lock";
-import { StarIcon } from "@phosphor-icons/react/dist/csr/Star";
+import { IconGitFork, IconLockFill, IconSearch, IconStar } from "fyicons";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { Avatar, Badge, Breadcrumbs, Button, InputGroup, Tabs } from "@/components";
 import { Stack } from "@/components/layout/layout";
 import { PageHeader } from "./page-header";
-import { MagnifyingGlassIcon } from "@phosphor-icons/react";
 
 const meta = {
 	title: "Blocks/Page header",
@@ -36,20 +33,16 @@ export const Examples: Story = {
 					</Breadcrumbs.Root>
 				}
 				titleAddon={
-					<Badge hue="neutral" startSlot={<LockIcon aria-hidden weight="fill" />}>
+					<Badge hue="neutral" startSlot={<IconLockFill size="1em" aria-hidden />}>
 						Private
 					</Badge>
 				}
 				actions={
 					<>
-						<Button size="sm" variant="neutral" startSlot={<StarIcon aria-hidden weight="bold" />}>
+						<Button size="sm" variant="neutral" startSlot={<IconStar size="1em" aria-hidden />}>
 							Star
 						</Button>
-						<Button
-							size="sm"
-							variant="neutral"
-							startSlot={<GitForkIcon aria-hidden weight="bold" />}
-						>
+						<Button size="sm" variant="neutral" startSlot={<IconGitFork size="1em" aria-hidden />}>
 							Fork
 						</Button>
 					</>
@@ -92,7 +85,7 @@ export const Examples: Story = {
 							</Tabs.List>
 							<InputGroup.Root>
 								<InputGroup.Addon>
-									<MagnifyingGlassIcon aria-hidden />
+									<IconSearch size="1em" aria-hidden />
 								</InputGroup.Addon>
 								<InputGroup.Input
 									aria-label="Search pull requests"

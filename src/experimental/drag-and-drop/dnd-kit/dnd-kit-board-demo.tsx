@@ -21,7 +21,7 @@ import {
 } from "../demo-data";
 import { DemoCard, DemoHandle, DemoInstructions, DemoPanel } from "../demo-parts";
 import { demoStyles } from "../drag-and-drop-demo.stylex";
-import { KanbanIcon } from "@phosphor-icons/react";
+import { IconLayoutColumnsThree } from "fyicons";
 
 export function DndKitBoardDemo() {
 	const [board, setBoard] = useState<DemoBoardState>(() => createInitialBoardState());
@@ -127,7 +127,7 @@ function DndKitBoardColumn({
 						<EmptyState
 							headingLevel="h3"
 							size="sm"
-							icon={<KanbanIcon weight="duotone" />}
+							icon={<IconLayoutColumnsThree size="1em" />}
 							title="No items"
 							description="Move completed tasks here."
 							xstyle={demoStyles.empty}

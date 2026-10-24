@@ -1,6 +1,4 @@
-import { CaretDownIcon } from "@phosphor-icons/react/dist/csr/CaretDown";
-import { CaretRightIcon } from "@phosphor-icons/react/dist/csr/CaretRight";
-import { ArrowsInLineVerticalIcon, ArrowsOutLineVerticalIcon } from "@phosphor-icons/react";
+import { IconChevronDown, IconChevronRight, IconRowCollapse, IconRowExpand } from "fyicons";
 import { useMemo } from "react";
 import { Icon } from "@/components/icons";
 import { IconButton } from "@/components/button/button";
@@ -71,8 +69,8 @@ export function useDataTableColumns<TData extends RowData, TValue>({
 							disabled={!table.getCanSomeRowsExpand()}
 							label={allExpanded ? "Collapse all" : "Expand all"}
 							onPressedChange={table.getToggleAllRowsExpandedHandler()}
-							icon={<ArrowsOutLineVerticalIcon aria-hidden />}
-							pressedIcon={<ArrowsInLineVerticalIcon aria-hidden />}
+							icon={<IconRowExpand size="1em" aria-hidden />}
+							pressedIcon={<IconRowCollapse size="1em" aria-hidden />}
 						/>
 					);
 				},
@@ -85,8 +83,8 @@ export function useDataTableColumns<TData extends RowData, TValue>({
 							aria-label={`${row.getIsExpanded() ? "Collapse" : "Expand"} row ${row.index + 1}`}
 							label={`${row.getIsExpanded() ? "Collapse" : "Expand"}`}
 							onPressedChange={row.getToggleExpandedHandler()}
-							icon={<CaretRightIcon aria-hidden />}
-							pressedIcon={<CaretDownIcon aria-hidden />}
+							icon={<IconChevronRight size="1em" aria-hidden />}
+							pressedIcon={<IconChevronDown size="1em" aria-hidden />}
 						/>
 					) : null,
 			});

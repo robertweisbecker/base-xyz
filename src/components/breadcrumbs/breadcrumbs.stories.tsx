@@ -1,5 +1,4 @@
-import { BookOpenIcon } from "@phosphor-icons/react/dist/csr/BookOpen";
-import { HouseIcon } from "@phosphor-icons/react/dist/csr/House";
+import { IconBookOpen, IconHome } from "fyicons";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { Heading } from "@/components/heading/heading";
 import { Stack } from "@/components/layout/layout";
@@ -34,18 +33,14 @@ type Story = StoryObj<typeof meta>;
 export const Playground: Story = {
 	render: (args) => (
 		<Breadcrumbs.Root {...args}>
-			<Breadcrumbs.Link
-				href="#"
-				startSlot={<HouseIcon aria-hidden weight="duotone" />}
-				color={args.color}
-			>
+			<Breadcrumbs.Link href="#" startSlot={<IconHome size="1em" aria-hidden />} color={args.color}>
 				Home
 			</Breadcrumbs.Link>
 			<Breadcrumbs.Separator />
 			<Breadcrumbs.Link
 				href="#"
 				color={args.color}
-				startSlot={<BookOpenIcon aria-hidden weight="duotone" />}
+				startSlot={<IconBookOpen size="1em" aria-hidden />}
 			>
 				Docs
 			</Breadcrumbs.Link>
@@ -74,7 +69,7 @@ export const Examples: Story = {
 			<Separator />
 			<Example title="Compact">
 				<Breadcrumbs.Root size="sm">
-					<Breadcrumbs.Link href="#" startSlot={<HouseIcon aria-hidden weight="duotone" />}>
+					<Breadcrumbs.Link href="#" startSlot={<IconHome size="1em" aria-hidden />}>
 						Home
 					</Breadcrumbs.Link>
 					<Breadcrumbs.Separator />

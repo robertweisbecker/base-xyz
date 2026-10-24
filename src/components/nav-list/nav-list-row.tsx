@@ -1,5 +1,5 @@
 import { useRender } from "@base-ui/react/use-render";
-import { ArrowLeftIcon, ArrowRightIcon, FileIcon } from "@phosphor-icons/react";
+import { IconArrowLeft, IconArrowRight, IconFile } from "fyicons";
 import * as stylex from "@stylexjs/stylex";
 import { useContext, type MouseEvent, type ReactElement, type ReactNode, type Ref } from "react";
 import { Collapsible } from "@/components/collapsible/collapsible";
@@ -182,7 +182,7 @@ function resolveRowModel({
 		resolvedAriaLabel: isIconMode ? (ariaLabel ?? label) : ariaLabel,
 		resolvedEndSlot: endSlot ?? badge,
 		showTooltip: isIconMode && !disclosure && (tooltip ?? label) !== false,
-		visualIcon: icon || startSlot || <FileIcon weight="duotone" />,
+		visualIcon: icon || startSlot || <IconFile size="1em" />,
 	};
 }
 
@@ -224,7 +224,7 @@ function RowContent({
 						disclosure === "collapse" && collapseOpen && navListParts.collapseIconOpen,
 					)}
 				>
-					{disclosure === "collapse" ? <Collapsible.Icon /> : <ArrowRightIcon />}
+					{disclosure === "collapse" ? <Collapsible.Icon /> : <IconArrowRight size="1em" />}
 				</span>
 			) : null}
 		</>
@@ -234,7 +234,7 @@ function RowContent({
 function RowIcon({ backIcon, children }: { backIcon: boolean; children: ReactNode }) {
 	return (
 		<span aria-hidden {...stylex.props(navListParts.icon)}>
-			{backIcon ? <ArrowLeftIcon /> : children}
+			{backIcon ? <IconArrowLeft size="1em" /> : children}
 		</span>
 	);
 }

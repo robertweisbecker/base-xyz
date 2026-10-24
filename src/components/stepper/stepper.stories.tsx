@@ -1,5 +1,4 @@
-import { ShieldCheckIcon } from "@phosphor-icons/react/dist/csr/ShieldCheck";
-import { UserIcon } from "@phosphor-icons/react/dist/csr/User";
+import { IconShieldCheck, IconUser } from "fyicons";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { Fragment, useState, type ReactNode } from "react";
 import { Button } from "@/components/button/button";
@@ -10,8 +9,8 @@ import { Stepper, type StepperOrientation, type StepperStatus, type StepperValue
 
 const markerOptions = {
 	Number: null,
-	Profile: <UserIcon aria-hidden weight="duotone" />,
-	Security: <ShieldCheckIcon aria-hidden weight="duotone" />,
+	Profile: <IconUser size="1em" aria-hidden />,
+	Security: <IconShieldCheck size="1em" aria-hidden />,
 };
 
 type StepperPlaygroundArgs = {
@@ -409,7 +408,7 @@ function ExampleStepper({
 				/>
 				<AccountStep
 					description="Choose authentication options."
-					marker={<ShieldCheckIcon aria-hidden weight="duotone" />}
+					marker={<IconShieldCheck size="1em" aria-hidden />}
 					title="Security"
 					value="security"
 				/>

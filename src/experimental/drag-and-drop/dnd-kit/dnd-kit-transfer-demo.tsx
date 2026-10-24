@@ -6,7 +6,7 @@ import { ASSET_TYPE, TASK_TYPE, TRANSFER_DESTINATIONS, TRANSFER_ITEM } from "../
 import { DemoCard, DemoDropZone, DemoHandle, DemoInstructions, DemoPanel } from "../demo-parts";
 import { demoStyles } from "../drag-and-drop-demo.stylex";
 import { EmptyState } from "@/components/empty-state/empty-state";
-import { TrayIcon } from "@phosphor-icons/react";
+import { IconInbox } from "fyicons";
 
 type Location = "source" | "planning";
 
@@ -97,7 +97,7 @@ export function DndKitTransferDemo() {
 								size="sm"
 								title="No more items"
 								description="Tray is empty."
-								icon={<TrayIcon weight="duotone" />}
+								icon={<IconInbox size="1em" />}
 							/>
 						)}
 					</div>
