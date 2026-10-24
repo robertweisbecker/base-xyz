@@ -1,7 +1,4 @@
-import { ArrowRightIcon } from "@phosphor-icons/react/dist/csr/ArrowRight";
-import { BlueprintIcon } from "@phosphor-icons/react/dist/csr/Blueprint";
-import { CopyIcon } from "@phosphor-icons/react/dist/csr/Copy";
-import { FolderOpenIcon } from "@phosphor-icons/react/dist/csr/FolderOpen";
+import { IconArrowRight, IconBlueprint, IconCopy, IconFolderOpen } from "fyicons";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import * as stylex from "@stylexjs/stylex";
 import { Avatar } from "@/components/avatar/avatar";
@@ -13,8 +10,8 @@ import { Item, type ItemDescriptionLayout, type ItemProps, type ItemVariant } fr
 
 const startSlotOptions = {
 	None: undefined,
-	Blueprint: <BlueprintIcon aria-hidden size="1.25em" weight="duotone" />,
-	Folder: <FolderOpenIcon aria-hidden size="1.25em" weight="duotone" />,
+	Blueprint: <IconBlueprint aria-hidden size="1.25em" />,
+	Folder: <IconFolderOpen aria-hidden size="1.25em" />,
 	Avatar: <Avatar initials="AL" name="Ada Lovelace" shape="rounded" size={8} />,
 };
 
@@ -25,8 +22,8 @@ const endSlotOptions = {
 			Beta
 		</Badge>
 	),
-	Copy: <CopyIcon aria-hidden size="1em" />,
-	Arrow: <ArrowRightIcon aria-hidden size="1em" />,
+	Copy: <IconCopy aria-hidden size="1em" />,
+	Arrow: <IconArrowRight aria-hidden size="1em" />,
 	Kbd: (
 		<Text color="muted" render={<kbd />} size="1">
 			⌘K
@@ -137,7 +134,7 @@ export const Layouts: Story = {
 							</Badge>
 						}
 						label="Item label"
-						startSlot={<BlueprintIcon aria-hidden size="1.25em" weight="duotone" />}
+						startSlot={<IconBlueprint aria-hidden size="1.25em" />}
 					/>
 				</Stack>
 			))}
@@ -163,7 +160,7 @@ export const Examples: Story = {
 						</Badge>
 					}
 					label="Members"
-					startSlot={<FolderOpenIcon aria-hidden size="1.25em" weight="duotone" />}
+					startSlot={<IconFolderOpen aria-hidden size="1.25em" />}
 				/>
 			</Stack>
 			<Separator />
@@ -174,7 +171,7 @@ export const Examples: Story = {
 				<Item
 					description="Last active 2 hours ago"
 					descriptionLayout="inline"
-					endSlot={<ArrowRightIcon aria-hidden size="1em" />}
+					endSlot={<IconArrowRight aria-hidden size="1em" />}
 					label="Ada Lovelace"
 					startSlot={<Avatar initials="AL" name="Ada Lovelace" shape="rounded" size={8} />}
 				/>
@@ -188,8 +185,8 @@ export const Examples: Story = {
 					description="Overview of your account and recent activity."
 					label="Dashboard"
 					render={<a href="#dashboard" />}
-					startSlot={<BlueprintIcon aria-hidden size="1.25em" weight="duotone" />}
-					endSlot={<ArrowRightIcon aria-hidden size="1em" />}
+					startSlot={<IconBlueprint aria-hidden size="1.25em" />}
+					endSlot={<IconArrowRight aria-hidden size="1em" />}
 				/>
 			</Stack>
 			<Separator />
@@ -197,7 +194,7 @@ export const Examples: Story = {
 				<Text color="muted" size="1">
 					Label only
 				</Text>
-				<Item label="Notifications" endSlot={<CopyIcon aria-hidden size="1em" />} />
+				<Item label="Notifications" endSlot={<IconCopy aria-hidden size="1em" />} />
 			</Stack>
 			<Separator />
 			<Stack gap={2}>
@@ -208,7 +205,7 @@ export const Examples: Story = {
 					description="Use when a short meta string should sit beside the label and continue onto the next line if needed."
 					descriptionLayout="inline-wrap"
 					label="Workspace storage"
-					startSlot={<FolderOpenIcon aria-hidden size="1.25em" weight="duotone" />}
+					startSlot={<IconFolderOpen aria-hidden size="1.25em" />}
 				/>
 			</Stack>
 		</Stack>

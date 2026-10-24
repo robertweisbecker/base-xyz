@@ -1,8 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { CubeIcon } from "@phosphor-icons/react/dist/csr/Cube";
-import { GearIcon } from "@phosphor-icons/react/dist/csr/Gear";
-import { HouseIcon } from "@phosphor-icons/react/dist/csr/House";
-import { UsersIcon } from "@phosphor-icons/react/dist/csr/Users";
+import { IconCube, IconHome, IconSettings, IconUsers } from "fyicons";
 import * as stylex from "@stylexjs/stylex";
 import { useState, type ReactNode } from "react";
 import { Avatar } from "@/components/avatar/avatar";
@@ -230,14 +227,11 @@ function PrimaryNavigation({ includeChildren = false }: { includeChildren?: bool
 		<NavList.Drilldown defaultValue="account">
 			<NavList.DrilldownPanel value="account" label="Account navigation">
 				<NavList.Section label="Project" visuallyHideLabel>
-					<NavList.Item label="Overview" href="#overview" icon={<HouseIcon weight="duotone" />} />
-					<NavList.Item label="Members" href="#members" icon={<UsersIcon weight="duotone" />} />
+					<NavList.Item label="Overview" href="#overview" icon={<IconHome size="1em" />} />
+					<NavList.Item label="Members" href="#members" icon={<IconUsers size="1em" />} />
 					{includeChildren ? (
 						<NavList.CollapsibleGroup>
-							<NavList.CollapsibleGroupTrigger
-								label="Deploy"
-								icon={<CubeIcon weight="duotone" />}
-							/>
+							<NavList.CollapsibleGroupTrigger label="Deploy" icon={<IconCube size="1em" />} />
 							<NavList.CollapsibleGroupPanel>
 								<NavList.Item label="Deployments" href="#deployments" />
 								<NavList.Item label="Workers" href="#workers" />
@@ -247,7 +241,7 @@ function PrimaryNavigation({ includeChildren = false }: { includeChildren?: bool
 					<NavList.DrilldownTrigger
 						to="settings"
 						label="Settings"
-						icon={<GearIcon weight="duotone" />}
+						icon={<IconSettings size="1em" />}
 					/>
 				</NavList.Section>
 			</NavList.DrilldownPanel>

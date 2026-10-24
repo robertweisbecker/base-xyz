@@ -1,4 +1,4 @@
-import { ArrowsDownUpIcon, SortAscendingIcon, SortDescendingIcon } from "@phosphor-icons/react";
+import { IconArrowUpArrowDown, IconSortDown, IconSortUp } from "fyicons";
 import * as stylex from "@stylexjs/stylex";
 import { type ReactNode } from "react";
 import { Button } from "@/components/button/button";
@@ -116,12 +116,12 @@ function HeaderContent<TData extends RowData>({
 
 function getSortIcon(sorted: false | "asc" | "desc") {
 	if (sorted === "asc") {
-		return <SortAscendingIcon aria-hidden />;
+		return <IconSortDown size="1em" aria-hidden />;
 	}
 	if (sorted === "desc") {
-		return <SortDescendingIcon aria-hidden />;
+		return <IconSortUp size="1em" aria-hidden />;
 	}
-	return <ArrowsDownUpIcon aria-hidden mirrored={true} />;
+	return <IconArrowUpArrowDown size="1em" aria-hidden />;
 }
 
 function getSortLabel(content: ReactNode, sorted: false | "asc" | "desc") {

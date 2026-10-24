@@ -1,4 +1,4 @@
-import { MagnifyingGlassIcon } from "@phosphor-icons/react/dist/csr/MagnifyingGlass";
+import { IconSearch } from "fyicons";
 import * as stylex from "@stylexjs/stylex";
 import { InputGroup } from "@/components/input-group/input-group";
 import { dataTableParts } from "./data-table.stylex";
@@ -21,7 +21,7 @@ export function DataTableSearch<TData extends RowData>({
 	return (
 		<InputGroup.Root {...stylex.props(dataTableParts.filter)}>
 			<InputGroup.Addon>
-				<MagnifyingGlassIcon aria-hidden size="1em" weight="bold" />
+				<IconSearch aria-hidden size="1em" />
 			</InputGroup.Addon>
 			<InputGroup.Input
 				value={filterColumn ? String(filterColumn.getFilterValue() ?? "") : globalFilter}

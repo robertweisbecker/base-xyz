@@ -1,6 +1,6 @@
 import { Menu as BaseMenu } from "@base-ui/react/menu";
 import { Collapsible as BaseCollapsible } from "@base-ui/react/collapsible";
-import { CaretRightIcon } from "@phosphor-icons/react/dist/csr/CaretRight";
+import { IconChevronRight } from "fyicons";
 import * as stylex from "@stylexjs/stylex";
 import { createContext, useContext, type ComponentProps, type ReactNode } from "react";
 import { fontFamilyStyles, textStyles, fontWeightStyles } from "@/components/text/text.stylex";
@@ -334,12 +334,7 @@ export function SubmenuTrigger({
 			{...props}
 		>
 			{children}
-			<CaretRightIcon
-				aria-hidden
-				size="1em"
-				weight="bold"
-				{...stylex.props(menuParts.submenuIcon)}
-			/>
+			<IconChevronRight aria-hidden size="1em" {...stylex.props(menuParts.submenuIcon)} />
 		</BaseMenu.SubmenuTrigger>
 	);
 }

@@ -1,5 +1,4 @@
-import { ArrowCounterClockwiseIcon } from "@phosphor-icons/react/dist/csr/ArrowCounterClockwise";
-import { LightningIcon } from "@phosphor-icons/react/dist/csr/Lightning";
+import { IconArrowCounterClockwise, IconBoltFill } from "fyicons";
 import * as stylex from "@stylexjs/stylex";
 import {
 	createContext,
@@ -174,8 +173,7 @@ export function Trigger({
 	...props
 }: ModelSelectorTriggerProps) {
 	const { selectedModel, value } = useModelSelectorContext("Trigger");
-	const triggerIcon =
-		value.speed === "Fast" ? <LightningIcon size="1em" weight="fill" /> : selectedModel.icon;
+	const triggerIcon = value.speed === "Fast" ? <IconBoltFill size="1em" /> : selectedModel.icon;
 	const triggerLabel = showEffort
 		? `Choose model, current ${getTextLabel(selectedModel.label)}, ${value.effort} effort`
 		: `Choose model, current ${getTextLabel(selectedModel.label)}`;
@@ -264,12 +262,7 @@ export function Popup({ positionerProps, xstyle, ...props }: ModelSelectorPopupP
 				onClick={() => context.updateValue(context.defaultValue, "reset")}
 			>
 				<span {...stylex.props(parts.resetLabel)}>Reset to default</span>
-				<ArrowCounterClockwiseIcon
-					aria-hidden
-					size="1em"
-					weight="regular"
-					{...stylex.props(parts.resetIcon)}
-				/>
+				<IconArrowCounterClockwise aria-hidden size="1em" {...stylex.props(parts.resetIcon)} />
 			</Menu.Item>
 		</Menu.Popup>
 	);
@@ -317,7 +310,7 @@ function ChoiceSubmenu({
 			<SettingsTrigger
 				label={label}
 				value={value}
-				valueIcon={value === "Fast" ? <LightningIcon size="1em" weight="fill" /> : valueIcon}
+				valueIcon={value === "Fast" ? <IconBoltFill size="1em" /> : valueIcon}
 			/>
 			<Menu.Popup
 				positionerProps={{

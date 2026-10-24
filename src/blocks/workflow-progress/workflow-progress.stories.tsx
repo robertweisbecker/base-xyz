@@ -1,5 +1,4 @@
-import { ArrowRightIcon } from "@phosphor-icons/react/dist/csr/ArrowRight";
-import { PlusIcon } from "@phosphor-icons/react/dist/csr/Plus";
+import { IconArrowRight, IconPlusThick } from "fyicons";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import type { ReactNode } from "react";
 import { CodeBlock, Collapsible, Separator } from "@/components";
@@ -88,7 +87,7 @@ export const Examples: Story = {
 						status="running"
 						title="Updating stories"
 						description="Consolidating related examples."
-						icon={<PlusIcon aria-hidden weight="bold" />}
+						icon={<IconPlusThick size="1em" aria-hidden />}
 						meta="8s"
 						details="Editing 4 files"
 					/>
@@ -96,7 +95,7 @@ export const Examples: Story = {
 						status="approval"
 						title="Publish the branch"
 						description="Permission is required before pushing changes."
-						endSlot={<ArrowRightIcon aria-hidden weight="bold" />}
+						endSlot={<IconArrowRight size="1em" aria-hidden />}
 					/>
 					<Activity
 						status="queued"

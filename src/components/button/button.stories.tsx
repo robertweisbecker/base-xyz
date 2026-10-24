@@ -1,5 +1,4 @@
-import { ArrowRightIcon } from "@phosphor-icons/react/dist/csr/ArrowRight";
-import { PlusIcon } from "@phosphor-icons/react/dist/csr/Plus";
+import { IconArrowRight, IconPlus, IconPlusThick, IconWarning } from "fyicons";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import x from "@stylexjs/atoms";
 import * as stylex from "@stylexjs/stylex";
@@ -11,13 +10,13 @@ import { Text } from "@/components/text/text";
 import { tokens } from "@/theme/tokens.stylex";
 
 import { Button } from "./button";
-import { WarningIcon } from "@phosphor-icons/react";
+
 import { Code } from "../code";
 
 const iconOptions = {
 	None: undefined,
-	Add: <PlusIcon aria-hidden />,
-	Continue: <ArrowRightIcon aria-hidden />,
+	Add: <IconPlus size="1em" aria-hidden />,
+	Continue: <IconArrowRight size="1em" aria-hidden />,
 };
 
 const meta = {
@@ -94,7 +93,7 @@ export const Rendering: Story = {
 			<Callout
 				hue="neutral"
 				title="Rendering links"
-				icon={<WarningIcon aria-hidden />}
+				icon={<IconWarning size="1em" aria-hidden />}
 				description={
 					<>
 						<Text>
@@ -135,14 +134,14 @@ export const SizesAndIcons: Story = {
 						<Button size={size}>Create project</Button>
 						<Button
 							size={size}
-							startSlot={<PlusIcon aria-hidden weight="bold" />}
+							startSlot={<IconPlusThick size="1em" aria-hidden />}
 							variant="secondary"
 						>
 							Create project
 						</Button>
 						<Button
 							size={size}
-							endSlot={<ArrowRightIcon aria-hidden weight="bold" />}
+							endSlot={<IconArrowRight size="1em" aria-hidden />}
 							variant="neutral"
 						>
 							Continue
@@ -212,7 +211,7 @@ function ButtonStates() {
 								loading={loading}
 								loadingText="Creating…"
 								size="md"
-								startSlot={<PlusIcon aria-hidden weight="bold" />}
+								startSlot={<IconPlusThick size="1em" aria-hidden />}
 								variant={variant}
 							>
 								Create project

@@ -1,10 +1,7 @@
 import { Field } from "@/components/field/field";
 import { Form } from "@/components/form/form";
 import { Label } from "@/components/label/label";
-import { MagnifyingGlassIcon } from "@phosphor-icons/react/dist/csr/MagnifyingGlass";
-import { PaperclipIcon } from "@phosphor-icons/react/dist/csr/Paperclip";
-import { PaperPlaneTiltIcon } from "@phosphor-icons/react/dist/csr/PaperPlaneTilt";
-import { ArrowUpIcon } from "@phosphor-icons/react/dist/csr/ArrowUp";
+import { IconArrowUp, IconPaperclip, IconSearch, IconSendTiltFill } from "fyicons";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import * as stylex from "@stylexjs/stylex";
 import { useState, type ReactNode } from "react";
@@ -44,7 +41,7 @@ export const Playground: Story = {
 				<InputGroup.Root {...args}>
 					<InputGroup.Input placeholder="Search by name…" />
 					<InputGroup.Addon>
-						<MagnifyingGlassIcon aria-hidden />
+						<IconSearch size="1em" aria-hidden />
 					</InputGroup.Addon>
 					<InputGroup.Addon position="end">⌘ K</InputGroup.Addon>
 				</InputGroup.Root>
@@ -66,7 +63,7 @@ export const Sizes: Story = {
 						<InputGroup.Root size={size}>
 							<InputGroup.Input aria-label={`${size} input group`} defaultValue="Search projects" />
 							<InputGroup.Addon position="start">
-								<MagnifyingGlassIcon aria-hidden />
+								<IconSearch size="1em" aria-hidden />
 							</InputGroup.Addon>
 							<InputGroup.Addon position="end">
 								<Button size="xs" variant="neutral">
@@ -123,7 +120,7 @@ export const Alignments: Story = {
 				<InputGroup.Root>
 					<InputGroup.Input aria-label="Inline start and end" placeholder="Search…" />
 					<InputGroup.Addon position="start">
-						<MagnifyingGlassIcon aria-hidden />
+						<IconSearch size="1em" aria-hidden />
 					</InputGroup.Addon>
 					<InputGroup.Addon position="end">⌘ K</InputGroup.Addon>
 				</InputGroup.Root>
@@ -133,7 +130,7 @@ export const Alignments: Story = {
 				<InputGroup.Root>
 					<InputGroup.Input aria-label="Start only input" placeholder="Search…" />
 					<InputGroup.Addon position="start">
-						<MagnifyingGlassIcon aria-hidden />
+						<IconSearch size="1em" aria-hidden />
 					</InputGroup.Addon>
 				</InputGroup.Root>
 			</State>
@@ -158,14 +155,18 @@ export const Alignments: Story = {
 					<InputGroup.Footer>
 						<InputGroup.Actions>
 							<IconButton
-								icon={<PaperclipIcon aria-hidden />}
+								icon={<IconPaperclip size="1em" aria-hidden />}
 								label="Attach a file"
 								variant="ghost"
 								size="sm"
 							/>
 						</InputGroup.Actions>
 						<InputGroup.Actions>
-							<IconButton icon={<ArrowUpIcon aria-hidden />} label="Send message" size="sm" />
+							<IconButton
+								icon={<IconArrowUp size="1em" aria-hidden />}
+								label="Send message"
+								size="sm"
+							/>
 						</InputGroup.Actions>
 					</InputGroup.Footer>
 				</InputGroup.Root>
@@ -183,12 +184,16 @@ export const Alignments: Story = {
 					/>
 					<InputGroup.Footer>
 						<InputGroup.Actions>
-							<Button startSlot={<PaperclipIcon aria-hidden />} size="sm" variant="neutral">
+							<Button
+								startSlot={<IconPaperclip size="1em" aria-hidden />}
+								size="sm"
+								variant="neutral"
+							>
 								Attach
 							</Button>
 						</InputGroup.Actions>
 						<InputGroup.Actions>
-							<Button startSlot={<PaperPlaneTiltIcon aria-hidden weight="fill" />} size="sm">
+							<Button startSlot={<IconSendTiltFill size="1em" aria-hidden />} size="sm">
 								Send
 							</Button>
 						</InputGroup.Actions>

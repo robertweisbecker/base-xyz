@@ -1,5 +1,4 @@
-import { BellIcon } from "@phosphor-icons/react/dist/csr/Bell";
-import { CubeIcon } from "@phosphor-icons/react/dist/csr/Cube";
+import { IconBell, IconCube } from "fyicons";
 import * as stylex from "@stylexjs/stylex";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { Button } from "@/components/button/button";
@@ -13,8 +12,8 @@ import { Navbar } from "./navbar";
 
 const slotOptions = {
 	None: undefined,
-	Cube: <CubeIcon aria-hidden />,
-	Bell: <BellIcon aria-hidden />,
+	Cube: <IconCube size="1em" aria-hidden />,
+	Bell: <IconBell size="1em" aria-hidden />,
 };
 
 const meta: Meta<typeof Navbar> = {
@@ -71,7 +70,7 @@ export const Examples: Story = {
 					position="sticky"
 					start={
 						<a href="#product" {...stylex.props(styles.brand, focusRing.offset)}>
-							<CubeIcon aria-hidden size={18} weight="duotone" />
+							<IconCube aria-hidden size={18} />
 							Acme
 						</a>
 					}

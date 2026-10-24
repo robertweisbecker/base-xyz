@@ -1,12 +1,14 @@
-import { BellIcon } from "@phosphor-icons/react/dist/csr/Bell";
-import { BellSlashIcon } from "@phosphor-icons/react/dist/csr/BellSlash";
-import { PushPinSimpleIcon } from "@phosphor-icons/react/dist/csr/PushPinSimple";
-import { TextAlignCenterIcon } from "@phosphor-icons/react/dist/csr/TextAlignCenter";
-import { TextAlignLeftIcon } from "@phosphor-icons/react/dist/csr/TextAlignLeft";
-import { TextAlignRightIcon } from "@phosphor-icons/react/dist/csr/TextAlignRight";
-import { TextBIcon } from "@phosphor-icons/react/dist/csr/TextB";
-import { TextItalicIcon } from "@phosphor-icons/react/dist/csr/TextItalic";
-import { TextUnderlineIcon } from "@phosphor-icons/react/dist/csr/TextUnderline";
+import {
+	IconBell,
+	IconBellSlash,
+	IconItalic,
+	IconPin,
+	IconTextAlignCenter,
+	IconTextAlignEnd,
+	IconTextAlignStart,
+	IconTextBold,
+	IconTextUnderline,
+} from "fyicons";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import * as stylex from "@stylexjs/stylex";
 import { Heading } from "@/components/heading/heading";
@@ -17,10 +19,10 @@ import { Toggle, ToggleGroup, type ToggleProps, type ToggleVariant } from "./tog
 
 const iconOptions = {
 	None: undefined,
-	Pin: <PushPinSimpleIcon aria-hidden />,
-	"Pin Fill": <PushPinSimpleIcon aria-hidden weight="duotone" />,
-	Bell: <BellIcon aria-hidden />,
-	"Bell slash": <BellSlashIcon aria-hidden weight="duotone" />,
+	Pin: <IconPin size="1em" aria-hidden />,
+	"Pin Fill": <IconPin size="1em" aria-hidden />,
+	Bell: <IconBell size="1em" aria-hidden />,
+	"Bell slash": <IconBellSlash size="1em" aria-hidden />,
 };
 
 const variants: ToggleVariant[] = [
@@ -113,19 +115,19 @@ function AlignmentToggles({ variant }: { variant?: ToggleVariant }) {
 	return (
 		<>
 			<Toggle
-				icon={<TextAlignLeftIcon aria-hidden />}
+				icon={<IconTextAlignStart size="1em" aria-hidden />}
 				label="Align left"
 				value="left"
 				variant={variant}
 			/>
 			<Toggle
-				icon={<TextAlignCenterIcon aria-hidden />}
+				icon={<IconTextAlignCenter size="1em" aria-hidden />}
 				label="Align center"
 				value="center"
 				variant={variant}
 			/>
 			<Toggle
-				icon={<TextAlignRightIcon aria-hidden />}
+				icon={<IconTextAlignEnd size="1em" aria-hidden />}
 				label="Align right"
 				value="right"
 				variant={variant}
@@ -138,19 +140,19 @@ function FormattingToggles({ variant }: { variant?: ToggleVariant }) {
 	return (
 		<>
 			<Toggle
-				icon={<TextBIcon aria-hidden weight="bold" />}
+				icon={<IconTextBold size="1em" aria-hidden />}
 				label="Bold"
 				value="bold"
 				variant={variant}
 			/>
 			<Toggle
-				icon={<TextItalicIcon aria-hidden />}
+				icon={<IconItalic size="1em" aria-hidden />}
 				label="Italic"
 				value="italic"
 				variant={variant}
 			/>
 			<Toggle
-				icon={<TextUnderlineIcon aria-hidden />}
+				icon={<IconTextUnderline size="1em" aria-hidden />}
 				label="Underline"
 				value="underline"
 				variant={variant}
@@ -304,31 +306,31 @@ export const SizesAndIcons: Story = {
 					</Text>
 					<Stack align="center" gap={3} orientation="horizontal" wrap="wrap">
 						<Toggle
-							startSlot={<BellSlashIcon aria-hidden />}
-							pressedIcon={<BellIcon aria-hidden weight="duotone" />}
+							startSlot={<IconBellSlash size="1em" aria-hidden />}
+							pressedIcon={<IconBell size="1em" aria-hidden />}
 							size={size}
 						>
 							Notifications
 						</Toggle>
 						<Toggle
 							defaultPressed
-							startSlot={<BellSlashIcon aria-hidden />}
-							pressedIcon={<BellIcon aria-hidden weight="duotone" />}
+							startSlot={<IconBellSlash size="1em" aria-hidden />}
+							pressedIcon={<IconBell size="1em" aria-hidden />}
 							size={size}
 						>
 							Notifications
 						</Toggle>
 						<Toggle
-							icon={<BellSlashIcon aria-hidden weight="regular" />}
+							icon={<IconBellSlash size="1em" aria-hidden />}
 							label="Notifications"
-							pressedIcon={<BellIcon aria-hidden weight="duotone" />}
+							pressedIcon={<IconBell size="1em" aria-hidden />}
 							size={size}
 						/>
 						<Toggle
 							defaultPressed
-							icon={<BellSlashIcon aria-hidden />}
+							icon={<IconBellSlash size="1em" aria-hidden />}
 							label="Notifications"
-							pressedIcon={<BellIcon aria-hidden weight="duotone" />}
+							pressedIcon={<IconBell size="1em" aria-hidden />}
 							size={size}
 						/>
 					</Stack>

@@ -1,6 +1,4 @@
-import { ArrowRightIcon } from "@phosphor-icons/react/dist/csr/ArrowRight";
-import { CheckCircleIcon } from "@phosphor-icons/react/dist/csr/CheckCircle";
-import { InfoIcon } from "@phosphor-icons/react/dist/csr/Info";
+import { IconArrowRight, IconCircleCheck, IconInfo } from "fyicons";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { Box, Stack } from "@/components/layout/layout";
 import { Separator } from "@/components/separator/separator";
@@ -9,9 +7,9 @@ import { List, type ListItemProps, type ListRootProps } from ".";
 
 const markerOptions = {
 	None: undefined,
-	Arrow: <ArrowRightIcon aria-hidden weight="bold" />,
-	Check: <CheckCircleIcon aria-hidden weight="duotone" />,
-	Information: <InfoIcon aria-hidden weight="duotone" />,
+	Arrow: <IconArrowRight size="1em" aria-hidden />,
+	Check: <IconCircleCheck size="1em" aria-hidden />,
+	Information: <IconInfo size="1em" aria-hidden />,
 };
 
 type ListStoryArgs = ListRootProps & Pick<ListItemProps, "marker">;
@@ -112,14 +110,14 @@ export const Examples: Story = {
 			<Separator />
 			<Example label="Custom item markers">
 				<List.Root data-testid="custom-marker-list-example" size="3">
-					<List.Item marker={<CheckCircleIcon aria-hidden weight="duotone" />}>
+					<List.Item marker={<IconCircleCheck size="1em" aria-hidden />}>
 						TypeScript passes.
 					</List.Item>
-					<List.Item marker={<CheckCircleIcon aria-hidden weight="duotone" />} color="success">
+					<List.Item marker={<IconCircleCheck size="1em" aria-hidden />} color="success">
 						The production build completed successfully, including a deliberately long line that
 						wraps beneath its text rather than beneath the icon marker.
 					</List.Item>
-					<List.Item marker={<ArrowRightIcon aria-hidden weight="bold" />} fontWeight="semibold">
+					<List.Item marker={<IconArrowRight size="1em" aria-hidden />} fontWeight="semibold">
 						Ready to publish.
 					</List.Item>
 				</List.Root>

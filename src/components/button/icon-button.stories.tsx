@@ -1,6 +1,4 @@
-import { PencilSimpleIcon } from "@phosphor-icons/react/dist/csr/PencilSimple";
-import { PlusIcon } from "@phosphor-icons/react/dist/csr/Plus";
-import { TrashIcon } from "@phosphor-icons/react/dist/csr/Trash";
+import { IconPencil, IconPlusThick, IconTrash } from "fyicons";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import * as stylex from "@stylexjs/stylex";
 import { Stack } from "@/components/layout/layout";
@@ -10,9 +8,9 @@ import { tokens } from "@/theme/tokens.stylex";
 import { IconButton } from "./button";
 
 const iconOptions = {
-	Add: <PlusIcon aria-hidden weight="bold" />,
-	Edit: <PencilSimpleIcon aria-hidden weight="bold" />,
-	Delete: <TrashIcon aria-hidden weight="bold" />,
+	Add: <IconPlusThick size="1em" aria-hidden />,
+	Edit: <IconPencil size="1em" aria-hidden />,
+	Delete: <IconTrash size="1em" aria-hidden />,
 };
 
 const sizes = ["xs", "sm", "md", "lg"] as const;
@@ -90,7 +88,7 @@ export const SizesAndShapes: Story = {
 									{size}
 								</Text>
 								<IconButton
-									icon={<PlusIcon aria-hidden weight="bold" />}
+									icon={<IconPlusThick size="1em" aria-hidden />}
 									label={`Add item (${size}, ${shape})`}
 									shape={shape}
 									size={size}
@@ -118,7 +116,7 @@ export const States: Story = {
 					</Text>
 					<StateSpecimen label="Enabled">
 						<IconButton
-							icon={<PencilSimpleIcon aria-hidden weight="bold" />}
+							icon={<IconPencil size="1em" aria-hidden />}
 							label={`Edit project (${variant})`}
 							variant={variant}
 						/>
@@ -126,14 +124,14 @@ export const States: Story = {
 					<StateSpecimen label="Disabled">
 						<IconButton
 							disabled
-							icon={<PencilSimpleIcon aria-hidden weight="bold" />}
+							icon={<IconPencil size="1em" aria-hidden />}
 							label={`Edit project (${variant}, disabled)`}
 							variant={variant}
 						/>
 					</StateSpecimen>
 					<StateSpecimen label="Loading">
 						<IconButton
-							icon={<PencilSimpleIcon aria-hidden weight="bold" />}
+							icon={<IconPencil size="1em" aria-hidden />}
 							label={`Edit project (${variant}, loading)`}
 							loading
 							variant={variant}

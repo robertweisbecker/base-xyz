@@ -9,7 +9,7 @@ import { parseDemoItemString, TASK_TYPE, TRANSFER_ITEM } from "../demo-data";
 import { DemoCard, DemoDropZone, DemoHandle, DemoInstructions, DemoPanel } from "../demo-parts";
 import { demoStyles } from "../drag-and-drop-demo.stylex";
 import { EmptyState } from "@/components/empty-state/empty-state";
-import { TrayIcon } from "@phosphor-icons/react";
+import { IconInbox } from "fyicons";
 
 type AccessibleLocation = "source" | "planning" | "release";
 
@@ -74,7 +74,7 @@ export function ReactAriaAccessibilityDemo() {
 							size="sm"
 							title="No more items"
 							description="Tray is empty."
-							icon={<TrayIcon weight="duotone" />}
+							icon={<IconInbox size="1em" />}
 						/>
 					)}
 				</div>

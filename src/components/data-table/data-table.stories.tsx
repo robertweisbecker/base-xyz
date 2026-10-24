@@ -21,17 +21,18 @@ import {
 } from "./data-table";
 import { Loader } from "@/components/loader";
 import { Button } from "@/components/button";
-import { CaretRightIcon } from "@phosphor-icons/react/dist/csr/CaretRight";
-import { CheckCircleIcon } from "@phosphor-icons/react/dist/csr/CheckCircle";
-import { XCircleIcon } from "@phosphor-icons/react/dist/csr/XCircle";
 import {
-	ArrowClockwiseIcon,
-	CopyIcon,
-	CubeFocusIcon,
-	GearFineIcon,
-	ScrollIcon,
-	TrashIcon,
-} from "@phosphor-icons/react";
+	IconArrowClockwise,
+	IconChevronRight,
+	IconCircleCheck,
+	IconCircleX,
+	IconCircleXFill,
+	IconCopy,
+	IconGear,
+	IconScroll,
+	IconTrash,
+} from "fyicons";
+import { CubeFocusIcon } from "@phosphor-icons/react";
 import { Avatar } from "@/components/avatar/avatar";
 import { Stack } from "@/components/layout/layout";
 
@@ -124,7 +125,7 @@ const commandGroups: DeploymentCommandGroup[] = [
 				group: "Deployments",
 				keywords: "new create publish deploy",
 				shortcut: "N",
-				icon: <CheckCircleIcon aria-hidden />,
+				icon: <IconCircleCheck size="1em" aria-hidden />,
 			},
 			{
 				id: "retry-failed",
@@ -132,7 +133,7 @@ const commandGroups: DeploymentCommandGroup[] = [
 				description: "Queue a redeploy for every failed target.",
 				group: "Maintenance",
 				keywords: "failed retry rebuild",
-				icon: <XCircleIcon aria-hidden />,
+				icon: <IconCircleX size="1em" aria-hidden />,
 			},
 		],
 	},
@@ -146,7 +147,7 @@ const commandGroups: DeploymentCommandGroup[] = [
 				description: "View the logs for the selected deployment.",
 				group: "Admin",
 				keywords: "logs view",
-				icon: <ScrollIcon aria-hidden />,
+				icon: <IconScroll size="1em" aria-hidden />,
 			},
 			{
 				id: "open-settings",
@@ -154,7 +155,7 @@ const commandGroups: DeploymentCommandGroup[] = [
 				description: "Manage environments and visibility defaults.",
 				group: "Maintenance",
 				keywords: "settings environments visibility",
-				icon: <GearFineIcon aria-hidden />,
+				icon: <IconGear size="1em" aria-hidden />,
 			},
 		],
 	},
@@ -530,19 +531,19 @@ function DeploymentTable(args: Partial<DataTableProps<Deployment>>) {
 				{
 					id: "copy-id",
 					label: "Copy deployment ID",
-					icon: <CopyIcon weight="duotone" />,
+					icon: <IconCopy size="1em" />,
 					onSelect: () => navigator.clipboard?.writeText(row.original.id),
 				},
 				{
 					id: "redeploy",
 					label: "Redeploy",
-					icon: <ArrowClockwiseIcon />,
+					icon: <IconArrowClockwise size="1em" />,
 					disabled: row.original.status === "Building",
 				},
 				{
 					id: "delete",
 					label: "Delete deployment",
-					icon: <TrashIcon weight="duotone" />,
+					icon: <IconTrash size="1em" />,
 					variant: "danger",
 				},
 			]}
@@ -575,7 +576,9 @@ function DeploymentCommandPalette() {
 									startSlot={command.icon}
 									description={command.description}
 									shortcut={command.shortcut}
-									endSlot={!command.shortcut ? <CaretRightIcon aria-hidden /> : undefined}
+									endSlot={
+										!command.shortcut ? <IconChevronRight size="1em" aria-hidden /> : undefined
+									}
 								>
 									{command.title}
 								</CommandPalette.Item>
@@ -609,7 +612,7 @@ function commandToStringValue(item: DeploymentCommand | DeploymentCommandGroup) 
 function StatusBadge({ status }: { status: Deployment["status"] }) {
 	if (status === "Failed") {
 		return (
-			<Badge hue="error" startSlot={<XCircleIcon aria-hidden weight="fill" />}>
+			<Badge hue="error" startSlot={<IconCircleXFill size="1em" aria-hidden />}>
 				Failed
 			</Badge>
 		);

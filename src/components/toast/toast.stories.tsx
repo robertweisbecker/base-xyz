@@ -1,12 +1,14 @@
-import { CheckIcon } from "@phosphor-icons/react/dist/csr/Check";
-import { CheckCircleIcon } from "@phosphor-icons/react/dist/csr/CheckCircle";
-import { CopyIcon } from "@phosphor-icons/react/dist/csr/Copy";
-import { FloppyDiskIcon } from "@phosphor-icons/react/dist/csr/FloppyDisk";
-import { PaperPlaneTiltIcon } from "@phosphor-icons/react/dist/csr/PaperPlaneTilt";
-import { PencilSimpleIcon } from "@phosphor-icons/react/dist/csr/PencilSimple";
-import { PlugIcon } from "@phosphor-icons/react/dist/csr/Plug";
-import { WarningCircleIcon } from "@phosphor-icons/react/dist/csr/WarningCircle";
-import { XIcon } from "@phosphor-icons/react/dist/csr/X";
+import {
+	IconCheckThick,
+	IconCircleAlertFill,
+	IconCircleCheckFill,
+	IconCopy,
+	IconFloppyDisk,
+	IconPencil,
+	IconPlug,
+	IconSendTilt,
+	IconXmark,
+} from "fyicons";
 import * as stylex from "@stylexjs/stylex";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { useEffect, useRef, useState } from "react";
@@ -190,7 +192,7 @@ function DefaultAnchoredExample({ _side, _align }: Pick<StoryArgs, "_side" | "_a
 				variant: "default",
 				tone: "success",
 				status: "success",
-				icon: <CheckCircleIcon aria-hidden size={20} weight="fill" />,
+				icon: <IconCircleCheckFill aria-hidden size={20} />,
 				dismissible: true,
 			},
 		});
@@ -198,7 +200,11 @@ function DefaultAnchoredExample({ _side, _align }: Pick<StoryArgs, "_side" | "_a
 
 	return (
 		<AnchoredStage hint="A standard toast positioned relative to its trigger.">
-			<Button ref={anchorRef} onClick={showFeedback} startSlot={<FloppyDiskIcon aria-hidden />}>
+			<Button
+				ref={anchorRef}
+				onClick={showFeedback}
+				startSlot={<IconFloppyDisk size="1em" aria-hidden />}
+			>
 				Save preferences
 			</Button>
 		</AnchoredStage>
@@ -242,7 +248,11 @@ function TooltipAnchoredExample({ _side, _align }: Pick<StoryArgs, "_side" | "_a
 					render={
 						<IconButton
 							icon={
-								feedbackVisible ? <CheckIcon aria-hidden weight="bold" /> : <CopyIcon aria-hidden />
+								feedbackVisible ? (
+									<IconCheckThick size="1em" aria-hidden />
+								) : (
+									<IconCopy size="1em" aria-hidden />
+								)
 							}
 							label="Copy design system link"
 							onClick={copyLink}
@@ -296,7 +306,7 @@ function PopoverAnchoredExample({ _side, _align }: Pick<StoryArgs, "_side" | "_a
 					variant: "popover",
 					tone: "error",
 					status: "error",
-					icon: <WarningCircleIcon aria-hidden size={20} weight="fill" />,
+					icon: <IconCircleAlertFill aria-hidden size={20} />,
 					dismissible: true,
 				},
 			});
@@ -309,7 +319,7 @@ function PopoverAnchoredExample({ _side, _align }: Pick<StoryArgs, "_side" | "_a
 				ref={anchorRef}
 				disabled={isSubmitting}
 				onClick={submitForm}
-				startSlot={isSubmitting ? <Loader aria-hidden /> : <PaperPlaneTiltIcon aria-hidden />}
+				startSlot={isSubmitting ? <Loader aria-hidden /> : <IconSendTilt size="1em" aria-hidden />}
 			>
 				{isSubmitting ? "Submitting…" : "Submit changes"}
 			</Button>
@@ -422,7 +432,7 @@ function PillAnchoredExample({ _side, _align }: Pick<StoryArgs, "_side" | "_alig
 					nextStatus === "success" ? (
 						<EditingProgressGauge complete value={100} />
 					) : (
-						<PlugIcon aria-hidden size={16} weight="fill" />
+						<IconPlug aria-hidden size={16} />
 					),
 				dismissible: false,
 			},
@@ -436,7 +446,7 @@ function PillAnchoredExample({ _side, _align }: Pick<StoryArgs, "_side" | "_alig
 					ref={anchorRef}
 					disabled={status === "ongoing"}
 					onClick={startGoal}
-					startSlot={<PencilSimpleIcon aria-hidden />}
+					startSlot={<IconPencil size="1em" aria-hidden />}
 				>
 					Start goal
 				</Button>
@@ -458,7 +468,7 @@ function PillAnchoredExample({ _side, _align }: Pick<StoryArgs, "_side" | "_alig
 					variant="error"
 					disabled={status !== "ongoing"}
 					onClick={() => finishGoal("error")}
-					startSlot={<PlugIcon aria-hidden />}
+					startSlot={<IconPlug size="1em" aria-hidden />}
 				>
 					Disconnect
 				</Button>
@@ -490,7 +500,7 @@ function DeduplicatedAnchoredExample({ _side, _align }: Pick<StoryArgs, "_side" 
 				variant: "default",
 				tone: "accent",
 				status: "success",
-				icon: <CheckCircleIcon aria-hidden size={20} weight="fill" />,
+				icon: <IconCircleCheckFill aria-hidden size={20} />,
 				dismissible: true,
 			},
 		});
@@ -498,7 +508,11 @@ function DeduplicatedAnchoredExample({ _side, _align }: Pick<StoryArgs, "_side" 
 
 	return (
 		<AnchoredStage hint="Click repeatedly: the stable ID updates one toast and replays its attention animation.">
-			<Button ref={anchorRef} onClick={saveDraft} startSlot={<FloppyDiskIcon aria-hidden />}>
+			<Button
+				ref={anchorRef}
+				onClick={saveDraft}
+				startSlot={<IconFloppyDisk size="1em" aria-hidden />}
+			>
 				Save draft
 			</Button>
 		</AnchoredStage>
@@ -531,7 +545,7 @@ function ToastList({ swipeDirection }: { swipeDirection: SwipeDirection }) {
 					<Toast.Description />
 				</Toast.Text>
 				<Toast.Close aria-label="Dismiss notification">
-					<XIcon aria-hidden size={16} weight="bold" />
+					<IconXmark aria-hidden size={16} />
 				</Toast.Close>
 			</Toast.Content>
 		</Toast.Root>

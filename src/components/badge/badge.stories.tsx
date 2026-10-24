@@ -1,5 +1,4 @@
-import { CheckCircleIcon } from "@phosphor-icons/react/dist/csr/CheckCircle";
-import { WarningIcon } from "@phosphor-icons/react/dist/csr/Warning";
+import { IconCircleCheckFill, IconWarningFill } from "fyicons";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import x from "@stylexjs/atoms";
 import * as stylex from "@stylexjs/stylex";
@@ -12,8 +11,8 @@ import { Icon } from "../icons";
 
 const iconOptions = {
 	None: undefined,
-	Check: <CheckCircleIcon aria-hidden weight="fill" />,
-	Warning: <WarningIcon aria-hidden weight="fill" />,
+	Check: <IconCircleCheckFill size="1em" aria-hidden />,
+	Warning: <IconWarningFill size="1em" aria-hidden />,
 };
 
 const meta = {
@@ -125,7 +124,7 @@ export const SizesAndShapes: Story = {
 											label={`${size} ${shape} status`}
 											shape={shape}
 											size={size}
-											startSlot={<CheckCircleIcon aria-hidden weight="fill" />}
+											startSlot={<IconCircleCheckFill size="1em" aria-hidden />}
 										/>
 									) : (
 										<Badge hue="accent" shape={shape} size={size}>
@@ -161,11 +160,11 @@ export const Options: Story = {
 					Slots
 				</Text>
 				<Stack align="center" gap={3} orientation="horizontal" wrap="wrap">
-					<Badge hue="success" startSlot={<CheckCircleIcon aria-hidden weight="fill" />}>
+					<Badge hue="success" startSlot={<IconCircleCheckFill size="1em" aria-hidden />}>
 						Approved
 					</Badge>
 					<Badge
-						endSlot={<WarningIcon aria-hidden weight="fill" />}
+						endSlot={<IconWarningFill size="1em" aria-hidden />}
 						hue="warning"
 						startSlot={<Icon.Dot />}
 					>
@@ -181,13 +180,13 @@ export const Options: Story = {
 					<Badge
 						label="Approved"
 						shape="circle"
-						startSlot={<CheckCircleIcon aria-hidden weight="fill" />}
+						startSlot={<IconCircleCheckFill size="1em" aria-hidden />}
 					/>
 					<Badge
 						hue="warning"
 						label="Needs attention"
 						shape="square"
-						startSlot={<WarningIcon aria-hidden weight="fill" />}
+						startSlot={<IconWarningFill size="1em" aria-hidden />}
 					/>
 				</Stack>
 			</Stack>
@@ -216,7 +215,7 @@ export const TruncationTooltip: Story = {
 				<Badge
 					data-testid="truncated-badge"
 					hue="accent"
-					startSlot={<CheckCircleIcon aria-hidden weight="fill" />}
+					startSlot={<IconCircleCheckFill size="1em" aria-hidden />}
 				>
 					Approved for the upcoming production release
 				</Badge>

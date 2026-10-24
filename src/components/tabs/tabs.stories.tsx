@@ -1,5 +1,4 @@
-import { FolderSimpleIcon } from "@phosphor-icons/react/dist/csr/FolderSimple";
-import { GearIcon } from "@phosphor-icons/react/dist/csr/Gear";
+import { IconFolder, IconSettings } from "fyicons";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import * as stylex from "@stylexjs/stylex";
 import type { ReactNode } from "react";
@@ -9,8 +8,8 @@ import { Tabs, type TabsSize, type TabsVariant } from "./tabs";
 
 const iconOptions = {
 	None: undefined,
-	Folder: <FolderSimpleIcon aria-hidden weight="duotone" />,
-	Settings: <GearIcon aria-hidden weight="duotone" />,
+	Folder: <IconFolder size="1em" aria-hidden />,
+	Settings: <IconSettings size="1em" aria-hidden />,
 };
 
 type TabsPlaygroundArgs = {
@@ -36,7 +35,7 @@ const meta = {
 		endSlot: undefined,
 		orientation: "horizontal",
 		size: "md",
-		startSlot: <FolderSimpleIcon aria-hidden weight="duotone" />,
+		startSlot: <IconFolder size="1em" aria-hidden />,
 		variant: "default",
 	},
 	argTypes: {
@@ -166,10 +165,10 @@ export const States: Story = {
 	render: () => (
 		<Tabs.Root defaultValue="selected">
 			<Tabs.List>
-				<Tabs.Tab startSlot={<FolderSimpleIcon aria-hidden weight="duotone" />} value="selected">
+				<Tabs.Tab startSlot={<IconFolder size="1em" aria-hidden />} value="selected">
 					Selected
 				</Tabs.Tab>
-				<Tabs.Tab startSlot={<GearIcon aria-hidden weight="duotone" />} value="unselected">
+				<Tabs.Tab startSlot={<IconSettings size="1em" aria-hidden />} value="unselected">
 					Unselected
 				</Tabs.Tab>
 				<Tabs.Tab disabled value="disabled">

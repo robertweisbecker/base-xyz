@@ -1,18 +1,20 @@
 import { Menu as BaseMenu } from "@base-ui/react/menu";
-import { ArchiveIcon } from "@phosphor-icons/react/dist/csr/Archive";
-import { BookmarkSimpleIcon } from "@phosphor-icons/react/dist/csr/BookmarkSimple";
-import { BroadcastIcon } from "@phosphor-icons/react/dist/csr/Broadcast";
-import { CaretRightIcon } from "@phosphor-icons/react/dist/csr/CaretRight";
-import { ChatCircleIcon } from "@phosphor-icons/react/dist/csr/ChatCircle";
-import { CopyIcon } from "@phosphor-icons/react/dist/csr/Copy";
-import { DotsThreeIcon } from "@phosphor-icons/react/dist/csr/DotsThree";
-import { DownloadSimpleIcon } from "@phosphor-icons/react/dist/csr/DownloadSimple";
-import { EnvelopeSimpleIcon } from "@phosphor-icons/react/dist/csr/EnvelopeSimple";
-import { FolderSimpleIcon } from "@phosphor-icons/react/dist/csr/FolderSimple";
-import { LinkSimpleIcon } from "@phosphor-icons/react/dist/csr/LinkSimple";
-import { PencilSimpleIcon } from "@phosphor-icons/react/dist/csr/PencilSimple";
-import { PrinterIcon } from "@phosphor-icons/react/dist/csr/Printer";
-import { ShareNetworkIcon } from "@phosphor-icons/react/dist/csr/ShareNetwork";
+import {
+	IconArchive,
+	IconBookmark,
+	IconBroadcastLive,
+	IconChatRound,
+	IconChevronRight,
+	IconCopy,
+	IconDownload,
+	IconEllipsis,
+	IconEnvelopeSimple,
+	IconFolder,
+	IconLink,
+	IconPencil,
+	IconPrinter,
+	IconShareAndroid,
+} from "fyicons";
 import * as stylex from "@stylexjs/stylex";
 import type { StyleXStyles } from "@stylexjs/stylex";
 import {
@@ -98,63 +100,58 @@ export function MorphingMenuExample({
 			defaultOpen={defaultOpen}
 			rootRowCount={6}
 			trigger={
-				<DotsThreeIcon
-					aria-hidden
-					size={20}
-					weight="bold"
-					{...stylex.props(morphingMenuStyles.triggerIcon)}
-				/>
+				<IconEllipsis aria-hidden size={20} {...stylex.props(morphingMenuStyles.triggerIcon)} />
 			}
 			triggerLabel={label}
 		>
 			<Item>
-				<MenuRow icon={<PencilSimpleIcon />} label="Edit" />
+				<MenuRow icon={<IconPencil size="1em" />} label="Edit" />
 			</Item>
 			<Item>
-				<MenuRow icon={<CopyIcon />} label="Copy" />
+				<MenuRow icon={<IconCopy size="1em" />} label="Copy" />
 			</Item>
 
 			<Submenu
 				label="Share"
 				renderRow={(back) => (
-					<MenuRow back={back} icon={<ShareNetworkIcon />} label="Share" submenu />
+					<MenuRow back={back} icon={<IconShareAndroid size="1em" />} label="Share" submenu />
 				)}
 			>
 				<Item>
-					<MenuRow icon={<ChatCircleIcon />} label="Messages" />
+					<MenuRow icon={<IconChatRound size="1em" />} label="Messages" />
 				</Item>
 				<Item>
-					<MenuRow icon={<EnvelopeSimpleIcon />} label="Email" />
+					<MenuRow icon={<IconEnvelopeSimple size="1em" />} label="Email" />
 				</Item>
 				<Item>
-					<MenuRow icon={<LinkSimpleIcon />} label="Copy link" />
+					<MenuRow icon={<IconLink size="1em" />} label="Copy link" />
 				</Item>
 				<Submenu
 					label="More"
 					renderRow={(back) => (
-						<MenuRow back={back} icon={<DotsThreeIcon />} label="More" submenu />
+						<MenuRow back={back} icon={<IconEllipsis size="1em" />} label="More" submenu />
 					)}
 				>
 					<Item>
-						<MenuRow icon={<BroadcastIcon />} label="AirDrop" />
+						<MenuRow icon={<IconBroadcastLive size="1em" />} label="AirDrop" />
 					</Item>
 					<Item>
-						<MenuRow icon={<FolderSimpleIcon />} label="Save to files" />
+						<MenuRow icon={<IconFolder size="1em" />} label="Save to files" />
 					</Item>
 					<Item>
-						<MenuRow icon={<BookmarkSimpleIcon />} label="Add bookmark" />
+						<MenuRow icon={<IconBookmark size="1em" />} label="Add bookmark" />
 					</Item>
 				</Submenu>
 			</Submenu>
 
 			<Item>
-				<MenuRow icon={<DownloadSimpleIcon />} label="Download" />
+				<MenuRow icon={<IconDownload size="1em" />} label="Download" />
 			</Item>
 			<Item>
-				<MenuRow icon={<PrinterIcon />} label="Print" />
+				<MenuRow icon={<IconPrinter size="1em" />} label="Print" />
 			</Item>
 			<Item>
-				<MenuRow icon={<ArchiveIcon />} label="Archive" />
+				<MenuRow icon={<IconArchive size="1em" />} label="Archive" />
 			</Item>
 		</Root>
 	);
@@ -418,10 +415,9 @@ function MenuRow({ back, icon, label, submenu }: MenuRowProps) {
 				{label}
 			</span>
 			{submenu ? (
-				<CaretRightIcon
+				<IconChevronRight
 					aria-hidden
 					size={16}
-					weight="bold"
 					{...stylex.props(morphingMenuStyles.chevron, back && morphingMenuStyles.chevronBack)}
 				/>
 			) : null}

@@ -1,5 +1,5 @@
 import { ChatCircleDotsIcon } from "@phosphor-icons/react/dist/csr/ChatCircleDots";
-import { GitPullRequestIcon } from "@phosphor-icons/react/dist/csr/GitPullRequest";
+import { IconGitPullRequest } from "fyicons";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import {
 	Badge,
@@ -116,7 +116,7 @@ export const Examples: Story = {
 					<AgentActionApproval.Content>
 						<AgentActionApproval.Summary>
 							<AgentActionApproval.Icon>
-								<GitPullRequestIcon aria-hidden size={18} />
+								<IconGitPullRequest aria-hidden size={18} />
 							</AgentActionApproval.Icon>
 							<AgentActionApproval.SummaryContent>
 								<AgentActionApproval.Action>Open a pull request</AgentActionApproval.Action>

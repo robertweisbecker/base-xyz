@@ -12,7 +12,7 @@ import {
 import * as stylex from "@stylexjs/stylex";
 import { Tabs as BaseTabs } from "@base-ui/react/tabs";
 import { useMediaQuery } from "@base-ui/react/unstable-use-media-query";
-import { WarningIcon } from "@phosphor-icons/react/dist/csr/Warning";
+import { IconWarningFill } from "fyicons";
 import { Icon } from "@/components/icons";
 import { fontWeightStyles, textStyles, textTruncationStyles } from "@/components/text/text.stylex";
 import { VisuallyHidden } from "@/components/visually-hidden/visually-hidden";
@@ -558,7 +558,7 @@ export function Marker({ children, className, style, xstyle, ...props }: Stepper
 		status === "completed" ? (
 			<Icon.Checkmark size="1em" strokeWidth={3} />
 		) : status === "invalid" ? (
-			<WarningIcon aria-hidden size="1em" weight="fill" />
+			<IconWarningFill aria-hidden size="1em" />
 		) : (
 			children
 		);

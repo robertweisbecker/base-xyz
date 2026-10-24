@@ -1,5 +1,4 @@
-import { InfoIcon } from "@phosphor-icons/react/dist/csr/Info";
-import { QuestionIcon } from "@phosphor-icons/react/dist/csr/Question";
+import { IconCircleQuestion, IconInfo } from "fyicons";
 import type { ReactNode } from "react";
 import { IconButton, type ButtonSize, type IconButtonProps } from "@/components/button/button";
 import { Popover } from "@/components/popover/popover";
@@ -23,9 +22,9 @@ export function InfoTip({ content, help = false, size = "sm", ...props }: InfoTi
 					<IconButton
 						icon={
 							help ? (
-								<QuestionIcon aria-hidden weight="duotone" />
+								<IconCircleQuestion size="1em" aria-hidden />
 							) : (
-								<InfoIcon aria-hidden weight="duotone" />
+								<IconInfo size="1em" aria-hidden />
 							)
 						}
 						label={label}

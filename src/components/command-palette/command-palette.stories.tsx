@@ -1,11 +1,5 @@
-import {
-	BookOpenTextIcon,
-	CirclesThreePlusIcon,
-	MagnifyingGlassIcon,
-	NotificationIcon,
-	ToolboxIcon,
-	UserCircleGearIcon,
-} from "@phosphor-icons/react";
+import { IconAppsPlus, IconBookOpen, IconSearch, IconToolbox } from "fyicons";
+import { NotificationIcon, UserCircleGearIcon } from "@phosphor-icons/react";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { useState } from "react";
 import { Kbd } from "@/components/kbd/kbd";
@@ -41,7 +35,7 @@ const commandGroups: CommandGroup[] = [
 				group: "Suggestions",
 				keywords: "new add worker application",
 				shortcut: "N",
-				icon: <CirclesThreePlusIcon weight="duotone" aria-hidden />,
+				icon: <IconAppsPlus size="1em" aria-hidden />,
 			},
 			{
 				id: "search-docs",
@@ -50,7 +44,7 @@ const commandGroups: CommandGroup[] = [
 				group: "Suggestions",
 				keywords: "docs help reference",
 				shortcut: "/",
-				icon: <BookOpenTextIcon weight="duotone" aria-hidden />,
+				icon: <IconBookOpen size="1em" aria-hidden />,
 			},
 		],
 	},
@@ -81,7 +75,7 @@ const commandGroups: CommandGroup[] = [
 				group: "Settings",
 				keywords: "preferences configure",
 				shortcut: "⌘,",
-				icon: <ToolboxIcon weight="duotone" aria-hidden />,
+				icon: <IconToolbox size="1em" aria-hidden />,
 			},
 		],
 	},
@@ -222,9 +216,7 @@ function CommandPaletteExample({ shortcut = false }: { shortcut?: boolean }) {
 		<Stack align="start" gap={3}>
 			<CommandPalette.Root
 				shortcut={shortcut}
-				trigger={
-					<CommandPalette.Trigger startSlot={<MagnifyingGlassIcon weight="bold" aria-hidden />} />
-				}
+				trigger={<CommandPalette.Trigger startSlot={<IconSearch size="1em" aria-hidden />} />}
 				items={commandGroups}
 				itemToStringValue={commandToStringValue}
 			>

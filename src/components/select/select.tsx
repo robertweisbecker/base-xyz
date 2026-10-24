@@ -1,7 +1,5 @@
 import { Select as BaseSelect } from "@base-ui/react/select";
-import { CaretDownIcon } from "@phosphor-icons/react/dist/csr/CaretDown";
-import { CaretUpIcon } from "@phosphor-icons/react/dist/csr/CaretUp";
-import { CaretUpDownIcon } from "@phosphor-icons/react/dist/csr/CaretUpDown";
+import { IconChevronDown, IconChevronUp, IconChevronsUpDown } from "fyicons";
 import * as stylex from "@stylexjs/stylex";
 import { createContext, useContext, type ReactNode } from "react";
 import { media } from "@/styles/constants.stylex";
@@ -108,9 +106,9 @@ export function Trigger({
 			</BaseSelect.Value>
 			<BaseSelect.Icon {...stylex.props(selectParts.triggerIcon)}>
 				{variant === "inline" ? (
-					<CaretDownIcon aria-hidden size=".875em" weight="bold" />
+					<IconChevronDown aria-hidden size=".875em" />
 				) : (
-					<CaretUpDownIcon aria-hidden size="1em" weight="bold" />
+					<IconChevronsUpDown aria-hidden size="1em" />
 				)}
 			</BaseSelect.Icon>
 		</BaseSelect.Trigger>
@@ -215,12 +213,7 @@ export function List({ ref, className, style, xstyle, ...props }: SelectListProp
 	return (
 		<>
 			<BaseSelect.ScrollUpArrow {...stylex.props(selectParts.scrollArrow, selectParts.scrollUp)}>
-				<CaretUpIcon
-					aria-hidden
-					size={14}
-					weight="bold"
-					{...stylex.props(selectParts.scrollArrowIcon)}
-				/>
+				<IconChevronUp aria-hidden size={14} {...stylex.props(selectParts.scrollArrowIcon)} />
 			</BaseSelect.ScrollUpArrow>
 			<BaseSelect.List
 				ref={ref}
@@ -231,12 +224,7 @@ export function List({ ref, className, style, xstyle, ...props }: SelectListProp
 			<BaseSelect.ScrollDownArrow
 				{...stylex.props(selectParts.scrollArrow, selectParts.scrollDown)}
 			>
-				<CaretDownIcon
-					aria-hidden
-					size={14}
-					weight="bold"
-					{...stylex.props(selectParts.scrollArrowIcon)}
-				/>
+				<IconChevronDown aria-hidden size={14} {...stylex.props(selectParts.scrollArrowIcon)} />
 			</BaseSelect.ScrollDownArrow>
 		</>
 	);
