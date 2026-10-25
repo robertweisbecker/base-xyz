@@ -14,7 +14,7 @@ export function CloseButton({
 }: CloseButtonProps) {
 	return (
 		<IconButton
-			icon={<IconXmark aria-hidden size={12} stroke="currentColor" strokeWidth={0.25} />}
+			icon={<IconXmark aria-hidden size={12} />}
 			label={label}
 			shape="circle"
 			size={size}

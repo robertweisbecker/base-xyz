@@ -137,7 +137,7 @@ export function ScrubArea({
 		>
 			{children}
 			<BaseNumberField.ScrubAreaCursor {...stylex.props(numberFieldParts.scrubCursor)}>
-				<IconArrowX aria-hidden size={24} strokeWidth={0.5} color="black" stroke="white" />
+				<IconArrowX aria-hidden size={24} color="black" />
 			</BaseNumberField.ScrubAreaCursor>
 		</BaseNumberField.ScrubArea>
 	);
