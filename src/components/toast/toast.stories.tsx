@@ -1,5 +1,5 @@
 import {
-	IconCheckThick,
+	IconCheck,
 	IconCircleAlertFill,
 	IconCircleCheckFill,
 	IconCopy,
@@ -249,7 +249,7 @@ function TooltipAnchoredExample({ _side, _align }: Pick<StoryArgs, "_side" | "_a
 						<IconButton
 							icon={
 								feedbackVisible ? (
-									<IconCheckThick size="1em" aria-hidden />
+									<IconCheck size="1em" aria-hidden />
 								) : (
 									<IconCopy size="1em" aria-hidden />
 								)

@@ -1,5 +1,5 @@
 import { NumberField as BaseNumberField } from "@base-ui/react/number-field";
-import { IconArrowX, IconMinus, IconPlusThick } from "fyicons";
+import { IconArrowX, IconMinus, IconPlus } from "fyicons";
 import * as stylex from "@stylexjs/stylex";
 import { createContext, useContext, type ComponentProps, type CSSProperties } from "react";
 import { media } from "@/styles/constants.stylex";
@@ -114,7 +114,7 @@ export function Control({
 					pressable.transition,
 				)}
 			>
-				<IconPlusThick aria-hidden size={12} />
+				<IconPlus aria-hidden size={12} />
 			</BaseNumberField.Increment>
 		</BaseNumberField.Group>
 	);

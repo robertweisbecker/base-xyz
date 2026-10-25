@@ -1,4 +1,4 @@
-import { IconArrowRight, IconPlusThick } from "fyicons";
+import { IconArrowRight, IconPlus } from "fyicons";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import type { ReactNode } from "react";
 import { CodeBlock, Collapsible, Separator } from "@/components";
@@ -87,7 +87,7 @@ export const Examples: Story = {
 						status="running"
 						title="Updating stories"
 						description="Consolidating related examples."
-						icon={<IconPlusThick size="1em" aria-hidden />}
+						icon={<IconPlus size="1em" aria-hidden />}
 						meta="8s"
 						details="Editing 4 files"
 					/>

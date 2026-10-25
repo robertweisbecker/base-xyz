@@ -2,7 +2,7 @@ import {
 	IconArrowRight,
 	IconCircleCheckFill,
 	IconInfoFill,
-	IconPlusThick,
+	IconPlus,
 	IconSearch,
 	IconWarningFill,
 } from "fyicons";
@@ -480,7 +480,7 @@ function IconographySection() {
 						<IconSearch aria-label="Search" size={28} />
 					</IconItem>
 					<IconItem name="Add">
-						<IconPlusThick aria-label="Add" size={28} />
+						<IconPlus aria-label="Add" size={28} />
 					</IconItem>
 					<IconItem name="Continue">
 						<IconArrowRight aria-label="Continue" size={28} />
@@ -499,7 +499,7 @@ function IconographySection() {
 
 			<FoundationSection
 				title="Sizing and weight"
-				description="Use 16–20px icons inside controls. Choose thick variants for emphasis and fill variants for status."
+				description="Use 16–20px icons inside controls. Use standard variants for actions and fill variants for status."
 			>
 				<div {...stylex.props(styles.iconExamples)}>
 					<div {...stylex.props(styles.iconExample)}>

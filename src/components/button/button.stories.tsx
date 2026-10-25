@@ -1,4 +1,4 @@
-import { IconArrowRight, IconPlus, IconPlusThick, IconWarning } from "fyicons";
+import { IconArrowRight, IconPlus, IconWarning } from "fyicons";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import x from "@stylexjs/atoms";
 import * as stylex from "@stylexjs/stylex";
@@ -132,11 +132,7 @@ export const SizesAndIcons: Story = {
 					</Text>
 					<Stack align="center" gap={3} orientation="horizontal" wrap="wrap">
 						<Button size={size}>Create project</Button>
-						<Button
-							size={size}
-							startSlot={<IconPlusThick size="1em" aria-hidden />}
-							variant="secondary"
-						>
+						<Button size={size} startSlot={<IconPlus size="1em" aria-hidden />} variant="secondary">
 							Create project
 						</Button>
 						<Button
@@ -211,7 +207,7 @@ function ButtonStates() {
 								loading={loading}
 								loadingText="Creating…"
 								size="md"
-								startSlot={<IconPlusThick size="1em" aria-hidden />}
+								startSlot={<IconPlus size="1em" aria-hidden />}
 								variant={variant}
 							>
 								Create project

@@ -22,7 +22,6 @@ import {
 	IconFolderOpen,
 	IconInfoFill,
 	IconPlus,
-	IconPlusThick,
 	IconSearch,
 	IconTextBold,
 	IconThumbsDown,
@@ -185,17 +184,13 @@ function getComponentCells(): GalleryCell[] {
 			title: "Button",
 			content: (
 				<div {...stylex.props(styles.buttonStack)}>
-					<Button
-						size="sm"
-						startSlot={<IconPlusThick size="1em" aria-hidden />}
-						variant="secondary"
-					>
+					<Button size="sm" startSlot={<IconPlus size="1em" aria-hidden />} variant="secondary">
 						Create project
 					</Button>
-					<Button size="sm" startSlot={<IconPlusThick size="1em" aria-hidden />}>
+					<Button size="sm" startSlot={<IconPlus size="1em" aria-hidden />}>
 						Create project
 					</Button>
-					<Button size="sm" startSlot={<IconPlusThick size="1em" aria-hidden />} variant="ghost">
+					<Button size="sm" startSlot={<IconPlus size="1em" aria-hidden />} variant="ghost">
 						Create project
 					</Button>
 				</div>
@@ -442,7 +437,7 @@ function getComponentCells(): GalleryCell[] {
 			title: "IconButton",
 			content: (
 				<IconButton
-					icon={<IconPlusThick size="1em" aria-hidden />}
+					icon={<IconPlus size="1em" aria-hidden />}
 					label="Add item"
 					variant="secondary"
 				/>

@@ -1,5 +1,5 @@
 import { Combobox as BaseCombobox } from "@base-ui/react/combobox";
-import { IconChevronDown, IconCircleXFill, IconPlusThick, IconXmark } from "fyicons";
+import { IconChevronDown, IconCircleXFill, IconPlus, IconXmark } from "fyicons";
 import * as stylex from "@stylexjs/stylex";
 import {
 	createContext,
@@ -471,7 +471,7 @@ export function Item({
 					aria-hidden
 					{...stylex.props(menuItemStyles.indicator, comboboxParts.creatableIndicator)}
 				>
-					<IconPlusThick aria-hidden size={16} />
+					<IconPlus aria-hidden size={16} />
 				</span>
 			) : (
 				<BaseCombobox.ItemIndicator keepMounted {...stylex.props(menuItemStyles.indicator)}>

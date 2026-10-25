@@ -1,4 +1,4 @@
-import { IconPencil, IconPlusThick, IconTrash } from "fyicons";
+import { IconPencil, IconPlus, IconTrash } from "fyicons";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import * as stylex from "@stylexjs/stylex";
 import { Stack } from "@/components/layout/layout";
@@ -8,7 +8,7 @@ import { tokens } from "@/theme/tokens.stylex";
 import { IconButton } from "./button";
 
 const iconOptions = {
-	Add: <IconPlusThick size="1em" aria-hidden />,
+	Add: <IconPlus size="1em" aria-hidden />,
 	Edit: <IconPencil size="1em" aria-hidden />,
 	Delete: <IconTrash size="1em" aria-hidden />,
 };
@@ -88,7 +88,7 @@ export const SizesAndShapes: Story = {
 									{size}
 								</Text>
 								<IconButton
-									icon={<IconPlusThick size="1em" aria-hidden />}
+									icon={<IconPlus size="1em" aria-hidden />}
 									label={`Add item (${size}, ${shape})`}
 									shape={shape}
 									size={size}

@@ -1,4 +1,4 @@
-import { IconArrowRight, IconPlusThick } from "fyicons";
+import { IconArrowRight, IconPlus } from "fyicons";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import type { ComponentProps } from "react";
 import { Stack } from "@/components/layout";
@@ -7,7 +7,7 @@ import { LinkButton } from "./link-button";
 
 const iconOptions = {
 	None: undefined,
-	Add: <IconPlusThick size="1em" aria-hidden />,
+	Add: <IconPlus size="1em" aria-hidden />,
 	Continue: <IconArrowRight size="1em" aria-hidden />,
 };
 
@@ -76,7 +76,7 @@ export const Examples: Story = {
 					Actions that navigate
 				</Text>
 				<Stack align="center" gap={3} orientation="horizontal" wrap="wrap">
-					<LinkButton href="#create-project" startSlot={<IconPlusThick size="1em" aria-hidden />}>
+					<LinkButton href="#create-project" startSlot={<IconPlus size="1em" aria-hidden />}>
 						Create project
 					</LinkButton>
 					<LinkButton href="#project-overview" variant="secondary">
