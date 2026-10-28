@@ -1,5 +1,5 @@
 import { Combobox as BaseCombobox } from "@base-ui/react/combobox";
-import { IconChevronDown, IconCircleXFill, IconPlus, IconXmark } from "fyicons";
+import { IconChevronDown, IconCircleXFill, IconPlus, IconX } from "fyicons";
 import * as stylex from "@stylexjs/stylex";
 import {
 	createContext,
@@ -327,7 +327,7 @@ export function ChipRemove({
 			style={mergeStyle(sx.style, style)}
 			{...props}
 		>
-			{children ?? <IconXmark aria-hidden size={12} />}
+			{children ?? <IconX aria-hidden size={12} />}
 		</BaseCombobox.ChipRemove>
 	);
 }

@@ -27,7 +27,7 @@ import {
 	IconThumbsDown,
 	IconThumbsUp,
 	IconTrash,
-	IconXmark,
+	IconX,
 } from "fyicons";
 import { GithubLogoIcon } from "@phosphor-icons/react/dist/csr/GithubLogo";
 
@@ -1345,7 +1345,7 @@ function ToastList() {
 				<Toast.Close
 					render={
 						<IconButton
-							icon={<IconXmark size="1em" aria-hidden />}
+							icon={<IconX size="1em" aria-hidden />}
 							label="Dismiss notification"
 							tooltip={false}
 							variant="ghost"

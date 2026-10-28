@@ -37,7 +37,7 @@
     "@stylexjs/stylex": "^0.19.1",
     "@tanstack/react-router": "^1.170.44",
     "@tanstack/react-table": "^9.3.1",
-    "fyicons": "^0.1.0",
+    "fyicons": "^0.2.0",
     "react": "^19.3.1",
     "react-aria": "^3.53.1",
     "react-aria-components": "^1.22.1",

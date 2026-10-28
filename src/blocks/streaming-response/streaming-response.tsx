@@ -1,4 +1,4 @@
-import { IconBan, IconCircleAlert, IconCircleCheck } from "fyicons";
+import { IconAlert, IconBan, IconCircleCheck } from "fyicons";
 import * as stylex from "@stylexjs/stylex";
 import {
 	createContext,
@@ -162,7 +162,7 @@ function renderStatusIcon(status: StreamingResponseStatus) {
 		case "stopped":
 			return <IconBan aria-hidden size={14} />;
 		case "error":
-			return <IconCircleAlert aria-hidden size={14} />;
+			return <IconAlert aria-hidden size={14} />;
 	}
 }
 

@@ -1,5 +1,5 @@
 import x from "@stylexjs/atoms";
-import { IconAlert, IconCircle, IconGlobe } from "fyicons";
+import { IconCircle, IconError, IconGlobe } from "fyicons";
 import * as stylex from "@stylexjs/stylex";
 import {
 	Button,
@@ -194,7 +194,7 @@ function ComparisonField({
 					</NumberField.Root>
 					{invalid ? (
 						<Field.Error match>
-							<IconAlert aria-hidden size="1em" />
+							<IconError aria-hidden size="1em" />
 							Enter a value below 5.
 						</Field.Error>
 					) : null}

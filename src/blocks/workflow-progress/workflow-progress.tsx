@@ -1,4 +1,4 @@
-import { IconAlert, IconChecklistChecked, IconClock } from "fyicons";
+import { IconChecklistChecked, IconClock, IconError } from "fyicons";
 import { Icon, Badge, Loader } from "@/components";
 import type { BadgeHue, BadgeProps } from "@/components";
 
@@ -197,7 +197,7 @@ function renderStatusIcon(status: WorkflowProgressStatus) {
 		case "approval":
 			return <IconClock size="1em" aria-hidden />;
 		case "error":
-			return <IconAlert size="1em" aria-hidden />;
+			return <IconError size="1em" aria-hidden />;
 	}
 }
 

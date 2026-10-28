@@ -1,13 +1,13 @@
 import {
+	IconAlertFill,
 	IconCheck,
-	IconCircleAlertFill,
 	IconCircleCheckFill,
 	IconCopy,
 	IconFloppyDisk,
 	IconPencil,
 	IconPlug,
 	IconSendTilt,
-	IconXmark,
+	IconX,
 } from "fyicons";
 import * as stylex from "@stylexjs/stylex";
 import type { Meta, StoryObj } from "@storybook/react-vite";
@@ -306,7 +306,7 @@ function PopoverAnchoredExample({ _side, _align }: Pick<StoryArgs, "_side" | "_a
 					variant: "popover",
 					tone: "error",
 					status: "error",
-					icon: <IconCircleAlertFill aria-hidden size={20} />,
+					icon: <IconAlertFill aria-hidden size={20} />,
 					dismissible: true,
 				},
 			});
@@ -545,7 +545,7 @@ function ToastList({ swipeDirection }: { swipeDirection: SwipeDirection }) {
 					<Toast.Description />
 				</Toast.Text>
 				<Toast.Close aria-label="Dismiss notification">
-					<IconXmark aria-hidden size={16} />
+					<IconX aria-hidden size={16} />
 				</Toast.Close>
 			</Toast.Content>
 		</Toast.Root>

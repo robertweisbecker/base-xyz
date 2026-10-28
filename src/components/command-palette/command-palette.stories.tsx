@@ -1,5 +1,11 @@
-import { IconAppsPlus, IconBookOpen, IconSearch, IconToolbox } from "fyicons";
-import { NotificationIcon, UserCircleGearIcon } from "@phosphor-icons/react";
+import {
+	IconAppNotification,
+	IconBookOpen,
+	IconSearch,
+	IconShapesPlus,
+	IconToolbox,
+} from "fyicons";
+import { UserCircleGearIcon } from "@phosphor-icons/react";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { useState } from "react";
 import { Kbd } from "@/components/kbd/kbd";
@@ -35,7 +41,7 @@ const commandGroups: CommandGroup[] = [
 				group: "Suggestions",
 				keywords: "new add worker application",
 				shortcut: "N",
-				icon: <IconAppsPlus size="1em" aria-hidden />,
+				icon: <IconShapesPlus size="1em" aria-hidden />,
 			},
 			{
 				id: "search-docs",
@@ -66,7 +72,7 @@ const commandGroups: CommandGroup[] = [
 				description: "Choose which events send alerts.",
 				group: "Settings",
 				keywords: "alerts messages bell",
-				icon: <NotificationIcon weight="duotone" aria-hidden />,
+				icon: <IconAppNotification size="1em" aria-hidden />,
 			},
 			{
 				id: "workspace-settings",

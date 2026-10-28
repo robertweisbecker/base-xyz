@@ -1,5 +1,5 @@
 import { Combobox as BaseCombobox } from "@base-ui/react/combobox";
-import { IconChevronsUpDown, IconCirclePlus, IconSearch, IconXmark } from "fyicons";
+import { IconChevronsUpDown, IconCirclePlus, IconSearch, IconX } from "fyicons";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import x from "@stylexjs/atoms";
 import * as stylex from "@stylexjs/stylex";
@@ -125,7 +125,7 @@ function FilterChipsPopupExample() {
 										aria-label={`Remove ${item}`}
 										{...stylex.props(styles.chipRemove, focusRing.offset, pressable.transition)}
 									>
-										<IconXmark aria-hidden size={12} />
+										<IconX aria-hidden size={12} />
 									</BaseCombobox.ChipRemove>
 								</BaseCombobox.Chip>
 							))

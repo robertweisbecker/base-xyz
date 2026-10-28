@@ -1,7 +1,7 @@
 /* eslint-disable react/only-export-components -- Compound component parts are intentionally grouped into the InlineEdit namespace. */
 import { Button as BaseButton } from "@base-ui/react/button";
 import { Input as BaseInput } from "@base-ui/react/input";
-import { IconXmark } from "fyicons";
+import { IconX } from "fyicons";
 import * as stylex from "@stylexjs/stylex";
 import {
 	createContext,
@@ -479,7 +479,7 @@ function InlineEditCancel({
 		<IconButton
 			{...props}
 			type="button"
-			icon={<IconXmark size="1em" aria-hidden />}
+			icon={<IconX size="1em" aria-hidden />}
 			label="Cancel"
 			disabled={context.disabled || context.pending || props.disabled}
 			size={size}

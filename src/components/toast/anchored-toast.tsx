@@ -1,4 +1,4 @@
-import { IconCircleAlertFill, IconCircleCheckFill, IconInfoFill, IconXmark } from "fyicons";
+import { IconAlertFill, IconCircleCheckFill, IconInfoFill, IconX } from "fyicons";
 import { Toast as BaseToast } from "@base-ui/react/toast";
 import type { ToastManager } from "@base-ui/react/toast";
 import * as stylex from "@stylexjs/stylex";
@@ -295,7 +295,7 @@ function AnchoredToastControls({
 						pressable.transition,
 					)}
 				>
-					<IconXmark aria-hidden size={14} />
+					<IconX aria-hidden size={14} />
 				</BaseToast.Close>
 			) : null}
 		</>
@@ -357,7 +357,7 @@ function toneForStatus(status: AnchoredToastStatus): AnchoredToastTone {
 
 function statusIcon(status: AnchoredToastStatus, size: number | string = 18) {
 	if (status === "success") return <IconCircleCheckFill size={size} />;
-	if (status === "error") return <IconCircleAlertFill size={size} />;
+	if (status === "error") return <IconAlertFill size={size} />;
 	if (status === "loading" || status === "ongoing") {
 		const loaderStyle =
 			size === 16

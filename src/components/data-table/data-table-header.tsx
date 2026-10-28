@@ -1,4 +1,4 @@
-import { IconArrowUpArrowDown, IconSortDown, IconSortUp } from "fyicons";
+import { IconArrowDownArrowUp, IconSortDown, IconSortUp } from "fyicons";
 import * as stylex from "@stylexjs/stylex";
 import { type ReactNode } from "react";
 import { Button } from "@/components/button/button";
@@ -121,7 +121,7 @@ function getSortIcon(sorted: false | "asc" | "desc") {
 	if (sorted === "desc") {
 		return <IconSortUp size="1em" aria-hidden />;
 	}
-	return <IconArrowUpArrowDown size="1em" aria-hidden />;
+	return <IconArrowDownArrowUp size="1em" aria-hidden />;
 }
 
 function getSortLabel(content: ReactNode, sorted: false | "asc" | "desc") {

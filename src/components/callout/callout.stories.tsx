@@ -1,4 +1,4 @@
-import { IconCircleAlert, IconCircleCheck, IconInfo, IconWarning } from "fyicons";
+import { IconAlert, IconCircleCheck, IconInfo, IconWarning } from "fyicons";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import x from "@stylexjs/atoms";
 import * as stylex from "@stylexjs/stylex";
@@ -99,7 +99,7 @@ const examplesByHue = {
 	},
 	error: {
 		description: "We couldn't save your changes. Please try again.",
-		icon: <IconCircleAlert size="1em" aria-hidden />,
+		icon: <IconAlert size="1em" aria-hidden />,
 		title: "Save failed",
 	},
 	warning: {
@@ -184,7 +184,7 @@ export const Options: Story = {
 				alert
 				description="We couldn't save your changes."
 				hue="error"
-				icon={<IconCircleAlert size="1em" aria-hidden />}
+				icon={<IconAlert size="1em" aria-hidden />}
 				variant="banner"
 			/>
 		</Stack>

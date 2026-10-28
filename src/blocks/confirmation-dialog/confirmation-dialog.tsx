@@ -1,4 +1,4 @@
-import { IconXmark } from "fyicons";
+import { IconX } from "fyicons";
 import * as stylex from "@stylexjs/stylex";
 import {
 	createContext,
@@ -305,7 +305,7 @@ function ToastList() {
 					<Toast.Description />
 				</Toast.Text>
 				<Toast.Close aria-label="Dismiss notification">
-					<IconXmark aria-hidden size={16} />
+					<IconX aria-hidden size={16} />
 				</Toast.Close>
 			</Toast.Content>
 		</Toast.Root>

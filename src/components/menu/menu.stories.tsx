@@ -1,12 +1,12 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import {
 	IconArchive,
+	IconArrowExternal,
 	IconBookOpen,
 	IconChatRound,
 	IconCopy,
 	IconCreditCard,
 	IconEnvelopeSimple,
-	IconExternalLink,
 	IconFilePlus,
 	IconGauge,
 	IconLifeRing,
@@ -194,7 +194,7 @@ export const ItemVariants: Story = {
 						</Menu.ItemIcon>
 						<Menu.ItemLabel>Link item</Menu.ItemLabel>
 						<Menu.ItemShortcut>
-							<IconExternalLink size="1em" aria-hidden />
+							<IconArrowExternal size="1em" aria-hidden />
 						</Menu.ItemShortcut>
 					</Menu.LinkItem>
 					<Menu.SubmenuRoot>
@@ -554,7 +554,7 @@ export const CollapsibleGroup: Story = {
 						<Menu.LinkItem href="#upgrade">
 							<Menu.ItemLabel>Upgrade for more usage</Menu.ItemLabel>
 							<Menu.ItemShortcut>
-								<IconExternalLink size="1em" aria-hidden />
+								<IconArrowExternal size="1em" aria-hidden />
 							</Menu.ItemShortcut>
 						</Menu.LinkItem>
 						<Menu.SubmenuRoot>
@@ -576,7 +576,7 @@ export const CollapsibleGroup: Story = {
 						<Menu.LinkItem href="#usage">
 							<Menu.ItemLabel>Learn more</Menu.ItemLabel>
 							<Menu.ItemShortcut>
-								<IconExternalLink aria-hidden size={14} />
+								<IconArrowExternal aria-hidden size={14} />
 							</Menu.ItemShortcut>
 						</Menu.LinkItem>
 					</Menu.CollapsibleGroupPanel>
