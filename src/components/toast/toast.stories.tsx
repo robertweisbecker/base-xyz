@@ -364,7 +364,7 @@ function PillAnchoredExample({ _side, _align }: Pick<StoryArgs, "_side" | "_alig
 			id: "agent-editing-progress",
 			title: `Step ${nextStepIndex + 1} / ${editingSteps.length} · ${step.files} files changed`,
 			description: (
-				<Stack orientation="horizontal" gap={1}>
+				<Stack orientation="horizontal" gap={1} render={<span />}>
 					<Text size="1" color="success" tabular render={<span />} fontFamily="mono">
 						+{step.additions}
 					</Text>
