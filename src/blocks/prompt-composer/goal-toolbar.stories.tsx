@@ -1,5 +1,4 @@
-import { LinkSimpleIcon } from "@phosphor-icons/react/dist/csr/LinkSimple";
-import { PaperclipIcon } from "@phosphor-icons/react/dist/csr/Paperclip";
+import { IconLink, IconPaperclip } from "fyicons";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import * as stylex from "@stylexjs/stylex";
 import {
@@ -164,13 +163,13 @@ function GoalComposerAddMenu() {
 					<Menu.GroupLabel>Add</Menu.GroupLabel>
 					<Menu.Item>
 						<Menu.ItemIcon>
-							<PaperclipIcon aria-hidden size={16} weight="bold" />
+							<IconPaperclip aria-hidden size={16} />
 						</Menu.ItemIcon>
 						<PromptComposer.AddItemContent>Files and folders</PromptComposer.AddItemContent>
 					</Menu.Item>
 					<Menu.Item>
 						<Menu.ItemIcon>
-							<LinkSimpleIcon aria-hidden size={16} weight="bold" />
+							<IconLink aria-hidden size={16} />
 						</Menu.ItemIcon>
 						<PromptComposer.AddItemContent>
 							<span>Add a link</span>

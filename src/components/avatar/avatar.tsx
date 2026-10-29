@@ -1,5 +1,5 @@
 import { Avatar as BaseAvatar } from "@base-ui/react/avatar";
-import { LegoSmileyIcon } from "@phosphor-icons/react";
+import { IconPersonFill } from "fyicons";
 import * as stylex from "@stylexjs/stylex";
 import type { StyleXStyles } from "@stylexjs/stylex";
 import type { ReactNode } from "react";
@@ -74,16 +74,7 @@ export function Avatar({
 	const normalizedName = name?.trim().replace(/\s+/gu, " ") ?? "";
 	const resolvedInitials = initials?.trim() || deriveInitials(normalizedName);
 	const hasName = normalizedName.length > 0;
-	const fallback =
-		icon ??
-		(resolvedInitials || (
-			<LegoSmileyIcon
-				aria-hidden
-				weight="duotone"
-				size="100%"
-				style={{ transform: "translateY(24%)" }}
-			/>
-		));
+	const fallback = icon ?? (resolvedInitials || <IconPersonFill size="1em" aria-hidden />);
 	const sx = stylex.props(
 		avatarParts.root,
 		focusRing.offsetInteractive,

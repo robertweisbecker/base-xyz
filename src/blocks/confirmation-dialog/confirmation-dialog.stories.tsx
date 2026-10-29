@@ -1,4 +1,4 @@
-import { PaperPlaneTiltIcon } from "@phosphor-icons/react/dist/csr/PaperPlaneTilt";
+import { IconSendTilt } from "fyicons";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { StrictMode, useState, type ComponentProps, type ReactElement } from "react";
 import { Button, Checkbox, Field, Label, Separator } from "@/components";
@@ -66,7 +66,7 @@ export const Examples: Story = {
 				>
 					<ConfirmationDialog.Header>
 						<ConfirmationDialog.Visual>
-							<PaperPlaneTiltIcon aria-hidden size={18} weight="duotone" />
+							<IconSendTilt aria-hidden size={18} />
 						</ConfirmationDialog.Visual>
 						<ConfirmationDialog.Title>Submit app for review?</ConfirmationDialog.Title>
 						<ConfirmationDialog.Description>

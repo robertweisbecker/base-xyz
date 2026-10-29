@@ -1,4 +1,4 @@
-import { DotsSixVerticalIcon, KanbanIcon } from "@phosphor-icons/react";
+import { IconGripV, IconLayoutColumnsThree } from "fyicons";
 import * as stylex from "@stylexjs/stylex";
 import { useState } from "react";
 import {
@@ -164,7 +164,7 @@ function ReactAriaBoardColumn({
 						size="sm"
 						title="No items"
 						description="Move completed tasks here."
-						icon={<KanbanIcon weight="duotone" />}
+						icon={<IconLayoutColumnsThree size="1em" />}
 					/>
 				)}
 				className={stylex.props(demoStyles.list).className}
@@ -180,7 +180,7 @@ function ReactAriaBoardColumn({
 									aria-label={`Move ${item.label}`}
 									className={stylex.props(demoStyles.handle, focusRing.offset).className}
 								>
-									<DotsSixVerticalIcon aria-hidden focusable="false" size={18} weight="bold" />
+									<IconGripV aria-hidden focusable="false" size={18} />
 								</AriaButton>
 							}
 						/>

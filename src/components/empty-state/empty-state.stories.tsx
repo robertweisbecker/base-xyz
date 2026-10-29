@@ -1,5 +1,4 @@
-import { FolderOpenIcon } from "@phosphor-icons/react/dist/csr/FolderOpen";
-import { MagnifyingGlassIcon } from "@phosphor-icons/react/dist/csr/MagnifyingGlass";
+import { IconFolderOpen, IconSearch } from "fyicons";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import * as stylex from "@stylexjs/stylex";
 
@@ -16,8 +15,8 @@ type EmptyStateStoryArgs = EmptyStateProps & {
 const sizes = ["sm", "md", "lg"] as const satisfies readonly EmptyStateSize[];
 const iconOptions = {
 	None: undefined,
-	Folder: <FolderOpenIcon aria-hidden size="1em" weight="duotone" />,
-	Search: <MagnifyingGlassIcon aria-hidden size="1em" />,
+	Folder: <IconFolderOpen aria-hidden size="1em" />,
+	Search: <IconSearch aria-hidden size="1em" />,
 };
 
 const meta = {
@@ -103,7 +102,7 @@ export const Examples: Story = {
 				<EmptyState
 					description="Create your first project to organize files, tasks, and collaborators in one place."
 					headingLevel="h3"
-					icon={<FolderOpenIcon aria-hidden size="1em" weight="duotone" />}
+					icon={<IconFolderOpen aria-hidden size="1em" />}
 					title="No projects yet"
 				>
 					<Button>Create project</Button>
@@ -118,7 +117,7 @@ export const Examples: Story = {
 				<EmptyState
 					description="Try a different keyword or clear the active filters."
 					headingLevel="h3"
-					icon={<MagnifyingGlassIcon aria-hidden size="1em" />}
+					icon={<IconSearch aria-hidden size="1em" />}
 					size="sm"
 					title="No matching projects"
 				>

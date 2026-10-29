@@ -1,7 +1,5 @@
 import x from "@stylexjs/atoms";
-import { WarningOctagonIcon } from "@phosphor-icons/react/dist/csr/WarningOctagon";
-import { CircleIcon } from "@phosphor-icons/react/dist/csr/Circle";
-import { GlobeIcon } from "@phosphor-icons/react/dist/csr/Globe";
+import { IconCircle, IconError, IconGlobe } from "fyicons";
 import * as stylex from "@stylexjs/stylex";
 import {
 	Button,
@@ -99,7 +97,7 @@ export function CrossComponentRow() {
 				</div>
 				<InputGroup.Root>
 					<InputGroup.Addon>
-						<GlobeIcon aria-hidden />
+						<IconGlobe size="1em" aria-hidden />
 					</InputGroup.Addon>
 					<InputGroup.Input aria-label="Domain" defaultValue="acme.example.com" />
 				</InputGroup.Root>
@@ -196,7 +194,7 @@ function ComparisonField({
 					</NumberField.Root>
 					{invalid ? (
 						<Field.Error match>
-							<WarningOctagonIcon aria-hidden size="1em" weight="duotone" />
+							<IconError aria-hidden size="1em" />
 							Enter a value below 5.
 						</Field.Error>
 					) : null}
@@ -257,7 +255,7 @@ function ComparisonField({
 						readOnly={readOnly}
 					/>
 					<InputGroup.Addon position="end">
-						<CircleIcon aria-hidden />
+						<IconCircle size="1em" aria-hidden />
 					</InputGroup.Addon>
 				</InputGroup.Root>
 			);

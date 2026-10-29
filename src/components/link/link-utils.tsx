@@ -1,11 +1,11 @@
-import { ArrowUpRightIcon } from "@phosphor-icons/react/dist/csr/ArrowUpRight";
+import { IconArrowUpRight } from "fyicons";
 import type { ComponentProps } from "react";
 
 type ExternalLinkOptions = Pick<ComponentProps<"a">, "rel" | "target"> & {
 	external: boolean;
 };
 
-export const externalLinkIndicator = <ArrowUpRightIcon aria-hidden size="1em" weight="regular" />;
+export const externalLinkIndicator = <IconArrowUpRight aria-hidden size="1em" />;
 
 export function resolveExternalLinkProps({ external, rel, target }: ExternalLinkOptions) {
 	return {

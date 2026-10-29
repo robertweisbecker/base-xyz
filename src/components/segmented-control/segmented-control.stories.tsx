@@ -1,7 +1,4 @@
-import { CalendarBlankIcon } from "@phosphor-icons/react/dist/csr/CalendarBlank";
-import { ClockIcon } from "@phosphor-icons/react/dist/csr/Clock";
-import { ListBulletsIcon } from "@phosphor-icons/react/dist/csr/ListBullets";
-import { SquaresFourIcon } from "@phosphor-icons/react/dist/csr/SquaresFour";
+import { IconCalendar, IconClock, IconGrid, IconListBullet } from "fyicons";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { type FormEvent, type ReactNode, useState } from "react";
 import { Button } from "@/components/button/button";
@@ -11,10 +8,10 @@ import { SegmentedControl, type SegmentedControlSize } from "./segmented-control
 
 const iconOptions = {
 	None: undefined,
-	Calendar: <CalendarBlankIcon aria-hidden weight="duotone" />,
-	Clock: <ClockIcon aria-hidden weight="duotone" />,
-	Grid: <SquaresFourIcon aria-hidden weight="duotone" />,
-	List: <ListBulletsIcon aria-hidden weight="duotone" />,
+	Calendar: <IconCalendar size="1em" aria-hidden />,
+	Clock: <IconClock size="1em" aria-hidden />,
+	Grid: <IconGrid size="1em" aria-hidden />,
+	List: <IconListBullet size="1em" aria-hidden />,
 };
 
 type SegmentedControlPlaygroundArgs = {
@@ -127,14 +124,11 @@ export const SizesAndIcons: Story = {
 						{size === "sm" ? "Small" : size === "md" ? "Medium" : "Large"}
 					</Text>
 					<SegmentedControl.Root aria-label={`${size} layout`} defaultValue="grid" size={size}>
-						<SegmentedControl.Item
-							startSlot={<SquaresFourIcon aria-hidden weight="duotone" />}
-							value="grid"
-						>
+						<SegmentedControl.Item startSlot={<IconGrid size="1em" aria-hidden />} value="grid">
 							Grid
 						</SegmentedControl.Item>
 						<SegmentedControl.Item
-							startSlot={<ListBulletsIcon aria-hidden weight="duotone" />}
+							startSlot={<IconListBullet size="1em" aria-hidden />}
 							value="list"
 						>
 							List

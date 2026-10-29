@@ -1,8 +1,7 @@
-import { ListChecksIcon } from "@phosphor-icons/react/dist/csr/ListChecks";
+import { IconChecklistChecked, IconClock, IconError } from "fyicons";
 import { Icon, Badge, Loader } from "@/components";
 import type { BadgeHue, BadgeProps } from "@/components";
-import { ClockIcon } from "@phosphor-icons/react/dist/csr/Clock";
-import { WarningDiamondIcon } from "@phosphor-icons/react/dist/csr/WarningDiamond";
+
 import * as stylex from "@stylexjs/stylex";
 import { textStyles, fontWeightStyles } from "@/components/text/text.stylex";
 import { createContext, type ComponentProps, type ReactNode, useContext } from "react";
@@ -194,11 +193,11 @@ function renderStatusIcon(status: WorkflowProgressStatus) {
 		case "running":
 			return <Loader aria-hidden />;
 		case "complete":
-			return <ListChecksIcon aria-hidden />;
+			return <IconChecklistChecked size="1em" aria-hidden />;
 		case "approval":
-			return <ClockIcon aria-hidden />;
+			return <IconClock size="1em" aria-hidden />;
 		case "error":
-			return <WarningDiamondIcon aria-hidden weight="duotone" />;
+			return <IconError size="1em" aria-hidden />;
 	}
 }
 

@@ -1,8 +1,10 @@
-import { TargetIcon } from "@phosphor-icons/react/dist/csr/Target";
-import { PauseCircleIcon } from "@phosphor-icons/react/dist/csr/PauseCircle";
-import { PencilSimpleIcon } from "@phosphor-icons/react/dist/csr/PencilSimple";
-import { PlayCircleIcon } from "@phosphor-icons/react/dist/csr/PlayCircle";
-import { TrashIcon } from "@phosphor-icons/react/dist/csr/Trash";
+import {
+	IconCirclePauseFill,
+	IconCirclePlayFill,
+	IconPencil,
+	IconTargetBullseye,
+	IconTrash,
+} from "fyicons";
 import * as stylex from "@stylexjs/stylex";
 import { useState, type FormEvent } from "react";
 import {
@@ -71,7 +73,7 @@ export function GoalToolbar({
 					>
 						<span {...stylex.props(parts.statusLabel)}>
 							<span aria-hidden {...stylex.props(parts.statusIcon)}>
-								<TargetIcon size={16} weight="regular" />
+								<IconTargetBullseye size={16} />
 							</span>
 							{currentActive ? "Pursuing goal" : "Goal paused"}
 						</span>
@@ -95,7 +97,7 @@ export function GoalToolbar({
 												currentActive ? iconSwapTransition.visible : iconSwapTransition.hidden,
 											)}
 										>
-											<PauseCircleIcon aria-hidden weight="fill" />
+											<IconCirclePauseFill size="1em" aria-hidden />
 										</span>
 										<span
 											{...stylex.props(
@@ -104,7 +106,7 @@ export function GoalToolbar({
 												currentActive ? iconSwapTransition.hidden : iconSwapTransition.visible,
 											)}
 										>
-											<PlayCircleIcon aria-hidden weight="fill" />
+											<IconCirclePlayFill size="1em" aria-hidden />
 										</span>
 									</span>
 								}
@@ -115,7 +117,7 @@ export function GoalToolbar({
 								variant="ghost"
 							/>
 							<IconButton
-								icon={<PencilSimpleIcon aria-hidden weight="duotone" />}
+								icon={<IconPencil size="1em" aria-hidden />}
 								label="Edit goal"
 								size="sm"
 								render={
@@ -127,7 +129,7 @@ export function GoalToolbar({
 
 							<IconButton
 								size="sm"
-								icon={<TrashIcon aria-hidden weight="regular" />}
+								icon={<IconTrash size="1em" aria-hidden />}
 								label="Delete goal"
 								nativeButton
 								render={<Toolbar.Button {...stylex.props(parts.wideAction)} />}
@@ -157,10 +159,10 @@ export function GoalToolbar({
 									<Dialog.Trigger
 										render={<Toolbar.Button {...stylex.props(parts.compactAction)} />}
 									>
-										<PencilSimpleIcon aria-hidden size={16} weight="regular" /> Edit
+										<IconPencil aria-hidden size={16} /> Edit
 									</Dialog.Trigger>
 									<Toolbar.Button {...stylex.props(parts.compactAction)}>
-										<TrashIcon aria-hidden size={16} weight="regular" /> Delete
+										<IconTrash aria-hidden size={16} /> Delete
 									</Toolbar.Button>
 								</Toolbar.Group>
 							</Toolbar.Root>

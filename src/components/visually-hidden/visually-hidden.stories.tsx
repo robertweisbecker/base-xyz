@@ -1,4 +1,4 @@
-import { EyeIcon } from "@phosphor-icons/react";
+import { IconEye } from "fyicons";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { Button } from "@/components/button/button";
 import { VisuallyHidden } from "./visually-hidden";
@@ -26,7 +26,7 @@ type Story = StoryObj<typeof meta>;
 export const Playground: Story = {
 	render: (args) => (
 		<>
-			<Button aria-describedby="visually-hidden-description" startSlot={<EyeIcon />}>
+			<Button aria-describedby="visually-hidden-description" startSlot={<IconEye size="1em" />}>
 				View details
 			</Button>
 			<VisuallyHidden {...args} id="visually-hidden-description" />

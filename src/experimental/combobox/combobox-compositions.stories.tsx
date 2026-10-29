@@ -1,8 +1,5 @@
 import { Combobox as BaseCombobox } from "@base-ui/react/combobox";
-import { CaretUpDownIcon } from "@phosphor-icons/react/dist/csr/CaretUpDown";
-import { MagnifyingGlassIcon } from "@phosphor-icons/react/dist/csr/MagnifyingGlass";
-import { PlusCircleIcon } from "@phosphor-icons/react/dist/csr/PlusCircle";
-import { XIcon } from "@phosphor-icons/react/dist/csr/X";
+import { IconChevronsUpDown, IconCirclePlus, IconSearch, IconX } from "fyicons";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import x from "@stylexjs/atoms";
 import * as stylex from "@stylexjs/stylex";
@@ -61,7 +58,7 @@ function SingleSelectPopupExample() {
 						<Button
 							variant="secondary"
 							xstyle={[styles.trigger, x.width["fit-content"]]}
-							endSlot={<CaretUpDownIcon aria-hidden weight="bold" />}
+							endSlot={<IconChevronsUpDown size="1em" aria-hidden />}
 						/>
 					}
 				>
@@ -93,7 +90,7 @@ function MultipleSummaryPopupExample() {
 						<Button
 							variant="secondary"
 							xstyle={styles.trigger}
-							endSlot={<CaretUpDownIcon aria-hidden weight="bold" />}
+							endSlot={<IconChevronsUpDown size="1em" aria-hidden />}
 						/>
 					}
 				>
@@ -128,7 +125,7 @@ function FilterChipsPopupExample() {
 										aria-label={`Remove ${item}`}
 										{...stylex.props(styles.chipRemove, focusRing.offset, pressable.transition)}
 									>
-										<XIcon aria-hidden size={12} weight="bold" />
+										<IconX aria-hidden size={12} />
 									</BaseCombobox.ChipRemove>
 								</BaseCombobox.Chip>
 							))
@@ -142,7 +139,7 @@ function FilterChipsPopupExample() {
 								shape="pill"
 								variant="plain"
 								xstyle={x.flexShrink._0}
-								startSlot={<PlusCircleIcon aria-hidden weight="bold" />}
+								startSlot={<IconCirclePlus size="1em" aria-hidden />}
 							>
 								Add
 							</Button>
@@ -171,12 +168,7 @@ function PopupContent({ label }: { label: string }) {
 						<BaseCombobox.InputGroup
 							{...stylex.props(fieldStyles.inputUnstyled, styles.popupInputControl)}
 						>
-							<MagnifyingGlassIcon
-								aria-hidden
-								size={16}
-								weight="bold"
-								{...stylex.props(styles.searchIcon)}
-							/>
+							<IconSearch aria-hidden size={16} {...stylex.props(styles.searchIcon)} />
 							<BaseCombobox.Input
 								aria-label={`Filter ${label}`}
 								placeholder={`Filter ${label}…`}

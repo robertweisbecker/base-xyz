@@ -1,5 +1,5 @@
 import { useRender } from "@base-ui/react/use-render";
-import { DotsSixVerticalIcon } from "@phosphor-icons/react";
+import { IconGripV } from "fyicons";
 import * as stylex from "@stylexjs/stylex";
 import type { StyleXStyles } from "@stylexjs/stylex";
 import type { ReactNode } from "react";
@@ -148,7 +148,7 @@ export function DemoHandle({
 			className={attrJoin(sx.className, className)}
 			style={sx.style}
 		>
-			<DotsSixVerticalIcon aria-hidden focusable="false" size={18} weight="bold" />
+			<IconGripV aria-hidden focusable="false" size={18} />
 		</button>
 	);
 }

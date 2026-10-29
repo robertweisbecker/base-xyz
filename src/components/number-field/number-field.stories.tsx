@@ -1,4 +1,4 @@
-import { WarningOctagonIcon } from "@phosphor-icons/react/dist/csr/WarningOctagon";
+import { IconError } from "fyicons";
 import x from "@stylexjs/atoms";
 import { Field } from "@/components/field/field";
 import { Label } from "@/components/label/label";
@@ -107,7 +107,7 @@ export const Playground: Story = {
 				{_description ? <Field.Description>{_description}</Field.Description> : null}
 				{_error ? (
 					<Field.Error match>
-						<WarningOctagonIcon aria-hidden size="1em" weight="duotone" />
+						<IconError aria-hidden size="1em" />
 						{_error}
 					</Field.Error>
 				) : null}
@@ -242,7 +242,7 @@ export const States: Story = {
 						<NumberField.Control />
 					</NumberField.Root>
 					<Field.Error match>
-						<WarningOctagonIcon aria-hidden size="1em" weight="duotone" />
+						<IconError aria-hidden size="1em" />
 						Choose at least one seat.
 					</Field.Error>
 				</Field.Root>

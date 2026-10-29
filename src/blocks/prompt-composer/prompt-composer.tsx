@@ -1,7 +1,5 @@
 import { Form } from "@base-ui/react/form";
-import { ArrowUpIcon } from "@phosphor-icons/react/dist/csr/ArrowUp";
-import { PlusIcon } from "@phosphor-icons/react/dist/csr/Plus";
-import { SquareIcon } from "@phosphor-icons/react/dist/csr/Square";
+import { IconArrowUp, IconPlus, IconStopFill } from "fyicons";
 import * as stylex from "@stylexjs/stylex";
 import {
 	createContext,
@@ -242,7 +240,7 @@ export function Submit({
 		return (
 			<IconButton
 				{...buttonProps}
-				icon={<ArrowUpIcon aria-hidden />}
+				icon={<IconArrowUp size="1em" aria-hidden />}
 				label={ariaLabel}
 				shape={shape === "circle" ? "circle" : "square"}
 			/>
@@ -268,7 +266,7 @@ export function Stop({
 		return (
 			<IconButton
 				{...props}
-				icon={<SquareIcon aria-hidden weight="fill" />}
+				icon={<IconStopFill size="1em" aria-hidden />}
 				label={ariaLabel}
 				shape={shape === "square" ? "square" : "circle"}
 				size={size}
@@ -300,7 +298,7 @@ export function AddTrigger({ children, render, ...props }: PromptComposerAddTrig
 				render ?? (
 					<IconButton
 						disabled={disabled}
-						icon={<PlusIcon aria-hidden />}
+						icon={<IconPlus size="1em" aria-hidden />}
 						label="Add files and more"
 						tooltip={
 							<>

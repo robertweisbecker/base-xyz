@@ -1,21 +1,23 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { ArrowSquareOutIcon } from "@phosphor-icons/react/dist/csr/ArrowSquareOut";
-import { ArchiveIcon } from "@phosphor-icons/react/dist/csr/Archive";
-import { BookOpenIcon } from "@phosphor-icons/react/dist/csr/BookOpen";
-import { ChatCircleIcon } from "@phosphor-icons/react/dist/csr/ChatCircle";
-import { CopyIcon } from "@phosphor-icons/react/dist/csr/Copy";
-import { CreditCardIcon } from "@phosphor-icons/react/dist/csr/CreditCard";
-import { EnvelopeSimpleIcon } from "@phosphor-icons/react/dist/csr/EnvelopeSimple";
-import { FilePlusIcon } from "@phosphor-icons/react/dist/csr/FilePlus";
-import { GaugeIcon } from "@phosphor-icons/react/dist/csr/Gauge";
-import { GearIcon } from "@phosphor-icons/react/dist/csr/Gear";
-import { LifebuoyIcon } from "@phosphor-icons/react/dist/csr/Lifebuoy";
-import { LinkSimpleIcon } from "@phosphor-icons/react/dist/csr/LinkSimple";
-import { PencilSimpleIcon } from "@phosphor-icons/react/dist/csr/PencilSimple";
-import { RepeatIcon } from "@phosphor-icons/react/dist/csr/Repeat";
-import { ShareNetworkIcon } from "@phosphor-icons/react/dist/csr/ShareNetwork";
-import { SignOutIcon } from "@phosphor-icons/react/dist/csr/SignOut";
-import { TrashIcon } from "@phosphor-icons/react/dist/csr/Trash";
+import {
+	IconArchive,
+	IconArrowExternal,
+	IconBookOpen,
+	IconChatRound,
+	IconCopy,
+	IconCreditCard,
+	IconEnvelopeSimple,
+	IconFilePlus,
+	IconGauge,
+	IconLifeRing,
+	IconLink,
+	IconPencil,
+	IconRepeat,
+	IconSettings,
+	IconShareAndroid,
+	IconSignOut,
+	IconTrash,
+} from "fyicons";
 import type { ReactNode } from "react";
 import * as stylex from "@stylexjs/stylex";
 import { Button } from "@/components/button/button";
@@ -92,21 +94,21 @@ export const Playground: Story = {
 			<Menu.Popup positionerProps={{ side: _side, align: _align }}>
 				<Menu.Item variant={_itemVariant}>
 					<Menu.ItemIcon>
-						<FilePlusIcon weight="regular" />
+						<IconFilePlus size="1em" />
 					</Menu.ItemIcon>
 					<Menu.ItemLabel>New file</Menu.ItemLabel>
 					{_showShortcuts ? <Menu.ItemShortcut>⌘N</Menu.ItemShortcut> : null}
 				</Menu.Item>
 				<Menu.Item variant={_itemVariant}>
 					<Menu.ItemIcon>
-						<CopyIcon weight="regular" />
+						<IconCopy size="1em" />
 					</Menu.ItemIcon>
 					<Menu.ItemLabel>Duplicate</Menu.ItemLabel>
 					{_showShortcuts ? <Menu.ItemShortcut>⌘D</Menu.ItemShortcut> : null}
 				</Menu.Item>
 				<Menu.Item disabled={_disabledItem} variant={_itemVariant}>
 					<Menu.ItemIcon>
-						<ArchiveIcon weight="regular" />
+						<IconArchive size="1em" />
 					</Menu.ItemIcon>
 					<Menu.ItemLabel>Move to archive</Menu.ItemLabel>
 				</Menu.Item>
@@ -158,27 +160,27 @@ export const ItemVariants: Story = {
 					<Menu.GroupLabel>Actions</Menu.GroupLabel>
 					<Menu.Item>
 						<Menu.ItemIcon>
-							<FilePlusIcon weight="duotone" />
+							<IconFilePlus size="1em" />
 						</Menu.ItemIcon>
 						<Menu.ItemLabel>Default item</Menu.ItemLabel>
 						<Menu.ItemShortcut>⌘N</Menu.ItemShortcut>
 					</Menu.Item>
 					<Menu.Item variant="primary">
 						<Menu.ItemIcon>
-							<PencilSimpleIcon weight="duotone" />
+							<IconPencil size="1em" />
 						</Menu.ItemIcon>
 						<Menu.ItemLabel>Primary item</Menu.ItemLabel>
 						<Menu.ItemShortcut>⌘R</Menu.ItemShortcut>
 					</Menu.Item>
 					<Menu.Item disabled>
 						<Menu.ItemIcon>
-							<ArchiveIcon weight="duotone" />
+							<IconArchive size="1em" />
 						</Menu.ItemIcon>
 						<Menu.ItemLabel>Disabled item</Menu.ItemLabel>
 					</Menu.Item>
 					<Menu.Item variant="error">
 						<Menu.ItemIcon>
-							<TrashIcon weight="duotone" />
+							<IconTrash size="1em" />
 						</Menu.ItemIcon>
 						<Menu.ItemLabel>Error item</Menu.ItemLabel>
 					</Menu.Item>
@@ -188,30 +190,30 @@ export const ItemVariants: Story = {
 					<Menu.GroupLabel>Links and nested items</Menu.GroupLabel>
 					<Menu.LinkItem href="#documentation">
 						<Menu.ItemIcon>
-							<BookOpenIcon weight="duotone" />
+							<IconBookOpen size="1em" />
 						</Menu.ItemIcon>
 						<Menu.ItemLabel>Link item</Menu.ItemLabel>
 						<Menu.ItemShortcut>
-							<ArrowSquareOutIcon aria-hidden weight="bold" />
+							<IconArrowExternal size="1em" aria-hidden />
 						</Menu.ItemShortcut>
 					</Menu.LinkItem>
 					<Menu.SubmenuRoot>
 						<Menu.SubmenuTrigger>
 							<Menu.ItemIcon>
-								<ShareNetworkIcon weight="duotone" />
+								<IconShareAndroid size="1em" />
 							</Menu.ItemIcon>
 							<Menu.ItemLabel>Submenu trigger</Menu.ItemLabel>
 						</Menu.SubmenuTrigger>
 						<Menu.Popup positionerProps={{ align: "start", side: "inline-end" }}>
 							<Menu.Item>
 								<Menu.ItemIcon>
-									<LinkSimpleIcon weight="duotone" />
+									<IconLink size="1em" />
 								</Menu.ItemIcon>
 								<Menu.ItemLabel>Copy link</Menu.ItemLabel>
 							</Menu.Item>
 							<Menu.Item>
 								<Menu.ItemIcon>
-									<EnvelopeSimpleIcon weight="duotone" />
+									<IconEnvelopeSimple size="1em" />
 								</Menu.ItemIcon>
 								<Menu.ItemLabel>Email</Menu.ItemLabel>
 							</Menu.Item>
@@ -222,7 +224,7 @@ export const ItemVariants: Story = {
 				<Menu.CollapsibleGroup defaultOpen>
 					<Menu.CollapsibleGroupTrigger>
 						<Menu.ItemIcon>
-							<GaugeIcon weight="duotone" />
+							<IconGauge size="1em" />
 						</Menu.ItemIcon>
 						<Menu.ItemLabel>Collapsible group trigger</Menu.ItemLabel>
 					</Menu.CollapsibleGroupTrigger>
@@ -322,20 +324,20 @@ export const MenuTypes: Story = {
 				<MenuExample trigger="Project actions">
 					<Menu.Item variant="primary">
 						<Menu.ItemIcon>
-							<PencilSimpleIcon weight="duotone" />
+							<IconPencil size="1em" />
 						</Menu.ItemIcon>
 						<Menu.ItemLabel>Rename</Menu.ItemLabel>
 					</Menu.Item>
 					<Menu.Item>
 						<Menu.ItemIcon>
-							<CopyIcon weight="duotone" />
+							<IconCopy size="1em" />
 						</Menu.ItemIcon>
 						<Menu.ItemLabel>Duplicate</Menu.ItemLabel>
 					</Menu.Item>
 					<Menu.Separator />
 					<Menu.Item variant="error">
 						<Menu.ItemIcon>
-							<TrashIcon weight="duotone" />
+							<IconTrash size="1em" />
 						</Menu.ItemIcon>
 						<Menu.ItemLabel>Delete</Menu.ItemLabel>
 					</Menu.Item>
@@ -349,13 +351,13 @@ export const MenuTypes: Story = {
 				<MenuExample trigger="Resources">
 					<Menu.LinkItem href="#documentation">
 						<Menu.ItemIcon>
-							<BookOpenIcon weight="duotone" />
+							<IconBookOpen size="1em" />
 						</Menu.ItemIcon>
 						<Menu.ItemLabel>Documentation</Menu.ItemLabel>
 					</Menu.LinkItem>
 					<Menu.LinkItem href="#support">
 						<Menu.ItemIcon>
-							<LifebuoyIcon weight="duotone" />
+							<IconLifeRing size="1em" />
 						</Menu.ItemIcon>
 						<Menu.ItemLabel>Support</Menu.ItemLabel>
 					</Menu.LinkItem>
@@ -369,39 +371,39 @@ export const MenuTypes: Story = {
 				<MenuExample trigger="Project actions">
 					<Menu.Item>
 						<Menu.ItemIcon>
-							<PencilSimpleIcon weight="duotone" />
+							<IconPencil size="1em" />
 						</Menu.ItemIcon>
 						<Menu.ItemLabel>Rename</Menu.ItemLabel>
 					</Menu.Item>
 					<Menu.Item>
 						<Menu.ItemIcon>
-							<CopyIcon weight="duotone" />
+							<IconCopy size="1em" />
 						</Menu.ItemIcon>
 						<Menu.ItemLabel>Duplicate</Menu.ItemLabel>
 					</Menu.Item>
 					<Menu.SubmenuRoot>
 						<Menu.SubmenuTrigger openOnHover>
 							<Menu.ItemIcon>
-								<ShareNetworkIcon weight="duotone" />
+								<IconShareAndroid size="1em" />
 							</Menu.ItemIcon>
 							<Menu.ItemLabel>Share</Menu.ItemLabel>
 						</Menu.SubmenuTrigger>
 						<Menu.Popup positionerProps={{ align: "start", side: "inline-end" }}>
 							<Menu.Item>
 								<Menu.ItemIcon>
-									<LinkSimpleIcon weight="duotone" />
+									<IconLink size="1em" />
 								</Menu.ItemIcon>
 								<Menu.ItemLabel>Copy link</Menu.ItemLabel>
 							</Menu.Item>
 							<Menu.Item>
 								<Menu.ItemIcon>
-									<EnvelopeSimpleIcon weight="duotone" />
+									<IconEnvelopeSimple size="1em" />
 								</Menu.ItemIcon>
 								<Menu.ItemLabel>Email</Menu.ItemLabel>
 							</Menu.Item>
 							<Menu.Item>
 								<Menu.ItemIcon>
-									<ChatCircleIcon weight="duotone" />
+									<IconChatRound size="1em" />
 								</Menu.ItemIcon>
 								<Menu.ItemLabel>Messages</Menu.ItemLabel>
 							</Menu.Item>
@@ -481,13 +483,13 @@ export const MenuTypes: Story = {
 						<Menu.GroupLabel>Actions</Menu.GroupLabel>
 						<Menu.Item>
 							<Menu.ItemIcon>
-								<PencilSimpleIcon weight="duotone" />
+								<IconPencil size="1em" />
 							</Menu.ItemIcon>
 							<Menu.ItemLabel>Rename</Menu.ItemLabel>
 						</Menu.Item>
 						<Menu.Item>
 							<Menu.ItemIcon>
-								<CopyIcon weight="duotone" />
+								<IconCopy size="1em" />
 							</Menu.ItemIcon>
 							<Menu.ItemLabel>Duplicate</Menu.ItemLabel>
 						</Menu.Item>
@@ -532,7 +534,7 @@ export const CollapsibleGroup: Story = {
 			<Menu.Popup positionerProps={{ align: "start" }} xstyle={storyStyles.accountMenu}>
 				<Menu.Item>
 					<Menu.ItemIcon>
-						<CreditCardIcon weight="duotone" />
+						<IconCreditCard size="1em" />
 					</Menu.ItemIcon>
 					<Menu.ItemLabel>Billing</Menu.ItemLabel>
 				</Menu.Item>
@@ -540,7 +542,7 @@ export const CollapsibleGroup: Story = {
 				<Menu.CollapsibleGroup defaultOpen>
 					<Menu.CollapsibleGroupTrigger>
 						<Menu.ItemIcon>
-							<GaugeIcon weight="duotone" />
+							<IconGauge size="1em" />
 						</Menu.ItemIcon>
 						<Menu.ItemLabel>Usage remaining</Menu.ItemLabel>
 					</Menu.CollapsibleGroupTrigger>
@@ -552,7 +554,7 @@ export const CollapsibleGroup: Story = {
 						<Menu.LinkItem href="#upgrade">
 							<Menu.ItemLabel>Upgrade for more usage</Menu.ItemLabel>
 							<Menu.ItemShortcut>
-								<ArrowSquareOutIcon aria-hidden weight="regular" />
+								<IconArrowExternal size="1em" aria-hidden />
 							</Menu.ItemShortcut>
 						</Menu.LinkItem>
 						<Menu.SubmenuRoot>
@@ -562,7 +564,7 @@ export const CollapsibleGroup: Story = {
 							<Menu.Popup positionerProps={{ align: "start", side: "inline-end" }}>
 								<Menu.Item>
 									<Menu.ItemIcon>
-										<RepeatIcon weight="duotone" />
+										<IconRepeat size="1em" />
 									</Menu.ItemIcon>
 									<Menu.ItemLabel>Use reset</Menu.ItemLabel>
 								</Menu.Item>
@@ -574,7 +576,7 @@ export const CollapsibleGroup: Story = {
 						<Menu.LinkItem href="#usage">
 							<Menu.ItemLabel>Learn more</Menu.ItemLabel>
 							<Menu.ItemShortcut>
-								<ArrowSquareOutIcon aria-hidden size={14} weight="regular" />
+								<IconArrowExternal aria-hidden size={14} />
 							</Menu.ItemShortcut>
 						</Menu.LinkItem>
 					</Menu.CollapsibleGroupPanel>
@@ -582,14 +584,14 @@ export const CollapsibleGroup: Story = {
 				<Menu.Separator />
 				<Menu.Item>
 					<Menu.ItemIcon>
-						<GearIcon weight="duotone" />
+						<IconSettings size="1em" />
 					</Menu.ItemIcon>
 					<Menu.ItemLabel>Settings</Menu.ItemLabel>
 					<Menu.ItemShortcut>⌘,</Menu.ItemShortcut>
 				</Menu.Item>
 				<Menu.Item variant="error">
 					<Menu.ItemIcon>
-						<SignOutIcon weight="duotone" />
+						<IconSignOut size="1em" />
 					</Menu.ItemIcon>
 					<Menu.ItemLabel>Log out</Menu.ItemLabel>
 				</Menu.Item>

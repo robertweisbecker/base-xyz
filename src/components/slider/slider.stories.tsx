@@ -2,11 +2,14 @@ import x from "@stylexjs/atoms";
 import { Field } from "@/components/field/field";
 import { Label } from "@/components/label/label";
 import { Field as BaseField } from "@base-ui/react/field";
-import { MinusIcon } from "@phosphor-icons/react/dist/csr/Minus";
-import { PlusIcon } from "@phosphor-icons/react/dist/csr/Plus";
-import { SpeakerHighIcon } from "@phosphor-icons/react/dist/csr/SpeakerHigh";
-import { SpeakerLowIcon } from "@phosphor-icons/react/dist/csr/SpeakerLow";
-import { SpeakerXIcon } from "@phosphor-icons/react/dist/csr/SpeakerX";
+import {
+	IconMinus,
+	IconPlus,
+	IconVolumeHigh,
+	IconVolumeHighFill,
+	IconVolumeLow,
+	IconVolumeSlashFill,
+} from "fyicons";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import * as stylex from "@stylexjs/stylex";
 import { useState } from "react";
@@ -225,9 +228,9 @@ export const Options: Story = {
 						<Slider.Label>Output volume</Slider.Label>
 					</Slider.Header>
 					<Slider.Row>
-						<SpeakerLowIcon aria-hidden {...stylex.props(styles.sideIcon)} />
+						<IconVolumeLow size="1em" aria-hidden {...stylex.props(styles.sideIcon)} />
 						<BasicControl />
-						<SpeakerHighIcon aria-hidden {...stylex.props(styles.sideIcon)} />
+						<IconVolumeHigh size="1em" aria-hidden {...stylex.props(styles.sideIcon)} />
 					</Slider.Row>
 				</Slider.Root>
 			</Stack>
@@ -435,9 +438,9 @@ function ControlledExamples() {
 					</Slider.Header>
 					<Slider.Row>
 						<Toggle
-							icon={<SpeakerLowIcon aria-hidden weight="regular" />}
+							icon={<IconVolumeLow size="1em" aria-hidden />}
 							label="Muted"
-							pressedIcon={<SpeakerXIcon aria-hidden weight="fill" />}
+							pressedIcon={<IconVolumeSlashFill size="1em" aria-hidden />}
 							onPressedChange={() => setPresetValue(min)}
 							pressed={presetValue === min}
 							variant="ghost"
@@ -447,9 +450,9 @@ function ControlledExamples() {
 							<Slider.Thumb />
 						</Slider.Control>
 						<Toggle
-							icon={<SpeakerHighIcon aria-hidden weight="regular" />}
+							icon={<IconVolumeHigh size="1em" aria-hidden />}
 							label="Maximum"
-							pressedIcon={<SpeakerHighIcon aria-hidden weight="fill" />}
+							pressedIcon={<IconVolumeHighFill size="1em" aria-hidden />}
 							onPressedChange={() => setPresetValue(max)}
 							pressed={presetValue === max}
 							variant="ghost"
@@ -476,7 +479,7 @@ function ControlledExamples() {
 					<Slider.Row>
 						<IconButton
 							disabled={incrementValue === min}
-							icon={<MinusIcon aria-hidden />}
+							icon={<IconMinus size="1em" aria-hidden />}
 							label="Decrease zoom"
 							onClick={() => setIncrementValue((value) => Math.max(min, value - step))}
 							size="xs"
@@ -489,7 +492,7 @@ function ControlledExamples() {
 						</Slider.Control>
 						<IconButton
 							disabled={incrementValue === max}
-							icon={<PlusIcon aria-hidden />}
+							icon={<IconPlus size="1em" aria-hidden />}
 							label="Increase zoom"
 							onClick={() => setIncrementValue((value) => Math.min(max, value + step))}
 							size="xs"

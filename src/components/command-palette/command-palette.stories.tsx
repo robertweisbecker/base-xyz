@@ -1,11 +1,11 @@
 import {
-	BookOpenTextIcon,
-	CirclesThreePlusIcon,
-	MagnifyingGlassIcon,
-	NotificationIcon,
-	ToolboxIcon,
-	UserCircleGearIcon,
-} from "@phosphor-icons/react";
+	IconAppNotification,
+	IconAppsPlus,
+	IconBookOpen,
+	IconPencilEdit,
+	IconSearch,
+	IconToolbox,
+} from "fyicons";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { useState } from "react";
 import { Kbd } from "@/components/kbd/kbd";
@@ -41,7 +41,7 @@ const commandGroups: CommandGroup[] = [
 				group: "Suggestions",
 				keywords: "new add worker application",
 				shortcut: "N",
-				icon: <CirclesThreePlusIcon weight="duotone" aria-hidden />,
+				icon: <IconAppsPlus size="1em" aria-hidden />,
 			},
 			{
 				id: "search-docs",
@@ -50,7 +50,7 @@ const commandGroups: CommandGroup[] = [
 				group: "Suggestions",
 				keywords: "docs help reference",
 				shortcut: "/",
-				icon: <BookOpenTextIcon weight="duotone" aria-hidden />,
+				icon: <IconBookOpen size="1em" aria-hidden />,
 			},
 		],
 	},
@@ -64,7 +64,7 @@ const commandGroups: CommandGroup[] = [
 				description: "Manage account details and preferences.",
 				group: "Settings",
 				keywords: "user account person",
-				icon: <UserCircleGearIcon weight="duotone" aria-hidden />,
+				icon: <IconPencilEdit size="1em" aria-hidden />,
 			},
 			{
 				id: "notifications",
@@ -72,7 +72,7 @@ const commandGroups: CommandGroup[] = [
 				description: "Choose which events send alerts.",
 				group: "Settings",
 				keywords: "alerts messages bell",
-				icon: <NotificationIcon weight="duotone" aria-hidden />,
+				icon: <IconAppNotification size="1em" aria-hidden />,
 			},
 			{
 				id: "workspace-settings",
@@ -81,7 +81,7 @@ const commandGroups: CommandGroup[] = [
 				group: "Settings",
 				keywords: "preferences configure",
 				shortcut: "⌘,",
-				icon: <ToolboxIcon weight="duotone" aria-hidden />,
+				icon: <IconToolbox size="1em" aria-hidden />,
 			},
 		],
 	},
@@ -222,9 +222,7 @@ function CommandPaletteExample({ shortcut = false }: { shortcut?: boolean }) {
 		<Stack align="start" gap={3}>
 			<CommandPalette.Root
 				shortcut={shortcut}
-				trigger={
-					<CommandPalette.Trigger startSlot={<MagnifyingGlassIcon weight="bold" aria-hidden />} />
-				}
+				trigger={<CommandPalette.Trigger startSlot={<IconSearch size="1em" aria-hidden />} />}
 				items={commandGroups}
 				itemToStringValue={commandToStringValue}
 			>

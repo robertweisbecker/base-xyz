@@ -8,7 +8,7 @@ An experimental React component library built with:
 - [StyleX](https://stylexjs.com/) for typed design tokens and component styles
 - Vite + Storybook
 
-The project intentionally has no Tailwind or pre-styled component layer, and uses [Phosphor](https://phosphoricons.com/) for icons (temporarily). Includes demo font assets bundled separately from component styling.
+The project intentionally has no Tailwind or pre-styled component layer, and uses [FYIcons](https://icons.bob.fyi/) for icons. Includes demo font assets bundled separately from component styling.
 
 ## Setup
 

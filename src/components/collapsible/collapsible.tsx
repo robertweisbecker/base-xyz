@@ -1,5 +1,5 @@
 import { Collapsible as BaseCollapsible } from "@base-ui/react/collapsible";
-import { CaretDownIcon } from "@phosphor-icons/react/dist/csr/CaretDown";
+import { IconChevronDown } from "fyicons";
 import * as stylex from "@stylexjs/stylex";
 import type { ComponentProps } from "react";
 import { media } from "@/styles/constants.stylex";
@@ -142,7 +142,7 @@ export function Icon({
 			style={mergeStyle(sx.style, style)}
 			{...props}
 		>
-			{children ?? <CaretDownIcon size="1em" weight="bold" />}
+			{children ?? <IconChevronDown size="1em" />}
 		</span>
 	);
 }

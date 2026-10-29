@@ -1,9 +1,12 @@
-import { GearIcon } from "@phosphor-icons/react/dist/csr/Gear";
-import { IdentificationCardIcon } from "@phosphor-icons/react/dist/csr/IdentificationCard";
-import { PlusIcon } from "@phosphor-icons/react/dist/csr/Plus";
-import { RobotIcon } from "@phosphor-icons/react/dist/csr/Robot";
-import { SignOutIcon } from "@phosphor-icons/react/dist/csr/SignOut";
-import { UserIcon } from "@phosphor-icons/react/dist/csr/User";
+import {
+	IconAgentSimple,
+	IconPlus,
+	IconSettings,
+	IconSignOut,
+	IconUserFill,
+	IconWidget,
+} from "fyicons";
+
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import * as stylex from "@stylexjs/stylex";
 import { Button, IconButton } from "@/components/button/button";
@@ -17,8 +20,8 @@ const image = "/avatar-example.svg";
 const sizes = [4, 6, 8, 10, 12, 16] as const satisfies readonly AvatarSize[];
 const iconOptions = {
 	None: undefined,
-	Robot: <RobotIcon aria-hidden weight="fill" />,
-	User: <UserIcon aria-hidden weight="fill" />,
+	Robot: <IconAgentSimple size="1em" aria-hidden />,
+	User: <IconUserFill size="1em" aria-hidden />,
 };
 
 const meta = {
@@ -126,13 +129,13 @@ function AccountMenu() {
 				<Menu.Separator />
 				<Menu.Item>
 					<Menu.ItemIcon>
-						<IdentificationCardIcon size={16} weight="duotone" />
+						<IconWidget size={16} />
 					</Menu.ItemIcon>
 					<Menu.ItemLabel>View profile</Menu.ItemLabel>
 				</Menu.Item>
 				<Menu.Item>
 					<Menu.ItemIcon>
-						<GearIcon size={16} weight="duotone" />
+						<IconSettings size={16} />
 					</Menu.ItemIcon>
 					<Menu.ItemLabel>Manage account</Menu.ItemLabel>
 				</Menu.Item>
@@ -140,14 +143,14 @@ function AccountMenu() {
 			<Menu.Separator />
 			<Menu.Item>
 				<Menu.ItemIcon>
-					<PlusIcon size={16} weight="regular" />
+					<IconPlus size={16} />
 				</Menu.ItemIcon>
 				<Menu.ItemLabel>Add account</Menu.ItemLabel>
 			</Menu.Item>
 			<Menu.Separator />
 			<Menu.Item variant="error">
 				<Menu.ItemIcon>
-					<SignOutIcon size={16} />
+					<IconSignOut size={16} />
 				</Menu.ItemIcon>
 				<Menu.ItemLabel>Log out</Menu.ItemLabel>
 			</Menu.Item>
@@ -159,7 +162,11 @@ const options: { label: string; props: AvatarProps }[] = [
 	{ label: "Image", props: { image, initials: "AL", name: "Ada Lovelace" } },
 	{
 		label: "Custom icon overrides initials",
-		props: { icon: <RobotIcon aria-hidden weight="fill" />, initials: "GR", name: "Grace Robot" },
+		props: {
+			icon: <IconAgentSimple size="1em" aria-hidden />,
+			initials: "GR",
+			name: "Grace Robot",
+		},
 	},
 	{ label: "Explicit initials", props: { initials: "GH", name: "Grace Hopper" } },
 	{ label: "Initials derived from name", props: { name: "Katherine Johnson" } },

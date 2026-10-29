@@ -1,5 +1,4 @@
-import { ArrowRightIcon } from "@phosphor-icons/react/dist/csr/ArrowRight";
-import { PlusIcon } from "@phosphor-icons/react/dist/csr/Plus";
+import { IconArrowRight, IconPlus } from "fyicons";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import type { ComponentProps } from "react";
 import { Stack } from "@/components/layout";
@@ -8,8 +7,8 @@ import { LinkButton } from "./link-button";
 
 const iconOptions = {
 	None: undefined,
-	Add: <PlusIcon aria-hidden weight="bold" />,
-	Continue: <ArrowRightIcon aria-hidden weight="bold" />,
+	Add: <IconPlus size="1em" aria-hidden />,
+	Continue: <IconArrowRight size="1em" aria-hidden />,
 };
 
 type LinkButtonStoryArgs = ComponentProps<typeof LinkButton>;
@@ -77,7 +76,7 @@ export const Examples: Story = {
 					Actions that navigate
 				</Text>
 				<Stack align="center" gap={3} orientation="horizontal" wrap="wrap">
-					<LinkButton href="#create-project" startSlot={<PlusIcon aria-hidden weight="bold" />}>
+					<LinkButton href="#create-project" startSlot={<IconPlus size="1em" aria-hidden />}>
 						Create project
 					</LinkButton>
 					<LinkButton href="#project-overview" variant="secondary">
@@ -102,7 +101,7 @@ export const Examples: Story = {
 					</LinkButton>
 					<LinkButton
 						href="#continue"
-						endSlot={<ArrowRightIcon aria-hidden weight="bold" />}
+						endSlot={<IconArrowRight size="1em" aria-hidden />}
 						size="sm"
 					>
 						Continue

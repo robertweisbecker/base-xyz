@@ -1,7 +1,4 @@
-import { CheckCircleIcon } from "@phosphor-icons/react/dist/csr/CheckCircle";
-import { InfoIcon } from "@phosphor-icons/react/dist/csr/Info";
-import { WarningCircleIcon } from "@phosphor-icons/react/dist/csr/WarningCircle";
-import { XIcon } from "@phosphor-icons/react/dist/csr/X";
+import { IconAlertFill, IconCircleCheckFill, IconInfoFill, IconX } from "fyicons";
 import { Toast as BaseToast } from "@base-ui/react/toast";
 import type { ToastManager } from "@base-ui/react/toast";
 import * as stylex from "@stylexjs/stylex";
@@ -298,7 +295,7 @@ function AnchoredToastControls({
 						pressable.transition,
 					)}
 				>
-					<XIcon aria-hidden size={14} weight="bold" />
+					<IconX aria-hidden size={14} />
 				</BaseToast.Close>
 			) : null}
 		</>
@@ -359,8 +356,8 @@ function toneForStatus(status: AnchoredToastStatus): AnchoredToastTone {
 }
 
 function statusIcon(status: AnchoredToastStatus, size: number | string = 18) {
-	if (status === "success") return <CheckCircleIcon size={size} weight="fill" />;
-	if (status === "error") return <WarningCircleIcon size={size} weight="fill" />;
+	if (status === "success") return <IconCircleCheckFill size={size} />;
+	if (status === "error") return <IconAlertFill size={size} />;
 	if (status === "loading" || status === "ongoing") {
 		const loaderStyle =
 			size === 16
@@ -370,7 +367,7 @@ function statusIcon(status: AnchoredToastStatus, size: number | string = 18) {
 					: anchoredParts.generatedLoader;
 		return <Loader aria-hidden style={loaderStyle} />;
 	}
-	return <InfoIcon size={size} weight="fill" />;
+	return <IconInfoFill size={size} />;
 }
 
 const renotifyEven = stylex.keyframes({

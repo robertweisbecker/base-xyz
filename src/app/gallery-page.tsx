@@ -14,14 +14,26 @@ import {
 	StreamingResponse,
 	WorkflowProgress,
 } from "@/blocks";
-import { BlueprintIcon } from "@phosphor-icons/react/dist/csr/Blueprint";
-import { CopyIcon } from "@phosphor-icons/react/dist/csr/Copy";
-import { FolderOpenIcon } from "@phosphor-icons/react/dist/csr/FolderOpen";
-import { GithubLogoIcon } from "@phosphor-icons/react/dist/csr/GithubLogo";
-import { InfoIcon } from "@phosphor-icons/react/dist/csr/Info";
-import { MagnifyingGlassIcon } from "@phosphor-icons/react/dist/csr/MagnifyingGlass";
-import { PlusIcon } from "@phosphor-icons/react/dist/csr/Plus";
-import { XIcon } from "@phosphor-icons/react/dist/csr/X";
+import {
+	IconArrowRight,
+	IconBlueprint,
+	IconBookRepository,
+	IconCopy,
+	IconFileSearch,
+	IconFolderOpen,
+	IconInfoFill,
+	IconPlus,
+	IconSearch,
+	IconTextBold,
+	IconTextBoldInactive,
+	IconThumbsDown,
+	IconThumbsDownFill,
+	IconThumbsUp,
+	IconThumbsUpFill,
+	IconTrash,
+	IconX,
+} from "fyicons";
+
 import {
 	AlertDialog,
 	Avatar,
@@ -91,15 +103,6 @@ import {
 } from "@/blocks/model-selector/model-selector.examples";
 import { breakpoints } from "@/styles/constants.stylex";
 import { tokens } from "@/theme/tokens.stylex";
-
-import {
-	ArrowRightIcon,
-	FileSearchIcon,
-	TextBIcon,
-	ThumbsDownIcon,
-	ThumbsUpIcon,
-	TrashIcon,
-} from "@phosphor-icons/react";
 
 type GalleryCell = {
 	title: string;
@@ -184,13 +187,13 @@ function getComponentCells(): GalleryCell[] {
 			title: "Button",
 			content: (
 				<div {...stylex.props(styles.buttonStack)}>
-					<Button size="sm" startSlot={<PlusIcon aria-hidden weight="bold" />} variant="secondary">
+					<Button size="sm" startSlot={<IconPlus size="1em" aria-hidden />} variant="secondary">
 						Create project
 					</Button>
-					<Button size="sm" startSlot={<PlusIcon aria-hidden weight="bold" />}>
+					<Button size="sm" startSlot={<IconPlus size="1em" aria-hidden />}>
 						Create project
 					</Button>
-					<Button size="sm" startSlot={<PlusIcon aria-hidden weight="bold" />} variant="ghost">
+					<Button size="sm" startSlot={<IconPlus size="1em" aria-hidden />} variant="ghost">
 						Create project
 					</Button>
 				</div>
@@ -202,7 +205,7 @@ function getComponentCells(): GalleryCell[] {
 				<Callout
 					description="A new version is ready to install."
 					hue="accent"
-					icon={<InfoIcon aria-hidden weight="fill" />}
+					icon={<IconInfoFill size="1em" aria-hidden />}
 					title="Update available"
 				/>
 			),
@@ -385,7 +388,7 @@ function getComponentCells(): GalleryCell[] {
 			content: (
 				<EmptyState
 					description="Create a project to get started."
-					icon={<FolderOpenIcon aria-hidden size="1em" weight="duotone" />}
+					icon={<IconFolderOpen aria-hidden size="1em" />}
 					size="sm"
 					title="No projects yet"
 				>
@@ -437,7 +440,7 @@ function getComponentCells(): GalleryCell[] {
 			title: "IconButton",
 			content: (
 				<IconButton
-					icon={<PlusIcon aria-hidden weight="bold" />}
+					icon={<IconPlus size="1em" aria-hidden />}
 					label="Add item"
 					variant="secondary"
 				/>
@@ -452,12 +455,12 @@ function getComponentCells(): GalleryCell[] {
 			content: (
 				<InputGroup.Root xstyle={styles.inputGroupSample}>
 					<InputGroup.Addon>
-						<FileSearchIcon aria-hidden size={13} />
+						<IconFileSearch aria-hidden size={13} />
 					</InputGroup.Addon>
 					<InputGroup.Input aria-label="Worker URL" defaultValue="stylex-lab" />
 					<InputGroup.Addon position="end">
 						<IconButton
-							icon={<ArrowRightIcon aria-hidden />}
+							icon={<IconArrowRight size="1em" aria-hidden />}
 							label="Copy URL"
 							size="xs"
 							tooltip={false}
@@ -478,7 +481,7 @@ function getComponentCells(): GalleryCell[] {
 						</Badge>
 					}
 					label="Projects"
-					startSlot={<FolderOpenIcon aria-hidden size="1.25em" weight="duotone" />}
+					startSlot={<IconFolderOpen aria-hidden size="1.25em" />}
 				/>
 			),
 		},
@@ -544,16 +547,16 @@ function getComponentCells(): GalleryCell[] {
 					<Menu.Trigger render={<Button variant="secondary" />}>Open menu</Menu.Trigger>
 					<Menu.Popup positionerProps={{ align: "start" }}>
 						<Menu.Item>
-							<PlusIcon aria-hidden weight="regular" />
+							<IconPlus size="1em" aria-hidden />
 							<Menu.ItemLabel>New file</Menu.ItemLabel>
 						</Menu.Item>
 						<Menu.Item>
-							<CopyIcon aria-hidden weight="regular" />
+							<IconCopy size="1em" aria-hidden />
 							<Menu.ItemLabel>Duplicate</Menu.ItemLabel>
 						</Menu.Item>
 						<Menu.Separator />
 						<Menu.Item variant="error">
-							<TrashIcon aria-hidden weight="regular" />
+							<IconTrash size="1em" aria-hidden />
 							<Menu.ItemLabel>Delete</Menu.ItemLabel>
 						</Menu.Item>
 					</Menu.Popup>
@@ -870,7 +873,12 @@ function getComponentCells(): GalleryCell[] {
 			title: "Toggle",
 			content: (
 				<div>
-					<Toggle startSlot={<TextBIcon aria-hidden weight="bold" />}>Bold</Toggle>
+					<Toggle
+						startSlot={<IconTextBoldInactive size="1em" aria-hidden />}
+						pressedIcon={<IconTextBold size="1em" aria-hidden />}
+					>
+						Bold
+					</Toggle>
 				</div>
 			),
 		},
@@ -880,17 +888,17 @@ function getComponentCells(): GalleryCell[] {
 				<div {...stylex.props(styles.toggleRow)}>
 					<ToggleGroup defaultValue={["bold"]}>
 						<Toggle
-							icon={<ThumbsDownIcon aria-hidden weight="regular" />}
+							icon={<IconThumbsDown size="1em" aria-hidden />}
 							pressedIcon={
-								<ThumbsDownIcon aria-hidden weight="duotone" color={tokens["--fg-error"]} />
+								<IconThumbsDownFill size="1em" aria-hidden color={tokens["--fg-error"]} />
 							}
 							label="Bad response"
 							value="thumbs-down"
 						/>
 						<Toggle
-							icon={<ThumbsUpIcon aria-hidden weight="regular" />}
+							icon={<IconThumbsUp size="1em" aria-hidden />}
 							pressedIcon={
-								<ThumbsUpIcon aria-hidden weight="duotone" color={tokens["--fg-success"]} />
+								<IconThumbsUpFill size="1em" aria-hidden color={tokens["--fg-success"]} />
 							}
 							label="Good response"
 							value="thumbs-up"
@@ -905,10 +913,10 @@ function getComponentCells(): GalleryCell[] {
 				<Toolbar.Root aria-label="Search toolbar">
 					<Toolbar.Input aria-label="Search" placeholder="Search..." />
 					<Toolbar.Button aria-label="Search">
-						<MagnifyingGlassIcon aria-hidden size={15} />
+						<IconSearch aria-hidden size={15} />
 					</Toolbar.Button>
 					<Toolbar.Button aria-label="Add">
-						<PlusIcon aria-hidden size={15} />
+						<IconPlus aria-hidden size={15} />
 					</Toolbar.Button>
 				</Toolbar.Root>
 			),
@@ -921,7 +929,7 @@ function getComponentCells(): GalleryCell[] {
 						<Tooltip.Trigger
 							render={
 								<IconButton
-									icon={<PlusIcon aria-hidden />}
+									icon={<IconPlus size="1em" aria-hidden />}
 									label="Add item"
 									tooltip={false}
 									variant="secondary"
@@ -1072,7 +1080,7 @@ function getBlockCells(): GalleryCell[] {
 					<AgentActionApproval.Content>
 						<AgentActionApproval.Summary>
 							<AgentActionApproval.Icon>
-								<BlueprintIcon aria-hidden size={14} weight="duotone" />
+								<IconBlueprint aria-hidden size={14} />
 							</AgentActionApproval.Icon>
 							<AgentActionApproval.SummaryContent>
 								<AgentActionApproval.Action>Run npm test</AgentActionApproval.Action>
@@ -1134,7 +1142,7 @@ function getBlockCells(): GalleryCell[] {
 				>
 					<ConfirmationDialog.Header>
 						<ConfirmationDialog.Visual>
-							<BlueprintIcon aria-hidden size={20} weight="duotone" />
+							<IconBlueprint aria-hidden size={20} />
 						</ConfirmationDialog.Visual>
 						<ConfirmationDialog.Title>Confirm release</ConfirmationDialog.Title>
 						<ConfirmationDialog.Description>
@@ -1185,7 +1193,11 @@ function getBlockCells(): GalleryCell[] {
 					description="Primitives, blocks, and verification stories."
 					headingLevel={2}
 					startSlot={
-						<Avatar icon={<GithubLogoIcon aria-hidden weight="fill" />} name="GitHub" size={8} />
+						<Avatar
+							icon={<IconBookRepository aria-hidden size="1em" />}
+							name="Repository"
+							size={8}
+						/>
 					}
 					breadcrumbs={
 						<Breadcrumbs.Root size="sm">
@@ -1349,7 +1361,7 @@ function ToastList() {
 				<Toast.Close
 					render={
 						<IconButton
-							icon={<XIcon aria-hidden weight="bold" />}
+							icon={<IconX size="1em" aria-hidden />}
 							label="Dismiss notification"
 							tooltip={false}
 							variant="ghost"

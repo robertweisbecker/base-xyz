@@ -1,6 +1,4 @@
-import { ArrowClockwiseIcon } from "@phosphor-icons/react/dist/csr/ArrowClockwise";
-import { CopyIcon } from "@phosphor-icons/react/dist/csr/Copy";
-import { SquareIcon } from "@phosphor-icons/react/dist/csr/Square";
+import { IconArrowClockwise, IconCopy, IconStopFill } from "fyicons";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { useState } from "react";
 import { Button, Separator, Toolbar } from "@/components";
@@ -33,11 +31,11 @@ function ResponseActions({ onRetry, retry = true }: { onRetry?: () => void; retr
 	return (
 		<StreamingResponse.Actions>
 			<Toolbar.Button aria-label="Copy response">
-				<CopyIcon aria-hidden size={16} weight="bold" />
+				<IconCopy aria-hidden size={16} />
 			</Toolbar.Button>
 			{retry ? (
 				<Toolbar.Button aria-label="Try again" onClick={onRetry}>
-					<ArrowClockwiseIcon aria-hidden size={16} weight="bold" />
+					<IconArrowClockwise aria-hidden size={16} />
 				</Toolbar.Button>
 			) : null}
 		</StreamingResponse.Actions>
@@ -135,7 +133,7 @@ function InteractiveResponseExample() {
 				{status === "streaming" ? (
 					<StreamingResponse.Actions>
 						<Toolbar.Button aria-label="Stop generating" onClick={() => setStatus("stopped")}>
-							<SquareIcon aria-hidden size={12} weight="fill" />
+							<IconStopFill aria-hidden size={12} />
 						</Toolbar.Button>
 					</StreamingResponse.Actions>
 				) : (
@@ -158,13 +156,13 @@ function ResponseExample({ label, status }: { label: string; status: StreamingRe
 				{status === "streaming" ? (
 					<StreamingResponse.Actions>
 						<Toolbar.Button aria-label="Stop generating">
-							<SquareIcon aria-hidden size={12} weight="fill" />
+							<IconStopFill aria-hidden size={12} />
 						</Toolbar.Button>
 					</StreamingResponse.Actions>
 				) : status === "error" ? (
 					<StreamingResponse.Actions>
 						<Toolbar.Button aria-label="Try again">
-							<ArrowClockwiseIcon aria-hidden size={16} weight="bold" />
+							<IconArrowClockwise aria-hidden size={16} />
 						</Toolbar.Button>
 					</StreamingResponse.Actions>
 				) : (

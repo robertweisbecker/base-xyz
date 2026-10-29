@@ -1,4 +1,4 @@
-import { XIcon } from "@phosphor-icons/react/dist/csr/X";
+import { IconX } from "fyicons";
 import * as stylex from "@stylexjs/stylex";
 import {
 	createContext,
@@ -305,7 +305,7 @@ function ToastList() {
 					<Toast.Description />
 				</Toast.Text>
 				<Toast.Close aria-label="Dismiss notification">
-					<XIcon aria-hidden size={16} weight="bold" />
+					<IconX aria-hidden size={16} />
 				</Toast.Close>
 			</Toast.Content>
 		</Toast.Root>

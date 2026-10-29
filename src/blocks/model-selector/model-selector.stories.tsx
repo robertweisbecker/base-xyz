@@ -1,4 +1,4 @@
-import { CirclesThreeIcon } from "@phosphor-icons/react";
+import { IconDotsTriangle } from "fyicons";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { useState } from "react";
 import { Button, type ButtonSize, type ButtonVariant } from "@/components";
@@ -237,7 +237,7 @@ const modelGroupsWithIcons = exampleModelGroups.map((group) => ({
 	...group,
 	options: group.options.map((option) => ({
 		...option,
-		icon: <CirclesThreeIcon aria-hidden weight="duotone" />,
+		icon: <IconDotsTriangle size="1em" aria-hidden />,
 	})),
 }));
 

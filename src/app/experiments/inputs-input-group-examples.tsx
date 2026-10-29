@@ -1,8 +1,4 @@
-import { CircleIcon } from "@phosphor-icons/react/dist/csr/Circle";
-import { EnvelopeIcon } from "@phosphor-icons/react/dist/csr/Envelope";
-import { LockIcon } from "@phosphor-icons/react/dist/csr/Lock";
-import { PaperclipIcon } from "@phosphor-icons/react/dist/csr/Paperclip";
-import { PaperPlaneTiltIcon } from "@phosphor-icons/react/dist/csr/PaperPlaneTilt";
+import { IconCircle, IconEnvelope, IconLock, IconPaperclip, IconSendTiltFill } from "fyicons";
 import * as stylex from "@stylexjs/stylex";
 import type { ReactNode } from "react";
 import { CopyButton } from "@/blocks";
@@ -25,7 +21,7 @@ export function InputGroupVariations() {
 			<InputGroupSpecimen label="Search projects">
 				<InputGroup.Root>
 					<InputGroup.Addon>
-						<CircleIcon aria-hidden />
+						<IconCircle size="1em" aria-hidden />
 					</InputGroup.Addon>
 					<InputGroup.Input
 						aria-label="Search projects"
@@ -50,7 +46,7 @@ export function InputGroupVariations() {
 			<InputGroupSpecimen label="Invite a teammate">
 				<InputGroup.Root>
 					<InputGroup.Addon>
-						<EnvelopeIcon aria-hidden />
+						<IconEnvelope size="1em" aria-hidden />
 					</InputGroup.Addon>
 					<InputGroup.Input
 						aria-label="Teammate email"
@@ -67,7 +63,7 @@ export function InputGroupVariations() {
 			<InputGroupSpecimen label="Copy an API token">
 				<InputGroup.Root variant="subtle">
 					<InputGroup.Addon>
-						<LockIcon aria-hidden />
+						<IconLock size="1em" aria-hidden />
 					</InputGroup.Addon>
 					<InputGroup.Input aria-label="API token" defaultValue="sk_live_••••••••42" readOnly />
 					<InputGroup.Actions>
@@ -99,14 +95,14 @@ export function InputGroupVariations() {
 					<InputGroup.Footer>
 						<InputGroup.Actions position="start">
 							<IconButton
-								icon={<PaperclipIcon aria-hidden />}
+								icon={<IconPaperclip size="1em" aria-hidden />}
 								label="Attach a file"
 								size="sm"
 								variant="ghost"
 							/>
 						</InputGroup.Actions>
 						<InputGroup.Actions>
-							<Button size="sm" startSlot={<PaperPlaneTiltIcon aria-hidden weight="fill" />}>
+							<Button size="sm" startSlot={<IconSendTiltFill size="1em" aria-hidden />}>
 								Send
 							</Button>
 						</InputGroup.Actions>

@@ -1,7 +1,5 @@
 import { NumberField as BaseNumberField } from "@base-ui/react/number-field";
-import { ArrowsHorizontalIcon } from "@phosphor-icons/react/dist/csr/ArrowsHorizontal";
-import { MinusIcon } from "@phosphor-icons/react/dist/csr/Minus";
-import { PlusIcon } from "@phosphor-icons/react/dist/csr/Plus";
+import { IconArrowX, IconMinus, IconPlus } from "fyicons";
 import * as stylex from "@stylexjs/stylex";
 import { createContext, useContext, type ComponentProps, type CSSProperties } from "react";
 import { media } from "@/styles/constants.stylex";
@@ -98,7 +96,7 @@ export function Control({
 					pressable.transition,
 				)}
 			>
-				<MinusIcon aria-hidden size={12} weight="bold" />
+				<IconMinus aria-hidden size={12} />
 			</BaseNumberField.Decrement>
 			<BaseNumberField.Input
 				className={attrJoin(sx.className, className)}
@@ -116,7 +114,7 @@ export function Control({
 					pressable.transition,
 				)}
 			>
-				<PlusIcon aria-hidden size={12} weight="bold" />
+				<IconPlus aria-hidden size={12} />
 			</BaseNumberField.Increment>
 		</BaseNumberField.Group>
 	);
@@ -139,14 +137,7 @@ export function ScrubArea({
 		>
 			{children}
 			<BaseNumberField.ScrubAreaCursor {...stylex.props(numberFieldParts.scrubCursor)}>
-				<ArrowsHorizontalIcon
-					aria-hidden
-					size={24}
-					weight="fill"
-					strokeWidth={8}
-					fill="black"
-					stroke="white"
-				/>
+				<IconArrowX aria-hidden size={24} color="black" />
 			</BaseNumberField.ScrubAreaCursor>
 		</BaseNumberField.ScrubArea>
 	);

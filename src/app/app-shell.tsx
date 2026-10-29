@@ -1,7 +1,6 @@
 import { Link as RouterLink, Outlet, useNavigate, useSearch } from "@tanstack/react-router";
-import { MoonIcon } from "@phosphor-icons/react/dist/csr/Moon";
-import { StairsIcon } from "@phosphor-icons/react/dist/csr/Stairs";
-import { SunIcon } from "@phosphor-icons/react/dist/csr/Sun";
+import { IconAtomSpiral, IconMoon, IconSun } from "fyicons";
+
 import * as stylex from "@stylexjs/stylex";
 import { useEffect, useState } from "react";
 import { IconButton, Navbar, Select, Separator } from "@/components";
@@ -116,7 +115,7 @@ function AppHeader({
 					{...stylex.props(textStyles.supporting, styles.brand, focusRing.offset)}
 				>
 					<span {...stylex.props(styles.brandMark)}>
-						<StairsIcon aria-hidden size={16} weight="duotone" />
+						<IconAtomSpiral aria-hidden size={16} />
 					</span>
 					<span>BaseX</span>
 				</RouterLink>
@@ -173,9 +172,9 @@ function AppHeader({
 						icon={
 							<span {...stylex.props(styles.themeIcon)}>
 								{resolvedMode === "light" ? (
-									<MoonIcon aria-hidden size={themeIconSize} weight="duotone" />
+									<IconMoon aria-hidden size={themeIconSize} />
 								) : (
-									<SunIcon aria-hidden size={themeIconSize} weight="duotone" />
+									<IconSun aria-hidden size={themeIconSize} />
 								)}
 							</span>
 						}
