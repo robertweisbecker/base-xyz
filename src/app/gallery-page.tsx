@@ -25,8 +25,11 @@ import {
 	IconPlus,
 	IconSearch,
 	IconTextBold,
+	IconTextBoldInactive,
 	IconThumbsDown,
+	IconThumbsDownFill,
 	IconThumbsUp,
+	IconThumbsUpFill,
 	IconTrash,
 	IconX,
 } from "fyicons";
@@ -870,7 +873,12 @@ function getComponentCells(): GalleryCell[] {
 			title: "Toggle",
 			content: (
 				<div>
-					<Toggle startSlot={<IconTextBold size="1em" aria-hidden />}>Bold</Toggle>
+					<Toggle
+						startSlot={<IconTextBoldInactive size="1em" aria-hidden />}
+						pressedIcon={<IconTextBold size="1em" aria-hidden />}
+					>
+						Bold
+					</Toggle>
 				</div>
 			),
 		},
@@ -881,13 +889,17 @@ function getComponentCells(): GalleryCell[] {
 					<ToggleGroup defaultValue={["bold"]}>
 						<Toggle
 							icon={<IconThumbsDown size="1em" aria-hidden />}
-							pressedIcon={<IconThumbsDown size="1em" aria-hidden color={tokens["--fg-error"]} />}
+							pressedIcon={
+								<IconThumbsDownFill size="1em" aria-hidden color={tokens["--fg-error"]} />
+							}
 							label="Bad response"
 							value="thumbs-down"
 						/>
 						<Toggle
 							icon={<IconThumbsUp size="1em" aria-hidden />}
-							pressedIcon={<IconThumbsUp size="1em" aria-hidden color={tokens["--fg-success"]} />}
+							pressedIcon={
+								<IconThumbsUpFill size="1em" aria-hidden color={tokens["--fg-success"]} />
+							}
 							label="Good response"
 							value="thumbs-up"
 						/>
