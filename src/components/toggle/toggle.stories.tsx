@@ -3,10 +3,12 @@ import {
 	IconBellSlash,
 	IconItalic,
 	IconPin,
+	IconPinFill,
 	IconTextAlignCenter,
 	IconTextAlignEnd,
 	IconTextAlignStart,
 	IconTextBold,
+	IconTextBoldInactive,
 	IconTextUnderline,
 } from "fyicons";
 import type { Meta, StoryObj } from "@storybook/react-vite";
@@ -20,7 +22,7 @@ import { Toggle, ToggleGroup, type ToggleProps, type ToggleVariant } from "./tog
 const iconOptions = {
 	None: undefined,
 	Pin: <IconPin size="1em" aria-hidden />,
-	"Pin Fill": <IconPin size="1em" aria-hidden />,
+	"Pin Fill": <IconPinFill size="1em" aria-hidden />,
 	Bell: <IconBell size="1em" aria-hidden />,
 	"Bell slash": <IconBellSlash size="1em" aria-hidden />,
 };
@@ -140,7 +142,8 @@ function FormattingToggles({ variant }: { variant?: ToggleVariant }) {
 	return (
 		<>
 			<Toggle
-				icon={<IconTextBold size="1em" aria-hidden />}
+				icon={<IconTextBoldInactive size="1em" aria-hidden />}
+				pressedIcon={<IconTextBold size="1em" aria-hidden />}
 				label="Bold"
 				value="bold"
 				variant={variant}

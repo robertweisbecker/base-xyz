@@ -1,6 +1,5 @@
 import { Link as RouterLink, Outlet, useNavigate, useSearch } from "@tanstack/react-router";
-import { IconMoon, IconSun } from "fyicons";
-import { StairsIcon } from "@phosphor-icons/react/dist/csr/Stairs";
+import { IconAtomSpiral, IconMoon, IconSun } from "fyicons";
 
 import * as stylex from "@stylexjs/stylex";
 import { useEffect, useState } from "react";
@@ -116,7 +115,7 @@ function AppHeader({
 					{...stylex.props(textStyles.supporting, styles.brand, focusRing.offset)}
 				>
 					<span {...stylex.props(styles.brandMark)}>
-						<StairsIcon aria-hidden size={16} weight="duotone" />
+						<IconAtomSpiral aria-hidden size={16} />
 					</span>
 					<span>BaseX</span>
 				</RouterLink>

@@ -1,5 +1,5 @@
 import { useRender } from "@base-ui/react/use-render";
-import { IconArrowLeft, IconArrowRight, IconFile } from "fyicons";
+import { IconArrowLeft, IconArrowRight, IconPage } from "fyicons";
 import * as stylex from "@stylexjs/stylex";
 import { useContext, type MouseEvent, type ReactElement, type ReactNode, type Ref } from "react";
 import { Collapsible } from "@/components/collapsible/collapsible";
@@ -182,7 +182,7 @@ function resolveRowModel({
 		resolvedAriaLabel: isIconMode ? (ariaLabel ?? label) : ariaLabel,
 		resolvedEndSlot: endSlot ?? badge,
 		showTooltip: isIconMode && !disclosure && (tooltip ?? label) !== false,
-		visualIcon: icon || startSlot || <IconFile size="1em" />,
+		visualIcon: icon || startSlot || <IconPage size="1em" />,
 	};
 }
 

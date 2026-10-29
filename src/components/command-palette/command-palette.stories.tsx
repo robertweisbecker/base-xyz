@@ -1,5 +1,11 @@
-import { IconAppNotification, IconAppsPlus, IconBookOpen, IconSearch, IconToolbox } from "fyicons";
-import { UserCircleGearIcon } from "@phosphor-icons/react";
+import {
+	IconAppNotification,
+	IconAppsPlus,
+	IconBookOpen,
+	IconPencilEdit,
+	IconSearch,
+	IconToolbox,
+} from "fyicons";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { useState } from "react";
 import { Kbd } from "@/components/kbd/kbd";
@@ -58,7 +64,7 @@ const commandGroups: CommandGroup[] = [
 				description: "Manage account details and preferences.",
 				group: "Settings",
 				keywords: "user account person",
-				icon: <UserCircleGearIcon weight="duotone" aria-hidden />,
+				icon: <IconPencilEdit size="1em" aria-hidden />,
 			},
 			{
 				id: "notifications",

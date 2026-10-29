@@ -1,5 +1,4 @@
-import { GithubLogoIcon } from "@phosphor-icons/react/dist/csr/GithubLogo";
-import { IconGitFork, IconLockFill, IconSearch, IconStar } from "fyicons";
+import { IconBookRepository, IconGitFork, IconLockFill, IconSearch, IconStar } from "fyicons";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { Avatar, Badge, Breadcrumbs, Button, InputGroup, Tabs } from "@/components";
 import { Stack } from "@/components/layout/layout";
@@ -23,7 +22,7 @@ export const Examples: Story = {
 				title="base-stylex-lab"
 				description="React primitives and workflow blocks composed with Base UI and StyleX."
 				startSlot={
-					<Avatar icon={<GithubLogoIcon aria-hidden weight="fill" />} name="GitHub" size={8} />
+					<Avatar icon={<IconBookRepository aria-hidden size="1em" />} name="Repository" size={8} />
 				}
 				breadcrumbs={
 					<Breadcrumbs.Root size="sm">

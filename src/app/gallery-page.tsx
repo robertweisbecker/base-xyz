@@ -16,6 +16,7 @@ import {
 } from "@/blocks";
 import {
 	IconArrowRight,
+	IconBookRepository,
 	IconBlueprint,
 	IconCopy,
 	IconFileSearch,
@@ -29,7 +30,6 @@ import {
 	IconTrash,
 	IconX,
 } from "fyicons";
-import { GithubLogoIcon } from "@phosphor-icons/react/dist/csr/GithubLogo";
 
 import {
 	AlertDialog,
@@ -1181,7 +1181,11 @@ function getBlockCells(): GalleryCell[] {
 					description="Primitives, blocks, and verification stories."
 					headingLevel={2}
 					startSlot={
-						<Avatar icon={<GithubLogoIcon aria-hidden weight="fill" />} name="GitHub" size={8} />
+						<Avatar
+							icon={<IconBookRepository aria-hidden size="1em" />}
+							name="Repository"
+							size={8}
+						/>
 					}
 					breadcrumbs={
 						<Breadcrumbs.Root size="sm">

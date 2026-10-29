@@ -1,6 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { IconCube, IconHome, IconSettings, IconUsers } from "fyicons";
-import { ShieldChevronIcon } from "@phosphor-icons/react/dist/csr/ShieldChevron";
+import { IconCube, IconHome, IconSettings, IconShieldLock, IconUsers } from "fyicons";
 
 import * as stylex from "@stylexjs/stylex";
 import { useRef, useState, type MouseEvent } from "react";
@@ -373,7 +372,7 @@ function DrilldownExample() {
 									<NavList.DrilldownTrigger
 										to="security"
 										label="Security"
-										icon={<ShieldChevronIcon weight="duotone" />}
+										icon={<IconShieldLock size="1em" />}
 									/>
 								</NavList.Section>
 							</NavList.DrilldownPanel>

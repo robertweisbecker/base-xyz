@@ -1,5 +1,11 @@
-import { IconAgentSimple, IconPlus, IconSettings, IconSignOut, IconUserFill } from "fyicons";
-import { IdentificationCardIcon } from "@phosphor-icons/react/dist/csr/IdentificationCard";
+import {
+	IconAgentSimple,
+	IconPlus,
+	IconSettings,
+	IconSignOut,
+	IconUserFill,
+	IconWidget,
+} from "fyicons";
 
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import * as stylex from "@stylexjs/stylex";
@@ -123,7 +129,7 @@ function AccountMenu() {
 				<Menu.Separator />
 				<Menu.Item>
 					<Menu.ItemIcon>
-						<IdentificationCardIcon size={16} weight="duotone" />
+						<IconWidget size={16} />
 					</Menu.ItemIcon>
 					<Menu.ItemLabel>View profile</Menu.ItemLabel>
 				</Menu.Item>

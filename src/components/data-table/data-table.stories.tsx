@@ -23,16 +23,17 @@ import { Loader } from "@/components/loader";
 import { Button } from "@/components/button";
 import {
 	IconArrowClockwise,
+	IconBrowserPointer,
 	IconChevronRight,
 	IconCircleCheck,
 	IconCircleX,
 	IconCircleXFill,
 	IconCopy,
 	IconGear,
+	IconListLog,
 	IconScroll,
 	IconTrash,
 } from "fyicons";
-import { CubeFocusIcon } from "@phosphor-icons/react";
 import { Avatar } from "@/components/avatar/avatar";
 import { Stack } from "@/components/layout/layout";
 
@@ -116,7 +117,7 @@ const commandGroups: DeploymentCommandGroup[] = [
 				group: "Deployments",
 				keywords: "find filter search url owner",
 				shortcut: "/",
-				icon: <CubeFocusIcon aria-hidden />,
+				icon: <IconListLog size="1em" aria-hidden />,
 			},
 			{
 				id: "new-deployment",
@@ -527,7 +528,7 @@ function DeploymentTable(args: Partial<DataTableProps<Deployment>>) {
 				</Stack>
 			)}
 			getRowActions={(row) => [
-				{ id: "view", label: "View deployment", icon: <CubeFocusIcon weight="duotone" /> },
+				{ id: "view", label: "View deployment", icon: <IconBrowserPointer size="1em" /> },
 				{
 					id: "copy-id",
 					label: "Copy deployment ID",
