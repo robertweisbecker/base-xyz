@@ -1,10 +1,4 @@
-import {
-	IconAppNotification,
-	IconBookOpen,
-	IconSearch,
-	IconShapesPlus,
-	IconToolbox,
-} from "fyicons";
+import { IconAppNotification, IconAppsPlus, IconBookOpen, IconSearch, IconToolbox } from "fyicons";
 import { UserCircleGearIcon } from "@phosphor-icons/react";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { useState } from "react";
@@ -41,7 +35,7 @@ const commandGroups: CommandGroup[] = [
 				group: "Suggestions",
 				keywords: "new add worker application",
 				shortcut: "N",
-				icon: <IconShapesPlus size="1em" aria-hidden />,
+				icon: <IconAppsPlus size="1em" aria-hidden />,
 			},
 			{
 				id: "search-docs",
