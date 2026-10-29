@@ -15,6 +15,7 @@ import {
 	IconTextAlignEnd,
 	IconTextAlignStart,
 	IconTextBold,
+	IconTextBoldInactive,
 	IconTextStrikethrough,
 	IconTextUnderline,
 } from "fyicons";
@@ -69,7 +70,7 @@ export const Playground: Story = {
 				<Toolbar.Button
 					render={
 						<Toggle
-							icon={<IconTextBold size="1em" aria-hidden />}
+							icon={<IconTextBoldInactive size="1em" aria-hidden />}
 							label="Bold"
 							pressedIcon={<IconTextBold size="1em" aria-hidden />}
 							value="bold"

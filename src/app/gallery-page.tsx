@@ -16,8 +16,8 @@ import {
 } from "@/blocks";
 import {
 	IconArrowRight,
-	IconBookRepository,
 	IconBlueprint,
+	IconBookRepository,
 	IconCopy,
 	IconFileSearch,
 	IconFolderOpen,

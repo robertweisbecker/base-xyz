@@ -34,6 +34,7 @@ import {
 } from "@/components";
 import { breakpoints } from "@/styles/constants.stylex";
 import { tokens } from "@/theme/tokens.stylex";
+import { AgentWorkflow } from "./agent-workflow";
 import { experimentLayoutVars } from "./experiment-layout.stylex";
 import { ExperimentPage, ExperimentSection } from "./experiment-page";
 
@@ -64,6 +65,13 @@ type ResponseStatus = "streaming" | "complete" | "stopped" | "error";
 type AgentBlockExampleProps = { description: string; id: string; title: string };
 
 const agentBlockSections = [
+	{
+		id: "agent-workflow",
+		title: "Complete agent workflow",
+		description:
+			"One local run from request to review, approval, and completion, with cancellation and recovery.",
+		Example: AgentWorkflowExample,
+	},
 	{
 		id: "agent-action-approval",
 		title: "Agent Action Approval",
@@ -112,7 +120,7 @@ const agentBlockSections = [
 export function AgentBlocksPage() {
 	return (
 		<ExperimentPage
-			description="Agent workflows listed individually with their meaningful anatomy, states, and controls."
+			description="A complete local agent workflow, followed by individual blocks and their anatomy, states, and controls."
 			title="Agent Blocks"
 		>
 			<Grid gap={8} xstyle={styles.pageLayout}>
@@ -124,6 +132,14 @@ export function AgentBlocksPage() {
 				</Stack>
 			</Grid>
 		</ExperimentPage>
+	);
+}
+
+function AgentWorkflowExample({ description, id, title }: AgentBlockExampleProps) {
+	return (
+		<ExperimentSection description={description} id={id} title={title}>
+			<AgentWorkflow />
+		</ExperimentSection>
 	);
 }
 
