@@ -4,6 +4,7 @@ import {
 	IconBookmark,
 	IconBroadcastLive,
 	IconChatRound,
+	IconCheck,
 	IconChevronRight,
 	IconCopy,
 	IconDownload,
@@ -29,7 +30,6 @@ import {
 	type ReactNode,
 	type SetStateAction,
 } from "react";
-import { Icon } from "@/components/icons";
 import { menuItemStyles, menuItemVariantStyles } from "@/components/menu/menu-item.stylex";
 import {
 	morphingChildPopupMarker,
@@ -380,7 +380,7 @@ export function RadioItem({ children, xstyle, ...props }: MorphingMenuRadioItemP
 				keepMounted
 				{...stylex.props(menuItemStyles.indicator, morphingMenuStyles.radioIndicator)}
 			>
-				<Icon.Checkmark aria-hidden height="1em" strokeWidth={3} width="1em" />
+				<IconCheck aria-hidden height="1em" width="1em" />
 			</BaseMenu.RadioItemIndicator>
 		</BaseMenu.RadioItem>
 	);

@@ -1,12 +1,11 @@
 import { Combobox as BaseCombobox } from "@base-ui/react/combobox";
-import { IconChevronsUpDown, IconCirclePlus, IconSearch, IconX } from "fyicons";
+import { IconCheck, IconChevronsUpDown, IconCirclePlus, IconSearch, IconX } from "fyicons";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import x from "@stylexjs/atoms";
 import * as stylex from "@stylexjs/stylex";
 import { media } from "@/styles/constants.stylex";
 import { Button } from "@/components/button/button";
 import { fieldStyles, fieldTextStyles } from "@/components/field/field.stylex";
-import { Icon } from "@/components/icons";
 import { Box } from "@/components/layout/layout";
 import { menuItemStyles, menuItemVariantStyles } from "@/components/menu/menu-item.stylex";
 import { popupMotionStyles, popupPositionerStyles } from "@/components/popover/popover.stylex";
@@ -192,7 +191,7 @@ function PopupContent({ label }: { label: string }) {
 								{...stylex.props(menuItemStyles.item, menuItemVariantStyles.default)}
 							>
 								<BaseCombobox.ItemIndicator keepMounted {...stylex.props(menuItemStyles.indicator)}>
-									<Icon.Checkmark width="1em" height="1em" strokeWidth={3} />
+									<IconCheck width="1em" height="1em" />
 								</BaseCombobox.ItemIndicator>
 								<span {...stylex.props(menuItemStyles.label)}>{item}</span>
 							</BaseCombobox.Item>

@@ -1,6 +1,6 @@
 import { Menu as BaseMenu } from "@base-ui/react/menu";
 import { Collapsible as BaseCollapsible } from "@base-ui/react/collapsible";
-import { IconChevronRight } from "fyicons";
+import { IconCheck, IconChevronRight } from "fyicons";
 import * as stylex from "@stylexjs/stylex";
 import { createContext, useContext, type ComponentProps, type ReactNode } from "react";
 import { fontFamilyStyles, textStyles, fontWeightStyles } from "@/components/text/text.stylex";
@@ -231,7 +231,7 @@ export function CheckboxItem({
 			{...props}
 		>
 			<BaseMenu.CheckboxItemIndicator keepMounted {...stylex.props(menuItemStyles.indicator)}>
-				<Icon.Checkmark width="1em" height="1lh" strokeWidth={3} />
+				<IconCheck width="1em" height="1lh" />
 			</BaseMenu.CheckboxItemIndicator>
 			{children}
 		</BaseMenu.CheckboxItem>

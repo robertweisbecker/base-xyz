@@ -14,7 +14,6 @@ import type { Meta, StoryObj } from "@storybook/react-vite";
 import { useEffect, useRef, useState } from "react";
 
 import { Button, IconButton } from "@/components/button/button";
-import { Icon } from "@/components/icons";
 import { Box, Grid, Stack } from "@/components/layout/layout";
 import { Loader } from "@/components/loader";
 import { MeterGauge } from "@/components/meter/meter-gauge";
@@ -347,7 +346,7 @@ function EditingProgressGauge({ complete = false, value }: { complete?: boolean;
 			trackColor="color-mix(in srgb, currentColor 25%, transparent)"
 			value={value}
 		>
-			{complete ? <Icon.Checkmark height={8} strokeWidth={4} width={8} /> : null}
+			{complete ? <IconCheck height={8} width={8} /> : null}
 		</MeterGauge>
 	);
 }
