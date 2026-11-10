@@ -1,7 +1,7 @@
 /* eslint-disable react/only-export-components -- Compound component parts are intentionally grouped into the InlineEdit namespace. */
 import { Button as BaseButton } from "@base-ui/react/button";
 import { Input as BaseInput } from "@base-ui/react/input";
-import { IconX } from "fyicons";
+import { IconCheck, IconX } from "fyicons";
 import * as stylex from "@stylexjs/stylex";
 import {
 	createContext,
@@ -16,7 +16,6 @@ import {
 } from "react";
 import { IconButton, type IconButtonProps } from "@/components/button/button";
 import { fieldStyles } from "@/components/field/field.stylex";
-import { Icon } from "@/components/icons";
 import {
 	textColorStyles,
 	textTabularStyles,
@@ -453,7 +452,7 @@ function InlineEditConfirm({
 		<IconButton
 			{...props}
 			type="button"
-			icon={<Icon.Checkmark strokeWidth={2} />}
+			icon={<IconCheck />}
 			label="Save"
 			loading={context.pending}
 			disabled={context.disabled || props.disabled}

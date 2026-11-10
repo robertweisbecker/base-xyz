@@ -4,13 +4,13 @@ import {
 	IconArrowExternal,
 	IconBookOpen,
 	IconChatRound,
-	IconCopy,
 	IconCreditCard,
+	IconDuplicateSticky,
 	IconEnvelopeSimple,
 	IconFilePlus,
-	IconGauge,
 	IconLifeRing,
 	IconLink,
+	IconMeter,
 	IconPencil,
 	IconRepeat,
 	IconSettings,
@@ -101,7 +101,7 @@ export const Playground: Story = {
 				</Menu.Item>
 				<Menu.Item variant={_itemVariant}>
 					<Menu.ItemIcon>
-						<IconCopy size="1em" />
+						<IconDuplicateSticky size="1em" />
 					</Menu.ItemIcon>
 					<Menu.ItemLabel>Duplicate</Menu.ItemLabel>
 					{_showShortcuts ? <Menu.ItemShortcut>⌘D</Menu.ItemShortcut> : null}
@@ -224,7 +224,7 @@ export const ItemVariants: Story = {
 				<Menu.CollapsibleGroup defaultOpen>
 					<Menu.CollapsibleGroupTrigger>
 						<Menu.ItemIcon>
-							<IconGauge size="1em" />
+							<IconMeter size="1em" />
 						</Menu.ItemIcon>
 						<Menu.ItemLabel>Collapsible group trigger</Menu.ItemLabel>
 					</Menu.CollapsibleGroupTrigger>
@@ -330,7 +330,7 @@ export const MenuTypes: Story = {
 					</Menu.Item>
 					<Menu.Item>
 						<Menu.ItemIcon>
-							<IconCopy size="1em" />
+							<IconDuplicateSticky size="1em" />
 						</Menu.ItemIcon>
 						<Menu.ItemLabel>Duplicate</Menu.ItemLabel>
 					</Menu.Item>
@@ -377,7 +377,7 @@ export const MenuTypes: Story = {
 					</Menu.Item>
 					<Menu.Item>
 						<Menu.ItemIcon>
-							<IconCopy size="1em" />
+							<IconDuplicateSticky size="1em" />
 						</Menu.ItemIcon>
 						<Menu.ItemLabel>Duplicate</Menu.ItemLabel>
 					</Menu.Item>
@@ -489,7 +489,7 @@ export const MenuTypes: Story = {
 						</Menu.Item>
 						<Menu.Item>
 							<Menu.ItemIcon>
-								<IconCopy size="1em" />
+								<IconDuplicateSticky size="1em" />
 							</Menu.ItemIcon>
 							<Menu.ItemLabel>Duplicate</Menu.ItemLabel>
 						</Menu.Item>
@@ -542,7 +542,7 @@ export const CollapsibleGroup: Story = {
 				<Menu.CollapsibleGroup defaultOpen>
 					<Menu.CollapsibleGroupTrigger>
 						<Menu.ItemIcon>
-							<IconGauge size="1em" />
+							<IconMeter size="1em" />
 						</Menu.ItemIcon>
 						<Menu.ItemLabel>Usage remaining</Menu.ItemLabel>
 					</Menu.CollapsibleGroupTrigger>

@@ -1,6 +1,7 @@
 import * as stylex from "@stylexjs/stylex";
 import { Button, Meter, MeterGauge, Popover } from "@/components";
 import type { ButtonProps } from "@/components";
+import { buttonMarker } from "@/components/button/button.stylex";
 import { tokens } from "@/theme/tokens.stylex";
 
 export type ContextPopoverProps = Pick<ButtonProps, "size" | "variant"> & {
@@ -55,7 +56,7 @@ export function ContextPopover({
 					trackColor="color-mix(in srgb, currentColor 25%, transparent)"
 					showValue={false}
 					size={size === "lg" ? 20 : 16}
-					xstyle={contextPopoverParts.gauge}
+					{...stylex.props(contextPopoverParts.gauge)}
 					value={ratio * 100}
 				/>
 			</Popover.Trigger>
@@ -90,7 +91,10 @@ function normalizeTokenCount(value: number) {
 
 const contextPopoverParts = stylex.create({
 	gauge: {
-		color: "inherit",
+		color: {
+			default: "inherit",
+			[stylex.when.ancestor(":is(*)", buttonMarker)]: "inherit",
+		},
 		flexShrink: 0,
 	},
 	popup: {

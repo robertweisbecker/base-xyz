@@ -23,16 +23,16 @@ import { Loader } from "@/components/loader";
 import { Button } from "@/components/button";
 import {
 	IconArrowClockwise,
+	IconArrowRevertHistory,
 	IconBrowserPointer,
 	IconChevronRight,
-	IconCircleCheck,
-	IconCircleX,
+	IconCirclePlus,
 	IconCircleXFill,
+	IconCogWheel,
 	IconCopy,
-	IconGear,
 	IconListLog,
-	IconScroll,
 	IconTrash,
+	IconViewText,
 } from "fyicons";
 import { Avatar } from "@/components/avatar/avatar";
 import { Stack } from "@/components/layout/layout";
@@ -117,7 +117,7 @@ const commandGroups: DeploymentCommandGroup[] = [
 				group: "Deployments",
 				keywords: "find filter search url owner",
 				shortcut: "/",
-				icon: <IconListLog size="1em" aria-hidden />,
+				icon: <IconViewText size="1em" aria-hidden />,
 			},
 			{
 				id: "new-deployment",
@@ -126,7 +126,7 @@ const commandGroups: DeploymentCommandGroup[] = [
 				group: "Deployments",
 				keywords: "new create publish deploy",
 				shortcut: "N",
-				icon: <IconCircleCheck size="1em" aria-hidden />,
+				icon: <IconCirclePlus size="1em" aria-hidden />,
 			},
 			{
 				id: "retry-failed",
@@ -134,7 +134,7 @@ const commandGroups: DeploymentCommandGroup[] = [
 				description: "Queue a redeploy for every failed target.",
 				group: "Maintenance",
 				keywords: "failed retry rebuild",
-				icon: <IconCircleX size="1em" aria-hidden />,
+				icon: <IconArrowRevertHistory size="1em" aria-hidden />,
 			},
 		],
 	},
@@ -148,7 +148,7 @@ const commandGroups: DeploymentCommandGroup[] = [
 				description: "View the logs for the selected deployment.",
 				group: "Admin",
 				keywords: "logs view",
-				icon: <IconScroll size="1em" aria-hidden />,
+				icon: <IconListLog size="1em" aria-hidden />,
 			},
 			{
 				id: "open-settings",
@@ -156,7 +156,7 @@ const commandGroups: DeploymentCommandGroup[] = [
 				description: "Manage environments and visibility defaults.",
 				group: "Maintenance",
 				keywords: "settings environments visibility",
-				icon: <IconGear size="1em" aria-hidden />,
+				icon: <IconCogWheel size="1em" aria-hidden />,
 			},
 		],
 	},

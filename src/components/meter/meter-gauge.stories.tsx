@@ -1,4 +1,4 @@
-import { Icon } from "@/components/icons";
+import { IconCheck } from "fyicons";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { Stack } from "@/components/layout";
 import { Text } from "@/components/text/text";
@@ -79,7 +79,7 @@ export const Examples: Story = {
 					size={64}
 					value={100}
 				>
-					<Icon.Checkmark width={"1.5em"} height={"1.5em"} />
+					<IconCheck width={"1.5em"} height={"1.5em"} />
 				</MeterGauge>
 			</Stack>
 		</Stack>

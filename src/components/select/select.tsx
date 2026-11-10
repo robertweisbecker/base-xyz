@@ -1,5 +1,5 @@
 import { Select as BaseSelect } from "@base-ui/react/select";
-import { IconChevronDown, IconChevronUp, IconChevronsUpDown } from "fyicons";
+import { IconCheck, IconChevronDown, IconChevronUp, IconChevronsUpDown } from "fyicons";
 import * as stylex from "@stylexjs/stylex";
 import { createContext, useContext, type ReactNode } from "react";
 import { media } from "@/styles/constants.stylex";
@@ -18,7 +18,6 @@ import {
 	menuItemVariantStyles,
 } from "@/components/menu/menu-item.stylex";
 import type { MenuItemVariant } from "@/components/menu/menu.types";
-import { Icon } from "@/components/icons";
 import { attrJoin } from "@/utils/attr-join";
 
 const HOVER_WHEN_INACTIVE =
@@ -264,7 +263,7 @@ export function Item({
 			{...props}
 		>
 			<BaseSelect.ItemIndicator keepMounted {...stylex.props(menuItemStyles.indicator)}>
-				<Icon.Checkmark width="1em" height="1em" strokeWidth={3} />
+				<IconCheck width="1em" height="1em" />
 			</BaseSelect.ItemIndicator>
 			<BaseSelect.ItemText {...stylex.props(menuItemStyles.label, selectParts.itemText)}>
 				{children}

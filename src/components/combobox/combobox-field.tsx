@@ -1,5 +1,5 @@
 import { Combobox as BaseCombobox } from "@base-ui/react/combobox";
-import { IconChevronDown, IconCircleXFill, IconPlus, IconX } from "fyicons";
+import { IconCheck, IconChevronDown, IconCircleXFill, IconPlus, IconX } from "fyicons";
 import * as stylex from "@stylexjs/stylex";
 import {
 	createContext,
@@ -11,7 +11,6 @@ import {
 } from "react";
 import { fieldControlSizes, fieldStyles, fieldTextStyles } from "@/components/field/field.stylex";
 import type { FieldSize } from "@/components/field/field.types";
-import { Icon } from "@/components/icons";
 import { Label as FieldLabel, type LabelProps } from "@/components/label/label";
 import {
 	menuItemSizeStyles,
@@ -475,7 +474,7 @@ export function Item({
 				</span>
 			) : (
 				<BaseCombobox.ItemIndicator keepMounted {...stylex.props(menuItemStyles.indicator)}>
-					<Icon.Checkmark width="1em" height="1em" strokeWidth={3} />
+					<IconCheck width="1em" height="1em" />
 				</BaseCombobox.ItemIndicator>
 			)}
 			<div {...stylex.props(menuItemStyles.label)}>{children}</div>

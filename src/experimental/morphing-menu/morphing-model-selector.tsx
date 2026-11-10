@@ -1,4 +1,14 @@
-import { IconBolt, IconChevronRight, IconGauge, IconSliders, IconStack } from "fyicons";
+import {
+	IconBolt,
+	IconChevronRight,
+	IconGaugeHigh,
+	IconGaugeLow,
+	IconGaugeMax,
+	IconGaugeMin,
+	IconGaugeSimple,
+	IconSliders,
+	IconStack,
+} from "fyicons";
 import * as stylex from "@stylexjs/stylex";
 import { useState, type ReactNode } from "react";
 import type {
@@ -103,7 +113,7 @@ export function MorphingModelSelector({ defaultOpen = true }: MorphingModelSelec
 				label="Tune response"
 				value={`${value.effort} · ${value.speed}`}
 			>
-				<SelectorSubmenu icon={<IconGauge size="1em" />} label="Effort" value={value.effort}>
+				<SelectorSubmenu icon={getEffortIcon(value.effort)} label="Effort" value={value.effort}>
 					<MorphingMenu.RadioGroup
 						value={value.effort}
 						onValueChange={(effort) => setValue((current) => ({ ...current, effort }))}
@@ -111,7 +121,7 @@ export function MorphingModelSelector({ defaultOpen = true }: MorphingModelSelec
 						{exampleEffortOptions.map((effort) => (
 							<SelectorOption
 								key={effort}
-								icon={<IconGauge size="1em" />}
+								icon={getEffortIcon(effort)}
 								label={effort}
 								value={effort}
 							/>
@@ -196,6 +206,21 @@ function SelectorRow({ back, icon, label, submenu, value }: SelectorRowProps) {
 			) : null}
 		</>
 	);
+}
+
+function getEffortIcon(effort: string) {
+	switch (effort) {
+		case "Low":
+			return <IconGaugeMin size="1em" />;
+		case "Medium":
+			return <IconGaugeLow size="1em" />;
+		case "Extra High":
+			return <IconGaugeHigh size="1em" />;
+		case "Max":
+			return <IconGaugeMax size="1em" />;
+		default:
+			return <IconGaugeSimple size="1em" />;
+	}
 }
 
 function getModel(value: string): ModelSelectorOption {
