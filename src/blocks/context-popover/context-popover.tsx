@@ -55,7 +55,7 @@ export function ContextPopover({
 					trackColor="color-mix(in srgb, currentColor 25%, transparent)"
 					showValue={false}
 					size={size === "lg" ? 20 : 16}
-					{...stylex.props(contextPopoverParts.gauge)}
+					xstyle={contextPopoverParts.gauge}
 					value={ratio * 100}
 				/>
 			</Popover.Trigger>

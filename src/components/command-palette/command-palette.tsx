@@ -531,7 +531,7 @@ const commandPaletteParts = stylex.create({
 	},
 	panel: {
 		borderColor: "transparent",
-		borderRadius: `calc(${tokens["--radius-xl"]} - 1px)`,
+		borderRadius: `calc(${tokens["--radius-lg"]} - 1px)`,
 		borderStyle: "solid",
 		borderWidth: 1,
 		overflow: "hidden",

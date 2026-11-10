@@ -7,6 +7,9 @@ import { tokens } from "@/theme/tokens.stylex";
 /** Marker for Field roots observed by descendant form-control styles. */
 export const fieldMarker = stylex.defineMarker();
 
+/** Marker for labels whose leading choice control aligns supporting text. */
+export const fieldLabelMarker = stylex.defineMarker();
+
 const INTERACTIVE_CONTROL_HOVER =
 	':hover:not(:focus-within):not([aria-invalid="true"]):not([data-active]):not([data-disabled]):not([data-invalid]):not([data-panel-open]):not([data-popup-open]):not([data-pressed]):not([data-readonly]):not([readonly])';
 
@@ -50,7 +53,16 @@ const parts = stylex.create({
 			default: tokens["--fg"],
 		},
 	},
-	description: { color: tokens["--fg-muted"] },
+	description: {
+		color: tokens["--fg-muted"],
+		paddingInlineStart: {
+			default: null,
+			[stylex.when.siblingBefore(':has(> [data-field-choice-size="md"])', fieldLabelMarker)]:
+				`calc(${tokens["--size-indicator-md"]} + ${tokens["--space-2"]})`,
+			[stylex.when.siblingBefore(':has(> [data-field-choice-size="sm"])', fieldLabelMarker)]:
+				`calc(${tokens["--size-indicator-sm"]} + ${tokens["--space-2"]})`,
+		},
+	},
 	error: {
 		gap: tokens["--space-1"],
 		alignItems: "center",

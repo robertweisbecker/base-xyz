@@ -266,7 +266,7 @@ const tabsParts = stylex.create({
 		cornerShape: "superellipse(1.3)",
 		flex: "none",
 		gap: tokens["--space-1"],
-		backgroundColor: tokens["--surface-subtle"],
+		backgroundColor: tokens["--inset"],
 		boxSizing: "border-box",
 		display: "inline-flex",
 		isolation: "isolate",
