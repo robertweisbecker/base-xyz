@@ -12,8 +12,7 @@ import {
 import * as stylex from "@stylexjs/stylex";
 import { Tabs as BaseTabs } from "@base-ui/react/tabs";
 import { useMediaQuery } from "@base-ui/react/unstable-use-media-query";
-import { IconWarningFill } from "fyicons";
-import { Icon } from "@/components/icons";
+import { IconCheck, IconWarningFill } from "fyicons";
 import { fontWeightStyles, textStyles, textTruncationStyles } from "@/components/text/text.stylex";
 import { VisuallyHidden } from "@/components/visually-hidden/visually-hidden";
 import { mergeStyle, type BaseStyleProps } from "@/styles/props/base";
@@ -556,7 +555,7 @@ export function Marker({ children, className, style, xstyle, ...props }: Stepper
 	const sx = stylex.props(stepperParts.marker, fontWeightStyles.medium, xstyle);
 	const marker =
 		status === "completed" ? (
-			<Icon.Checkmark size="1em" strokeWidth={3} />
+			<IconCheck size="1em" />
 		) : status === "invalid" ? (
 			<IconWarningFill aria-hidden size="1em" />
 		) : (

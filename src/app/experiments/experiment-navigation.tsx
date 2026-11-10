@@ -1,9 +1,9 @@
 import {
 	IconAgentSimple,
+	IconBoundingBoxText,
 	IconFolder,
 	IconPictureInPicture,
 	IconTable,
-	IconTextBox,
 	IconWrench,
 } from "fyicons";
 
@@ -36,7 +36,7 @@ export const componentsNavigationGroup = {
 	items: [
 		{
 			description: "Form controls for collecting, selecting, and validating structured values.",
-			icon: <IconTextBox size="1em" aria-hidden />,
+			icon: <IconBoundingBoxText size="1em" aria-hidden />,
 			label: "Inputs",
 			to: "/experiments/components/inputs",
 		},

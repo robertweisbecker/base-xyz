@@ -1,8 +1,7 @@
-import { IconCopy } from "fyicons";
+import { IconCheck, IconCopy } from "fyicons";
 import * as stylex from "@stylexjs/stylex";
 import { type ReactNode, useId, useRef, useState } from "react";
 import { Button, IconButton, type ButtonProps } from "@/components/button/button";
-import { Icon } from "@/components/icons";
 import { Toast } from "@/components/toast";
 import { useMergedRefs } from "@/hooks/use-merged-refs";
 import { iconSwapTransition } from "@/styles/recipes/transitions";
@@ -105,7 +104,7 @@ function CopyButtonControl({
 					copied ? iconSwapTransition.visible : iconSwapTransition.hidden,
 				)}
 			>
-				<Icon.Checkmark strokeWidth={props.size === "md" || props.size === "lg" ? 3 : 2} />
+				<IconCheck />
 			</span>
 		</span>
 	);

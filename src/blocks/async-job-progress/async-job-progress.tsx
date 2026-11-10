@@ -1,5 +1,6 @@
 import {
 	IconArrowClockwise,
+	IconCheck,
 	IconChevronRight,
 	IconCircleXFill,
 	IconClock,
@@ -15,14 +16,7 @@ import {
 	useId,
 	useMemo,
 } from "react";
-import {
-	Badge,
-	type BadgeHue,
-	Button,
-	Icon,
-	Loader,
-	Progress as ProgressComponent,
-} from "@/components";
+import { Badge, type BadgeHue, Button, Loader, Progress as ProgressComponent } from "@/components";
 import { tokens } from "@/theme/tokens.stylex";
 import { mergeStyle, type BaseStyleProps } from "@/styles/props/base";
 import type { MarginProps } from "@/styles/props/spacing.stylex";
@@ -312,7 +306,7 @@ function renderStatusIcon(status: AsyncJobStatus) {
 		case "running":
 			return <Loader aria-hidden size="10px" />;
 		case "complete":
-			return <Icon.Checkmark aria-hidden size={12} />;
+			return <IconCheck aria-hidden size={12} />;
 		case "error":
 			return <IconWarningFill aria-hidden size={12} />;
 	}
