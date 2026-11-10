@@ -5,7 +5,7 @@ import {
 	IconCopy,
 	IconFloppyDisk,
 	IconPencil,
-	IconPlugUnplug,
+	IconPlugsUnplug,
 	IconSendTilt,
 	IconX,
 } from "fyicons";
@@ -432,7 +432,7 @@ function PillAnchoredExample({ _side, _align }: Pick<StoryArgs, "_side" | "_alig
 					nextStatus === "success" ? (
 						<EditingProgressGauge complete value={100} />
 					) : (
-						<IconPlugUnplug aria-hidden size={16} />
+						<IconPlugsUnplug aria-hidden size={16} />
 					),
 				dismissible: false,
 			},
@@ -468,7 +468,7 @@ function PillAnchoredExample({ _side, _align }: Pick<StoryArgs, "_side" | "_alig
 					variant="error"
 					disabled={status !== "ongoing"}
 					onClick={() => finishGoal("error")}
-					startSlot={<IconPlugUnplug size="1em" aria-hidden />}
+					startSlot={<IconPlugsUnplug size="1em" aria-hidden />}
 				>
 					Disconnect
 				</Button>

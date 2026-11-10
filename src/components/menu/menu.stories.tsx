@@ -8,9 +8,9 @@ import {
 	IconCreditCard,
 	IconEnvelopeSimple,
 	IconFilePlus,
-	IconGauge,
 	IconLifeRing,
 	IconLink,
+	IconMeter,
 	IconPencil,
 	IconRepeat,
 	IconSettings,
@@ -224,7 +224,7 @@ export const ItemVariants: Story = {
 				<Menu.CollapsibleGroup defaultOpen>
 					<Menu.CollapsibleGroupTrigger>
 						<Menu.ItemIcon>
-							<IconGauge size="1em" />
+							<IconMeter size="1em" />
 						</Menu.ItemIcon>
 						<Menu.ItemLabel>Collapsible group trigger</Menu.ItemLabel>
 					</Menu.CollapsibleGroupTrigger>
@@ -542,7 +542,7 @@ export const CollapsibleGroup: Story = {
 				<Menu.CollapsibleGroup defaultOpen>
 					<Menu.CollapsibleGroupTrigger>
 						<Menu.ItemIcon>
-							<IconGauge size="1em" />
+							<IconMeter size="1em" />
 						</Menu.ItemIcon>
 						<Menu.ItemLabel>Usage remaining</Menu.ItemLabel>
 					</Menu.CollapsibleGroupTrigger>

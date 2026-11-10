@@ -1,4 +1,4 @@
-import { IconBolt, IconChevronRight, IconGauge, IconSliders, IconStack } from "fyicons";
+import { IconBolt, IconChevronRight, IconMeter, IconSliders, IconStack } from "fyicons";
 import * as stylex from "@stylexjs/stylex";
 import { useState, type ReactNode } from "react";
 import type {
@@ -103,7 +103,7 @@ export function MorphingModelSelector({ defaultOpen = true }: MorphingModelSelec
 				label="Tune response"
 				value={`${value.effort} · ${value.speed}`}
 			>
-				<SelectorSubmenu icon={<IconGauge size="1em" />} label="Effort" value={value.effort}>
+				<SelectorSubmenu icon={<IconMeter size="1em" />} label="Effort" value={value.effort}>
 					<MorphingMenu.RadioGroup
 						value={value.effort}
 						onValueChange={(effort) => setValue((current) => ({ ...current, effort }))}
@@ -111,7 +111,7 @@ export function MorphingModelSelector({ defaultOpen = true }: MorphingModelSelec
 						{exampleEffortOptions.map((effort) => (
 							<SelectorOption
 								key={effort}
-								icon={<IconGauge size="1em" />}
+								icon={<IconMeter size="1em" />}
 								label={effort}
 								value={effort}
 							/>

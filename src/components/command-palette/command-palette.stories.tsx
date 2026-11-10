@@ -2,7 +2,7 @@ import {
 	IconAppNotification,
 	IconAppsPlus,
 	IconBookOpen,
-	IconPencilEdit,
+	IconEdit,
 	IconSearch,
 	IconToolbox,
 } from "fyicons";
@@ -64,7 +64,7 @@ const commandGroups: CommandGroup[] = [
 				description: "Manage account details and preferences.",
 				group: "Settings",
 				keywords: "user account person",
-				icon: <IconPencilEdit size="1em" aria-hidden />,
+				icon: <IconEdit size="1em" aria-hidden />,
 			},
 			{
 				id: "notifications",
