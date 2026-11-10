@@ -52,6 +52,7 @@ export function Checkbox({ className, style, xstyle, size, ...props }: CheckboxP
 
 	return (
 		<BaseCheckbox.Root
+			data-field-choice-size={resolvedSize}
 			className={attrJoin(sx.className, className)}
 			style={mergeStyle(sx.style, style)}
 			{...rest}

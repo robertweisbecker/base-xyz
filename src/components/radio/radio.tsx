@@ -53,6 +53,7 @@ export function Radio({ className, style, xstyle, size, ...props }: RadioProps) 
 
 	return (
 		<BaseRadio.Root
+			data-field-choice-size={resolvedSize}
 			className={attrJoin(sx.className, className)}
 			style={mergeStyle(sx.style, style)}
 			{...rest}

@@ -9,6 +9,7 @@ export const rootStyles = stylex.create({
 		display: "flex",
 		flexDirection: "column",
 		rowGap: tokens["--space-3"],
+		width: "stretch",
 	},
 	labelWidth: (value: string) => ({ "--_description-list-label-width": value }),
 	grid: {
