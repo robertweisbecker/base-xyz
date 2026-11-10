@@ -4,8 +4,8 @@ import {
 	IconArrowExternal,
 	IconBookOpen,
 	IconChatRound,
-	IconCopy,
 	IconCreditCard,
+	IconDuplicateSticky,
 	IconEnvelopeSimple,
 	IconFilePlus,
 	IconLifeRing,
@@ -101,7 +101,7 @@ export const Playground: Story = {
 				</Menu.Item>
 				<Menu.Item variant={_itemVariant}>
 					<Menu.ItemIcon>
-						<IconCopy size="1em" />
+						<IconDuplicateSticky size="1em" />
 					</Menu.ItemIcon>
 					<Menu.ItemLabel>Duplicate</Menu.ItemLabel>
 					{_showShortcuts ? <Menu.ItemShortcut>⌘D</Menu.ItemShortcut> : null}
@@ -330,7 +330,7 @@ export const MenuTypes: Story = {
 					</Menu.Item>
 					<Menu.Item>
 						<Menu.ItemIcon>
-							<IconCopy size="1em" />
+							<IconDuplicateSticky size="1em" />
 						</Menu.ItemIcon>
 						<Menu.ItemLabel>Duplicate</Menu.ItemLabel>
 					</Menu.Item>
@@ -377,7 +377,7 @@ export const MenuTypes: Story = {
 					</Menu.Item>
 					<Menu.Item>
 						<Menu.ItemIcon>
-							<IconCopy size="1em" />
+							<IconDuplicateSticky size="1em" />
 						</Menu.ItemIcon>
 						<Menu.ItemLabel>Duplicate</Menu.ItemLabel>
 					</Menu.Item>
@@ -489,7 +489,7 @@ export const MenuTypes: Story = {
 						</Menu.Item>
 						<Menu.Item>
 							<Menu.ItemIcon>
-								<IconCopy size="1em" />
+								<IconDuplicateSticky size="1em" />
 							</Menu.ItemIcon>
 							<Menu.ItemLabel>Duplicate</Menu.ItemLabel>
 						</Menu.Item>

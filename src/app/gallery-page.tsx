@@ -18,7 +18,7 @@ import {
 	IconArrowRight,
 	IconBlueprint,
 	IconBookRepository,
-	IconCopy,
+	IconDuplicateSticky,
 	IconFileSearch,
 	IconFolderOpen,
 	IconInfoFill,
@@ -551,7 +551,7 @@ function getComponentCells(): GalleryCell[] {
 							<Menu.ItemLabel>New file</Menu.ItemLabel>
 						</Menu.Item>
 						<Menu.Item>
-							<IconCopy size="1em" aria-hidden />
+							<IconDuplicateSticky size="1em" aria-hidden />
 							<Menu.ItemLabel>Duplicate</Menu.ItemLabel>
 						</Menu.Item>
 						<Menu.Separator />
