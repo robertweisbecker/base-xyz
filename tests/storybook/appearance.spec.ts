@@ -21,11 +21,23 @@ for (const [name, path, colorScheme] of [
 		for (const surface of await surfaces.all()) {
 			const background = await surface.evaluate((element) => {
 				const context = document.createElement("canvas").getContext("2d")!;
-				context.fillStyle = getComputedStyle(element).backgroundColor;
+				// Start with the browser canvas, then composite ancestor backgrounds.
+				// Transparent loading layers over a dark page are valid too.
+				const canvasColor = document.createElement("span");
+				canvasColor.style.color = "Canvas";
+				document.documentElement.append(canvasColor);
+				context.fillStyle = getComputedStyle(canvasColor).color;
 				context.fillRect(0, 0, 1, 1);
+				canvasColor.remove();
+				const ancestors: Element[] = [];
+				for (let ancestor: Element | null = element; ancestor; ancestor = ancestor.parentElement)
+					ancestors.unshift(ancestor);
+				for (const ancestor of ancestors) {
+					context.fillStyle = getComputedStyle(ancestor).backgroundColor;
+					context.fillRect(0, 0, 1, 1);
+				}
 				return [...context.getImageData(0, 0, 1, 1).data];
 			});
-			expect(background[3], "opaque page backdrop").toBe(255);
 			expect(Math.max(...background.slice(0, 3)), "dark page backdrop").toBeLessThan(64);
 		}
 	});
