@@ -11,16 +11,20 @@ import {
 	useMemo,
 	useRef,
 	useState,
+	useSyncExternalStore,
 } from "react";
 import { Button, IconButton, InputGroup, Kbd, Menu } from "@/components";
 import type { ButtonProps } from "@/components";
 import { useMergedRefs } from "@/hooks/use-merged-refs";
 import { useScrollFade } from "@/hooks/use-scroll-fade";
 import { mergeStyle, type BaseStyleProps } from "@/styles/props/base";
-import { tokens } from "@/theme/tokens.stylex";
 import { attrJoin } from "@/utils/attr-join";
+import { useComposerLayout } from "./use-composer-layout";
+
+import { composerMarker, promptComposerStyles as parts } from "./prompt-composer.stylex";
 
 type PromptComposerContextValue = {
+	layout: "adaptive" | "stacked";
 	canSubmit: boolean;
 	disabled: boolean;
 	submitting: boolean;
@@ -40,6 +44,8 @@ type FormProps = StyledProps<
 	className?: string;
 };
 export type PromptComposerRootProps = FormProps & {
+	/** Controls share the input row when the draft fits. Defaults to adaptive. */
+	layout?: "adaptive" | "stacked";
 	value?: string;
 	defaultValue?: string;
 	onValueChange?: (value: string) => void;
@@ -65,6 +71,7 @@ export type PromptComposerAddItemContentProps = StyledProps<ComponentProps<"span
 export type PromptComposerAddItemDescriptionProps = StyledProps<ComponentProps<"span">>;
 
 export function Root({
+	layout = "adaptive",
 	value,
 	defaultValue = "",
 	onValueChange,
@@ -100,6 +107,7 @@ export function Root({
 
 	const contextValue = useMemo(
 		() => ({
+			layout,
 			canSubmit,
 			disabled,
 			submitting,
@@ -108,7 +116,7 @@ export function Root({
 			updateValue,
 			submit,
 		}),
-		[canSubmit, currentValue, disabled, submit, submitting, updateValue],
+		[layout, canSubmit, currentValue, disabled, submit, submitting, updateValue],
 	);
 
 	const sx = stylex.props(parts.root, xstyle);
@@ -128,10 +136,14 @@ export function Root({
 export function Surface({
 	ref: forwardedRef,
 	variant = "elevated",
+	className,
+	style,
 	xstyle,
 	...props
 }: PromptComposerSurfaceProps) {
-	const { surfaceRef } = usePromptComposerContext("Surface");
+	const { surfaceRef, layout, value } = usePromptComposerContext("Surface");
+	const compact = useComposerLayout(surfaceRef, layout, value);
+	const marker = stylex.props(composerMarker);
 	const mergedRef = useMergedRefs(forwardedRef, surfaceRef);
 
 	return (
@@ -140,7 +152,10 @@ export function Surface({
 			size="lg"
 			variant={variant}
 			{...props}
-			xstyle={[parts.inputGroup, xstyle]}
+			data-compact={compact ? "" : undefined}
+			className={attrJoin(marker.className, className)}
+			style={mergeStyle(marker.style, style)}
+			xstyle={[parts.inputGroup, compact && parts.compact, xstyle]}
 		/>
 	);
 }
@@ -148,11 +163,12 @@ export function Surface({
 export function Input({
 	"aria-label": ariaLabel = "Message",
 	placeholder = "Ask anything…",
-	rows = 3,
+	rows = 1,
 	minRows,
 	maxRows,
 	className,
 	style,
+	xstyle,
 	onChange,
 	onKeyDown,
 	ref,
@@ -160,6 +176,7 @@ export function Input({
 }: PromptComposerInputProps) {
 	const context = usePromptComposerContext("Input");
 	const resolvedMinRows = minRows ?? rows;
+	const desktop = useSyncExternalStore(subscribeDesktop, isDesktop, () => false);
 	const scrollFade = useScrollFade({ axis: "y", contentKey: context.value });
 	const mergedRef = useMergedRefs(ref, scrollFade.ref);
 
@@ -176,12 +193,10 @@ export function Input({
 		}
 	}
 
-	const inputSx = stylex.props(parts.input);
-
 	return (
 		<InputGroup.Textarea
 			aria-label={ariaLabel}
-			className={attrJoin(scrollFade.className, inputSx.className, className)}
+			className={attrJoin(scrollFade.className, className)}
 			disabled={context.disabled}
 			onChange={(event) => {
 				onChange?.(event);
@@ -192,17 +207,20 @@ export function Input({
 			ref={mergedRef}
 			rows={rows}
 			minRows={resolvedMinRows}
-			maxRows={maxRows}
+			maxRows={maxRows ?? (desktop ? 12 : 6)}
 			style={style}
 			value={context.value}
 			{...props}
+			xstyle={[parts.input, xstyle]}
 		/>
 	);
 }
 
 export const Header = InputGroup.Header;
 
-export const Footer = InputGroup.Footer;
+export function Footer({ xstyle, ...props }: PromptComposerFooterProps) {
+	return <InputGroup.Footer {...props} xstyle={[parts.footer, xstyle]} />;
+}
 
 export function Options({ className, style, xstyle, ...props }: PromptComposerOptionsProps) {
 	const sx = stylex.props(parts.options, xstyle);
@@ -211,11 +229,16 @@ export function Options({ className, style, xstyle, ...props }: PromptComposerOp
 			className={attrJoin(sx.className, className)}
 			style={mergeStyle(sx.style, style)}
 			{...props}
+			data-composer-options=""
 		/>
 	);
 }
 
-export const Actions = InputGroup.Actions;
+export function Actions({ xstyle, ...props }: PromptComposerActionsProps) {
+	return (
+		<InputGroup.Actions {...props} data-composer-actions="" xstyle={[parts.actions, xstyle]} />
+	);
+}
 
 export function Submit({
 	children,
@@ -377,56 +400,15 @@ function usePromptComposerContext(part: string) {
 	return context;
 }
 
-const parts = stylex.create({
-	root: {
-		gap: tokens["--space-0"],
-		color: tokens["--fg"],
-		display: "flex",
-		flexDirection: "column",
-		maxWidth: "42rem",
-		width: "100%",
-	},
-	/**
-	 * Denser shell than InputGroup defaults: Root owns even inline inset; Header /
-	 * Footer / Textarea own block edges. Child inline padding clears so Root inset wins.
-	 */
-	inputGroup: {
-		"--_input-group-padding": tokens["--space-4"],
-		"--_input-padding": tokens["--space-4"],
-		borderRadius: "2.5rem",
-		gap: 0,
-		minHeight: null,
-	},
-	/** Fade size + expand-on-focus; both are composer behavior, not InputGroup. */
-	input: {
-		"--scroll-fade-size": tokens["--space-8"],
-		minHeight: "0px",
-	},
-	options: {
-		gap: tokens["--space-1"],
-		alignItems: "center",
-		display: "flex",
-		minWidth: 0,
-	},
-	addMenu: { minWidth: "15rem" },
-	addMenuCopy: {
-		gap: tokens["--space-2"],
-		alignItems: "baseline",
-		display: "flex",
-		gridColumnEnd: "4",
-		gridColumnStart: "2",
-		minWidth: 0,
-	},
-	addMenuDescription: {
-		overflow: "hidden",
-		color: tokens["--fg-muted"],
-		fontSize: tokens["--font-size-1"],
-		letterSpacing: tokens["--letter-spacing-1"],
-		lineHeight: tokens["--line-height-1"],
-		textOverflow: "ellipsis",
-		whiteSpace: "nowrap",
-	},
-});
+function isDesktop() {
+	return window.matchMedia("(min-width: 48rem)").matches;
+}
+
+function subscribeDesktop(onChange: () => void) {
+	const query = window.matchMedia("(min-width: 48rem)");
+	query.addEventListener("change", onChange);
+	return () => query.removeEventListener("change", onChange);
+}
 
 export const PromptComposer = {
 	Root,

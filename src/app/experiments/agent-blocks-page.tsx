@@ -374,16 +374,6 @@ function PromptComposerExample({ description, id, title }: AgentBlockExampleProp
 								</Menu.Root>
 								<Separator orientation="vertical" mx={2} my={2} />
 								<ContextPopover total={128_000} usage={71_420} variant="ghost" />
-								<ModelSelector.Root
-									defaultValue={agentDefaultModel}
-									effortOptions={agentEffortOptions}
-									groups={agentModelGroups}
-									onValueChange={() => setFeedback("Model settings updated")}
-									speedOptions={agentSpeedOptions}
-								>
-									<ModelSelector.Trigger shape="pill" variant="ghost" />
-									<ModelSelector.Popup />
-								</ModelSelector.Root>
 							</PromptComposer.Options>
 							<PromptComposer.Actions>
 								<Toggle
@@ -394,6 +384,16 @@ function PromptComposerExample({ description, id, title }: AgentBlockExampleProp
 									}
 									shape="circle"
 								/>
+								<ModelSelector.Root
+									defaultValue={agentDefaultModel}
+									effortOptions={agentEffortOptions}
+									groups={agentModelGroups}
+									onValueChange={() => setFeedback("Model settings updated")}
+									speedOptions={agentSpeedOptions}
+								>
+									<ModelSelector.Trigger shape="pill" variant="ghost" />
+									<ModelSelector.Popup />
+								</ModelSelector.Root>
 								<PromptComposer.Submit />
 							</PromptComposer.Actions>
 						</PromptComposer.Footer>
