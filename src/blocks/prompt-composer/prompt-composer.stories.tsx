@@ -18,7 +18,7 @@ import { PromptComposer, type PromptComposerRootProps } from "./prompt-composer"
 
 type ComposerDemoProps = Pick<
 	PromptComposerRootProps,
-	"clearOnSubmit" | "defaultValue" | "disabled"
+	"clearOnSubmit" | "defaultValue" | "disabled" | "layout"
 >;
 
 const meta = {
@@ -41,7 +41,7 @@ type Story = StoryObj<typeof meta>;
 export const Examples: Story = {
 	render: () => (
 		<Stack gap={6} maxWidth="42rem">
-			<Example label="Ready, empty">
+			<Example label="Ready, empty" testId="adaptive-prompt-composer">
 				<ComposerDemo clearOnSubmit defaultValue="" disabled={false} />
 			</Example>
 			<Separator />
@@ -58,6 +58,10 @@ export const Examples: Story = {
 				/>
 			</Example>
 			<Separator />
+			<Example label="Always stacked" testId="stacked-prompt-composer">
+				<ComposerDemo layout="stacked" />
+			</Example>
+			<Separator />
 			<Example label="Disabled">
 				<DisabledDemo />
 			</Example>
@@ -71,10 +75,12 @@ export const Examples: Story = {
 
 function ComposerSurface({
 	children,
+	actions,
 	submitting = false,
 	onStop,
 }: {
 	children?: React.ReactNode;
+	actions?: ReactNode;
 	submitting?: boolean;
 	onStop?: () => void;
 }) {
@@ -84,6 +90,7 @@ function ComposerSurface({
 			<PromptComposer.Footer>
 				<PromptComposer.Options>{children}</PromptComposer.Options>
 				<PromptComposer.Actions>
+					{actions}
 					{submitting ? <PromptComposer.Stop onClick={onStop} /> : <PromptComposer.Submit />}
 				</PromptComposer.Actions>
 			</PromptComposer.Footer>
@@ -171,7 +178,7 @@ function DisabledDemo() {
 	);
 }
 
-function ComposerDemo({ clearOnSubmit, defaultValue, disabled }: ComposerDemoProps) {
+function ComposerDemo({ clearOnSubmit, defaultValue, disabled, layout }: ComposerDemoProps) {
 	const [feedback, setFeedback] = useState(
 		"Press Enter to send. Use Shift + Enter for a new line.",
 	);
@@ -180,42 +187,45 @@ function ComposerDemo({ clearOnSubmit, defaultValue, disabled }: ComposerDemoPro
 		<Stack gap={3} maxWidth="42rem" width="full">
 			<PromptComposer.Root
 				clearOnSubmit={clearOnSubmit}
+				layout={layout}
 				defaultValue={defaultValue}
 				disabled={disabled}
 				onSubmit={(prompt) => setFeedback(`Submitted: ${prompt}`)}
 			>
-				<ComposerSurface>
+				<ComposerSurface
+					actions={
+						<ModelSelector.Root
+							groups={exampleModelGroups}
+							effortOptions={exampleEffortOptions}
+							speedOptions={exampleSpeedOptions}
+							defaultValue={exampleDefaultValue}
+							onValueChange={(value, { reason }) => {
+								if (reason === "reset") {
+									setFeedback("Model settings reset to defaults.");
+									return;
+								}
+								if (reason === "model") {
+									setFeedback(`Model changed to ${getExampleModelLabel(value.model)}.`);
+									return;
+								}
+								if (reason === "effort") {
+									setFeedback(`Effort changed to ${value.effort}.`);
+									return;
+								}
+								setFeedback(`Speed changed to ${value.speed}.`);
+							}}
+						>
+							<ModelSelector.Trigger
+								variant="neutral"
+								size="sm"
+								shape="pill"
+								xstyle={storyParts.modelTrigger}
+							/>
+							<ModelSelector.Popup />
+						</ModelSelector.Root>
+					}
+				>
 					<AddMenu setFeedback={setFeedback} />
-
-					<ModelSelector.Root
-						groups={exampleModelGroups}
-						effortOptions={exampleEffortOptions}
-						speedOptions={exampleSpeedOptions}
-						defaultValue={exampleDefaultValue}
-						onValueChange={(value, { reason }) => {
-							if (reason === "reset") {
-								setFeedback("Model settings reset to defaults.");
-								return;
-							}
-							if (reason === "model") {
-								setFeedback(`Model changed to ${getExampleModelLabel(value.model)}.`);
-								return;
-							}
-							if (reason === "effort") {
-								setFeedback(`Effort changed to ${value.effort}.`);
-								return;
-							}
-							setFeedback(`Speed changed to ${value.speed}.`);
-						}}
-					>
-						<ModelSelector.Trigger
-							variant="neutral"
-							size="sm"
-							shape="pill"
-							xstyle={storyParts.modelTrigger}
-						/>
-						<ModelSelector.Popup />
-					</ModelSelector.Root>
 				</ComposerSurface>
 			</PromptComposer.Root>
 			<Feedback>{feedback}</Feedback>

@@ -128,6 +128,8 @@ function GoalPromptStackDemo({ id }: { id: string }) {
 							<PromptComposer.Footer>
 								<PromptComposer.Options>
 									<GoalComposerAddMenu />
+								</PromptComposer.Options>
+								<PromptComposer.Actions>
 									<Toolbar.Root aria-label="Prompt options" variant="unstyled">
 										<ModelSelector.Root
 											groups={exampleModelGroups}
@@ -141,8 +143,6 @@ function GoalPromptStackDemo({ id }: { id: string }) {
 											<ModelSelector.Popup />
 										</ModelSelector.Root>
 									</Toolbar.Root>
-								</PromptComposer.Options>
-								<PromptComposer.Actions>
 									<PromptComposer.Submit />
 								</PromptComposer.Actions>
 							</PromptComposer.Footer>
