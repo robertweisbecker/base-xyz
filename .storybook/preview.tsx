@@ -1,25 +1,9 @@
 import type { Decorator, Preview } from "@storybook/react-vite";
-import { themes } from "storybook/theming";
 import "../src/styles/index.css";
 import "./docs.css";
 import "./reduced-motion.css";
 import { ReducedMotionFrame } from "./reduced-motion-frame";
-import { ThemeProvider, type ThemeMode, type ThemeName } from "../src/theme";
-
-type StorybookTheme = { mode: ThemeMode; theme: ThemeName };
-
-function resolveAppearance(appearance: string | undefined): StorybookTheme {
-	switch (appearance) {
-		case "light":
-			return { mode: "light", theme: "default" };
-		case "dark":
-			return { mode: "dark", theme: "default" };
-		case "mp-light":
-			return { mode: "light", theme: "mp" };
-		default:
-			return { mode: "system", theme: "default" };
-	}
-}
+import { StorybookDocs, StorybookTheme } from "./appearance";
 
 let focusAccessorGuarded = false;
 
@@ -53,11 +37,10 @@ const withStorybookFocusCompatibility: Decorator = (Story) => {
 };
 
 const withTheme: Decorator = (Story, context) => {
-	const { mode, theme } = resolveAppearance(context.globals.appearance);
 	return (
-		<ThemeProvider mode={mode} theme={theme}>
+		<StorybookTheme appearance={context.globals.appearance}>
 			<Story />
-		</ThemeProvider>
+		</StorybookTheme>
 	);
 };
 
@@ -95,12 +78,12 @@ const preview: Preview = {
 		},
 	},
 	initialGlobals: {
-		appearance: "system",
+		appearance: document.documentElement.dataset.storybookAppearance ?? "system",
 		reducedMotion: "system",
 	},
 	parameters: {
 		docs: {
-			theme: themes.normal,
+			container: StorybookDocs,
 		},
 		layout: "padded",
 		controls: {

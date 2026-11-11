@@ -1,0 +1,44 @@
+<meta name="color-scheme" content="light dark" />
+<script>
+	// Resolve appearance before any story bundle loads; keep it across iframe reloads.
+	(() => {
+		const globals = new URLSearchParams(location.search).get("globals");
+		const requested = globals
+			?.split(";")
+			.find((entry) => entry.startsWith("appearance:"))
+			?.slice(11);
+		let saved;
+		try {
+			saved = localStorage.getItem("stylex-storybook-appearance");
+		} catch {}
+		const appearance = requested ?? saved;
+		document.documentElement.dataset.storybookAppearance = ["light", "dark", "mp-light"].includes(
+			appearance,
+		)
+			? appearance
+			: "system";
+	})();
+</script>
+<style>
+	:root {
+		color-scheme: light dark;
+	}
+	:root[data-storybook-appearance="dark"] {
+		color-scheme: dark;
+	}
+	:root[data-storybook-appearance="light"],
+	:root[data-storybook-appearance="mp-light"] {
+		color-scheme: light;
+	}
+	html,
+	body,
+	body .sb-preparing-story,
+	body .sb-preparing-docs {
+		background: var(--canvas, Canvas);
+		color: var(--fg, CanvasText);
+	}
+	body .sb-previewBlock {
+		background: var(--surface, Canvas);
+		border-color: var(--border, GrayText);
+	}
+</style>
