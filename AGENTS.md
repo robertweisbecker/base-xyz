@@ -34,6 +34,11 @@ Consult matching references when changing a contract, verifying work, or resolvi
 | Plans and backlog lifecycle                 | [Planning](docs/agents/planning.md)                                                                              |
 | Documentation and architectural decisions   | [Documentation ownership](docs/agents/domain.md)                                                                 |
 
+## ui-sdk
+
+- Before using ui-sdk, follow the `ui-sdk` skill if installed and read `node_modules/@ui-sdk/react/docs/llms.txt`.
+- To build a new component, also search `node_modules/@ui-sdk/react/docs/core.md` by heading and read `node_modules/@ui-sdk/react/docs/rendering.md`.
+
 ## Public APIs and design
 
 - `src/components/index.ts` defines public components. Gallery specimens use public exports; imports and specimen titles stay alphabetical.
