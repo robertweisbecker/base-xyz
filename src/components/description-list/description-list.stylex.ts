@@ -79,7 +79,10 @@ export const valueStyles = stylex.create({
 		overflowWrap: "anywhere",
 		minWidth: 0,
 	},
-	wide: { gridColumn: { default: "1 / -1", [containerBreakpoints.xs]: "2" } },
+	wide: {
+		gridColumnEnd: { default: "-1", [containerBreakpoints.xs]: "auto" },
+		gridColumnStart: { default: "1", [containerBreakpoints.xs]: "2" },
+	},
 });
 
 export const actionsStyles = stylex.create({
